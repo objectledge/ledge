@@ -26,13 +26,14 @@
 # POSSIBILITY OF SUCH DAMAGE. 
 # 
 
-# Table schema for the IdGenerator
+# test for DatabaseUtils.runScript(..)
 #
 # author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
 # version $Id$
 
-DROP TABLE id_table IF EXISTS;
-CREATE TABLE id_table (
-   next_id BIGINT NOT NULL,
-   table VARCHAR(255) NOT NULL
+DROP TABLE test_object IF EXISTS;
+CREATE TABLE test_object ( 
+  id BIGINT NOT NULL,
+  value VARCHAR(255),
+  date DATE
 );
