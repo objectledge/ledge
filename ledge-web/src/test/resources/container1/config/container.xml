@@ -30,11 +30,8 @@
 
 	<!-- end of core config -->
 
-    <component class-key="org.objectledge.web.HttpDispatcher" 
-    		   class="org.objectledge.web.dispatcher.HttpMethodDispatcher"/>
-    		   
-    <component key="org.objectledge.web.dispatcher.StaticHttpDispatcher"
+    <component class-key="org.objectledge.web.HttpDispatcher"
                class="org.objectledge.web.dispatcher.StaticHttpDispatcher"/>
-    
+
   </container>
 </container>

@@ -28,5 +28,5 @@
 --> 
 
 <config>
-  <method name="GET">org.objectledge.web.dispatcher.StaticHttpDispatcher</method>
+  <response pattern=".*" status="200" type="text/plain">Hello world!</response>
 </config>
