@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>I18n</title>
+  </properties>
+
+  <body>
+    <section name="I18n">
+      <p>Dependencies
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%">none</td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>none</td>
+          </tr>
+        </table>
+      </p>
+
+      <p>I18n component provide the access to the locale sensitive <code>String</code> resources.</p>
+
+	  <p><a href="../apidocs/org/objectledge/i18n/I18n.html">View JavaDoc</a></p>
+
+      <p>Constructor parameters<br/>
+      The default implementation based on XML requires following parameters:<br/>
+	    <table>
+	      <tr>
+	        <th>position</th>
+	        <th>type</th>
+	        <th widht="100%">descritpion</th>
+	      </tr>
+	      <tr>
+	        <td>1</td>
+	        <td><code>org.jcontainer.dna.Configuration</code></td>
+	        <td>the configuration</td>
+	      </tr>
+		  <tr>
+		    <td>2</td>
+		    <td><code>import org.jcontainer.dna.Logger</code></td>
+		    <td>the logger</td>
+		  </tr>
+		  <tr>
+		    <td>3</td>
+		    <td><code>org.objectledge.filesystem.FileSystem</code></td>
+		    <td>the file system to access the templates</td>
+		  </tr>
+		  <tr>
+		    <td>4</td>
+		    <td><code>java.lang.String</code></td>
+		    <td>the file system path to the directory that contatins localization files.</td>
+		  </tr>
+		</table>
+	  </p>
+    </section>
+  </body>
+</document>  
+  

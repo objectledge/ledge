@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Velocity Templating</title>
+  </properties>
+
+  <body>
+    <section name="Velocity Templating">
+      <p>Dependencies
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%">FileSystem</td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>Velocity</td>
+          </tr>
+        </table>
+      </p>
+
+      <p>Provides the simple templating based on velocity engine.</p>
+
+	  <p><a href="../apidocs/org/objectledge/templating/velocity/VelocityTemplating.html">View JavaDoc</a></p>
+
+	  <p>Constructor parameters
+	    <table>
+	      <tr>
+	        <th>position</th>
+	        <th>type</th>
+	        <th widht="100%">descritpion</th>
+	      </tr>
+	      <tr>
+	        <td>1</td>
+	        <td><code>org.jcontainer.dna.Configuration</code></td>
+	        <td>the configuration</td>
+	      </tr>
+		  <tr>
+		    <td>2</td>
+		    <td><code>import org.jcontainer.dna.Logger</code></td>
+		    <td>the logger</td>
+		  </tr>
+		  <tr>
+		    <td>3</td>
+		    <td><code>org.objectledge.filesystem.FileSystem</code></td>
+		    <td>the file system to access the templates</td>
+		  </tr>
+		</table>
+	  </p>
+    </section>
+  </body>
+</document>  
+  
