@@ -39,6 +39,7 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
+import org.picocontainer.defaults.CachingComponentAdapter;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
@@ -49,7 +50,7 @@ import org.picocontainer.extras.ImplementationHidingComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.5 2003-12-17 11:22:32 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.6 2004-01-09 10:56:12 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -102,10 +103,11 @@ public class LoggerFactory
         else
         {                
             ComponentAdapter adapter = loggerContainer.findComponentAdapter(marker);
+            Object proxy = adapter.getComponentInstance(loggerContainer);
             ImplementationHidingComponentAdapter proxyAdapter = 
                 (ImplementationHidingComponentAdapter)
                 ((DecoratingComponentAdapter)adapter).getDelegate();
-            proxyAdapter.hotSwap(logger);
+            proxyAdapter.hotSwap(proxy, logger);
         }
     }
 
@@ -179,6 +181,7 @@ public class LoggerFactory
     {
         ComponentAdapter adapter = new InstanceComponentAdapter(marker, logger);
         adapter = new ImplementationHidingComponentAdapter(adapter);
+        adapter = new CachingComponentAdapter(adapter);
         return adapter;
     }
     
