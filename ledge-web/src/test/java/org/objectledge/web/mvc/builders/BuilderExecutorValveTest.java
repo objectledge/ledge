@@ -49,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.7 2004-01-21 15:36:29 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.8 2004-01-22 08:20:58 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -158,6 +158,23 @@ public class BuilderExecutorValveTest extends TestCase
         catch(Exception e)
         {
             assertEquals(PipelineProcessingException.class, e.getClass());
+        }
+    }
+    
+    public void testFailing()
+        throws Exception
+    {
+        setUp("builders");
+        mvcContext.setView("Failing");
+        try
+        {
+            executor.run();
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            assertEquals(PipelineProcessingException.class, e.getClass());
+            assertEquals(BuildException.class, e.getCause().getClass());
         }
     }
     
