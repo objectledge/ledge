@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.2 2004-01-16 07:20:36 fil Exp $
+ * @version $Id: AllTests.java,v 1.3 2004-01-27 12:38:01 pablo Exp $
  */
 public class AllTests
 {
@@ -45,6 +45,7 @@ public class AllTests
         TestSuite suite = new TestSuite("Test for org.objectledge.web");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(LedgeServletTest.class));
+        suite.addTest(new TestSuite(ExceptionRedirectorValveTest.class));
         //$JUnit-END$
         suite.addTest(org.objectledge.web.mvc.AllTests.suite());
         return suite;

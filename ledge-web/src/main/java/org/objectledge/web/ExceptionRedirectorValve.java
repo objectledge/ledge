@@ -51,13 +51,13 @@ public class ExceptionRedirectorValve implements Valve
 {
     /** logger the logger */
     private Logger logger;
-    
+
     /** error view */
     private String errorView;
-    
+
     /** error log level */
     private String errorLevel;
-    
+
     /** exception - view mapping */
     private Map exceptionViewMap;
 
@@ -89,18 +89,20 @@ public class ExceptionRedirectorValve implements Valve
                 String level = exception[i].getAttribute("level");
                 Class clazz = Class.forName(name);
                 exceptionViewMap.put(clazz, view);
-                exceptionLoggingLevelMap.put(clazz, level);                         
+                exceptionLoggingLevelMap.put(clazz, level);
             }
-            if(!exceptionViewMap.containsKey(Throwable.class))
+            if (!exceptionViewMap.containsKey(Throwable.class))
             {
                 exceptionViewMap.put(Throwable.class, errorView);
                 exceptionLoggingLevelMap.put(Throwable.class, errorLevel);
             }
         }
-        catch(Exception e)
+        ///CLOVER:OFF
+        catch (Exception e)
         {
             throw new ComponentInitializationError(e);
         }
+        ///CLOVER:ON
     }
 
     /**
@@ -110,52 +112,56 @@ public class ExceptionRedirectorValve implements Valve
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         Throwable t = (Throwable)context.getAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION);
-        Class leafException = null;
-        Iterator i = exceptionViewMap.keySet().iterator();
-        while (i.hasNext())
+        if (t != null)
         {
-            Class temp = (Class)i.next();
-            if (temp.isAssignableFrom(t.getClass()))
+
+            Class leafException = null;
+            Iterator i = exceptionViewMap.keySet().iterator();
+            while (i.hasNext())
             {
-                if (leafException == null || leafException.isAssignableFrom(temp))
+                Class temp = (Class)i.next();
+                if (temp.isAssignableFrom(t.getClass()))
                 {
-                    leafException = temp;
+                    if (leafException == null || leafException.isAssignableFrom(temp))
+                    {
+                        leafException = temp;
+                    }
                 }
             }
+            log((String)exceptionLoggingLevelMap.get(leafException), t);
+            String view = (String)exceptionViewMap.get(leafException);
+            TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+            if (templatingContext != null)
+            {
+                //TODO think where to put the original view.
+                templatingContext.put("original_view", mvcContext.getView());
+            }
+            mvcContext.setView(view);
         }
-        log((String)exceptionLoggingLevelMap.get(leafException), t);
-        String view = (String)exceptionViewMap.get(leafException);
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        if(templatingContext != null)
-        {
-            //TODO think where to put the original view.
-            templatingContext.put("original_view",mvcContext.getView());
-        }
-        mvcContext.setView(view);
     }
-    
+
     private void log(String verbosity, Throwable t)
     {
-        if(verbosity.equals("WARN"))
+        if (verbosity.equals("WARN"))
         {
-            logger.warn("Exception occured during processing",t);
-            return; 
+            logger.warn("Exception occured during processing", t);
+            return;
         }
-        if(verbosity.equals("INFO"))
+        if (verbosity.equals("INFO"))
         {
-            logger.info("Exception occured during processing",t);
-            return; 
+            logger.info("Exception occured during processing", t);
+            return;
         }
-        if(verbosity.equals("DEBUG"))
+        if (verbosity.equals("DEBUG"))
         {
-            logger.debug("Exception occured during processing",t);
-            return; 
+            logger.debug("Exception occured during processing", t);
+            return;
         }
-        if(verbosity.equals("TRACE"))
+        if (verbosity.equals("TRACE"))
         {
-            logger.trace("Exception occured during processing",t);
-            return; 
+            logger.trace("Exception occured during processing", t);
+            return;
         }
-        logger.error("Exception occured during processing",t);
+        logger.error("Exception occured during processing", t);
     }
 }

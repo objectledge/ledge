@@ -27,18 +27,24 @@
 //
 package org.objectledge.web.mvc.actions;
 
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
+
+
 /**
  * Default action which does nothing.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultAction.java,v 1.1 2003-12-30 17:26:25 zwierzem Exp $
+ * @version $Id: DefaultAction.java,v 1.2 2004-01-27 12:38:02 pablo Exp $
  */
-public class DefaultAction implements Runnable
+public class DefaultAction implements Valve
 {
     /**
      * Does nothing.
+     * 
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
         // does nothing
     }
