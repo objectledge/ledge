@@ -66,6 +66,10 @@
   #date_selector_base($name $ds_current $ds_enabled $minutes)
 #end
 
+#macro(date_selector_minutes $name $current $disabled_label)
+ #date_selector($name $current $disabled_label [0..59])
+#end
+
 #**
  * A date selector that supports a 'no date' option.
  *
@@ -87,4 +91,8 @@
   	#set($ds_current = $format_date.now())
   #end
   #date_selector_base($name $ds_current $ds_enabled $minutes)
+#end
+
+#macro(date_selector_optional_minutes $name $current $disabled_label)
+ #date_selector_optional($name $current $disabled_label [0..59])
 #end
