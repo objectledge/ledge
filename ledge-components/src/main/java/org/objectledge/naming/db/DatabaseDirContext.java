@@ -101,7 +101,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         List list = lookupContext(dn);
         if(list.size() == 0)
         {
-            throw new NamingException("faled to retrieve context '"+dn+"' form database");
+            throw new NamingException("faled to retrieve context '"+dn+"' from database");
         }
         if(list.size() > 1)
         {
