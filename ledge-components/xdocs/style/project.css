@@ -14,3 +14,7 @@
 p.more {
   text-align: right;
 }
+
+.navLink .navLink {
+  margin-left: 10px;
+}
