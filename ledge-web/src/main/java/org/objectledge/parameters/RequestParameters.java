@@ -54,7 +54,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.14 2004-12-22 08:59:00 rafal Exp $
+ * @version $Id: RequestParameters.java,v 1.15 2005-03-14 13:03:02 zwierzem Exp $
  */
 public class RequestParameters extends SortedParameters
 {
@@ -135,6 +135,7 @@ public class RequestParameters extends SortedParameters
             while (st.hasMoreTokens())
             {
                 String token = st.nextToken();
+                // separators
                 if(token.length() == 1 && separator.indexOf(token.charAt(0)) > -1 )
                 {
                     switch(state)
@@ -160,6 +161,7 @@ public class RequestParameters extends SortedParameters
                                 "illegal state while parsing params");
                     }
                 }
+                // names and values
                 else
                 {
                     switch(state)
