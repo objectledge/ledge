@@ -48,22 +48,35 @@ import org.objectledge.table.generic.GenericTreeRowSet;
  * Implementation of Table service based on file service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileTableModel.java,v 1.1 2005-02-07 21:05:16 zwierzem Exp $
+ * @version $Id: FileTableModel.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
  */
 public class FileTableModel implements ExtendedTableModel
 {
-    /* file service */
-    protected FileSystem fileSystem;
+    private final FileSystem fileSystem;
 	
-	protected String basePath;
+	private final String basePath;
 
-    protected Map<String, Comparator> comparatorByColumnName = new HashMap<String, Comparator>();
+    private final Map<String, Comparator> comparatorByColumnName = 
+        new HashMap<String, Comparator>();
 
+    /**
+     * Creates new FileTableModel instance.
+     * 
+     * @param fileSystem file system component.
+     * @param locale locale to use.
+     */
     public FileTableModel(FileSystem fileSystem, Locale locale)
     {
 		this(fileSystem, null, locale);
     }
 
+    /**
+     * Creates new FileTableModel instance.
+     * 
+     * @param fileSystem file system component.
+     * @param basePath base path within FS.
+     * @param locale locale to use.
+     */
 	public FileTableModel(FileSystem fileSystem, String basePath, Locale locale)
 	{
 		this.basePath = normalizeDirPath(basePath);
@@ -81,6 +94,7 @@ public class FileTableModel implements ExtendedTableModel
      * and a given {@link TableState}.
      *
      * @param state the parent
+     * @param filters the filters to apply.
      * @return table of children
      */
     public TableRowSet getRowSet(TableState state, TableFilter[] filters)
@@ -178,23 +192,24 @@ public class FileTableModel implements ExtendedTableModel
 
     /**
      * Returns the id of the object.
+     * 
      * @param parent id of the parent model object
      * @param child model object.
      *
      * @return the id of the object.
      */
-    public String getId(String parent, Object object)
+    public String getId(String parent, Object child)
     {
-        if(object == null)
+        if(child == null)
         {
             return "";
         }
-        return ((FileObject)object).getPath();
+        return ((FileObject)child).getPath();
     }
     
     // implementation //////////////////////////////////////////////////////////////////////////////
 
-	protected String normalizeDirPath(String path)
+	private String normalizeDirPath(String path)
 	{
 		if(path.charAt(path.length()-1) == '/')
 		{
@@ -203,7 +218,7 @@ public class FileTableModel implements ExtendedTableModel
 		return path;
 	}
 	
-	protected String getFullPath(String path)
+	private String getFullPath(String path)
 	{
 		if(this.basePath != null)
 		{

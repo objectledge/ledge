@@ -34,7 +34,7 @@ import java.util.Date;
  * This is a base comparator for comparing time values related to an object.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TimeComparator.java,v 1.1 2005-02-07 21:05:13 zwierzem Exp $
+ * @version $Id: TimeComparator.java,v 1.2 2005-02-08 21:19:28 rafal Exp $
  */
 public abstract class TimeComparator
     implements Comparator
@@ -45,6 +45,10 @@ public abstract class TimeComparator
      *  <li>If both are null, dates are considered equal</li>
      *  <li>If one of the dates is null it is considered to be after the non null date</li>
      *  </ul>
+     *  @param d1 a date
+     *  @param d2 a date
+     *  @return int value &lt; 0 if d2 is earlier than d1, 0 if d1 is equal to d2, &gt; 0 if d1 is 
+     *  earlier that d2.
      */
     public int compareDates(Date d1, Date d2)
     {

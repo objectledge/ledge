@@ -33,11 +33,14 @@ import java.util.Comparator;
  * This is a comparator for comparing FileObject lenghts.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LengthComparator.java,v 1.1 2005-02-07 21:05:16 zwierzem Exp $
+ * @version $Id: LengthComparator.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
  */
 public class LengthComparator
     implements Comparator
 {
+    /**
+     * {@inheritDoc}
+     */
     public int compare(Object o1, Object o2)
     {
         if(!((o1 instanceof FileObject && o2 instanceof FileObject )))

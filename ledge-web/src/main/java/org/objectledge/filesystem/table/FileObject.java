@@ -35,17 +35,24 @@ import org.objectledge.filesystem.FileSystem;
  * Simple object representing file.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileObject.java,v 1.1 2005-02-07 21:05:16 zwierzem Exp $
+ * @version $Id: FileObject.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
  */
 public class FileObject
 {
-	protected String path;
-	protected String name;
-	protected Date lastModified;
-	protected long length;
-	protected boolean isDirectory;
+	private final String path;
+	private final String name;
+	private final Date lastModified;
+	private final long length;
+	private final boolean isDirectory;
 
-	public FileObject(String fullPath, String path, FileSystem fileSystem)
+    /**
+     * Creates new FileObject instance.
+     * 
+     * @param fullPath the full path of the file.
+     * @param path the path of the file.
+     * @param fileSystem Ledge file system.
+     */
+	public FileObject(final String fullPath, final String path, final FileSystem fileSystem)
 	{
 		this.path = path;
 		this.name = path.substring(path.lastIndexOf('/')+1);
@@ -54,26 +61,51 @@ public class FileObject
 		this.isDirectory = fileSystem.isDirectory(fullPath);
 	}
 
+    /**
+     * Returns the path of the file.
+     * 
+     * @return the path of the file.
+     */
     public String getPath()
     {
         return path;
     }
  
+    /**
+     * Returns the name of the file.
+     * 
+     * @return the name of the file.
+     */
 	public String getName()
 	{
 		return name;
 	}
- 
+
+    /**
+     * Returns <code>true</code> if the object denotes a directory.
+     * 
+     * @return <code>true</code> if the object denotes a directory.
+     */
     public boolean isDirectory()
     {
         return isDirectory;
     }
 
+    /**
+     * Returns the object's last modification date.
+     * 
+     * @return the object's last modification date.
+     */
     public Date getLastModified()
     {
         return lastModified;
     }
 
+    /**
+     * Returns the file length.
+     * 
+     * @return the file length. 
+     */
     public long getLength()
     {
         return length;

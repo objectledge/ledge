@@ -36,18 +36,30 @@ import java.util.Locale;
  * It provides localisation for string comparisons.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseStringComparator.java,v 1.1 2005-02-07 21:05:13 zwierzem Exp $
+ * @version $Id: BaseStringComparator.java,v 1.2 2005-02-08 21:19:28 rafal Exp $
  */
 public abstract class BaseStringComparator
     implements Comparator
 {
+    /** The Collator to use for comparisons. */
     protected Collator collator;
     
+    /**
+     * {@inheritDoc}
+     */
     public BaseStringComparator(Locale locale)
     {
         collator = Collator.getInstance(locale);
     }
-    
+
+    /**
+     * Compare two strings in a locale sensitive way.
+     * 
+     * @param s1 a string.
+     * @param s2 a string.
+     * @return int value &lt; 0 if s2 precedes s1 in lexicographic ordering, 0 if both strings
+     * are lexicographically equivalent, &gt; 0 if s1 precedes s2 in lexicographic ordering.
+     */
     public int compareStrings(String s1, String s2)
     {
         return collator.compare(s1, s2);

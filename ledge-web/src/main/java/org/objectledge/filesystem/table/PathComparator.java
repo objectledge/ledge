@@ -35,16 +35,24 @@ import org.objectledge.table.comparator.BaseStringComparator;
  * This is a comparator for comparing file paths.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PathComparator.java,v 1.1 2005-02-07 21:05:16 zwierzem Exp $
+ * @version $Id: PathComparator.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
  */
 public class PathComparator
     extends BaseStringComparator
 {
+    /**
+     * Creates new PathComparator instance.
+     * 
+     * @param locale the locale to use for string comparison.
+     */
     public PathComparator(Locale locale)
     {
         super(locale);
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public int compare(Object o1, Object o2)
     {
         if(!((o1 instanceof FileObject && o2 instanceof FileObject)))

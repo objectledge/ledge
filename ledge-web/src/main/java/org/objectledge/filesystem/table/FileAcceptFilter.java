@@ -31,11 +31,14 @@ package org.objectledge.filesystem.table;
  * This is a filter which accepts only files.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileAcceptFilter.java,v 1.1 2005-02-07 21:05:16 zwierzem Exp $
+ * @version $Id: FileAcceptFilter.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
  */
 public class FileAcceptFilter
     extends DirectoryAcceptFilter
 {
+    /**
+     * {@inheritDoc}
+     */
     public boolean accept(Object object)
     {
         return !(super.accept(object));
