@@ -3,7 +3,6 @@
 	<name>ledge-tutorial-webapp</name>
 	<comment></comment>
 	<projects>
-		<project>dna</project>
 		<project>ledge-components</project>
 		<project>ledge-container</project>
 		<project>ledge-web</project>

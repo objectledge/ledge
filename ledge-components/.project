@@ -3,7 +3,6 @@
 	<name>ledge-components</name>
 	<comment></comment>
 	<projects>
-		<project>dna</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
