@@ -35,7 +35,7 @@ import java.util.List;
  * Captures a full stack trace in a multi-level <code>Throwable</code> sequence.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTrace.java,v 1.5 2004-12-22 08:35:04 rafal Exp $
+ * @version $Id: StackTrace.java,v 1.6 2005-02-15 20:49:51 rafal Exp $
  */
 public class StackTrace
 {    
@@ -117,7 +117,7 @@ public class StackTrace
                 StackTraceElement[] frames = (StackTraceElement[])traces.get(i);
                 StackTraceElement[] prevFrames = (StackTraceElement[])traces.get(i - 1);
                 skip[i] = frames.length;
-                inner: for (int j = 0; j < frames.length; j++)
+                inner: for (int j = 0; j < frames.length && j < prevFrames.length; j++)
                 {
                     if(!frames[frames.length - j - 1].equals(prevFrames[prevFrames.length - j - 1]))
                     {
