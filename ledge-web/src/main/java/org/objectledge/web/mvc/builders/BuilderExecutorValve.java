@@ -32,6 +32,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
@@ -42,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.21 2004-09-23 09:32:52 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.22 2004-10-04 14:26:04 zwierzem Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -97,6 +98,7 @@ public class BuilderExecutorValve
         throws ProcessingException
 	{
 		// setup used contexts
+        HttpContext httpContext = HttpContext.getHttpContext(context);
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 	
@@ -160,6 +162,12 @@ public class BuilderExecutorValve
 	            throw new ProcessingException(e);
 	        }
 
+            // escape on direct response
+            if(httpContext.getDirectResponse())
+            {
+                return;
+            }
+            
             // get next view build level -----------------------------------------------------------
             Builder enclosingBuilder = null;
             Template enclosingTemplate = null;
