@@ -27,46 +27,78 @@
 // 
 package org.objectledge.database;
 
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
-import org.hsqldb.jdbcDataSource;
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
-
 /**
- * An implementation of DataSource interface using HSQLDB.
+ * A delegation pattern wrapper for a DataSource interface.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: HsqldbDataSource.java,v 1.2 2004-02-04 14:38:13 fil Exp $
+ * @version $Id: DelegatingDataSource.java,v 1.1 2004-02-04 14:38:13 fil Exp $
  */
-public class HsqldbDataSource extends DelegatingDataSource
+public abstract class DelegatingDataSource implements DataSource
 {
+    private DataSource dataSource;
+
     /**
-     * Constructs a DataSource instance.
+     * Creates a wrapper instance.
      * 
-     * @param config the data source configuration.
-     * @throws ConfigurationException if the configuration is invalid.
-     */
-    public HsqldbDataSource(Configuration config)
-        throws ConfigurationException
+     * @param dataSource the dataSource to deleage to.
+     */    
+    protected DelegatingDataSource(DataSource dataSource)
     {
-        super(getDataSource(config));
+        this.dataSource = dataSource;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Connection getConnection() throws SQLException
+    {
+        return dataSource.getConnection();
     }
 
-    private static DataSource getDataSource(Configuration config)
-        throws ConfigurationException
+    ///CLOVER:OFF
+    /**
+     * {@inheritDoc}
+     */
+    public int getLoginTimeout() throws SQLException
     {
-        jdbcDataSource dataSource;
-        String url = config.getChild("url").getValue();
-        String user = config.getChild("user").getValue(null);
-        String password = config.getChild("password").getValue(null);
-        dataSource = new jdbcDataSource();
-        dataSource.setDatabase(url);
-        dataSource.setUser(user);
-        if(password != null)
-        {
-            dataSource.setPassword(password);
-        }
-        return dataSource;
+        return dataSource.getLoginTimeout();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLoginTimeout(int seconds) throws SQLException
+    {
+        dataSource.setLoginTimeout(seconds);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PrintWriter getLogWriter() throws SQLException
+    {
+        return dataSource.getLogWriter();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLogWriter(PrintWriter out) throws SQLException
+    {
+        dataSource.setLogWriter(out);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Connection getConnection(String username, String password) throws SQLException
+    {
+        return dataSource.getConnection(username, password);
     }
 }
