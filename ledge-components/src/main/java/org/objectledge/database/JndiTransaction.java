@@ -35,23 +35,26 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 
 /**
  * Operates upon the UserTransaction object provided by the application server through JNDI.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JndiTransaction.java,v 1.2 2004-02-06 08:41:57 fil Exp $
+ * @version $Id: JndiTransaction.java,v 1.3 2004-02-06 15:38:06 fil Exp $
  */
 public class JndiTransaction extends Transaction
 {
     /**
      * Constructs a JndiLogger instance.
      * 
+     * @param tracing tracing depth.
+     * @param context the threads processing context.
      * @param log the logger to use for error reporting.
      */
-    public JndiTransaction(Logger log)
+    public JndiTransaction(int tracing, Context context, Logger log)
     {
-        super(log);
+        super(tracing, context, log);
     }
     
     /**
