@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.22 2004-04-22 13:22:03 fil Exp $
+ * @version $Id: FileSystem.java,v 1.23 2004-09-24 11:24:34 zwierzem Exp $
  */
 public class FileSystem
 {
@@ -495,10 +495,13 @@ public class FileSystem
      * @param path the pathname of the file to create.
      * @return <code>true</code> if the named file does not exist and was 
      *          successfully created; <code>false</code> if the named file 
-     *          already exists. 
+     *          already exists.
+     * @throws UnsupportedCharactersInFilePathException if the given path contains
+     *  characters incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
-    public boolean createNewFile(String path) throws IOException
+    public boolean createNewFile(String path)
+        throws IOException, UnsupportedCharactersInFilePathException
     {
         String dir = directoryPath(path);
         if (!exists(dir))
@@ -528,9 +531,12 @@ public class FileSystem
      * Creates a directory and all neccessary parent directories.
      * 
      * @param path the directory name.
+     * @throws UnsupportedCharactersInFilePathException if the given path contains
+     *  characters incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
-    public void mkdirs(String path) throws IOException
+    public void mkdirs(String path)
+        throws IOException, UnsupportedCharactersInFilePathException
     {
         path = normalizedPath(path);
         StringTokenizer st = new StringTokenizer(path, "/");
@@ -635,9 +641,12 @@ public class FileSystem
      * 
      * @param from source path.
      * @param to destination path.
+     * @throws UnsupportedCharactersInFilePathException if the given destination path contains
+     *  characters incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
-    public void rename(String from, String to) throws IOException
+    public void rename(String from, String to)
+        throws IOException, UnsupportedCharactersInFilePathException    
     {
         if (!exists(from))
         {
@@ -668,9 +677,12 @@ public class FileSystem
      * 
      * @param from the source path.
      * @param to the destination path.
+     * @throws UnsupportedCharactersInFilePathException if the given destination path contains
+     *  characters incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
-    public void copyFile(String from, String to) throws IOException
+    public void copyFile(String from, String to) 
+        throws IOException, UnsupportedCharactersInFilePathException    
     {
         InputStream in = getInputStream(from);
         if (in == null)
@@ -703,9 +715,12 @@ public class FileSystem
      * 
      * @param src source directory.
      * @param dst destination directory.
+     * @throws UnsupportedCharactersInFilePathException if the given destination path contains
+     *  characters incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
-    public void copyDir(String src, String dst) throws IOException
+    public void copyDir(String src, String dst)
+        throws IOException, UnsupportedCharactersInFilePathException    
     {
         if (!exists(src))
         {

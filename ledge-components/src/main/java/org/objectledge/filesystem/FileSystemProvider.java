@@ -38,7 +38,7 @@ import java.net.URL;
  * Specifies the contract between FileSystem abstarction and its concrete delegates.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemProvider.java,v 1.4 2004-01-13 12:46:12 fil Exp $
+ * @version $Id: FileSystemProvider.java,v 1.5 2004-09-24 11:24:34 zwierzem Exp $
  */
 public interface FileSystemProvider
 {
@@ -122,20 +122,24 @@ public interface FileSystemProvider
      * @param path the pathname of the file to create.
      * @return <code>true</code> if the named file does not exist and was 
      *          successfully created; <code>false</code> if the named file 
-     *          already exists. 
+     *          already exists.
+     * @throws UnsupportedCharactersInFilePathException if the given path contains characters
+     *  incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
     public boolean createNewFile(String path)
-        throws IOException;
+        throws IOException, UnsupportedCharactersInFilePathException;
 
     /**
      * Creates a directory, and all necceray parent directories.
      * 
      * @param path the path.
+     * @throws UnsupportedCharactersInFilePathException if the given path contains characters
+     *  incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
     public void mkdirs(String path)
-        throws IOException;
+        throws IOException, UnsupportedCharactersInFilePathException;
     
     /**
      * Deletes a file or directory.
@@ -153,10 +157,12 @@ public interface FileSystemProvider
      * 
      * @param from source path.
      * @param to destination path.
+     * @throws UnsupportedCharactersInFilePathException if the given destination path contains
+     *  characters incompatible with underlying filesystem.
      * @throws IOException if the operation fails.
      */
     public void rename(String from, String to)
-        throws IOException;
+        throws IOException, UnsupportedCharactersInFilePathException;
 
     /**
      * Opens an input stream for reading a file.

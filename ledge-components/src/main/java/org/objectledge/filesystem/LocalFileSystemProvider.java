@@ -37,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -53,7 +54,8 @@ import org.objectledge.filesystem.impl.LocalRandomAccessFile;
  * considererd to be relative the the running user's current directory.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.2 2004-01-13 12:46:12 fil Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: LocalFileSystemProvider.java,v 1.3 2004-09-24 11:23:11 zwierzem Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -63,6 +65,9 @@ public class LocalFileSystemProvider
 	/** Platform specific directory spearator character. */
 	private static String fs = System.getProperty("file.separator");
 
+    /** Platform and configuration specific file names encoding. */
+    private static String encoding = System.getProperty("file.encoding");
+    
 	// instance variables ///////////////////////////////////////////////////
 
 	/** The base directory. */	
@@ -102,6 +107,16 @@ public class LocalFileSystemProvider
         if(!baseDir.isDirectory())
         {
             throw new ComponentInitializationError(root+" is not a directory");
+        }
+        
+        try
+        {
+            "anyString".getBytes(encoding);
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new ComponentInitializationError(
+                "invalid value of system's 'file.encoding' property '"+encoding+"'", e);
         }
     }
 
@@ -195,8 +210,9 @@ public class LocalFileSystemProvider
      * {@inheritDoc}
      */
     public boolean createNewFile(String path)
-        throws IOException
+        throws IOException, UnsupportedCharactersInFilePathException
     {
+        checkPath(path);        
         File file = getFile(path);
         return file.createNewFile();
     }
@@ -204,8 +220,10 @@ public class LocalFileSystemProvider
     /**
      * {@inheritDoc}
      */
-    public void mkdirs(String path) throws IOException
+    public void mkdirs(String path)
+        throws IOException, UnsupportedCharactersInFilePathException
     {
+        checkPath(path);        
 		File file = getFile(path);
 		if(!file.mkdirs())
 		{
@@ -228,8 +246,10 @@ public class LocalFileSystemProvider
     /**
      * {@inheritDoc}
      */
-    public void rename(String from, String to) throws IOException
+    public void rename(String from, String to)
+        throws IOException, UnsupportedCharactersInFilePathException
     {
+        checkPath(to);        
 		File fromFile = getFile(from);
 		File toFile = getFile(to);
 		if(!fromFile.renameTo(toFile))
@@ -393,6 +413,46 @@ public class LocalFileSystemProvider
     
     // implementation ///////////////////////////////////////////////////////
     
+    /**
+     * Checks the given abstract path for character set compatibility with underlying filesystem. 
+     * 
+     * @param path the pathname.
+     * @throws UnsupportedCharactersInFilePathException if the given destination path contains
+     *  characters incompatible with underlying filesystem.
+     */
+    protected void checkPath(String path)
+        throws UnsupportedCharactersInFilePathException
+    {
+        // TODO: Test this method
+        try
+        {
+            String newPath = new String(path.getBytes(encoding), encoding);
+            if(!newPath.equals(path))
+            {
+                // paths differ - get different characters
+                StringBuffer badCharacters = new StringBuffer();
+                int stop = path.length() < newPath.length() ? path.length() : newPath.length();
+                for(int i=0; i < stop; i++)
+                {
+                    char c = path.charAt(i);
+                    if(c != newPath.charAt(i))
+                    {
+                        badCharacters.append(c);
+                    }
+                }
+                for(int i=stop; i < newPath.length(); i++)
+                {
+                    badCharacters.append(newPath.charAt(i));
+                }
+                throw new UnsupportedCharactersInFilePathException(badCharacters.toString());
+            }
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            // should never happen - look at the constructor
+        }
+    }
+
     /**
      * Returns a java.io.File object at the given abstract path.
      * 
