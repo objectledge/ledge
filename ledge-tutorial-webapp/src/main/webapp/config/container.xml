@@ -7,6 +7,7 @@
   <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
              class="org.objectledge.pico.LedgeStringToObjectConverter"/>
     
+  <component class="org.objectledge.xml.XMLGrammarCache"/>
   <component class="org.objectledge.xml.XMLValidator"/>
 
   <component class="org.objectledge.configuration.ConfigurationFactory">
