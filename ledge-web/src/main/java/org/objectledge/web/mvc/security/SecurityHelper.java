@@ -67,12 +67,12 @@ public abstract class SecurityHelper
                 HttpContext httpContext = HttpContext.getHttpContext(context);
                 if(httpContext == null)
                 {
-                    throw new IllegalStateException("failed to retrieve http context" +
+                    throw new IllegalStateException("failed to retrieve http context " +
                                                      " for security checking purpose");
                 }
                 if(!httpContext.getRequest().isSecure())
                 {
-                    throw new InsecureChannelException("Secure channel required for"+
+                    throw new InsecureChannelException("Secure channel required for "+
                                                         obj.getClass().getName());
                 }
             }
@@ -81,12 +81,12 @@ public abstract class SecurityHelper
                 MVCContext mvcContext = MVCContext.getMVCContext(context);
                 if(mvcContext == null)
                 {
-                    throw new IllegalStateException("failed to retrieve mvc context" +
+                    throw new IllegalStateException("failed to retrieve mvc context " +
                                                      " for security checking purpose");
                 }
                 if(!mvcContext.isUserAuthenticated())
                 {
-                    throw new LoginRequiredException("Only authenticated user can access to"+
+                    throw new LoginRequiredException("Only authenticated user can access "+
                                                        obj.getClass().getName());
                 }
             }
