@@ -32,7 +32,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.4 2004-01-22 10:53:29 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.5 2004-01-29 13:18:43 pablo Exp $
  */
 public class MailSystem
 {
@@ -94,7 +94,7 @@ public class MailSystem
         try
         {
             String mimeTypeFilePath = config.getChild("mime_type_file_path")
-            	.getValue("/config/mimeType");
+            	.getValue("/config/mime.types");
             mimeMap = new MimetypesFileTypeMap(fileSystem.getInputStream(mimeTypeFilePath));
             debugAddress = config.getChild("big_brother_email").getValue("");
             String pattern = config.getChild("email_pattern")
