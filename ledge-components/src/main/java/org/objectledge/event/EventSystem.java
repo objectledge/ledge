@@ -60,7 +60,7 @@ import org.objectledge.threads.ThreadPool;
  * InboundEventForwarder} and {@link OutboundEventForwarder}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventSystem.java,v 1.3 2004-02-12 11:43:05 pablo Exp $
+ * @version $Id: EventSystem.java,v 1.4 2004-03-01 11:40:55 fil Exp $
  */
 public class EventSystem implements EventForwarder
 {
@@ -73,7 +73,7 @@ public class EventSystem implements EventForwarder
     private EventForwarder forwarder;
 
     /** Asynchronous mode flag. */
-    private boolean asynchronous;
+    private boolean asynchronous = false;
     
     /** The event queue */
     private ArrayList queue;
@@ -89,7 +89,10 @@ public class EventSystem implements EventForwarder
     {
         this.logger = logger;
         forwarder = new DefaultEventForwarder(this, logger);
-        asynchronous = config.getChild("asynchronous").getValueAsBoolean(false);
+        if(config != null)
+        {
+            asynchronous = config.getChild("asynchronous").getValueAsBoolean(false);
+        }
         if(asynchronous)
         {
             threadPool.runDaemon(new DispatcherTask());
