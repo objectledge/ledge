@@ -49,13 +49,15 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.5 2004-01-21 15:17:07 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.6 2004-01-21 15:23:53 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
     private Templating templating;
     
     private Context context;
+    
+    private MVCContext mvcContext;
     
     private BuilderExecutorValve executor;
     
@@ -95,34 +97,28 @@ public class BuilderExecutorValveTest extends TestCase
         context = new Context();
         context.clearAttributes();
         executor = new BuilderExecutorValve(context, finder, finder, 8, 8);
+        mvcContext = new MVCContext();
+        context.setAttribute(MVCContext.class, mvcContext);
+        context.setAttribute(TemplatingContext.class, templating.createContext());
     }
     
     public void testEnclosure()
     {
-        MVCContext mvcContext = new MVCContext();
         mvcContext.setView("foo.Bar");
-        context.setAttribute(MVCContext.class, mvcContext);
-        context.setAttribute(TemplatingContext.class, templating.createContext());
         executor.run();
         assertEquals("Default(foo/Default(foo/Bar()))", mvcContext.getBuildResult());
     }
     
     public void testRoute()
     {
-        MVCContext mvcContext = new MVCContext();
         mvcContext.setView("Router");
-        context.setAttribute(MVCContext.class, mvcContext);
-        context.setAttribute(TemplatingContext.class, templating.createContext());
         executor.run();
         assertEquals("Default(RoutedTo())", mvcContext.getBuildResult());
     }
     
     public void testInfiniteRoute()
     {
-        MVCContext mvcContext = new MVCContext();
         mvcContext.setView("RouteToSelf");
-        context.setAttribute(MVCContext.class, mvcContext);
-        context.setAttribute(TemplatingContext.class, templating.createContext());
         try
         {
             executor.run();
@@ -136,10 +132,7 @@ public class BuilderExecutorValveTest extends TestCase
     
     public void testInfiniteEnclosure()
     {
-        MVCContext mvcContext = new MVCContext();
         mvcContext.setView("EncloseSelf");
-        context.setAttribute(MVCContext.class, mvcContext);
-        context.setAttribute(TemplatingContext.class, templating.createContext());
         try
         {
             executor.run();
@@ -153,10 +146,7 @@ public class BuilderExecutorValveTest extends TestCase
     
     public void testOverride()
     {
-        MVCContext mvcContext = new MVCContext();
         mvcContext.setView("Overrider");
-        context.setAttribute(MVCContext.class, mvcContext);
-        context.setAttribute(TemplatingContext.class, templating.createContext());
         executor.run();
         assertEquals("Default(OverridenTo())", mvcContext.getBuildResult());
     }
