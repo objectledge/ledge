@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<strings>
+  <prefix name="page">
+    <item name="first">Pierwsza strona</item>
+    <item name="last">Ostatnia strona</item>
+    <item name="next">Następna strona</item>
+    <item name="previous">Poprzednia strona</item>
+    <item name="of">z</item>
+    <item name="size">na stronie</item>
+    <item name="all">wszystkie</item>
+  </prefix>
+  <item name="empty">Brak elementów</item>
+</strings>

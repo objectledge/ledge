@@ -1,0 +1,223 @@
+#**
+ * table rendering macros
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
+ * @version $Id: table.vt,v 1.1 2004-02-11 15:52:19 zwierzem Exp $
+*###
+#**
+ * Displays a single header cell contents.
+ *
+ * @param $table the table tool.
+ * @param $column TableColumn object.
+ * @param $tableLink LinkTool with preset table_id parameter.
+ *#
+#macro(tableView_headCellContent $table $column $tableLink)
+  #if($column.isSortable())
+    <a href="$tableLink.action('table,SetSortColumn').set('sort_column',$column.name)">$column.label</a>
+    #if($table.getSortColumn() && $table.getSortColumn() == $column)
+      #if($table.getAscSort())
+      <img src="$link.resource('tree/down.gif')" border="0" />
+      #else
+      <img src="$link.resource('tree/up.gif')" border="0" />
+      #end
+    #end
+  #else
+    $column.label
+  #end
+#end
+
+#**
+ * Displays table headers.
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset table_id.
+ * @param $columnOrder list of column names.
+ *#
+#macro(tableView_header $table $tableLink $columnOrder)
+  #foreach($columnName in $columnOrder)
+    #set($column = $table.getColumn($columnName))
+    <th #*
+*##if($column.width)width="$column.width" #end#*
+*##if($column.style)style="$column.style" #end#*
+*##if($column.align)align="$column.align" #end#*
+*##if($column.valign)valign="$column.valign" #end#*
+*##if($column.get('class'))class="$column.get('class')"#end nowrap="nowrap">
+    #tableView_headCellContent($table $column $tableLink)
+    </th>
+  #end
+#end
+
+
+#**
+ * Displays table body.
+ *
+ * @param $table the table tool.
+ *#
+#macro(tableView_rows $table)
+  #if ($table.pageRowCount == 0)
+    #tableView_emptyRow()
+  #else
+    #foreach ($row in $table.rows)
+      ## compute even/odd table row
+      #set ($odd = $velocityCount%2)
+      <tr class="row$odd">
+      #tableView_row($table $row $odd)
+      </tr>
+    #end
+  #end
+#end
+
+#**
+ * Displays the table pager.
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset table_id.
+ *#
+#macro(tableView_pager $table $tableLink)
+#if($table.numPages > 1)
+#set($setPageLink = $tableLink.action('table,SetPage'))
+<a href="$setPageLink.set('page',$table.getPageNumber(0))">$i18n.get('table.page.first')</a> |
+<a href="$setPageLink.set('page',$table.getRelativePageNumber(-1))">$i18n.get('table.page.previous')</a> |
+$table.currentPage $i18n.get('table.page.of') $table.numPages |
+&nbsp;
+<a href="$setPageLink.set('page',$table.getRelativePageNumber(1))">$i18n.get('table.page.next')</a> |
+<a href="$setPageLink.set('page',$table.getPageNumber($table.numPages))">$i18n.get('table.page.last')</a>
+#end
+#end
+
+#**
+ * Displays a relative pager
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset table_id.
+ *#
+#macro(tableView_relativePager $table $tableLink)
+#set($setPageLink = $tableLink.action('table,SetPage'))
+<a href="$setPageLink.set('page',$table.getPageNumber(0))">$i18n.get('table.page.first')</a> |
+#if($table.getRelativePageNumber(-5) > 1)... #end
+#foreach($pageNum in [$table.getRelativePageNumber(-5)..$table.getRelativePageNumber(-1)])
+  #if($pageNum != $table.currentPage) <a href="$setPageLink.set('page',$pageNum)">$pageNum</a> #end
+#end
+<b>$table.currentPage</b>
+#foreach($pageNum in [$table.getRelativePageNumber(1)..$table.getRelativePageNumber(5)])
+  #if($pageNum != $table.currentPage) <a href="$setPageLink.set('page',$pageNum)">$pageNum</a> #end
+#end
+#if($table.getRelativePageNumber(5) < $table.numPages)... #end
+| <a href="$setPageLink.set('page',$table.getPageNumber($table.numPages))">$i18n.get('table.page.last')</a>
+#end
+
+#**
+ * Displays a page size chooser
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset table_id.
+ * @param $sizes a list of page sizes (ie. [10,20,50])
+ *#
+#macro(tableView_pageSizeChooser $table $tableLink $sizes)
+#foreach($size in $sizes)
+<input type="radio" name="pageSize" id="size$size" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('page_size',$size)'" #if($table.pageSize == $size)checked#end> <label for="size$size">$size</label>
+#end
+<input type="radio" name="pageSize" id="size0" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('page_size',0)'" #if($table.pageSize == 0)checked#end> <label for="size0">$i18n.get('table.page.all')</label>
+$i18n.get('table.page.size')
+#end
+
+#**
+ * Displays lines, expand boxes and icons for a tree view.
+ *
+ * @param $table the table tool.
+ * @param $row the row to displays tree images for.
+ * @parmm $toggleExpandLink LinkTool with preconfigured action for toggling.
+ *        row selection
+ *#
+#macro(tableView_linesAndFoldersBase $table $row $toggleExpandLink)
+#if($table.viewAsTree)
+## -- tree view
+  #if($table.rootRow == $row)
+    <img src="$link.resource('tree/folderopen.gif')" />
+  #else
+##   -- lines generation START
+    #foreach($ancestor in $table.getAncestors($row))
+      #if($ancestor != $table.getParent($row))
+        #if($table.hasMoreChildren($ancestor, $row))
+          <img src="$link.resource('tree/I.gif')" />
+        #else
+          <img src="$link.resource('tree/blank.gif')" />
+        #end
+      #end
+    #end
+##   -- lines generation END
+##   -- plus minus and file/folder generation START
+    #set($parent = $table.getParent($row))
+    #if ($row.childCount == 0)
+      #if($table.hasMoreChildren($parent, $row))
+        <img src="$link.resource('tree/T.gif')" />
+      #else
+        <img src="$link.resource('tree/L.gif')" />
+      #end
+      <img src="$link.resource('tree/file.gif')" />
+    #else ## getChildCount() > 0
+      #if($table.hasMoreChildren($parent, $row))
+        #if($table.isExpanded($row))
+          <a href="$toggleExpandLink"><img src="$link.resource('tree/Tminus.gif')" /></a>
+          <img src="$link.resource('tree/folderopen.gif')" />
+        #else
+          <a href="$toggleExpandLink"><img src="$link.resource('tree/Tplus.gif')" /></a>
+          <img src="$link.resource('tree/folder.gif')" />
+        #end
+      #else
+        #if($table.isExpanded($row))
+          <a href="$toggleExpandLink"><img src="$link.resource('tree/Lminus.gif')" /></a>
+          <img src="$link.resource('tree/folderopen.gif')" />
+        #else
+          <a href="$toggleExpandLink"><img src="$link.resource('tree/Lplus.gif')" /></a>
+          <img src="$link.resource('tree/folder.gif')" />
+        #end
+      #end
+    #end
+##   -- plus minus and file/folder generation END
+  #end
+#else
+## -- list view
+  #if ($row.childCount == 0) <img src="$link.resource('tree/file.gif')" />
+  #else <img src="$link.resource('tree/folder.gif')" /> #end
+#end
+#end
+
+#**
+ * Standard lines and folders with defalut expansion tooggling action.
+ *
+ * @param $table the table tool.
+ * @param $row the row to displays tree images for.
+ *#
+#macro(tableView_linesAndFolders $table $row $tableLink)
+    #set($toggleExpandLink = $tableLink.set('row_id',$row.id).action('table,ToggleExpanded'))
+    #tableView_linesAndFoldersBase($table $row $toggleExpandLink)
+#end
+
+#**
+ * Displays a tree that displays row object's name property.
+ *
+ * @param $table the table model.
+ * @param $tableLink LinkTool with preset table_id.
+ * @param $rowLink LinkTool with preconfigured links for table elements.
+ * @param $rowIdParameterName the name of the request parameters to put row
+ *        identifier to.
+ *#
+#macro(tableView_oneColumnTree $table $tableLink $rowLink $rowIdParameterName)
+  #if ($table.pageRowCount == 0)
+  <div class="row1">$i18n.get('table.empty')</div>
+  #else
+    #foreach ($row in $table.rows)
+      ## compute even/odd table row
+      #set($odd = $velocityCount%2)
+      <div class="row$odd tree-lines-and-folders">#tableView_linesAndFolders($table $row $tableLink)
+      #if($table.isSelected($row))
+        <b><a href="$rowLink.set($rowIdParameterName,$row.id)">$row.object.name</a></b>
+      #else
+        <a href="$rowLink.set($rowIdParameterName,$row.id)">$row.object.name</a>
+      #end
+      </div>
+    #end
+  #end
+#end
