@@ -16,7 +16,7 @@ import pl.caltha.forms.internal.ui.UIConstants;
 /** This a form tool context tool implementation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormToolImpl.java,v 1.3 2005-01-27 00:58:23 pablo Exp $
+ * @version $Id: FormToolImpl.java,v 1.4 2005-02-02 22:24:34 pablo Exp $
  */
 public class FormToolImpl 
 implements FormTool
@@ -27,6 +27,7 @@ implements FormTool
     
     public FormToolImpl(Context context, Templating templating)
     {
+        this.context = context;
         this.templating = templating;
     }
     
