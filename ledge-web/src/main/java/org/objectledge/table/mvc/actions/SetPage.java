@@ -26,39 +26,40 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.actions;
+package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 
 /**
- * Sets a new sorting for a given table.
- * If the same column is set, sorting direction is changed.
- *
+ * Changes currently viewed page.
+ * 
+ * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetSortColumn.java,v 1.1 2004-02-10 17:17:47 zwierzem Exp $
+ * @version $Id: SetPage.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
  */
-public class SetSortColumn extends BaseTableAction
+public class SetPage
+    extends BaseTableAction
 {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public SetSortColumn(TableStateManager tableStateManager)
-	{
-		super(tableStateManager);
-	}
+    public SetPage(TableStateManager tableStateManager)
+    {
+        super(tableStateManager);
+    }
 
-	/** 
+    /** 
 	 * {@inheritDoc}
 	 */
-	public void process(Context context)
-		throws ProcessingException
-	{
+    public void process(Context context)
+        throws ProcessingException
+    {
         TableState state = getTableState(context);
 
         // null pointer exception protection
@@ -68,21 +69,13 @@ public class SetSortColumn extends BaseTableAction
         }
 
 		Parameters requestParameters = RequestParameters.getRequestParameters(context);
-        String sortColumnName = requestParameters.get(TableConstants.SORT_COLUMN_PARAM_KEY, "");
-        if(sortColumnName.length() == 0)
+        int page = requestParameters.getInt(TableConstants.PAGE_NO_PARAM_KEY, -1);
+        if(page == -1)
         {
-            throw new ProcessingException("'"+TableConstants.SORT_COLUMN_PARAM_KEY+
-				"' parameter, not found");
+            throw new ProcessingException("'"+TableConstants.PAGE_NO_PARAM_KEY+
+				"' parameter not found");
         }
 
-        String originalSortColumnName = state.getSortColumnName();
-        if(sortColumnName.equals(originalSortColumnName))
-        {
-            state.toggleSortDir();
-        }
-        else
-        {
-            state.setSortColumnName(sortColumnName);
-        }
+        state.setCurrentPage(page);
     }
 }

@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.actions;
+package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
@@ -39,7 +39,7 @@ import org.objectledge.table.TableStateManager;
  * 
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleView.java,v 1.1 2004-02-10 17:17:47 zwierzem Exp $
+ * @version $Id: ToggleView.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
  */
 public class ToggleView
     extends BaseTableAction

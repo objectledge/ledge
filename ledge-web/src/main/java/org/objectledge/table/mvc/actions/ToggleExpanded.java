@@ -26,40 +26,37 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.actions;
+package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 
 /**
- * Changes currently viewed page.
+ * Toggles a row expansion state.
  * 
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetPage.java,v 1.1 2004-02-10 17:17:47 zwierzem Exp $
+ * @version $Id: ToggleExpanded.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
  */
-public class SetPage
-    extends BaseTableAction
+public class ToggleExpanded
+    extends BaseToggleAction
 {
 	/** 
 	 * {@inheritDoc}
 	 */
-    public SetPage(TableStateManager tableStateManager)
-    {
-        super(tableStateManager);
-    }
+	public ToggleExpanded(TableStateManager tableStateManager)
+	{
+		super(tableStateManager);
+	}
 
-    /** 
+	/** 
 	 * {@inheritDoc}
 	 */
-    public void process(Context context)
-        throws ProcessingException
-    {
+	public void process(Context context)
+		throws ProcessingException
+	{
         TableState state = getTableState(context);
 
         // null pointer exception protection
@@ -68,14 +65,7 @@ public class SetPage
             return;
         }
 
-		Parameters requestParameters = RequestParameters.getRequestParameters(context);
-        int page = requestParameters.getInt(TableConstants.PAGE_NO_PARAM_KEY, -1);
-        if(page == -1)
-        {
-            throw new ProcessingException("'"+TableConstants.PAGE_NO_PARAM_KEY+
-				"' parameter not found");
-        }
-
-        state.setCurrentPage(page);
+        String rowId = getRowId(context);
+        state.toggleExpanded(rowId);
     }
 }

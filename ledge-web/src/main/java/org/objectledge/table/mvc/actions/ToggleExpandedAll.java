@@ -26,30 +26,27 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.actions;
+package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 
 /**
- * Changes the viewed page size.
- * 
- * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
+ * Toggles expanded all state flag.
+ *
+ * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetPageSize.java,v 1.1 2004-02-10 17:17:47 zwierzem Exp $
+ * @version $Id: ToggleExpandedAll.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
  */
-public class SetPageSize
-    extends BaseTableAction
+public class ToggleExpandedAll
+    extends BaseToggleAction
 {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public SetPageSize(TableStateManager tableStateManager)
+	public ToggleExpandedAll(TableStateManager tableStateManager)
 	{
 		super(tableStateManager);
 	}
@@ -61,21 +58,11 @@ public class SetPageSize
 		throws ProcessingException
 	{
         TableState state = getTableState(context);
-
         // null pointer exception protection
         if(state == null)
         {
             return;
         }
-
-		Parameters requestParameters = RequestParameters.getRequestParameters(context);
-        int size = requestParameters.getInt(TableConstants.PAGE_SIZE_PARAM_KEY, -1);
-        if(size == -1)
-        {
-            throw new ProcessingException("'"+TableConstants.PAGE_SIZE_PARAM_KEY+
-				"' parameter not found");
-        }
-        state.setCurrentPage(1);
-        state.setPageSize(size);
+        state.setAllExpanded(!state.getAllExpanded());
     }
 }

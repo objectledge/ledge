@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.actions;
+package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
@@ -34,19 +34,19 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 
 /**
- * Toggles a row expansion state.
+ * Toggles row selection state.
  * 
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleExpanded.java,v 1.1 2004-02-10 17:17:47 zwierzem Exp $
+ * @version $Id: ToggleSelected.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
  */
-public class ToggleExpanded
+public class ToggleSelected
     extends BaseToggleAction
 {
 	/** 
 	 * {@inheritDoc}
 	 */
-	public ToggleExpanded(TableStateManager tableStateManager)
+	public ToggleSelected(TableStateManager tableStateManager)
 	{
 		super(tableStateManager);
 	}
@@ -66,6 +66,6 @@ public class ToggleExpanded
         }
 
         String rowId = getRowId(context);
-        state.toggleExpanded(rowId);
+        state.toggleSelected(rowId);
     }
 }

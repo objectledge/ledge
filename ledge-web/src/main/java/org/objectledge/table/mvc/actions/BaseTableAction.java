@@ -26,46 +26,57 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.actions;
+package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.pipeline.Valve;
+import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
+import org.objectledge.web.HttpContext;
 
 /**
- * Toggles row selection state.
- * 
- * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
+ * Base class for all table actions.
+ *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleSelected.java,v 1.1 2004-02-10 17:17:47 zwierzem Exp $
+ * @version $Id: BaseTableAction.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
  */
-public class ToggleSelected
-    extends BaseToggleAction
+public abstract class BaseTableAction
+	implements Valve
 {
-	/** 
-	 * {@inheritDoc}
-	 */
-	public ToggleSelected(TableStateManager tableStateManager)
-	{
-		super(tableStateManager);
-	}
+    /** table service */
+    protected TableStateManager tableStateManager;
 
-	/** 
-	 * {@inheritDoc}
+	/**
+	 * Constructs a base table action.
+	 * @param tableStateManager used to get currently modified table state.
 	 */
-	public void process(Context context)
-		throws ProcessingException
-	{
-        TableState state = getTableState(context);
+    public BaseTableAction(TableStateManager tableStateManager)
+    {
+		this.tableStateManager = tableStateManager;
+    }
 
-        // null pointer exception protection
-        if(state == null)
+	/**
+	 * Retrieves currently modified table state from users session.
+	 * @param context used to access request parameters and http context.
+	 * @return table state selected using current request parameters
+	 * @throws ProcessingException if table identification parameter is not defined for
+	 * 		this request. 
+	 */
+    protected TableState getTableState(Context context)
+    	throws ProcessingException
+    {
+    	Parameters requestParameters = RequestParameters.getRequestParameters(context);
+    	HttpContext httpContext = HttpContext.getHttpContext(context);
+        int id = requestParameters.getInt(TableConstants.TABLE_ID_PARAM_KEY, -1);
+        if(id == -1)
         {
-            return;
+            throw new ProcessingException("'"+TableConstants.TABLE_ID_PARAM_KEY+
+            	"' parameter, not found");
         }
-
-        String rowId = getRowId(context);
-        state.toggleSelected(rowId);
+        return tableStateManager.getState(httpContext, new Integer(id));
     }
 }

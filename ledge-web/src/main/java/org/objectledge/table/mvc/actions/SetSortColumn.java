@@ -26,57 +26,63 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.actions;
+package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.pipeline.Valve;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.web.HttpContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 
 /**
- * Base class for all table actions.
+ * Sets a new sorting for a given table.
+ * If the same column is set, sorting direction is changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseTableAction.java,v 1.1 2004-02-10 17:17:47 zwierzem Exp $
+ * @version $Id: SetSortColumn.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
  */
-public abstract class BaseTableAction
-	implements Valve
+public class SetSortColumn extends BaseTableAction
 {
-    /** table service */
-    protected TableStateManager tableStateManager;
-
-	/**
-	 * Constructs a base table action.
-	 * @param tableStateManager used to get currently modified table state.
+	/** 
+	 * {@inheritDoc}
 	 */
-    public BaseTableAction(TableStateManager tableStateManager)
-    {
-		this.tableStateManager = tableStateManager;
-    }
+	public SetSortColumn(TableStateManager tableStateManager)
+	{
+		super(tableStateManager);
+	}
 
-	/**
-	 * Retrieves currently modified table state from users session.
-	 * @param context used to access request parameters and http context.
-	 * @return table state selected using current request parameters
-	 * @throws ProcessingException if table identification parameter is not defined for
-	 * 		this request. 
+	/** 
+	 * {@inheritDoc}
 	 */
-    protected TableState getTableState(Context context)
-    	throws ProcessingException
-    {
-    	Parameters requestParameters = RequestParameters.getRequestParameters(context);
-    	HttpContext httpContext = HttpContext.getHttpContext(context);
-        int id = requestParameters.getInt(TableConstants.TABLE_ID_PARAM_KEY, -1);
-        if(id == -1)
+	public void process(Context context)
+		throws ProcessingException
+	{
+        TableState state = getTableState(context);
+
+        // null pointer exception protection
+        if(state == null)
         {
-            throw new ProcessingException("'"+TableConstants.TABLE_ID_PARAM_KEY+
-            	"' parameter, not found");
+            return;
         }
-        return tableStateManager.getState(httpContext, new Integer(id));
+
+		Parameters requestParameters = RequestParameters.getRequestParameters(context);
+        String sortColumnName = requestParameters.get(TableConstants.SORT_COLUMN_PARAM_KEY, "");
+        if(sortColumnName.length() == 0)
+        {
+            throw new ProcessingException("'"+TableConstants.SORT_COLUMN_PARAM_KEY+
+				"' parameter, not found");
+        }
+
+        String originalSortColumnName = state.getSortColumnName();
+        if(sortColumnName.equals(originalSortColumnName))
+        {
+            state.toggleSortDir();
+        }
+        else
+        {
+            state.setSortColumnName(sortColumnName);
+        }
     }
 }
