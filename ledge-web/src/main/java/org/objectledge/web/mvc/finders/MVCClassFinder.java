@@ -35,7 +35,7 @@ import org.objectledge.web.mvc.components.Component;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.11 2005-02-08 19:11:39 rafal Exp $
+ * @version $Id: MVCClassFinder.java,v 1.12 2005-02-17 17:09:04 zwierzem Exp $
  */
 public interface MVCClassFinder
 {
@@ -65,18 +65,10 @@ public interface MVCClassFinder
 	 * Returns an enclosing builder for a given builder. If no builder is found, a
 	 * {@link org.objectledge.web.mvc.builders.DefaultBuilder} is returned.
 	 * 
-	 * @param builder a builder for which an eclosing builder must be found 
+	 * @param viewName a builder for which an eclosing builder must be found 
      * @return found builder instance
 	 */
-	public Builder findEnclosingBuilder(Builder builder);
-
-	/**
-	 * Finds the view name that corresponds to the given builder.
-	 * 
-	 * @param builder the builder to lookup name for
-	 * @return the view name that corresponds to the given builder.
-	 */
-	public String findViewName(Builder builder);
+	public String findEnclosingViewName(String viewName);
 
 	// components /////////////////////////////////////////////////////////////////////////////////
 

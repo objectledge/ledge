@@ -40,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.24 2004-06-16 08:34:05 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.25 2005-02-17 17:09:04 zwierzem Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -91,23 +91,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		return findTemplate(VIEWS, view, true, false, null, "findBuilderTemplate");
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
-    public Template findEnclosingBuilderTemplate(Template builderTemplate)
-    {
-        String view = findViewName(builderTemplate);
-		return findTemplate(VIEWS, view, true, true, null, "findEnclosingBuilderTemplate");
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public String findViewName(Template builderTemplate)
-    {
-        return nameSequenceFactory.getView(VIEWS, builderTemplate);
-    }
-
 	// component templates ////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -141,18 +124,53 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	/**
 	 * {@inheritDoc}
 	 */
-    public Builder findEnclosingBuilder(Builder builder)
+    public String findEnclosingViewName(String viewName)
     {
-        String view = findViewName(builder);
-        return (Builder) findObject(VIEWS, view, true, true, "findBuilder");
-    }
+        if(viewName != null && viewName.length() != 0)
+        {
+            Sequence classSequence = nameSequenceFactory.
+                getClassNameSequence(VIEWS, viewName, true, true);
 
-	/**
-	 * {@inheritDoc}
-	 */
-    public String findViewName(Builder builder)
-    {
-        return nameSequenceFactory.getView(VIEWS, builder.getClass());
+            Sequence templateSequence = nameSequenceFactory.
+                getTemplateNameSequence(VIEWS, viewName, true, true);
+
+            while(classSequence.hasNext() && templateSequence.hasNext())
+            {
+                String className = classSequence.next();
+                String templateName = templateSequence.next();
+                logger.debug("findEnclosingViewName: trying "+className+" and "+templateName);
+
+                try
+                {
+                    Object builder = getClassInstance(className);
+                    break;
+                }
+                catch(ClassNotFoundException e)
+                {
+                    // go on
+                }
+
+                if(templating.templateExists(templateName))
+                {
+                    break;
+                }
+            }
+            
+            String classSequenceViewName = classSequence.currentView();
+            String templateSequenceViewName = templateSequence.currentView();
+            if((classSequenceViewName == templateSequenceViewName) // both nulls
+               || classSequenceViewName.equals(templateSequenceViewName))
+            {
+                return classSequenceViewName;
+            }
+            else
+            {
+                throw new IllegalStateException("Sequences produced different view names: "+
+                    classSequenceViewName+" (class sequence) "+
+                    templateSequenceViewName+" (template sequence)");
+            }
+        }
+        return null;
     }
 
 	// components ///////////////////////////////////////////////////////////////////////////////
@@ -182,14 +200,17 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 			{
 				String name = sequence.next();
 				logger.debug(methodName+": trying "+name);
-				try
-				{
-					return templating.getTemplate(name);
-				}
-				catch(TemplateNotFoundException e)
-				{
-					// go on
-				}
+                if(templating.templateExists(name))
+                {
+                    try
+                    {
+                        return templating.getTemplate(name);
+                    }
+                    catch(TemplateNotFoundException e)
+                    {
+                        throw new IllegalStateException("Existing template disappeared", e);
+                    }
+                }
 			}
 		}
 		return null;
