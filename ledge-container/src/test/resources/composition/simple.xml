@@ -14,11 +14,11 @@
     <component-parameter class-key="java.lang.ClassLoader"/>
   </component>
   <component class="org.objectledge.filesystem.FileSystem">
-    <sequence-parameter class="[Lorg.objectledge.filesystem.FileSystemProvider;">
+    <sequence-parameter>
       <component-parameter key="org.objectledge.filesystem.FileSystemProvider:local"/>
       <component-parameter key="org.objectledge.filesystem.FileSystemProvider:classpath"/>
     </sequence-parameter>
-    <constant-parameter class="java.lang.Integer" value="4096"/>
-    <constant-parameter class="java.lang.Integer" value="4096"/>
+    <constant-parameter value="4096"/>
+    <constant-parameter value="4096"/>
   </component>
 </container>

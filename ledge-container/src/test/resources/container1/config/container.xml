@@ -10,9 +10,9 @@
     
     <component class="org.objectledge.xml.XMLValidator"/>
     <component class="org.objectledge.configuration.ConfigurationFactory" preload="true">
-      <component-parameter class-key="org.picocontainer.MutablePicoContainer"/>
-      <component-parameter class-key="org.objectledge.filesystem.FileSystem"/>
-      <component-parameter class-key="org.objectledge.xml.XMLValidator"/>
+      <component-parameter/>
+      <component-parameter/>
+      <component-parameter/>
       <constant-parameter value="/config"/>
     </component>
 
