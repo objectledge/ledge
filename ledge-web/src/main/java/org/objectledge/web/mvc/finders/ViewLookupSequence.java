@@ -32,7 +32,7 @@ import java.util.NoSuchElementException;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequence.java,v 1.5 2004-01-19 15:03:16 fil Exp $
+ * @version $Id: ViewLookupSequence.java,v 1.6 2004-01-22 15:53:43 pablo Exp $
  */
 public class ViewLookupSequence
     implements Sequence
@@ -53,8 +53,9 @@ public class ViewLookupSequence
      * Constructs a view lookup sequence.
      * 
      * @param prefices the path prefices.
-     * @param viewFallbackSequence the fallback sequence.
      * @param outSeparator separator to use in generated paths.
+     * @param infix the type of mvc component.
+     * @param viewFallbackSequence the fallback sequence.
      */
     public ViewLookupSequence(String[] prefices, char outSeparator, 
         String infix, Sequence viewFallbackSequence)
