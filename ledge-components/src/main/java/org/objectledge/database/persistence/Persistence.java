@@ -46,7 +46,7 @@ import org.objectledge.database.IdGenerator;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.5 2004-02-09 11:44:01 fil Exp $
+ * @version $Id: Persistence.java,v 1.6 2004-02-10 10:42:15 pablo Exp $
  */
 public class Persistence
 {
@@ -256,6 +256,10 @@ public class Persistence
     {
         synchronized (object)
         {
+            if (!object.getSaved())
+            {
+                throw new IllegalStateException("no state has been saved yet");
+            }
             Connection conn = null;
             try
             {

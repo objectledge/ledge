@@ -149,6 +149,11 @@ public class OutputRecord
     public void setBigDecimal(String field, BigDecimal value)
         throws PersistenceException
     {
+        if(value == null)
+        {
+            setNull(field);
+            return;
+        }
         fields.put(field, value.toString());
     }
 
@@ -191,6 +196,11 @@ public class OutputRecord
     public void setString(String field, String value)
         throws PersistenceException
     {
+        if(value == null)
+        {
+            setNull(field);
+            return;
+        }        
         fields.put(field,"'"+DatabaseUtils.escapeSqlString(value)+"'");
     }
 
@@ -231,6 +241,11 @@ public class OutputRecord
     public void setDate(String field, Date value)
         throws PersistenceException
     {
+        if(value == null)
+        {
+            setNull(field);
+            return;
+        }        
         fields.put(field, new java.sql.Date(value.getTime()));
     }
     
@@ -245,6 +260,11 @@ public class OutputRecord
     public void setTime(String field, Date value)
         throws PersistenceException
     {
+        if(value == null)
+        {
+            setNull(field);
+            return;
+        }        
         fields.put(field, new Time(value.getTime()));
     }
 
@@ -259,6 +279,11 @@ public class OutputRecord
     public void setTimestamp(String field, Date value)
         throws PersistenceException
     {
+        if(value == null)
+        {
+            setNull(field);
+            return;
+        }        
         fields.put(field, new Timestamp(value.getTime()));
     }
 
@@ -471,10 +496,17 @@ public class OutputRecord
             {
                 buff.append(field);
                 buff.append(" = ");
-                String value = (String)fields.get(field);
+                Object value = fields.get(field);
                 if(value != null)
                 {
-                    buff.append(value);
+                    if(value instanceof String)
+                    {
+                        buff.append(value);
+                    }
+                    else
+                    {
+                        buff.append('?');
+                    }
                 }
                 else
                 {
