@@ -1,5 +1,5 @@
 // 
-//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+//Copyright (c) 2003, 2004 Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 //All rights reserved. 
 //   
 //Redistribution and use in source and binary forms, with or without modification,  
@@ -39,7 +39,7 @@ import org.picocontainer.MutablePicoContainer;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.8 2004-04-01 08:54:26 fil Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.9 2004-04-22 12:54:00 zwierzem Exp $
  */
 public class HTMLEntityEncoder
 {
