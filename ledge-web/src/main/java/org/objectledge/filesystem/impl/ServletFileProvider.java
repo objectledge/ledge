@@ -11,7 +11,7 @@ import javax.servlet.ServletContext;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileProvider.java,v 1.1 2003-11-25 13:08:43 fil Exp $
+ * @version $Id: ServletFileProvider.java,v 1.2 2003-12-02 14:07:01 fil Exp $
  */
 public class ServletFileProvider 
 	extends ReadOnlyFileSystemProvider
@@ -32,7 +32,8 @@ public class ServletFileProvider
     public ServletFileProvider(String name, ServletContext context)
     {
         super(name);
-        this.context = context; 
+        this.context = context;
+        processListings();
     }
     
     // public interface ///////////////////////////////////////////////////////////////////////////
