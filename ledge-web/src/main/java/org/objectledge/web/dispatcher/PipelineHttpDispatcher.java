@@ -44,7 +44,7 @@ import org.objectledge.web.HttpDispatcher;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.4 2004-01-12 14:46:20 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.5 2004-01-12 14:50:23 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
@@ -78,7 +78,7 @@ public class PipelineHttpDispatcher
         HttpContext httpContext = new HttpContext(request,response);
         context.setAttribute(HttpContext.CONTEXT_KEY, httpContext);
         pipeline.run();
-        // TODO decide what to return...
-        return true;
+        context.removeAttribute(HttpContext.CONTEXT_KEY);
+        return httpContext.getDirectResponse();
     }
 }
