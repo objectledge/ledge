@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web.mvc;
+package org.objectledge.web.tools;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
