@@ -27,23 +27,49 @@
 //
 package org.objectledge.table;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AllTests.java,v 1.2 2004-02-12 10:25:25 zwierzem Exp $
+ * @version $Id: TableRowTest.java,v 1.1 2004-02-12 10:25:25 zwierzem Exp $
  */
-public class AllTests
+public class TableRowTest extends TestCase
 {
 
-    public static Test suite()
+    /**
+     * Constructor for TableRowTest.
+     * @param arg0
+     */
+    public TableRowTest(String arg0)
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.table");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(TableColumnTest.class));
-        suite.addTest(new TestSuite(TableRowTest.class));
-        //$JUnit-END$
-        return suite;
+        super(arg0);
+    }
+
+    public void testTableRow()
+    {
+    	String id = "id";
+    	Integer o = new Integer(12345);
+    	int depth = 2;
+    	int childCount = 3;
+    	int visibleChildCount = 2;
+    	TableRow row = new TableRow(id, o, depth, childCount, visibleChildCount);
+    	
+    	assertEquals(row.getId(), id);
+    	assertEquals(row.getObject(), o);
+    	assertEquals(row.getDepth(), depth);
+    	assertEquals(row.getChildCount(), childCount);
+    	assertEquals(row.getVisibleChildCount(), visibleChildCount);
+    	
+		assertFalse(row.equals(o));
+
+		TableRow row2 = new TableRow(id, null, 1, 1, 1);
+		assertTrue(row.equals(row2));
+
+		TableRow row3 = new TableRow("other-id", null, 1, 1, 1);
+		assertFalse(row.equals(row3));
+
+		assertEquals(row.hashCode(), row.hashCode());
+		assertEquals(row.hashCode(), row2.hashCode());
+		assertFalse(row.hashCode() == row3.hashCode());
     }
 }
