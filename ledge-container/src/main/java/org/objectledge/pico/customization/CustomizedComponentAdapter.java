@@ -45,7 +45,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * of the managed component, depending on the customizedComponentProvider's semantics.</p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.8 2003-12-15 09:42:57 fil Exp $
+ * @version $Id: CustomizedComponentAdapter.java,v 1.9 2003-12-15 15:33:35 fil Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
@@ -99,7 +99,7 @@ public class CustomizedComponentAdapter
             ComponentAdapter adapter = customizedComponentProvider.
                 getCustomizedAdapter(dependencyContainer, componentKey, componentImplementation);
             customizedComponentContainer.registerComponent(adapter);
-            return adapter.getComponentInstance(dependencyContainer);
+            return adapter.getComponentInstance(customizedComponentContainer);
         }
     }
 
