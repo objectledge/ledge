@@ -29,29 +29,27 @@
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
   <interleave>
+    <optional>    
+      <element name="query_separator">  
+        <text/>
+      </element>
+    </optional>    
     <optional>
-      <element name="default_locale">
-        <text/>
+      <element name="sticky">
+        <zeroOrMore>
+	      <element name="key">
+            <text/>
+          </element>       
+        </zeroOrMore>
       </element>
     </optional>    
-    <optional>    
-      <element name="default_encoding">  
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="view_token">  
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="action_token">  
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="upload_limit">
-        <text/>
+    <optional>
+      <element name="pathinfo">
+        <zeroOrMore>
+	      <element name="key">
+            <text/>
+          </element>       
+        </zeroOrMore>
       </element>
     </optional>    
   </interleave>   
