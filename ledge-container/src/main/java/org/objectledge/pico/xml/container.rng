@@ -96,7 +96,10 @@
   <define name="attlist.component" combine="interleave">
     <attribute name="class"/>
     <optional>
-      <attribute name="key"/>
+      <choice>
+        <attribute name="key"/>
+        <attribute name="class-key"/>
+      </choice>
     </optional>
     <optional>
       <attribute name="preload" a:defaultValue="false">
