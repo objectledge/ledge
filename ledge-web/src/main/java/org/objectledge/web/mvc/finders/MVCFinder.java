@@ -27,9 +27,6 @@
 //
 package org.objectledge.web.mvc.finders;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
@@ -46,7 +43,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.15 2004-01-20 13:12:13 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.16 2004-01-20 13:39:34 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -60,9 +57,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	private MutablePicoContainer container;
 	private Runnable defaultAction;
 	private DefaultBuilder defaultBuilder;
-	private DefaultComponent defaultComponent;
     private DefaultTemplate defaultTemplate = new DefaultTemplate();
-	private Map classCache = new HashMap();
 	
     /** the logger. */
     private Logger logger;
@@ -95,7 +90,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		
 		defaultBuilder = (DefaultBuilder) container.getComponentInstance(DefaultBuilder.class);
 		defaultAction = (DefaultAction) container.getComponentInstance(DefaultAction.class);
-		defaultComponent= (DefaultComponent) container.getComponentInstance(DefaultComponent.class);
 	}
 
     // builder templates ////////////////////////////////////////////////////////////////////////
@@ -105,7 +99,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Template findBuilderTemplate(String view)
     {
-		return findTemplate(VIEWS, view, true, "findBuilderTemplate");
+		return findTemplate(VIEWS, view, true, defaultTemplate, "findBuilderTemplate");
     }
 
 	/**
@@ -151,7 +145,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Template getComponentTemplate(String name)
 	{
-		return findTemplate(COMPONENTS, name, false, "getComponentTemplate");
+		return findTemplate(COMPONENTS, name, false, null, "getComponentTemplate");
 	}
 
 	// actions //////////////////////////////////////////////////////////////////////////////////
@@ -223,8 +217,8 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Component getComponent(String componentName)
 	{
-		return (Component)
-			findObject(COMPONENTS, componentName, false, defaultComponent,  "getComponent");
+        return (Component)
+            findObject(COMPONENTS, componentName, false, null,  "getComponent");
 	}    
 
     // implementation ///////////////////////////////////////////////////////////////////////////
@@ -233,7 +227,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		String classType,
 		String templateName,
 		boolean fallback,
-		String methodName)
+		Template defaultTemplate, String methodName)
 	{
 		if(templateName != null && templateName.length() != 0)
 		{
