@@ -71,7 +71,14 @@
 		<a href="http://objectledge.org/jira">view issues</a>
 	      </p>
   	    </td>
-	    <td colspan="2" style="vertical-align:bottom; background:white;">
+     	    <td width="33%" style="vertical-align:bottom; background:white;">
+	      <p style="text-align:center;">
+	        <img alt="Clover logo" style="border:none; margin-bottom:5px;" src="images/clover_logo.gif" /><br />
+  	        <a href="http://www.thecortex.net/clover/index.html">Clover</a><br/>
+		<a href="modules/ledge-components/clover/index.html">view a coverage report</a>
+	      </p>
+  	    </td>
+	    <td style="vertical-align:bottom; background:white;">
 	      <br/>
 	    </td>
 	  </tr>
