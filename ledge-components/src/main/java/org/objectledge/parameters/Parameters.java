@@ -5,7 +5,7 @@ package org.objectledge.parameters;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.4 2003-11-27 17:05:19 pablo Exp $
+ * @version $Id: Parameters.java,v 1.5 2003-11-28 14:40:08 pablo Exp $
  */
 public interface Parameters
 {
@@ -153,7 +153,7 @@ public interface Parameters
      * @param name the name of the parameter.
      * @return <code>true</code> if parameter is defined.
      */
-    public boolean isDefinied(String name);
+    public boolean isDefined(String name);
 
     /**
      * Remove all parameters.
