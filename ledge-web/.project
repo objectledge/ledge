@@ -3,6 +3,7 @@
 	<name>ledge-web</name>
 	<comment></comment>
 	<projects>
+		<project>dna</project>
 		<project>ledge-components</project>
 		<project>pico</project>
 	</projects>
@@ -13,14 +14,13 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.ajdt.ui.ajbuilder</name>
+			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.eclipse.ajdt.ui.ajnature</nature>
 		<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
 	</natures>
 </projectDescription>
