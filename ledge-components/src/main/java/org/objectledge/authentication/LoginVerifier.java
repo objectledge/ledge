@@ -39,7 +39,7 @@ import org.jcontainer.dna.Configuration;
  * Verifies a login name against a set of reserved ones and pattern.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LoginVerifier.java,v 1.2 2004-02-19 16:27:47 pablo Exp $
+ * @version $Id: LoginVerifier.java,v 1.3 2004-02-24 15:50:51 pablo Exp $
  */
 public class LoginVerifier
 {
@@ -77,10 +77,8 @@ public class LoginVerifier
      * 
      * @param login the login name to be checked.
      * @return <code>true</code> if a login name is a non-occupied and non-reserved.
-     * @throws AuthenticationException if there is a problem performing the operation.
      */
     public boolean checkLogin(String login)
-       throws AuthenticationException
     {
         return !reserved.contains(login);       
     }

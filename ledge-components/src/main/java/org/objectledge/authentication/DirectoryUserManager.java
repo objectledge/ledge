@@ -140,7 +140,6 @@ public class DirectoryUserManager extends UserManager
             getValue(PASSWORD_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
         superuserName = config.getChild("superuserName").getValue(null);
-       
         String contextId = config.getChild("contextId").getValue("people");
         directory = new ContextHelper(factory.getDirContext(contextId));
         
@@ -195,7 +194,8 @@ public class DirectoryUserManager extends UserManager
             }
             attrs.put(oc);
             attrs.put(new BasicAttribute(loginAttribute, login));
-            attrs.put(new BasicAttribute(passwordAttribute, password));
+            attrs.put(new BasicAttribute(passwordAttribute, 
+                                         passwordDigester.digestPassword(password)));
             ctx.createSubcontext(directory.getRelativeName(dn), attrs);
             nameByLogin.put(login, dn);
             loginByName.put(dn, login);
@@ -327,7 +327,8 @@ public class DirectoryUserManager extends UserManager
                 throw new UserUnknownException("user "+account.getName()+" does not exist");
             }
             Attributes attrs = new BasicAttributes(true);
-            attrs.put(new BasicAttribute(passwordAttribute, password));
+            attrs.put(new BasicAttribute(passwordAttribute,
+                                         passwordDigester.digestPassword(password)));
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attrs);
             logger.info("User " + account.getName() + "'s password changed");
         }
@@ -505,7 +506,6 @@ public class DirectoryUserManager extends UserManager
         try 
         {
             ctx = (DirContext)directory.getBaseContext().lookup("");
-            logger.debug("looking up "+attribute+"="+value+" in "+ ctx.getNameInNamespace());
             String[] attrIDs = {};
             Attributes matchAttrs = new BasicAttributes(false);
             matchAttrs.put(new BasicAttribute(attribute, value));
@@ -539,9 +539,8 @@ public class DirectoryUserManager extends UserManager
         try 
         {
             ctx = (DirContext)directory.getBaseContext().lookup("");
-            logger.debug("looking up query= "+query+" in "+ ctx.getNameInNamespace());
             String[] attrIDs = {};
-            NamingEnumeration answer = ctx.search("", query, attrIDs, defaultSearchControls);
+            NamingEnumeration answer = ctx.search("", query, defaultSearchControls);
             List results = new ArrayList();
             while(answer.hasMore())
             {

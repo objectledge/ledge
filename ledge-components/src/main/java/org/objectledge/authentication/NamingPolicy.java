@@ -44,7 +44,7 @@ import org.objectledge.parameters.Parameters;
  * Specifies a policy of naming accounts in the system.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NamingPolicy.java,v 1.1 2004-02-18 11:45:54 fil Exp $
+ * @version $Id: NamingPolicy.java,v 1.2 2004-02-24 15:50:51 pablo Exp $
  */
 public class NamingPolicy
 {
@@ -154,14 +154,14 @@ public class NamingPolicy
         {
             if(tokens[i].specifies(loginProperty))
             {
-                return tokens[i].get(name.get(i), loginProperty);
+                return tokens[i].get(name.get(name.size()-1-i), loginProperty);
             }
             else
             {
-                if(!tokens[i].match(name.get(i)))
+                if(!tokens[i].match(name.get(name.size()-1-i)))
                 {
-                    throw new InvalidNameException("invalied name, element "+name.get(i)+
-                        " does not match "+tokens[i].toString());
+                    throw new InvalidNameException("invalied name, element "+
+                        name.get(name.size()-1-i)+ " does not match "+tokens[i].toString());
                 }
             }
         }
@@ -174,7 +174,7 @@ public class NamingPolicy
      * Represents syntax of a compound disthinguished name element. 
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: NamingPolicy.java,v 1.1 2004-02-18 11:45:54 fil Exp $
+     * @version $Id: NamingPolicy.java,v 1.2 2004-02-24 15:50:51 pablo Exp $
      */    
     public static class Token
     {
@@ -255,14 +255,14 @@ public class NamingPolicy
                 }
                 else
                 {
-                    String value = parameters.get(properties[i/2+1]);
+                    String value = parameters.get(properties[i/2],null);
                     if(value != null)
                     { 
                         target.append(value);
                     }
                     else
                     {
-                        throw new NoSuchElementException("undefined property "+properties[i/2+1]);
+                        throw new NoSuchElementException("undefined property "+properties[i/2]);
                     }
                 }
             }
@@ -307,6 +307,7 @@ public class NamingPolicy
         public String get(String image, String propertyName)
             throws IllegalArgumentException, InvalidNameException
         {
+            System.out.println("TESTUJE: "+image+ " : "+propertyName);
             int lastPos = 0;
             int nextPos = image.length();
             for(int i=0; i<strings.length+properties.length; i++)
@@ -323,7 +324,7 @@ public class NamingPolicy
                         else
                         {
                             throw new InvalidNameException("invalid token "+image+" "+
-                                strings[i/2+1]+" is missing");
+                                strings[i/2]+" is missing");
                         }
                     }
                     if(i/2+1 < strings.length)
@@ -349,7 +350,7 @@ public class NamingPolicy
                 }
                 else
                 {
-                    if(properties[i/2+1].equals(propertyName))
+                    if(properties[i/2].equals(propertyName))
                     {
                         return image.substring(lastPos, nextPos);
                     }
@@ -395,7 +396,7 @@ public class NamingPolicy
                 }
                 else
                 {
-                    target.append('<').append(properties[i/2+1]).append('>');
+                    target.append('<').append(properties[i/2]).append('>');
                 }
             }
             return target.toString();            

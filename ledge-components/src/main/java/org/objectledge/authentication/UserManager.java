@@ -38,7 +38,7 @@ import org.objectledge.parameters.Parameters;
  * A base implementation of the UserManager interface.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.2 2004-02-19 16:27:47 pablo Exp $
+ * @version $Id: UserManager.java,v 1.3 2004-02-24 15:50:51 pablo Exp $
  */
 public abstract class UserManager
 {
@@ -83,12 +83,21 @@ public abstract class UserManager
      * 
      * @param login the login name to be checked.
      * @return <code>true</code> if a login name is a non-occupied and non-reserved.
-     * @throws AuthenticationException if there is a problem performing the operation.
      */
     public boolean checkLogin(String login)
-       throws AuthenticationException
     {
         return loginVerifier.checkLogin(login);
+    }
+
+    /**
+     * Checks if a login name is acceptable.
+     * 
+     * @param login the login name to be checked.
+     * @return <code>true</code> if a login name is correct.
+     */
+    public boolean validateLogin(String login)
+    {
+        return loginVerifier.validate(login);
     }
     
     /**
