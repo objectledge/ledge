@@ -28,35 +28,24 @@
 
 package org.objectledge.templating;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.objectledge.context.Context;
-
 
 /**
  * Interface for all templating contexts.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: TemplatingContext.java,v 1.5 2004-01-14 14:08:28 fil Exp $
+ * @version $Id: TemplatingContext.java,v 1.6 2004-01-14 14:36:39 fil Exp $
  */
 ///CLOVER:OFF
 public abstract class TemplatingContext
 {
-    /** data storage */
-    private Map data = new HashMap();
-		
 	/**
 	 * Gets an object from the Context.
 	 *
 	 * @param key the object's key.
 	 * @return the object
 	 */
-	public Object get(String key)
-    {
-        return data.get(key);
-    }
+	public abstract Object get(String key);
 		
 	/**
 	 * Puts an object into the context.
@@ -65,10 +54,7 @@ public abstract class TemplatingContext
 	 * @param value the object
 	 * @return the previous object with that key.
 	 */
-	public Object put(String key, Object value)
-    {
-        return data.put(key, value);
-    }
+	public abstract Object put(String key, Object value);
 		
 	/**
 	 * Removes an object from the context.
@@ -76,10 +62,7 @@ public abstract class TemplatingContext
 	 * @param key the object's key.
 	 * @return the object in the context.
 	 */
-	public Object remove(String key)
-    {
-        return data.remove(key);
-    }
+	public abstract Object remove(String key);
 		
 	/**
 	 * Checks if the context contains an object.
@@ -87,23 +70,14 @@ public abstract class TemplatingContext
 	 * @param key the object's key.
 	 * @return <code>true</code> if object is stored in the context.
 	 */
-	public boolean containsKey(String key)
-    {
-        return data.containsKey(key);
-    }
+	public abstract boolean containsKey(String key);
 	
 	/**
 	 * Returns keys of all objects.
 	 *
 	 * @return keys of all objects.
 	 */
-	public String[] getKeys()
-    {
-        Set keys = data.keySet();
-        String[] result = new String[keys.size()];
-        keys.toArray(result);
-        return result;
-    }
+	public abstract String[] getKeys();
     
     // static access ////////////////////////////////////////////////////////////////////////////
     
