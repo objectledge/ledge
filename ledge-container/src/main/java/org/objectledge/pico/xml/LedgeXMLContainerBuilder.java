@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXMLContainerBuilder.java,v 1.6 2004-04-01 08:54:21 fil Exp $
+ * @version $Id: LedgeXMLContainerBuilder.java,v 1.7 2004-12-22 08:02:04 rafal Exp $
  */
 public class LedgeXMLContainerBuilder 
     extends ScriptedContainerBuilder
@@ -73,10 +73,17 @@ public class LedgeXMLContainerBuilder
     
     // instance variables ////////////////////////////////////////////////////////////////////////
 
+    /** The root element of the assembly. */
     protected Element rootElement;
 
     // ContainerBuilder interface ////////////////////////////////////////////////////////////////
     
+    /**
+     * Creates a new LedgeXMLContainerBuilder instance.
+     * 
+     * @param script a reader to load script from.
+     * @param classLoader the class loader used to load components.
+     */
     public LedgeXMLContainerBuilder(Reader script, ClassLoader classLoader) 
     {
         super(script, classLoader);
@@ -92,6 +99,9 @@ public class LedgeXMLContainerBuilder
         }
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public PicoContainer createContainerFromScript(PicoContainer parentContainer, 
         Object assemblyScope) 
     {

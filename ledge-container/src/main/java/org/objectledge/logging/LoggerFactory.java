@@ -46,7 +46,7 @@ import org.picocontainer.defaults.InstanceComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.13 2004-08-18 13:53:01 rafal Exp $
+ * @version $Id: LoggerFactory.java,v 1.14 2004-12-22 08:02:09 rafal Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -58,7 +58,8 @@ public class LoggerFactory
     /**
      * Creates a new instance of Factory and installs apropriate component adapter.
      * 
-     * <p>We depend LoggingConfigurator to make sure that logging is configured before we create any logs.</p>
+     * <p>We depend LoggingConfigurator to make sure that logging is configured before we create any
+     * logs.</p>
      * 
      * @param loggingConfigurator the LoggingConfigurator.
      */
