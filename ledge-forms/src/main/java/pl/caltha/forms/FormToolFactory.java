@@ -31,6 +31,7 @@ package pl.caltha.forms;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.tools.ContextToolFactory;
 
 import pl.caltha.forms.internal.FormToolImpl;
@@ -63,7 +64,8 @@ public class FormToolFactory implements ContextToolFactory
      */
     public Object getTool()
     {
-        return new FormToolImpl(context, templating);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        return new FormToolImpl(templating, templatingContext);
     }
     
     /**

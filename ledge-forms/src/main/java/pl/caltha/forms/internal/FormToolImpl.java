@@ -1,6 +1,5 @@
 package pl.caltha.forms.internal;
 
-import org.objectledge.context.Context;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
@@ -16,19 +15,19 @@ import pl.caltha.forms.internal.ui.UIConstants;
 /** This a form tool context tool implementation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormToolImpl.java,v 1.4 2005-02-02 22:24:34 pablo Exp $
+ * @version $Id: FormToolImpl.java,v 1.5 2005-03-22 06:16:43 zwierzem Exp $
  */
 public class FormToolImpl 
 implements FormTool
 {
     private Templating templating;
     
-    private Context context;
+    private TemplatingContext templatingContext;
     
-    public FormToolImpl(Context context, Templating templating)
+    public FormToolImpl(Templating templating, TemplatingContext templatingContext)
     {
-        this.context = context;
         this.templating = templating;
+        this.templatingContext = templatingContext;
     }
     
     
@@ -38,12 +37,10 @@ implements FormTool
         // 1. get UI from Instance, get rootNode
         // 2. put root node into the context
         // 3. put instance into the context
-        TemplatingContext tContext = (TemplatingContext)
-            context.getAttribute(TemplatingContext.class);
-        tContext.put("formtool-instance", instance);
-        tContext.put("formtool-form", ((InstanceImpl)instance).getForm().getUI().getUIRoot());
-        tContext.put("formtool-link", formLink);
-        tContext.put("formtool-const", UIConstants.getInstance());
+        templatingContext.put("formtool-instance", instance);
+        templatingContext.put("formtool-form", ((InstanceImpl)instance).getForm().getUI().getUIRoot());
+        templatingContext.put("formtool-link", formLink);
+        templatingContext.put("formtoolConst", UIConstants.getInstance());
 
         // 4. get the skin == template
         Template template = null;
@@ -54,7 +51,7 @@ implements FormTool
         }
 
         // 5. merge template
-        return template.merge(tContext);
+        return template.merge(templatingContext);
     }
 
 
