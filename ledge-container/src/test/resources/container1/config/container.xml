@@ -3,7 +3,7 @@
   <component class-key="org.picoextras.reflection.StringToObjectConverter"
              class="org.objectledge.pico.LedgeStringToObjectConverter"/>
 
-  <container key="org.picocontainer.MutablePicoContainer" replace="true">
+  <container class-key="org.picocontainer.MutablePicoContainer" replace="true">
     <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
 	  <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
     </adapter-factory>
