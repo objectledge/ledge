@@ -43,7 +43,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.16 2004-01-20 13:39:34 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.17 2004-01-20 13:45:50 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -110,21 +110,18 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         String view = findViewName(builderTemplate);
         Sequence sequence = nameSequenceFactory.
             getTemplateNameSequence(VIEWS, view, true);
-        if(sequence.hasNext())
+        sequence.next();
+        while(sequence.hasNext())
         {
-            sequence.next();
-            while(sequence.hasNext())
+            String name = sequence.next();
+            logger.debug("findEnclosingBuilderTemplate: trying "+name);
+            try
             {
-                String name = sequence.next();
-                logger.debug("findEnclosingBuilderTemplate: trying "+name);
-                try
-                {
-                    return templating.getTemplate(name);
-                }
-                catch(TemplateNotFoundException e)
-                {
-                    // go on
-                }
+                return templating.getTemplate(name);
+            }
+            catch(TemplateNotFoundException e)
+            {
+                // go on
             }
         }
         return defaultTemplate;
@@ -182,21 +179,18 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         String view = findViewName(builder);
         Sequence sequence = nameSequenceFactory.
             getClassNameSequence(VIEWS, view, true);
-        if(sequence.hasNext())
+        sequence.next();
+        while(sequence.hasNext())
         {
-            sequence.next();
-            while(sequence.hasNext())
+            String name = sequence.next();
+            logger.debug("findEnclosingBuilder: trying "+name);
+            try
             {
-                String name = sequence.next();
-                logger.debug("findEnclosingBuilder: trying "+name);
-                try
-                {
-                    return (Builder)getClassInstance(name);
-                }
-                catch(ClassNotFoundException e)
-                {
-                    // go on
-                }
+                return (Builder)getClassInstance(name);
+            }
+            catch(ClassNotFoundException e)
+            {
+                // go on
             }
         }
         return defaultBuilder;
