@@ -88,7 +88,7 @@
       through <a href="http://maven.apache.org">Maven</a> build system. Add the follwing
       to your <code>project.properties</code> file to access ObjectLedge jars and their
       dependencies:</p>
-      <source>maven.repo.remote=http://ibibilo.org/maven,http://dist.objectledge.org/</source>
+      <source>maven.repo.remote=http://ibiblio.org/maven,http://dist.objectledge.org/</source>
     </section>
   </body>
 </document>
