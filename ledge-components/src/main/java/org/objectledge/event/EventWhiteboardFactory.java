@@ -29,7 +29,6 @@
 package org.objectledge.event;
 
 import java.lang.reflect.Method;
-import java.rmi.Remote;
 import java.util.ArrayList;
 
 import org.jcontainer.dna.Configuration;
@@ -60,7 +59,7 @@ import org.objectledge.threads.ThreadPool;
  * InboundEventWhiteboard} and {@link OutboundEventWhiteboard}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventWhiteboardFactory.java,v 1.2 2004-03-01 13:41:49 fil Exp $
+ * @version $Id: EventWhiteboardFactory.java,v 1.3 2004-03-01 13:48:13 fil Exp $
  */
 public class EventWhiteboardFactory
 {
