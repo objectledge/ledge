@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.8 2004-01-15 12:32:10 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.9 2004-01-15 14:00:39 fil Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -110,6 +110,7 @@ public class BuilderExecutorValve implements Runnable
                 throw new PipelineProcessingException("Maximum number of builder reroutings "+
                     "exceeded");
             }
+            // TODO access control
 
 	        // get the template
 	        // let builder override the template
