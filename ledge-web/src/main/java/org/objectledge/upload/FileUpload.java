@@ -33,10 +33,11 @@ import java.util.Map;
 import org.objectledge.context.Context;
 
 /**
+ * An application access point to the HTML form file upload functionality.
  *
  * <p>Created on Jan 14, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileUpload.java,v 1.3 2004-01-14 14:07:15 fil Exp $
+ * @version $Id: FileUpload.java,v 1.4 2004-01-14 14:41:10 fil Exp $
  */
 public class FileUpload
 {
