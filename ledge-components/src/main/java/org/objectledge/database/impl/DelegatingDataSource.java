@@ -37,10 +37,11 @@ import javax.sql.DataSource;
  * A delegation pattern wrapper for a DataSource interface.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DelegatingDataSource.java,v 1.1 2004-02-04 14:42:24 fil Exp $
+ * @version $Id: DelegatingDataSource.java,v 1.2 2004-02-06 08:41:11 fil Exp $
  */
 public abstract class DelegatingDataSource implements DataSource
 {
+    /** The underlying data source. */
     private DataSource dataSource;
 
     /**
@@ -51,6 +52,16 @@ public abstract class DelegatingDataSource implements DataSource
     protected DelegatingDataSource(DataSource dataSource)
     {
         this.dataSource = dataSource;
+    }
+    
+    /**
+     * Returns the underlying DataSource.
+     * 
+     * @return the underlying DataSource.
+     */
+    protected DataSource getDelegate()
+    {
+        return dataSource;
     }
     
     /**
