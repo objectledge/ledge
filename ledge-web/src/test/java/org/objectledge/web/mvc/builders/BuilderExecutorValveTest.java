@@ -48,7 +48,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.2 2004-01-20 15:26:52 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.3 2004-01-21 13:11:37 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -114,5 +114,15 @@ public class BuilderExecutorValveTest extends TestCase
         context.setAttribute(TemplatingContext.class, templating.createContext());
         executor.run();
         assertEquals("Default(RoutedTo())", mvcContext.getBuildResult());
+    }
+    
+    public void testOverride()
+    {
+        MVCContext mvcContext = new MVCContext();
+        mvcContext.setView("Overrider");
+        context.setAttribute(MVCContext.class, mvcContext);
+        context.setAttribute(TemplatingContext.class, templating.createContext());
+        executor.run();
+        assertEquals("Default(OverridenTo())", mvcContext.getBuildResult());
     }
 }
