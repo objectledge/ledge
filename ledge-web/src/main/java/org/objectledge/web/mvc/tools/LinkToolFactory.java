@@ -38,6 +38,7 @@ import org.objectledge.web.WebConfigurator;
  * Context tool factory component to build the link tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: LinkToolFactory.java,v 1.3 2004-02-03 13:51:55 zwierzem Exp $
  */
 public class LinkToolFactory implements ContextToolFactory
 {
