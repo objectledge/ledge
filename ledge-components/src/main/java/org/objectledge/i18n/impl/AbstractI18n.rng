@@ -43,6 +43,11 @@
                 <text/>
               </attribute>
             </optional>
+            <optional>
+              <attribute name="name">
+                <text/>
+              </attribute>
+            </optional>
             <text/>
           </element>
         </oneOrMore>
