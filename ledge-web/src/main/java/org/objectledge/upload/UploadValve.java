@@ -29,33 +29,10 @@ import org.objectledge.web.parameters.RequestParameters;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UploadValve.java,v 1.2 2004-01-14 13:18:09 fil Exp $
+ * @version $Id: UploadValve.java,v 1.3 2004-01-14 13:27:16 fil Exp $
  */
 public class UploadValve implements Runnable, WebConstants
 {
-	/** context key to store the upload map */
-	public static final String UPLOAD_CONTEXT_KEY = "upload_map";
-	
-	/**
-	 * Retrieve the upload container.
-	 *
-	 * @param context the context.
-	 * @param name the name of the item.
-	 * @return the upload container, or <code>null</code> if not available.
-	 */
-	public UploadContainer getItem(Context context, String name) 
-	{
-		Map map =(Map)context.getAttribute(UPLOAD_CONTEXT_KEY);
-		if (map == null) 
-		{
-			return null;
-		}
-		else
-		{
-			return (UploadContainer)uploadMap.get(name);
-		}
-	}
-	
 	/** web configurator */
 	private WebConfigurator config; 
 	
@@ -130,7 +107,7 @@ public class UploadValve implements Runnable, WebConstants
                 }
                 
                 // store the upload map into the RunData
-                context.setAttribute(UPLOAD_CONTEXT_KEY,uploadMap);
+                context.setAttribute(FileUpload.UPLOAD_CONTEXT_KEY, uploadMap);
                 logger.debug("UploadValve has stored the upload map in the context");
             }
             catch (IOException e) 
