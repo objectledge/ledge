@@ -78,6 +78,8 @@
         <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
         <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
         <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+        <component-parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
+        <component-parameter class-key="org.objectledge.web.mvc.builders.BuilderExecutorValve"/>
       </sequence-parameter>
 	  <sequence-parameter/>
 	  <sequence-parameter>
