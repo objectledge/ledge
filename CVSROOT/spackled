@@ -1,0 +1,13 @@
+Spackle version 0.1b3-dev
+spackled.  Generated from spackled.in by configure.
+
+Configured at Mon Dec  1 09:55:25 CET 2003 with
+  Access control:   yes
+  Logging features: yes
+  Maintainer:       nobody
+  Maintainer email: nobody
+
+Command line:
+  ./configure '--enable-overwrite' '--enable-acls' '--enable-logging' '--with-cvsroot=/home/fil/eclipse/ledge/ledge-CVSROOT/' '--with-sendmail=/usr/sbin/sendmail'
+
+See <URL:http://Spackle.SourceForge.Net/> for more info.

@@ -1,3 +1,13 @@
+#
+# $Id: checkoutlist,v 1.2 2003-12-01 09:07:39 fil Exp $
+#
+# Copyright (c) 2002 by Ken A L Coar.  All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted according to the terms of the Apache
+# licence.
+#
+#
 # The "checkoutlist" file is used to support additional version controlled
 # administrative files in $CVSROOT/CVSROOT, such as template files.
 #
@@ -11,3 +21,19 @@
 #	[<whitespace>]<filename><whitespace><error message><end-of-line>
 #
 # comment lines begin with '#'
+#
+avail
+commit_prep.pl
+commitcheck.sh
+cvs_acls.pl
+cvsedit.pl
+cvsignore
+log_accum.pl
+mailmap
+#passwd
+rcstemplate
+#readers
+SpackleConf.pm
+spackle.conf
+spackled
+#writers
