@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.6 2003-12-23 15:27:13 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.7 2003-12-29 11:10:33 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -142,7 +142,7 @@ public class LedgeXmlFrontEnd
         }
         else
         {
-            reflectionFrontEnd.registerComponent(key, className);
+            reflectionFrontEnd.registerComponentImplementation(key, className);
         }
         if(preload != null && preload.equals("true"))
         {
@@ -382,7 +382,8 @@ public class LedgeXmlFrontEnd
         ReflectionFrontEnd tempContainer = new DefaultReflectionFrontEnd();
 
         if (adapterFactoryClass != null && !adapterFactoryClass.equals("")) {
-            tempContainer.registerComponent(ComponentAdapterFactory.class, adapterFactoryClass);
+            tempContainer.registerComponentImplementation(ComponentAdapterFactory.class, 
+                adapterFactoryClass);
         }
         else {
             ComponentAdapterFactory adapterFactory = new DefaultComponentAdapterFactory();
@@ -404,12 +405,12 @@ public class LedgeXmlFrontEnd
         }
         if (picoContainerClassName == null || picoContainerClassName.equals("")) 
         {
-            tempContainer.registerComponent(classKey, 
+            tempContainer.registerComponentImplementation(classKey, 
                 DefaultPicoContainer.class.getName());
         } 
         else 
         {
-            tempContainer.registerComponent(classKey, picoContainerClassName); 
+            tempContainer.registerComponentImplementation(classKey, picoContainerClassName); 
         }
         MutablePicoContainer container = (MutablePicoContainer) tempContainer.getPicoContainer().
             getComponentInstance(classKey);
@@ -442,7 +443,8 @@ public class LedgeXmlFrontEnd
         }
 
         ReflectionFrontEnd tempContainer = new DefaultReflectionFrontEnd();
-        tempContainer.registerComponent(XmlPseudoComponentFactory.class.getName(), factoryClass);
+        tempContainer.registerComponentImplementation(XmlPseudoComponentFactory.class.getName(), 
+            factoryClass);
         XmlPseudoComponentFactory factory = (XmlPseudoComponentFactory)tempContainer.
             getPicoContainer().getComponentInstances().get(0);
 

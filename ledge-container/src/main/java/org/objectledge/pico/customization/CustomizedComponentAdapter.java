@@ -45,7 +45,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * of the managed component, depending on the customizedComponentProvider's semantics.</p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.11 2003-12-23 15:17:05 fil Exp $
+ * @version $Id: CustomizedComponentAdapter.java,v 1.12 2003-12-29 11:14:11 fil Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
@@ -79,7 +79,8 @@ public class CustomizedComponentAdapter
     public Object getComponentInstance(MutablePicoContainer dependencyContainer)
         throws PicoInitializationException, PicoIntrospectionException
     {
-        return null;
+        // lacking a better idea...
+        return customizedComponentProvider;
     }
     
     /**
