@@ -49,11 +49,12 @@ import org.objectledge.utils.ReturnArgument;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCInitializerValve;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.4 2004-05-28 13:34:28 fil Exp $
+ * @version $Id: PageToolTest.java,v 1.5 2004-06-02 07:10:46 fil Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -78,7 +79,7 @@ public class PageToolTest extends LedgeTestCase
 		}
 		FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
 		context = new Context();
-		XMLValidator validator = new XMLValidator();
+		XMLValidator validator = new XMLValidator(new XMLGrammarCache());
 		ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
 
 		Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);

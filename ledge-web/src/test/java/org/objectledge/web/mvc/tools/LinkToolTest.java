@@ -50,6 +50,7 @@ import org.objectledge.utils.ReturnArgument;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCInitializerValve;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
 /**
@@ -84,7 +85,7 @@ public class LinkToolTest extends LedgeTestCase
         }
         FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
         context = new Context();
-        XMLValidator validator = new XMLValidator();
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
 
         Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
@@ -253,7 +254,7 @@ public class LinkToolTest extends LedgeTestCase
         // some other initial          
         fs = FileSystem.getStandardFileSystem(root + "/tools2");
         context = new Context();
-        validator = new XMLValidator();
+        validator = new XMLValidator(new XMLGrammarCache());
         configFactory = new ConfigurationFactory(fs, validator, ".");
         config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
         loggerFactory = new LoggerFactory();

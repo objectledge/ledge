@@ -36,12 +36,13 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.views.foo.Bar;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.10 2004-04-01 08:54:19 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.11 2004-06-02 07:10:48 fil Exp $
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
@@ -56,7 +57,7 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
     public void setUp() throws Exception
     {
         fs = getFileSystem("src/test/resources/view-sequences");
-        XMLValidator validator = new XMLValidator();        
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());        
         configFactory = new ConfigurationFactory(fs, validator, ".");
     }
     

@@ -44,6 +44,7 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
@@ -84,7 +85,7 @@ public class ComponentsTest extends TestCase
             }
             
             FileSystem fs = FileSystem.getStandardFileSystem(root + "/components");
-            XMLValidator validator = new XMLValidator();
+            XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
             Configuration config = configFactory.
                         getConfig(NameSequenceFactory.class, NameSequenceFactory.class);

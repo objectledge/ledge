@@ -51,6 +51,7 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
 /**
@@ -86,7 +87,7 @@ public class ExceptionRedirectorValveTest extends LedgeTestCase
                                  "use -Dledge.root=.../ledge-container/src/test/resources");
             }
             FileSystem fs = FileSystem.getStandardFileSystem(root + "/exception-redirector");
-            XMLValidator validator = new XMLValidator();
+            XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
             Configuration config = configFactory.getConfig(WebConfigurator.class, 
                                                            WebConfigurator.class);

@@ -42,6 +42,7 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.actions.foo.TestAction;
 import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.components.Component;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
@@ -49,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.7 2004-01-22 15:15:12 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.8 2004-06-02 07:10:48 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -76,7 +77,7 @@ public class MVCFinderTest extends TestCase
             "use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystem fs = FileSystem.getStandardFileSystem(root+"/finder");
-        XMLValidator validator = new XMLValidator();        
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());        
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
         Configuration config = configFactory.
             getConfig(NameSequenceFactory.class, NameSequenceFactory.class);

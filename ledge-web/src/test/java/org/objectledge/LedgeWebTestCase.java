@@ -32,6 +32,7 @@ import org.jcontainer.dna.Configuration;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
 /**
@@ -45,7 +46,7 @@ public abstract class LedgeWebTestCase extends LedgeTestCase
     {
         if(configFactory == null)
         {
-            XMLValidator validator = new XMLValidator();
+            XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             configFactory = new ConfigurationFactory(fs, validator, ".");
         }
         return configFactory.getConfig(key, impl);

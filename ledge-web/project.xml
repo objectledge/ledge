@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.34 2004-05-28 13:34:27 fil Exp $ -->
+<!-- $Id: project.xml,v 1.35 2004-06-02 07:10:40 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -119,10 +119,28 @@
       <url>http://dna.codehaus.org</url>
     </dependency>
     <dependency>
-      <groupId>jing</groupId>
-      <artifactId>jing</artifactId>
-      <version>20030619</version>
-      <url>http://www.thaiopensource.com/relaxng/jing.html</url>
+      <groupId>msv</groupId>
+      <artifactId>msv</artifactId>
+      <version>20040506</version>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>isorelax</groupId>
+      <artifactId>isorelax</artifactId>
+      <version>20040506</version>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>xsdlib</groupId>
+      <artifactId>xsdlib</artifactId>
+      <version>20040506</version>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>relaxngDatatype</groupId>
+      <artifactId>relaxngDatatype</artifactId>
+      <version>20040506</version>
+      <url>https://sourceforge.net/projects/relaxng</url>
     </dependency>
     <dependency>
       <groupId>httpunit</groupId>

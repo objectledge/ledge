@@ -42,6 +42,7 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
@@ -49,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.10 2004-01-23 08:17:06 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.11 2004-06-02 07:10:47 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -80,7 +81,7 @@ public class BuilderExecutorValveTest extends TestCase
             "use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystem fs = FileSystem.getStandardFileSystem(root+"/"+base);
-        XMLValidator validator = new XMLValidator();        
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());        
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
         Configuration config = configFactory.
             getConfig(NameSequenceFactory.class, NameSequenceFactory.class);
