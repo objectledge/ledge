@@ -39,13 +39,27 @@ import com.mockobjects.servlet.MockHttpServletRequest;
 public class TestHttpServletRequest
     extends MockHttpServletRequest implements HttpServletRequest
 {
+    private boolean isSecure = false;
+    
+    private int serverPort = 80;
+    
     public int getServerPort()
     {
-        return 80;
+        return serverPort;
     }
     
     public boolean isSecure()
     {
-        return false;
+        return isSecure;
+    }
+    
+    public void setupIsSecure(boolean isSecure)
+    {
+        this.isSecure = isSecure;
+    }
+    
+    public void setupGetServerPort(int serverPort)
+    {
+        this.serverPort = serverPort;
     }
 }

@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.4 2004-01-26 10:42:32 pablo Exp $
+ * @version $Id: AllTests.java,v 1.5 2004-01-26 14:56:31 pablo Exp $
  */
 public class AllTests
 {
@@ -49,6 +49,7 @@ public class AllTests
         suite.addTest(org.objectledge.web.mvc.finders.AllTests.suite());
         suite.addTest(org.objectledge.web.mvc.builders.AllTests.suite());
         suite.addTest(org.objectledge.web.mvc.tools.AllTests.suite());
+        suite.addTest(new TestSuite(MVCInitializerValveTest.class));
         return suite;
     }
 }
