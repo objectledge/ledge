@@ -1,22 +1,22 @@
 /**
  * Date selector support.
  *
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafa� Krzewski</a>
- * @version $Id: DateSelector.js,v 1.3 2003/08/08 12:45:56 rkrzewsk Exp $
+ * @author <a href="mailto:rafal@caltha.pl">Rafał� Krzewski</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: $
  */
-
 function initDays(selectedTime)
 {
-    var selected = new Date(selectedTime);
-    var date = new Date(selected.getTime());
+    var selectedDate = new Date(selectedTime);
+    var date = new Date(selectedDate.getTime());
 
     var opts = '';
     date.setDate(1);
-    while(date.getMonth() == selected.getMonth())
+    while(date.getMonth() == selectedDate.getMonth())
     {
         var s;
         s = '    <option value=\''+date.getDate()+'\'';
-        if(date.getDate() == selected.getDate())
+        if(date.getDate() == selectedDate.getDate())
         {
             s += ' selected="selected"';
         }
@@ -30,14 +30,14 @@ function initDays(selectedTime)
 
 function initMonths(selectedTime, monthNames)
 {
-    var selected = new Date(selectedTime);
+    var selectedDate = new Date(selectedTime);
 
     var opts = '';
     for(var i=1; i<=12; i++)
     {
         var s;
         s = '    <option value=\''+i+'\'';
-        if(selected.getMonth() == i)
+        if(selectedDate.getMonth() == i)
         {
             s += ' selected';
         }
@@ -50,14 +50,14 @@ function initMonths(selectedTime, monthNames)
 
 function initYears(selectedTime, startYear, endYear)
 {
-    var selected = new Date(selectedTime);
+    var selectedDate = new Date(selectedTime);
 
     var opts = '';
     for(var i=startYear; i<=endYear; i++)
     {
         var s;
         s = '    <option value=\''+i+'\'';
-        if(selected.getFullYear() == i)
+        if(selectedDate.getFullYear() == i)
         {
             s += ' selected';
         }
@@ -120,7 +120,7 @@ function dateElementChanged(element)
     dateElem.value = selected.getTime();
 }
 
-function dateEnabled(element)
+function dateEnabled(element, saveDisabledString)
 {
     var i = element.name.lastIndexOf('_');
     var base = element.name.substring(0,i);
@@ -138,11 +138,11 @@ function dateEnabled(element)
     var day = dayElem.options[dayElem.selectedIndex].value;
     var hour = hourElem.options[hourElem.selectedIndex].value;
     var minute = minuteElem.options[minuteElem.selectedIndex].value;
-    var selected = new Date(year, month, day, hour, minute, 0, 0);
+    var selectedDate = new Date(year, month, day, hour, minute, 0, 0);
 
     if(element.value == 'true')
     {
-        dateElem.value = selected.getTime();
+        dateElem.value = selectedDate.getTime();
         yearElem.disabled = false;
         monthElem.disabled = false;
         dayElem.disabled = false;
@@ -151,7 +151,14 @@ function dateEnabled(element)
     }
     else
     {
-        dateElem.value = '';
+    	if(saveDisabledString)
+    	{
+        	dateElem.value = ''+selectedDate.getTime() + '/disabled';
+    	}
+    	else
+    	{
+        	dateElem.value = '';
+    	}
         yearElem.disabled = true;
         monthElem.disabled = true;
         dayElem.disabled = true;
@@ -159,6 +166,8 @@ function dateEnabled(element)
         minuteElem.disabled = true;
     }
 }
+
+/**
 function dateToggleMaxMin(element)
 {
     var i = element.name.lastIndexOf('_');
@@ -179,7 +188,7 @@ function dateToggleMaxMin(element)
     var day = dayElem.options[dayElem.selectedIndex].value;
     var hour = hourElem.options[hourElem.selectedIndex].value;
     var minute = minuteElem.options[minuteElem.selectedIndex].value;
-    var selected = new Date(year, month, day, hour, minute, 0, 0);
+    var selectedDate = new Date(year, month, day, hour, minute, 0, 0);
 
 	if(limes != 'date')
 	{
@@ -191,7 +200,7 @@ function dateToggleMaxMin(element)
 	}
 	else
 	{
-        dateElem.value = selected.getTime();
+        dateElem.value = selectedDate.getTime();
         yearElem.disabled = false;
         monthElem.disabled = false;
         dayElem.disabled = false;
@@ -212,4 +221,4 @@ function dateToggleMaxMin(element)
         dateElem.value = '';
 	}
 }
-
+*/
