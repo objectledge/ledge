@@ -41,7 +41,7 @@ import org.picocontainer.lifecycle.Stoppable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.5 2004-02-02 09:21:35 fil Exp $
+ * @version $Id: ThreadPool.java,v 1.6 2004-02-02 13:50:54 fil Exp $
  */
 public class ThreadPool
     implements Stoppable
@@ -65,6 +65,8 @@ public class ThreadPool
     
     private int workerPriority = Thread.MIN_PRIORITY;
     
+    private int workerPoolCapacity = 10;
+    
     private Set threads = new HashSet();
 
     private Logger log;
@@ -84,7 +86,9 @@ public class ThreadPool
         this.cleanup = cleanup;
         this.log = log;
         this.threadGroup = new ThreadGroup(THREAD_GROUP_NAME);
-        this.workerPool = new WorkerPool(workerPriority, threadGroup, log, context, cleanup);
+        this.workerPool = new WorkerPool(workerPoolCapacity, workerPriority, threadGroup, 
+            log, context, cleanup);
+        runDaemon(workerPool.getSchedulingTask());
     }
     
     /**
@@ -94,10 +98,7 @@ public class ThreadPool
      */
     public void runWorker(Task task)
     {
-        synchronized(threads)
-        {
-            threads.add(workerPool.dispatch(task));     
-        }
+        workerPool.dispatch(task);     
     }
     
     /**
