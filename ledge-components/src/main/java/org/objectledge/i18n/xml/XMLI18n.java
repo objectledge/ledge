@@ -121,33 +121,36 @@ public class XMLI18n extends AbstractI18n
 		Map newLocaleMap = new HashMap();
 		try
 		{
-			String[] files = fileSystem.list(localeDir);
-			for(int i=0; i<files.length; i++)
-			{
-				if(files[i].equals("CVS"))
+		    if(fileSystem.exists(localeDir) && fileSystem.isDirectory(localeDir))
+		    {
+				String[] files = fileSystem.list(localeDir);
+				for(int i=0; i<files.length; i++)
 				{
-					continue;
-				}
-				Matcher m = localeFilePattern.matcher(files[i]);
-				if(!m.matches())
-				{
-					throw new ComponentInitializationError("file '"+files[i]+
-								"' doesn't match locale file pattern");
-				}
-				//tokenize file...
-				int split = files[i].indexOf('_');
-				String prefix = files[i].substring(0,split);
-				String rest = files[i].substring(split+1, files[i].length());
-				split = rest.indexOf('.');
-				String locale = rest.substring(0, split);
-				Map map = (Map)newLocaleMap.get(locale);
-				if(map == null)
-				{
-					map = new HashMap();
-					newLocaleMap.put(locale, map);
-				}
-				loadFile(files[i], map, prefix);
-			}
+					if(files[i].equals("CVS"))
+					{
+						continue;
+					}
+					Matcher m = localeFilePattern.matcher(files[i]);
+					if(!m.matches())
+					{
+						throw new ComponentInitializationError("file '"+files[i]+
+									"' doesn't match locale file pattern");
+					}
+					//tokenize file...
+					int split = files[i].indexOf('_');
+					String prefix = files[i].substring(0,split);
+					String rest = files[i].substring(split+1, files[i].length());
+					split = rest.indexOf('.');
+					String locale = rest.substring(0, split);
+					Map map = (Map)newLocaleMap.get(locale);
+					if(map == null)
+					{
+						map = new HashMap();
+						newLocaleMap.put(locale, map);
+					}
+					loadFile(files[i], map, prefix);
+				}		        
+		    }
 		}
 		catch(Exception e)	
 		{
