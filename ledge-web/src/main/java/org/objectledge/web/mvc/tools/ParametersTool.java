@@ -28,6 +28,8 @@
 
 package org.objectledge.web.mvc.tools;
 
+import java.util.Date;
+
 import org.objectledge.parameters.Parameters;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -35,7 +37,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Give a read only access to request parameters.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ParametersTool.java,v 1.2 2005-03-03 13:26:57 zwierzem Exp $
+ * @version $Id: ParametersTool.java,v 1.3 2005-03-10 09:56:58 zwierzem Exp $
  */
 public class ParametersTool
 {
@@ -140,6 +142,44 @@ public class ParametersTool
     public boolean[] getBooleans(String name)
     {
         return parameters.getBooleans(name);
+    }
+
+    /**
+     * Return the parameter with specified name.
+     * The assumed String value of this parameter is a decimal representation of a Unix time-stamp.
+     * 
+     * @param name the name of the parameter.
+     * @return the date value of the parameter.
+     */
+    public Date getDate(String name)
+    {
+        return parameters.getDate(name);
+    }
+
+    /**
+     * Return the parameter with specified name. 
+     * The assumed String value of this parameter is a decimal representation of a Unix time-stamp.
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the date value of the parameter.
+     */
+    public Date getDate(String name, Date defaultValue)
+    {
+        return parameters.getDate(name, defaultValue);
+    }
+
+    /**
+     * Return all values of the parameter with specified name as an array. 
+     * The assumed String values of this parameter is are decimal representations of Unix
+     * time-stamps.
+     * 
+     * @param name the name of the parameters.
+     * @return the array of the date values of the parameter.
+    */
+    public Date[] getDates(String name)
+    {
+        return parameters.getDates(name);
     }
 
     /**
