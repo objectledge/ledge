@@ -29,6 +29,7 @@
 package org.objectledge.web.mvc.security;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -89,6 +90,8 @@ public class PolicyCheckingValve implements Valve
                 return;
             }
         }
+        AuthenticationContext authenticationContext =
+            AuthenticationContext.getAuthenticationContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         Policy policy = policySystem.getPolicy(mvcContext.getView(), mvcContext.getAction());
@@ -100,7 +103,7 @@ public class PolicyCheckingValve implements Valve
                 logger.debug("PolicyHook: secure channel required");
                 throw new InsecureChannelException("Please use HTTPS");
             }
-            if(policySystem.getGlobalLogin() && !mvcContext.isUserAuthenticated())
+            if(policySystem.getGlobalLogin() && !authenticationContext.isUserAuthenticated())
             {
                 logger.debug("PolicyHook: login required");
                 throw new LoginRequiredException("Please login");
@@ -118,13 +121,13 @@ public class PolicyCheckingValve implements Valve
                 logger.debug("PolicyHook: secure channel required");
                 throw new InsecureChannelException("Please use HTTPS");
             }
-            if(policy.requiresLogin() && !mvcContext.isUserAuthenticated())
+            if(policy.requiresLogin() && !authenticationContext.isUserAuthenticated())
             {
                 logger.debug("PolicyHook: login required");
                 throw new LoginRequiredException("Please login");
             }
-            if(!policySystem.checkPolicy(mvcContext.getUserPrincipal(),
-                mvcContext.isUserAuthenticated(), policy))
+            if(!policySystem.checkPolicy(authenticationContext.getUserPrincipal(),
+                authenticationContext.isUserAuthenticated(), policy))
             {
                 logger.debug("PolicyHook: access denied");
                 throw new AccessDeniedException("No rights to access action or view");

@@ -28,15 +28,15 @@
 
 package org.objectledge.web.mvc.security;
 
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Util class used to check components security.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SecurityHelper.java,v 1.4 2004-06-24 15:20:02 pablo Exp $
+ * @version $Id: SecurityHelper.java,v 1.5 2004-06-29 13:42:45 zwierzem Exp $
  */
 public abstract class SecurityHelper
 {
@@ -79,13 +79,14 @@ public abstract class SecurityHelper
             }
             if(scObj.requiresAuthenticatedUser(context))
             {
-                MVCContext mvcContext = MVCContext.getMVCContext(context);
-                if(mvcContext == null)
+                AuthenticationContext authenticationContext = 
+                    AuthenticationContext.getAuthenticationContext(context);
+                if(authenticationContext == null)
                 {
                     throw new IllegalStateException("failed to retrieve mvc context " +
                                                      " for security checking purpose");
                 }
-                if(!mvcContext.isUserAuthenticated())
+                if(!authenticationContext.isUserAuthenticated())
                 {
                     throw new LoginRequiredException("Only authenticated user can access "+
                                                        obj.getClass().getName());
