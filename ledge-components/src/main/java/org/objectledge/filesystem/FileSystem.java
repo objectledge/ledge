@@ -50,7 +50,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.18 2004-01-29 10:14:55 pablo Exp $
+ * @version $Id: FileSystem.java,v 1.19 2004-02-12 11:43:06 pablo Exp $
  */
 public class FileSystem
 {
@@ -80,7 +80,7 @@ public class FileSystem
         this.maxReadSize = maxReadSize;
     }
 
-    // FileService interface ////////////////////////////////////////////////
+    // FileSystem interface ////////////////////////////////////////////////
 
     /**
      * Return the URL protocol name for this FileSystem.

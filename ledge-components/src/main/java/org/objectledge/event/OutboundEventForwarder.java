@@ -36,7 +36,7 @@ import java.rmi.Remote;
  *
  * <p>You can use this class to safeguard against an incorrect usage of an
  * unidirectional event forwarder. First, create a private forwarder ({@link
- * EventService#getForwarder()}, then register an event listener with it
+ * EventSystem#getForwarder()}, then register an event listener with it
  * (typically a NotificationService client), create {@link OutboundEventForwarder}
  * proxy object upon your private forwarder, and pass the reference to the
  * proxy to the downstream code. Any attempt to register a listener on the
@@ -44,7 +44,7 @@ import java.rmi.Remote;
  * thus unwanted local-echoing of events will be avoided.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: OutboundEventForwarder.java,v 1.1 2004-02-02 09:41:04 pablo Exp $
+ * @version $Id: OutboundEventForwarder.java,v 1.2 2004-02-12 11:43:05 pablo Exp $
  */
 public class OutboundEventForwarder implements EventForwarder
 {

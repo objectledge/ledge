@@ -45,10 +45,10 @@ import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.RandomAccessFile;
 
 /**
- * A base class for read only FileService backend implemetations. 
+ * A base class for read only FileSystem backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.12 2004-01-14 11:31:45 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.13 2004-02-12 11:43:06 pablo Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider

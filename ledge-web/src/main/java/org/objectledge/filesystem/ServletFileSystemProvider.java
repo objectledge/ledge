@@ -39,13 +39,13 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
 /**
- * An implementation of FileService provider that operates on the ServletContext.
+ * An implementation of FileSystem provider that operates on the ServletContext.
  * 
  * <p>This is a read-only implementation. It is able to use WEB-INF/files for
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileSystemProvider.java,v 1.3 2004-01-14 11:29:39 fil Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.4 2004-02-12 11:44:32 pablo Exp $
  */
 public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider

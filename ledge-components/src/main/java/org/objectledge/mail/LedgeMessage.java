@@ -31,7 +31,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.1 2004-01-09 14:44:33 pablo Exp $
+ * @version $Id: LedgeMessage.java,v 1.2 2004-02-12 11:43:05 pablo Exp $
  */
 public class LedgeMessage
 {
@@ -61,7 +61,7 @@ public class LedgeMessage
     /** The logger. */
     private Logger logger;
 
-    /** The MailService. */
+    /** The MailSystem. */
     private MailSystem mailSystem;
 
     /** The Templating system. */

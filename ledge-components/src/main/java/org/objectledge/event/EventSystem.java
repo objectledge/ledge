@@ -49,7 +49,7 @@ import org.objectledge.threads.ThreadPool;
  * concrete objects. Propagating these events to other JVMs will usually
  * require some additional effort, like <code>java.rmi.Remote</code>
  * listeners, or listeners generating messages and propagating them to other
- * JVMs using <code>NotificationService</code>, with notification listeners
+ * JVMs using <code>Notification</code>, with notification listeners
  * parsing messages, and firing events on the other local
  * <code>EventSystem</code>.</p>
  *
@@ -60,7 +60,7 @@ import org.objectledge.threads.ThreadPool;
  * InboundEventForwarder} and {@link OutboundEventForwarder}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventSystem.java,v 1.2 2004-02-02 10:17:20 pablo Exp $
+ * @version $Id: EventSystem.java,v 1.3 2004-02-12 11:43:05 pablo Exp $
  */
 public class EventSystem implements EventForwarder
 {

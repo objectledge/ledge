@@ -44,7 +44,7 @@ import org.objectledge.database.DatabaseUtils;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.7 2004-02-10 11:56:33 fil Exp $
+ * @version $Id: Persistence.java,v 1.8 2004-02-12 11:43:05 pablo Exp $
  */
 public class Persistence
 {
@@ -66,7 +66,7 @@ public class Persistence
         this.database = database;
     }
 
-    // PersistenceService interface //////////////////////////////////////////
+    // PersistenceSystem interface //////////////////////////////////////////
 
     /**
      * Loads an object from the database.

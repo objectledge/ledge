@@ -126,7 +126,7 @@ public abstract class AbstractScheduler
         format = new SimpleDateFormat(formatString);
     }
 
-    // SchedulerService interface ////////////////////////////////////////////
+    // Scheduler interface ////////////////////////////////////////////
 
     /**
      * Creates a new scheduled job.
