@@ -36,6 +36,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.nanocontainer.NanoContainer;
 import org.objectledge.filesystem.FileSystem;
+import org.picocontainer.PicoContainer;
 import org.realityforge.cli.CLArgsParser;
 import org.realityforge.cli.CLOption;
 import org.realityforge.cli.CLOptionDescriptor;
@@ -46,7 +47,7 @@ import org.realityforge.cli.CLUtil;
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.5 2004-02-17 15:50:31 fil Exp $
+ * @version $Id: Main.java,v 1.6 2004-02-19 15:12:20 fil Exp $
  */
 public class Main
 {
@@ -196,12 +197,14 @@ public class Main
     {
         BasicConfigurator.configure();
         Logger log = Logger.getLogger(Main.class);
-        LedgeContainer container = null; 
+        PicoContainer container = null; 
         try
         {
             FileSystem fs = FileSystem.getStandardFileSystem(root);
-            container = new LedgeContainer(fs, config, Main.class.getClassLoader());
-            addShutdownHook(container);
+            LedgeContainer ledgeContainer = new LedgeContainer(fs, config, 
+                Main.class.getClassLoader());
+            container = ledgeContainer.getContainer();
+            addShutdownHook(ledgeContainer);
         }
         catch(Exception e)
         {
@@ -214,7 +217,7 @@ public class Main
             try
             {
                 componentClass = Class.forName(componentClassName);
-                component =  container.getContainer().getComponentInstance(componentClass);
+                component =  container.getComponentInstance(componentClass);
                 if(component == null)
                 {
                     log.error("Component "+componentClassName+" is missing from the assembly");
@@ -257,14 +260,14 @@ public class Main
         }
     }
     
-    private static void addShutdownHook(final NanoContainer nanoContainer)
+    private static void addShutdownHook(final LedgeContainer ledgeContainer)
     {
         // add a shutdown hook that will tell the builder to kill it.
         Runnable shutdownHook = new Runnable() {
             public void run() {
                 System.out.println("Shutting Down NanoContainer");
                 try {
-                    nanoContainer.killContainer();
+                    ledgeContainer.killContainer();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {

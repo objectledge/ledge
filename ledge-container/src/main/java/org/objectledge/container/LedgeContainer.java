@@ -34,6 +34,7 @@ import java.io.Reader;
 import java.net.URL;
 
 import org.nanocontainer.NanoContainer;
+import org.nanocontainer.integrationkit.ContainerBuilder;
 import org.nanocontainer.integrationkit.PicoCompositionException;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.pico.xml.LedgeXMLContainerBuilder;
@@ -41,16 +42,17 @@ import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
+import org.picocontainer.defaults.ObjectReference;
+import org.picocontainer.defaults.SimpleReference;
 import org.xml.sax.SAXParseException;
 
 /**
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.8 2004-02-17 15:50:31 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.9 2004-02-19 15:12:21 fil Exp $
  */
 public class LedgeContainer
-    extends NanoContainer
 {
     // constants ////////////////////////////////////////////////////////////////////////////////
     
@@ -58,21 +60,20 @@ public class LedgeContainer
     public static final String COMPOSITION_FILE = "/container.xml";
 
     /** Default xml front end implementation. */
-    public static final String FRONT_END_CLASS = "org.objectledge.pico.xml.LedgeXMLContainerBuilder";
+    public static final String FRONT_END_CLASS = 
+        "org.objectledge.pico.xml.LedgeXMLContainerBuilder";
     
     /** Config base path key. */
     public static final String CONFIG_BASE_KEY = "org.objectledge.ConfigBase";
     
-    /** fake composition file extenstion */
-    public static final String LEDGE = ".ledge";
-    
+    /** The embedded container. */
+    protected ObjectReference containerRef = new SimpleReference();
+
+    /** The embedded container builder. */
+    protected ContainerBuilder containerBuilder;
+
     // initialization //////////////////////////////////////////////////////////////////////////
 
-    static 
-    {
-        extensionToComposers.put(LEDGE, FRONT_END_CLASS);
-    }
-    
     /**
      * Creates an instance of the LedgeContainer
      * 
@@ -87,20 +88,30 @@ public class LedgeContainer
     public LedgeContainer(FileSystem fs, String configBase, ClassLoader classLoader)
         throws IOException, ClassNotFoundException, PicoCompositionException
     {
-        super(getCompositionFile(fs, configBase), 
-              LEDGE, 
-              getBootContainer(fs, configBase, classLoader), 
-              classLoader);
+        NanoContainer nano = new NanoContainer(getCompositionFile(fs, configBase), FRONT_END_CLASS,
+            null, classLoader);
+        containerBuilder = nano.getContainerBuilder();
+        ObjectReference parentRef = new SimpleReference();
+        parentRef.set(getBootContainer(fs, configBase, classLoader));
+        containerBuilder.buildContainer(containerRef, parentRef, null);
+    }
+
+    /**
+     * Returns the embedded container.
+     * 
+     * @return the embedded container.
+     */
+    public MutablePicoContainer getContainer()
+    {
+        return (MutablePicoContainer)containerRef.get();
     }
     
     /**
-     * Returns the instance of the built container.
-     * 
-     * @return the instance of the built container.
+     * Kills the embedded container. 
      */
-    public PicoContainer getContainer()
+    public void killContainer()
     {
-        return (PicoContainer)containerRef.get();
+        containerBuilder.killContainer(containerRef);
     }
     
     /**

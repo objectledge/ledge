@@ -64,7 +64,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXMLContainerBuilder.java,v 1.1 2004-02-17 15:50:30 fil Exp $
+ * @version $Id: LedgeXMLContainerBuilder.java,v 1.2 2004-02-19 15:12:18 fil Exp $
  */
 public class LedgeXMLContainerBuilder 
     extends ScriptedContainerBuilder
@@ -94,12 +94,11 @@ public class LedgeXMLContainerBuilder
         }
     }
     
-    public void buildContainer(ObjectReference containerRef, ObjectReference parentContainerRef, 
+    public MutablePicoContainer createContainer(PicoContainer parentContainer, 
         Object assemblyScope) 
     {
         try
         {
-            PicoContainer parentContainer = (PicoContainer) parentContainerRef.get();
             ReflectionContainerAdapter parentReflectionContainerAdapter = 
                 createReflectionContainerAdapter((MutablePicoContainer)parentContainer);
             MutablePicoContainer container = loadContainer(rootElement);
@@ -108,7 +107,7 @@ public class LedgeXMLContainerBuilder
                 createReflectionContainerAdapter(parentReflectionContainerAdapter, container);
             loadContainerContents(rootReflectionContainerAdapter, rootElement).
                 getPicoContainer();
-            containerRef.set(container);
+            return container;
         }
         catch(Exception e)
         {
