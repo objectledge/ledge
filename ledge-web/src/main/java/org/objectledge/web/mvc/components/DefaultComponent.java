@@ -28,6 +28,7 @@
 package org.objectledge.web.mvc.components;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
@@ -37,7 +38,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * Base class of Component interface implementations.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultComponent.java,v 1.3 2004-12-27 05:18:22 rafal Exp $
+ * @version $Id: DefaultComponent.java,v 1.4 2005-02-08 20:57:52 rafal Exp $
  */
 public class DefaultComponent implements Component
 {
@@ -74,6 +75,7 @@ public class DefaultComponent implements Component
      * {@inheritDoc}
      */
     public Template getTemplate()
+        throws ProcessingException
     {
         return null;
     }

@@ -27,6 +27,7 @@
 //
 package org.objectledge.web.mvc.components;
 
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.BuildException;
 
@@ -34,7 +35,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * A generic building block for the application's UI.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Component.java,v 1.2 2004-12-27 05:18:22 rafal Exp $
+ * @version $Id: Component.java,v 1.3 2005-02-08 20:57:52 rafal Exp $
  */
 public interface Component
 {
@@ -54,6 +55,8 @@ public interface Component
 	 * 
 	 * @return template used for rendering this component, or <code>null</code> to use template
 	 *         selected by the name of the component.
+     * @throws ProcessingException if there is a problem determinit exception to be used.
 	 */
-	public Template getTemplate(); 
+	public Template getTemplate()
+        throws ProcessingException; 
 }
