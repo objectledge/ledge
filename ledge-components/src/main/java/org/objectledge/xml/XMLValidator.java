@@ -58,10 +58,16 @@ import com.thaiopensource.xml.sax.DraconianErrorHandler;
 import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
 
 /**
+ * Validates XML files against schemata using Jing library.
  *
+ * <p>The primary schema language used throughout ObjectLedge project is RelaxNG, but the Jing
+ * library determines the schema languague using XML namespace of the top level element. At the
+ * moment XML based schema languages supported by Jing and thus by XMLValidator are W3C XSD, 
+ * Scheamtron and Namespace Routing Language.</p>
+ * 
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.3 2003-12-03 15:34:01 fil Exp $
+ * @version $Id: XMLValidator.java,v 1.4 2003-12-30 13:07:32 fil Exp $
  */
 public class XMLValidator
 {
