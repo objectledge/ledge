@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.31 2005-03-29 10:53:23 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.32 2005-03-30 11:20:34 zwierzem Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -107,7 +107,8 @@ public class BuilderExecutorValve
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 	
 		// get initial builder, template and embedded result
-        String viewName = mvcContext.getView();
+        String originalViewName = mvcContext.getView();
+        String viewName = originalViewName;
 		String embeddedResult = null;
 		Builder builder = null;
 		Template template = null;
@@ -118,7 +119,8 @@ public class BuilderExecutorValve
 		int enclosures;
 		for (enclosures = 0; enclosures < maxEnclosures; enclosures++)
 		{
-            builder = classFinder.findBuilder(viewName);
+            MVCClassFinder.Result builderResult = classFinder.findBuilder(viewName);
+            builder = builderResult.getBuilder();
             if(builder != null)
             {
                 // route builder -------------------------------------------------------------------
@@ -132,7 +134,8 @@ public class BuilderExecutorValve
                         break;
                     }
                     viewName = routeBuilderName;
-                    builder = classFinder.findBuilder(viewName);
+                    builderResult = classFinder.findBuilder(viewName);
+                    builder = builderResult.getBuilder();
                 }
                 if(routeCalls >= maxRouteCalls)
                 {
@@ -142,8 +145,16 @@ public class BuilderExecutorValve
                 securityHelper.checkSecurity(builder, context);
             }
             // get template ------------------------------------------------------------------------
-            template = templateFinder.findBuilderTemplate(viewName);
-
+            MVCTemplateFinder.Result templateResult = templateFinder.findBuilderTemplate(viewName); 
+            template = templateResult.getTemplate();
+            
+            if(enclosures == 0 &&
+               builderResult.fallbackPerformed() && templateResult.fallbackPerformed())
+            {
+                throw new MissingViewException(
+                    "originalViewName="+originalViewName+", viewName="+viewName);
+            }
+            
 			// embedded results --------------------------------------------------------------------
 			embeddedResult = embeddedResult == null ? "": embeddedResult;
             innermostView = innermostView == null ? viewName : innermostView;

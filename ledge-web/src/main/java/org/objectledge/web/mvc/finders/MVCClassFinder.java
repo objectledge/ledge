@@ -35,7 +35,7 @@ import org.objectledge.web.mvc.components.Component;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.14 2005-03-29 10:53:24 zwierzem Exp $
+ * @version $Id: MVCClassFinder.java,v 1.15 2005-03-30 11:20:19 zwierzem Exp $
  */
 public interface MVCClassFinder
 {
@@ -53,13 +53,13 @@ public interface MVCClassFinder
     // builders /////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returns a builder instance based on a given name. If no builder is found, a
-     * <code>null</code> is returned.
+     * Returns a result object containing reference to the found builder for a given view
+     * name. If no builder is found, a <code>null</code> builder is returned in the result object.
      * 
      * @param builderName part of a name of a builder class to be instantiated
-     * @return found builder instance
+     * @return found builder instance with accompanying info.
      */
-    public Builder findBuilder(String builderName);
+    public Result findBuilder(String builderName);
 
 	/**
 	 * Returns an enclosing view name for a given view name. If no name is found, a
@@ -80,4 +80,55 @@ public interface MVCClassFinder
 	 * @return found component instance
 	 */
 	public Component getComponent(String componentName);
+
+    /**
+     * The search result for builder find method.
+     *  
+     * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+     */
+    public static class Result
+    {
+        private final String originalView;
+        private final Builder builder;
+        private final String actualView;
+        
+        public Result(String originalView, Builder builder, String actualView)
+        {
+            this.originalView = originalView;
+            this.builder = builder;
+            this.actualView = actualView;
+        }
+
+        /**
+         * @return Returns the original view used to search for the builder.
+         */
+        public String getOriginalView()
+        {
+            return originalView;
+        }
+
+        /**
+         * @return Returns the actual view name computed during search.
+         */
+        public String getActualView()
+        {
+            return actualView;
+        }
+
+        /**
+         * @return Returns the found builder.
+         */
+        public Builder getBuilder()
+        {
+            return builder;
+        }
+        
+        /**
+         * @return Tells whether fallback on view name was preformed during builder search.
+         */
+        public boolean fallbackPerformed()
+        {
+            return !originalView.equals(actualView);
+        }
+    }
 }

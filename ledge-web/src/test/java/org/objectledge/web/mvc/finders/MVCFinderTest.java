@@ -40,7 +40,6 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.actions.foo.TestAction;
-import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.components.Component;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
@@ -50,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.14 2005-03-29 12:25:38 zwierzem Exp $
+ * @version $Id: MVCFinderTest.java,v 1.15 2005-03-30 11:20:33 zwierzem Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -88,16 +87,26 @@ public class MVCFinderTest extends TestCase
 
     public void testFindBuilderTemplate()
     {
-        Template template = finder.findBuilderTemplate("foo.Bar");
-        assertEquals( "views/foo/Bar", template.getName());
-        template = finder.findBuilderTemplate(null);
-        assertNull(template);
-        template = finder.findBuilderTemplate("foo.NonExistentView");
-        assertEquals("views/foo/Default", template.getName());
-        template = finder.findBuilderTemplate("NonExistentView");
-        assertEquals("views/Default", template.getName());
-        template = finder.findBuilderTemplate("nonexistentpackage.NonExistentView");
-        assertEquals("views/Default", template.getName());
+        MVCTemplateFinder.Result result = finder.findBuilderTemplate("foo.Bar");
+        assertEquals( "views/foo/Bar", result.getTemplate().getName());
+        assertEquals( "foo.Bar", result.getOriginalView());
+        assertEquals( "foo.Bar", result.getActualView());
+        result = finder.findBuilderTemplate(null);
+        assertNull(result.getTemplate());
+        assertNull(result.getOriginalView());
+        assertNull(result.getActualView());
+        result = finder.findBuilderTemplate("foo.NonExistentView");
+        assertEquals("views/foo/Default", result.getTemplate().getName());
+        assertEquals( "foo.NonExistentView", result.getOriginalView());
+        assertEquals( "foo.Default", result.getActualView());
+        result = finder.findBuilderTemplate("NonExistentView");
+        assertEquals("views/Default", result.getTemplate().getName());
+        assertEquals( "NonExistentView", result.getOriginalView());
+        assertEquals( "Default", result.getActualView());
+        result = finder.findBuilderTemplate("nonexistentpackage.NonExistentView");
+        assertEquals("views/Default", result.getTemplate().getName());
+        assertEquals( "nonexistentpackage.NonExistentView", result.getOriginalView());
+        assertEquals( "Default", result.getActualView());
     }
 
     public void testGetAction()
@@ -111,32 +120,32 @@ public class MVCFinderTest extends TestCase
 
     public void testFindBuilder()
     {
-        Builder builder = finder.findBuilder("foo.Bar");
-        assertEquals(org.objectledge.test.views.foo.Bar.class, builder.getClass());
-        builder = finder.findBuilder(null);
-        assertNull(builder);
-        builder = finder.findBuilder("foo.NotExistentClass");
-        assertEquals(org.objectledge.test.views.foo.Default.class, builder.getClass());
-        builder = finder.findBuilder("NotExistentClass");
-        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
-        builder = finder.findBuilder("nonexistentpackage.NotExistentClass");
-        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
+        MVCClassFinder.Result result = finder.findBuilder("foo.Bar");
+        assertEquals(org.objectledge.test.views.foo.Bar.class, result.getBuilder().getClass());
+        result = finder.findBuilder(null);
+        assertNull(result.getBuilder());
+        result = finder.findBuilder("foo.NotExistentClass");
+        assertEquals(org.objectledge.test.views.foo.Default.class, result.getBuilder().getClass());
+        result = finder.findBuilder("NotExistentClass");
+        assertEquals(org.objectledge.test.views.Default.class, result.getBuilder().getClass());
+        result = finder.findBuilder("nonexistentpackage.NotExistentClass");
+        assertEquals(org.objectledge.test.views.Default.class, result.getBuilder().getClass());
     }
     
     public void testFindEnclosingViewName()
     {
         String viewName = ("foo.Bar");
-        Builder builder = finder.findBuilder(viewName);
-        assertEquals(org.objectledge.test.views.foo.Bar.class, builder.getClass());
+        MVCClassFinder.Result result = finder.findBuilder(viewName);
+        assertEquals(org.objectledge.test.views.foo.Bar.class, result.getBuilder().getClass());
         viewName = finder.findEnclosingViewName(viewName);
-        builder = finder.findBuilder(viewName);
-        assertEquals(org.objectledge.test.views.foo.Default.class, builder.getClass());
+        result = finder.findBuilder(viewName);
+        assertEquals(org.objectledge.test.views.foo.Default.class, result.getBuilder().getClass());
         viewName = finder.findEnclosingViewName(viewName);
-        builder = finder.findBuilder(viewName);
-        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
+        result = finder.findBuilder(viewName);
+        assertEquals(org.objectledge.test.views.Default.class, result.getBuilder().getClass());
         viewName = finder.findEnclosingViewName(viewName);
-        builder = finder.findBuilder(viewName);
-        assertNull(builder);        
+        result = finder.findBuilder(viewName);
+        assertNull(result.getBuilder());        
     }
 
     public void testGetComponentTemplate()

@@ -40,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.30 2005-03-29 10:53:24 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.31 2005-03-30 11:20:19 zwierzem Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -116,9 +116,9 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
   	/**
 	 * {@inheritDoc}
 	 */
-    public Template findBuilderTemplate(String view)
+    public MVCTemplateFinder.Result findBuilderTemplate(String view)
     {
-		return findTemplate(Kind.VIEW, view, true, "findBuilderTemplate");
+		return findBuilderTemplate(view, "findBuilderTemplate");
     }
 
 	// component templates ////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Template getComponentTemplate(String name)
 	{
-		return findTemplate(Kind.COMPONENT, name, false, "getComponentTemplate");
+        return findTemplate(Kind.COMPONENT, name, false, "getComponentTemplate");
 	}
 
 	// actions //////////////////////////////////////////////////////////////////////////////////
@@ -146,9 +146,9 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     /**
      * {@inheritDoc}
      */
-    public Builder findBuilder(String view)
+    public MVCClassFinder.Result findBuilder(String view)
     {
-        return (Builder) findObject(Kind.VIEW, view, true, "getBuilder");
+        return findBuilder(view, "findBuilder");
     }
 
 	/**
@@ -242,6 +242,34 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		return null;
 	}
 
+    private MVCTemplateFinder.Result findBuilderTemplate(String templateName, String methodName)
+    {
+        if(templateName != null && templateName.length() != 0)
+        {
+            Sequence sequence = getTemplateNameSequence(Kind.VIEW, templateName, true, false);
+            while(sequence.hasNext())
+            {
+                String name = sequence.next();
+                logger.debug(methodName+": trying "+name);
+                if(templating.templateExists(name))
+                {
+                    try
+                    {
+                        Template template = templating.getTemplate(name);
+                        return new MVCTemplateFinder.Result(
+                            templateName, template, sequence.currentView());
+                    }
+                    catch(TemplateNotFoundException e)
+                    {
+                        throw new IllegalStateException("Existing template disappeared", e);
+                    }
+                }
+            }
+            return new MVCTemplateFinder.Result(templateName, null, sequence.currentView());
+        }
+        return new MVCTemplateFinder.Result(templateName, null, null);
+    }
+
     /**
      * Return a template lookup sequence.
      * 
@@ -270,7 +298,8 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 				logger.debug(methodName+": trying "+name);
 				try
 				{
-					return getClassInstance(name);
+					Object obj = getClassInstance(name);
+                    return obj;
 				}
 				catch(ClassNotFoundException e)
 				{
@@ -281,6 +310,32 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		return null;
 	}
 
+    private MVCClassFinder.Result findBuilder(String className, String methodName)
+    {
+        if(className != null && className.length() != 0)
+        {
+            Sequence sequence = nameSequenceFactory.
+                getClassNameSequence(Kind.VIEW.getInfix(), className, true, false);
+            while(sequence.hasNext())
+            {
+                String name = sequence.next();
+                logger.debug(methodName+": trying "+name);
+                try
+                {
+                    Object obj = getClassInstance(name);
+                    return new MVCClassFinder.Result(
+                        className, (Builder) obj, sequence.currentView());
+                }
+                catch(ClassNotFoundException e)
+                {
+                    // go on
+                }
+            }
+            return new MVCClassFinder.Result(className, (Builder) null, sequence.currentView());
+        }
+        return new MVCClassFinder.Result(className, (Builder) null, null);
+    }
+    
 	/**
 	 * Gets an instance of an object depending on it's finder name and type
 	 */

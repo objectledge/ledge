@@ -33,29 +33,80 @@ import org.objectledge.templating.Template;
  * Finds templates that should be used for rendering specific views.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCTemplateFinder.java,v 1.10 2005-02-17 17:09:04 zwierzem Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.11 2005-03-30 11:20:19 zwierzem Exp $
  */
 public interface MVCTemplateFinder
 {
     // builders /////////////////////////////////////////////////////////////////////////////////
     
 	/**
-	 * Returns an builder template for a given view name. If no template is found, a
-	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
+	 * Returns a result object containing reference to the found builder template for a given view
+     * name. If no template is found, a <code>null</code> template is returned in the result object.
 	 * 
      * @param name view name to look up template for.
-	 * @return found template
+	 * @return found template with accompanying info.
      */
-    public Template findBuilderTemplate(String name);
+    public Result findBuilderTemplate(String name);
 
 	// components /////////////////////////////////////////////////////////////////////////////////
     
 	/**
 	 * Returns an component template for a given component name. If no template is found, a
-	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
+	 * <code>null</code> is returned.
 	 * 
 	 * @param name component name to look up template for.
 	 * @return found template
 	 */
 	public Template getComponentTemplate(String name);
+    
+    /**
+     * The search result for builder template find method.
+     *  
+     * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+     */
+    public static class Result
+    {
+        private final String originalView;
+        private final Template template;
+        private final String actualView;
+        
+        public Result(String originalView, Template template, String actualView)
+        {
+            this.originalView = originalView;
+            this.template = template;
+            this.actualView = actualView;
+        }
+
+        /**
+         * @return Returns the original view used to search for the builder template.
+         */
+        public String getOriginalView()
+        {
+            return originalView;
+        }
+
+        /**
+         * @return Returns the actual view name computed during search.
+         */
+        public String getActualView()
+        {
+            return actualView;
+        }
+
+        /**
+         * @return Returns the found builder template.
+         */
+        public Template getTemplate()
+        {
+            return template;
+        }
+        
+        /**
+         * @return Tells whether fallback on view name was preformed during builder template search.
+         */
+        public boolean fallbackPerformed()
+        {
+            return !originalView.equals(actualView);
+        }
+    }
 }
