@@ -44,7 +44,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.10 2004-01-19 16:04:54 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.11 2004-01-20 10:47:36 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -55,7 +55,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	/** Internal constant for choosing "components" package name part. */
 	private static final int COMPONENTS = 2;
 	
-	private String[] packageNameParts = { "builders", "actions", "components" };
+	private String[] packageNameParts = { "views", "actions", "components" };
 	
 	private MutablePicoContainer container;
 	private Runnable defaultAction;
