@@ -24,6 +24,7 @@
         <item name="Web i18n tool factory" href="/components/WebI18nToolFactory.html"/>
         <item name="Web configurator" href="/components/WebConfigurator.html"/>
         <item name="Exception redirector valve" href="/components/ExceptionRedirectorValve.html"/>
+        <item name="PolicySystem" href="/components/PolicySystem.html"/>
         <item name="MVC Components" href="/components/mvc/index.html" collapse="true">
           <item name="MVC initializer valve" href="/components/mvc/MVCInitializerValve.html"/>      
           <item name="MVC results valve" href="/components/mvc/MVCResultsValve.html"/>

@@ -51,6 +51,11 @@
         </p>
         <p class="more"><a href="ExceptionRedirectorValve.html">more</a></p>
       </subsection>
+      <subsection name="PolicySystem">
+        <p>The simple component to checks user permission to execute the action and
+	     access the view.</p>
+        <p class="more"><a href="PolicySystem.html">more</a></p>
+      </subsection>
     </section>
   </body>
 </document>
