@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ObjectLedge">
+
+  <title>ObjectLedge</title>
+
+  <body>
+    <links>
+      <item name="home" href="../../index.html"/>
+      <item name="wiki" href="http://objectledge.org/wiki"/>
+      <item name="issues" href="http://objectledge.org/jira"/>
+      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/"/>
+    </links>
+  </body>
+</project>
