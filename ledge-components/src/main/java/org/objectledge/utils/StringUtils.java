@@ -44,7 +44,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.20 2005-01-21 03:53:35 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.21 2005-01-26 03:47:21 rafal Exp $
  */
 public class StringUtils
 {
@@ -647,6 +647,7 @@ public class StringUtils
     }    
     
     /**
+     * Expand macros in a string.
      *  
      * @param s the String to process.
      * @param t the macros (token -&gt; value)
@@ -655,7 +656,9 @@ public class StringUtils
     public static String expand(String s, Map t)
     {
         if(t==null || t.size()==0)
+        {
             return s;
+        }
         StringBuffer buff = new StringBuffer(s.length());
         Iterator keys = t.keySet().iterator();
         int pos, lastpos;
@@ -665,7 +668,9 @@ public class StringUtils
             k = (String)keys.next();
             pos = s.indexOf(k);
             if(pos < 0)
+            {
                 continue;
+            }
             lastpos = 0;
             v = (String)t.get(k);
             buff.setLength(0);
