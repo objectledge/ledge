@@ -27,14 +27,51 @@
 // 
 package org.objectledge.authentication;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jcontainer.dna.Configuration;
+
 /**
- * Verifies a login name against a set of reserved ones.
+ * Verifies a login name against a set of reserved ones and pattern.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LoginVerifier.java,v 1.1 2004-02-18 11:45:54 fil Exp $
+ * @version $Id: LoginVerifier.java,v 1.2 2004-02-19 16:27:47 pablo Exp $
  */
-public abstract class LoginVerifier
+public class LoginVerifier
 {
+    /** The regexp login pattern. */
+    public static final String LOGIN_PATTERN = "[-a-zA-Z0-9]+";
+
+    /** the reserved logins set */
+    private Set reserved;
+    
+    /** the login pattern */
+    private Pattern loginPattern;
+
+    /**
+     * Component constructor.
+     * 
+     * @param config the configuration.
+     */    
+    public LoginVerifier(Configuration config)
+    {
+        reserved = new HashSet();
+        String list = config.getChild("reserved").getValue("");
+        StringTokenizer st = new StringTokenizer(list);
+        while(st.hasMoreTokens())
+        {
+            String login = st.nextToken();
+            reserved.add(login);
+        }
+        String pattern = config.getChild("loginPattern")
+           .getValue(LOGIN_PATTERN);
+        loginPattern = Pattern.compile(pattern);
+    }
+    
     /**
      * Checks if a login name is a non-reserved one.
      * 
@@ -42,6 +79,21 @@ public abstract class LoginVerifier
      * @return <code>true</code> if a login name is a non-occupied and non-reserved.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract boolean checkLogin(String login)
-       throws AuthenticationException;
+    public boolean checkLogin(String login)
+       throws AuthenticationException
+    {
+        return !reserved.contains(login);       
+    }
+    
+    /**
+     * Verify login.
+     * 
+     * @param login the login.
+     * @return <code>true</code> if login is valid.
+     */
+    public boolean validate(String login)
+    {
+        Matcher m = loginPattern.matcher(login);
+        return m.matches();
+    }
 }

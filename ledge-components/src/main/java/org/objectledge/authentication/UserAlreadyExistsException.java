@@ -33,14 +33,14 @@ package org.objectledge.authentication;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class UserUnknownException extends AuthenticationException
+public class UserAlreadyExistsException extends AuthenticationException
 {
     /**
      * Constructor.
      * 
      * @param message the message.
      */
-    public UserUnknownException(String message)
+    public UserAlreadyExistsException(String message)
     {
         super(message);
     }
@@ -51,9 +51,9 @@ public class UserUnknownException extends AuthenticationException
      * @param message the message.
      * @param t the root cause.
      */
-    public UserUnknownException(String message, Throwable t)
+    public UserAlreadyExistsException(String message, Throwable t)
     {
         super(message,t);
     }
-    
+
 }

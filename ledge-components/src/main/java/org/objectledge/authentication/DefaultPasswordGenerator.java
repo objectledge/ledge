@@ -28,64 +28,60 @@
 
 package org.objectledge.authentication;
 
-import java.security.Principal;
+import java.util.Random;
 
 /**
- * Simple implementation of authentication.
+ * Default password generator.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class BaseAuthentication implements Authentication
+public class DefaultPasswordGenerator extends PasswordGenerator
 {
+    /** The pseudorandom numbers generator */
+    private Random randomGenerator;
     
-    /** the constructor */
-    public BaseAuthentication()
+    /**
+     * Alphabet consisting of letters A-Z and digits 0-9.
+     */
+    private static final char[] ALPHABET = {
+        'A','B','C','D','E','F','G','H',
+        'I','J','K','L','M','N','O','P',
+        'Q','R','S','T','U','V','W','X',
+        'Y','Z','1','2','3','4','5','6',
+        '7','8','9','0','a','b','c','d',
+        'e','f','g','h','i','j','k','l',
+        'm','n','o','p','q','r','s','t',
+        'u','v','w','x','y','z',
+    };
+
+    /**
+     * Component constructor.
+     */
+    public DefaultPasswordGenerator()
     {
+        randomGenerator = new Random();
     }
-    
-    //TODO config, many other things....
-    
-    /** anonymous name */
-    private String anonymousName = "anonymous";
 
     /**
      * {@inheritDoc}
      */
-    public Principal getAnonymousUser()
+    public String createRandomPassword(int min, int max)
     {
-        return new DefaultPrincipal(anonymousName);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public boolean checkPassword(String login, String password)
-            throws UserUnknownException
-    {
-        //TODO for now authenticate all users...
-        return true;
-    }
-    
-    /**
-     * Get the user.
-     * 
-     * @param dn the user name.
-     * @return the user principal.
-     */
-    public Principal getUser(String dn)
-    {
-        // do not check if it exists
-        return new DefaultPrincipal(dn);
-    }
-    
-    /**
-     * Get the user name.
-     * 
-     * @param dn the user name.
-     * @return the user principal.
-     */
-    public String getUserName(String dn)
-    {
-        return dn;    
+        int length = 0;
+        if (min < max)
+        {
+            int offset = randomGenerator.nextInt(max - min + 1);
+            length = min + offset;
+        }
+        else
+        {
+            length = min;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++)
+        {
+            sb.append(ALPHABET[randomGenerator.nextInt(ALPHABET.length)]);
+        }
+        return sb.toString();
     }
 }

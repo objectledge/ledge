@@ -31,16 +31,14 @@ import java.security.Principal;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
 
-import org.objectledge.naming.ContextFactory;
 import org.objectledge.parameters.Parameters;
 
 /**
  * A base implementation of the UserManager interface.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.1 2004-02-18 11:45:54 fil Exp $
+ * @version $Id: UserManager.java,v 1.2 2004-02-19 16:27:47 pablo Exp $
  */
 public abstract class UserManager
 {
@@ -58,32 +56,24 @@ public abstract class UserManager
     /** the password generator to be used. */
     protected PasswordGenerator passwordGenerator;
     
-    /** the directory context. */
-    protected DirContext context;
-        
     // initialization ///////////////////////////////////////////////////////////////////////////
     
     /**
      * Creates an instance of the user manager.
      * 
-     * @param contextId the context identifier.
      * @param namingPolicy the namig policy to be used.
      * @param loginVerifier the login verifier.
      * @param passwordGenerator the password generator.
      * @param passwordDigester the password digester.
-     * @param factory the factory to get context from.
-     * @throws NamingException if the context could not be accessed.
      */
-    public UserManager(String contextId, NamingPolicy namingPolicy, 
+    public UserManager(NamingPolicy namingPolicy, 
         LoginVerifier loginVerifier, PasswordGenerator passwordGenerator, 
-        PasswordDigester passwordDigester, ContextFactory factory) 
-        throws NamingException
+        PasswordDigester passwordDigester) 
     {
         this.namingPolicy = namingPolicy;
         this.loginVerifier = loginVerifier;
         this.passwordGenerator = passwordGenerator;
         this.passwordDigester = passwordDigester;
-        this.context = factory.getDirContext(contextId);
     }
     
     // account creation + removal ///////////////////////////////////////////////////////////////
@@ -95,8 +85,11 @@ public abstract class UserManager
      * @return <code>true</code> if a login name is a non-occupied and non-reserved.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract boolean checkLogin(String login)
-       throws AuthenticationException;
+    public boolean checkLogin(String login)
+       throws AuthenticationException
+    {
+        return loginVerifier.checkLogin(login);
+    }
     
     /**
      * Creates a distinguished name from provided parameters in conformance to configured naming 
@@ -109,6 +102,14 @@ public abstract class UserManager
     {
         return namingPolicy.getDn(parameters);
     }
+
+    /** 
+     * Check if user exists.
+     * 
+     * @param dn the name of the user.
+     * @return <code>true</code> if user exists in system.
+     */
+    public abstract boolean userExists(String dn);
     
     /**
      * Creates a new user account.
@@ -266,6 +267,6 @@ public abstract class UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException if the opertion could not be performed.
      */
-    public abstract Principal[] lookupAccounds(String query)
+    public abstract Principal[] lookupAccounts(String query)
         throws NamingException;    
 }

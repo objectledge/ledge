@@ -33,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.8 2004-02-11 10:42:59 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.9 2004-02-19 16:27:47 pablo Exp $
  */
 public class MailSystem
 {
@@ -43,7 +43,8 @@ public class MailSystem
     public static final String DEFAULT_SESSION = "default";
     
 	/** The regex email address patter. */
-	public static final String EMAIL_ADDRESS_PATTERN = "email_address_pattern";
+	public static final String EMAIL_ADDRESS_PATTERN = 
+        "^[-!\\.\\w]+@[^\\.][-a-zA-Z0-9]+(\\.[-a-zA-Z0-9]+)+";
         
     /** logger */
     private Logger logger;
@@ -99,7 +100,7 @@ public class MailSystem
             mimeMap = new MimetypesFileTypeMap(fileSystem.getInputStream(mimeTypeFilePath));
             debugAddress = config.getChild("big_brother_email").getValue("");
             String pattern = config.getChild("email_pattern")
-            	.getValue("^[-!\\.\\w]+@[^\\.][-a-zA-Z0-9]+(\\.[-a-zA-Z0-9]+)+");
+            	.getValue(EMAIL_ADDRESS_PATTERN);
             emailAddressPattern = Pattern.compile(pattern);
 
             Configuration sessionsNode = config.getChild("sessions");
