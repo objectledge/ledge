@@ -33,12 +33,13 @@ import java.util.Locale;
 
 import org.objectledge.context.Context;
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplatingContext;
 
 /**
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineContextImpl.java,v 1.1 2003-12-23 23:40:23 pablo Exp $
+ * @version $Id: PipelineContextImpl.java,v 1.2 2003-12-29 13:09:29 pablo Exp $
  */
 public class PipelineContextImpl implements PipelineContext
 {
@@ -53,30 +54,29 @@ public class PipelineContextImpl implements PipelineContext
 		return (PipelineContext)context.getAttribute(CONTEXT_KEY);
 	}
 
-	
 	/** The screen template. */
-	protected Template screenTemplate;
+	private Template screenTemplate;
 
 	/** The Action for this request */
 	//protected Action action;
 
 	/** the locale */
-	protected Locale locale;
+	private Locale locale;
 
 	/** the encoding */
-	protected String encoding;
+	private String encoding;
 
 	/** the media */
-	protected String media;
+	private String media;
 
     /** the user. */
-	protected Principal user;
+	private Principal user;
 
     /** is the user authenticated */
-	protected boolean authenticated;
+	private boolean authenticated;
 
 	/** The name of the view paramter. */
-    protected String viewToken;
+	private String viewToken;
 	 
 	/**
 	 * Construct new pipeline context.
