@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Overview of Pico extensions</title>
+  </properties>
+  
+  <body>
+    <section name="PicoContainer extensions">
+      <subsection name="SequenceParameter">
+        <p></p>
+		<p class="more"><a href="SequenceParameter.html">more</a></p>
+	  </subsection>
+      
+      <subsection name="Component customization">
+        <p></p>
+		<p class="more"><a href="ComponentCustomization.html">more</a></p>
+      </subsection>
+      
+      <subsection name="Enhanced XMLFrontEnd">
+        <p></p>
+		<p class="more"><a href="XMLFrontEnd.html">more</a></p>
+      </subsection>
+    </section>
+  </body>
+</document>
+  

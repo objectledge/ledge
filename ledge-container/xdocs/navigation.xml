@@ -10,8 +10,18 @@
       <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-container"/>
     </links>
     <menu name="Refernce">
-      <item name="Container" href="container.html" collapse="true"/>
-      <item name="Pico extenstions" href="pico-extensions.html" collapse="true"/>
+      <item name="Container subsystems"   href="/container-subsystems/index.html" collapse="true">
+        <item name="Logging configurator"   href="/container-subsystems/LoggingConfigurator.html"/>
+        <item name="Logger factory"         href="/container-subsystems/LoggerFactory.html"/>
+        <item name="Configuration factory"  href="/container-subsystems/ConfigurationFactory.html"/>
+        <item name="Ledge container"        href="/container-subsystems/LedgeContainer.html"/>
+        <item name="Command line interface" href="/container-subsystems/Main.html"/>
+      </item>
+      <item name="Pico extenstions"        href="/pico-extensions/index.html" collapse="true">
+        <item name="SequenceParameter"       href="/pico-extensions/SequenceParamter.html"/>
+        <item name="Component customization" href="/pico-extensions/ComponentCustomization.html"/>
+        <item name="Enhanced XMLFrontEnd"    href="/pico-extensions/XMLFrontEnd.html"/>
+      </item>
     </menu>
   </body>
 </project>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Overview of container subsystems</title>
+  </properties>
+  
+  <body>
+    <section name="Container">
+      <subsection name="Logging configurator">
+        <p>
+        </p>
+		<p class="more"><a href="LoggingConfigurator.html">more</a></p>        
+      </subsection>
+
+      <subsection name="Logger factory">
+        <p>
+        </p>
+		<p class="more"><a href="LoggerFactory.html">more</a></p>        
+      </subsection>
+      
+      <subsection name="Configuration factory">
+        <p>
+        </p>
+		<p class="more"><a href="ConfigurationFactory.html">more</a></p>        
+      </subsection>
+      
+      <subsection name="Ledge container">
+        <p>
+        </p>
+		<p class="more"><a href="LedgeContainer.html">more</a></p>        
+      </subsection>
+
+      <subsection name="Command line interface">
+        <p>
+        </p>
+		<p class="more"><a href="Main.html">more</a></p>        
+      </subsection>
+    </section>
+  </body>
+</document>
+  
