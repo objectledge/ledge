@@ -186,21 +186,37 @@
       </fileset>
     </fileScanner>
     <j:forEach var="srcFile" items="${srcFiles.iterator()}">
+      <j:new className="java.lang.Integer" var="cutoff">
+         <j:arg type="int" value="${srcFile.path.length()-4}"/>
+      </j:new>
+      <util:file var="dstFile" name="${srcFile.path.substring(0,cutoff)}.jj"/>
+      <j:set var="propname" value="uptodate-${srcFile.path}"/>
+      <uptodate property="${propname}" 
+      	srcfile="${srcFile.path}" targetfile="${dstFile.path}"/>
+      <j:set var="uptodate" value="${context.getVariable(propname)}"/>
       <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
-      <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
-      <j:set var="dstDir" value="${dstDir.canonicalFile}"/>
-      <j:set var="dummy" value="${dstDir.mkdirs()}"/>
-      <copy todir="${dstDir.path}" overwrite="true">
-        <fileset dir="${srcFile.parentFile.path}">
-          <include name="*.jjt"/>
-          <include name="*.jj"/>
-          <include name="*.java"/>
-        </fileset>
-      </copy>
-      <echo>Generating grammar for ${relPath}</echo>
-      <ledge:jjtree input="${srcFile.name}" dir="${dstDir.path}"/>
-      <ledge:smartCopy srcDir="${dstDir}" srcMask="*.jj" dstDir="${srcFile.parentFile}"/>
-      <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+      <j:choose>
+        <j:when test="${empty(uptodate)}">
+          <echo>Generating grammar for ${relPath}</echo>
+          <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
+          <j:set var="dstDir" value="${dstDir.canonicalFile}"/>
+          <j:set var="dummy" value="${dstDir.mkdirs()}"/>
+          <copy todir="${dstDir.path}" overwrite="true">
+            <fileset dir="${srcFile.parentFile.path}">
+              <include name="*.jjt"/>
+              <include name="*.jj"/>
+              <include name="*.java"/>
+            </fileset>
+          </copy>
+          <ledge:jjtree input="${srcFile.name}" dir="${dstDir.path}"/>
+          <ledge:smartCopy srcDir="${dstDir}" srcMask="*.jj" dstDir="${srcFile.parentFile}"/>
+          <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+          <touch file="${dstFile.path}"/>
+        </j:when>
+        <j:otherwise>
+          <echo>Grammar for ${relPath} is up-to-date</echo>
+        </j:otherwise>
+      </j:choose>
     </j:forEach>
 
     <!-- javacc parsers -->
@@ -210,18 +226,34 @@
       </fileset>
     </fileScanner>
     <j:forEach var="srcFile" items="${srcFiles.iterator()}">
-      <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
-      <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
-      <echo>Generating parser for ${relPath}</echo>
-      <j:set var="dummy" value="${dstDir.mkdirs()}"/>
-      <copy todir="${dstDir.path}" overwrite="true">
-        <fileset dir="${srcFile.parentFile.path}">
-          <include name="*.jj"/>
-          <include name="*.java"/>
-        </fileset>
-      </copy>
-      <ledge:javacc input="${srcFile.name}" dir="${dstDir.path}"/>
-      <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+      <j:new className="java.lang.Integer" var="cutoff">
+         <j:arg type="int" value="${srcFile.path.length()-3}"/>
+      </j:new>
+      <util:file var="dstFile" name="${srcFile.path.substring(0,cutoff)}.java"/>
+      <j:set var="propname" value="uptodate-${srcFile.path}"/>
+      <uptodate property="${propname}" 
+      	srcfile="${srcFile.path}" targetfile="${dstFile.path}"/>
+      <j:set var="uptodate" value="${context.getVariable(propname)}"/>
+      <j:choose>
+        <j:when test="${empty(uptodate)}">
+          <echo>Generating parser for ${relPath}</echo>
+          <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
+          <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
+          <j:set var="dummy" value="${dstDir.mkdirs()}"/>
+          <copy todir="${dstDir.path}" overwrite="true">
+            <fileset dir="${srcFile.parentFile.path}">
+              <include name="*.jj"/>
+              <include name="*.java"/>
+            </fileset>
+          </copy>
+          <ledge:javacc input="${srcFile.name}" dir="${dstDir.path}"/>
+          <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+          <touch file="${dstFile.path}"/>
+        </j:when>
+        <j:otherwise>
+          <echo>Parser for ${relPath} is up-to-date</echo>
+        </j:otherwise>
+      </j:choose>
     </j:forEach>
   </goal>
 
