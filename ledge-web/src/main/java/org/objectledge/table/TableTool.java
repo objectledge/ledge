@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.8 2004-12-23 07:17:47 rafal Exp $
+ * @version $Id: TableTool.java,v 1.9 2005-03-08 13:08:32 zwierzem Exp $
  */
 public class TableTool
 {
@@ -517,6 +517,11 @@ public class TableTool
         public String getType()
         {
             return type;
+        }
+        
+        public boolean isIcon()
+        {
+            return type.equals("folder") || type.equals("file") || type.equals("folderopen");
         }
 	}
 

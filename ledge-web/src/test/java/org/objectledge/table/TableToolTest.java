@@ -37,7 +37,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableToolTest.java,v 1.2 2004-07-01 11:42:14 zwierzem Exp $
+ * @version $Id: TableToolTest.java,v 1.3 2005-03-08 13:08:33 zwierzem Exp $
  */
 public class TableToolTest extends TestCase
 {
@@ -260,90 +260,112 @@ public class TableToolTest extends TestCase
 		TableTool.LinesAndFoldersBox box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(1));
 		assertEquals(laf.size(), 2);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Tminus");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(2));
 		assertEquals(laf.size(), 3);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "I");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Lminus");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(3));
 		assertEquals(laf.size(), 4);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "I");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "T");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(3); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(4));
 		assertEquals(laf.size(), 4);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "I");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "L");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(3); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(5));
 		assertEquals(laf.size(), 2);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Lminus");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(6));
 		assertEquals(laf.size(), 3);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Tplus");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(7));
 		assertEquals(laf.size(), 3);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Lplus");
+        assertFalse(box.isIcon());
 		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
+        assertTrue(box.isIcon());
 		
 		// list view
 		state.setTreeView(false); 
@@ -355,50 +377,59 @@ public class TableToolTest extends TestCase
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(1));
 		assertEquals(laf.size(), 1);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(2));
 		assertEquals(laf.size(), 1);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(3));
 		assertEquals(laf.size(), 1);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(4));
 		assertEquals(laf.size(), 1);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(5));
 		assertEquals(laf.size(), 1);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(6));
 		assertEquals(laf.size(), 1);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
+        assertTrue(box.isIcon());
 
 		laf = table.linesAndFolders((TableRow) rows.get(7));
 		assertEquals(laf.size(), 1);
 		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
+        assertTrue(box.isIcon());
 	}
     
+
     // implementation -----------------------------------------------------------------------------
 
     private class MockTableModel implements TableModel
