@@ -31,7 +31,6 @@ package org.objectledge.parameters.db;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.Reader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,8 +43,8 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
-import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.DefaultDatabase;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
@@ -54,7 +53,6 @@ import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
 import org.objectledge.database.persistence.TestObject;
-import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -77,20 +75,23 @@ public class DBParametersTest extends TestCase
     public DBParametersTest(String arg0) throws Exception
     {
         super(arg0);
-        FileSystem fs = FileSystem.getStandardFileSystem(".");
         DataSource dataSource = getDataSource();
-        Reader script = fs.getReader("src/main/sql/database/IdGenerator.sql", "UTF-8");
+        LineNumberReader script = new LineNumberReader(
+            new InputStreamReader(
+            new FileInputStream("src/main/sql/database/IdGenerator.sql"), "UTF-8"));
         DatabaseUtils.runScript(dataSource, script);
-        script = fs.getReader("src/main/sql/parameters/DBParameters.sql", "UTF-8");
+        script = new LineNumberReader(new InputStreamReader(
+            new FileInputStream("src/main/sql/parameters/DBParameters.sql"), "UTF-8"));
         DatabaseUtils.runScript(dataSource, script);
-        script = fs.getReader("src/test/resources/parameters/test.sql", "UTF-8");
+        script = new LineNumberReader(new InputStreamReader(
+            new FileInputStream("src/test/resources/parameters/test.sql"), "UTF-8"));
         DatabaseUtils.runScript(dataSource, script);
         IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         persistence = new DefaultPersistence(database, logger);
-        manager = new DBParametersManager(database, logger);
+        manager = new DBParametersManagerImpl(database, logger);
     }
 
     public void testDBParameters() throws Exception
