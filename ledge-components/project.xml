@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.8 2003-12-04 08:41:19 fil Exp $ -->
+<!-- $Id: project.xml,v 1.9 2003-12-05 19:12:20 mover Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -81,6 +81,16 @@
       <groupId>saxon</groupId>
       <artifactId>saxon</artifactId>
       <version>6.5.3</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.4-dev</version>
     </dependency>
   </dependencies>
 </project>
