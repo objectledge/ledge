@@ -13,10 +13,14 @@ import org.picocontainer.defaults.ComponentAdapterFactory;
 import org.picocontainer.defaults.NotConcreteRegistrationException;
 
 /**
- *
+ * A factory of CustomizingConstructorComponentAdapters.
+ * 
+ * <p>Use this factory at the bottom of the factory chain for your container to take advantage of
+ * component customization. You'll also need to register {@link CustomizedComponentAdapters} for 
+ * the types of the components you want to have customized.<p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizingConstructorComponentAdapterFactory.java,v 1.1 2003-11-28 15:51:23 fil Exp $
+ * @version $Id: CustomizingConstructorComponentAdapterFactory.java,v 1.2 2003-12-01 13:09:45 fil Exp $
  */
 public class CustomizingConstructorComponentAdapterFactory 
     implements ComponentAdapterFactory
@@ -40,6 +44,7 @@ public class CustomizingConstructorComponentAdapterFactory
             AssignabilityRegistrationException,
             NotConcreteRegistrationException
     {
-        return new CustomizingConstructorComponentAdapter(componentKey, componentImplementation, parameters);
+        return new CustomizingConstructorComponentAdapter(componentKey, componentImplementation, 
+            parameters);
     }
 }

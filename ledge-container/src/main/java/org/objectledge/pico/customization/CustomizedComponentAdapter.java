@@ -13,31 +13,41 @@ import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 
 /**
- *
+ * An adapter for a component that is customized on behalf of a component that is asking for it.
+ * 
+ * <p>When another component is being initialized and it depends on the component that is managed 
+ * by this adapter (identified by the componentKey), the customizedComponentContainer is consulted 
+ * for a cached instance. If not present, the customizedContainerProvider is asked to produce an
+ * instance of the customized component. Thus, different components may recieve different instnaces
+ * of the managed component, depending on the customizedComponentProvider's semantics.</p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.3 2003-12-01 10:14:47 fil Exp $
+ * @version $Id: CustomizedComponentAdapter.java,v 1.4 2003-12-01 13:09:45 fil Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
 {
     private Object componentKey;
 
-    private MutablePicoContainer customizedInstanceContainer;
+    private MutablePicoContainer customizedComponentContainer;
     
-    private CustomizedComponentProvider customizationProvider;
+    private CustomizedComponentProvider customizedComponentProvider;
     
     /**
+     * Crates a new instance of the adapter.
      * 
+     * @param componentKey the component key this adapter manages.
+     * @param customizedComponentContainer a container for storing customized components.
+     * @param customizedComponentProvider a provider of customized components.
      */
     public CustomizedComponentAdapter(
         Object componentKey,
-        MutablePicoContainer customizedInstanceContainer,
-        CustomizedComponentProvider customizationProvider)
+        MutablePicoContainer customizedComponentContainer,
+        CustomizedComponentProvider customizedComponentProvider)
     {
         this.componentKey = componentKey;
-        this.customizedInstanceContainer = customizedInstanceContainer;
-        this.customizationProvider = customizationProvider;
+        this.customizedComponentContainer = customizedComponentContainer;
+        this.customizedComponentProvider = customizedComponentProvider;
     }
 
     /**
@@ -46,22 +56,26 @@ public class CustomizedComponentAdapter
     public Object getComponentInstance(MutablePicoContainer dependencyContainer)
         throws PicoInitializationException, PicoIntrospectionException
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
     
-    public Object getComponentInstance(MutablePicoContainer dependencyContainer, Object componentKey, Class componentImplementation)
+    /**
+     * {@inheritDoc}
+     */
+    public Object getComponentInstance(MutablePicoContainer dependencyContainer, 
+        Object componentKey, Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException
     {
         String marker = ((Class)componentKey).getName();
-        if(customizedInstanceContainer.hasComponent(marker))
+        if(customizedComponentContainer.hasComponent(marker))
         {
-            return customizedInstanceContainer.getComponentInstance(marker);
+            return customizedComponentContainer.getComponentInstance(marker);
         }
         else
         {
-            Object instance = customizationProvider.getCustomizedInsatnce(dependencyContainer, componentKey, componentImplementation);
-            customizedInstanceContainer.registerComponentInstance(marker, instance);
+            Object instance = customizedComponentProvider.
+                getCustomizedInsatnce(dependencyContainer, componentKey, componentImplementation);
+            customizedComponentContainer.registerComponentInstance(marker, instance);
             return instance;
         }
     }
@@ -71,15 +85,15 @@ public class CustomizedComponentAdapter
      */
     public void verify(PicoContainer picoContainer) throws NoSatisfiableConstructorsException
     {
-        customizationProvider.verify(picoContainer);    
+        customizedComponentProvider.verify(picoContainer);    
     }
+    
     /**
      * {@inheritDoc}
      */
     public Class getComponentImplementation()
     {
-        System.out.println("ouch!");
-        return Object.class;
+        throw new UnsupportedOperationException();
     }
 
     /**

@@ -16,17 +16,21 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.2 2003-12-01 09:18:32 fil Exp $
+ * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.3 2003-12-01 13:09:45 fil Exp $
  */
 public class CustomizingConstructorComponentAdapter extends ConstructorComponentAdapter
 {
 
     /**
+     * Constructs a new instnace of the adapter.
+     * 
      * @param componentKey the component's key.
      * @param componentImplementation the component implementation class.
      * @param parameters the component instantiation paramter hints.
-     * @throws AssignabilityRegistrationException
-     * @throws NotConcreteRegistrationException
+     * @throws AssignabilityRegistrationException if the componentKey is a class not assignable to
+     *         componentImplementation class.
+     * @throws NotConcreteRegistrationException if the componentImplementation type is  an abstract
+     *         class or interface.
      */
     public CustomizingConstructorComponentAdapter(
         Object componentKey,
@@ -38,10 +42,14 @@ public class CustomizingConstructorComponentAdapter extends ConstructorComponent
     }
 
     /**
+     * Constructs a new instnace of the adapter.
+     * 
      * @param componentKey the component's key.
      * @param componentImplementation the component implementation class.
-     * @throws AssignabilityRegistrationException
-     * @throws NotConcreteRegistrationException
+     * @throws AssignabilityRegistrationException if the componentKey is a class not assignable to
+     *         componentImplementation class.
+     * @throws NotConcreteRegistrationException if the componentImplementation type is  an abstract
+     *         class or interface.
      */
     public CustomizingConstructorComponentAdapter(
         Object componentKey,
@@ -64,7 +72,8 @@ public class CustomizingConstructorComponentAdapter extends ConstructorComponent
             if(adapterDependency instanceof CustomizedComponentAdapter)
             {
                 result[i] = ((CustomizedComponentAdapter)adapterDependency).
-                    getComponentInstance(picoContainer, getComponentKey(), getComponentImplementation());                                
+                    getComponentInstance(picoContainer, getComponentKey(), 
+                    getComponentImplementation());                                
             }
             else
             {
