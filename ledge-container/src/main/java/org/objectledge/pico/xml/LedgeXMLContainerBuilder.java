@@ -28,13 +28,11 @@
 
 package org.objectledge.pico.xml;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.nanocontainer.integrationkit.PicoCompositionException;
 import org.nanocontainer.reflection.DefaultReflectionContainerAdapter;
@@ -51,7 +49,6 @@ import org.picocontainer.defaults.ComponentAdapterFactory;
 import org.picocontainer.defaults.ComponentParameter;
 import org.picocontainer.defaults.DefaultComponentAdapterFactory;
 import org.picocontainer.defaults.DefaultPicoContainer;
-import org.picocontainer.defaults.ObjectReference;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -64,7 +61,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXMLContainerBuilder.java,v 1.3 2004-02-20 08:40:32 fil Exp $
+ * @version $Id: LedgeXMLContainerBuilder.java,v 1.4 2004-02-23 09:05:39 fil Exp $
  */
 public class LedgeXMLContainerBuilder 
     extends ScriptedContainerBuilder
@@ -94,7 +91,7 @@ public class LedgeXMLContainerBuilder
         }
     }
     
-    public MutablePicoContainer createContainerFromScript(PicoContainer parentContainer, 
+    public MutablePicoContainer createContainer(PicoContainer parentContainer, 
         Object assemblyScope) 
     {
         try
