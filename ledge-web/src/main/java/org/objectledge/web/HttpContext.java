@@ -45,7 +45,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.10 2004-09-29 14:23:15 zwierzem Exp $
+ * @version $Id: HttpContext.java,v 1.11 2004-10-07 15:30:54 zwierzem Exp $
  */
 public class HttpContext
 {
@@ -194,6 +194,10 @@ public class HttpContext
      */
 	public void setContentType(String type)
 	{
+        if(type == null)
+        {
+            throw new IllegalArgumentException("Content Type cannot be null");
+        }
 		contentType = type;
 	}
 	
