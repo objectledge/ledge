@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.8 2003-12-04 14:55:56 fil Exp $
+ * @version $Id: FileSystem.java,v 1.9 2003-12-04 16:45:20 mover Exp $
  */
 public class FileSystem
 {
@@ -60,7 +60,7 @@ public class FileSystem
     /** The providers. */
     private List providers = new ArrayList();
 
-    /** URL steram handler. */
+    /** URL stream handler. */
     private URLStreamHandler urlStreamHandler;
 
     /** The size of the buffer. */
