@@ -42,7 +42,7 @@ import org.objectledge.threads.Task;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DaemonTest.java,v 1.2 2004-02-02 11:37:34 fil Exp $
+ * @version $Id: DaemonTest.java,v 1.3 2004-02-02 11:58:58 fil Exp $
  */
 public class DaemonTest extends TestCase
 {
@@ -67,7 +67,7 @@ public class DaemonTest extends TestCase
     {
         synchronized(whiteboard)
         {
-            Task task = new NormalTask();
+            Task task = new LongRunningTask();
             int priority = Thread.NORM_PRIORITY;
             ThreadGroup threadGroup = new ThreadGroup("Test group");
             Context context = new Context();
@@ -88,7 +88,7 @@ public class DaemonTest extends TestCase
     {
         synchronized(whiteboard)
         {
-            Task task = new EarlyExitTask();
+            Task task = new ShortRunningTask();
             int priority = Thread.NORM_PRIORITY;
             ThreadGroup threadGroup = new ThreadGroup("Test group");
             Context context = new Context();
@@ -151,7 +151,7 @@ public class DaemonTest extends TestCase
     {
         synchronized(whiteboard)
         {
-            Task task = new NormalTask();
+            Task task = new LongRunningTask();
             int priority = Thread.NORM_PRIORITY;
             ThreadGroup threadGroup = new ThreadGroup("Test group");
             Context context = new Context();
@@ -176,7 +176,7 @@ public class DaemonTest extends TestCase
     {
         synchronized(whiteboard)
         {
-            Task task = new NormalTask();
+            Task task = new LongRunningTask();
             int priority = Thread.NORM_PRIORITY;
             ThreadGroup threadGroup = new ThreadGroup("Test group");
             Context context = new Context();
@@ -199,7 +199,7 @@ public class DaemonTest extends TestCase
     {
         synchronized(whiteboard)
         {
-            Task task = new NormalTask();
+            Task task = new LongRunningTask();
             int priority = Thread.NORM_PRIORITY;
             ThreadGroup threadGroup = new ThreadGroup("Test group");
             Context context = new Context();
@@ -220,12 +220,12 @@ public class DaemonTest extends TestCase
     {
         synchronized(whiteboard)
         {
-            Task task = new NormalTask();
+            Task task = new LongRunningTask();
             int priority = Thread.NORM_PRIORITY;
             ThreadGroup threadGroup = new ThreadGroup("Test group");
             Context context = new Context();
             whiteboard.clear();
-            Valve cleanup = new FailedCleanupValve();
+            Valve cleanup = new FailingCleanupValve();
             Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
             Thread.sleep(DELAY);
             daemon.stop();
@@ -236,7 +236,7 @@ public class DaemonTest extends TestCase
         }
     }
 
-    private class NormalTask
+    private class LongRunningTask
         extends Task
     {
         public synchronized void process(Context context)
@@ -254,7 +254,7 @@ public class DaemonTest extends TestCase
         }
     }
 
-    private class EarlyExitTask
+    private class ShortRunningTask
         extends Task
     {
         public void process(Context context)
@@ -306,7 +306,7 @@ public class DaemonTest extends TestCase
         }
     }
 
-    private class FailedCleanupValve
+    private class FailingCleanupValve
         implements Valve
     {
         public void process(Context context)
