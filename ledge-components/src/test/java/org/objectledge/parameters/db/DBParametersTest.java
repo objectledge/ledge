@@ -79,7 +79,7 @@ public class DBParametersTest extends TestCase
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         persistence = new DefaultPersistence(database, logger);
-        manager = new DBParametersManager(database, logger);
+        manager = new DefaultDBParametersManager(database, logger);
     }
 
     public void testDBParameters() throws Exception

@@ -1,86 +1,53 @@
+// 
+// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// All rights reserved. 
+// 
+// Redistribution and use in source and binary forms, with or without modification,  
+// are permitted provided that the following conditions are met: 
+//  
+// * Redistributions of source code must retain the above copyright notice,  
+//	 this list of conditions and the following disclaimer. 
+// * Redistributions in binary form must reproduce the above copyright notice,  
+//	 this list of conditions and the following disclaimer in the documentation  
+//	 and/or other materials provided with the distribution. 
+// * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+//	 nor the names of its contributors may be used to endorse or promote products  
+//	 derived from this software without specific prior written permission. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+// IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+// OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+// POSSIBILITY OF SUCH DAMAGE. 
+// 
 package org.objectledge.parameters.db;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.database.Database;
-import org.objectledge.database.DatabaseUtils;
-import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 
 /**
  * Manages the parameters stored in database.
  * 
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParametersManager.java,v 1.8 2004-03-11 12:53:45 fil Exp $
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: DBParametersManager.java,v 1.9 2004-03-11 13:16:35 fil Exp $
  */
-public class DBParametersManager
+public interface DBParametersManager
 {
-	/** the table name */
-	public static final String TABLE_NAME = "ledge_parameters";
+    /** the table name */
+    public static final String TABLE_NAME = "ledge_parameters";
 
-	/** the logger */
-	private Logger logger;
-	
-    /** the database */
-    private Database database;
-    
-    /** the parameters cache */
-    private Map localCache;
-    
-    /**
-     * Component cons
-     * 
-     * @param database the database access component.
-     * @param logger the logger.
-     */
-    public DBParametersManager(Database database, Logger logger)
-    {
-        this.logger = logger;
-        this.database = database;
-        localCache = new HashMap();
-    }
-    
     /**
      * Creates an empty container stored in database.
      *
      * @return the container.
      * @throws DBParametersException thrown if creation failed.
      */
-    public Parameters createContainer()
-    	throws DBParametersException
-    {
-    	// TODO consider the synchronization.
-        long id = -1;
-        Connection conn = null;
-        try
-        {
-        	conn = database.getConnection();
-            Statement statement = conn.createStatement();
-            id = database.getNextId(TABLE_NAME);
-            statement.execute("INSERT INTO "+TABLE_NAME+" values ("+id+",'','')");
-        }
-        ///CLOVER:OFF
-        catch(SQLException e)
-        {
-            throw new DBParametersException("Failed to insert the empty parameters", e);
-        }
-        ///CLOVER:ON
-        finally
-        {
-            DatabaseUtils.close(conn);
-        }
-        DBParameters parameters = new DBParameters(null, id, database, logger);
-		Long key = new Long(id);
-		localCache.put(key, parameters);
-		return parameters;
-    }
-
+    public abstract Parameters createContainer() throws DBParametersException;
+    
     /**
      * Retrieves parameters from database.
      *
@@ -88,51 +55,7 @@ public class DBParametersManager
      * @return the parameters.
      * @throws DBParametersException if parameters cannot be found.
      */
-    public Parameters getParameters(long id) throws DBParametersException
-    {
-        Parameters parameters;
-        Long key = new Long(id);
-        if (localCache.containsKey(key))
-        {
-            return (Parameters)localCache.get(key);
-        }
-        parameters = new DefaultParameters();
-        Connection conn = null;
-        try
-        {
-            conn = database.getConnection( );
-            Statement statement = conn.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * from " + TABLE_NAME +
-             										  " where parameters_id = " + id);
-            boolean exist = false;
-            while (result.next())
-            {
-                exist = true;
-                if (!result.getString("name").equals(""))
-                {
-                    parameters.add(DatabaseUtils.unescapeSqlString(result.getString("name")), 
-                                   DatabaseUtils.unescapeSqlString(result.getString("value")));
-                }
-            }
-            if (!exist)
-            {
-                throw new DBParametersException("DBParameters with id = " + id + " does not exist");
-            }
-            parameters = new DBParameters(parameters, id, database, logger);
-            localCache.put(key, parameters);
-            return parameters;
-        }
-        ///CLOVER:OFF
-        catch (SQLException e)
-        {
-            throw new DBParametersException("Failed to retrieve object", e);
-        }
-        ///CLOVER:ON
-        finally
-        {
-            DatabaseUtils.close(conn);
-        }
-    }
+    public abstract Parameters getParameters(long id) throws DBParametersException;
 
     /**
      * Deletes parameters from database.
@@ -140,27 +63,5 @@ public class DBParametersManager
      * @param id the parameters identifier
      * @throws DBParametersException thrown if failed to delete.
      */
-    public void deleteParameters(long id)
-    	throws DBParametersException
-    {
-        Long key = new Long(id);
-        Connection conn = null;
-        try
-        {
-        	conn = database.getConnection();
-            Statement statement = conn.createStatement();
-            statement.execute("DELETE FROM "+TABLE_NAME+" where parameters_id = "+id);
-            localCache.remove(key);
-        }
-        ///CLOVER:OFF
-        catch(SQLException e)
-        {
-            throw new DBParametersException("Failed to delete parameters", e);
-        }
-        ///CLOVER:ON
-        finally
-        {
-            DatabaseUtils.close(conn);
-        }
-    }
+    public abstract void deleteParameters(long id) throws DBParametersException;
 }
