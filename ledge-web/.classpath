@@ -19,5 +19,7 @@
     <classpathentry kind="var" path="MAVEN_REPO/jaf/jars/activation-1.0.2.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/javamail/jars/javamail-1.2.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4-dev.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/mockobjects/jars/mockobjects-jdk1.4-j2ee1.3-0.09.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/mockobjects/jars/mockobjects-core-0.09.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
