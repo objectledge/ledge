@@ -11,6 +11,15 @@
         <code>FileServiceProvider</code> implementations were moved to <code>org.objectledge.filesystem</code>
         package, as they are accessed by the casual users - they should not be forced to look into impl packages.
       </action>
+      <action dev="fil" type="add">
+        Implemented full support of "ledge" URL schema. Thanks to this, you can pass ledge://...
+        URL strings as parameters to InputSource() constructors and have extenral entities and other
+        variants of file inclusion work. <br/>
+        There is a problem though - only one handler for a specific schema may be present
+        in a class loader at a time. This means that if you have two ledge filesystems 
+        active at the same time in a single classloader, you'll get inconsistent results - 
+        the last filesystem started winns. <br/>
+      </action>
     </release>
   </body>
 </document>

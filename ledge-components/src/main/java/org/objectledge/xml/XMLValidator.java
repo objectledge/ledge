@@ -29,7 +29,7 @@
 package org.objectledge.xml;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +67,7 @@ import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
  * 
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.4 2003-12-30 13:07:32 fil Exp $
+ * @version $Id: XMLValidator.java,v 1.5 2004-01-08 12:50:52 fil Exp $
  */
 public class XMLValidator
 {
@@ -125,17 +125,15 @@ public class XMLValidator
         {
             validator = getValidator(schemaPath);
             XMLReader reader = saxParser.getXMLReader();
-            InputStream is = fileSystem.getInputStream(path);
-            if(is == null)
+            URL url = fileSystem.getResource(path);
+            if(url == null)
             {
                 throw new IOException(path+" does not exist");
             }
-            InputSource source = new InputSource(is);
-            source.setSystemId(path);
+            InputSource source = new InputSource(url.toString());
             reader.setContentHandler(validator.getContentHandler());
             reader.setDTDHandler(validator.getDTDHandler());
             reader.parse(source);
-             
         }
         finally
         {
@@ -173,12 +171,12 @@ public class XMLValidator
         }
         else
         {
-            InputStream is = fileSystem.getInputStream(schemaPath);
-            if(is == null)
+            URL url = fileSystem.getResource(schemaPath);
+            if(url == null)
             {
                 throw new IOException(schemaPath+" does not exist");
             }
-            schema = schemaReader.createSchema(new InputSource(is), properties);
+            schema = schemaReader.createSchema(new InputSource(url.toString()), properties);
             schemas.put(schemaPath, schema);
             validators.put(schemaPath, new ArrayList());
         }

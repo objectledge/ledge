@@ -51,7 +51,7 @@ import org.xml.sax.SAXParseException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEndTest.java,v 1.4 2003-12-22 09:00:34 fil Exp $
+ * @version $Id: LedgeXmlFrontEndTest.java,v 1.5 2004-01-08 12:50:50 fil Exp $
  */
 public class LedgeXmlFrontEndTest extends TestCase
 {
@@ -80,6 +80,7 @@ public class LedgeXmlFrontEndTest extends TestCase
                 "use -Dledge.root=.../ledge-container/src/test/resources");
         }
         fs = FileSystem.getStandardFileSystem(root);
+        fs.start();
         validator = new XMLValidator(fs);
     }
 

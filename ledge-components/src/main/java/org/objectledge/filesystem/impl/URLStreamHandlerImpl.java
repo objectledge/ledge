@@ -40,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * using FileSystem.
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: URLStreamHandlerImpl.java,v 1.4 2003-12-05 18:50:02 pablo Exp $
+ *  @version $Id: URLStreamHandlerImpl.java,v 1.5 2004-01-08 12:50:53 fil Exp $
  */
 public class URLStreamHandlerImpl extends URLStreamHandler
 {
@@ -63,7 +63,7 @@ public class URLStreamHandlerImpl extends URLStreamHandler
      * @return an URL connection.
      * @throws IOException if the URL is not using the right protocol.
      */    
-    protected URLConnection openConnection(URL url) 
+    public URLConnection openConnection(URL url) 
         throws IOException
     {
 		if(url.getProtocol().equals(fileSystem.getProtocol()))
