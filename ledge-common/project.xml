@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.5 2004-09-02 11:47:04 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.6 2004-09-03 10:13:59 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
   <!-- project info -->
 
+  <id>ledge-common</id>
+  <groupId>objectledge</groupId>
+  <currentVersion>0.3-dev</currentVersion>
+  
   <organization>
     <name>objectledge.org</name>
     <url>http://objectledge.org/</url>
@@ -38,6 +42,11 @@
       <id>0.2</id>
       <name>0.2</name>
       <tag>RELEASE-0_2</tag>
+    </version>
+    <version>
+      <id>0.3</id>
+      <name>0.3</name>
+      <tag>RELEASE-0_3</tag>
     </version>
   </versions>
 
