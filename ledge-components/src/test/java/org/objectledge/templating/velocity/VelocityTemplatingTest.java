@@ -81,12 +81,14 @@ public class VelocityTemplatingTest extends TestCase
 		FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
 		try
 		{
-            InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+            InputSource source = new InputSource(fs.getInputStream(
+                "config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             DOMConfigurator.configure(logConfig.getDocumentElement());
 
-            source = new InputSource(fs.getInputStream("config/org.objectledge.templating.velocity.VelocityTemplating.xml"));
+            source = new InputSource(fs.getInputStream(
+                "config/org.objectledge.templating.velocity.VelocityTemplating.xml"));
             SAXParserFactory parserFactory = SAXParserFactory.newInstance();
             XMLReader reader = parserFactory.newSAXParser().getXMLReader();
             SAXConfigurationHandler handler = new SAXConfigurationHandler();
