@@ -52,7 +52,7 @@ import org.objectledge.filesystem.impl.ServletFileProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.6 2003-12-23 14:35:17 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.7 2003-12-23 15:28:31 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -81,13 +81,15 @@ public class LedgeServlet extends HttpServlet
     {
         BasicConfigurator.configure();
         Logger log = Logger.getLogger(ServletConfig.class);
-        String rootParam = servletConfig.getServletName()+".root";
-        String configParam = servletConfig.getServletName()+".config";
-        String root = servletConfig.getInitParameter(rootParam);
+
         ServletContext context = servletConfig.getServletContext();
+        String ctxRootParam = servletConfig.getServletName()+".root";
+        String ctxConfigParam = servletConfig.getServletName()+".config";
+
+        String root = servletConfig.getInitParameter("root");
         if(root == null)
         {
-            root = (String)context.getAttribute(rootParam);
+            root = (String)context.getAttribute(ctxRootParam);
         }
         if(root == null)
         {
@@ -101,21 +103,25 @@ public class LedgeServlet extends HttpServlet
                 root = tempDir.getAbsolutePath(); 
             }
         }
-        String config = servletConfig.getInitParameter(configParam);
+
+        String config = servletConfig.getInitParameter("config");
         if(config == null)
         {
-            config = (String)context.getAttribute(configParam);
+            config = (String)context.getAttribute(ctxConfigParam);
         }
         if(config == null)
         {
             config = "/config";
         }
+
+        log.info("starting up: root="+root+" config="+config);
+
         LocalFileSystemProvider lfs = new LocalFileSystemProvider("local", root);
         ServletFileProvider sfs = new ServletFileProvider("servlet", context);
         ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4096);
-        log.info("starting up: root="+root+" config="+config);
+
         try
         {
             container = new LedgeContainer(fs, config, new Log4JNanoContainerMonitor());    
@@ -125,8 +131,9 @@ public class LedgeServlet extends HttpServlet
             log.error("failed to initialize container", e);
             throw new ServletException("failed to initialize container", e);
         }
+
         dispatcher = (HttpDispatcher)container.getRootContainer().
-            getComponentInstance(HttpDispatcher.class);
+            getComponentInstance(HttpDispatcher.class.getName());
         if(dispatcher == null)
         {
             log.error("dispatcher component is missing");

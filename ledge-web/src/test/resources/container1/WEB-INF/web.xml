@@ -4,7 +4,7 @@
     <servlet-name>ledge</servlet-name>
     <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
     <init-param>
-      <param-name>ledge.root</param-name>
+      <param-name>root</param-name>
       <param-value>src/test/resources/container1</param-value>
     </init-param>
   </servlet>
