@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.7 2004-01-15 12:18:40 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.8 2004-01-15 12:32:10 fil Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -93,8 +93,9 @@ public class BuilderExecutorValve implements Runnable
 		for (enclosures = 0; enclosures < maxEnclosures; enclosures++)
 		{
 			// route builder
-			boolean builderRouted = false; 
-			for (int routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
+			boolean builderRouted = false;
+            int routeCalls; 
+			for (routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
 	        {
 				Builder routeBuilder = builder.route();
 				if(routeBuilder == null)
@@ -104,6 +105,11 @@ public class BuilderExecutorValve implements Runnable
 				builder = routeBuilder;
 				builderRouted = true;
 	        }
+            if(routeCalls >= maxRouteCalls)
+            {
+                throw new PipelineProcessingException("Maximum number of builder reroutings "+
+                    "exceeded");
+            }
 
 	        // get the template
 	        // let builder override the template
@@ -162,7 +168,7 @@ public class BuilderExecutorValve implements Runnable
 		// did not reach a closing builder
 		if(enclosures >= maxEnclosures)
 		{
-			throw new PipelineProcessingException("Maximal number of builder enclosures exceeded");
+			throw new PipelineProcessingException("Maximum number of builder enclosures exceeded");
 		}
 
 		// store building result
