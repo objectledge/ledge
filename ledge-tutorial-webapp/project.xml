@@ -25,7 +25,7 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-      <url>http://dna.jcontainer.org</url>
+      <url>http://dna.codehaus.org</url>
     </dependency>
     <dependency>
       <groupId>dna</groupId>
@@ -34,7 +34,7 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-      <url>http://dna.jcontainer.org</url>
+      <url>http://dna.codehaus.org</url>
     </dependency>
     <dependency>
       <groupId>jing</groupId>
@@ -52,7 +52,7 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-      <url>http://jakarta.apache.org/log4j/docs/index.html</url>
+      <url>http://logging.apache.org/log4j/docs/</url>
     </dependency>
     <dependency>
       <groupId>objectledge</groupId>
@@ -99,7 +99,7 @@
     <dependency>
       <id>commons-collections</id>
       <version>2.1</version>
-      <url>http://jakarta.apache.org./commons/collections.html</url>
+      <url>http://jakarta.apache.org./commons/collections</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      
@@ -107,7 +107,7 @@
     <dependency>
       <id>velocity</id>
       <version>1.4-dev</version>
-      <url>http://jakarata.apache.org/velocity</url>
+      <url>http://jakarta.apache.org/velocity</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>      

@@ -28,7 +28,7 @@
             <li>LoggerFactory <a href="../apidocs/org/objectledge/logging/LoggerFactory.html">JavaDoc</a></li>
             <li>LoggerFactory <a href="../xref/org/objectledge/logging/LoggerFactory.html">XRef</a></li>
             <li>LoggerFactory <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/logging/LoggerFactory.java">CVS log</a></li>
-            <li>DNA Logger <a href="http://dna.jcontainer.org/apidocs/org/jcontainer/dna/Logger.html">JavaDoc</a></li>
+            <li>DNA Logger <a href="http://dna.codehaus.org/apidocs/org/jcontainer/dna/Logger.html">JavaDoc</a></li>
           </ul>
         </p>
       </subsection>

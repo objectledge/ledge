@@ -34,7 +34,7 @@
 	        <li>ConfigurationFactory <a href="../xref/org/objectledge/configuration/ConfigurationFactory.html">XRef</a></li>
 	        <li>ConfigurationFactory <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/configuration/ConfigurationFactory.java">CVS log</a></li>
             <li>RelaxNG <a href="http://relaxng.org">resources</a></li>
-      		<li>DNA Configuration <a href="http://dna.jcontainer.org/apidocs/org/jcontainer/dna/Configuration.html">JavaDoc</a></li>
+      		<li>DNA Configuration <a href="http://dna.codehaus.org/apidocs/org/jcontainer/dna/Configuration.html">JavaDoc</a></li>
 		  </ul>
 	     </p>
 	  </subsection>
