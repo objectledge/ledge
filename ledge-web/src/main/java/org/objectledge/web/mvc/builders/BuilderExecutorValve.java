@@ -42,7 +42,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.20 2004-08-20 10:03:43 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.21 2004-09-23 09:32:52 zwierzem Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -111,9 +111,9 @@ public class BuilderExecutorValve
 		{
             if(builder != null)
             {
-                // route builder
+                // route builder -------------------------------------------------------------------
                 boolean builderRouted = false;
-                int routeCalls; 
+                int routeCalls;
                 for (routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
                 {
                     Builder routeBuilder = builder.route();
@@ -126,12 +126,11 @@ public class BuilderExecutorValve
                 }
                 if(routeCalls >= maxRouteCalls)
                 {
-                    throw new ProcessingException("Maximum number of builder reroutings "+
-                        "exceeded");
+                    throw new ProcessingException("Maximum number of builder reroutings exceeded");
                 }
-                // security check
+                // security check ------------------------------------------------------------------
                 securityHelper.checkSecurity(builder, context);
-                // get the template
+                // get the template ----------------------------------------------------------------
                 // let builder override the template
                 Template overrideTemplate = builder.getTemplate(); 
                 if(overrideTemplate != null)
@@ -146,7 +145,7 @@ public class BuilderExecutorValve
                 }
             }
 
-			// build view level
+			// build view level --------------------------------------------------------------------
 			embeddedResult = embeddedResult == null ? "": embeddedResult;
 			templatingContext.put(MVCConstants.EMBEDDED_PLACEHOLDER_KEY, embeddedResult);
             Builder actualBuilder = builder != null ? builder : defaultBuilder;
@@ -161,7 +160,7 @@ public class BuilderExecutorValve
 	            throw new ProcessingException(e);
 	        }
 
-            // get next view build level
+            // get next view build level -----------------------------------------------------------
             Builder enclosingBuilder = null;
             Template enclosingTemplate = null;
             if(builder != null)
@@ -188,6 +187,7 @@ public class BuilderExecutorValve
 				enclosingTemplate = templateFinder.findEnclosingBuilderTemplate(template);
 			}
 			template = enclosingTemplate;
+	        // -------------------------------------------------------------------------------------
 			
 			if(template == null && builder == null)
 			{
