@@ -108,7 +108,7 @@
             <property name="severity" value="warning"/>
         </module>
         <module name="com.puppycrawl.tools.checkstyle.checks.RedundantThrowsCheck">
-            <property name="allowSubclasses" value="false"/>
+            <property name="allowSubclasses" value="true"/>
             <property name="allowUnchecked" value="true"/>
             <property name="severity" value="warning"/>
         </module>
