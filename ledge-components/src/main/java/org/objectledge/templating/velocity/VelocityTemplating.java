@@ -32,6 +32,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogSystem;
 import org.jcontainer.dna.Configuration;
@@ -50,7 +51,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.10 2004-01-20 12:36:11 fil Exp $
+ * @version $Id: VelocityTemplating.java,v 1.11 2004-03-26 14:04:35 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -216,6 +217,12 @@ public class VelocityTemplating implements Templating, LogSystem
             success = engine.evaluate(((VelocityContext)context).getContext(),
             							target, logTag, source);
         }
+        catch(MethodInvocationException e)
+        {
+            throw new MergingException("failed to render template - " +
+                                        " exception during method invocation", 
+                                        e.getWrappedThrowable());
+        }        
         catch (Exception e)
         {
             throw new MergingException("failed to render template", e);
@@ -236,6 +243,11 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             ((VelocityTemplate)template).getTemplate().
             	merge(((VelocityContext)context).getContext(), target);
+        }
+        catch(MethodInvocationException e)
+        {
+            throw new MergingException("failed to render template - " +                                        " exception during method invocation", 
+                                        e.getWrappedThrowable());
         }
         catch (Exception e)
         {
