@@ -30,8 +30,9 @@
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: table.vt,v 1.1 2004-08-30 10:20:26 rafal Exp $
+ * @version $Id: table.vt,v 1.2 2004-08-30 10:24:15 rafal Exp $
 *###
+
 #**
  * Displays a single header cell contents.
  *
@@ -41,12 +42,12 @@
  *#
 #macro(tableView_headCellContent $table $column $tableLink)
   #if($column.isSortable())
-    <a href="$tableLink.action('table,SetSortColumn').set('sortColumn',$column.name)">$column.label</a>
+    <a href="$tableLink.action('table.SetSortColumn').set('sortColumn',$column.name)">$column.label</a>
     #if($table.getSortColumn() && $table.getSortColumn() == $column)
       #if($table.getAscSort())
-      <img src="$link.content('tree/down.gif')" border="0" />
+      <img src="$link.content('images/tree/down.gif')" border="0" />
       #else
-      <img src="$link.content('tree/up.gif')" border="0" />
+      <img src="$link.content('images/tree/up.gif')" border="0" />
       #end
     #end
   #else
@@ -75,6 +76,52 @@
   #end
 #end
 
+#**
+ * Displays a single header cell contents - form submit version.
+ *
+ * @param $table the table tool.
+ * @param $column TableColumn object.
+ * @param $tableLink LinkTool with preset tableId parameter.
+ * @param $function the javascript function to be called.
+ *#
+#macro(tableView_headCellContent_Submit $table $column $tableLink $function)
+  #if($column.isSortable())
+    #set($sortLink = $tableLink.action('table.SetSortColumn').set('sortColumn',$column.name))
+    #set($sortLink = "javascript:${function}('$sortLink')")
+    <a href="$sortLink">$column.label</a>
+    #if($table.getSortColumn() && $table.getSortColumn() == $column)
+      #if($table.getAscSort())
+      <img src="$link.content('images/tree/down.gif')" border="0" />
+      #else
+      <img src="$link.content('images/tree/up.gif')" border="0" />
+      #end
+    #end
+  #else
+    $column.label
+  #end
+#end
+
+#**
+ * Displays table headers - form submit version.
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset tableId.
+ * @param $columnOrder list of column names.
+ * @param $function the javascript function to be called.
+ *#
+#macro(tableView_header_Submit $table $tableLink $columnOrder $function)
+  #foreach($columnName in $columnOrder)
+    #set($column = $table.getColumn($columnName))
+    <th #*
+*##if($column.width)width="$column.width" #end#*
+*##if($column.style)style="$column.style" #end#*
+*##if($column.align)align="$column.align" #end#*
+*##if($column.valign)valign="$column.valign" #end#*
+*##if($column.get('class'))class="$column.get('class')"#end nowrap="nowrap">
+    #tableView_headCellContent_Submit($table $column $tableLink $function)
+    </th>
+  #end
+#end
 
 #**
  * Displays table body.
@@ -103,7 +150,7 @@
  *#
 #macro(tableView_pager $table $tableLink)
 #if($table.numPages > 1)
-#set($setPageLink = $tableLink.action('table,SetPage'))
+#set($setPageLink = $tableLink.action('table.SetPage'))
 <a href="$setPageLink.set('page',$table.getPageNumber(0))">$i18n.get('table.page.first')</a> |
 <a href="$setPageLink.set('page',$table.getRelativePageNumber(-1))">$i18n.get('table.page.previous')</a> |
 $table.currentPage $i18n.get('table.page.of') $table.numPages |
@@ -113,6 +160,35 @@ $table.currentPage $i18n.get('table.page.of') $table.numPages |
 #end
 #end
 
+
+#**
+ * Displays the table pager - form submit version.
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset tableId.
+ * @param $function the javascript function to be called.  
+ *#
+#macro(tableView_pager_Submit $table $tableLink $function)
+#if($table.numPages > 1)
+#set($pageLink = $tableLink.action('table.SetPage').set('page',$table.getPageNumber(0)))
+#set($pageLink = "javascript:${function}('$pageLink')")
+<a href="$pageLink">$i18n.get('table.page.first')</a> |
+
+#set($pageLink = $tableLink.action('table.SetPage').set('page',$table.getRelativePageNumber(-1)))
+#set($pageLink = "javascript:${function}('$pageLink')")
+<a href="$pageLink">$i18n.get('table.page.previous')</a> |
+$table.currentPage $i18n.get('table.page.of') $table.numPages |
+&nbsp;
+#set($pageLink = $tableLink.action('table.SetPage').set('page',$table.getRelativePageNumber(1)))
+#set($pageLink = "javascript:${function}('$pageLink')")
+<a href="$pageLink">$i18n.get('table.page.next')</a> |
+#set($pageLink = $tableLink.action('table.SetPage').set('page',$table.getPageNumber($table.numPages)))
+#set($pageLink = "javascript:${function}('$pageLink')")
+<a href="$pageLink">$i18n.get('table.page.last')</a>
+#end
+#end
+
+
 #**
  * Displays a relative pager
  *
@@ -120,7 +196,7 @@ $table.currentPage $i18n.get('table.page.of') $table.numPages |
  * @param $tableLink LinkTool with preset tableId.
  *#
 #macro(tableView_relativePager $table $tableLink)
-#set($setPageLink = $tableLink.action('table,SetPage'))
+#set($setPageLink = $tableLink.action('table.SetPage'))
 <a href="$setPageLink.set('page',$table.getPageNumber(0))">$i18n.get('table.page.first')</a> |
 #if($table.getRelativePageNumber(-5) > 1)... #end
 #foreach($pageNum in [$table.getRelativePageNumber(-5)..$table.getRelativePageNumber(-1)])
@@ -135,19 +211,73 @@ $table.currentPage $i18n.get('table.page.of') $table.numPages |
 #end
 
 #**
+ * Displays a relative pager - form submit version.
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset tableId.
+ * @param $function the javascript function to be called.  
+ *#
+#macro(tableView_relativePager_Submit $table $tableLink $function)
+#set($pageLink = $tableLink.action('table.SetPage').set('page',$table.getPageNumber(0)))
+#set($pageLink = "javascript:${function}('$pageLink')")
+<a href="$pageLink">$i18n.get('table.page.first')</a> |
+
+#if($table.getRelativePageNumber(-5) > 1)... #end
+#foreach($pageNum in [$table.getRelativePageNumber(-5)..$table.getRelativePageNumber(-1)])
+  #if($pageNum != $table.currentPage)
+  #set($pageLink = $tableLink.action('table.SetPage').set('page',$pageNum))
+  #set($pageLink = "javascript:${function}('$pageLink')")
+  <a href="$pageLink">$pageNum</a> #end
+#end
+<b>$table.currentPage</b>
+#foreach($pageNum in [$table.getRelativePageNumber(1)..$table.getRelativePageNumber(5)])
+  #if($pageNum != $table.currentPage)
+  #set($pageLink = $tableLink.action('table.SetPage').set('page',$pageNum))
+  #set($pageLink = "javascript:${function}('$pageLink')")
+  <a href="$pageLink">$pageNum</a> 
+  #end
+#end
+#if($table.getRelativePageNumber(5) < $table.numPages)... #end
+  #set($pageLink = $tableLink.action('table.SetPage').set('page',$table.getPageNumber($table.numPages)))
+  #set($pageLink = "javascript:${function}('$pageLink')")
+| <a href="$pageLink">$i18n.get('table.page.last')</a>
+#end
+
+#**
  * Displays a page size chooser
  *
  * @param $table the table tool.
  * @param $tableLink LinkTool with preset tableId.
  * @param $sizes a list of page sizes (ie. [10,20,50])
  *#
-#macro(tableView_pageSizeChooser $table $tableLink $sizes)
+#macro(tableView_pageSizeChooser $table $tableLink $sizes )
 #foreach($size in $sizes)
-<input type="radio" name="pageSize" id="size$size" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('pageSize',$size)'" #if($table.pageSize == $size)checked#end> <label for="size$size">$size</label>
+<input type="radio" name="pageSize" id="size$size" onchange="document.location.href='$tableLink.action('table.SetPageSize').set('pageSize',$size)'" #if($table.pageSize == $size)checked#end> <label for="size$size">$size</label>
 #end
-<input type="radio" name="pageSize" id="size0" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('pageSize',0)'" #if($table.pageSize == 0)checked#end> <label for="size0">$i18n.get('table.page.all')</label>
+<input type="radio" name="pageSize" id="size0" onchange="document.location.href='$tableLink.action('table.SetPageSize').set('pageSize',0)'" #if($table.pageSize == 0)checked#end> <label for="size0">$i18n.get('table.page.all')</label>
 $i18n.get('table.page.size')
 #end
+
+#**
+ * Displays a page size chooser - form submit version
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset tableId.
+ * @param $sizes a list of page sizes (ie. [10,20,50])
+ * @param $function the javascript function to be called. 
+ *#
+#macro(tableView_pageSizeChooser_Submit $table $tableLink $sizes $function)
+#foreach($size in $sizes)
+  #set($pageLink = $tableLink.action('table.SetPageSize').set('pageSize',$size))
+  #set($pageLink = "javascript:${function}('$pageLink')")
+  <input type="radio" name="pageSize" id="size$size" onchange="$pageLink" #if($table.pageSize == $size)checked#end> <label for="size$size">$size</label>
+#end
+#set($pageLink = $tableLink.action('table.SetPageSize').set('pageSize',0))
+#set($pageLink = "javascript:${function}('$pageLink')")
+<input type="radio" name="pageSize" id="size0" onchange="document.location.href='$tableLink.action('table.SetPageSize').set('pageSize',0)'" #if($table.pageSize == 0)checked#end> <label for="size0">$i18n.get('table.page.all')</label>
+$i18n.get('table.page.size')
+#end
+
 
 #**
  * Displays lines, expand boxes and icons for a tree view.
@@ -159,9 +289,9 @@ $i18n.get('table.page.size')
 #macro(tableView_linesAndFoldersBase $table $row $toggleExpandLink)
 #foreach($box in $table.linesAndFolders($row))##
 #if($box.linkType == 'toggle-expand')##
-<a href="$toggleExpandLink"><img src="$link.content("tree/${box.type}.gif")" /></a>##
+<a href="$toggleExpandLink"><img src="$link.content("images/tree/${box.type}.gif")" /></a>##
 #else##
-<img src="$link.content("tree/${box.type}.gif")" />##
+<img src="$link.content("images/tree/${box.type}.gif")" />##
 #end##
 #end##
 #end
@@ -174,6 +304,18 @@ $i18n.get('table.page.size')
  *#
 #macro(tableView_linesAndFolders $table $row $tableLink)
 #tableView_linesAndFoldersBase($table $row $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))##
+#end
+
+#**
+ * Standard lines and folders with defalut expansion tooggling action.
+ *
+ * @param $table the table tool.
+ * @param $row the row to displays tree images for.
+ *#
+#macro(tableView_linesAndFolders_Submit $table $row $tableLink $function)
+  #set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))
+  #set($toggleExpandLink = "javascript:${function}('$toggleExpandLink')")
+  #tableView_linesAndFoldersBase($table $row $toggleExpandLink)##
 #end
 
 #**
