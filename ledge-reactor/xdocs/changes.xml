@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <document>
   <body>
-    <release version="0.1" date="Janary 7 2004">
+    <release version="0.1" date="Janary 7, 2004">
     </release>
-    <release version="0.2" date="CVS HEAD">
+    <release version="0.2" date="January 29, 2004">
       <action dev="fil" type="update">
         New format was introduced for component/subsystem documentation, with 
         obligatory "Description" and "Browse" sections (the latter with links to
@@ -12,6 +12,8 @@
         included as necessary, and links to config schemata, and example files 
         (through cvsview) are added to "Browse" section where applicable.
       </action>
+    </release>
+    <release version="0.3" date="CVS HEAD">
     </release>
   </body>
 </document>

@@ -4,9 +4,9 @@
     <title>Changes</title>
   </properties>
   <body>
-    <release version="0.1" date="January 7 2004">
+    <release version="0.1" date="January 7, 2004">
     </release>
-    <release version="0.2" date="CVS HEAD">
+    <release version="0.2" date="January 29, 2004">
       <action dev="fil" type="update">
         <code>FileServiceProvider</code> implementations were moved to <code>org.objectledge.filesystem</code>
         package, as they are accessed by the casual users - they should not be forced to look into impl packages.
@@ -26,6 +26,8 @@
         XMLValidator is now compatible with Crimson and Xerces parsers, Saxon is not 
         required any longer.
       </action>
+    </release>
+    <release version="0.3" date="CVS HEAD">
     </release>
   </body>
 </document>

@@ -44,6 +44,44 @@
           </tr>
         </table>
       </subsection>    
+      <subsection name="0.2">
+        <table>
+          <tr>
+            <th>Date</th>
+            <td width="100%">January 29, 2004</td>
+          </tr>
+          <tr>
+            <th>Theme</th>
+            <td>Web Application Framework</td>
+          </tr>
+          <tr>
+            <th>Documentation</th>
+            <td>
+              can be browsed online <a href="http://objectledge.org/releases/0.2/">here</a>,
+              or downloaded <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.2-doc.zip">here</a> 
+            </td>
+          </tr>
+          <tr>
+            <th rowspan="3" valign="top">Deliverables</th>
+            <td>
+              source <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.2-src.zip">zip</a> 
+                     <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.2-src.tar.bz2">tar.bz2</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              docs <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.2-doc.zip">zip</a> 
+                   <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.2-doc.tar.bz2">tar.bz2</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              binaries <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.2-bin.zip">zip</a> 
+                       <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.2-bin.tar.bz2">tar.bz2</a>
+            </td>
+          </tr>
+        </table>
+      </subsection>    
     </section>
     <section name="Binary distribution access">
       <p>The most convinient way of using ObjectLedge for building your own programs is
