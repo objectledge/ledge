@@ -37,7 +37,7 @@
       </interleave>
     </element>
   </start>
-    
+
   <define name="syntax">
     <element name="syntax">
       <choice>
@@ -97,14 +97,14 @@
     </optional>
   </define>
   
-  <define name="string"/>
+  <define name="string">
     <element name="string">
       <choice>
         <attribute name="value"/>
         <text/>
       </choice>
     </element>
-  <define>
+  </define>
   
   <define name="variable">
     <element name="variable">

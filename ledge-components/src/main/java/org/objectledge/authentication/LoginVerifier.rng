@@ -31,23 +31,25 @@
   <start>
     <element name="config">
       <interleave> 
-        <ref name="loginPattern"/>
+        <optional>
+          <ref name="loginPattern"/>
+        </optional>
         <ref name="reserved"/>
       </interleave>
     </element>
   </start>
     
-  <define name="loginPattern"/>
+  <define name="loginPattern">
     <element name="loginPattern">
       <choice>
         <attribute name="value"/>
         <text/>
       </choice>
     </element>
-  <define>
+  </define>
   
   <define name="reserved">
-    <element name="variable">
+    <element name="reserved">
       <text/>
     </element>
   </define>

@@ -39,6 +39,7 @@ import org.jmock.builder.MockObjectTestCase;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLValidator;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 /**
@@ -49,13 +50,13 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     private FileSystem fileSystem;
 
     // filesystem ///////////////////////////////////////////////////////////////////////////////    
- 
+
     protected FileSystem getFileSystem() throws Exception
     {
-        if(fileSystem == null)
+        if (fileSystem == null)
         {
             String root = System.getProperty("ledge.root");
-            if(root != null && root.length()>0)
+            if (root != null && root.length() > 0)
             {
                 fileSystem = FileSystem.getStandardFileSystem(root);
             }
@@ -66,12 +67,12 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         }
         return fileSystem;
     }
-   
+
     protected FileSystem getFileSystem(String root)
     {
         return FileSystem.getStandardFileSystem(root);
-    } 
-    
+    }
+
     // configuraitons & schemata /////////////////////////////////////////////////////////////////
 
     /**
@@ -93,18 +94,45 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         reader.parse(source);
         return handler.getConfiguration();
     }
-    
-    protected void checkSchema(String configuration, String schema)
-        throws Exception
+
+    protected void checkSchema(String configuration, String schema) throws Exception
     {
+
         getFileSystem();
         XMLValidator validator = new XMLValidator();
+        URL rngUrl = fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA);
         URL schemaUrl = fileSystem.getResource(schema);
-        validator.validate(fileSystem.getResource(configuration), schemaUrl);
+        URL configUrl = fileSystem.getResource(configuration);
+        try
+        {
+            validator.validate(schemaUrl, rngUrl);
+        }
+        catch (SAXParseException e)
+        {
+            throw new Exception("parse error " + e.getMessage() + " in "
+                                 + e.getSystemId() + " at line " + e.getLineNumber(), e);
+        }
+        catch (Exception e)
+        {
+            throw new Exception("composition file " + schemaUrl + "is missing or invalid", e);
+        }
+        try
+        {
+            validator.validate(configUrl, schemaUrl);
+        }
+        catch (SAXParseException e)
+        {
+            throw new Exception("parse error " + e.getMessage() +
+                                 " in " + e.getSystemId() + " at line " + e.getLineNumber(), e);
+        }
+        catch (Exception e)
+        {
+            throw new Exception("composition file " + configUrl + "is missing or invalid", e);
+        }
     }
-    
+
     // jMock goodies ////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Create a Constraint on map elements
      * 
@@ -116,5 +144,5 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     {
         return new MapElement(key, c);
     }
-    
+
 }

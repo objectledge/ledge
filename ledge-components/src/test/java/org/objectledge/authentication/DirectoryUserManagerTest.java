@@ -31,18 +31,12 @@ package org.objectledge.authentication;
 import java.io.IOException;
 import java.io.Reader;
 import java.security.Principal;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.naming.InvalidNameException;
 import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.xml.DOMConfigurator;
 import org.hsqldb.jdbcDataSource;
@@ -62,6 +56,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.utils.LedgeTestCase;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -73,22 +68,13 @@ import org.xml.sax.XMLReader;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class DirectoryUserManagerTest extends TestCase
+public class DirectoryUserManagerTest extends LedgeTestCase
 {
     private FileSystem fs = null;
 
     private ContextFactory contextFactory;
 
     private UserManager userManager;
-
-    /**
-     * Constructor for DirectoryUserManagerTest.
-     * @param arg0
-     */
-    public DirectoryUserManagerTest(String arg0)
-    {
-        super(arg0);
-    }
     
     public void setUp()
         throws Exception
@@ -112,8 +98,11 @@ public class DirectoryUserManagerTest extends TestCase
         PasswordGenerator passwordGenerator = new PasswordGenerator();
         PasswordDigester passwordDigester = new PasswordDigester("md5");
         config = getConfig("config/org.objectledge.authentication.NamingPolicy.xml");
+        
         NamingPolicy namingPolicy = new NamingPolicy(config);
         config = getConfig("config/org.objectledge.authentication.LoginVerifier.xml");
+        checkSchema("config/org.objectledge.authentication.LoginVerifier.xml", 
+                    "org/objectledge/authentication/LoginVerifier.rng");
         LoginVerifier loginVerifier = new LoginVerifier(config);
         config = getConfig("config/org.objectledge.authentication.DirectoryUserManager.xml");
         userManager = new DirectoryUserManager(config, logger, namingPolicy, loginVerifier, passwordGenerator, passwordDigester, contextFactory);
