@@ -33,10 +33,11 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
 /**
- * LoggingEvent subclass, created to plug in {@link StackTrace} throwable formatter.
+ * LoggingEvent subclass, created to plug in {@link org.objectledge.utils.StackTrace} throwable 
+ * formatter.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeLoggingEvent.java,v 1.2 2004-12-22 08:34:54 rafal Exp $
+ * @version $Id: LedgeLoggingEvent.java,v 1.3 2005-02-08 00:35:24 rafal Exp $
  */
 public class LedgeLoggingEvent
 	extends LoggingEvent

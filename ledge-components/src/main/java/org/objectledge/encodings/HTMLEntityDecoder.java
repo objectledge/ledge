@@ -43,7 +43,7 @@ import org.objectledge.encodings.encoders.CharEncoderHTMLEntity;
  * <p>This tool is completely thread safe and does not keep any internal state.</p> 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityDecoder.java,v 1.2 2004-06-30 12:27:24 zwierzem Exp $
+ * @version $Id: HTMLEntityDecoder.java,v 1.3 2005-02-08 00:35:34 rafal Exp $
  */
 public class HTMLEntityDecoder
 {
@@ -122,7 +122,6 @@ public class HTMLEntityDecoder
 	/** 
 	 * Decodes a given character stream and writes a string with entities converted to unicode
 	 * characters into the given writer.
-	 * @see HTMLEntityParser#parse(String) 
 	 * 
 	 * @param inputReader input character stream with characters encoded as named or numeric
 	 *  entities, this method CLOSES the given reader.
@@ -139,7 +138,6 @@ public class HTMLEntityDecoder
 	/** 
 	 * Deodes a given character stream and writes a string with entities converted to unicode
 	 * characters into the given writer, avoids converting core XML entities.
-	 * @see HTMLEntityParser#parseXML(String) 
 	 * 
 	 * @param inputReader input character stream with characters encoded as named or numeric
 	 *  entities, this method CLOSES the given reader.

@@ -31,10 +31,10 @@ package org.objectledge.cache;
 /**
  * Provides the 'factory map' with values on read misses.
  *
- * <p>See {@link CacheFactory#getFactoryMap(ValueFactory,Map)}.</p>
+ * <p>See {@link CacheFactory#getFactoryMap(ValueFactory,java.util.Map)}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>*
- * @version $Id: ValueFactory.java,v 1.2 2004-02-26 11:34:25 fil Exp $
+ * @version $Id: ValueFactory.java,v 1.3 2005-02-08 00:35:42 rafal Exp $
  */
 public interface ValueFactory
 {

@@ -50,23 +50,23 @@ import org.picocontainer.Startable;
 /**
  * Base class for scheduler components.
  * 
- *  
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski </a>
  */
-public abstract class AbstractScheduler implements Startable
+public abstract class AbstractScheduler
+    implements Startable
 {
     /** The default DateFormat pattern used by the UI (yyy-MM-dd HH:mm). */
     public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm";
-    
+
     // instance variables ////////////////////////////////////////////////////
 
     /** the container */
     private MutablePicoContainer container;
-    
+
     /** the configuration. */
     protected Configuration config;
-    
+
     /** The logging facility. */
     protected Logger logger;
 
@@ -75,7 +75,7 @@ public abstract class AbstractScheduler implements Startable
 
     /** The registered schedule types factories. */
     private Map scheduleFactory = new HashMap();
-    
+
     /** The registered jobs. */
     protected Map jobs = new HashMap();
 
@@ -97,9 +97,8 @@ public abstract class AbstractScheduler implements Startable
      * @param threadPool the thread pool component.
      * @param scheduleFactories the list of schedule factories.
      */
-    public AbstractScheduler(MutablePicoContainer container, Configuration config, 
-                             Logger logger, ThreadPool threadPool,
-                             ScheduleFactory[] scheduleFactories)
+    public AbstractScheduler(MutablePicoContainer container, Configuration config, Logger logger,
+        ThreadPool threadPool, ScheduleFactory[] scheduleFactories)
     {
         this.config = config;
         this.logger = logger;
@@ -109,12 +108,12 @@ public abstract class AbstractScheduler implements Startable
             scheduleFactory.put(scheduleFactories[i].getName(), scheduleFactories[i]);
         }
         String formatString = config.getChild("date_format").getValue(DATE_FORMAT_DEFAULT);
-        format = new SimpleDateFormat(formatString);        
+        format = new SimpleDateFormat(formatString);
     }
-    
+
     /**
      * {@inheritDoc}
-     */   
+     */
     public void start()
     {
         loadJobs();
@@ -133,39 +132,41 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * {@inheritDoc}
-     */   
+     */
     public void stop()
     {
     }
-    
+
     // Scheduler interface ////////////////////////////////////////////
 
     /**
      * Creates a new scheduled job.
-     *
-     * <p>Note that newly created jobs are initialy disabled. You need to call 
-     * {@link SchedulerService#enable(ScheduledJob)} to allow the job's
-     * execution.</p> 
-     * <p>Non-perisistent implementation may decide to disallow creation of new 
-     * jobs at run time. This mehtod would throw 
-     * <code>UnsupportedOperationException</code> in that case.</p>
+     * <p>
+     * Note that newly created jobs are initialy disabled. You need to call
+     * {@link #enable(AbstractJobDescriptor)}to allow the job's execution.
+     * </p>
+     * <p>
+     * Non-perisistent implementation may decide to disallow creation of new jobs at run time. This
+     * mehtod would throw <code>UnsupportedOperationException</code> in that case.
+     * </p>
      * 
      * @param name the name of the job.
      * @param schedule the job's schedule.
-     * @param jobSpec job class specification, see {@link
-     *        ScheduledJob#getJobSpec()}
-     * @return the scheduled job.     
+     * @param jobSpec job class specification, see
+     *        {@link AbstractJobDescriptor#setJobClassName(String)}
+     * @return the scheduled job.
      * @throws JobModificationException if the job could not be instantiated.
      */
     public abstract AbstractJobDescriptor createJobDescriptor(String name, Schedule schedule,
-                                                               String jobSpec)
+        String jobSpec)
         throws JobModificationException;
 
     /**
      * Deletes a scheduled job.
-     *
-     * <p>Non-persisten implementaion may decide to dissalow this operation.</p>
-     *
+     * <p>
+     * Non-persisten implementaion may decide to dissalow this operation.
+     * </p>
+     * 
      * @param job the job.
      * @throws JobModificationException if the job could not be deleted.
      */
@@ -174,7 +175,7 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * Enables a scheduled job.
-     *
+     * 
      * @param job the job.
      * @throws JobModificationException if the job state could not be saved.
      */
@@ -193,23 +194,22 @@ public abstract class AbstractScheduler implements Startable
                 e = ee;
             }
         }
-        schedule(job);    
+        schedule(job);
         if(e != null)
         {
             throw e;
         }
     }
-    
+
     /**
      * Disables a scheduled job.
-     *
-     * <p>An attempt will be made to terminate all instances of this job running at
-     * the moment. Would this attempt be effective depends on the implementation of
-     * <code>execute()</code> and <code>terminate(Thread)</code> methods in the
-     * Job class.</p>
-     *
+     * <p>
+     * An attempt will be made to terminate all instances of this job running at the moment. Would
+     * this attempt be effective depends on the implementation of <code>execute()</code> and
+     * <code>terminate(Thread)</code> methods in the Job class.
+     * </p>
+     * 
      * @param job the job.
-     *
      * @throws JobModificationException if the job state could not be saved.
      */
     public void disable(AbstractJobDescriptor job)
@@ -227,7 +227,7 @@ public abstract class AbstractScheduler implements Startable
                 e = ee;
             }
         }
-        terminate(job);    
+        terminate(job);
         if(e != null)
         {
             throw e;
@@ -236,7 +236,7 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * Returns all currently configured jobs.
-     *
+     * 
      * @return all currently configured jobs.
      */
     public synchronized AbstractJobDescriptor[] getJobDescriptors()
@@ -248,7 +248,7 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * Returns a configured job with the specified name.
-     *
+     * 
      * @param name the job's name.
      * @return the scheduled job.
      */
@@ -259,7 +259,7 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * Returns available schedule types.
-     *
+     * 
      * @return available schedule types.
      */
     public String[] getScheduleTypes()
@@ -271,7 +271,7 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * Creates a Schedule object.
-     *
+     * 
      * @param type the schedule type.
      * @param config the schedule configuration.
      * @return the schedule.
@@ -283,33 +283,31 @@ public abstract class AbstractScheduler implements Startable
         ScheduleFactory factory = (ScheduleFactory)scheduleFactory.get(type);
         if(factory == null)
         {
-            throw new InvalidScheduleException("Schedule factory for type '"+
-                                                type+"' not registered");
+            throw new InvalidScheduleException("Schedule factory for type '" + type
+                + "' not registered");
         }
         Schedule schedule = factory.getInstance();
         schedule.init(this, config);
         return schedule;
     }
 
-
     /**
-     * Returns <code>true</code> if the implemenation allows job manipulation
-     * at run time.
-     *
-     * <p>If this method returns <code>false</code>, the following methods
-     * are not supported, and should not be called:</p>
+     * Returns <code>true</code> if the implemenation allows job manipulation at run time.
+     * <p>
+     * If this method returns <code>false</code>, the following methods are not supported, and
+     * should not be called:
+     * </p>
      * <ul>
-     *   <li><code>SchedulerService.createJob()</code></li>
-     *   <li><code>SchedulerService.deleteJob()</code></li>
-     *   <li><code>ScheduledJob.setSchedule()</code></li>
-     *   <li><code>ScheduledJob.setJobSpec()</code></li>
-     *   <li><code>ScheduledJob.setRunCountLimit()</code></li>
-     *   <li><code>ScheduledJob.setTimeLimit()</code></li>
-     *   <li><code>ScheduledJob.setReentrant()</code></li>
+     * <li><code>SchedulerService.createJob()</code></li>
+     * <li><code>SchedulerService.deleteJob()</code></li>
+     * <li><code>ScheduledJob.setSchedule()</code></li>
+     * <li><code>ScheduledJob.setJobSpec()</code></li>
+     * <li><code>ScheduledJob.setRunCountLimit()</code></li>
+     * <li><code>ScheduledJob.setTimeLimit()</code></li>
+     * <li><code>ScheduledJob.setReentrant()</code></li>
      * </ul>
-     *
-     * @return <code>true</code> if the implemenation allows job manipulation
-     *         at run time.
+     * 
+     * @return <code>true</code> if the implemenation allows job manipulation at run time.
      */
     public abstract boolean allowsModifications();
 
@@ -332,7 +330,7 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * Schedules the next execution of a job.
-     *
+     * 
      * @param job the job.
      */
     private void schedule(AbstractJobDescriptor job)
@@ -344,8 +342,8 @@ public abstract class AbstractScheduler implements Startable
             {
                 Date start = job.getTimeLimitStart();
                 Date end = job.getTimeLimitEnd();
-                if((start == null || nextRun.compareTo(start) > 0) &&
-                   (end == null || nextRun.compareTo(end) < 0))
+                if((start == null || nextRun.compareTo(start) > 0)
+                    && (end == null || nextRun.compareTo(end) < 0))
                 {
                     int countLimit = job.getRunCountLimit();
                     if(countLimit < 0 || job.getRunCount() < countLimit)
@@ -374,7 +372,7 @@ public abstract class AbstractScheduler implements Startable
                 }
                 catch(JobModificationException e)
                 {
-                    logger.error("failed to auto-clean expired job "+job.getName(), e);
+                    logger.error("failed to auto-clean expired job " + job.getName(), e);
                 }
             }
         }
@@ -401,7 +399,7 @@ public abstract class AbstractScheduler implements Startable
 
     /**
      * Runs a specified job within a pool service's worker thread.
-     *
+     * 
      * @param job the job.
      */
     private void run(AbstractJobDescriptor job)
@@ -415,7 +413,7 @@ public abstract class AbstractScheduler implements Startable
             }
         }
     }
-    
+
     /**
      * Get job component.
      * 
@@ -438,7 +436,7 @@ public abstract class AbstractScheduler implements Startable
         }
         catch(ClassNotFoundException e)
         {
-            throw new JobNotFoundException("Couldn't find job class '"+className+"' ",e);
+            throw new JobNotFoundException("Couldn't find job class '" + className + "' ", e);
         }
     }
 
@@ -449,18 +447,18 @@ public abstract class AbstractScheduler implements Startable
         extends Task
     {
         private AbstractJobDescriptor job;
-      
+
         private Thread thread;
-  
+
         public RunnerTask(AbstractJobDescriptor job)
         {
             this.job = job;
             this.thread = Thread.currentThread();
         }
-        
+
         public String getName()
         {
-            return "scheduler: "+job.getName();
+            return "scheduler: " + job.getName();
         }
 
         public void process(Context context)
@@ -475,21 +473,21 @@ public abstract class AbstractScheduler implements Startable
                 }
                 set.add(this);
             }
-            
+
             synchronized(job)
             {
                 job.setRunning(true);
                 try
                 {
                     job.setLastRunTime(new Date());
-                    job.setRunCount(job.getRunCount()+1);
+                    job.setRunCount(job.getRunCount() + 1);
                 }
                 catch(JobModificationException e)
                 {
                     logger.warn("failed to save job accountig information", e);
                 }
             }
-            
+
             try
             {
                 try
@@ -498,7 +496,7 @@ public abstract class AbstractScheduler implements Startable
                 }
                 catch(JobNotFoundException e)
                 {
-                    logger.error("invalid job specification "+job.getJobClassName(), e);
+                    logger.error("invalid job specification " + job.getJobClassName(), e);
                 }
             }
             catch(VirtualMachineError e)
@@ -511,8 +509,8 @@ public abstract class AbstractScheduler implements Startable
             }
             catch(Throwable t)
             {
-                logger.error("uncaught exception in scheduled job "+job.getName(), t);
-            }            
+                logger.error("uncaught exception in scheduled job " + job.getName(), t);
+            }
 
             synchronized(runners)
             {
@@ -525,14 +523,14 @@ public abstract class AbstractScheduler implements Startable
                         synchronized(job)
                         {
                             job.setRunning(false);
-                        }   
+                        }
                     }
                 }
             }
-            
+
             thread = null;
         }
-        
+
         public void terminate(Thread t)
         {
             try
@@ -541,7 +539,7 @@ public abstract class AbstractScheduler implements Startable
             }
             catch(JobNotFoundException e)
             {
-                logger.error("invalid job specification "+job.getJobClassName(), e);
+                logger.error("invalid job specification " + job.getJobClassName(), e);
             }
         }
 
@@ -552,7 +550,7 @@ public abstract class AbstractScheduler implements Startable
                 terminate(thread);
             }
         }
-    }    
+    }
 
     /**
      * The daemon task that performs the timekeeping
@@ -564,7 +562,7 @@ public abstract class AbstractScheduler implements Startable
         {
             return "Scheduled Job";
         }
-        
+
         public void process(Context context)
         {
             synchronized(queue)
@@ -619,10 +617,10 @@ public abstract class AbstractScheduler implements Startable
                 }
             }
         }
-        
+
         public void terminate(Thread t)
         {
             t.interrupt();
         }
-    }    
+    }
 }

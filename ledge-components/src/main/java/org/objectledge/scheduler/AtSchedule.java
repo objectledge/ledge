@@ -39,10 +39,10 @@ import java.util.StringTokenizer;
  *
  * <p>The configuration of the schedule is expected to be semicolon separated
  * list of dates. Each date must adhere to the pattern used by the
- * Scheduler (see {@link AbstractScheduler#DATE_FROMAT_DEFAULT}).</p>
+ * Scheduler (see {@link AbstractScheduler#DATE_FORMAT_DEFAULT}).</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AtSchedule.java,v 1.1 2004-01-30 14:53:20 pablo Exp $
+ * @version $Id: AtSchedule.java,v 1.2 2005-02-08 00:35:32 rafal Exp $
  */
 public class AtSchedule
     implements Schedule

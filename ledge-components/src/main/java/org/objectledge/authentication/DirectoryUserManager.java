@@ -497,7 +497,7 @@ public class DirectoryUserManager extends UserManager
      *
      * @param attribute the attribute name.
      * @param value the attribute value.
-     * @param return the list of the name of matched context.
+     * @return the list of the name of matched context.
      * @throws NamingException if lookup fails.
      */
     private List lookupDNs(String attribute, String value)
@@ -527,9 +527,8 @@ public class DirectoryUserManager extends UserManager
     /**
      * Find all dn of the context that match the attribute query.
      *
-     * @param attribute the attribute name.
-     * @param value the attribute value.
-     * @param return the list of the name of matched context.
+     * @param query attribute query
+     * @return the list of the name of matched context.
      * @throws NamingException if lookup fails.
      */
     private List lookupDNs(String query)

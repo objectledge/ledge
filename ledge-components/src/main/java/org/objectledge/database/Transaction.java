@@ -43,15 +43,15 @@ import org.objectledge.utils.StringUtils;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.8 2004-03-12 11:45:18 fil Exp $
+ * @version $Id: Transaction.java,v 1.9 2005-02-08 00:35:46 rafal Exp $
  */
 public abstract class Transaction
 {
-    /** {@link Conext} key under where tracing buffer is kept. */ 
+    /** {@link org.objectledge.context.Context} key under where tracing buffer is kept. */ 
     public static final String TRACE_BUFFER = 
         "org.objectledge.database.Transaction.traceBuffer";
 
-    /** {@link Conext} key under where nesting counter is kept. */ 
+    /** {@link org.objectledge.context.Context} key under where nesting counter is kept. */ 
     public static final String NESTING_COUNTER = 
         "org.objectledge.database.Transaction.nestingCounter";
 

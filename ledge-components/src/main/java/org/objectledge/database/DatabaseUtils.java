@@ -46,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * A set of utility functions for working with JDBC databases.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.17 2004-12-27 03:05:47 rafal Exp $
+ * @version $Id: DatabaseUtils.java,v 1.18 2005-02-08 00:35:46 rafal Exp $
  */
 public class DatabaseUtils
 {
@@ -202,7 +202,7 @@ public class DatabaseUtils
     /**
      * Executes an SQL script.
      * 
-     * @see runScript.
+     * @see #runScript(Connection, Reader)
      * @param conn the connections to the database.
      * @param reader the reader to read script from.
      * @throws IOException if the script cannot be read.

@@ -36,7 +36,7 @@ import java.rmi.Remote;
  *
  * <p>You can use this class to safeguard against an incorrect usage of an
  * unidirectional event forwarder. First, create a private forwarder ({@link
- * EventWhiteboardFactory#getForwarder()}, then register an event listener with it
+ * EventWhiteboardFactory#newInstance()}, then register an event listener with it
  * (typically a NotificationService client), create {@link OutboundEventWhiteboard}
  * proxy object upon your private forwarder, and pass the reference to the
  * proxy to the downstream code. Any attempt to register a listener on the
@@ -44,7 +44,7 @@ import java.rmi.Remote;
  * thus unwanted local-echoing of events will be avoided.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: OutboundEventWhiteboard.java,v 1.2 2004-12-23 07:16:39 rafal Exp $
+ * @version $Id: OutboundEventWhiteboard.java,v 1.3 2005-02-08 00:35:44 rafal Exp $
  */
 public class OutboundEventWhiteboard implements EventWhiteboard
 {

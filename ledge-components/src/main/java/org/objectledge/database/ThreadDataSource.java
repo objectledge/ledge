@@ -64,15 +64,19 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.3 2004-03-11 15:26:39 fil Exp $
+ * @version $Id: ThreadDataSource.java,v 1.4 2005-02-08 00:35:46 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
 {
-    /** {@link Conext} key under which DataSource -> ThreadConnection map is kept. */ 
+    /**
+     * {@link org.objectledge.context.Context} key under which DataSource -> ThreadConnection map 
+     * is kept.
+     */ 
     public static final String THREAD_MAP = "org.objectledge.database.ThreadDataSource.threadMap";
     
-    /** {@link Conext} key under where open/close tracing buffer is kept. */ 
+    /** {@link org.objectledge.context.Context}key under where open/close tracing buffer is kept. 
+     */ 
     public static final String TRACE_BUFFER = 
         "org.objectledge.database.ThreadDataSource.traceBuffer";
     
@@ -157,7 +161,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.3 2004-03-11 15:26:39 fil Exp $
+     * @version $Id: ThreadDataSource.java,v 1.4 2005-02-08 00:35:46 rafal Exp $
      */
     public static class GuardValve
         implements Valve
