@@ -30,54 +30,15 @@
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
   <start>
     <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-      <optional>
-        <element name="standard">
-          <optional>    
-            <element name="HashMap">
-              <text/>
-            </element>
-          </optional>    
-          <optional>
-            <element name="TimeoutMap">
-              <text/>
-            </element>
-          </optional>    
-          <optional>
-            <element name="LRUMap">
-              <text/>
-            </element>
-          </optional>    
-          <optional>
-            <element name="SoftMap">
-              <text/>
-            </element>
-          </optional>    
-          <optional>
-            <element name="FactoryMap">
-              <text/>
-            </element>
-          </optional>    
-          <optional>
-            <element name="DistributedMap">
-              <text/>
-            </element>
-          </optional>    
-          <optional>
-            <element name="StatisticsMap">
-              <text/>
-            </element>
-          </optional>    
-        </element>
-      </optional>
       <zeroOrMore>
-        <element name="factory">
-          <attribute name="name"/>
+        <element name="implementation">
+          <attribute name="type"/>
           <attribute name="class"/>    
         </element>
       </zeroOrMore>
       <zeroOrMore>
-        <element name="custom">
-          <attribute name="type"/>
+        <element name="factory">
+          <attribute name="name"/>
           <attribute name="class"/>    
         </element>
       </zeroOrMore>

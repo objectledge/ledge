@@ -75,7 +75,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Caching.java,v 1.1 2004-02-12 11:41:27 pablo Exp $
+ * @version $Id: Caching.java,v 1.2 2004-02-12 13:41:42 pablo Exp $
  */
 public class Caching
     implements CachingSPI
@@ -192,35 +192,42 @@ public class Caching
         this.notification = notification;
         this.persistence = persistence;
         
-        Configuration standard = config.getChild("standard");
-        String hashClass = standard.getChild(HASH_MAP_TYPE).
-            getValue(HASH_MAP_CLASS_DEFALUT);
-        initImpl(HASH_MAP_TYPE, hashClass, Map.class);
-        String timeoutClass = standard.getChild(TIMEOUT_MAP_TYPE).
-            getValue(TIMEOUT_MAP_CLASS_DEFALUT);
-        initImpl(TIMEOUT_MAP_TYPE, timeoutClass, TimeoutMap.class);
-        String lRUClass = standard.getChild(LRU_MAP_TYPE).
-            getValue(LRU_MAP_CLASS_DEFALUT);
-        initImpl(LRU_MAP_TYPE, lRUClass, LRUMap.class);
-        String softClass = standard.getChild(SOFT_MAP_TYPE).
-            getValue(SOFT_MAP_CLASS_DEFALUT);
-        initImpl(SOFT_MAP_TYPE, softClass, SoftMap.class);
-        String distributedClass = standard.getChild(DISTRIBUTED_MAP_TYPE).
-            getValue(DISTRIBUTED_MAP_CLASS_DEFALUT);
-        initImpl(DISTRIBUTED_MAP_TYPE, distributedClass, DistributedMap.class);
-        String factoryClass = standard.getChild(FACTORY_MAP_TYPE).
-            getValue(FACTORY_MAP_CLASS_DEFALUT);
-        initImpl(FACTORY_MAP_TYPE, factoryClass, FactoryMap.class);
-        String statisticsClass = standard.getChild(STATISTICS_MAP_TYPE).
-            getValue(STATISTICS_MAP_CLASS_DEFALUT);
-        initImpl(STATISTICS_MAP_TYPE, statisticsClass, StatisticsMap.class);
-
-        Configuration[] custom = config.getChildren("custom");
+        Map classMap = new HashMap();
+        classMap.put(HASH_MAP_TYPE, HASH_MAP_CLASS_DEFALUT);
+        classMap.put(TIMEOUT_MAP_TYPE, TIMEOUT_MAP_CLASS_DEFALUT);
+        classMap.put(LRU_MAP_TYPE, LRU_MAP_CLASS_DEFALUT);
+        classMap.put(SOFT_MAP_TYPE, SOFT_MAP_CLASS_DEFALUT);
+        classMap.put(DISTRIBUTED_MAP_TYPE, DISTRIBUTED_MAP_CLASS_DEFALUT);
+        classMap.put(FACTORY_MAP_TYPE, FACTORY_MAP_CLASS_DEFALUT);
+        classMap.put(STATISTICS_MAP_TYPE, STATISTICS_MAP_CLASS_DEFALUT);
+        
+        Map ifaceMap = new HashMap();
+        ifaceMap.put(HASH_MAP_TYPE, Map.class);
+        ifaceMap.put(TIMEOUT_MAP_TYPE, TimeoutMap.class);
+        ifaceMap.put(LRU_MAP_TYPE, LRUMap.class);
+        ifaceMap.put(SOFT_MAP_TYPE, SoftMap.class);
+        ifaceMap.put(DISTRIBUTED_MAP_TYPE, DistributedMap.class);
+        ifaceMap.put(FACTORY_MAP_TYPE, FactoryMap.class);
+        ifaceMap.put(STATISTICS_MAP_TYPE, StatisticsMap.class);
+        
+        Configuration[] custom = config.getChildren("implementation");
         for(int i=0; i<custom.length; i++)
         {
-            String customType = custom[i].getAttribute("type");
-            String customClass = custom[i].getAttribute("class");
-            initImpl(customType, customClass, Map.class);
+            String type = custom[i].getAttribute("type");
+            String clazz = custom[i].getAttribute("class");
+            classMap.put(type,clazz);
+        }
+        Iterator it = classMap.keySet().iterator();
+        while(it.hasNext())
+        {
+            String type = (String)it.next();
+            String clazz = (String)classMap.get(type);
+            Class iface = (Class)ifaceMap.get(type);
+            if(iface == null)
+            {
+                iface = Map.class;
+            }
+            initImpl(type, clazz, iface);    
         }
         
         Configuration[] aliases = config.getChildren("config");
