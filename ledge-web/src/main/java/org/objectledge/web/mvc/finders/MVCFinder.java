@@ -40,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.25 2005-02-17 17:09:04 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.26 2005-02-21 17:47:49 rafal Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -194,8 +194,8 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	{
 		if(templateName != null && templateName.length() != 0)
 		{
-			Sequence sequence = nameSequenceFactory.
-				getTemplateNameSequence(classType, templateName, fallback, enclosing);
+			Sequence sequence = getTemplateNameSequence(classType, templateName, fallback,
+                enclosing);
 			while(sequence.hasNext())
 			{
 				String name = sequence.next();
@@ -215,6 +215,22 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		}
 		return null;
 	}
+
+    /**
+     * Return a template lookup sequence.
+     * 
+     * @param classType the kind of template being looked up.
+     * @param templateName the view name.
+     * @param fallback perform fallback.
+     * @param enclosing obsolete paramter.
+     * @return a lookup sequence.
+     */
+    protected Sequence getTemplateNameSequence(String classType, String templateName,
+        boolean fallback, boolean enclosing)
+    {
+        return nameSequenceFactory.
+        	getTemplateNameSequence(classType, templateName, fallback, enclosing);
+    }
 
     private Object findObject(
         String classType,
