@@ -36,15 +36,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.utils.StringUtils;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.3 2004-01-22 15:53:14 pablo Exp $
+ * @version $Id: DatabaseUtils.java,v 1.4 2004-02-03 14:39:10 fil Exp $
  */
 public class DatabaseUtils
 {
+    /** A logger. Bypasses LogFactory. */
+    private static Logger log = 
+        new Log4JLogger(org.apache.log4j.Logger.getLogger(DatabaseUtils.class));
+    
     /** date format for PLSQL92 databases */
     private static SimpleDateFormat df = 
         new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", new Locale("en","US"));
@@ -56,7 +62,7 @@ public class DatabaseUtils
     // utilities //////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Close the connection
+     * Closes the connection.
      * 
      * @param conn the connection. 
      */
@@ -69,11 +75,57 @@ public class DatabaseUtils
                 conn.close();
             }
         }
+        ///CLOVER:OFF
         catch (SQLException e)
         {
-            //TODO report the exception to log.
-            throw new Error("Couldn't close the connection - " +                " this error will be replaced be silent error log",e);    
+            log.error("failed to close connection", e);
         }
+        ///CLOVER:ON
+    }
+    
+    /**
+     * Close the statement.
+     * 
+     * @param stmt the statement. 
+     */
+    public static void close(Statement stmt)
+    {
+        try
+        {
+            if (stmt != null)
+            {
+                stmt.close();
+            }
+        }
+        ///CLOVER:OFF
+        catch (SQLException e)
+        {
+            log.error("failed to close statement", e);
+        }
+        ///CLOVER:ON
+    }
+    
+
+    /**
+     * Close the result set.
+     * 
+     * @param rs the result set. 
+     */
+    public static void close(ResultSet rs)
+    {
+        try
+        {
+            if (rs != null)
+            {
+                rs.close();
+            }
+        }
+        ///CLOVER:OFF
+        catch (SQLException e)
+        {
+            log.error("failed to close result set", e);
+        }
+        ///CLOVER:ON
     }
 
     /**
@@ -85,9 +137,10 @@ public class DatabaseUtils
      */
     public static void close(Connection conn, Statement stmt, ResultSet rs)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+        close(rs);
+        close(stmt);
+        close(conn);
     }
-    
     
     /**
      * Unescape the string that comes from query.
