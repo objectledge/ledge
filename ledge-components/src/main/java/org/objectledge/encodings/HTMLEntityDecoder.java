@@ -38,10 +38,12 @@ import org.objectledge.encodings.encoders.CharEncoderHTMLEntity;
 
 /**
  * Tool for parsing text with characters encoded as HTML entities. All recognized entities
- * (including numeric ones) are converted to single unicode characters. 
+ * (including numeric ones) are converted to single unicode characters.
+ * 
+ * <p>This tool is completely thread safe and does not keep any internal state.</p> 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityDecoder.java,v 1.1 2004-03-17 10:11:41 zwierzem Exp $
+ * @version $Id: HTMLEntityDecoder.java,v 1.2 2004-06-30 12:27:24 zwierzem Exp $
  */
 public class HTMLEntityDecoder
 {
@@ -67,12 +69,12 @@ public class HTMLEntityDecoder
 	private static final int MAYBE_IN_NAMED_ENTITY = 5;
 
 	/** 
-	 * Deodes a given string and returns a string with entities converted to unicode characters.
+	 * Decodes a given string and returns a string with entities converted to unicode characters.
 	 * This operation compresses strings. Example:
 	 * <pre>
 	 * input  = " &amp;amp; &amp;quot; &amp;euml; &amp;Oacute; &amp;#211; "+
 	 * 		"&amp;sdsd&amp;#1233&amp;amp; &amp;euml &amp;notsgmlentity; "
-	 * output = " &amp; " ë Ó Ó &amp;sdsd&amp;#1233&amp; &amp;euml &amp;notsgmlentity; "
+	 * output = " &amp; " ï¿½ ï¿½ ï¿½ &amp;sdsd&amp;#1233&amp; &amp;euml &amp;notsgmlentity; "
 	 * </pre>
 	 * 
 	 * @param input input string with characters encoded as named or numeric entities.
@@ -84,13 +86,13 @@ public class HTMLEntityDecoder
 	}
 
 	/** 
-	 * Deodes a string and returns a string with entities converted to unicode characters,
+	 * Decodes a string and returns a string with entities converted to unicode characters,
 	 * avoids converting core XML entities.
 	 * This operation compresses strings. Example:
 	 * <pre>
 	 * input  = " &amp;amp; &amp;quot; &amp;lt; &amp;euml; &amp;Oacute;"+ 
 	 * 		"&amp;#211; &amp;sdsd&#1233&amp;amp; &amp;euml &amp;notsgmlentity; "
-	 * output = " &amp;amp; &amp;quot; &amp;lt; ë Ó Ó &amp;sdsd&amp;#1233&amp;amp; "+
+	 * output = " &amp;amp; &amp;quot; &amp;lt; ï¿½ ï¿½ ï¿½ &amp;sdsd&amp;#1233&amp;amp; "+
 	 * 		"&amp;euml &amp;notsgmlentity; "
 	 * </pre>
 	 * 
@@ -118,7 +120,7 @@ public class HTMLEntityDecoder
 	}
 
 	/** 
-	 * Deodes a given character stream and writes a string with entities converted to unicode
+	 * Decodes a given character stream and writes a string with entities converted to unicode
 	 * characters into the given writer.
 	 * @see HTMLEntityParser#parse(String) 
 	 * 
