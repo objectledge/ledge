@@ -1,37 +1,34 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.6 2004-09-03 10:13:59 rafal Exp $ -->
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: project.xml,v 1.7 2004-09-03 13:23:54 rafal Exp $ -->
+
 <project>
   <pomVersion>3</pomVersion>
-
   <!-- project info -->
 
   <id>ledge-common</id>
   <groupId>objectledge</groupId>
-  <currentVersion>0.3-dev</currentVersion>
-  
+  <currentVersion>0.3</currentVersion>
   <organization>
     <name>objectledge.org</name>
     <url>http://objectledge.org/</url>
     <logo>/images/caltha-logo.gif</logo>
   </organization>
   <!-- logo -->
+
   <inceptionYear>2003</inceptionYear>
   <package>org.objectledge</package>
   <issueTrackingUrl>http://objectledge.org/jira/secure/BrowseProject.jspa?id=10010</issueTrackingUrl>
-   
   <url>http://objectledge.org/</url>
-  
   <siteAddress>objectledge.org</siteAddress>
   <siteDirectory>/home/caltha/objectledge/www</siteDirectory>
   <distributionSite>objectledge.org</distributionSite>
   <distributionDirectory>/home/caltha/objectledge/builds</distributionDirectory>
-
   <repository>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/ledge:${pom.artifactId}</developerConnection>
     <connection>scm:cvs:pserver:anoncvs@objectledge.org:/cvsroot/ledge:${pom.artifactId}</connection>
     <url>http://objectledge.org/viewcvs.cgi/${pom.artifactId}</url>
   </repository>
-
   <versions>
     <version>
       <id>0.1</id>
@@ -49,7 +46,6 @@
       <tag>RELEASE-0_3</tag>
     </version>
   </versions>
-
   <licenses>
     <license>
       <name>BSD</name>
@@ -57,7 +53,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
   <mailingLists>
     <mailingList>
       <name>ObjectLedge release announcements</name>
@@ -95,7 +90,6 @@
       <archive>http://lists.objectledge.org/pipermail/objectledge-issues/</archive>
     </mailingList>
   </mailingLists>
-
   <developers>
     <developer>
       <name>Rafal Krzewski</name>
@@ -109,7 +103,6 @@
         <role>java developer</role>
       </roles>
     </developer>
-    
     <developer>
       <name>Pawel Potempski</name>
       <id>pablo</id>
@@ -120,7 +113,6 @@
         <role>java developer</role>
       </roles>
     </developer>
-    
     <developer>
       <name>Michal Mach</name>
       <id>mover</id>
@@ -132,7 +124,6 @@
         <role>documentation engineer</role>
       </roles>
     </developer>
-
     <developer>
       <name>Damian Gajda</name>
       <id>zwierzem</id>
@@ -143,11 +134,9 @@
         <role>java developer</role>
       </roles>
     </developer>
-
   </developers>
-
   <!-- contributors -->
-  
+
   <reports>
     <report>maven-license-plugin</report>
     <report>maven-tasklist-plugin</report>
@@ -158,7 +147,6 @@
     <report>maven-junit-report-plugin</report>
     <report>maven-pmd-plugin</report>
     <report>maven-simian-plugin</report>
-    <report>maven-faq-plugin</report>    
+    <report>maven-faq-plugin</report>
   </reports>
-
 </project>
