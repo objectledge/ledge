@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -44,7 +45,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.10 2004-03-10 14:28:23 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.11 2004-03-11 12:51:52 fil Exp $
  */
 public class DatabaseUtils
 {
@@ -243,4 +244,39 @@ public class DatabaseUtils
             close(conn);
         }
     }
+    
+    /**
+     * Checks if the given database contains a table with the given name.
+     * 
+     * @param ds DataSource for creating connections to database in question.
+     * @param table table name, case insensitive.
+     * @return <code>true</code> if the database contains the table.
+     * @throws SQLException if there is a problem executing the check.
+     */
+    public static boolean hasTable(DataSource ds, String table)
+        throws SQLException
+    {
+        Connection conn = null;
+        ResultSet tables = null;
+        try
+        {
+            conn = ds.getConnection();
+            DatabaseMetaData md = conn.getMetaData();
+            tables = md.getTables(null, null, null, null);
+            boolean result = false;
+            while(tables.next())
+            {
+                if(tables.getString("TABLE_NAME").equalsIgnoreCase(table))
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+        finally
+        {
+            close(tables);
+            close(conn);
+        }
+    }    
 }
