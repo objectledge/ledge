@@ -23,13 +23,32 @@
 
     <component class="org.objectledge.context.Context"/>
     <component class="org.objectledge.web.RequestParametersLoader"/>
-    <component class="org.objectledge.web.RequestParametersLoaderTestValve"/>
+    <component class="org.objectledge.web.RequestParametersLoaderTest"/>
+    <component class-key="org.objectledge.templating.Templating"
+		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
+    <component class="org.objectledge.templating.TemplatingContextLoader"/>
+    <component class="org.objectledge.templating.ContextToolPopulator"/>
+    <component class-key="org.objectledge.i18n.I18n"
+		       class="org.objectledge.i18n.impl.XMLI18n">
+      <component-parameter class-key="org.jcontainer.dna.Configuration"/>
+      <component-parameter class-key="org.objectledge.filesystem.FileSystem"/>		       
+      <constant-parameter value="locale/"/>
+    </component>    
+
+    <component class="org.objectledge.templating.ContextTools">
+	  <sequence-parameter class="[Lorg.objectledge.templating.ContextToolFactory;">
+        <component-parameter class-key="org.objectledge.i18n.I18n"/>
+      </sequence-parameter>
+    </component>      
+    
     <component key="org.objectledge.pipeline.Pipeline"
                class="org.objectledge.pipeline.Pipeline">
       <component-parameter class-key="org.objectledge.context.Context"/>               
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
         <component-parameter class-key="org.objectledge.web.RequestParametersLoader"/>
-        <component-parameter class-key="org.objectledge.web.RequestParametersLoaderTestValve"/>
+        <component-parameter class-key="org.objectledge.web.RequestParametersLoaderTest"/>
+        <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
+        <component-parameter class-key="org.objectledge.templating.ContextToolPopulator"/>
       </sequence-parameter>
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
       </sequence-parameter>
