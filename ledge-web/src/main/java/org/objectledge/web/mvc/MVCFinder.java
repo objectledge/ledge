@@ -27,6 +27,9 @@
 //
 package org.objectledge.web.mvc;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.actions.DefaultAction;
 import org.objectledge.web.mvc.builders.Builder;
@@ -37,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.1 2003-12-30 17:26:25 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.2 2004-01-13 15:25:10 zwierzem Exp $
  */
 public class MVCFinder implements TemplateFinder, MVCClassFinder
 {
@@ -53,16 +56,17 @@ public class MVCFinder implements TemplateFinder, MVCClassFinder
 	private MutablePicoContainer container;
 	private Runnable defaultAction;
 	private DefaultBuilder defaultBuilder;
+	private Map classCache = new HashMap();
 	
 	/** Prefixes for builder classes. */
 	private String[] classPrefixes;
 	
-	public MVCFinder()
+	public MVCFinder(MutablePicoContainer container)
 	{
-		// TODO  get container from somewhere
+		this.container = container;
 		container.registerComponentImplementation(DefaultBuilder.class);
 		container.registerComponentImplementation(DefaultAction.class);
-		//container.registerComponentImplementation(DefaultComponent.class);
+		// TODO container.registerComponentImplementation(DefaultComponent.class);
 		
 		defaultBuilder = (DefaultBuilder) container.getComponentInstance(DefaultBuilder.class);
 		defaultAction = (DefaultAction) container.getComponentInstance(DefaultAction.class);
@@ -139,15 +143,37 @@ public class MVCFinder implements TemplateFinder, MVCClassFinder
 	 */
 	private Object getInstance(int componentType, String className)
 	{
+		Class clazz = getClass(componentType, className);
+		if(!container.hasComponent(clazz))
+		{
+			container.registerComponentImplementation(clazz);
+		}
+		return container.getComponentInstance(clazz);
+	}    
+
+	/**
+	 * Gets an class depending on it's finder name and type, uses defaulting
+	 */
+	private Class findClass(int componentType, String name)
+	{
+		// TODO name breaking and finding 
+		return null;
+	}    
+
+	/**
+	 * Gets an class depending on it's finder name and type
+	 */
+	private Class getClass(int componentType, String name)
+	{
 		StringBuffer buf = new StringBuffer(100);
 		buf.append(packageNameParts[componentType]);
-		if(className.charAt(0) != '.')
+		if(name.charAt(0) != '.')
 		{
 			buf.append('.');
 		}
-		String classNamePart = buf.append(className).toString();
+		String classNamePart = buf.append(name).toString();
 		
-		if(!container.hasComponent(classNamePart))
+		if(!classCache.containsKey(classNamePart))
 		{
 			for (int i = 0; i < classPrefixes.length; i++)
 			{
@@ -156,7 +182,8 @@ public class MVCFinder implements TemplateFinder, MVCClassFinder
 				{
 					buf.append(classPrefixes[i]).append(classNamePart);
 					Class componentClass = Class.forName(buf.toString());
-					container.registerComponentImplementation(classNamePart, componentClass);
+					classCache.put(classNamePart, componentClass);
+					break;
 				}
 				catch (ClassNotFoundException e)
 				{
@@ -164,7 +191,7 @@ public class MVCFinder implements TemplateFinder, MVCClassFinder
 				}
 			}
 		}
-		// will throw exception on non existing component
-		return container.getComponentInstance(classNamePart);
+		// will return null on non existing class
+		return (Class) classCache.get(classNamePart);
 	}    
 }
