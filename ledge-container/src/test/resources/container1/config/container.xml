@@ -9,13 +9,13 @@
     </adapter-factory>
     
     <component class="org.objectledge.xml.XMLValidator"/>
+
+    <container key="org.objectledge.configuration.ConfigurationFactory.container"/>
     <component class="org.objectledge.configuration.ConfigurationFactory">
       <component-parameter/>
       <component-parameter/>
       <constant-parameter value="/config"/>
     </component>
-    
-    <container key="org.objectledge.configuration.ConfigurationFactory.container"/>
     <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
       <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
       <component-parameter key="org.objectledge.configuration.ConfigurationFactory.container"/>
