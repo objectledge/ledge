@@ -67,7 +67,7 @@ public class RequestParametersTest extends LedgeTestCase
         Vector parameterNames = new Vector();
         parameterNames.add("foo");
         mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue(parameterNames.elements()));
-        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("foo")).will(returnValue(new String[] { "bar" }));
+        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("foo")).will(returnValue(new String[] { "barek", "bar" }));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue("foo=barek"));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
 
@@ -81,6 +81,9 @@ public class RequestParametersTest extends LedgeTestCase
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
         assertNotNull(parameters);
+        assertEquals(parameters.get("view"), "Default");
+        assertEquals(parameters.getStrings("foo")[0], "barek");
+        assertEquals(parameters.getStrings("foo")[1], "bar");
     }
 
 }
