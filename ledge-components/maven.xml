@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.1 2003-11-25 14:58:02 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.2 2003-12-01 13:16:58 fil Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:ant="jelly:ant">
   <postGoal name="xdoc:register-reports">
+    <attainGoal name="maven-findbugs-plugin:register"/>
     <attainGoal name="maven-clover-plugin:register"/>
   </postGoal>
 </project>
