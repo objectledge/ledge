@@ -32,6 +32,7 @@ import java.security.Principal;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.Authentication;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -40,7 +41,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.3 2004-01-22 15:15:13 fil Exp $ 
+ * @version $Id: Logout.java,v 1.4 2004-01-27 12:43:11 fil Exp $ 
  */
 public class Logout 
     extends BaseAuthenticationAction
