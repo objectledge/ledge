@@ -52,7 +52,7 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  * HttpDispatcher component to handle requests.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.17 2005-02-03 23:26:02 pablo Exp $
+ * @version $Id: LedgeServlet.java,v 1.18 2005-02-11 12:08:04 rafal Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -89,7 +89,7 @@ public class LedgeServlet extends HttpServlet
         String root = servletConfig.getInitParameter("root");
         if(root == null)
         {
-            root = (String)context.getAttribute(ctxRootParam);
+            root = (String)context.getInitParameter(ctxRootParam);
         }
         if(root == null)
         {
@@ -107,7 +107,7 @@ public class LedgeServlet extends HttpServlet
         String config = servletConfig.getInitParameter("config");
         if(config == null)
         {
-            config = (String)context.getAttribute(ctxConfigParam);
+            config = (String)context.getInitParameter(ctxConfigParam);
         }
         if(config == null)
         {
