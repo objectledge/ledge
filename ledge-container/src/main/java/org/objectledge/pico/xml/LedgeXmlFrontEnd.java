@@ -43,7 +43,6 @@ import org.picocontainer.defaults.DefaultComponentAdapterFactory;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picoextras.reflection.DefaultReflectionFrontEnd;
 import org.picoextras.reflection.ReflectionFrontEnd;
-import org.picoextras.reflection.StringToObjectConverter;
 import org.picoextras.script.PicoCompositionException;
 import org.picoextras.script.xml.EmptyCompositionException;
 import org.picoextras.script.xml.XmlFrontEnd;
@@ -59,7 +58,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.8 2004-01-09 14:15:51 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.9 2004-01-14 11:52:53 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -71,8 +70,6 @@ public class LedgeXmlFrontEnd
     
     // instance variables ////////////////////////////////////////////////////////////////////////
     
-    private StringToObjectConverter converter = new StringToObjectConverter();
-
     // XmlFrontEnd interface /////////////////////////////////////////////////////////////////////
     
     /**
