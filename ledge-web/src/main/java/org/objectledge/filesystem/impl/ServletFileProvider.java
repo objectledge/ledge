@@ -33,13 +33,13 @@ import java.io.InputStream;
 import javax.servlet.ServletContext;
 
 /**
- * An implementation of FileService provider that operates on the ServletContext
+ * An implementation of FileService provider that operates on the ServletContext.
  * 
  * <p>This is a read-only implementation. It is able to use WEB-INF/files for
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileProvider.java,v 1.3 2003-12-03 15:24:13 mover Exp $
+ * @version $Id: ServletFileProvider.java,v 1.4 2003-12-23 16:56:19 fil Exp $
  */
 public class ServletFileProvider 
 	extends ReadOnlyFileSystemProvider
