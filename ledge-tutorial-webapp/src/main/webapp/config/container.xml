@@ -7,6 +7,7 @@
 
   <!-- // valves ////////////////////////////////////////////////////////////////////// -->
 
+  <component class="org.objectledge.web.ContentTypeInitializerValve"/>
   <component class="org.objectledge.context.Context"/>
   <component class="org.objectledge.web.WebConfigurator"/>
   <component class="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
@@ -63,6 +64,7 @@
   <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
     <parameter class-key="org.jcontainer.dna.Logger"/>
     <sequence>
+      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
       <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
       <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
       <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
@@ -75,6 +77,7 @@
       <parameter class-key="org.objectledge.web.mvc.builders.BuilderExecutorValve"/>
     </sequence>
 	<sequence>
+      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
       <parameter class-key="org.objectledge.web.PrintExceptionValve"/>
     </sequence>
 	<sequence>
