@@ -28,25 +28,43 @@
 
 package org.objectledge.pico;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.picocontainer.PicoIntrospectionException;
 
 /**
+ * Thrown when a Collectoin or array type is excpected, but a scalar type is 
  *
- *
+ * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.3 2003-12-08 12:35:26 fil Exp $
+ * @version $Id: NonCompositeTypeException.java,v 1.1 2003-12-08 12:35:27 fil Exp $
  */
-public class AllTests
+public class NonCompositeTypeException extends PicoIntrospectionException
 {
-
-    public static Test suite()
+    /**
+     * Creates a new instance of the exception.
+     */
+    public NonCompositeTypeException()
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.pico");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(SequenceParameterTest.class));
-        //$JUnit-END$
-        suite.addTest(org.objectledge.pico.customization.AllTests.suite());
-        return suite;
+        super();
+    }
+
+    /**
+     * Creates a new instance of the exception.
+     * 
+     * @param message the detail message.
+     */
+    public NonCompositeTypeException(String message)
+    {
+        super(message);
+    }
+
+    /**
+     * Creates a new instance of the exception.
+     * 
+     * @param message the detail message.
+     * @param cause the root cause of the exception.
+     */
+    public NonCompositeTypeException(String message, Exception cause)
+    {
+        super(message, cause);
     }
 }
