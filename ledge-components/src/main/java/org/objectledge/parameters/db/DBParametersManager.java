@@ -8,15 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.database.Database;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.utils.StringUtils;
 
 /**
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParametersManager.java,v 1.2 2004-01-20 17:21:25 pablo Exp $
+ * @version $Id: DBParametersManager.java,v 1.3 2004-01-22 10:53:48 pablo Exp $
  */
 public class DBParametersManager
 {
@@ -27,7 +28,7 @@ public class DBParametersManager
 	private Logger logger;
 	
     /** The db access component */
-    private Object dbc;
+    private Database dbc;
     
     /** the parameters cache */
     private Map localCache;
@@ -38,7 +39,7 @@ public class DBParametersManager
      * @param logger the logger.
      * @param dbc the database access component.
      */
-    public DBParametersManager(Logger logger, Object dbc)
+    public DBParametersManager(Logger logger, Database dbc)
     {
         this.logger = logger;
         this.dbc = dbc;
@@ -59,10 +60,9 @@ public class DBParametersManager
         Connection conn = null;
         try
         {
-        	//TODO uncomment those when possible.
-            //conn = dbc.getConnection();
+        	conn = dbc.getConnection();
             Statement statement = conn.createStatement();
-            //id = dbc.getNextId(TABLE, conn);
+            id = dbc.getNextId(TABLE_NAME);
             statement.execute("INSERT INTO "+TABLE_NAME+" values ("+id+",'','')");
         }
         catch(SQLException e)
@@ -71,7 +71,7 @@ public class DBParametersManager
         }
         finally
         {
-            close(conn);
+            DatabaseUtils.close(conn);
         }
         DBParameters parameters = new DBParameters(logger, dbc, null, id);
 		Long key = new Long(id);
@@ -98,8 +98,7 @@ public class DBParametersManager
         Connection conn = null;
         try
         {
-            //TODO uncomment this when possible
-            //conn = dbc.getConnection( );
+            conn = dbc.getConnection( );
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery("SELECT * from " + TABLE_NAME +
              										  " where parameters_id = " + id);
@@ -109,8 +108,8 @@ public class DBParametersManager
                 exist = true;
                 if (!result.getString("name").equals(""))
                 {
-                    parameters.add(unescape(result.getString("name")), 
-                    			   unescape(result.getString("value")));
+                    parameters.add(DatabaseUtils.unescapeSqlString(result.getString("name")), 
+                                   DatabaseUtils.unescapeSqlString(result.getString("value")));
                 }
             }
             if (!exist)
@@ -127,7 +126,7 @@ public class DBParametersManager
         }
         finally
         {
-            close(conn);
+            DatabaseUtils.close(conn);
         }
     }
 
@@ -144,8 +143,7 @@ public class DBParametersManager
         Connection conn = null;
         try
         {
-        	//TODO uncomment it when possible
-            //conn = dbc.getConnection();
+        	conn = dbc.getConnection();
             Statement statement = conn.createStatement();
             statement.execute("DELETE FROM "+TABLE_NAME+" where parameters_id = "+id);
             localCache.remove(key);
@@ -156,30 +154,7 @@ public class DBParametersManager
         }
         finally
         {
-            close(conn);
-        }
-    }
-    
-	/**
-	 * Unescape unicode escapes.
-	 */
-	private String unescape(String string)
-	{
-		return StringUtils.expandUnicodeEscapes(string);
-	}
-
-    private void close(Connection conn)
-    {
-        try
-        {
-            if(conn != null)
-            {
-                conn.close();
-            }
-        }
-        catch(SQLException e)
-        {
-            logger.error("failed to close connection", e);
+            DatabaseUtils.close(conn);
         }
     }
 }

@@ -38,15 +38,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.database.Database;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.utils.StringUtils;
 
 /**
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.1 2004-01-20 17:19:35 pablo Exp $
+ * @version $Id: DBParameters.java,v 1.2 2004-01-22 10:53:48 pablo Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -54,8 +55,7 @@ public class DBParameters implements Parameters
 	private Logger logger;
 
 	/** db access component */
-	//TODO change it to component class key
-	private Object dbc;
+	private Database dbc;
 	
 	/** container id */
 	private long id;
@@ -75,7 +75,7 @@ public class DBParameters implements Parameters
      * @param parameters the initial parameters.
      * @param id the database identifier.
      */
-    public DBParameters(Logger logger, Object dbc, Parameters parameters, long id)
+    public DBParameters(Logger logger, Database dbc, Parameters parameters, long id)
     {
     	this.logger = logger;
     	this.dbc = dbc;
@@ -545,11 +545,10 @@ public class DBParameters implements Parameters
 	 */
 	private void update()
 	{
-		//TODO update it...
 		Connection conn = null;
 		try
 		{
-			//conn = dbc.getConnection();
+			conn = dbc.getConnection();
 			Iterator iterator = modified.iterator();
 			PreparedStatement deleteStmt = conn.prepareStatement(
 				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = "+id+
@@ -561,13 +560,13 @@ public class DBParameters implements Parameters
 			{
 				String name = (String)iterator.next();
 				String[] values = container.getStrings(name);
-				name = escape(name);
+				name = DatabaseUtils.escapeSqlString(name);
 				deleteStmt.setString(1,name);
 				deleteStmt.addBatch();
 				for(int j = 0; j < values.length; j++)
 				{
 					insertStmt.setString(1,name);
-					insertStmt.setString(1,escape(values[j]));
+					insertStmt.setString(1,DatabaseUtils.escapeSqlString(values[j]));
 					insertStmt.addBatch();
 				}
 			}
@@ -580,31 +579,7 @@ public class DBParameters implements Parameters
 		}
 		finally
 		{
-			close(conn);
+			DatabaseUtils.close(conn);
 		}
 	}
-	
-	/**
-	 * Backslash escape the \ and ' characters.
-	 */
-	private String escape(String string)
-	{
-		return StringUtils.backslashEscape(StringUtils.escapeNonASCIICharacters(string), "'\\");
-	}
-
-	private void close(Connection conn)
-	{
-		try
-		{
-			if(conn != null)
-			{
-				conn.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			logger.error("failed to close connection", e);
-		}
-	}
-
 }
