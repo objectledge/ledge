@@ -30,14 +30,17 @@ package org.objectledge.test;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.picocontainer.lifecycle.Startable;
+import org.picocontainer.lifecycle.Stoppable;
 
 /**
  * A simple test component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FooComponent.java,v 1.4 2003-12-03 15:19:16 mover Exp $
+ * @version $Id: FooComponent.java,v 1.5 2003-12-17 10:03:41 fil Exp $
  */
 public class FooComponent
+    implements Startable, Stoppable
 {
     private Configuration configuration;
     
@@ -57,5 +60,15 @@ public class FooComponent
     public void log()
     {
         logger.info("yipee!");
+    }
+    
+    public void start()
+    {
+        logger.info("started");
+    }
+
+    public void stop()
+    {
+        logger.info("stopped");
     }
 }
