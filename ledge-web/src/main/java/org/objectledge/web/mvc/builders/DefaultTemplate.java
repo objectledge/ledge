@@ -25,17 +25,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.builders;
 
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.mvc.MVCConstants;
 
 /**
  * A default template which behaves as if it only contained <code>$embedded_placeholder</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultTemplate.java,v 1.1 2003-12-29 14:07:03 zwierzem Exp $
+ * @version $Id: DefaultTemplate.java,v 1.1 2004-01-12 15:24:30 fil Exp $
  */
 public class DefaultTemplate implements Template
 {
