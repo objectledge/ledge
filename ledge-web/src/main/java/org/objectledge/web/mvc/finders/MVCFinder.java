@@ -43,7 +43,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.17 2004-01-20 13:45:50 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.18 2004-01-20 14:14:19 zwierzem Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -57,6 +57,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	private MutablePicoContainer container;
 	private Runnable defaultAction;
 	private DefaultBuilder defaultBuilder;
+	private DefaultComponent defaultComponent;
     private DefaultTemplate defaultTemplate = new DefaultTemplate();
 	
     /** the logger. */
@@ -90,6 +91,17 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		
 		defaultBuilder = (DefaultBuilder) container.getComponentInstance(DefaultBuilder.class);
 		defaultAction = (DefaultAction) container.getComponentInstance(DefaultAction.class);
+		defaultComponent= (DefaultComponent) container.getComponentInstance(DefaultComponent.class);
+	}
+
+	// templates ////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Template getDefaultTemplate()
+	{
+		return defaultTemplate;
 	}
 
     // builder templates ////////////////////////////////////////////////////////////////////////
@@ -161,6 +173,14 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         throw new IllegalArgumentException("action "+actionName+" is not available");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Runnable getDefaultAction()
+	{
+		return defaultAction;
+	}
+
     // builders /////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -204,6 +224,14 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         return nameSequenceFactory.getView(VIEWS, builder.getClass());
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Builder getDefaultBuilder()
+	{
+		return defaultBuilder;
+	}
+
 	// components ///////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -211,9 +239,17 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Component getComponent(String componentName)
 	{
-        return (Component)
+		return (Component)
             findObject(COMPONENTS, componentName, false, null,  "getComponent");
 	}    
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Component getDefaultComponent()
+	{
+		return defaultComponent;
+	}
 
     // implementation ///////////////////////////////////////////////////////////////////////////
 
