@@ -40,7 +40,7 @@ import junit.framework.TestCase;
  * Tests for the general-purpose visitor.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VisitorTest.java,v 1.1 2005-03-18 10:26:49 rafal Exp $
+ * @version $Id: VisitorTest.java,v 1.2 2005-03-18 11:53:24 rafal Exp $
  */
 public class VisitorTest
     extends TestCase
@@ -89,9 +89,23 @@ public class VisitorTest
         Item g = new Item("a", new SubItem("b", new SubSubItem("c", null)));
         ItemVisitor iv = new InexactPolymorphicRecorderVisitor();
         Visitor.traverseBreadthFirst(g, iv);
-        Method[] methods = iv.getClass().getDeclaredMethods();
         assertEquals("[a, B, c]", recorder.toString());
     }   
+    
+    public void testInnerVisitor()
+    {
+        Item g = new Item("a", new SubItem("b", new SubSubItem("c", null)));
+        final List localRecorder = new ArrayList();
+        ItemVisitor iv = new ItemVisitor()
+        {
+            public void visit(Item i)
+            {
+                localRecorder.add(i.value());
+            }
+        };
+        Visitor.traverseBreadthFirst(g, iv);
+        assertEquals("[a, b, c]", localRecorder.toString());
+    }
     
     public class ItemRecorderVisitor
         extends ItemVisitor
