@@ -34,6 +34,7 @@ package org.objectledge.templating;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
+///CLOVER:OFF
 public class TemplateNotFoundException extends Exception
 {
     /**

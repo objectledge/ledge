@@ -35,8 +35,9 @@ import org.picoextras.script.PicoCompositionException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: UnknownElementException.java,v 1.1 2003-12-09 12:41:42 fil Exp $
+ * @version $Id: UnknownElementException.java,v 1.2 2003-12-29 13:30:25 fil Exp $
  */
+///CLOVER:OFF
 public class UnknownElementException 
     extends PicoCompositionException
 {

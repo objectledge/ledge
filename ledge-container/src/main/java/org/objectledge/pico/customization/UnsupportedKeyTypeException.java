@@ -35,8 +35,9 @@ import org.picocontainer.PicoIntrospectionException;
  * key type.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: UnsupportedKeyTypeException.java,v 1.2 2003-12-03 15:13:14 mover Exp $
+ * @version $Id: UnsupportedKeyTypeException.java,v 1.3 2003-12-29 13:30:25 fil Exp $
  */
+///COVER:OFF
 public class UnsupportedKeyTypeException 
     extends PicoIntrospectionException
 {

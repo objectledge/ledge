@@ -35,8 +35,9 @@ import org.picocontainer.PicoIntrospectionException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: NonCompositeTypeException.java,v 1.2 2003-12-17 11:23:37 fil Exp $
+ * @version $Id: NonCompositeTypeException.java,v 1.3 2003-12-29 13:30:25 fil Exp $
  */
+///CLOVER:OFF
 public class NonCompositeTypeException extends PicoIntrospectionException
 {
     /**

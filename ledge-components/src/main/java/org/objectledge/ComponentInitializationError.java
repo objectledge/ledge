@@ -32,8 +32,9 @@ package org.objectledge;
  * Thrown to indicate that a component cannot initialize itself.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ComponentInitializationError.java,v 1.2 2003-12-03 14:11:14 mover Exp $
+ * @version $Id: ComponentInitializationError.java,v 1.3 2003-12-29 13:32:06 fil Exp $
  */
+///CLOVER:OFF
 public class ComponentInitializationError extends Error
 {
 

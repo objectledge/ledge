@@ -34,7 +34,7 @@ import java.security.Principal;
  * Authentication component interface
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Authentication.java,v 1.2 2003-12-29 13:02:09 fil Exp $
+ * @version $Id: Authentication.java,v 1.3 2003-12-29 13:32:06 fil Exp $
  */
 ///CLOVER:OFF
 public interface Authentication
@@ -46,4 +46,3 @@ public interface Authentication
      */
 	Principal getAnonymousUser();
 }
-///CLOVER:ON

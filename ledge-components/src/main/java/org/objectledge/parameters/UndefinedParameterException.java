@@ -32,8 +32,9 @@ package org.objectledge.parameters;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UndefinedParameterException.java,v 1.2 2003-12-03 14:39:27 mover Exp $
+ * @version $Id: UndefinedParameterException.java,v 1.3 2003-12-29 13:32:06 fil Exp $
  */
+///CLOVER:OFF
 public class UndefinedParameterException
     extends RuntimeException
 {
