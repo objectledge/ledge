@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <document>
+  <properties>
+    <title>Changes</title>
+  </properties>
   <body>
     <release version="0.1" date="CVS HEAD">
     </release>
