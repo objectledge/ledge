@@ -34,23 +34,12 @@ import org.objectledge.templating.TemplatingContext;
  * Utitlity methods for MVC components. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCUtil.java,v 1.2 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: MVCUtil.java,v 1.3 2004-01-14 14:09:48 fil Exp $
  */
 public class MVCUtil
 {
 	/** private constructor */
 	private MVCUtil()
 	{
-	}
-
-	/**
-	 * Retrieves templating context buried in application context.
-	 * 
-	 * @param context application context
-	 * @return templating context
-	 */
-	public static TemplatingContext getTemplatingContext(Context context)
-	{
-		return (TemplatingContext) context.getAttribute(TemplatingContext.CONTEXT_KEY);
 	}
 }
