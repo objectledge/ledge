@@ -39,9 +39,11 @@ import java.sql.SQLException;
 import java.util.Date;
 
 /**
+ * An interface that exposes minimal set methods necessary for storing Persistent object 
+ * field information into JDBC database entry.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: OutputRecord.java,v 1.6 2004-05-06 13:53:25 pablo Exp $
+ * @version $Id: OutputRecord.java,v 1.7 2004-12-27 04:43:24 rafal Exp $
  */
 public interface OutputRecord
 {

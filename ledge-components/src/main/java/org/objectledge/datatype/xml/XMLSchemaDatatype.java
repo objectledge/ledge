@@ -32,8 +32,10 @@ import org.objectledge.datatype.DatatypeValidationInfo;
 import org.relaxng.datatype.DatatypeException;
 
 /**
+ * Datatype implementation based on MSV/RelaxNG.
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLSchemaDatatype.java,v 1.2 2004-12-23 07:17:21 rafal Exp $
+ * @version $Id: XMLSchemaDatatype.java,v 1.3 2004-12-27 04:43:20 rafal Exp $
  */
 public class XMLSchemaDatatype extends AbstractDatatype 
 {

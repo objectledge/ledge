@@ -36,14 +36,14 @@ import java.sql.Ref;
 import java.util.Date;
 
 /**
+ * An interface that exposes minimal set methods necessary for retrieving Persistent object 
+ * field information from JDBC database entry.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: InputRecord.java,v 1.5 2004-05-06 13:51:54 pablo Exp $
+ * @version $Id: InputRecord.java,v 1.6 2004-12-27 04:43:24 rafal Exp $
  */
 public interface InputRecord
 {
-    // DefaultInputRecord interface /////////////////////////////////////////////////
-    
     /**
      * Returns a <code>boolean</code> field value.
      *

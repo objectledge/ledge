@@ -32,7 +32,7 @@ package org.objectledge.encodings;
  * Mapping entry for encoder mappings defnitions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MappingEntry.java,v 1.2 2004-03-12 15:49:16 zwierzem Exp $
+ * @version $Id: MappingEntry.java,v 1.3 2004-12-27 04:43:25 rafal Exp $
  */
 public class MappingEntry
 {
@@ -93,6 +93,8 @@ public class MappingEntry
     }
 
     /**
+     * Return the Unicode character value for this mapping entry.
+     * 
      * @return Unicode character value for this mapping entry.
      */
     public short getUnicodeCode()
@@ -101,6 +103,8 @@ public class MappingEntry
     }
 
     /**
+     * Return encoded character value for this mapping entry.
+     * 
      * @return Encoded character value for this mapping entry.
      */
     public String getValue()

@@ -28,8 +28,10 @@
 package org.objectledge.datatype;
 
 /**
+ * Common base class for DatatypeSet implementations.
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractDatatypeSet.java,v 1.1 2004-05-12 09:54:03 zwierzem Exp $
+ * @version $Id: AbstractDatatypeSet.java,v 1.2 2004-12-27 04:43:22 rafal Exp $
  */
 public abstract class AbstractDatatypeSet implements DatatypeSet
 {

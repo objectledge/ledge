@@ -28,8 +28,10 @@
 package org.objectledge.datatype;
 
 /**
+ * Defines a factory of Datatype set objects.
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DatatypeSetFactory.java,v 1.1 2004-05-12 09:54:03 zwierzem Exp $
+ * @version $Id: DatatypeSetFactory.java,v 1.2 2004-12-27 04:43:22 rafal Exp $
  */
 public interface DatatypeSetFactory
 {

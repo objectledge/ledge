@@ -28,8 +28,10 @@
 package org.objectledge.datatype;
 
 /**
+ * Defines an unit of information about data validity.
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DatatypeValidationInfo.java,v 1.1 2004-05-12 09:54:03 zwierzem Exp $
+ * @version $Id: DatatypeValidationInfo.java,v 1.2 2004-12-27 04:43:22 rafal Exp $
  */
 public class DatatypeValidationInfo
 {
@@ -56,6 +58,8 @@ public class DatatypeValidationInfo
 	}
 
     /**
+     * Checks if this info contains error information.
+     * 
      * @return <code>true</code> if this info contains error information
      */
     public boolean hasError()
@@ -64,6 +68,8 @@ public class DatatypeValidationInfo
     }
 
     /**
+     * Returns error message for this validation results.
+     * 
      * @return error message for this validation results, may be <code>null</code>.
      */
     public String getErrorMessage()

@@ -39,8 +39,10 @@ import org.objectledge.datatype.xml.XMLSchemaDatatypeSetFactory;
 import org.objectledge.xml.XMLGrammarCache;
 
 /**
+ * The Datatype set manager component. 
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DatatypeSetManager.java,v 1.2 2004-12-23 07:17:10 rafal Exp $
+ * @version $Id: DatatypeSetManager.java,v 1.3 2004-12-27 04:43:22 rafal Exp $
  */
 public class DatatypeSetManager
 {
