@@ -100,6 +100,7 @@ public abstract class AbstractScheduler
     public AbstractScheduler(MutablePicoContainer container, Configuration config, Logger logger,
         ThreadPool threadPool, ScheduleFactory[] scheduleFactories)
     {
+        this.container = container;
         this.config = config;
         this.logger = logger;
         this.threadPool = threadPool;
