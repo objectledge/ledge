@@ -1,5 +1,5 @@
 #
-# $Id: checkoutlist,v 1.4 2004-02-10 09:27:18 fil Exp $
+# $Id: checkoutlist,v 1.5 2004-02-10 10:25:57 fil Exp $
 #
 # Copyright (c) 2002 by Ken A L Coar.  All rights reserved.
 #
@@ -38,6 +38,7 @@ spackle.conf
 spackled
 #writers
 
+logcheck.sh
 cvsspam.conf
 cvsspam.rb
 record_lastdir.rb
