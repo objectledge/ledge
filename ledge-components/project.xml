@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.47 2004-05-27 12:24:33 fil Exp $ -->
+<!-- $Id: project.xml,v 1.48 2004-05-27 12:31:37 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -135,7 +135,7 @@
     <dependency>
       <groupId>jta</groupId>
       <artifactId>jta</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.1b</version>
       <url>http://java.sun.com/products/jta/index.html</url>
     </dependency>
     <dependency>
