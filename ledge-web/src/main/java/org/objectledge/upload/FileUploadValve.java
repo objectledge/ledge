@@ -29,7 +29,7 @@ import org.objectledge.web.parameters.RequestParameters;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UploadValve.java,v 1.3 2004-01-14 13:27:16 fil Exp $
+ * @version $Id: FileUploadValve.java,v 1.1 2004-01-14 13:29:45 fil Exp $
  */
 public class UploadValve implements Runnable, WebConstants
 {
