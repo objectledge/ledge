@@ -31,7 +31,7 @@ package org.objectledge.web.mvc.tools;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.1 2004-06-17 16:09:13 zwierzem Exp $
+ * @version $Id: StringTool.java,v 1.2 2004-07-01 11:40:34 zwierzem Exp $
  */
 public class StringTool
 {
@@ -48,8 +48,8 @@ public class StringTool
         if(str.length() > maxLength)
         {
             StringBuffer buf = new StringBuffer(str);
-            buf.setLength(maxLength-3);
-            buf.append("...");
+            buf.setLength(maxLength-1);
+            buf.append('\u2026'); // the ellipsis character - ie. 3 dots ...
             return buf.toString();
         }
         return str;
