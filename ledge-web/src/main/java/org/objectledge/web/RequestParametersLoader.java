@@ -34,7 +34,7 @@ import org.objectledge.context.Context;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoader.java,v 1.1 2003-12-23 17:14:28 pablo Exp $
+ * @version $Id: RequestParametersLoader.java,v 1.2 2003-12-29 09:45:14 pablo Exp $
  */
 public class RequestParametersLoader implements Runnable
 {
@@ -61,6 +61,5 @@ public class RequestParametersLoader implements Runnable
     	// TODO set the encoding
     	parameters.init(webContext.getRequest(), "ISO-8859-1");
     	context.setAttribute(RequestParameters.CONTEXT_KEY,parameters);
-    	System.out.println("Cool! somebody called me");
     }
 }
