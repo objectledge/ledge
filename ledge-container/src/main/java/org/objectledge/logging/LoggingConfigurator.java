@@ -47,7 +47,7 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.6 2004-06-16 11:03:10 fil Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.7 2004-06-16 14:33:35 fil Exp $
  */
 public class LoggingConfigurator
     implements Startable
@@ -79,7 +79,7 @@ public class LoggingConfigurator
      */
     public void start()
     {
-        configurator.doConfigure(config.getDocumentElement(),  LogManager.getLoggerRepository());
+        configurator.doConfigure(config.getDocumentElement(), LogManager.getLoggerRepository());
     }
     
     /**
