@@ -45,7 +45,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.12 2004-12-23 07:17:51 rafal Exp $
+ * @version $Id: HttpContext.java,v 1.13 2005-03-09 13:33:59 zwierzem Exp $
  */
 public class HttpContext
 {
@@ -77,10 +77,8 @@ public class HttpContext
     
 	/** the output writer */
 	private PrintWriter writer;
-	
-	private static final String DEFAULT_CONTENT_TYPE = "text/html";
-	
-	/**
+
+    /**
 	 * Construct new http context.
 	 * 
 	 * @param request the http request.
@@ -91,7 +89,6 @@ public class HttpContext
 		this.request = request;
 		this.response = response;
 		directResponse = false;
-		contentType = DEFAULT_CONTENT_TYPE;
 	}
 	
     /**
