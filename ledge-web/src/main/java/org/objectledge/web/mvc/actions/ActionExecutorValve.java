@@ -35,7 +35,7 @@ import org.objectledge.web.mvc.finders.MVCClassFinder;
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.3 2004-01-15 09:27:05 fil Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.4 2004-01-15 14:00:57 fil Exp $
  */
 public class ActionExecutorValve implements Runnable
 {
@@ -63,8 +63,12 @@ public class ActionExecutorValve implements Runnable
     {
 		// setup used contexts
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
-		// get and execute action
-		Runnable action = classFinder.findAction(mvcContext.getAction());
-		action.run();
+        if(mvcContext.getAction() != null)
+        {
+            // get and execute action
+            Runnable action = classFinder.findAction(mvcContext.getAction());
+            // TODO access control
+            action.run();
+        }
     }
 }
