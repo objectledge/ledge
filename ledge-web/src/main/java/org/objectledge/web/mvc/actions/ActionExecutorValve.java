@@ -28,6 +28,7 @@
 package org.objectledge.web.mvc.actions;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.PipelineProcessingException;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 
@@ -35,7 +36,7 @@ import org.objectledge.web.mvc.finders.MVCClassFinder;
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.4 2004-01-15 14:00:57 fil Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.5 2004-01-20 08:28:36 fil Exp $
  */
 public class ActionExecutorValve implements Runnable
 {
@@ -63,12 +64,20 @@ public class ActionExecutorValve implements Runnable
     {
 		// setup used contexts
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
-        if(mvcContext.getAction() != null)
+        String actionName = mvcContext.getAction(); 
+        if(actionName != null)
         {
-            // get and execute action
-            Runnable action = classFinder.findAction(mvcContext.getAction());
-            // TODO access control
-            action.run();
+            try
+            {
+                // get and execute action
+                Runnable action = classFinder.findAction(actionName);
+                // TODO access control
+                action.run();
+            }
+            catch(ClassNotFoundException e)
+            {
+                throw new PipelineProcessingException("invalid action "+actionName, e);
+            }
         }
     }
 }
