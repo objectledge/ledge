@@ -471,28 +471,24 @@ public class CronParser implements CronParserConstants {
 
   final private boolean jj_2_1(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
-    boolean retval = !jj_3_1();
-    jj_save(0, xla);
-    return retval;
+    try { return !jj_3_1(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(0, xla); }
   }
 
   final private boolean jj_3_1() {
     if (jj_3R_3()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
   final private boolean jj_3R_3() {
     if (jj_3R_4()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_scan_token(5)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
   final private boolean jj_3R_4() {
     if (jj_scan_token(NUMBER)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
@@ -505,8 +501,18 @@ public class CronParser implements CronParserConstants {
   private boolean jj_semLA;
   private int jj_gen;
   final private int[] jj_la1 = new int[11];
-  final private int[] jj_la1_0 = {0x40,0x10,0x80,0x110,0x1ffe00,0xfe00000,0xf0000000,0x1fff10,0xfe00110,0xf0000110,0x0,};
-  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x0,0x0,0x0,0x7,0x0,0x0,0x7,0x8,};
+  static private int[] jj_la1_0;
+  static private int[] jj_la1_1;
+  static {
+      jj_la1_0();
+      jj_la1_1();
+   }
+   private static void jj_la1_0() {
+      jj_la1_0 = new int[] {0x40,0x10,0x80,0x110,0x1ffe00,0xfe00000,0xf0000000,0x1fff10,0xfe00110,0xf0000110,0x0,};
+   }
+   private static void jj_la1_1() {
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x7,0x0,0x0,0x7,0x8,};
+   }
   final private JJCalls[] jj_2_rtns = new JJCalls[1];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
@@ -593,6 +599,8 @@ public class CronParser implements CronParserConstants {
     throw generateParseException();
   }
 
+  static private final class LookaheadSuccess extends java.lang.Error { }
+  final private LookaheadSuccess jj_ls = new LookaheadSuccess();
   final private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
       jj_la--;
@@ -609,7 +617,9 @@ public class CronParser implements CronParserConstants {
       while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
       if (tok != null) jj_add_error_token(kind, i);
     }
-    return (jj_scanpos.kind != kind);
+    if (jj_scanpos.kind != kind) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) throw jj_ls;
+    return false;
   }
 
   final public Token getNextToken() {
@@ -644,8 +654,8 @@ public class CronParser implements CronParserConstants {
         jj_expentry[i] = jj_lasttokens[i];
       }
       boolean exists = false;
-      for (java.util.Enumeration enum = jj_expentries.elements(); enum.hasMoreElements();) {
-        int[] oldentry = (int[])(enum.nextElement());
+      for (java.util.Enumeration e = jj_expentries.elements(); e.hasMoreElements();) {
+        int[] oldentry = (int[])(e.nextElement());
         if (oldentry.length == jj_expentry.length) {
           exists = true;
           for (int i = 0; i < jj_expentry.length; i++) {
@@ -662,7 +672,7 @@ public class CronParser implements CronParserConstants {
     }
   }
 
-  final public ParseException generateParseException() {
+  public ParseException generateParseException() {
     jj_expentries.removeAllElements();
     boolean[] la1tokens = new boolean[36];
     for (int i = 0; i < 36; i++) {

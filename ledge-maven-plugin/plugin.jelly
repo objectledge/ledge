@@ -127,6 +127,58 @@
       </j:forEach>
     </define:tag>
     
+    <!--
+     | Prepares JavaCC command line arguments
+     |
+     | @param input the input file
+     | @param outputDir the output directory
+     | @param var the jelly variable to assign argument array to
+     -->
+    <define:tag name="javaccargs">
+      <j:useList var="args"/>
+      <j:invoke on="${args}" method="add">
+        <j:arg value="-output_directory=${outputDir}"/>
+      </j:invoke>
+      <j:invoke on="${args}" method="add">
+        <j:arg value="${input}"/>
+      </j:invoke>
+      <j:invokeStatic className="java.lang.Class" method="forName" var="string">
+        <j:arg value="java.lang.String"/>
+      </j:invokeStatic>
+      <j:invokeStatic className="java.lang.reflect.Array" method="newInstance" var="stringArray">
+        <j:arg type="java.lang.Class" value="${string}"/>
+        <j:arg type="int" value="2"/>
+      </j:invokeStatic>
+      <j:set scope="parent" var="${var}" value="${args.toArray(stringArray)}"/>
+    </define:tag>
+    
+    <!--
+     | Invokes JJTree
+     |
+     | @param input the input file
+     | @param outputDir the output directory
+     -->
+    <define:tag name="jjtree">
+      <ledge:javaccargs input="${input}" outputDir="${outputDir}" var="args"/>
+      <j:new className="org.javacc.jjtree.JJTree" var="jjtree"/>
+      <j:invoke on="${jjtree}" method="main">
+        <j:arg type="[Ljava.lang.String;" value="${args}"/>
+      </j:invoke>
+    </define:tag>
+
+    <!--
+     | Invokes JavaCC
+     |
+     | @param input the input file
+     | @param outputDir the output directory
+     -->
+    <define:tag name="javacc">
+      <ledge:javaccargs input="${input}" outputDir="${outputDir}" var="args"/>
+      <j:invokeStatic className="org.javacc.parser.Main" method="mainProgram">
+        <j:arg type="[Ljava.lang.String;" value="${args}"/>
+      </j:invokeStatic>
+    </define:tag>
+    
   </define:taglib>
 
   <goal name="ledge:index-jar"
@@ -166,7 +218,7 @@
       </copy>
       <echo>Generating grammar for ${relPath}</echo>
       <j:set var="dummy" value="${dstDir.mkdirs()}"/>
-      <jjtree target="${srcFile.path}" outputdirectory="${dstDir.path}" javacchome="${build.javacc.home}"/>
+      <ledge:jjtree input="${srcFile.path}" outputDir="${dstDir.path}"/>
       <ledge:smartCopy srcDir="${dstDir}" srcMask="*.jj" dstDir="${srcFile.parentFile}"/>
       <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
     </j:forEach>
@@ -183,7 +235,7 @@
       <echo>Generating parser for ${relPath}</echo>
       <j:set var="dummy" value="${dstDir.mkdirs()}"/>
       ${dstDir.mkdirs()}
-      <javacc target="${srcFile.path}" outputdirectory="${dstDir.path}" javacchome="${build.javacc.home}"/>
+      <ledge:javacc input="${srcFile.path}" outputDir="${dstDir.path}"/>
       <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
     </j:forEach>
   </goal>
