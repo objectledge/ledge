@@ -39,13 +39,13 @@ import org.picocontainer.MutablePicoContainer;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.4 2004-03-12 15:49:16 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.5 2004-03-17 10:11:08 zwierzem Exp $
  */
 public class HTMLEntityEncoder
 {
     private static final CharEncoderHTMLEntity HTML_ENTITY_ENCODER = new CharEncoderHTMLEntity();
-    private MutablePicoContainer container;
-	private static String encoderClassPrefix = "org.objectledge.encodings.encoders.CharEncoder";
+	private static final String ENCODER_CLASS_PREFIX = "org.objectledge.encodings.encoders.CharEncoder";
+	private MutablePicoContainer container;
 
 	/**
 	 * Constructs the entity encoder component.
@@ -56,7 +56,7 @@ public class HTMLEntityEncoder
 		this.container = container;
 		CharEncoder ref1 = getCharsetEncoder("Unicode");
 		CharEncoder ref2 = getCharsetEncoder("Unicode");
-		if(ref1 == null)
+		if(ref1 == null || ref2 == null)
 		{
 			throw new ComponentInitializationError("cannot get basic Unicode encoder");
 		}
@@ -184,14 +184,15 @@ public class HTMLEntityEncoder
 			encodingName = EncodingMap.getIANA2JavaMapping(encodingName);
 			if(container.getComponentInstance(encodingName) == null)
 			{
-				Class clazz = Class.forName(encoderClassPrefix + encodingName);
+				Class clazz = Class.forName(ENCODER_CLASS_PREFIX + encodingName);
 				container.registerComponentImplementation(encodingName, clazz);
 			}
 			return (CharEncoder) container.getComponentInstance(encodingName);
 		}
 		catch (ClassNotFoundException e)
 		{
-			return null;
+			throw new IllegalArgumentException(
+				"unknown or unsupported encoding '"+encodingName+"'"); 
 		}
     }
 
