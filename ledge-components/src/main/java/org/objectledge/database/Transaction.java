@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.4 2004-02-06 15:37:55 fil Exp $
+ * @version $Id: Transaction.java,v 1.5 2004-02-09 08:45:08 fil Exp $
  */
 public abstract class Transaction
 {
@@ -275,7 +275,6 @@ public abstract class Transaction
     {
         if(tracing > 0)
         {
-            StringBuffer trace = (StringBuffer)context.getAttribute(TRACE_BUFFER);
             Counter nestingCounter = (Counter)context.getAttribute(NESTING_COUNTER);
             if(nestingCounter == null)
             {
@@ -290,6 +289,7 @@ public abstract class Transaction
             {
                 nestingCounter.dec();
             }
+            StringBuffer trace = (StringBuffer)context.getAttribute(TRACE_BUFFER);
             if(trace == null)
             {
                 trace = new StringBuffer();
