@@ -29,13 +29,12 @@ package org.objectledge.logging;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
-import org.objectledge.utils.StackTrace;
 
 /**
  * Logger subclass, created to plug in {@link StackTrace} throwable formatter.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeLogger.java,v 1.1 2004-06-24 14:00:50 fil Exp $
+ * @version $Id: LedgeLogger.java,v 1.2 2004-12-21 06:30:18 rafal Exp $
  */
 public class LedgeLogger extends Logger
 {

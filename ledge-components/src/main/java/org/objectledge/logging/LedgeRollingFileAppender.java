@@ -40,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * A derivate of log4j.RollingFileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeRollingFileAppender.java,v 1.3 2004-09-24 11:25:24 zwierzem Exp $
+ * @version $Id: LedgeRollingFileAppender.java,v 1.4 2004-12-21 06:30:18 rafal Exp $
  */
 public class LedgeRollingFileAppender
 	extends RollingFileAppender
@@ -126,7 +126,10 @@ public class LedgeRollingFileAppender
             {
                 // Delete the oldest file, to keep Windows happy.
                 file = fileName + '.' + maxBackupIndex;
-                if(fileSystem.exists(file)) fileSystem.delete(file);
+                if(fileSystem.exists(file)) 
+                {
+                    fileSystem.delete(file);
+                }
 
                 // Map {(maxBackupIndex - 1), ..., 2, 1} to {maxBackupIndex, ..., 3, 2}
                 for (int i = maxBackupIndex - 1; i >= 1; i--)

@@ -39,37 +39,37 @@ import java.io.Writer;
  * values, what is useful for putting path values in Query String fields.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: URLEncoder.java,v 1.1 2004-07-05 12:39:19 zwierzem Exp $
+ * @version $Id: URLEncoder.java,v 1.2 2004-12-21 06:30:21 rafal Exp $
  */
 public class URLEncoder
 {
-    private static final boolean[] passThrough =  new boolean[256];
-    private static final String hexChars = "0123456789ABCDEF";
+    private static final boolean[] PASS_THROUGH =  new boolean[256];
+    private static final String HEX_CHARS = "0123456789ABCDEF";
 
     static
     {
         for (int i = 0; i < 256; i++)
         {
-            passThrough[i] = false;
+            PASS_THROUGH[i] = false;
         }
         for (int i = 'a'; i <= 'z'; i++)
         {
-            passThrough[i] = true;
+            PASS_THROUGH[i] = true;
         }
         for (int i = 'A'; i <= 'Z'; i++)
         {
-            passThrough[i] = true;
+            PASS_THROUGH[i] = true;
         }
         int j = 0;
         for (int i = '0'; i <= '9'; i++)
         {
-            passThrough[i] = true;
+            PASS_THROUGH[i] = true;
         }
-        passThrough['-'] = true;
-        passThrough['_'] = true;
-        passThrough['.'] = true;
-        passThrough['*'] = true;
-        passThrough['/'] = true;
+        PASS_THROUGH['-'] = true;
+        PASS_THROUGH['_'] = true;
+        PASS_THROUGH['.'] = true;
+        PASS_THROUGH['*'] = true;
+        PASS_THROUGH['/'] = true;
     }
     
     /**
@@ -100,7 +100,7 @@ public class URLEncoder
             // get a character from input String
             char c = text.charAt(i);
             
-            if(c < 256 && passThrough[c])
+            if(c < 256 && PASS_THROUGH[c])
             {
                 outputBuf.append(c);
             }
@@ -134,8 +134,8 @@ public class URLEncoder
                     for (int j=0; j < bytes.length; j++)
                     {
                         outputBuf.append('%');
-                        outputBuf.append(hexChars.charAt((bytes[j] >> 4) & 0xf));
-                        outputBuf.append(hexChars.charAt(bytes[j] & 0xf));
+                        outputBuf.append(HEX_CHARS.charAt((bytes[j] >> 4) & 0xf));
+                        outputBuf.append(HEX_CHARS.charAt(bytes[j] & 0xf));
                     }
                 }
                 catch(IOException e)

@@ -42,13 +42,12 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.objectledge.database.DatabaseUtils;
-import org.objectledge.utils.StringUtils;
 
 /**
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.11 2004-10-26 13:33:14 pablo Exp $
+ * @version $Id: DefaultParameters.java,v 1.12 2004-12-21 06:30:24 rafal Exp $
  */
 public class DefaultParameters implements Parameters
 {

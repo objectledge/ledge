@@ -35,18 +35,18 @@ import java.util.List;
  * Captures a full stack trace in a multi-level <code>Throwable</code> sequence.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTrace.java,v 1.3 2004-07-22 16:39:41 zwierzem Exp $
+ * @version $Id: StackTrace.java,v 1.4 2004-12-21 06:30:16 rafal Exp $
  */
 public class StackTrace
 {    
-    private Class[] EMPTY_FORMAL_ARGS = new Class[0];
+    private static final Class[] EMPTY_FORMAL_ARGS = new Class[0];
 
-    private Object[] EMPTY_ACTUAL_ARGS = new Object[0];
+    private static final Object[] EMPTY_ACTUAL_ARGS = new Object[0];
 
-    private static String[] ROOT_CAUSE_METHOD_NAMES = { "getRootCause", "getException", 
+    private static final String[] ROOT_CAUSE_METHOD_NAMES = { "getRootCause", "getException", 
                     "getNextException", "getTargetException", "getWrappedThrowable" };
     
-    private static String EOL = System.getProperty("line.separator");
+    private static final String EOL = System.getProperty("line.separator");
 
     /** The exception that we crate trace for. */
     private Throwable exception;
@@ -173,10 +173,10 @@ public class StackTrace
      */
     public StringBuffer appendTo(StringBuffer buff)
     {
-        String[] trace = toStringArray();
-        for(int i = 0; i < trace.length; i++)
+        String[] traceArray = toStringArray();
+        for(int i = 0; i < traceArray.length; i++)
         {
-            buff.append(trace[i]).append(EOL);
+            buff.append(traceArray[i]).append(EOL);
         }
         return buff;
     }
