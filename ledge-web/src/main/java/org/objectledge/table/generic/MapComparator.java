@@ -43,8 +43,8 @@ import java.util.Map;
  * colum is not of a  basic type like String or Integer and does not implement
  * Comparable interface itself)</p>
  *
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: MapComparator.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: MapComparator.java,v 1.2 2004-03-16 15:35:08 zwierzem Exp $
  */
 public class MapComparator
     implements Comparator
