@@ -51,7 +51,7 @@
     <element name="properties">
       <zeroOrMore>
         <element name="property">
-          <attribute name="name">
+          <attribute name="name"/>
           <choice>
             <attribute name="value"/>
             <text/>
