@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.18 2004-02-19 08:19:45 fil Exp $ -->
+<!-- $Id: project.xml,v 1.1 2004-05-13 15:48:58 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
