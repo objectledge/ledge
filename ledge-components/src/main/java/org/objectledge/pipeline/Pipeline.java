@@ -35,12 +35,12 @@ import org.objectledge.context.Context;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.8 2004-01-08 16:33:42 fil Exp $
+ * @version $Id: Pipeline.java,v 1.9 2004-01-12 09:27:23 fil Exp $
  */
 public class Pipeline
     implements Runnable
 {
-    private static final String CONTEXT_EXCEPTIONS = "org.objectledge.pipeline.Pipeline.exceptions";
+    private static final String PIPELINE_EXCEPTION = "org.objectledge.pipeline.Pipeline.exception";
     
     private Context context;
     
@@ -96,6 +96,7 @@ public class Pipeline
         catch(Throwable e)
         {
             logger.error("Exception in try section", e);
+            context.setAttribute(PIPELINE_EXCEPTION, e);
             try
             {
                 for(int i = 0; i < catchValves.length; i++)
@@ -141,6 +142,7 @@ public class Pipeline
                     logger.error("Exception in finally section", ee);
                 }
 			}
+            context.removeAttribute(PIPELINE_EXCEPTION);
         }
     }
     
