@@ -36,7 +36,7 @@ import org.objectledge.context.Context;
  * try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ErrorHandlingPipeline.java,v 1.1 2004-01-23 08:47:26 fil Exp $
+ * @version $Id: ErrorHandlingPipeline.java,v 1.2 2004-06-25 12:53:43 fil Exp $
  */
 public class ErrorHandlingPipeline
     implements Valve
@@ -95,7 +95,9 @@ public class ErrorHandlingPipeline
         ///CLOVER:ON
         catch(Throwable e)
         {
-            logger.error("Exception in try section", e);
+            // log with debug verbosity only - the application is attempting to recover or 
+            // report the error at this point
+            logger.debug("Exception in try section", e);
             context.setAttribute(PIPELINE_EXCEPTION, e);
             try
             {
