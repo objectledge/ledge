@@ -36,10 +36,18 @@ import org.objectledge.web.mvc.MVCConstants;
  * A default template which behaves as if it only contained <code>$embedded_placeholder</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultTemplate.java,v 1.3 2004-01-14 14:56:16 fil Exp $
+ * @version $Id: DefaultTemplate.java,v 1.4 2004-01-15 12:07:31 fil Exp $
  */
 public class DefaultTemplate implements Template
-{
+{    
+    /**
+     * {@inheritDoc}
+     */
+    public String getName()
+    {
+        return null;
+    }
+
     /**
      * Merges default template. 
      * 

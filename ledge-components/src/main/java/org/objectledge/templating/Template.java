@@ -33,11 +33,23 @@ package org.objectledge.templating;
  * Interface for system template. 
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Template.java,v 1.3 2003-12-29 13:32:06 fil Exp $
+ * @version $Id: Template.java,v 1.4 2004-01-15 12:07:08 fil Exp $
  */
 ///CLOVER:OFF
 public interface Template
 {
+    /**
+     * Returns the name of the template, which uniquely identifies it within it's Templating 
+     * component.
+     * 
+     * <p>This method should return the same name as the one passed to {@link 
+     * Templating#getTemplate(String)}.</p>
+     * 
+     * @return the name of the template, or <code>null</code> if the template was not loaded from
+     *         the file system.
+     */
+    public String getName();
+    
 	/**
 	 * Merge the template with context.
 	 *

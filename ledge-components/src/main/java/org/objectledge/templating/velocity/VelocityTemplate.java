@@ -16,28 +16,30 @@ public class VelocityTemplate implements Template
 {
 	/** reference to templating system */
 	private Templating templating;
+    
+    /** the name of the template. */
+    private String name;
 	
 	/** native velocity template */
 	private org.apache.velocity.Template template;
 	
     /**
-     * Public constructor.
+     * Constructs a template instance.
      * 
      * @param template the velocity template.
+     * @param name the name of the template.
      * @param templating the templating system.
      */
-    public VelocityTemplate(Templating templating, org.apache.velocity.Template template)
+    public VelocityTemplate(Templating templating, String name, 
+        org.apache.velocity.Template template)
     {
 		this.templating = templating;
+        this.name = name;
 		this.template = template;	
     }
     
     /**
-     * Merge the template with context.
-     *
-     * @param context the context.
-     * @return the output.
-     * @throws MergingException if problem appears.
+     * {@inheritDoc}
      */
     public String merge(TemplatingContext context)
     	throws MergingException
@@ -47,6 +49,21 @@ public class VelocityTemplate implements Template
 		return sw.toString();
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public String getName()
+    {
+        return name;
+    }
+    
+    // implementation ///////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Returns the native Velocity template.
+     *
+     * @return the native Velocity template.
+     */
     org.apache.velocity.Template getTemplate()
     {
     	return template;
