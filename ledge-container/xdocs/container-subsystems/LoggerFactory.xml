@@ -33,7 +33,7 @@
       This might be useful for run-time administraiton, especially in case of Logger objects that
       are immutable.</p>
       
-      <p><a href="http://dna.jcontainer.org/apidocs/org/jcontainer/dna/Logger.html">DNA Logger API</a>
+      <p><a href="http://dna.jcontainer.org/apidocs/org/jcontainer/dna/Logger.html">DNA Logger API</a></p>
       
       <p><a href="apidocs/org/objectledge/logging/LoggerFactory.html">View JavaDoc</a></p>
 		
