@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.12 2004-01-16 08:52:06 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.13 2004-01-16 09:09:30 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -109,7 +109,6 @@ public class LedgeXmlFrontEnd
         throws ClassNotFoundException, PicoCompositionException
     {
         String className = componentElement.getAttribute("class");
-        String preload = componentElement.getAttribute("preload");
 
         Parameter[] parameters = loadParameters(componentElement);
 
@@ -123,10 +122,6 @@ public class LedgeXmlFrontEnd
         else
         {
             reflectionFrontEnd.registerComponentImplementation(key, className);
-        }
-        if(preload != null && preload.equals("true"))
-        {
-            reflectionFrontEnd.getPicoContainer().getComponentInstance(key);
         }
     }
     

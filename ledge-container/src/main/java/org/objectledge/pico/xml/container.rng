@@ -105,14 +105,6 @@
         <attribute name="class-key"/>
       </choice>
     </optional>
-    <optional>
-      <attribute name="preload" a:defaultValue="false">
-        <choice>
-          <value>false</value>
-          <value>true</value>
-        </choice>
-      </attribute>
-    </optional>  
   </define>
 
   <define name="component-adapter">
