@@ -33,11 +33,14 @@ package org.objectledge.templating;
  * Interface for all templating contexts.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: TemplatingContext.java,v 1.2 2003-12-22 16:54:11 pablo Exp $
+ * @version $Id: TemplatingContext.java,v 1.3 2003-12-29 13:07:49 pablo Exp $
  */
 ///CLOVER:OFF
 public interface TemplatingContext
 {
+	/** key to store this context in thread context */
+	public static final String CONTEXT_KEY = "objectledge.templating.context";
+		
 	/**
 	 * Gets an object from the Context.
 	 *
