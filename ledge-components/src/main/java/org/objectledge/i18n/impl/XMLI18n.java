@@ -57,9 +57,6 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XMLI18n extends I18nBase
 {
-	/** configutation */
-	private Configuration config;
-	
 	/** the file system */
 	private FileSystem fileSystem;
 	
@@ -149,7 +146,7 @@ public class XMLI18n extends I18nBase
 		try
 		{
 			InputStream is = fileSystem.getInputStream(localeDir+file);
-			handler.init(file, map, prefix);
+			handler.init(map, prefix);
 			parser.parse(is, handler);
 		}
 		catch(SAXParseException e)
@@ -184,19 +181,14 @@ public class XMLI18n extends I18nBase
 		/** base prefix */
 		private String basePrefix;
 		
-		/** fileName */
-		private String fileName;
-
 		/**
 		 * Initializes the hadler before parsing a new file.
 		 *
-		 * @param fileName the fileName.
 		 * @param map the locale map.
 		 * @param basePrefix the base prefix.
 		 */
-		public void init(String fileName, Map map, String basePrefix)
+		public void init(Map map, String basePrefix)
 		{
-			this.fileName = fileName;
 			this.basePrefix = basePrefix;
 		    this.map = map;
 			item = null;

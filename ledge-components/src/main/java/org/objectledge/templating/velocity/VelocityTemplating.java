@@ -50,16 +50,10 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.6 2004-01-05 15:54:12 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.7 2004-01-05 16:46:11 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
-    /** file system */
-    private FileSystem fileSystem;
-
-    /** component configuration */
-    private Configuration config;
-
     /** logger */
     private Logger logger;
 
@@ -85,8 +79,6 @@ public class VelocityTemplating implements Templating, LogSystem
     public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem)
     {
         this.logger = logger;
-        this.fileSystem = fileSystem;
-        this.config = config;
         engine = new VelocityEngine();
         extension = config.getChild("extension").getValue("*.vt");
         encoding = config.getChild("encoding").getValue("ISO-8859-1");

@@ -69,6 +69,7 @@ public class I18nTool
 	
 	/**
 	 * Returns a new I18nTool using a prefix.
+	 * If prefix is an empty string the prefix is set to null,
 	 *
 	 * @param prefix the prefix to use.
 	 * @return the i18n tool.
@@ -89,7 +90,7 @@ public class I18nTool
 			}
 		}
 		I18nTool child = new I18nTool(i18n, factory, locale, newPrefix);
-	 	return child;
+        return child;
 	}
 	
 	/**
