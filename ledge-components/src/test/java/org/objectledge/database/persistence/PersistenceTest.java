@@ -28,9 +28,6 @@
 
 package org.objectledge.database.persistence;
 
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.Date;
 import java.util.List;
@@ -70,11 +67,6 @@ public class PersistenceTest extends TestCase
         super(arg0);
         dataSource = getDataSource();
         FileSystem fs = FileSystem.getStandardFileSystem(".");
-        Reader script = fs.getReader("src/main/sql/database/IdGenerator.sql", "UTF-8");
-        DatabaseUtils.runScript(dataSource, script);
-        script = fs.getReader("src/test/resources/database/persistence/runScript.sql", "UTF-8");
-        DatabaseUtils.runScript(dataSource, script);
-
         IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
@@ -213,7 +205,20 @@ public class PersistenceTest extends TestCase
         DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
         user.setValue("sa");
         conf.addChild(user);
-        return new HsqldbDataSource(conf);
+        DataSource ds = new HsqldbDataSource(conf);
+        FileSystem fs = FileSystem.getStandardFileSystem(".");
+        Reader reader;
+        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
+        {
+            reader =  fs.getReader("sql/database/IdGenerator.sql", "UTF-8");
+            DatabaseUtils.runScript(ds, reader);
+        }
+        if(!DatabaseUtils.hasTable(ds, "test_object"))
+        {
+            reader = fs.getReader("sql/database/persistence/TestObject.sql", "UTF-8");
+            DatabaseUtils.runScript(ds, reader);
+        }
+        return ds;
     }
 
     private PersistentFactory testFactory = new PersistentFactory()

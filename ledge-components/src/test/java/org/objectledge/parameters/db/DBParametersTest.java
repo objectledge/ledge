@@ -28,9 +28,6 @@
 
 package org.objectledge.parameters.db;
 
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,8 +40,8 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
-import org.objectledge.database.DefaultDatabase;
 import org.objectledge.database.DatabaseUtils;
+import org.objectledge.database.DefaultDatabase;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
@@ -53,6 +50,7 @@ import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
 import org.objectledge.database.persistence.TestObject;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -76,22 +74,12 @@ public class DBParametersTest extends TestCase
     {
         super(arg0);
         DataSource dataSource = getDataSource();
-        LineNumberReader script = new LineNumberReader(
-            new InputStreamReader(
-            new FileInputStream("src/main/sql/database/IdGenerator.sql"), "UTF-8"));
-        DatabaseUtils.runScript(dataSource, script);
-        script = new LineNumberReader(new InputStreamReader(
-            new FileInputStream("src/main/sql/parameters/DBParameters.sql"), "UTF-8"));
-        DatabaseUtils.runScript(dataSource, script);
-        script = new LineNumberReader(new InputStreamReader(
-            new FileInputStream("src/test/resources/parameters/test.sql"), "UTF-8"));
-        DatabaseUtils.runScript(dataSource, script);
         IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         persistence = new DefaultPersistence(database, logger);
-        manager = new DBParametersManagerImpl(database, logger);
+        manager = new DBParametersManager(database, logger);
     }
 
     public void testDBParameters() throws Exception
@@ -116,7 +104,6 @@ public class DBParametersTest extends TestCase
         }
 
         parameters = manager.getParameters(1000);
-        assertEquals(parameters.get("bar", "foo"), "bar3");
 
         new DBParametersException("", null);
     }
@@ -855,7 +842,18 @@ public class DBParametersTest extends TestCase
         DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
         user.setValue("sa");
         conf.addChild(user);
-        return new HsqldbDataSource(conf);
+        DataSource ds = new HsqldbDataSource(conf);
+        FileSystem fs = FileSystem.getStandardFileSystem(".");
+        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
+        {
+            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGenerator.sql", "UTF-8"));
+        }
+        if(!DatabaseUtils.hasTable(ds, "ledge_parameters"))
+        {        
+            DatabaseUtils.runScript(ds, fs.getReader("sql/parameters/db/DBParameters.sql", "UTF-8"));
+        }
+        DatabaseUtils.runScript(ds, fs.getReader("sql/parameters/db/DBParametersTest.sql", "UTF-8"));
+        return ds;
     }
 
     private PersistentFactory testFactory = new PersistentFactory()

@@ -88,20 +88,11 @@ public class ContextFactoryTest extends TestCase
     public void setUp()
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if (root == null)
-        {
-            throw new RuntimeException("system property ledge.root undefined." + 
-                " use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
-            getClass().getClassLoader());
-        fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         try
         {
+            fs = FileSystem.getStandardFileSystem(".");
             InputSource source = new InputSource(fs.
-                getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+                getInputStream("src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             DOMConfigurator.configure(logConfig.getDocumentElement());
@@ -122,7 +113,7 @@ public class ContextFactoryTest extends TestCase
         throws Exception
     {
         InputSource source = new InputSource(fs.
-            getInputStream(name));
+            getInputStream("src/test/resources/"+name));
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         XMLReader reader = parserFactory.newSAXParser().getXMLReader();
         SAXConfigurationHandler handler = new SAXConfigurationHandler();
@@ -220,16 +211,21 @@ public class ContextFactoryTest extends TestCase
         ds.setDatabase("jdbc:hsqldb:.");
         ds.setUser("sa");
         ds.setPassword("");
-        DatabaseUtils.runScript(ds, getScript("dbcontext_cleanup.sql"));
-        DatabaseUtils.runScript(ds, getScript("dbcontext_id_generator.sql"));
-        DatabaseUtils.runScript(ds, getScript("dbcontext_hsqldb.sql"));
-        DatabaseUtils.runScript(ds, getScript("dbcontext_test.sql"));
+        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
+        {
+            DatabaseUtils.runScript(ds, getScript("sql/database/IdGenerator.sql"));
+        }
+        if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
+        {
+            DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNaming.sql"));
+        }
+        DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNamingTest.sql"));
         return ds;
     }
     
     private Reader getScript(String path)
         throws IOException
     {
-        return fs.getReader("naming/"+path, "ISO-8859-2");
+        return fs.getReader(path, "ISO-8859-2");
     }
 }

@@ -28,7 +28,6 @@
 package org.objectledge.database;
 
 import java.io.FileInputStream;
-import java.io.Reader;
 
 import javax.sql.DataSource;
 
@@ -44,7 +43,7 @@ import org.objectledge.filesystem.FileSystem;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGeneratorTest.java,v 1.4 2004-03-10 14:29:35 fil Exp $
+ * @version $Id: IdGeneratorTest.java,v 1.5 2004-03-11 12:55:27 fil Exp $
  */
 public class IdGeneratorTest extends DatabaseTestCase
 {
@@ -59,28 +58,20 @@ public class IdGeneratorTest extends DatabaseTestCase
     {
         super(arg0);
         dataSource = getDataSource();
-        FileSystem fs = FileSystem.getStandardFileSystem(".");
-        Reader script = fs.getReader("src/main/sql/database/IdGenerator.sql", "UTF-8");
-        DatabaseUtils.runScript(dataSource, script);
     }
     
     public void testNextId()
         throws Exception
     {
         IdGenerator idGenerator = new IdGenerator(dataSource);
-        assertEquals(0, idGenerator.getNextId("test_table_one"));
         assertEquals(1, idGenerator.getNextId("test_table_one"));
+        assertEquals(2, idGenerator.getNextId("test_table_one"));
         assertEquals(0, idGenerator.getNextId("test_table_two"));
         assertEquals(1, idGenerator.getNextId("test_table_two"));
         idGenerator.stop();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////
-
-    protected DatabaseOperation getSetUpOperation() throws Exception
-    {
-        return DatabaseOperation.INSERT;
-    }
 
     protected IDatabaseConnection getConnection() throws Exception
     {
@@ -102,6 +93,13 @@ public class IdGeneratorTest extends DatabaseTestCase
         DefaultConfiguration user = new DefaultConfiguration("user","","/config");
         user.setValue("sa");
         conf.addChild(user);
-        return new HsqldbDataSource(conf);    
+        DataSource ds = new HsqldbDataSource(conf);    
+        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
+        {
+            FileSystem fs = FileSystem.getStandardFileSystem(".");
+            DatabaseUtils.runScript(dataSource, fs.getReader("sql/database/IdGenerator.sql", 
+                "UTF-8"));
+        }
+        return ds;
     }
 }

@@ -27,9 +27,7 @@
 // 
 package org.objectledge.database;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -40,19 +38,23 @@ import javax.sql.DataSource;
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.impl.DefaultConfiguration;
+import org.objectledge.filesystem.FileSystem;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtilsTest.java,v 1.4 2004-03-10 14:29:35 fil Exp $
+ * @version $Id: DatabaseUtilsTest.java,v 1.5 2004-03-11 12:55:27 fil Exp $
  */
 public class DatabaseUtilsTest extends TestCase
 {    
+    private FileSystem fs;
+
     private DataSource dataSource;
 
     public void setUp()
         throws Exception
     {
+        fs = FileSystem.getStandardFileSystem(".");
         dataSource = getDataSource();    
     }
     
@@ -163,8 +165,7 @@ public class DatabaseUtilsTest extends TestCase
     private Reader getScript(String name)
         throws IOException
     {
-        return new InputStreamReader(
-            new FileInputStream("src/test/resources/database/"+name), "UTF-8");
+        return fs.getReader("sql/database/"+name, "UTF-8");
     }
     
     private DataSource getDataSource()

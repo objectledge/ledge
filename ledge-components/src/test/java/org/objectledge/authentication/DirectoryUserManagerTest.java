@@ -31,6 +31,10 @@ package org.objectledge.authentication;
 import java.io.IOException;
 import java.io.Reader;
 import java.security.Principal;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.naming.InvalidNameException;
 import javax.sql.DataSource;
@@ -54,10 +58,7 @@ import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.FileSystemProvider;
-import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -92,15 +93,8 @@ public class DirectoryUserManagerTest extends TestCase
     public void setUp()
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if (root == null)
-        {
-            throw new RuntimeException("system property ledge.root undefined." + " use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", getClass().getClassLoader());
-        fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
-        InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+        fs = FileSystem.getStandardFileSystem(".");
+        InputSource source = new InputSource(fs.getInputStream("src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document logConfig = builder.parse(source);
         DOMConfigurator.configure(logConfig.getDocumentElement());
@@ -111,9 +105,7 @@ public class DirectoryUserManagerTest extends TestCase
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
         Database database = new DefaultDatabase(ds, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
-        container.registerComponentInstance(Persistence.class, persistence);
-        
-        
+        container.registerComponentInstance(Persistence.class, persistence);        
         
         Configuration config = getConfig("naming/dbNaming.xml");
         contextFactory = new ContextFactory(container, config, logger);
@@ -369,24 +361,29 @@ public class DirectoryUserManagerTest extends TestCase
         ds.setDatabase("jdbc:hsqldb:.");
         ds.setUser("sa");
         ds.setPassword("");
-        DatabaseUtils.runScript(ds, getScript("naming_context_cleanup.sql"));
-        DatabaseUtils.runScript(ds, getScript("dbcontext_id_generator.sql"));
-        DatabaseUtils.runScript(ds, getScript("naming_context_hsqldb.sql"));
-        DatabaseUtils.runScript(ds, getScript("naming_context_test.sql"));
+        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
+        {
+            DatabaseUtils.runScript(ds, getScript("sql/database/IdGenerator.sql"));
+        }
+        if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
+        {        
+            DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNaming.sql"));
+        }
+        DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNamingTest.sql"));
         return ds;
-    }
+    }    
     
     private Reader getScript(String path)
         throws IOException
     {
-        return fs.getReader("naming/"+path, "ISO-8859-2");
+        return fs.getReader(path, "UTF-8");
     }    
 
     private Configuration getConfig(String name)
         throws Exception
     {
         InputSource source = new InputSource(fs.
-            getInputStream(name));
+            getInputStream("src/test/resources/"+name));
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         XMLReader reader = parserFactory.newSAXParser().getXMLReader();
         SAXConfigurationHandler handler = new SAXConfigurationHandler();
