@@ -34,13 +34,14 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.utils.StackTrace;
 import org.objectledge.utils.StringUtils;
 
 /**
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintExceptionValve.java,v 1.3 2004-03-28 09:49:49 pablo Exp $
+ * @version $Id: PrintExceptionValve.java,v 1.4 2004-06-23 15:00:34 fil Exp $
  */
 public class PrintExceptionValve 
     implements Valve
@@ -67,30 +68,8 @@ public class PrintExceptionValve
         {
         	try
 			{
-                Throwable tt = t;
-                StringBuffer sb = new StringBuffer();
-                sb.append("Stacktrace start:<br/>\n");
-                
-                while(tt != null)
-                {
-                    sb.append(tt.toString());
-                    sb.append("<br/>\n");
-                    StackTraceElement[] el = tt.getStackTrace();
-                    sb.append("<ul>\n");
-                    for(int i = 0; i < el.length; i++)
-                    {
-                        sb.append("<li>");
-                        sb.append(el[i].toString());
-                        sb.append("</li>");
-                    }
-                    sb.append("</ul>\n");
-                    tt = tt.getCause();
-                    sb.append("<br/>\n");
-                }
-                sb.append("end of stacktrace");
-                 
-                String result = sb.toString();
-				httpContext.setContentType("text/html");
+                String result = new StackTrace(t).toString();
+				httpContext.setContentType("text/plain");
 				httpContext.getResponse().setContentLength(
 			       	StringUtils.getByteCount(result, httpContext.getEncoding()));
 				PrintWriter out = httpContext.getPrintWriter();
