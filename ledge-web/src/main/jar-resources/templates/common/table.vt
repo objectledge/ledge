@@ -29,8 +29,8 @@
  * table rendering macros
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
- * @version $Id: table.vt,v 1.5 2004-06-11 19:22:28 zwierzem Exp $
+ * @author <a href="mailto:pablo@caltha.pl">Paweï¿½ Potempski</a>
+ * @version $Id: table.vt,v 1.6 2004-07-02 10:45:16 zwierzem Exp $
 *###
 #**
  * Displays a single header cell contents.
@@ -44,9 +44,9 @@
     <a href="$tableLink.action('table,SetSortColumn').set('sort_column',$column.name)">$column.label</a>
     #if($table.getSortColumn() && $table.getSortColumn() == $column)
       #if($table.getAscSort())
-      <img src="$link.resource('tree/down.gif')" border="0" />
+      <img src="$link.content('tree/down.gif')" border="0" />
       #else
-      <img src="$link.resource('tree/up.gif')" border="0" />
+      <img src="$link.content('tree/up.gif')" border="0" />
       #end
     #end
   #else
@@ -159,9 +159,9 @@ $i18n.get('table.page.size')
 #macro(tableView_linesAndFoldersBase $table $row $toggleExpandLink)
 #foreach($box in $table.linesAndFolders($row))##
 #if($box.linkType == 'toggle-expand')##
-<a href="$toggleExpandLink"><img src="$link.resource("tree/${box.type}.gif")" /></a>##
+<a href="$toggleExpandLink"><img src="$link.content("tree/${box.type}.gif")" /></a>##
 #else##
-<img src="$link.resource("tree/${box.type}.gif")" />##
+<img src="$link.content("tree/${box.type}.gif")" />##
 #end##
 #end##
 #end

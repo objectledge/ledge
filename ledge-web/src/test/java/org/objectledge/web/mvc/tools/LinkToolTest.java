@@ -95,9 +95,9 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
-        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("/view/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
-        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/ledge"));
         mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getServerPort").will(returnValue(80));
         mockHttpServletRequest.stubs().method("isSecure").will(returnValue(false));
@@ -171,9 +171,9 @@ public class LinkToolTest extends LedgeTestCase
         assertEquals(linkTool.https(8090).toString(),
                      "https://www.objectledge.org:8090/test/ledge");
         assertEquals(linkTool.sessionless().toString(), "/test/ledge");
-        assertEquals(linkTool.resource("foo").toString(), "/test/content/foo");
-        assertEquals(linkTool.resource("").toString(), "/test/content");
-        assertEquals(linkTool.resource("/foo").toString(), "/test/content/foo");
+        assertEquals(linkTool.content("foo").toString(), "/test/content/foo");
+        assertEquals(linkTool.content("").toString(), "/test/content");
+        assertEquals(linkTool.content("/foo").toString(), "/test/content/foo");
         assertEquals(linkTool.fragment("foo").toString(), "/test/ledge#foo");
         assertEquals(linkTool.fragment("foo").fragment(),"foo");
         assertEquals(linkTool.self().toString(),"/test/ledge");
@@ -265,7 +265,7 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
-        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/ledge"));
         mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue("/foo#bar"));
         mockHttpServletRequest.stubs().method("getServerName").will(returnValue("www.objectledge.org"));
         mockHttpServletRequest.stubs().method("getServerPort").will(returnValue(443));
