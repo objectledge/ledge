@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Related projects</title>
+  </properties>
+  
+  <body>
+    <section name="Related projects">
+      <subsection name="Coral">
+        <p><a href="http://coral.objectledge.org">Coral</a></p>
+        <p>Coral is as an object oriented database. It manages structured resources, that 
+        can be mapped to Java objects in a JDBC relational database. </p>
+        <p>Besides simple object persistency mechanism Coral provides an expressive security system, 
+        many kinds of resources relations (intrinsic tree organization or resources, 
+        reference attributes, set theory relations) and a powerful query facility that 
+        can use attribute values and resource relations to select objects from the 
+        store.</p>
+        <p>The resources can be manipulated through Java API, or interactively using
+        RML script language. Resource types can be created and modified at runtime 
+        (existing resource instances are aproprietly adjusted). Java wrapper sources for
+        the resources can be genereated using a Maven plugin from RML scripts, or a live
+        database instance. Datatype schemata and security information can be exported
+        to RML scripts, and resources can be imported/exported using XML.</p>
+      </subsection>
+      <subsection name="Cyklotron">
+        <p>
+          <a href="http://cyklotron.org">Cyklotron</a>
+        </p>
+        <p>Cyklotron is a content management system - an application for easy development and 
+        management of websites. </p>
+        <p> Cyklotron project is sponsored by major player in the Non Governmental Organizations 
+        domain, and thus it's primary focus is serving the needs of NGOs, but the developed software 
+        will be also useful and available for commercial entities.</p>
+        <p>Cyklotron is based on earlier CykloKlon project. You can see Cyklotron in 
+        action on these major NGO websites in Poland: 
+        <a href="http://www.ngo.pl">http://www.ngo.pl</a> and 
+        <a href="http://www.niepelnosprawni.info">http://www.niepelnosprawni.info</a>. The aim of 
+        this project is creating a next generation of Cyklotron software, that is faster more robust
+        and easier to use, and providing it to the wide public.</p>
+        <p>It is developed as an Open Source project, and is based on a large number of open source 
+        libraries and tools. The software developed in the course of the project will be available 
+        for any non-commercial or commercial use on the terms of liberal BSD license.</p>
+      </subsection>
+    </section>
+  </body>
+</document>

@@ -12,9 +12,10 @@
     </links>
     <menu name="Overview">
       <item name="Subprojects"						href="projects-overview.html"/>
+      <item name="Related projects"                 href="related-projects.html"/>
+      <item name="Featured technologies"            href="technologies.html"/>
       <item name="Releases"							href="releases.html"/>
       <item name="Roadmap"                          href="roadmap.html"/>
-      <item name="Featured technologies"            href="technologies.html"/>
     </menu>
   </body>
 </project>
