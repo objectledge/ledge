@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.2 2004-02-02 16:51:10 zwierzem Exp $
+ * @version $Id: UserAgentTool.java,v 1.3 2004-02-02 16:56:36 zwierzem Exp $
  */
 public class UserAgentTool
 {
@@ -69,6 +69,7 @@ public class UserAgentTool
 	 * Constructs a UserAgentTool for a given http context.
 	 * 
 	 * @param httpContext context for a current request
+	 * @param logger a logger used for error reporting
 	 */
 	public UserAgentTool(HttpContext httpContext, Logger logger)
 	{
