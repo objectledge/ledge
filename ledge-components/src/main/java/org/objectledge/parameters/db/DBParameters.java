@@ -48,7 +48,7 @@ import org.objectledge.parameters.Parameters;
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.5 2004-02-10 13:00:16 pablo Exp $
+ * @version $Id: DBParameters.java,v 1.6 2004-03-16 11:06:37 fil Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -554,7 +554,7 @@ public class DBParameters implements Parameters
 			Iterator iterator = modified.iterator();
 			PreparedStatement deleteStmt = conn.prepareStatement(
 				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = "+id+
-				"AND name = ?");
+				" AND name = ?");
 			PreparedStatement insertStmt = conn.prepareStatement(
 				"INSERT INTO "+DBParametersManager.TABLE_NAME+" (parameters_id, name, value)" +
 				" VALUES ("+id+", ?, ?)");
