@@ -29,13 +29,15 @@
 package org.objectledge.web.mvc;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.web.WebConfigurator;
+import org.objectledge.web.parameters.RequestParameters;
 
 /**
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.1 2004-01-15 09:44:37 fil Exp $
+ * @version $Id: MVCInitializerValve.java,v 1.2 2004-01-15 14:01:21 fil Exp $
  */
 public class MVCInitializerValve implements Runnable
 {
@@ -64,6 +66,9 @@ public class MVCInitializerValve implements Runnable
     {
     	MVCContext mvcContext = new MVCContext();
     	mvcContext.setLocale(webConfigurator.getDefaultLocale());
+        Parameters requestParamters = RequestParameters.getRequestParameters(context);
+        mvcContext.setAction(requestParamters.get(webConfigurator.getActionToken(), null));
+        mvcContext.setView(requestParamters.get(webConfigurator.getViewToken(), null));
     	context.setAttribute(MVCContext.class, mvcContext);
     }
 }
