@@ -32,14 +32,13 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.Task;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerPool.java,v 1.1 2004-01-30 15:52:27 fil Exp $
+ * @version $Id: WorkerPool.java,v 1.2 2004-02-02 09:21:35 fil Exp $
  */
 public class WorkerPool
 {
@@ -82,10 +81,8 @@ public class WorkerPool
      * 
      * @param task the task to dispatch.
      * @return the Worker running the task.
-     * @throws ProcessingException if there is a proble with obtaing the worker.
      */
     public Worker dispatch(Task task)
-        throws ProcessingException
     {
         try
         {
@@ -95,7 +92,8 @@ public class WorkerPool
         }
         catch(Exception e)
         {
-            throw new ProcessingException("failed to dispatch task", e);
+            log.error("failed to dispatch task", e);
+            return null;
         }
     }
     

@@ -33,7 +33,6 @@ import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.impl.Daemon;
 import org.objectledge.threads.impl.WorkerPool;
@@ -42,7 +41,7 @@ import org.picocontainer.lifecycle.Stoppable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.4 2004-01-30 15:52:33 fil Exp $
+ * @version $Id: ThreadPool.java,v 1.5 2004-02-02 09:21:35 fil Exp $
  */
 public class ThreadPool
     implements Stoppable
@@ -92,10 +91,8 @@ public class ThreadPool
      * Run the worker task.
      * 
      * @param task the task to run.
-     * @throws ProcessingException if there is a proble with obtaing the worker.
-         */
+     */
     public void runWorker(Task task)
-        throws ProcessingException
     {
         synchronized(threads)
         {
