@@ -40,6 +40,7 @@ import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StackTrace;
 
 /**
  * The valve that in case of exception redirect to appropriate view.
@@ -132,8 +133,8 @@ public class ExceptionRedirectorValve implements Valve
             TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
             if (templatingContext != null)
             {
-                //TODO think where to put the original view.
-                templatingContext.put("original_view", mvcContext.getView());
+                templatingContext.put("originalView", mvcContext.getView());
+                templatingContext.put("stackTrace", new StackTrace(t).toString());
             }
             mvcContext.setView(view);
         }
