@@ -20,7 +20,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.3 2003-11-25 11:01:27 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.4 2003-12-02 13:10:02 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -44,7 +44,7 @@ public abstract class ReadOnlyFileSystemProvider
     protected String name;
 
 	/** The file listing. */	
-	private Map listing = new HashMap();
+	private Map listing = null;
 
     /** The directory tree. */
     private Map directoryTree = new HashMap();
@@ -65,22 +65,32 @@ public abstract class ReadOnlyFileSystemProvider
 	public ReadOnlyFileSystemProvider(String name)
 	{
         this.name = name;
-		String location = null;
-		InputStream is = null;
-		for(int i=0; i<LISTING_LOCATION.length; i++)
-		{
-			location = LISTING_LOCATION[i];
-			is = getInputStream(location);
-			if(is != null)
-			{
-				break;
-			}
-		}
-		if(is != null)
-		{
-			processListing(location, is);
-		}
 	}
+
+    /**
+     * Processes the liststings at the common locations.
+     * 
+     * <p>{@link #getInputStream(String)} method must be functional at the point of calling this
+     * method.</p>
+     */
+    protected void processListings()
+    {
+        String location = null;
+        InputStream is = null;
+        for(int i=0; i<LISTING_LOCATION.length; i++)
+        {
+            location = LISTING_LOCATION[i];
+            is = getInputStream(location);
+            if(is != null)
+            {
+                break;
+            }
+        }
+        if(is != null)
+        {
+            processListing(location, is);
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -110,6 +120,10 @@ public abstract class ReadOnlyFileSystemProvider
 	{
 		try
 		{
+            if(listing == null)
+            {
+                listing = new HashMap();
+            }
 			LineNumberReader reader = new LineNumberReader(
                 new InputStreamReader(is, LISTING_ENCODING));
 			ArrayList tempList = new ArrayList();
