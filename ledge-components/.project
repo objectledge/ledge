@@ -3,6 +3,8 @@
 	<name>ledge-components</name>
 	<comment></comment>
 	<projects>
+		<project>dna</project>
+		<project>pico</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -10,11 +12,11 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-	    <buildCommand>
-            <name>org.eclipse.jdt.core.javabuilder</name>
-            <arguments>
-            </arguments>
-        </buildCommand>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>

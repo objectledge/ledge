@@ -3,12 +3,12 @@
     <classpathentry kind="src" path="src/main/java"/>
     <classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="var"
-        path="MAVEN_REPO/dna/jars/dna-api-1.0.jar" sourcepath="ECLIPSE_HOME/workspace/dna/api/src"/>
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/saxon/jars/saxon-6.5.3.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/jing/jars/jing-20030619.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4-dev.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-2.1.jar"/>
+    <classpathentry kind="src" path="/pico"/>
+    <classpathentry kind="src" path="/dna"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
