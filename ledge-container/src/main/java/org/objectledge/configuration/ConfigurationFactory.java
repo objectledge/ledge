@@ -37,7 +37,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.6 2003-12-02 13:19:14 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.7 2003-12-02 14:06:41 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -99,13 +99,12 @@ public class ConfigurationFactory
             InputSource source = new InputSource(fileSystem.getInputStream(path));
             reader.parse(source);
             configuration = handler.getConfiguration();
-            //checkSchema(configuration, schema);
             checkSchema(path, schema);
         }
         catch(SAXParseException e)
         {
-            throw new ComponentInitializationError("parser error "+e.getMessage()+" in "+
-                e.getSystemId()+" at line "+e.getLineNumber()+" column "+e.getColumnNumber(), e);
+            throw new ComponentInitializationError("configuration file "+path+" for compoenent "+
+                name+" parse error "+e.getMessage()+" at line "+e.getLineNumber(), e);
         }
         catch(Exception e)
         {
