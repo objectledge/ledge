@@ -15,7 +15,7 @@ import pl.caltha.forms.internal.ui.UIConstants;
 /** This a form tool context tool implementation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormToolImpl.java,v 1.5 2005-03-22 06:16:43 zwierzem Exp $
+ * @version $Id: FormToolImpl.java,v 1.6 2005-03-23 12:37:17 zwierzem Exp $
  */
 public class FormToolImpl 
 implements FormTool
@@ -43,13 +43,8 @@ implements FormTool
         templatingContext.put("formtoolConst", UIConstants.getInstance());
 
         // 4. get the skin == template
-        Template template = null;
-        // this one throws an exception - we cannot generate UI without any templates.
-        if(template == null)
-        {
-            template = templating.getTemplate("forms/"+skinName);
-        }
-
+        Template template = templating.getTemplate("forms/"+skinName);
+        
         // 5. merge template
         return template.merge(templatingContext);
     }
