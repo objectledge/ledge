@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.2 2003-12-18 16:04:25 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.3 2004-01-05 10:58:15 fil Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:ant="jelly:ant">
   <postGoal name="xdoc:register-reports">
-    <j:set var="changelogs" value="ledge.changelogs"/>
-    <j:if test="${changelogs}">
+    <j:if test="${context.getVariable('ledge.changelogs') == 'true'}">
 	  <attainGoal name="maven-statcvs-plugin:register"/>
     </j:if>
     <attainGoal name="maven-linkcheck-plugin:deregister"/>
