@@ -21,13 +21,13 @@
     <component-parameter class-key="org.objectledge.configuration.CustomizedConfigurationProvider"/>
   </component-adapter>
     
+  <component class="org.objectledge.logging.LoggingConfigurator"/>
+
   <component class="org.objectledge.logging.LoggerFactory"/>
   <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
     <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
     <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
   </component-adapter>
-
-  <component class="org.objectledge.logging.LoggingConfigurator"/>
 
   <!-- end of core config -->
 
