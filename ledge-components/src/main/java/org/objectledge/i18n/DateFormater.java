@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * The date formater component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DateFormater.java,v 1.1 2004-09-01 08:18:34 pablo Exp $
+ * @version $Id: DateFormater.java,v 1.2 2004-09-17 13:10:47 rafal Exp $
  */
 public class DateFormater
 {
@@ -86,7 +86,7 @@ public class DateFormater
                 {
                     patternValue = patterns[j].getValue();
                 }
-                map.put(patternName, new SimpleDateFormat(patternValue, locale));
+                map.put(patternName, patternValue);
             }
         }
 	}
@@ -105,7 +105,7 @@ public class DateFormater
 	    {
 	        return null;
 	    }
-	    return (DateFormat)patterns.get(pattern);
+	    return new SimpleDateFormat((String)patterns.get(pattern), locale);
 	}
 	
 	/**
@@ -121,9 +121,8 @@ public class DateFormater
 	    {
 	        return null;
 	    }
-	    return (DateFormat)patterns.get(getDefaultPattern(locale));
+	    return new SimpleDateFormat((String)patterns.get(getDefaultPattern(locale)), locale);
 	}	
-	
 	
 	/**
 	 * Get the default pattern for locale. 
@@ -135,6 +134,4 @@ public class DateFormater
 	{
 	    return (String)defaultPatterns.get(locale);
 	}
-	
-	
 }
