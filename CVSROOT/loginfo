@@ -25,7 +25,7 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 
-ALL $CVSROOT/CVSROOT/log_accum.pl $USER %s
-ALL $CVSROOT/CVSROOT/collect_diffs.rb --from $USER --to objectledge-cvshtml@lists.caltha.pl %{sVv}
+#ALL $CVSROOT/CVSROOT/log_accum.pl $USER %s
+#ALL $CVSROOT/CVSROOT/collect_diffs.rb --from $USER --to objectledge-cvshtml@lists.caltha.pl %{sVv}
 
-#ALL $CVSROOT/CVSROOT/logcheck.sh %s %{sVv}
+ALL $CVSROOT/CVSROOT/logcheck.sh %s %{sVv}
