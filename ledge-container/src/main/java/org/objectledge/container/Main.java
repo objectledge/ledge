@@ -46,7 +46,7 @@ import org.realityforge.cli.CLUtil;
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.1 2003-12-22 12:59:34 fil Exp $
+ * @version $Id: Main.java,v 1.2 2003-12-23 15:52:28 fil Exp $
  */
 public class Main
 {
@@ -150,7 +150,8 @@ public class Main
                         CLOption option = (CLOption)clOptions.get(i+1+j);
                         if(option.getId() != CLOption.TEXT_ARGUMENT)
                         {
-                            throw new IllegalStateException("Ooops, conflicting option "+option.getId());
+                            throw new IllegalStateException("Ooops, conflicting option "+
+                                option.getId());
                         }
                         componentArgs[j] = option.getArgument();
                     }
