@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AllTests.java,v 1.4 2004-02-04 16:06:44 fil Exp $
+ * @version $Id: AllTests.java,v 1.5 2004-02-06 08:42:58 fil Exp $
  */
 public class AllTests
 {
@@ -46,6 +46,7 @@ public class AllTests
         suite.addTest(new TestSuite(DatabaseUtilsTest.class));
         suite.addTest(new TestSuite(IdGeneratorTest.class));
         suite.addTest(new TestSuite(JotmTransactionTest.class));
+        suite.addTest(new TestSuite(XaPoolDataSourceTest.class));
         //$JUnit-END$
         return suite;
     }
