@@ -38,7 +38,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.7 2004-08-19 13:40:05 pablo Exp $
+ * @version $Id: ComponentTool.java,v 1.8 2004-08-20 10:04:54 zwierzem Exp $
  */
 public class ComponentTool
 {
@@ -50,6 +50,9 @@ public class ComponentTool
     
 	/** The template finder for finding component templates. */
 	protected MVCTemplateFinder templateFinder;
+
+    /** SecurityHelper for access checking. */
+    protected SecurityHelper securityHelper;
     
     /** the default component implementation. */
     protected Component defaultComponent;
@@ -63,13 +66,15 @@ public class ComponentTool
      * @param context thread's processing context.
      * @param classFinder class finder for finding component objects.
      * @param templateFinder template finder for finding component templates.
+     * @param securityHelper security helper for access checking
      */
     public ComponentTool(Context context, MVCClassFinder classFinder, 
-        MVCTemplateFinder templateFinder)
+        MVCTemplateFinder templateFinder, SecurityHelper securityHelper)
     {
         this.context = context;
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
+        this.securityHelper = securityHelper;
         this.defaultComponent = new DefaultComponent(context);
         this.defaultTemplate = new DefaultTemplate();
     }
@@ -109,7 +114,7 @@ public class ComponentTool
 			}
 			component = defaultComponent;
 		}		
-        SecurityHelper.checkSecurity(component, context);
+        securityHelper.checkSecurity(component, context);
 		return component.build(template);
 	}
 	

@@ -42,6 +42,7 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
+import org.objectledge.web.mvc.security.SecurityHelper;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -50,7 +51,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.13 2004-06-28 10:08:38 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.14 2004-08-20 10:05:48 zwierzem Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -88,10 +89,11 @@ public class BuilderExecutorValveTest extends TestCase
         MutablePicoContainer container = new DefaultPicoContainer();
         container.registerComponentImplementation(Context.class);
         MVCFinder finder = new MVCFinder(container, logger, templating, nameSequenceFactory);
+        SecurityHelper securityHelper = new SecurityHelper();
         container.registerComponentInstance(MVCFinder.class, finder);
         context = new Context();
         context.clearAttributes();
-        executor = new BuilderExecutorValve(context, finder, finder, 8, 8);
+        executor = new BuilderExecutorValve(context, finder, finder, securityHelper, 8, 8);
         mvcContext = new MVCContext();
         context.setAttribute(MVCContext.class, mvcContext);
         context.setAttribute(TemplatingContext.class, templating.createContext());

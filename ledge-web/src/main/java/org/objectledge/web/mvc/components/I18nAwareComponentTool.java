@@ -32,10 +32,11 @@ import org.objectledge.i18n.I18nAwareTemplateResolver;
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareComponentTool.java,v 1.1 2004-08-19 13:40:05 pablo Exp $
+ * @version $Id: I18nAwareComponentTool.java,v 1.2 2004-08-20 10:04:54 zwierzem Exp $
  */
 public class I18nAwareComponentTool
 	extends ComponentTool
@@ -49,12 +50,14 @@ public class I18nAwareComponentTool
      * @param context thread's processing context.
      * @param classFinder class finder for finding component objects.
      * @param templateFinder template finder for finding component templates.
-     * @param resolver the i18n aware temlplate resolver.
+     * @param securityHelper security helper for access checking
+     * @param resolver the i18n aware template resolver.
      */
-    public I18nAwareComponentTool(Context context, MVCClassFinder classFinder, 
-        MVCTemplateFinder templateFinder, I18nAwareTemplateResolver resolver)
+    public I18nAwareComponentTool(Context context, MVCClassFinder classFinder,
+        MVCTemplateFinder templateFinder, SecurityHelper securityHelper,
+        I18nAwareTemplateResolver resolver)
     {
-        super(context, classFinder, templateFinder);
+        super(context, classFinder, templateFinder, securityHelper);
         this.resolver = resolver;
     }
 

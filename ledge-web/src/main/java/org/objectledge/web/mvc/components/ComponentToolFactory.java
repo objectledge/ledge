@@ -32,6 +32,7 @@ import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * Component tools factory.
@@ -46,6 +47,8 @@ public class ComponentToolFactory implements ContextToolFactory
 	protected MVCClassFinder classFinder;
 	/** The template finder for finding component templates. */
 	protected MVCTemplateFinder templateFinder;
+    /** SecurityHelper for access checking. */
+    protected SecurityHelper securityHelper;
 	
 	/**
 	 * Component constructor.
@@ -53,15 +56,15 @@ public class ComponentToolFactory implements ContextToolFactory
 	 * @param context the context.
 	 * @param classFinder the class finder.
 	 * @param templateFinder the template finder.
+     * @param securityHelper security helper for access checking
 	 */
-    public ComponentToolFactory(
-        Context context,
-        MVCClassFinder classFinder,
-        MVCTemplateFinder templateFinder)
+    public ComponentToolFactory(Context context, MVCClassFinder classFinder,
+        MVCTemplateFinder templateFinder, SecurityHelper securityHelper)
 	{
 		this.context = context;
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
+        this.securityHelper = securityHelper;
 	}
 	
     /**
@@ -69,7 +72,7 @@ public class ComponentToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		return new ComponentTool(context, classFinder, templateFinder);
+		return new ComponentTool(context, classFinder, templateFinder, securityHelper);
 	}
 	
 	/**

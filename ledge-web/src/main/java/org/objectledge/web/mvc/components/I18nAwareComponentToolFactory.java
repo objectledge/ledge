@@ -32,6 +32,7 @@ import org.objectledge.context.Context;
 import org.objectledge.i18n.I18nAwareTemplateResolver;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * Component tools factory.
@@ -49,14 +50,16 @@ public class I18nAwareComponentToolFactory extends ComponentToolFactory
 	 * @param context the context.
 	 * @param classFinder the class finder.
 	 * @param templateFinder the template finder.
+     * @param securityHelper security helper for access checking
 	 */
     public I18nAwareComponentToolFactory(
         Context context,
         MVCClassFinder classFinder,
         MVCTemplateFinder templateFinder,
+        SecurityHelper securityHelper,
         I18nAwareTemplateResolver resolver)
 	{
-		super(context, classFinder, templateFinder);
+		super(context, classFinder, templateFinder, securityHelper);
 		this.resolver = resolver;
 	}
 	
@@ -65,7 +68,8 @@ public class I18nAwareComponentToolFactory extends ComponentToolFactory
 	 */
 	public Object getTool()
 	{
-		return new I18nAwareComponentTool(context, classFinder, templateFinder, resolver);
+		return new I18nAwareComponentTool(context, classFinder, templateFinder, securityHelper,
+            resolver);
 	}
 	
 	/**

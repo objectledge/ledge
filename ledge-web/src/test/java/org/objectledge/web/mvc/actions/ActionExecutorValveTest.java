@@ -40,6 +40,7 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
+import org.objectledge.web.mvc.security.SecurityHelper;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
@@ -67,7 +68,8 @@ public class ActionExecutorValveTest extends LedgeWebTestCase
         MutablePicoContainer container = new DefaultPicoContainer();
         container.registerComponentImplementation(Context.class);
         MVCFinder finder = new MVCFinder(container, logger, templating, nameSequenceFactory);
-        actionExecutorValve = new ActionExecutorValve(finder);
+        SecurityHelper securityHelper = new SecurityHelper();
+        actionExecutorValve = new ActionExecutorValve(finder, securityHelper);
         MVCContext mvcContext = new MVCContext();
         mvcContext.setAction(null);
         context.setAttribute(MVCContext.class, mvcContext);

@@ -44,6 +44,7 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
+import org.objectledge.web.mvc.security.SecurityHelper;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -91,7 +92,8 @@ public class ComponentsTest extends TestCase
             container.registerComponentImplementation(Context.class);
             MVCFinder finder = new MVCFinder(container, logger, templating, nameSequenceFactory);
             container.registerComponentInstance(MVCFinder.class,finder);
-            componentToolFactory = new ComponentToolFactory(context,finder,finder);
+            SecurityHelper securityHelper = new SecurityHelper();
+            componentToolFactory = new ComponentToolFactory(context,finder,finder,securityHelper);
             MVCContext mvcContext = new MVCContext();
             mvcContext.setAction(null);
             context.setAttribute(MVCContext.class, mvcContext);
