@@ -46,7 +46,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.10 2004-07-05 13:51:16 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.11 2004-08-10 10:17:31 zwierzem Exp $
  */
 public class RequestParameters extends SortedParameters
 {
@@ -56,9 +56,9 @@ public class RequestParameters extends SortedParameters
 	 * @param context the context.
 	 * @return the request parameters.
 	 */
-	public static Parameters getRequestParameters(Context context)
+	public static RequestParameters getRequestParameters(Context context)
 	{
-		return (Parameters)context.getAttribute(RequestParameters.class);
+		return (RequestParameters)context.getAttribute(RequestParameters.class);
 	}
 	
     /**
