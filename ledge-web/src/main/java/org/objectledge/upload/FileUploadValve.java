@@ -29,7 +29,7 @@ import org.objectledge.web.parameters.RequestParameters;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.2 2004-01-14 13:30:21 fil Exp $
+ * @version $Id: FileUploadValve.java,v 1.3 2004-01-14 14:06:54 fil Exp $
  */
 public class FileUploadValve implements Runnable, WebConstants
 {
@@ -45,9 +45,6 @@ public class FileUploadValve implements Runnable, WebConstants
     /** the context */
     private Context context;
 
-    /** upload map */
-    private Map uploadMap;
-    
     /**
      * Constructs the component.
      * 
@@ -71,8 +68,8 @@ public class FileUploadValve implements Runnable, WebConstants
      */
     public void run()
     {
-        uploadMap = new HashMap();
-        HttpContext httpContext = HttpContext.retrieve(context);
+        Map uploadMap = new HashMap();
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         if(httpContext.getRequest().getContentLength() > config.getUploadLimit())
         {
             logger.debug("The request size exceeds upload limits");
@@ -102,7 +99,7 @@ public class FileUploadValve implements Runnable, WebConstants
                     for (int i = 0; i < partsCounter; i++) 
                     {
                         BodyPart part = mm.getBodyPart(i);
-                        parsePart(context, part);
+                        parsePart(context, part, uploadMap);
                     }
                 }
                 
@@ -125,7 +122,7 @@ public class FileUploadValve implements Runnable, WebConstants
         }
     }
 
-    private void parsePart(Context context, Part part)
+    private void parsePart(Context context, Part part, Map uploadMap)
         throws MessagingException, IOException
     {
 		//HttpContext httpContext;
@@ -186,7 +183,7 @@ public class FileUploadValve implements Runnable, WebConstants
             }
             byte[] contents = baos.toByteArray();
            
-			HttpContext httpContext = HttpContext.retrieve(context); 
+			HttpContext httpContext = HttpContext.getHttpContext(context); 
             String encoding = (String)httpContext.getRequest().getSession().
                 getAttribute(ENCODING_SESSION_KEY);
             if(encoding == null)
@@ -194,7 +191,7 @@ public class FileUploadValve implements Runnable, WebConstants
                 encoding = config.getDefaultEncoding();
             }
             String field = new String(contents, encoding);
-            Parameters parameters = RequestParameters.retrieve(context);
+            Parameters parameters = RequestParameters.getRequestParameters(context);
             parameters.add(name, field); 
         } 
         else 
