@@ -3,7 +3,14 @@
 
   <title>ObjectLedge components</title>
   <body>
-    <menu name="Refernce">
+    <links>
+      <item name="home" href="../../index.html"/>
+      <item name="wiki" href="http://objectledge.org/wiki"/>
+      
+      <item name="ledge container" href="../../modules/ledge-container/index.html"/>
+      <item name="ledge web" href="../../modules/ledge-web/index.html"/>
+    </links>
+    <menu name="Reference">
       <item name="Components" href="components.html" collapse="true"/>
     </menu>
   </body>

@@ -4,6 +4,13 @@
   <title>ObjectLedge</title>
 
   <body>
+    <links>
+      <item name="wiki" href="http://objectledge.org/wiki"/>
+      
+      <item name="ledge components" href="modules/ledge-components/index.html"/>
+      <item name="ledge container" href="modules/ledge-container/index.html"/>
+      <item name="ledge web" href="modules/ledge-web/index.html"/>
+    </links>
     <menu name="Overview">
       <item name="Featured technologies"            href="technologies.html"/>
     </menu>
