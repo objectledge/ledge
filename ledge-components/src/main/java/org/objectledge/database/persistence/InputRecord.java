@@ -29,6 +29,11 @@
 package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
+import java.net.URL;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -277,6 +282,132 @@ public class InputRecord
         try
         {
             return rs.getTimestamp(field);
+        }
+        catch(SQLException e)
+        {
+            throw new PersistenceException("Failed to read field "+field, e);
+        }
+    }
+
+    /**
+     * gets a <code>Array</code> field value.
+     * 
+     * @param field the name of the field.
+     * @return value the value of the filed.
+     * @throws PersistenceException if the field could not be get to the
+     *         specified value. 
+     */
+    public Array getArray(String field)
+        throws PersistenceException
+    {
+        try
+        {
+            return rs.getArray(field);
+        }
+        catch(SQLException e)
+        {
+            throw new PersistenceException("Failed to read field "+field, e);
+        }
+    }
+
+    /**
+     * Returns a <code>Blob</code> field value.
+     * 
+     * @param field the name of the field.
+     * @return value the value of the filed.
+     * @throws PersistenceException if the field could not be get to the
+     *         specified value. 
+     */
+    public Blob getBlob(String field)
+        throws PersistenceException
+    {
+        try
+        {
+            return rs.getBlob(field);
+        }
+        catch(SQLException e)
+        {
+            throw new PersistenceException("Failed to read field "+field, e);
+        }
+    }
+
+    /**
+     * Returns a <code>Clob</code> field value.
+     * 
+     * @param field the name of the field.
+     * @return value the value of the filed.
+     * @throws PersistenceException if the field could not be get to the
+     *         specified value. 
+     */
+    public Clob getClob(String field)
+        throws PersistenceException
+    {
+        try
+        {
+            return rs.getClob(field);
+        }
+        catch(SQLException e)
+        {
+            throw new PersistenceException("Failed to read field "+field, e);
+        }
+    }
+
+    /**
+     * Returns a <code>Ref</code> field value.
+     * 
+     * @param field the name of the field.
+     * @return value the value of the filed.
+     * @throws PersistenceException if the field could not be get to the
+     *         specified value. 
+     */
+    public Ref getRef(String field)
+        throws PersistenceException
+    {
+        try
+        {
+            return rs.getRef(field);
+        }
+        catch(SQLException e)
+        {
+            throw new PersistenceException("Failed to read field "+field, e);
+        }
+    }
+
+    /**
+     * Returns a <code>URL</code> field value.
+     * 
+     * @param field the name of the field.
+     * @return value the value of the filed.
+     * @throws PersistenceException if the field could not be get to the
+     *         specified value. 
+     */
+    public URL getURL(String field)
+        throws PersistenceException
+    {
+        try
+        {
+            return rs.getURL(field);
+        }
+        catch(SQLException e)
+        {
+            throw new PersistenceException("Failed to read field "+field, e);
+        }
+    }
+
+    /**
+     * Returns a <code>Object</code> field value.
+     * 
+     * @param field the name of the field.
+     * @return value the value of the filed.
+     * @throws PersistenceException if the field could not be get to the
+     *         specified value. 
+     */
+    public Object getObject(String field)
+        throws PersistenceException
+    {
+        try
+        {
+            return rs.getObject(field);
         }
         catch(SQLException e)
         {

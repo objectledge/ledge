@@ -46,7 +46,7 @@ import org.objectledge.database.IdGenerator;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.3 2004-02-09 09:47:50 fil Exp $
+ * @version $Id: Persistence.java,v 1.4 2004-02-09 11:14:15 fil Exp $
  */
 public class Persistence
 {
@@ -172,7 +172,7 @@ public class Persistence
     {
         synchronized (object)
         {
-            OutputRecord record = new OutputRecord();
+            OutputRecord record = new OutputRecord(object);
             String table = object.getTable();
             String[] keys = object.getKeyColumns();
             object.getData(record);
@@ -184,7 +184,7 @@ public class Persistence
                 PreparedStatement statement;
                 if (object.getSaved())
                 {
-                    statement = record.getUpdateStatement(table, keys, conn);
+                    statement = record.getUpdateStatement(conn);
                     statement.execute();
                 }
                 else
@@ -199,7 +199,7 @@ public class Persistence
                     {
                         id = -1;
                     }
-                    statement = record.getInsertStatement(table, conn);
+                    statement = record.getInsertStatement(conn);
                     statement.execute();
                     object.setSaved(id);
                 }
@@ -236,10 +236,10 @@ public class Persistence
             {
                 conn = dataSource.getConnection();
                 Statement statement = conn.createStatement();
-                OutputRecord orecord = new OutputRecord();
+                OutputRecord orecord = new OutputRecord(object);
                 object.getData(orecord);
                 ResultSet rs = statement.executeQuery("SELECT * FROM " + object.getTable() + 
-                                  " WHERE " + orecord.getWhereClause(object.getKeyColumns()));
+                                  " WHERE " + orecord.getWhereClause());
                 if (!rs.next())
                 {
                     throw new PersistenceException("saved state was lost");
@@ -272,10 +272,9 @@ public class Persistence
             try
             {
                 conn = dataSource.getConnection();
-                OutputRecord record = new OutputRecord();
+                OutputRecord record = new OutputRecord(object);
                 object.getData(record);
-                PreparedStatement statement = record.getDeleteStatement(object.getTable(),
-                    object.getKeyColumns(), conn); 
+                PreparedStatement statement = record.getDeleteStatement(conn); 
                 statement.execute();
             }
             catch (Exception e)

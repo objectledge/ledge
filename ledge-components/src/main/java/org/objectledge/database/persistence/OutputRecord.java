@@ -29,31 +29,43 @@
 package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
+import java.net.URL;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Ref;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
 import org.objectledge.database.DatabaseUtils;
-import org.objectledge.utils.StringUtils;
 
 /**
  * An implementation of {@link OutputRecord}.
+ *
+ * TODO get rid of sun.misc.Base64Encoder
  */
 public class OutputRecord
 {
+    /** The persistent object. */
+    private Persistent object;
+    
     /** The fields. */
     private HashMap fields;
         
     /**
      * Constructs an <code>OutputRecordImpl</code>.
      */
-    OutputRecord()
+    OutputRecord(Persistent object)
     {
         fields = new HashMap();
+        this.object = object;
     }
         
     /**
@@ -179,14 +191,7 @@ public class OutputRecord
     public void setString(String field, String value)
         throws PersistenceException
     {
-        if(value != null)
-        {
-            fields.put(field,"'"+StringUtils.backslashEscape(value,"\\'")+"'");
-        }
-        else
-        {
-            fields.put(field, "NULL");
-        }
+        fields.put(field,"'"+DatabaseUtils.escapeSqlString(value)+"'");
     }
 
     /**
@@ -226,7 +231,119 @@ public class OutputRecord
     public void setDate(String field, Date value)
         throws PersistenceException
     {
-        fields.put(field,"'"+DatabaseUtils.format(value)+"'");
+        fields.put(field, new java.sql.Date(value.getTime()));
+    }
+    
+    /**
+     * Sets a <code>Time</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setTime(String field, Date value)
+        throws PersistenceException
+    {
+        fields.put(field, new Time(value.getTime()));
+    }
+
+    /**
+     * Sets a <code>Timestamp</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setTimestamp(String field, Date value)
+        throws PersistenceException
+    {
+        fields.put(field, new Timestamp(value.getTime()));
+    }
+
+    /**
+     * Sets a <code>Array</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setArray(String field, Array value)
+        throws PersistenceException
+    {
+        fields.put(field, value);
+    }
+
+    /**
+     * Sets a <code>Blob</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setBlob(String field, Blob value)
+        throws PersistenceException
+    {
+        fields.put(field, value);
+    }
+
+    /**
+     * Sets a <code>Clob</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setClob(String field, Clob value)
+        throws PersistenceException
+    {
+        fields.put(field, value);
+    }
+
+    /**
+     * Sets a <code>Ref</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setRef(String field, Ref value)
+        throws PersistenceException
+    {
+        fields.put(field, value);
+    }
+
+    /**
+     * Sets a <code>URL</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setURL(String field, URL value)
+        throws PersistenceException
+    {
+        fields.put(field, value);
+    }
+
+    /**
+     * Sets a <code>Object</code> field value.
+     * 
+     * @param field the name of the field.
+     * @param value the value of the filed.
+     * @throws PersistenceException if the field could not be set to the
+     *         specified value. 
+     */
+    public void setObject(String field, Object value)
+        throws PersistenceException
+    {
+        fields.put(field, value);
     }
 
     /**
@@ -247,13 +364,13 @@ public class OutputRecord
     /**
      * Builds <code>WHERE</code> clause with contained data.
      *
-     * @param keys the names of colums to appear in the clause.
      * @return the where clause.
      * @throws PersistenceException if the clause could not be built.
      */
-    public String getWhereClause(String[] keys)
+    public String getWhereClause()
         throws PersistenceException
     {
+        String[] keys = object.getKeyColumns();
         StringBuffer buff = new StringBuffer();
         for(int i=0; i<keys.length; i++)
         {
@@ -278,29 +395,34 @@ public class OutputRecord
     /**
      * Builds an insert statement with contained data.
      *
-     * @param table the table name.
      * @param conn database connection.
      * @return the statement.
      * @throws PersistenceException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
-    public PreparedStatement getInsertStatement(String table, Connection conn)
+    public PreparedStatement getInsertStatement(Connection conn)
         throws PersistenceException, SQLException
     {
         StringBuffer buff = new StringBuffer();
         StringBuffer buff2 = new StringBuffer();
         buff.append("INSERT INTO ");
-        buff.append(table);
+        buff.append(object.getTable());
         buff.append(" (");
-        Iterator i = fields.keySet().iterator();
-        while(i.hasNext())
+        for(Iterator i = fields.keySet().iterator(); i.hasNext();)
         {
             String field = (String)i.next();
             buff.append(field);
-            String value = (String)fields.get(field);
+            Object value = fields.get(field);
             if(value != null)
             {
-                buff2.append(value);
+                if(value instanceof String)
+                {
+                    buff2.append(value);
+                }
+                else
+                {
+                    buff2.append('?');
+                }
             }
             else
             {
@@ -315,22 +437,23 @@ public class OutputRecord
         buff.append(") VALUES (");
         buff.append(buff2.toString());
         buff.append(")");
-        return conn.prepareStatement(buff.toString());
+        PreparedStatement stmt = conn.prepareStatement(buff.toString());
+        setValues(stmt);
+        return stmt;
     }
-
+    
     /**
      * Builds an update statement with contained data.
      *
-     * @param table the table name.
-     * @param keys the names of colums to appear in the where clause.
      * @param conn database connection.
      * @return the statement.
      * @throws PersistenceException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
-    public PreparedStatement getUpdateStatement(String table, String[] keys, Connection conn)
+    public PreparedStatement getUpdateStatement(Connection conn)
         throws PersistenceException, SQLException
     {
+        String[] keys = object.getKeyColumns();
         HashSet keySet = new HashSet();
         for(int i=0; i<keys.length; i++)
         {
@@ -338,7 +461,7 @@ public class OutputRecord
         }
         StringBuffer buff = new StringBuffer();
         buff.append("UPDATE ");
-        buff.append(table);
+        buff.append(object.getTable());
         buff.append(" SET ");
         Iterator i=fields.keySet().iterator();
         while(i.hasNext())
@@ -363,29 +486,29 @@ public class OutputRecord
         // remove superfluous ", "
         buff.setLength(buff.length() - 2);
         buff.append(" WHERE ");
-        buff.append(getWhereClause(keys));
-        return conn.prepareStatement(buff.toString());
+        buff.append(getWhereClause());
+        PreparedStatement stmt = conn.prepareStatement(buff.toString()); 
+        setValues(stmt);
+        return stmt;
     }
 
     /**
      * Builds a <code>DELETE</code> statement with contained data.
      *
      *
-     * @param table the table name.
-     * @param keys the names of colums to appear in the where clause.
      * @param conn database connection.
      * @return the statement.
      * @throws PersistenceException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
-    public PreparedStatement getDeleteStatement(String table, String[] keys, Connection conn)
+    public PreparedStatement getDeleteStatement(Connection conn)
         throws PersistenceException, SQLException
     {
         StringBuffer buff = new StringBuffer();
         buff.append("DELETE FROM ");
-        buff.append(table);
+        buff.append(object.getTable());
         buff.append(" WHERE ");
-        buff.append(getWhereClause(keys));
+        buff.append(getWhereClause());
         return conn.prepareStatement(buff.toString());
     }
 
@@ -403,5 +526,76 @@ public class OutputRecord
     public String getField(String name)
     {
         return (String)fields.get(name);
+    }
+    
+    /**
+     * Sets prepared statement's positional parameters to non-string field values.
+     * 
+     * @param stmt the statement.
+     * @throws SQLException if a value couldn't be set.
+     */
+    private void setValues(PreparedStatement stmt)
+        throws SQLException
+    {
+        int pos = 1;
+        for(Iterator i = fields.values().iterator(); i.hasNext();)
+        {
+            Object value = i.next();
+            if(value != null)
+            {
+                if(!(value instanceof String))
+                {
+                    setValue(pos++, value, stmt);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Sets prepared statement's positional parameters to non-string field values.
+     * 
+     * @param pos parameter position (1 based).
+     * @param value parameter value.
+     * @param stmt the statement.
+     */
+    private void setValue(int pos, Object value, PreparedStatement stmt)
+        throws SQLException
+    {
+        if(value instanceof Array)
+        {
+            stmt.setArray(pos, (Array)value);
+        }
+        else if(value instanceof Blob)
+        {
+            stmt.setBlob(pos, (Blob)value);
+        }
+        else if(value instanceof Clob)
+        {
+            stmt.setClob(pos, (Clob)value);
+        }
+        else if(value instanceof java.sql.Date)
+        {
+            stmt.setDate(pos, (java.sql.Date)value);
+        }
+        else if(value instanceof Time)
+        {
+            stmt.setTime(pos, (Time)value);        
+        }
+        else if(value instanceof Timestamp)
+        {
+            stmt.setTimestamp(pos, (Timestamp)value);        
+        }
+        else if(value instanceof Ref)
+        {
+            stmt.setRef(pos, (Ref)value);
+        }
+        else if(value instanceof URL)
+        {
+            stmt.setURL(pos, (URL)value);
+        }
+        else
+        {
+            stmt.setObject(pos, object);
+        }
     }
 }
