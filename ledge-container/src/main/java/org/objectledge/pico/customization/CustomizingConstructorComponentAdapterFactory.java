@@ -43,7 +43,7 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  * each type of the component you want to have customized.<p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Revision: 1.5 $ $Date: 2004-12-27 05:27:48 $
+ * @version $Revision: 1.6 $
  */
 public class CustomizingConstructorComponentAdapterFactory 
     implements ComponentAdapterFactory
