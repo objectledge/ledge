@@ -334,6 +334,7 @@ public class LinkTool
 		{
 			checkSetParamName(config.getActionToken());
 		}
+		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
         target.parameters = new DefaultParameters(parameters);
         return target;
@@ -347,6 +348,7 @@ public class LinkTool
      */
     public LinkTool fragment(String fragment)
     {
+		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
         target.fragment = fragment;
         return target;
@@ -474,6 +476,7 @@ public class LinkTool
 		{
 			checkAddParamName(config.getActionToken());
 		}
+		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
         target.parameters.add(parameters, false);
         return target;
@@ -749,6 +752,7 @@ public class LinkTool
     
     private void checkSetParamName(String name)
     {
+		// TODO: Add RFC characters check
 		if (name.equals(config.getViewToken()))
 		{
 			throw new IllegalArgumentException("to set the value of the view parameter, " +
@@ -763,6 +767,7 @@ public class LinkTool
 
 	private void checkAddParamName(String name)
 	{
+		// TODO: Add RFC characters check
 		if (name.equals(config.getViewToken()))
 		{
 			throw new IllegalArgumentException(
