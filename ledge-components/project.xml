@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.51 2004-05-28 13:34:32 fil Exp $ -->
+<!-- $Id: project.xml,v 1.52 2004-06-01 11:16:34 zwierzem Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -86,12 +86,6 @@
       <artifactId>dna-api</artifactId>
       <version>1.1-rc2</version>
       <url>http://dna.codehaus.org</url>
-    </dependency>
-    <dependency>
-      <groupId>jing</groupId>
-      <artifactId>jing</artifactId>
-      <version>20030619</version>
-      <url>http://www.thaiopensource.com/relaxng/jing.html</url>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
