@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web;
+package org.objectledge.i18n;
 
 import java.security.Principal;
 import java.util.Locale;
@@ -36,6 +36,8 @@ import javax.servlet.http.Cookie;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.utils.StringUtils;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.MVCContextImpl;
 
@@ -45,7 +47,7 @@ import org.objectledge.web.mvc.MVCContextImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * 
- * @version $Id: LocaleLoaderValve.java,v 1.2 2004-01-12 14:37:12 fil Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.1 2004-01-12 14:42:16 fil Exp $
  */
 public class LocaleLoaderValve implements Runnable, WebConstants
 {
