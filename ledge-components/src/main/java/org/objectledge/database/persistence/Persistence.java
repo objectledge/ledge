@@ -46,7 +46,7 @@ import org.objectledge.database.IdGenerator;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.4 2004-02-09 11:14:15 fil Exp $
+ * @version $Id: Persistence.java,v 1.5 2004-02-09 11:44:01 fil Exp $
  */
 public class Persistence
 {
@@ -89,10 +89,9 @@ public class Persistence
         try
         {
             conn = dataSource.getConnection();
-            Statement statement = conn.createStatement();
             Persistent obj = factory.newInstance();
-            ResultSet rs = statement.executeQuery("SELECT * FROM " + obj.getTable() + " WHERE " +
-                                                  obj.getKeyColumns()[0] + " = " + id);
+            PreparedStatement statement = InputRecord.getSelectStatement(id, obj, conn);
+            ResultSet rs = statement.executeQuery();
             if (!rs.next())
             {
                 return null;
@@ -130,17 +129,9 @@ public class Persistence
         try
         {
             conn = dataSource.getConnection();
-            Statement statement = conn.createStatement();
             Persistent obj = factory.newInstance();
-            ResultSet rs = null;
-            if (where != null)
-            {
-                rs = statement.executeQuery("SELECT * FROM " + obj.getTable() + " WHERE " + where);
-            }
-            else
-            {
-                rs = statement.executeQuery("SELECT * FROM " + obj.getTable());
-            }
+            PreparedStatement statement = InputRecord.getSelectStatement(where, obj, conn);
+            ResultSet rs = statement.executeQuery();
             InputRecord record = new InputRecord(rs);
             ArrayList list = new ArrayList();
             while (rs.next())
@@ -235,11 +226,8 @@ public class Persistence
             try
             {
                 conn = dataSource.getConnection();
-                Statement statement = conn.createStatement();
-                OutputRecord orecord = new OutputRecord(object);
-                object.getData(orecord);
-                ResultSet rs = statement.executeQuery("SELECT * FROM " + object.getTable() + 
-                                  " WHERE " + orecord.getWhereClause());
+                PreparedStatement statement = InputRecord.getSelectStatements(object, conn);
+                ResultSet rs = statement.executeQuery();
                 if (!rs.next())
                 {
                     throw new PersistenceException("saved state was lost");
