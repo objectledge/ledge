@@ -33,7 +33,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumnTest.java,v 1.1 2004-02-12 10:10:11 zwierzem Exp $
+ * @version $Id: TableColumnTest.java,v 1.2 2004-05-06 10:58:57 pablo Exp $
  */
 public class TableColumnTest extends TestCase
 {
@@ -57,14 +57,20 @@ public class TableColumnTest extends TestCase
 			TableColumn tableColumn = new TableColumn(null);
     		fail("Should raise a TableException");
 		}
-    	catch (TableException success) {}
+    	catch (TableException success) 
+        {
+            //ok!
+        }
 
 		try
 		{
 			TableColumn tableColumn = new TableColumn("");
 			fail("Should raise a TableException");
 		}
-		catch (TableException success) {}
+		catch (TableException success)
+        {
+            //ok!
+        }
 
 		TableColumn tableColumn = null;
     	try

@@ -41,7 +41,7 @@ import org.picocontainer.Startable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransactionTest.java,v 1.5 2004-02-17 15:48:45 fil Exp $
+ * @version $Id: JotmTransactionTest.java,v 1.6 2004-05-06 10:58:09 pablo Exp $
  */
 public class JotmTransactionTest extends TestCase
 {
@@ -111,11 +111,9 @@ public class JotmTransactionTest extends TestCase
     {
         boolean controller1 = transaction.begin();
         assertTrue(controller1);
-        {
-            boolean controller2 = transaction.begin();
-            assertFalse(controller2);
-            transaction.commit(controller2);
-        }
+        boolean controller2 = transaction.begin();
+        assertFalse(controller2);
+        transaction.commit(controller2);
         transaction.commit(controller1);
         valve.process(context);
     }
@@ -125,11 +123,9 @@ public class JotmTransactionTest extends TestCase
     {
         boolean controller1 = transaction.begin();
         assertTrue(controller1);
-        {
-            boolean controller2 = transaction.begin();
-            assertFalse(controller2);
-            transaction.rollback(controller2);
-        }
+        boolean controller2 = transaction.begin();
+        assertFalse(controller2);
+        transaction.rollback(controller2);
         transaction.rollback(controller1);
     }
 
@@ -138,11 +134,9 @@ public class JotmTransactionTest extends TestCase
     {
         boolean controller1 = transaction.begin();
         assertTrue(controller1);
-        {
-            boolean controller2 = transaction.begin();
-            assertFalse(controller2);
-            transaction.rollback(controller2);
-        }
+        boolean controller2 = transaction.begin();
+        assertFalse(controller2);
+        transaction.rollback(controller2);
         try
         {
             transaction.commit(controller1);
@@ -159,11 +153,9 @@ public class JotmTransactionTest extends TestCase
     {
         boolean controller1 = transaction.begin();
         assertTrue(controller1);
-        {
-            boolean controller2 = transaction.begin();
-            assertFalse(controller2);
-            transaction.commit(controller2);
-        }
+        boolean controller2 = transaction.begin();
+        assertFalse(controller2);
+        transaction.commit(controller2);
         valve.process(context);
     }
 
@@ -174,11 +166,9 @@ public class JotmTransactionTest extends TestCase
         valve = new Transaction.GuardValve(transaction, log);
         boolean controller1 = transaction.begin();
         assertTrue(controller1);
-        {
-            boolean controller2 = transaction.begin();
-            assertFalse(controller2);
-            transaction.commit(controller2);
-        }
+        boolean controller2 = transaction.begin();
+        assertFalse(controller2);
+        transaction.commit(controller2);
         valve.process(context);
     }
 }
