@@ -12,5 +12,6 @@
     <classpathentry kind="var" path="MAVEN_REPO/jaf/jars/activation-1.0.2.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/javamail/jars/javamail-1.2.jar"/>
     <classpathentry kind="src" path="/pico"/>
+    <classpathentry kind="var" path="MAVEN_REPO/jta/jars/jta-1.0.1.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
