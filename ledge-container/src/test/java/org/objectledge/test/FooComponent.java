@@ -37,7 +37,7 @@ import org.picocontainer.lifecycle.Stoppable;
  * A simple test component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FooComponent.java,v 1.5 2003-12-17 10:03:41 fil Exp $
+ * @version $Id: FooComponent.java,v 1.6 2003-12-22 12:59:19 fil Exp $
  */
 public class FooComponent
     implements Startable, Stoppable
@@ -70,5 +70,14 @@ public class FooComponent
     public void stop()
     {
         logger.info("stopped");
+    }
+    
+    public void main(String[] args)
+    {
+        logger.info("main invoked");
+        for (int i = 0; i < args.length; i++)
+        {
+            logger.info(" argument "+i+" = "+args[i]);
+        }
     }
 }
