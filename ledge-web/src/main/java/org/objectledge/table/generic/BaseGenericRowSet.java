@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.2 2004-02-11 13:42:11 zwierzem Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -240,8 +240,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
     }
 
     /**
-     * Returns the list of {@link TableRow} objects representing the resource
-     * tree or list.
+     * Returns the list of {@link TableRow} objects representing the object tree or list.
      *
      * @return a list of tree nodes.
      */
