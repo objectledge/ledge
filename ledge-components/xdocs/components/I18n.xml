@@ -6,7 +6,7 @@
 
   <body>
     <section name="I18n">
-      <p>Dependencies
+      <p>Dependencies:
         <table>
           <tr>
             <th>required components</th>

@@ -10,12 +10,13 @@
         <p>LoggingConfigurator resposibility is setting up the Log4j. It was introduced so that
         log system configufration were preformed in a way uniform with oterh parts of the system.
         </p>
-        <p>Functionality anticipated in the future</p>
-        <ul>
-          <li>runtime modification of logging configuration, most notably logger verbosities</li>
-          <li>management of loggers through textual interaction, and possibly JMX</li>
-          <li>customized log4j file appenders working over Ledge FileSystem</li>
-        </ul>
+        <p>Functionality anticipated in the future:
+          <ul>
+            <li>runtime modification of logging configuration, most notably logger verbosities</li>
+            <li>management of loggers through textual interaction, and possibly JMX</li>
+            <li>customized log4j file appenders working over Ledge FileSystem</li>
+          </ul>
+        </p>
 		<p class="more"><a href="LoggingConfigurator.html">more</a></p>        
       </subsection>
 

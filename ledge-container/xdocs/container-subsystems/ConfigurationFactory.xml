@@ -6,7 +6,7 @@
 
   <body>
     <section name="Configuration factory">
-      <p>
+      <p>Dependencies:
         <table>
           <tr>
             <th>required components</th>

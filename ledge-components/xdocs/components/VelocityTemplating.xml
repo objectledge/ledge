@@ -6,7 +6,7 @@
 
   <body>
     <section name="Velocity Templating">
-      <p>Dependencies
+      <p>Dependencies:
         <table>
           <tr>
             <th>required components</th>
@@ -23,7 +23,7 @@
 
 	  <p><a href="../apidocs/org/objectledge/templating/velocity/VelocityTemplating.html">View JavaDoc</a></p>
 
-	  <p>Constructor parameters
+	  <p>Constructor parameters:
 	    <table>
 	      <tr>
 	        <th>position</th>

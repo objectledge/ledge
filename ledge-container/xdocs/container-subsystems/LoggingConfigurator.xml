@@ -6,7 +6,7 @@
 
   <body>
     <section name="Logging configurator">
-      <p>
+      <p>Dependencies:
         <table>
           <tr>
             <th>required components</th>
@@ -38,16 +38,17 @@
       
       <p>The above is rather complex, you may prefer to look at a configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/test/resources/container1/config/LoggingConfigurator.xml?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">example</a>.</p>
       
-      <p>Functionality anticipated in the future</p>
-      <ul>
-        <li>runtime modification of logging configuration, most notably logger verbosities</li>
-        <li>management of loggers through textual interaction, and possibly JMX</li>
-        <li>customized log4j file appenders working over Ledge FileSystem</li>
-      </ul>
+      <p>Functionality anticipated in the future:
+        <ul>
+          <li>runtime modification of logging configuration, most notably logger verbosities</li>
+          <li>management of loggers through textual interaction, and possibly JMX</li>
+          <li>customized log4j file appenders working over Ledge FileSystem</li>
+        </ul>
+      </p>
       
       <p><a href="apidocs/org/objectledge/logging/LoggingConfigurator.html">View JavaDoc</a></p>
 		
-	  <p>Constructor parameters
+	  <p>Constructor parameters:
 	    <table>
 	      <tr>
 	        <th>position</th>

@@ -6,7 +6,7 @@
 
   <body>
     <section name="ClasspathFileSystemProvider">
-      <p>
+      <p>Dependencies:
         <table>
           <tr>
             <th>required components</th>
@@ -26,7 +26,7 @@
 
       <p><a href="apidocs/org/objectledge/filesystem/impl/ClasspathFileSystemProvider.html">View JavaDoc</a></p>
         
-      <p>Constructor parameters
+      <p>Constructor parameters:
         <table>
 	      <tr>
 		    <th>position</th>

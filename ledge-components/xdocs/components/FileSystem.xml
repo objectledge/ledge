@@ -6,7 +6,7 @@
 
   <body>
     <section name="FileSystem">
-      <p>
+      <p>Dependencies:
         <table>
           <tr>
             <th>required components</th>
@@ -52,7 +52,7 @@
 
       <p><a href="apidocs/org/objectledge/filesystem/FileSystem.html">View JavaDoc</a></p>
 		
-	  <p>Constructor parameters
+	  <p>Constructor parameters:
 	    <table>
 	      <tr>
 	        <th>position</th>
