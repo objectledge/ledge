@@ -9,15 +9,24 @@
     </adapter-factory>
     
     <component class="org.objectledge.xml.XMLValidator"/>
-    <component class="org.objectledge.configuration.ConfigurationFactory" preload="true">
-      <component-parameter class-key="org.picocontainer.MutablePicoContainer"/>
-      <component-parameter class-key="org.objectledge.filesystem.FileSystem"/>
-      <component-parameter class-key="org.objectledge.xml.XMLValidator"/>
-      <component-parameter key="org.objectledge.ConfigBase"/>
-    </component>
 
-    <component class="org.objectledge.logging.LoggingConfigurator" preload="true"/>
-    <component class="org.objectledge.logging.LoggerFactory" preload="true"/>
+    <component class="org.objectledge.configuration.ConfigurationFactory">
+      <component-parameter/>
+      <component-parameter/>
+      <constant-parameter value="/config"/>
+    </component>
+    <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+      <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
+      <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
+    </component-adapter>
+    
+    <component class="org.objectledge.logging.LoggerFactory"/>
+    <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+      <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
+      <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
+    </component-adapter>
+
+    <component class="org.objectledge.logging.LoggingConfigurator"/>
 
 	<!-- end of core config -->
 
@@ -30,34 +39,29 @@
     <component class="org.objectledge.web.mvc.MVCInitializerValve"/>
     <component class="org.objectledge.web.parameters.RequestParametersLoaderValve"/>
 
-
-<!--
-
-    <component class-key="org.objectledge.web.mvc.finders.MVCClassFinder"
-  		       class=""/>
-    
-    <component class-key="org.objectledge.web.mvc.finders.MVCTemplateFinder"
-    		   class=""/>
-    
-    <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
-      <component-parameter class-key="org.objectledge.context.Context"/>               
-      <component-parameter class-key="org.objectledge.web.mvc.finders.MVCClassFinder"/>               
-      <component-parameter class-key="org.objectledge.web.mvc.finders.MVCTemplateFinder"/>
-	  <constant-parameter value="10"/>
-	  <constant-parameter value="10"/>
+    <container key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
+    <component class="org.objectledge.web.mvc.finders.MVCFinder">
+      <component-parameter key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
+      <component-parameter/>
     </component>
-    
--->
+    <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
+    <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
+      <component-parameter/>
+      <component-parameter/>
+      <component-parameter/>
+      <constant-parameter value="4"/>
+      <constant-parameter value="4"/>
+    </component>
     
     <component class-key="org.objectledge.templating.Templating"
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
-    <component class="org.objectledge.templating.TemplatingContextLoader"/>
-    <component class="org.objectledge.templating.tools.ContextToolPopulator"/>
+    <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
+    <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
     
     <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
     <component class="org.objectledge.i18n.WebI18nToolFactory"/>
     <component class="org.objectledge.templating.tools.ContextTools">
-	  <sequence-parameter class="[Lorg.objectledge.templating.tools.ContextToolFactory;">
+	  <sequence-parameter>
         <component-parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
       </sequence-parameter>
     </component>      
@@ -66,15 +70,14 @@
                class="org.objectledge.pipeline.Pipeline">
       <component-parameter class-key="org.objectledge.context.Context"/>               
       <component-parameter class-key="org.jcontainer.dna.Logger"/>
-	  <sequence-parameter class="[Ljava.lang.Runnable;">
+	  <sequence-parameter>
         <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
-        <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
-        <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulator"/>
+        <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
+        <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
       </sequence-parameter>
-	  <sequence-parameter class="[Ljava.lang.Runnable;">
-      </sequence-parameter>
-	  <sequence-parameter class="[Ljava.lang.Runnable;">
+	  <sequence-parameter/>
+	  <sequence-parameter>
 	    <component-parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
       </sequence-parameter>
     </component>
