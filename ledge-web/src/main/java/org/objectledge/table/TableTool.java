@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.3 2004-03-05 12:14:15 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.4 2004-03-05 12:19:17 zwierzem Exp $
  */
 public class TableTool
 {
@@ -331,6 +331,12 @@ public class TableTool
         return state.isExpanded(row.getId());
     }
     
+    /**
+     * Returns a list of {@link LinesAndFoldersBox} objects for a given row to help building tree 
+     * like structures. 
+     * @param row the row for which the lines and folders data will be generated
+     * @return list of {@link LinesAndFoldersBox} 
+     */
     public List linesAndFolders(TableRow row)
     {
 		List linesAndFolders = new ArrayList();
@@ -443,11 +449,20 @@ public class TableTool
 		private String type;
 		private String linkType = "none";
 
+		/**
+		 * Creates a box of a given type with undefined link type.
+		 * @param type type of the box
+		 */
 		public LinesAndFoldersBox(String type)
 		{
 			this.type = type;
 		}
-
+		
+		/**
+		 * Creates a box of a given type and link type.
+		 * @param type type of the box
+		 * @param linkType type of the link
+		 */
 		public LinesAndFoldersBox(String type, String linkType)
 		{
 			this(type);
