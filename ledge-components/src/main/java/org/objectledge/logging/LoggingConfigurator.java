@@ -51,7 +51,7 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.8 2004-06-24 14:01:33 fil Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.1 2004-06-25 11:20:30 fil Exp $
  */
 public class LoggingConfigurator
     implements Startable
@@ -72,7 +72,8 @@ public class LoggingConfigurator
     public LoggingConfigurator(ConfigurationFactory configurationFactory, FileSystem fileSystem)
         throws ParserConfigurationException, IOException, SAXException
     {
-        InputSource source = configurationFactory.getConfigurationSource(LoggingConfigurator.class);
+        InputSource source = configurationFactory.
+        	getConfigurationSource(LoggingConfigurator.class, LoggingConfigurator.class);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         config = builder.parse(source);
         configurator = new LedgeDOMConfigurator(fileSystem);
@@ -85,7 +86,9 @@ public class LoggingConfigurator
     {
         Hierarchy hierarchy = new LedgeLoggerHierarchy(new RootCategory((Level)Level.DEBUG));
         configurator.doConfigure(config.getDocumentElement(), hierarchy);
-        LogManager.setRepositorySelector(new DefaultRepositorySelector(hierarchy), this);
+        // We use ClassLoader local, but accessible object as the guard. This allows reinitializing 
+        // Log4J from within the same sandbox.
+        LogManager.setRepositorySelector(new DefaultRepositorySelector(hierarchy), LogManager.class);
     }
     
     /**
