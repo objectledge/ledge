@@ -28,20 +28,21 @@
 
 package org.objectledge.pico.customization;
 
+import java.util.List;
+
 import org.picocontainer.ComponentAdapter;
-import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.defaults.AssignabilityRegistrationException;
-import org.picocontainer.defaults.ConstructorComponentAdapter;
+import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 import org.picocontainer.defaults.NotConcreteRegistrationException;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.6 2004-02-17 15:50:29 fil Exp $
+ * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.7 2004-03-11 14:13:36 fil Exp $
  */
-public class CustomizingConstructorComponentAdapter extends ConstructorComponentAdapter
+public class CustomizingConstructorComponentAdapter extends ConstructorInjectionComponentAdapter
 {
 
     /**
@@ -67,15 +68,15 @@ public class CustomizingConstructorComponentAdapter extends ConstructorComponent
     /**
      * {@inheritDoc}
      */
-    protected Object[] getConstructorArguments(ComponentAdapter[] adapterDependencies)
+    protected Object[] getConstructorArguments(List adapterDependencies)
     {
-        Object[] result = new Object[adapterDependencies.length];
-        for (int i = 0; i < adapterDependencies.length; i++) {
-            ComponentAdapter adapterDependency = adapterDependencies[i];
+        Object[] result = new Object[adapterDependencies.size()];
+        for (int i = 0; i < adapterDependencies.size(); i++) {
+            ComponentAdapter adapterDependency = (ComponentAdapter)adapterDependencies.get(i);
             if(adapterDependency instanceof CustomizedComponentAdapter)
             {
                 result[i] = ((CustomizedComponentAdapter)adapterDependency).
-                    getComponentInstance(getComponentKey(), getComponentImplementation());                                
+                    getComponentInstance(getComponentKey(), getComponentImplementation());
             }
             else
             {
