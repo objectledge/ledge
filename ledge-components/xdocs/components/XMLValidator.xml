@@ -14,7 +14,10 @@
           </tr>
           <tr>
             <th>required libraries</th>
-            <td>none</td>
+            <td>
+              Jing (jing:jing:20030619)<br/>
+              Saxon (saxon:saxon:6.5.3)
+            </td>
           </tr>
         </table>
       </p>
