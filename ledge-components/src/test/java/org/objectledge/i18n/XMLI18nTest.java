@@ -46,6 +46,7 @@ import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.i18n.xml.XMLI18n;
+import org.objectledge.xml.XMLValidator;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -76,6 +77,7 @@ public class XMLI18nTest extends TestCase
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath",
         										 getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
+        fs.start();
         try
         {
             InputSource source = new InputSource(
@@ -93,7 +95,8 @@ public class XMLI18nTest extends TestCase
             reader.parse(source);
             Configuration config = handler.getConfiguration();
             Logger logger = Logger.getLogger(XMLI18n.class);
-            i18n = new XMLI18n(config, new Log4JLogger(logger), fs , "locale/");
+            XMLValidator validator = new XMLValidator(fs);
+            i18n = new XMLI18n(config, new Log4JLogger(logger), fs, validator, "locale/");
         }
         catch (Exception e)
         {

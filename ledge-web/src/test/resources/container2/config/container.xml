@@ -35,6 +35,7 @@
       <component-parameter class-key="org.jcontainer.dna.Configuration"/>
       <component-parameter class-key="org.jcontainer.dna.Logger"/>
       <component-parameter class-key="org.objectledge.filesystem.FileSystem"/>		       
+      <component-parameter class-key="org.objectledge.xml.XMLValidator"/>		       
       <constant-parameter value="locale/"/>
     </component>
     <component class="org.objectledge.i18n.impl.WebI18nToolFactory"/>

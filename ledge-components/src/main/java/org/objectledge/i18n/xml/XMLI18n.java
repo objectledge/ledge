@@ -45,11 +45,14 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.impl.I18nBase;
+import org.objectledge.xml.XMLValidator;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.thaiopensource.validate.IncorrectSchemaException;
 
 /**
  * I18n Component XML implementation.
@@ -58,8 +61,14 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XMLI18n extends I18nBase
 {
+    /** localization file schema path */
+    private static final String LOCALIZATION_SCHEMA = "org/objectledge/i18n/xml/localization.rng";
+    
 	/** the file system */
 	private FileSystem fileSystem;
+    
+    /** xml validator */
+    private XMLValidator xmlValidator;
 	
 	/** the locale files directory */
 	private String localeDir;
@@ -83,13 +92,14 @@ public class XMLI18n extends I18nBase
 	 * @throws ParserConfigurationException if happen.
 	 * @throws SAXException if happen.
 	 */	
-	public XMLI18n(Configuration config, Logger logger, FileSystem fileSystem, String localeDir)
+	public XMLI18n(Configuration config, Logger logger, FileSystem fileSystem, XMLValidator xmlValidator, String localeDir)
 		throws ParserConfigurationException, SAXException 
 	{
 		super(config, logger);
 		System.out.println("XMLI18n init called");
 		this.fileSystem = fileSystem;
 		this.localeDir = localeDir;
+        this.xmlValidator = xmlValidator;
 		localeFilePattern = Pattern.
 			compile("[a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.xml");
 		SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -142,8 +152,9 @@ public class XMLI18n extends I18nBase
 	}
 
 	private void loadFile(String file, Map map, String prefix)
-		throws IOException, SAXException
+		throws IOException, SAXException, IncorrectSchemaException
 	{
+        xmlValidator.validate(localeDir+file, LOCALIZATION_SCHEMA);
 		try
 		{
 			InputStream is = fileSystem.getInputStream(localeDir+file);
