@@ -7,6 +7,13 @@
   <body>
     <section name="Components">
       <subsection name="Context">
+        <p>Provides dependant components with a nontion of <i>thread context</i>, that is a set
+		of name - value pairs (boths elements are arbitrary Java objectss) that is specific
+		to the currently executing thread. This allows passing information across the method
+		call stack without actually pushing it through formal arguments. Servlet Request and
+		Response objects, authentication and transactiotion managment objects are conveniently
+		passed around using thread context.</p>
+		<p><a href="apidocs/org/objectledge/context/Context.html">View JavaDoc</a></p>
       </subsection>
       
       <subsection name="FileSystem">
