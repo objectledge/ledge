@@ -36,7 +36,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderValve.java,v 1.1 2004-01-23 11:22:45 pablo Exp $
+ * @version $Id: RequestParametersLoaderValve.java,v 1.2 2004-06-28 12:14:26 zwierzem Exp $
  */
 public class RequestParametersLoaderValve 
     implements Valve
@@ -55,9 +55,9 @@ public class RequestParametersLoaderValve
      */
     public void process(Context context)
     {
-    	RequestParameters parameters = new RequestParameters();
-    	HttpContext httpContext = HttpContext.getHttpContext(context);
-    	parameters.init(httpContext.getRequest(), httpContext.getEncoding());
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+    	RequestParameters parameters = new RequestParameters(
+            httpContext.getRequest(), httpContext.getEncoding());
     	context.setAttribute(RequestParameters.class, parameters);
     }
 }

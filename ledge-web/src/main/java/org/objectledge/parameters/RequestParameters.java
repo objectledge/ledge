@@ -40,7 +40,7 @@ import org.objectledge.context.Context;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.2 2004-01-26 16:49:19 pablo Exp $
+ * @version $Id: RequestParameters.java,v 1.3 2004-06-28 12:14:26 zwierzem Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -56,13 +56,13 @@ public class RequestParameters extends DefaultParameters
 	}
 	
     /**
-     * Load the parameter container with parameters found in http request.
+     * Create the parameter container with parameters found in http request.
      *
      * @param request the request
      * @param encoding the encoding
      * @throws IllegalArgumentException if illegal escape sequences appears.
      */
-    public void init(HttpServletRequest request, String encoding)
+    public RequestParameters(HttpServletRequest request, String encoding)
     	throws IllegalArgumentException
     {
         try
