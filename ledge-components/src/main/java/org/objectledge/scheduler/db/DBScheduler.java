@@ -165,7 +165,6 @@ public class DBScheduler extends AbstractScheduler
         try
         {
             List jobList = persistence.load(null, this);
-            System.out.println("BYLO ZADAN WIELU: "+jobList.size());
             Iterator i = jobList.iterator();
             while (i.hasNext())
             {
@@ -175,7 +174,9 @@ public class DBScheduler extends AbstractScheduler
         }
         catch (PersistenceException e)
         {
+            ///CLOVER:OFF
             throw new ComponentInitializationError("Failed to load jobs ", e);
+            ///CLOVER:ON
         }
     }
 }

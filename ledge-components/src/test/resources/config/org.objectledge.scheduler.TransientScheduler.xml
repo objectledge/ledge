@@ -29,4 +29,6 @@
 
 <config>
  <job name="foo" scheduleType="at" scheduleConfig="" jobClassName=""/>
+ <job name="test" scheduleType="cron" scheduleConfig="* * * * *" jobClassName=""
+      argument="foo bar" runCountLimit="1" runTimeLimit="2000-12-01 10:22::2010-11-13 11:33" reentrant="false"/>
 </config>

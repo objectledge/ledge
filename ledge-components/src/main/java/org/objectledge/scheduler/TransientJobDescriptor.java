@@ -53,7 +53,7 @@ public class TransientJobDescriptor
     /**
      * {@inheritDoc}
      */
-    public synchronized void setJobSpec(String jobSpec)
+    public synchronized void setJobClassName(String jobSpec)
         throws JobModificationException
     {
         unsupported();
@@ -156,7 +156,7 @@ public class TransientJobDescriptor
             }
             super.setTimeLimit(startDate, endDate);
         }
-        if(config.getAttribute("rentrant","").length() > 0)
+        if(config.getAttribute("reentrant","").length() > 0)
         {
             super.setReentrant(config.getAttributeAsBoolean("reentrant"));
         }

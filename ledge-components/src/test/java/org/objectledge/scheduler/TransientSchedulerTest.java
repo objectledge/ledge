@@ -29,6 +29,7 @@
 package org.objectledge.scheduler;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -44,8 +45,11 @@ import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.I18n;
+import org.objectledge.i18n.xml.XMLI18n;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
@@ -79,9 +83,12 @@ public class TransientSchedulerTest extends TestCase
         Context context = new Context();
         ThreadPool threadPool = new ThreadPool(null, context,config, logger);
         config = getConfig("config/org.objectledge.scheduler.TransientScheduler.xml");
-        ScheduleFactory[] scheduleFactories = new ScheduleFactory[1];
+        XMLValidator validator = new XMLValidator();
+        I18n i18n = new XMLI18n(config, logger, fs, validator);
+        
+        ScheduleFactory[] scheduleFactories = new ScheduleFactory[2];
         scheduleFactories[0] = new AtScheduleFactory();
-        //scheduleFactories[1] = new CronScheduleFactory(i18n);
+        scheduleFactories[1] = new CronScheduleFactory(i18n);
         MutablePicoContainer container = new DefaultPicoContainer();
         scheduler = new TransientScheduler(container, config, logger, threadPool, scheduleFactories);
         scheduler.start();
@@ -139,17 +146,88 @@ public class TransientSchedulerTest extends TestCase
         assertEquals(true, job.isEnabled());
     }
 
+    public void testGetJobDescriptor()
+    {
+        AbstractJobDescriptor job = scheduler.getJobDescriptor("foo");
+        try
+        {
+            job.setArgument("");
+            fail("should throw the exception");
+        }
+        catch(JobModificationException e)
+        {
+            //ok!
+        }
+        try
+        {
+            job.setSchedule(null);
+            fail("should throw the exception");
+        }
+        catch(JobModificationException e)
+        {
+            //ok!
+        }
+        try
+        {
+            job.setAutoClean(true);
+            fail("should throw the exception");
+        }
+        catch(JobModificationException e)
+        {
+            //ok!
+        }
+        try
+        {
+            job.setJobClassName("");
+            fail("should throw the exception");
+        }
+        catch(JobModificationException e)
+        {
+            //ok!
+        }
+        try
+        {
+            job.setRunCountLimit(1);
+            fail("should throw the exception");
+        }
+        catch(JobModificationException e)
+        {
+            //ok!
+        }
+        try
+        {
+            job.setTimeLimit(null,null);
+            fail("should throw the exception");
+        }
+        catch(JobModificationException e)
+        {
+            //ok!
+        }
+        try
+        {
+            job.setReentrant(false);
+            fail("should throw the exception");
+        }
+        catch(JobModificationException e)
+        {
+            //ok!
+        }
+        
+        
+        
+    }
+
+
     public void testGetJobDescriptors()
     {
         AbstractJobDescriptor[] jobs = scheduler.getJobDescriptors();
-        assertEquals(1, jobs.length);
+        assertEquals(2, jobs.length);
     }
 
     public void testGetScheduleTypes()
     {
         String[] types = scheduler.getScheduleTypes();
-        assertEquals(1, types.length);
-        assertEquals("at", types[0]);
+        assertEquals(2, types.length);
     }
 
     public void testCreateSchedule()
@@ -163,6 +241,46 @@ public class TransientSchedulerTest extends TestCase
         try
         {
             scheduler.createSchedule("foo","");
+            fail("should throw the exception");
+        }
+        catch(InvalidScheduleException e)
+        {
+            //ok!
+        }
+        schedule = scheduler.createSchedule("cron","* * * * *");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.SECOND,15);
+        calendar.set(Calendar.MILLISECOND,0);
+        Date currentTime = calendar.getTime();
+        
+        calendar.add(Calendar.MINUTE,-2);
+        Date lastRun = calendar.getTime();
+        calendar.add(Calendar.MINUTE, 3);
+        calendar.set(Calendar.SECOND,0);
+        Date expected = calendar.getTime();
+        assertEquals(expected,schedule.getNextRunTime(currentTime, lastRun));
+        assertEquals("cron",schedule.getType());
+        assertEquals("* * * * *",schedule.getConfig());
+        
+        
+        schedule = scheduler.createSchedule("at","2003-12-01 10:22");
+        assertNotNull(schedule);
+        calendar.set(Calendar.YEAR, 2000);
+        Date oldDate = calendar.getTime();
+        calendar.set(Calendar.YEAR, 2003);
+        calendar.set(Calendar.MINUTE,22);
+        calendar.set(Calendar.HOUR,10);
+        calendar.set(Calendar.MONTH,11);
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        assertEquals(calendar.getTime(),schedule.getNextRunTime(oldDate, oldDate));
+        calendar.set(Calendar.YEAR,2005);
+        oldDate = calendar.getTime();
+        assertNull(schedule.getNextRunTime(oldDate, oldDate));
+        try
+        {
+            schedule.setConfig("foo-bar");
             fail("should throw the exception");
         }
         catch(InvalidScheduleException e)

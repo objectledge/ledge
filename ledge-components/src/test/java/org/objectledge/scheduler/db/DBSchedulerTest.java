@@ -59,6 +59,8 @@ import org.objectledge.scheduler.AbstractJobDescriptor;
 import org.objectledge.scheduler.AbstractScheduler;
 import org.objectledge.scheduler.AtScheduleFactory;
 import org.objectledge.scheduler.InvalidScheduleException;
+import org.objectledge.scheduler.JobModificationException;
+import org.objectledge.scheduler.JobNotFoundException;
 import org.objectledge.scheduler.Schedule;
 import org.objectledge.scheduler.ScheduleFactory;
 import org.objectledge.threads.ThreadPool;
@@ -114,6 +116,15 @@ public class DBSchedulerTest extends TestCase
         assertNotNull(scheduler);
         Schedule schedule = scheduler.createSchedule("at","");
         scheduler.createJobDescriptor("bar",schedule,"org.objectledge.scheduler.FooJob");
+        try
+        {
+            scheduler.createJobDescriptor("bar",schedule,"org.objectledge.scheduler.FooJob");
+            fail("should throw the exception");
+        }
+        catch(IllegalArgumentException e)
+        {
+            //ok!
+        }
     }
     
 
@@ -130,7 +141,6 @@ public class DBSchedulerTest extends TestCase
         assertEquals(true,scheduler.allowsModifications());
     }
 
-    
     public void testEnable()
         throws Exception
     {
@@ -181,6 +191,30 @@ public class DBSchedulerTest extends TestCase
                        scheduler.getDateFormat());
     }
 
+    public void testDBJobDescriptor()
+        throws Exception
+    {
+        Schedule schedule = scheduler.createSchedule("at","");
+        scheduler.createJobDescriptor("foo.bar",schedule,"org.objectledge.scheduler.FooJob");
+        DBJobDescriptor job = (DBJobDescriptor)scheduler.getJobDescriptor("foo.bar");
+        assertEquals(false, job.isRunning());
+        job.setSchedule(schedule);
+        job.setJobClassName("foo.bar");
+        job.setAutoClean(false);
+        assertEquals("foo.bar", job.getJobClassName());
+        assertEquals(false, job.getAutoClean());
+    }
+
+    public void testAdditional()
+    {
+        JobNotFoundException e = new JobNotFoundException("foo");
+        assertEquals("foo", e.getMessage());
+        JobNotFoundException ee = new JobNotFoundException("bar", e);
+        assertEquals("bar", ee.getMessage());
+        Exception eee = new JobModificationException("bar", e);
+        assertEquals("bar", eee.getMessage());
+    }
+
 
     //////////////////////////////
 
@@ -220,4 +254,5 @@ public class DBSchedulerTest extends TestCase
         }
         return ds;
     }
+    
 }

@@ -108,6 +108,8 @@ public abstract class AbstractScheduler implements Startable
         {
             scheduleFactory.put(scheduleFactories[i].getName(), scheduleFactories[i]);
         }
+        String formatString = config.getChild("date_format").getValue(DATE_FORMAT_DEFAULT);
+        format = new SimpleDateFormat(formatString);        
     }
     
     /**
@@ -127,8 +129,6 @@ public abstract class AbstractScheduler implements Startable
             schedule(job);
         }
         threadPool.runDaemon(new SchedulerTask());
-        String formatString = config.getChild("date_format").getValue(DATE_FORMAT_DEFAULT);
-        format = new SimpleDateFormat(formatString);
     }
 
     /**
