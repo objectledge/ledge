@@ -26,67 +26,27 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web;
+package org.objectledge.web.mvc;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
-import org.objectledge.web.mvc.TestHttpSession;
-
-import com.mockobjects.servlet.MockHttpServletRequest;
+import com.mockobjects.servlet.MockHttpSession;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class TestHttpServletRequest
-    extends MockHttpServletRequest implements HttpServletRequest
+public class TestHttpSession extends MockHttpSession
 {
-    private Map sessionMap;
+    public static final String COOKIE_KEY = "ledge-test-cookie-key";
     
-    private boolean isSecure = false;
-    
-    private int serverPort = 80;
-
-    public TestHttpServletRequest()
+    public Object getAttribute(String name)
     {
-        super();
-        sessionMap = new HashMap();
+        try
+        {
+            return super.getAttribute(name);
+        }
+        catch(Error e)
+        {
+            return null;
+        }
     }
-    
-    public TestHttpServletRequest(Map sessionMap)
-    {
-        this.sessionMap = sessionMap;
-    }
-
-    
-    public int getServerPort()
-    {
-        return serverPort;
-    }
-    
-    public boolean isSecure()
-    {
-        return isSecure;
-    }
-    
-    public void setupIsSecure(boolean isSecure)
-    {
-        this.isSecure = isSecure;
-    }
-    
-    public void setupGetServerPort(int serverPort)
-    {
-        this.serverPort = serverPort;
-    }
-    
-    public Cookie[] getCookies()
-    {
-        Cookie[] cookies = (Cookie[])sessionMap.get(TestHttpSession.COOKIE_KEY);
-        return cookies; 
-    }
-    
 }

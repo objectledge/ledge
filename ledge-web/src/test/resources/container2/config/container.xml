@@ -42,6 +42,7 @@
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
     <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
     <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+    <component class="org.objectledge.templating.tools.ContextToolRecyclerValve"/>    
     <component class="org.objectledge.web.mvc.MVCResultsValve"/>
     
     <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
@@ -80,6 +81,7 @@
         <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
         <component-parameter class-key="org.objectledge.parameters.RequestParametersLoaderTestValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
+        <component-parameter class-key="org.objectledge.templating.tools.ContextToolRecyclerValve"/>
       </sequence-parameter>
 	  <sequence-parameter/>
 	  <sequence-parameter/>

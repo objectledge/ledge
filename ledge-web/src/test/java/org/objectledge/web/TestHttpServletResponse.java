@@ -28,7 +28,15 @@
 
 package org.objectledge.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+import org.objectledge.web.mvc.TestHttpSession;
 
 import com.mockobjects.servlet.MockHttpServletResponse;
 
@@ -38,8 +46,40 @@ import com.mockobjects.servlet.MockHttpServletResponse;
  */
 public class TestHttpServletResponse extends MockHttpServletResponse implements HttpServletResponse
 {
+    private Map sessionMap;
+    
+    public TestHttpServletResponse()
+    {
+        super();
+        sessionMap = new HashMap();
+    }
+    
+    public TestHttpServletResponse(Map sessionMap)
+    {
+         super();
+         this.sessionMap = sessionMap;
+    }
+    
+    
     public String encodeURL(String source)
     {
         return source;
+    }
+
+    public void addCookie(Cookie cookie)
+    {
+        Cookie[] cookies = (Cookie[])sessionMap.get(TestHttpSession.COOKIE_KEY);
+        List cookiesList = new ArrayList();
+        if (cookies != null)
+        {
+            for(int i = 0; i < cookies.length; i++)
+            {
+                cookiesList.add(cookies[i]);
+            }
+        }
+        cookiesList.add(cookie);
+        Cookie[] target = new Cookie[cookiesList.size()];
+        cookiesList.toArray(target);
+        sessionMap.put(TestHttpSession.COOKIE_KEY, target);
     }
 }

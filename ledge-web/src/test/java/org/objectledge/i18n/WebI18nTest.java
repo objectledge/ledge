@@ -28,12 +28,17 @@
 
 package org.objectledge.i18n;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
+
+import javax.servlet.http.Cookie;
 
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
@@ -43,7 +48,9 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.TestHttpServletRequest;
 import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
+import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.MVCInitializerValve;
+import org.objectledge.web.mvc.TestHttpSession;
 import org.objectledge.xml.XMLValidator;
 
 /**
@@ -83,15 +90,19 @@ public class WebI18nTest extends TestCase
             Configuration config = configFactory.getConfig(WebConfigurator.class,
                   WebConfigurator.class);
             WebConfigurator webConfigurator = new WebConfigurator(config);
-            TestHttpServletRequest request = new TestHttpServletRequest();
-            TestHttpServletResponse response = new TestHttpServletResponse();
+            Map sessionMap = new HashMap();
+            TestHttpServletRequest request = new TestHttpServletRequest(sessionMap);
             request.setupGetContentType("text/html");
             request.setupGetParameterNames((new Vector()).elements());
             request.setupPathInfo("view/Default");
             request.setupGetContextPath("/test");
             request.setupGetServletPath("ledge");
             request.setupGetRequestURI("");
+            request.setupGetRemoteAddr("www.objectledge.com");
             request.setupServerName("www.objectledge.org");
+            TestHttpSession session = new TestHttpSession();
+            request.setSession(session);
+            TestHttpServletResponse response = new TestHttpServletResponse(sessionMap);
             HttpContext httpContext = new HttpContext(request, response);
             httpContext.setEncoding(webConfigurator.getDefaultEncoding());
             context.setAttribute(HttpContext.class, httpContext);
@@ -101,7 +112,7 @@ public class WebI18nTest extends TestCase
             mvcInitializer.process(context);
             LoggerFactory loggerFactory = new LoggerFactory();
             Logger logger = loggerFactory.getLogger(LocaleLoaderValve.class);
-            localeLoaderValve = new LocaleLoaderValve(logger);    
+            localeLoaderValve = new LocaleLoaderValve(logger,webConfigurator);    
         }
         catch (Exception e)
         {
@@ -111,9 +122,19 @@ public class WebI18nTest extends TestCase
 
     public void testLocaleLoaderTest() throws Exception
     {
-      // localeLoaderValve.process(context);
+        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        
+        localeLoaderValve.process(context);
+        Cookie[] cookies = httpContext.getRequest().getCookies();
+        assertNotNull(cookies);
+        assertEquals(cookies.length,2);
+        localeLoaderValve.process(context);
+        cookies = httpContext.getRequest().getCookies();
+        assertEquals(cookies.length,2);
+        mvcContext.setUserPrincipal(new DefaultPrincipal("foo"),true);
+        localeLoaderValve.process(context);
+        cookies = httpContext.getRequest().getCookies();
+        assertEquals(cookies.length,4);
     }
-    
-    
-
 }

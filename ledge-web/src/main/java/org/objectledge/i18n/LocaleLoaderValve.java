@@ -38,6 +38,7 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -47,22 +48,27 @@ import org.objectledge.web.mvc.MVCContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * 
- * @version $Id: LocaleLoaderValve.java,v 1.5 2004-01-22 15:15:12 fil Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.6 2004-01-27 10:03:17 pablo Exp $
  */
 public class LocaleLoaderValve 
     implements Valve, WebConstants
 {
 	/** the logger */
 	private Logger logger;
+    
+    /** the web configurator */
+    private WebConfigurator webConfigurator;
 
     /**
      * Constructor
      * 
      * @param logger the logger.
+     * @param webConfigurator the web configurator component.
      */
-    public LocaleLoaderValve(Logger logger)
+    public LocaleLoaderValve(Logger logger, WebConfigurator webConfigurator)
     {
         this.logger = logger;
+        this.webConfigurator = webConfigurator;
     }
 
     /**
@@ -72,9 +78,8 @@ public class LocaleLoaderValve
      */
     public void process(Context context)
     {
-        //TODO Take those values from configuration, somehow... 
-        Locale defaultLocale = StringUtils.getLocale("en_US");
-		String defaultEncoding = "ISO-8858-1";
+        Locale defaultLocale = webConfigurator.getDefaultLocale();
+		String defaultEncoding = webConfigurator.getDefaultEncoding();
 		
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);
@@ -178,7 +183,7 @@ public class LocaleLoaderValve
                 catch (java.io.UnsupportedEncodingException e)
                 {
                     logger.error("invalid " + encodingCookieKey + 
-                                 " cookie '" + encoding + "' received from client " +
+                                 " cookie '" + encodingString + "' received from client " +
                                  httpContext.getRequest().getRemoteAddr());
                     Cookie cookie = new Cookie(encodingCookieKey, "");
                     cookie.setMaxAge(0);
