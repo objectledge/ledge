@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.11 2005-02-25 14:28:14 zwierzem Exp $
+ * @version $Id: StringTool.java,v 1.12 2005-03-02 15:42:42 zwierzem Exp $
  */
 public class StringTool
 {
@@ -209,5 +209,16 @@ public class StringTool
             b.setLength(index+3);
         }
         return b.append("Mb").toString();        
-    }    
+    }
+    
+    /**
+     * Convert newlines in the string into <code>&lt;br /&gt;</code> tags.
+     *
+     * @param s the string to process.
+     * @return processed string.
+     */
+    public String htmlLineBreaks(String s)
+    {
+        return StringUtils.htmlLineBreaks(s);
+    }
 }
