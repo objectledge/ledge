@@ -51,7 +51,7 @@ import org.objectledge.filesystem.impl.ServletFileProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.4 2003-12-22 16:05:19 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.5 2003-12-23 08:21:54 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -81,14 +81,14 @@ public class LedgeServlet extends HttpServlet
         String rootParam = servletConfig.getServletName()+".root";
         String configParam = servletConfig.getServletName()+".config";
         String root = servletConfig.getInitParameter(rootParam);
+        ServletContext context = servletConfig.getServletContext();
         if(root == null)
         {
-            root = (String)servletConfig.getServletContext().getAttribute(rootParam);
+            root = (String)context.getAttribute(rootParam);
         }
         if(root == null)
         {
-            File tempDir = (File)servletConfig.getServletContext().
-                getAttribute("javax.servlet.context.tempdir");
+            File tempDir = (File)context.getAttribute("javax.servlet.context.tempdir");
             if(tempDir == null)
             {
                 root = System.getProperty("java.io.tmpdir");
@@ -101,15 +101,14 @@ public class LedgeServlet extends HttpServlet
         String config = servletConfig.getInitParameter(configParam);
         if(config == null)
         {
-            config = (String)servletConfig.getServletContext().getAttribute(configParam);
+            config = (String)context.getAttribute(configParam);
         }
         if(config == null)
         {
             config = "/config";
         }
         LocalFileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        ServletFileProvider sfs = new ServletFileProvider("servlet", 
-            servletConfig.getServletContext());
+        ServletFileProvider sfs = new ServletFileProvider("servlet", context);
         ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4096);
