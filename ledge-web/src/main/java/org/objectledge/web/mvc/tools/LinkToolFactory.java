@@ -31,14 +31,17 @@ package org.objectledge.web.mvc.tools;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.templating.tools.ContextToolFactory;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Context tool factory component to build the link tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinkToolFactory.java,v 1.3 2004-02-03 13:51:55 zwierzem Exp $
+ * @version $Id: LinkToolFactory.java,v 1.4 2004-08-10 10:32:20 zwierzem Exp $
  */
 public class LinkToolFactory implements ContextToolFactory
 {
@@ -71,7 +74,10 @@ public class LinkToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		return new LinkTool(context, linkToolConfiguration);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        RequestParameters requestParameters = RequestParameters.getRequestParameters(context);
+		return new LinkTool(httpContext, mvcContext, requestParameters, linkToolConfiguration);
 	}
 	
 	/**

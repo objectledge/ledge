@@ -36,12 +36,12 @@ import java.util.Set;
 import org.jcontainer.dna.Configurable;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
-import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.parameters.SortedParameters;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Context tool used to build web application links. It works in a pull manner. The template
@@ -64,7 +64,7 @@ import org.objectledge.web.WebConfigurator;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.11 2004-07-08 08:54:47 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.12 2004-08-10 10:32:20 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -78,22 +78,22 @@ public class LinkTool
 	/** link tool factory */
 	private LinkToolFactory factory;
 	
-	/** the thread context */
-	private Context context;
-	
     /** configuration. */
     private LinkTool.Configuration config;
     
 	/** the http context */
 	private HttpContext httpContext;
 
-	/** the request parameters */
-	private Parameters requestParameters;
+    /** the mvc context */
+    private MVCContext mvcContext;
+
+    /** the request parameters */
+	private RequestParameters requestParameters;
 	
-	/** view */
+	/** view, null for current request parameters view value, empty string for unset value */
 	private String view;
 	
-	/** the action */
+	/** the action, empty string for unset value */
 	private String action;
 	
 	/** is content link switch */
@@ -126,21 +126,25 @@ public class LinkTool
 	/** 
 	 * Component constructor.
 	 * 
-	 * @param config the link tool configuraiton.
-	 * @param context the thread context.
+	 * @param httpContext the http context.
+     * @param mvcContext the mvc context.
+     * @param requestParameters the request parameters.
+     * @param config the link tool configuraiton.
 	 */
-	public LinkTool(Context context, LinkTool.Configuration config)
+	public LinkTool(HttpContext httpContext, MVCContext mvcContext,
+        RequestParameters requestParameters, LinkTool.Configuration config)
 	{
-		this.context = context;
         this.config = config;
-		httpContext = HttpContext.getHttpContext(context);
-		requestParameters = RequestParameters.getRequestParameters(context);
+		this.httpContext = httpContext;
+        this.mvcContext = mvcContext;
+		this.requestParameters = requestParameters;
 		contentLink = false;
 		includeSession = true;
 		showProtocolName = false;
 		protocolName = ""; 
         port = 0;
-		view = requestParameters.get(config.viewToken, "");
+        // this means no override for view
+        view = null;
 		action = "";
 		parameters = new SortedParameters();
 		fragment = null;
@@ -654,9 +658,14 @@ public class LinkTool
     private void appendPathInfo(StringBuffer sb, String[] keys)
         throws UnsupportedEncodingException
     {
-        if (view != null && view.length() > 0)
+        String outView = view; 
+        if (outView == null) // override with current view
         {
-            sb.append('/').append(config.viewToken).append('/').append(view);
+            outView = mvcContext.getView();
+        }
+        if (outView != null && outView.length() > 0)
+        {
+            sb.append('/').append(config.viewToken).append('/').append(outView);
         }
 
         for (int i = 0; i < keys.length; i++)
@@ -716,7 +725,7 @@ public class LinkTool
 	 */
 	private LinkTool getLinkTool(LinkTool source)
 	{
-		LinkTool target = new LinkTool(context, source.config);
+		LinkTool target = new LinkTool(httpContext, mvcContext, requestParameters, source.config);
 		target.view = source.view;
 		target.action = source.action;
 		target.contentLink = source.contentLink;
