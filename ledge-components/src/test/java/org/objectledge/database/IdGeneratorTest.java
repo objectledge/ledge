@@ -42,7 +42,7 @@ import org.objectledge.filesystem.FileSystem;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGeneratorTest.java,v 1.7 2004-04-01 08:54:25 fil Exp $
+ * @version $Id: IdGeneratorTest.java,v 1.8 2005-02-16 20:00:46 rafal Exp $
  */
 public class IdGeneratorTest extends DatabaseTestCase
 {
@@ -96,7 +96,7 @@ public class IdGeneratorTest extends DatabaseTestCase
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
             FileSystem fs = FileSystem.getStandardFileSystem(".");
-            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGenerator.sql", 
+            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGeneratorTables.sql", 
                 "UTF-8"));
         }
         return ds;

@@ -846,12 +846,12 @@ public class DBParametersTest extends TestCase
         FileSystem fs = FileSystem.getStandardFileSystem(".");
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGenerator.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8"));
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_parameters"))
         {        
             DatabaseUtils.runScript(ds, 
-                fs.getReader("sql/parameters/db/DBParameters.sql", "UTF-8"));
+                fs.getReader("sql/parameters/db/DBParametersTables.sql", "UTF-8"));
         }
         DatabaseUtils.runScript(ds, 
             fs.getReader("sql/parameters/db/DBParametersTest.sql", "UTF-8"));

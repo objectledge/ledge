@@ -26,13 +26,15 @@
 -- POSSIBILITY OF SUCH DAMAGE. 
 -- 
 
--- Table schema for the DBParameters
+-- Table schema for the IdGenerator
 --
--- author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
--- version $Id: Exp $
+-- author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+-- version $Id: IdGeneratorTables.sql,v 1.1 2005-02-16 20:00:30 rafal Exp $
 
-CREATE TABLE ledge_parameters (
-   parameters_id BIGINT NOT NULL,
-   name VARCHAR(255) NOT NULL,
-   value VARCHAR(255) NOT NULL
+CREATE TABLE ledge_id_table 
+(
+   next_id BIGINT NOT NULL,
+   table_name VARCHAR(255) NOT NULL,
+   PRIMARY KEY(table_name)
 );
+

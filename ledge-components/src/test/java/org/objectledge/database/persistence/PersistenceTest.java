@@ -201,7 +201,7 @@ public class PersistenceTest extends TestCase
         Reader reader;
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
-            reader =  fs.getReader("sql/database/IdGenerator.sql", "UTF-8");
+            reader =  fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8");
             DatabaseUtils.runScript(ds, reader);
         }
         if(!DatabaseUtils.hasTable(ds, "test_object"))

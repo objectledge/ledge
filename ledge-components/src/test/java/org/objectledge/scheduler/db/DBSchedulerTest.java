@@ -247,12 +247,12 @@ public class DBSchedulerTest extends TestCase
         DataSource ds = new HsqldbDataSource(conf);
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGenerator.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8"));
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_scheduler"))
         {        
             DatabaseUtils.runScript(ds, 
-                fs.getReader("sql/scheduler/db/DBScheduler.sql", "UTF-8"));
+                fs.getReader("sql/scheduler/db/DBSchedulerTables.sql", "UTF-8"));
             DatabaseUtils.runScript(ds, 
                 fs.getReader("sql/scheduler/db/DBSchedulerTest.sql", "UTF-8"));
         }

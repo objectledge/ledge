@@ -231,11 +231,11 @@ public class DirectoryParametersTest extends TestCase
         ds.setPassword("");
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGenerator.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8"));
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
         {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/naming/db/DBNaming.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, fs.getReader("sql/naming/db/DBNamingTables.sql", "UTF-8"));
         }
         DatabaseUtils.runScript(ds, fs.getReader("sql/naming/db/DBNamingTest.sql", "UTF-8"));
         return ds;

@@ -357,11 +357,11 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         ds.setPassword("");
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
-            DatabaseUtils.runScript(ds, getScript("sql/database/IdGenerator.sql"));
+            DatabaseUtils.runScript(ds, getScript("sql/database/IdGeneratorTables.sql"));
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
         {        
-            DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNaming.sql"));
+            DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNamingTables.sql"));
         }
         DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNamingTest.sql"));
         return ds;
