@@ -44,7 +44,7 @@ import java.util.Set;
  * General purpose visitor that is capable of traversing arbitrary object graphs.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Visitor.java,v 1.2 2005-03-18 12:06:35 rafal Exp $
+ * @version $Id: Visitor.java,v 1.3 2005-03-21 07:30:54 rafal Exp $
  */
 public abstract class Visitor<T>
 {
@@ -207,6 +207,7 @@ public abstract class Visitor<T>
             });
             for(Method m : ordered)
             {
+                m.setAccessible(true);
                 methodMap.put(m.getParameterTypes()[0], m);
             }
             methodMap.putAll(unordered);
