@@ -33,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.9 2004-02-19 16:27:47 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.10 2004-03-22 09:27:51 pablo Exp $
  */
 public class MailSystem
 {
@@ -117,13 +117,13 @@ public class MailSystem
                     }
                     Properties sessionProperties = new Properties();
                     Configuration[] properties = sessions[i].getChildren("property");
-                    for (int j = 0; i < properties.length; j++)
+                    for (int j = 0; j < properties.length; j++)
                     {
-                        String propertyName = properties[i].getAttribute("name");
-                        String propertyValue = properties[i].getAttribute("value", null);
+                        String propertyName = properties[j].getAttribute("name");
+                        String propertyValue = properties[j].getAttribute("value", null);
                         if (propertyValue == null)
                         {
-                            propertyValue = properties[i].getValue();
+                            propertyValue = properties[j].getValue();
                         }
                         sessionProperties.setProperty("mail." + propertyName, propertyValue);
                     }

@@ -48,6 +48,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.I18n;
 import org.objectledge.i18n.xml.XMLI18n;
 import org.objectledge.mail.MailSystem;
+import org.objectledge.scheduler.cron.TokenMgrError;
 import org.objectledge.threads.ThreadPool;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -261,6 +262,30 @@ public class TransientSchedulerTest extends TestCase
         assertEquals(expected,schedule.getNextRunTime(currentTime, lastRun));
         assertEquals("cron",schedule.getType());
         assertEquals("* * * * *",schedule.getConfig());
+        
+        
+        //TODO add some checking
+        schedule = scheduler.createSchedule("cron","* * * jan mon");
+        schedule = scheduler.createSchedule("cron","0-15/60 * * jan mon");
+        schedule = scheduler.createSchedule("cron","@yearly");
+        try
+        {
+            schedule = scheduler.createSchedule("cron","foo bar");
+            fail("should throw the exception");
+        }
+        catch(TokenMgrError e)
+        {
+            //ok!
+        }
+        try
+        {
+            schedule = scheduler.createSchedule("cron","\ufefe");
+            fail("should throw the exception");
+        }
+        catch(TokenMgrError e)
+        {
+            //ok!
+        }
         
         
         schedule = scheduler.createSchedule("at","2003-12-01 10:22");

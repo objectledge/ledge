@@ -28,4 +28,12 @@
 --> 
 
 <config>
+  <sessions>
+    <session name="bar">
+      <property name="foo">bar</property>
+      <credentials>
+      <credential protocol="smtp" username="foo" password="bar"/>
+      </credentials>
+    </session>
+  </sessions>      
 </config>
