@@ -29,6 +29,8 @@
 
 <config>
  <context name="foo" initial_factory="org.objectledge.naming.MockInitialContextFactory">
-<!--   <property name="java.naming.provider.url" value="o=ngo,c=pl"/> -->
+   <property name="foo" value="bar"/>
+   <property name="bar">foo</property>
+   <alias name="bar"/>
  </context>
 </config>

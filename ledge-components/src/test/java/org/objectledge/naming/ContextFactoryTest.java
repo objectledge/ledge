@@ -30,6 +30,7 @@ package org.objectledge.naming;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -68,23 +69,19 @@ public class ContextFactoryTest extends TestCase
         String root = System.getProperty("ledge.root");
         if (root == null)
         {
-            throw new RuntimeException("system property ledge.root undefined." + 
-            " use -Dledge.root=.../ledge-container/src/test/resources");
+            throw new RuntimeException("system property ledge.root undefined." + " use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
-                                                                  getClass().getClassLoader());
+        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         try
         {
-            InputSource source = new InputSource(
-                fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+            InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             DOMConfigurator.configure(logConfig.getDocumentElement());
 
-            source = new InputSource(
-                fs.getInputStream("config/org.objectledge.naming.ContextFactory.xml"));
+            source = new InputSource(fs.getInputStream("config/org.objectledge.naming.ContextFactory.xml"));
             SAXParserFactory parserFactory = SAXParserFactory.newInstance();
             XMLReader reader = parserFactory.newSAXParser().getXMLReader();
             SAXConfigurationHandler handler = new SAXConfigurationHandler();
@@ -106,21 +103,60 @@ public class ContextFactoryTest extends TestCase
     {
         try
         {
-             Context context = contextFactory.getContext("foo");
-             assertNotNull(context);
+            Context context = contextFactory.getContext("foo");
+            assertNotNull(context);
+            contextFactory.reconnect("foo");
+            context = contextFactory.getContext("foo");
+            assertNotNull(context);
+            context = contextFactory.getContext("bar");
+            assertNotNull(context);
+            contextFactory.reconnect("bar");
+            context = contextFactory.getContext("bar");
+            assertNotNull(context);
         }
-        catch(NamingException e)
+        catch (NamingException e)
         {
-            fail("Exception occured: " + e); 
+            fail("Exception occured: " + e);
+        }
+        try
+        {
+            Context context = contextFactory.getContext("unknown");
+            fail("shoud throw the exception");
+        }
+        catch (NamingException e)
+        {
+            //ok!
         }
     }
 
     public void testGetDirContext()
     {
-    }
-
-    public void testReconnect()
-    {
+        try
+        {
+            DirContext context = contextFactory.getDirContext("foo");
+            assertNotNull(context);
+            contextFactory.reconnect("foo");
+            context = contextFactory.getDirContext("foo");
+            assertNotNull(context);
+            context = contextFactory.getDirContext("bar");
+            assertNotNull(context);
+            contextFactory.reconnect("bar");
+            context = contextFactory.getDirContext("bar");
+            assertNotNull(context);
+        }
+        catch (NamingException e)
+        {
+            fail("Exception occured: " + e);
+        }
+        try
+        {
+            DirContext context = contextFactory.getDirContext("unknown");
+            fail("shoud throw the exception");
+        }
+        catch (NamingException e)
+        {
+            //ok!
+        }
     }
 
 }

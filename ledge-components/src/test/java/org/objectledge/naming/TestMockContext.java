@@ -28,7 +28,13 @@
 
 package org.objectledge.naming;
 
+import javax.naming.Name;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
+import javax.naming.directory.SearchControls;
 
 import com.mockobjects.naming.MockContext;
 
@@ -37,10 +43,247 @@ import com.mockobjects.naming.MockContext;
  *
  */
 public class TestMockContext extends MockContext
+    implements DirContext
 {
     public Object lookup(String name)
         throws NamingException
     {
         return this;
     }
+    
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void rebind(Name name, Object obj, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void rebind(String name, Object obj, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attributes getAttributes(Name name, String[] attrIds) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attributes getAttributes(Name name) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attributes getAttributes(String name, String[] attrIds) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attributes getAttributes(String name) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void modifyAttributes(Name name, int mod_op, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void modifyAttributes(Name name, ModificationItem[] mods) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void modifyAttributes(String name, int mod_op, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void modifyAttributes(String name, ModificationItem[] mods) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void bind(Name name, Object obj, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void bind(String name, Object obj, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DirContext createSubcontext(Name name, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DirContext createSubcontext(String name, Attributes attrs) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DirContext getSchema(Name name) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DirContext getSchema(String name) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DirContext getSchemaClassDefinition(Name name) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DirContext getSchemaClassDefinition(String name) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(Name name, Attributes matchingAttributes, String[] attributesToReturn) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(Name name, Attributes matchingAttributes) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(Name name, String filterExpr, Object[] filterArgs, SearchControls cons) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(Name name, String filter, SearchControls cons) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(String name, Attributes matchingAttributes, String[] attributesToReturn) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(String name, Attributes matchingAttributes) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(String name, String filterExpr, Object[] filterArgs, SearchControls cons) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NamingEnumeration search(String name, String filter, SearchControls cons) throws NamingException
+    {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
 }

@@ -20,7 +20,7 @@ import org.objectledge.ComponentInitializationError;
  *
  * @author <a href="mail:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mail:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ContextFactory.java,v 1.2 2004-01-24 13:13:59 pablo Exp $
+ * @version $Id: ContextFactory.java,v 1.3 2004-01-27 17:24:45 pablo Exp $
  */
 public class ContextFactory
 {
@@ -56,21 +56,21 @@ public class ContextFactory
 				String initialFactory = contexts[i].getAttribute("initial_factory");
 				env.put("java.naming.factory.initial", initialFactory);
 				Configuration[] properties = contexts[i].getChildren("property");
-				for (int j = 0; i < properties.length; j++)
+				for (int j = 0; j < properties.length; j++)
 				{
-					String propertyName = properties[i].getAttribute("name");
-					String propertyValue = properties[i].getAttribute("value", null);
+					String propertyName = properties[j].getAttribute("name");
+					String propertyValue = properties[j].getAttribute("value", null);
 					if (propertyValue == null)
 					{
-						propertyValue = properties[i].getValue();
+						propertyValue = properties[j].getValue();
 					}
 					env.put(propertyName, propertyValue);
 				}
 				initial.put(name, env);
 				Configuration[] aliases = contexts[i].getChildren("alias");
-				for (int j = 0; i < aliases.length; j++)
+				for (int j = 0; j < aliases.length; j++)
 				{
-					String aliasName = aliases[i].getAttribute("name");
+					String aliasName = aliases[j].getAttribute("name");
 					String prevContext = (String)alias.get(aliasName);
 					if(prevContext != null)
 					{
@@ -80,10 +80,12 @@ public class ContextFactory
 				}
 			}
   		}
+        ///CLOVER:OFF
   		catch(ConfigurationException e)
   		{
   			throw new ComponentInitializationError("Invalid configuration",e);
   		}
+        ///CLOVER:ON
   	}
 
     /**
