@@ -31,6 +31,7 @@ package org.objectledge.parameters.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -47,7 +48,7 @@ import org.objectledge.parameters.Parameters;
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.4 2004-02-10 12:00:13 fil Exp $
+ * @version $Id: DBParameters.java,v 1.5 2004-02-10 13:00:16 pablo Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -76,6 +77,7 @@ public class DBParameters implements Parameters
      */
     public DBParameters(Parameters parameters, long id, Database database, Logger logger)
     {
+        modified = new HashSet();
     	this.logger = logger;
     	this.database = database;
     	if(parameters != null)
@@ -294,7 +296,7 @@ public class DBParameters implements Parameters
 	public void remove(Set keys)
 	{
 		container.remove(keys);
-		modified.add(keys);
+		modified.addAll(keys);
 		update();    	
 	}
     
@@ -306,9 +308,9 @@ public class DBParameters implements Parameters
 	public void removeExcept(Set keys)
 	{
 		container.removeExcept(keys);
-		List all = Arrays.asList(container.getParameterNames());
+		List all = new ArrayList(Arrays.asList(container.getParameterNames()));
 		all.removeAll(keys);
-		modified.add(all);
+		modified.addAll(all);
 		update();    	
 	}
 
@@ -518,7 +520,7 @@ public class DBParameters implements Parameters
     public void add(Parameters parameters, boolean overwrite)
     {
 		container.add(parameters, overwrite);
-		modified.add(Arrays.asList(parameters.getParameterNames()));
+		modified.addAll(Arrays.asList(parameters.getParameterNames()));
 		update();    	
     }
 
@@ -545,6 +547,7 @@ public class DBParameters implements Parameters
 	private void update()
 	{
 		Connection conn = null;
+        boolean isInsert = false;
 		try
 		{
 			conn = database.getConnection();
@@ -564,21 +567,37 @@ public class DBParameters implements Parameters
 				deleteStmt.addBatch();
 				for(int j = 0; j < values.length; j++)
 				{
+                    isInsert = true;
 					insertStmt.setString(1,name);
-					insertStmt.setString(1,DatabaseUtils.escapeSqlString(values[j]));
+					insertStmt.setString(2,DatabaseUtils.escapeSqlString(values[j]));
 					insertStmt.addBatch();
 				}
 			}
 			deleteStmt.executeBatch();
-			insertStmt.executeBatch();
+            if(isInsert)
+            {
+    			insertStmt.executeBatch();
+            }
 		}
+        ///CLOVER:OFF
 		catch(SQLException e)
 		{
 			throw new Error("Exception occurred during parameter update",e);
 		}
+        ///CLOVER:ON
 		finally
 		{
 			DatabaseUtils.close(conn);
 		}
 	}
+
+    /**
+     * Get the parameters identifier in database.
+     * 
+     * @return the parameters identifier.
+     */    
+    public long getId()
+    {
+        return id;
+    }
 }

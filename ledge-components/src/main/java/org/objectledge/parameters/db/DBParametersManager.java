@@ -17,12 +17,12 @@ import org.objectledge.parameters.Parameters;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParametersManager.java,v 1.5 2004-02-10 12:00:13 fil Exp $
+ * @version $Id: DBParametersManager.java,v 1.6 2004-02-10 13:00:16 pablo Exp $
  */
 public class DBParametersManager
 {
 	/** the table name */
-	public static final String TABLE_NAME = "ledge_parameters";
+	public static final String TABLE_NAME = "parameters";
 
 	/** the logger */
 	private Logger logger;
@@ -65,10 +65,12 @@ public class DBParametersManager
             id = database.getNextId(TABLE_NAME);
             statement.execute("INSERT INTO "+TABLE_NAME+" values ("+id+",'','')");
         }
+        ///CLOVER:OFF
         catch(SQLException e)
         {
             throw new DBParametersException("Failed to insert the empty parameters", e);
         }
+        ///CLOVER:ON
         finally
         {
             DatabaseUtils.close(conn);
@@ -120,10 +122,12 @@ public class DBParametersManager
             localCache.put(key, parameters);
             return parameters;
         }
+        ///CLOVER:OFF
         catch (SQLException e)
         {
             throw new DBParametersException("Failed to retrieve object", e);
         }
+        ///CLOVER:ON
         finally
         {
             DatabaseUtils.close(conn);
@@ -148,10 +152,12 @@ public class DBParametersManager
             statement.execute("DELETE FROM "+TABLE_NAME+" where parameters_id = "+id);
             localCache.remove(key);
         }
+        ///CLOVER:OFF
         catch(SQLException e)
         {
             throw new DBParametersException("Failed to delete parameters", e);
         }
+        ///CLOVER:ON
         finally
         {
             DatabaseUtils.close(conn);
