@@ -28,9 +28,6 @@
 
 package org.objectledge.pico.customization;
 
-import java.util.List;
-
-import org.picocontainer.ComponentAdapter;
 import org.picocontainer.Parameter;
 import org.picocontainer.defaults.AssignabilityRegistrationException;
 import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
@@ -40,49 +37,67 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  * An implementation of CDI ComponentAdapter aware of dependencies using CustomizedComponentAdapter.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.8 2004-12-27 05:18:05 rafal Exp $
+ * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.9 2005-02-04 02:28:15 rafal Exp $
  */
 public class CustomizingConstructorComponentAdapter extends ConstructorInjectionComponentAdapter
 {
-
     /**
-     * Constructs a new instnace of the adapter.
+     * Creates new CustomizingConstructorComponentAdapter instance.
      * 
-     * @param componentKey the component's key.
+     * @param componentKey the component key.
      * @param componentImplementation the component implementation class.
-     * @param parameters the component instantiation paramter hints.
-     * @throws AssignabilityRegistrationException if the componentKey is a class not assignable to
-     *         componentImplementation class.
-     * @throws NotConcreteRegistrationException if the componentImplementation type is  an abstract
-     *         class or interface.
+     * @throws AssignabilityRegistrationException if the component key is a type, and given 
+     * component implementation is not assignable to it.
+     * @throws NotConcreteRegistrationException if the given implementation class is not concrete.
      */
-    public CustomizingConstructorComponentAdapter(
-        Object componentKey,
-        Class componentImplementation,
-        Parameter[] parameters)
+    public CustomizingConstructorComponentAdapter(Object componentKey, 
+        Class componentImplementation)
         throws AssignabilityRegistrationException, NotConcreteRegistrationException
+    {
+        super(componentKey, componentImplementation);
+    }
+    
+    /**
+     * Creates new CustomizingConstructorComponentAdapter instance.
+     * 
+     * @param componentKey the component key.
+     * @param componentImplementation the component implementation class.
+     * @param parameters component parameters.
+     */
+    public CustomizingConstructorComponentAdapter(Object componentKey,
+        Class componentImplementation, Parameter[] parameters)
     {
         super(componentKey, componentImplementation, parameters);
     }
-
+    
+    /**
+     * Creates new CustomizingConstructorComponentAdapter instance.
+     * 
+     * @param componentKey the component key.
+     * @param componentImplementation the component implementation class.
+     * @param parameters component parameters.
+     * @param allowNonPublicClasses true to allow instantiating non-public classes.
+     * @throws AssignabilityRegistrationException if the component key is a type, and given 
+     * component implementation is not assignable to it.
+     * @throws NotConcreteRegistrationException if the given implementation class is not concrete.
+     */
+    public CustomizingConstructorComponentAdapter(Object componentKey,
+        Class componentImplementation, Parameter[] parameters, boolean allowNonPublicClasses)
+        throws AssignabilityRegistrationException, NotConcreteRegistrationException
+    {
+        super(componentKey, componentImplementation, parameters, allowNonPublicClasses);
+    }
+    
     /**
      * {@inheritDoc}
      */
-    protected Object[] getConstructorArguments(List adapterDependencies)
+    protected Parameter[] createDefaultParameters(Class[] parameters)
     {
-        Object[] result = new Object[adapterDependencies.size()];
-        for (int i = 0; i < adapterDependencies.size(); i++) {
-            ComponentAdapter adapterDependency = (ComponentAdapter)adapterDependencies.get(i);
-            if(adapterDependency instanceof CustomizedComponentAdapter)
-            {
-                result[i] = ((CustomizedComponentAdapter)adapterDependency).
-                    getComponentInstance(getComponentKey(), getComponentImplementation());
-            }
-            else
-            {
-                result[i] = adapterDependency.getComponentInstance();
-            }
+        Parameter[] componentParameters = new Parameter[parameters.length];
+        for(int i = 0; i < parameters.length; i++)
+        {
+            componentParameters[i] = CustomizingComponentParameter.DEFAULT;
         }
-        return result;
+        return componentParameters;
     }
 }

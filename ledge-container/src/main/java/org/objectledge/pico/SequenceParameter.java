@@ -39,8 +39,7 @@ import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoException;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
-import org.picocontainer.PicoVerificationException;
-import org.picocontainer.defaults.AssignabilityRegistrationException;
+import org.picocontainer.PicoVisitor;
 
 /**
  * A Parameter that is a sequence of nested Parameter objects.
@@ -51,193 +50,167 @@ import org.picocontainer.defaults.AssignabilityRegistrationException;
  * size, or a no-argument constructor) or be Java array type.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameter.java,v 1.4 2004-02-17 15:50:29 fil Exp $
+ * @version $Id: SequenceParameter.java,v 1.5 2005-02-04 02:28:13 rafal Exp $
  */
 public class SequenceParameter implements Parameter
 {
     private Parameter[] elements;
+    private Class implClass;
     
     /**
      * Creates a sequence parameter.
      * 
      * @param elements the sequence elements.
+     * @param implClass collection implementation class, may be null.
      */
-    public SequenceParameter(Parameter[] elements)
+    public SequenceParameter(Parameter[] elements, Class implClass)
     {
         this.elements = elements;
+        this.implClass = implClass;
     }
 
     /**
      * {@inheritDoc}
      */
-    public ComponentAdapter resolveAdapter(PicoContainer componentRegistry, Class expectedType)
-        throws PicoIntrospectionException
+    public Object resolveInstance(PicoContainer container, ComponentAdapter adapter, 
+        Class expectedType)
+        throws PicoInitializationException
     {
-        ComponentAdapter[] adapters = new ComponentAdapter[elements.length];
-        if(expectedType.getComponentType() == null &&
-            !Collection.class.isAssignableFrom(expectedType))
+        Class elementType = getElementType(expectedType);
+        Object[] items = new Object[elements.length];
+        for(int i = 0; i < elements.length; i++)
         {
-            throw new NonCompositeTypeException(expectedType.getName()+
-                " is not a Collection nor array type");        
+            items[i] = elements[i].resolveInstance(container, adapter, elementType);
         }
-        Class elementType = null;
         if(expectedType.getComponentType() != null)
         {
-            elementType = expectedType.getComponentType();
+            return toArray(items, expectedType);
         }
-        for (int i = 0; i < elements.length; i++)
+        if(Collection.class.isAssignableFrom(expectedType))
         {
-            adapters[i] = elements[i].resolveAdapter(componentRegistry, elementType);
-            if(adapters[i] == null)
+            if(implClass != null)
             {
-                return null; 
+                return toCollection(items, implClass);
             }
-            if(elementType != null)
+            else
             {
-                if(!elementType.isAssignableFrom(adapters[i].getComponentImplementation()))
+                return toCollection(items, expectedType);
+            }
+        }
+        throw new PicoIntrospectionException("not a collection nor array type");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isResolvable(PicoContainer container, ComponentAdapter adapter, 
+        Class expectedType)
+    {
+        try
+        {
+            Class elementType = getElementType(expectedType);
+            for(Parameter element : elements)
+            {
+                if(!element.isResolvable(container, adapter, elementType))
                 {
-                    throw new AssignabilityRegistrationException(elementType, 
-                        adapters[i].getComponentImplementation());
+                    return false;
                 }
             }
+            return true;
         }
-        return new SequenceComponentAdapter(adapters, expectedType);
+        catch(PicoIntrospectionException e)
+        {
+            // non array or collection type
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void verify(PicoContainer container, ComponentAdapter adapter, Class expectedType)
+        throws PicoIntrospectionException
+    {
+        Class elementType = getElementType(expectedType);
+        for(Parameter element : elements)
+        {
+            element.verify(container, adapter, expectedType);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void accept(PicoVisitor visitor)
+    {
+        visitor.visitParameter(this);
+        for(Parameter element : elements)
+        {
+            visitor.visitParameter(element);
+        }
     }
     
-    /**
-     * Custom component adapter for instantiating parameter's instance.
-     *
-     * <p>Created on Dec 8, 2003</p>
-     * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
-     * @version $Id: SequenceParameter.java,v 1.4 2004-02-17 15:50:29 fil Exp $
-     */
-    private static class SequenceComponentAdapter
-        implements ComponentAdapter
+    private Class getElementType(Class expectedType)
     {
-        private PicoContainer container;
-        
-        private ComponentAdapter[] adapters;
-        
-        private Object componentKey;
-        
-        private Class compoponenImplementation;
-        
-        public SequenceComponentAdapter(ComponentAdapter[] adapters, Class componentImplementation)
+        if(expectedType.getComponentType() != null)
         {
-            this.componentKey = new Object();
-            this.compoponenImplementation = componentImplementation;
-            this.adapters = adapters;
+            return expectedType.getComponentType();
         }
-        
-        /**
-         * {@inheritDoc}
-         */
-        public void setContainer(PicoContainer container)
+        if(Collection.class.isAssignableFrom(expectedType))
         {
-            this.container = container;
+            // Cannot determine actual type parameters from a Class object. This is not supported
+            // Java5. We could determine the type parameter from the constructor though - we
+            // would have to be passed java.lang.reflect.ParametrizedType, which can be obtained
+            // from Constructor.getGenericParameterTypes()
+            return Object.class;
         }
+        throw new PicoIntrospectionException("not a collection nor array type");
+    }
     
-        /**
-         * {@inheritDoc}
-         */
-        public PicoContainer getContainer()
+    private Object toArray(Object[] source, Class targetType)
+    {
+        Object target = Array.newInstance(targetType.getComponentType(), source.length);
+        System.arraycopy(source, 0, target, 0, source.length);
+        return target;
+    }
+    
+    private Object toCollection(Object[] source, Class targetType)
+    {
+        Collection target;
+        try
         {
-            return container;
-        }
-        
-        /**
-         * {@inheritDoc}
-         */
-        public Object getComponentInstance()
-            throws PicoInitializationException, PicoIntrospectionException
-        {
-            Object[] instances = new Object[adapters.length];
-            for (int i = 0; i < adapters.length; i++)
+            try
             {
-                instances[i] = adapters[i].getComponentInstance();
+                Constructor ctor = targetType.getConstructor(new Class[] { Integer.TYPE });
+                target = (Collection)ctor.newInstance(new Object[] { new Integer(source.length) });
             }
-            if(getComponentImplementation().getComponentType() != null)
+            catch(NoSuchMethodException e)
             {
-                Object result = Array.newInstance(getComponentImplementation().getComponentType(), 
-                    adapters.length);
-                System.arraycopy(instances, 0, result, 0, adapters.length);
-                return result;
-            }
-            if(Collection.class.isAssignableFrom(getComponentImplementation()))
-            {
-                Collection result;
                 try
                 {
-                    try
-                    {
-                        Constructor ctor = getComponentImplementation().
-                            getConstructor(new Class[] {Integer.TYPE});
-                        result = (Collection)ctor.
-                            newInstance(new Object[] {new Integer(adapters.length)});
-                    }
-                    catch(NoSuchMethodException e)
-                    {
-                        try
-                        {
-                            Constructor ctor = getComponentImplementation().
-                                getConstructor(new Class[0]);
-                                result = (Collection)ctor.newInstance(new Object[0]);
-                        }
-                        catch(NoSuchMethodException ee)
-                        {
-                            throw new CollectionInstantiationException(
-                                "cannot instantiate Collection "+
-                                getComponentImplementation().getName()+
-                                " no supported constructors found", ee);
-                        }
-                    }
+                    Constructor ctor = targetType.getConstructor(new Class[0]);
+                    target = (Collection)ctor.newInstance(new Object[0]);
                 }
-                catch(Exception e)
+                catch(NoSuchMethodException ee)
                 {
-                    if(e instanceof PicoException)
-                    {
-                        throw (PicoException)e; 
-                    }
-                    else
-                    {
-                        throw new CollectionInstantiationException(
-                            "cannot instantiate Collection "+
-                            getComponentImplementation().getName(), e);
-                    }
+                    throw new CollectionInstantiationException("cannot instantiate Collection "
+                        + targetType.getName() + " no supported constructors found", ee);
                 }
-                result.addAll(Arrays.asList(instances));
-                return result;
             }
-            throw new NonCompositeTypeException(getComponentImplementation().getName()+
-                " is not a Collection nor array type");        
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        public void verify() throws PicoVerificationException
+        catch(Exception e)
         {
-            for (int i = 0; i < adapters.length; i++)
+            if(e instanceof PicoException)
             {
-                ComponentAdapter adapter = adapters[i];
-                adapter.verify();
+                throw (PicoException)e;
+            }
+            else
+            {
+                throw new CollectionInstantiationException("cannot instantiate Collection "
+                    + targetType.getName(), e);
             }
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Class getComponentImplementation()
-        {
-            return compoponenImplementation;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Object getComponentKey()
-        {
-            return componentKey;
-        }
+        target.addAll(Arrays.asList(source));
+        return target;
     }
 }

@@ -35,20 +35,12 @@ import org.picocontainer.PicoIntrospectionException;
  * key type.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: UnsupportedKeyTypeException.java,v 1.4 2004-01-14 12:12:28 fil Exp $
+ * @version $Id: UnsupportedKeyTypeException.java,v 1.5 2005-02-04 02:28:15 rafal Exp $
  */
 ///CLOVER:OFF
 public class UnsupportedKeyTypeException 
     extends PicoIntrospectionException
 {
-    /**
-     * Creates a new instance of the exception object. 
-     */
-    public UnsupportedKeyTypeException()
-    {
-        super();
-    }
-
     /**
      * Creates a new instance of the exception object.
      *  
@@ -57,17 +49,6 @@ public class UnsupportedKeyTypeException
     public UnsupportedKeyTypeException(String message)
     {
         super(message);
-    }
-
-    /**
-     * Creates a new instance of the exception object.
-     *      
-     * @param cause the root cause.
-     */
-    public UnsupportedKeyTypeException(Throwable cause)
-    {
-        super();
-        initCause(cause);
     }
 
     /**

@@ -28,7 +28,6 @@
 
 package org.objectledge.pico.customization;
 
-import org.picocontainer.ComponentAdapter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
@@ -39,37 +38,24 @@ import org.picocontainer.PicoVerificationException;
  * class.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentProvider.java,v 1.9 2004-05-06 13:38:18 pablo Exp $
+ * @version $Id: CustomizedComponentProvider.java,v 1.10 2005-02-04 02:28:15 rafal Exp $
  */
 public interface CustomizedComponentProvider
 {
     /**
-     * Associates the provider with a container.
-     * 
-     * @param container the container.
-     */
-    public void setContainer(PicoContainer container);
-    
-    /**
-     * Returns the associated container.
-     * 
-     * @return the container.
-     */
-    public PicoContainer getContainer();
-    
-    /**
      * Returns a customized component instance.
      * 
+     * @param container the container.
      * @param componentKey requesting component's key.
      * @param componentImplementaion requesting component's implmenetation class.
-     * @return customized adapter of the component.
+     * @return customized component.
      * @throws PicoInitializationException if the customized component cannot be initialized.
      * @throws PicoIntrospectionException if the customized component cannot be initialized.
      * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
-    public ComponentAdapter getCustomizedAdapter(Object componentKey, Class componentImplementaion)
-        throws PicoInitializationException, PicoIntrospectionException,
-            UnsupportedKeyTypeException;
+    public Object getCustomizedComponentInstance(PicoContainer container, Object componentKey,
+        Class componentImplementaion)
+        throws PicoInitializationException, PicoIntrospectionException, UnsupportedKeyTypeException;
     
     /**
      * Returns the type of the customized components.
@@ -82,9 +68,10 @@ public interface CustomizedComponentProvider
      * Verifies if the customized component can be instantiated using the dependencies present
      * in the associated container.
      * 
+     * @param container the container.
      * @throws PicoVerificationException if the container does not contain required
      *         dependencies.
      */
-    public void verify() 
+    public void verify(PicoContainer container) 
         throws PicoVerificationException;
 }

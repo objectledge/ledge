@@ -28,19 +28,23 @@
 
 package org.objectledge.pico;
 
+import java.lang.reflect.Field;
+
+import org.nanocontainer.reflection.InvalidConversionException;
 import org.nanocontainer.reflection.StringToObjectConverter;
 import org.picocontainer.ComponentAdapter;
 import org.picocontainer.Parameter;
 import org.picocontainer.PicoContainer;
+import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
-import org.picocontainer.defaults.InstanceComponentAdapter;
+import org.picocontainer.PicoVisitor;
 
 /**
  * A parameter that is intialized with a string, and is converted to the desired type on demand.
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: StringParameter.java,v 1.3 2004-02-17 15:50:29 fil Exp $
+ * @version $Id: StringParameter.java,v 1.4 2005-02-04 02:28:13 rafal Exp $
  */
 public class StringParameter 
     implements Parameter
@@ -77,20 +81,90 @@ public class StringParameter
     /**
      * {@inheritDoc}
      */
-    public ComponentAdapter resolveAdapter(PicoContainer componentRegistry, Class expectedType)
-        throws PicoIntrospectionException
+    public Object resolveInstance(PicoContainer container, ComponentAdapter adapter, 
+        Class expectedType)
+        throws PicoInitializationException
     {
-        StringToObjectConverter converter = (StringToObjectConverter)componentRegistry.
+        StringToObjectConverter converter = (StringToObjectConverter)container.
             getComponentInstance(StringToObjectConverter.class);
-        Object value;
         if(parameterType == null)
         {
-           value = converter.convertTo(expectedType, stringValue);
+            return converter.convertTo(expectedType, stringValue);
         }
         else
         {
-            value = converter.convertTo(parameterType, stringValue);
+            return converter.convertTo(parameterType, stringValue);
         }
-        return new InstanceComponentAdapter(new Object(), value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isResolvable(PicoContainer container, ComponentAdapter adapter, 
+        Class expectedType)
+    {
+        try 
+        {
+            verify(container, adapter, expectedType);
+            return true;
+        } 
+        catch(PicoIntrospectionException e) 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void verify(PicoContainer container, ComponentAdapter adapter, Class expectedType)
+        throws PicoIntrospectionException
+    {
+        if(parameterType != null && !expectedType.isAssignableFrom(parameterType)
+            && !checkPrimitive(expectedType))
+        {
+            throw new PicoIntrospectionException(expectedType.getClass().getName()
+                + " is not assignable from "
+                + parameterType.getName());
+        }
+        try
+        {
+            resolveInstance(container, adapter, expectedType);
+        }
+        catch(InvalidConversionException e)
+        {
+            throw new PicoIntrospectionException("cannot resolve parameter from string", e);
+        }
+    }
+    
+    private boolean checkPrimitive(Class expectedType) 
+    {
+        try
+        {
+            if(expectedType.isPrimitive())
+            {
+                final Field field = parameterType.getField("TYPE");
+                final Class type = (Class)field.get(null);
+                return expectedType.isAssignableFrom(type);
+            }
+        }
+        catch(NoSuchFieldException e)
+        {
+            // ignored
+        }
+        catch(IllegalAccessException e)
+        {
+            // ignored
+        }
+        return false;
+    }
+    
+
+    /**
+     * {@inheritDoc}
+     */
+    public void accept(PicoVisitor visitor)
+    {
+        visitor.visitParameter(this);
     }
 }
