@@ -13,29 +13,48 @@
       <item name="Servlet integration" href="/servlet-integration/index.html" collapse="true">
         <item name="Ledge Servlet" href="/servlet-integration/LedgeServlet.html"/>
         <item name="Http Dispatcher" href="/servlet-integration/HttpDispatcher.html" collapse="true">
+          <item name="Selector Dispatcher" href="/servlet-integration/dispatcher/SelectorHttpDispatcher.html"/>
+          <item name="Pipeline Dispatcher" href="/servlet-integration/dispatcher/PipelineHttpDispatcher.html"/>
           <item name="Static Dispatcher" href="/servlet-integration/dispatcher/StaticHttpDispatcher.html"/>
         </item>
       </item>
+      <item name="WebMVC" href="/mvc/index.html" collapse="true">
+        <item name="Page model" href="/mvc/PageModel.html"/>
+        <item name="Finder" href="/mvc/Finder.html"/>
+        <item name="Builders" href="/mvc/Builders.html"/>
+        <item name="Components" href="/mvc/Components.html"/>
+        <item name="Actions" href="/mvc/Actions.html"/>                        
+      </item>
       <item name="Components" href="/components/index.html" collapse="true">
-        <item name="Servlet FS provider" href="/components/ServletFileSystemProvider.html"/>
-        <item name="Upload valve" href="/components/UploadValve.html"/>
-        <item name="Parameters loader valve" href="/components/RequestParameters.html"/>
-        <item name="Locale loader valve" href="/components/LocaleLoaderValve.html"/>
-        <item name="Web i18n tool factory" href="/components/WebI18nToolFactory.html"/>
         <item name="Web configurator" href="/components/WebConfigurator.html"/>
-        <item name="Exception redirector valve" href="/components/ExceptionRedirectorValve.html"/>
-        <item name="PolicySystem" href="/components/PolicySystem.html"/>
-        <item name="MVC Components" href="/components/mvc/index.html" collapse="true">
-          <item name="MVC initializer valve" href="/components/mvc/MVCInitializerValve.html"/>      
-          <item name="MVC results valve" href="/components/mvc/MVCResultsValve.html"/>
-          <item name="Action executor valve" href="/components/mvc/ActionExecutorValve.html"/>
-          <item name="Component tool factory" href="/components/mvc/ComponentToolFactory.html"/>
-          <item name="MVC class finder" href="/components/mvc/MVCClassFinder.html"/>
-          <item name="MVC template finder" href="/components/mvc/MVCTemplateFinder.html"/>
-          <item name="MVC finder" href="/components/mvc/MVCFinder.html"/>
-          <item name="Name sequence factory" href="/components/mvc/NameSequenceFactory.html"/>
-          <item name="Builder executor valve" href="/components/mvc/BuilderExecutorValve.html"/>
-        </item>
+        <item name="MVC class finder" href="/components/MVCClassFinder.html"/>
+        <item name="MVC template finder" href="/components/MVCTemplateFinder.html"/>
+        <item name="MVC finder" href="/components/MVCFinder.html"/>
+        <item name="Name sequence factory" href="/components/mvc/NameSequenceFactory.html"/>
+        <item name="PolicySystem" href="/components/PolicySystem.html"/>        
+        <item name="Servlet FS provider" href="/components/ServletFileSystemProvider.html"/>        
+      </item>
+      
+      <item name="Tools &amp; ToolFactories" href="/tools/index.html" collapse="true">
+        <item name="Web I18n tool factory" href="/tools/WebI18nToolFactory.html"/>
+        <item name="ComponentTool &amp; factory" href="/tools/ComponentToolFactory.html"/>
+        <item name="Link tool &amp; factory" href="/tools/LinkToolFactory.html"/>
+      </item>
+      
+      <item name="Valves" href="/valves/index.html" collapse="true">
+        <item name="Locale loader" href="/valves/LocaleLoaderValve.html"/>      
+        <item name="Request parameters loader" href="/valves/RequestParameters.html"/>      
+        <item name="Exception redirector valve" href="/valves/ExceptionRedirectorValve.html"/>
+		<item name="Upload valve" href="/valves/UploadValve.html"/>
+		<item name="MVC initializer valve" href="/valves/MVCInitializerValve.html"/>
+        <item name="Action executor valve" href="/valves/ActionExecutorValve.html"/>		
+        <item name="Builder executor valve" href="/valves/BuilderExecutorValve.html"/>        
+        <item name="MVC results valve" href="/valves/MVCResultsValve.html"/>        
+      </item>
+      <item name="Utils" href="/utils/index.html" collapse="true">
+        <item name="RequestParameters" href="/utils/RequestParameters.html"/>
+        <item name="HttpContext" href="/utils/HttpContext.html"/>            
+        <item name="MVCContext" href="/utils/MVCContext"/>
       </item>
     </menu>
   </body>

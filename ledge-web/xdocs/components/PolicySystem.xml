@@ -17,6 +17,7 @@
             <li>PolicySystem <a href="../apidocs/org/objectledge/policy/PolicySystem.html">JavaDoc</a></li>
             <li>PolicySystem <a href="../xref/org/objectledge/policy/PolicySystem.html">XRef</a></li>
             <li>PolicySystem <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/policy/PolicySystem.java">CVS log</a></li>
+            <li>PolicySystem configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/policy/PolicySystem.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
           </ul>
         </p>
       </subsection>
@@ -28,7 +29,7 @@
               <th>required components</th>
               <td width="100%">
                 <a href="../../../ledge-container/docs/container-subsystems/LoggerFactory.html">LoggerFactory</a>, 
-                <a href="../../../ledge-components/docs/components/Templating.html">Templating</a>
+                <a href="../../../ledge-components/docs/components/Templating.html">Templating</a>,
                 <a href="../../../ledge-components/docs/components/RoleChecking.html">RoleChecking</a>
               </td>
             </tr>

@@ -15,8 +15,8 @@
       <subsection name="Browse">
         <p>
           <ul>
-            <li>MVCInitializerValve <a href="../../apidocs/org/objectledge/web/mvc/MVCInitializerValve.html">JavaDoc</a></li>
-            <li>MVCInitializerValve <a href="../../xref/org/objectledge/web/mvc/MVCInitializerValve.html">XRef</a></li>
+            <li>MVCInitializerValve <a href="../apidocs/org/objectledge/web/mvc/MVCInitializerValve.html">JavaDoc</a></li>
+            <li>MVCInitializerValve <a href="../xref/org/objectledge/web/mvc/MVCInitializerValve.html">XRef</a></li>
             <li>MVCInitializerValve <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/mvc/MVCInitializerValve.java">CVS log</a></li>
           </ul>
         </p>
@@ -28,7 +28,7 @@
             <tr>
               <th>required components</th>
               <td width="100%">
-                <a href="../WebConfigurator.html">WebConfigurator</a>
+                <a href="../components/WebConfigurator.html">WebConfigurator</a>
               </td>
             </tr>
             <tr>

@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <document>
   <properties>
-    <title>MVCTemplateFinder</title>
+    <title>MVCClassFinder</title>
   </properties>
 
   <body>
-    <section name="MVCTemplateFinder">
+    <section name="MVCClassFinder">
       <subsection name="Description">
         <p>
-          An interface finder for finding MVC templates that should be used for
-          rendering specific views or components.
+          An interface finder for finding MVC model classes.
         </p>
       </subsection>
       
       <subsection name="Browse">
         <p>
           <ul>
-            <li>MVCTemplateFinder <a href="../../apidocs/org/objectledge/web/mvc/finders/MVCTemplateFinder.html">JavaDoc</a></li>
-            <li>MVCTemplateFinder <a href="../../xref/org/objectledge/web/mvc/finders/MVCTemplateFinder.html">XRef</a></li>
-            <li>MVCTemplateFinder <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/mvc/finders/MVCTemplateFinder.java">CVS log</a></li>
+            <li>MVCClassFinder <a href="../apidocs/org/objectledge/web/mvc/finders/MVCClassFinder.html">JavaDoc</a></li>
+            <li>MVCClassFinder <a href="../xref/org/objectledge/web/mvc/finders/MVCClassFinder.html">XRef</a></li>
+            <li>MVCClassFinder <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/mvc/finders/MVCClassFinder.java">CVS log</a></li>
           </ul>
         </p>
       </subsection>
@@ -43,7 +42,7 @@
       <subsection name="Implementations">
         <ul>
           <li>
-            <p>The default implementation of the <code>MVCTemplateFinder</code> interface.</p>
+            <p>The default implementation of the <code>MVCClassFinder</code> interface.</p>
             <p class="more"><a href="MVCFinder.html">more</a></p>
           </li>
         </ul>

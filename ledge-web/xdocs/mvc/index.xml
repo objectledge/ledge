@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Overview of MVC</title>
+  </properties>
+  <body>
+    <section name="MVC">
+      <subsection name="Page model">
+        <p>...</p>
+        <p class="more"><a href="PageModel.html">more</a></p>
+      </subsection>
+      <subsection name="Finder">
+        <p>...</p>
+        <p class="more"><a href="Finder.html">more</a></p>
+      </subsection>
+      <subsection name="Builders">
+        <p>...</p>
+        <p class="more"><a href="Builders.html">more</a></p>
+      </subsection>
+      <subsection name="Components">
+        <p>...</p>
+        <p class="more"><a href="Components.html">more</a></p>
+      </subsection>
+      <subsection name="Actions">
+        <p>...</p>
+        <p class="more"><a href="Actions.html">more</a></p>
+      </subsection>
+    </section>
+  </body>
+</document>
+  

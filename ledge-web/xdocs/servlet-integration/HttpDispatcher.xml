@@ -25,10 +25,18 @@
         <p>
           <ul>
             <li>
+              <p>SelectorHttpDispatcher - a dispatcher that provides rule based selection of other dispatchers.</p>
+              <p class="more"><a href="dispatcher/SelectorHttpDispatcher.html">more</a></p>
+            </li>
+			<li>
+              <p>PipelineHttpDispatcher - a dispatcher that process the request using pipeline.</p>
+              <p class="more"><a href="dispatcher/PipelineHttpDispatcher.html">more</a></p>
+            </li>
+			<li>
               <p>StaticHttpDispatcher returns hard coded responses for URLs matching a regular expression.
               Status code, content type and response body text can be configured.</p>
               <p class="more"><a href="dispatcher/StaticHttpDispatcher.html">more</a></p>
-            </li>
+            </li>                        
           </ul>
         </p>
       </subsection>

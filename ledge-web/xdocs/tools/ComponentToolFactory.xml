@@ -9,22 +9,22 @@
       <subsection name="Description">
         <p>
           The component produces the context tool used to include the MVC components within the view.
-          Learn more about <a href="../../../../ledge-components/docs/components/templating/ComponentToolFactory.html">ContextTools</a>
+          Learn more about <a href="../../../ledge-components/docs/components/templating/ContextToolFactory.html">ContextTools</a>
         </p>
       </subsection>
       
       <subsection name="Browse">
         <p>
           <ul>
-            <li>ComponentToolFactory <a href="../../apidocs/org/objectledge/web/mvc/components/ComponentToolFactory.html">JavaDoc</a></li>
-            <li>ComponentToolFactory <a href="../../xref/org/objectledge/web/mvc/components/ComponentToolFactory.html">XRef</a></li>
+            <li>ComponentToolFactory <a href="../apidocs/org/objectledge/web/mvc/components/ComponentToolFactory.html">JavaDoc</a></li>
+            <li>ComponentToolFactory <a href="../xref/org/objectledge/web/mvc/components/ComponentToolFactory.html">XRef</a></li>
             <li>ComponentToolFactory <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/mvc/components/ComponentToolFactory.java">CVS log</a></li>
           </ul>
         </p>
         <p>
           <ul>
-            <li>ComponentTool <a href="../../apidocs/org/objectledge/web/mvc/components/ComponentTool.html">JavaDoc</a></li>
-            <li>ComponentTool <a href="../../xref/org/objectledge/web/mvc/components/ComponentTool.html">XRef</a></li>
+            <li>ComponentTool <a href="../apidocs/org/objectledge/web/mvc/components/ComponentTool.html">JavaDoc</a></li>
+            <li>ComponentTool <a href="../xref/org/objectledge/web/mvc/components/ComponentTool.html">XRef</a></li>
             <li>ComponentTool <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/mvc/components/ComponentTool.java">CVS log</a></li>
           </ul>
         </p>
@@ -36,9 +36,9 @@
             <tr>
               <th>required components</th>
               <td width="100%">
-                <a href="MVCClassFinder.html">MVCClassFinder</a>,
-                <a href="MVCTemplateFinder.html">MVCTemplateFinder</a>,
-                <a href="../../../../ledge-components/docs/components/Context.html">Context</a>
+                <a href="../components/MVCClassFinder.html">MVCClassFinder</a>,
+                <a href="../components/MVCTemplateFinder.html">MVCTemplateFinder</a>,
+                <a href="../../../ledge-components/docs/components/Context.html">Context</a>
               </td>
             </tr>
             <tr>
