@@ -29,13 +29,12 @@ package org.objectledge.web.mvc.components;
 
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.2 2004-01-20 14:13:37 zwierzem Exp $
+ * @version $Id: ComponentTool.java,v 1.3 2004-01-20 14:15:08 zwierzem Exp $
  */
 public class ComponentTool
 {
