@@ -1,71 +1,43 @@
 // 
-//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
-//All rights reserved. 
-//   
-//Redistribution and use in source and binary forms, with or without modification,  
-//are permitted provided that the following conditions are met: 
-//   
-//* Redistributions of source code must retain the above copyright notice,  
-//this list of conditions and the following disclaimer. 
-//* Redistributions in binary form must reproduce the above copyright notice,  
-//this list of conditions and the following disclaimer in the documentation  
-//and/or other materials provided with the distribution. 
-//* Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-//nor the names of its contributors may be used to endorse or promote products  
-//derived from this software without specific prior written permission. 
+// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// All rights reserved. 
 // 
-//THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
-//AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
-//WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-//IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
-//INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
-//BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
-//OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
-//WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
-//ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
-//POSSIBILITY OF SUCH DAMAGE. 
-//
-
+// Redistribution and use in source and binary forms, with or without modification,  
+// are permitted provided that the following conditions are met: 
+//  
+// * Redistributions of source code must retain the above copyright notice,  
+//	 this list of conditions and the following disclaimer. 
+// * Redistributions in binary form must reproduce the above copyright notice,  
+//	 this list of conditions and the following disclaimer in the documentation  
+//	 and/or other materials provided with the distribution. 
+// * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+//	 nor the names of its contributors may be used to endorse or promote products  
+//	 derived from this software without specific prior written permission. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+// IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+// OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+// POSSIBILITY OF SUCH DAMAGE. 
+// 
 package org.objectledge.database.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.database.Database;
-import org.objectledge.database.DatabaseUtils;
 
 /**
  * Provides Object-Relational DB mapping.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.8 2004-02-12 11:43:05 pablo Exp $
+ * @version $Id: Persistence.java,v 1.9 2004-02-24 09:13:44 fil Exp $
  */
-public class Persistence
+public interface Persistence
 {
-    /** The Database. */
-    private Database database;
-    
-    /** The logger */
-    private Logger logger;
-
-    /**
-     * Component constructor.
-     * 
-     * @param database the database.
-     * @param logger the logger.
-     */
-    public Persistence(Database database, Logger logger)
-    {
-        this.logger = logger;
-        this.database = database;
-    }
-
     // PersistenceSystem interface //////////////////////////////////////////
 
     /**
@@ -76,33 +48,8 @@ public class Persistence
      * @return the presistent object.
      * @throws PersistenceException if any exception occured.
      */
-    public Persistent load(long id, PersistentFactory factory) throws PersistenceException
-    {
-        Connection conn = null;
-        try
-        {
-            conn = database.getConnection();
-            Persistent obj = factory.newInstance();
-            PreparedStatement statement = InputRecord.getSelectStatement(id, obj, conn);
-            ResultSet rs = statement.executeQuery();
-            if (!rs.next())
-            {
-                return null;
-            }
-            InputRecord record = new InputRecord(rs);
-            obj.setData(record);
-            obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
-            return obj;
-        }
-        catch (Exception e)
-        {
-            throw new PersistenceException("Failed to retrieve object", e);
-        }
-        finally
-        {
-            DatabaseUtils.close(conn);
-        }
-    }
+    public Persistent load(long id, PersistentFactory factory)
+        throws PersistenceException;
 
     /**
      * Loads objects from the database.
@@ -116,35 +63,7 @@ public class Persistence
      * @return the list of presistent objects.
      * @throws PersistenceException if any exception occured.
      */
-    public List load(String where, PersistentFactory factory) throws PersistenceException
-    {
-        Connection conn = null;
-        try
-        {
-            conn = database.getConnection();
-            Persistent obj = factory.newInstance();
-            PreparedStatement statement = InputRecord.getSelectStatement(where, obj, conn);
-            ResultSet rs = statement.executeQuery();
-            InputRecord record = new InputRecord(rs);
-            ArrayList list = new ArrayList();
-            while (rs.next())
-            {
-                obj.setData(record);
-                obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
-                list.add(obj);
-                obj = factory.newInstance();
-            }
-            return list;
-        }
-        catch (Exception e)
-        {
-            throw new PersistenceException("Failed to retrieve object", e);
-        }
-        finally
-        {
-            DatabaseUtils.close(conn);
-        }
-    }
+    public List load(String where, PersistentFactory factory) throws PersistenceException;
 
     /**
      * Saves an object in the database.
@@ -152,52 +71,7 @@ public class Persistence
      * @param object the object to be saved.
      * @throws PersistenceException if any exception occured.
      */
-    public void save(Persistent object) throws PersistenceException
-    {
-        synchronized (object)
-        {
-            OutputRecord record = new OutputRecord(object);
-            String table = object.getTable();
-            String[] keys = object.getKeyColumns();
-            object.getData(record);
-            Connection conn = null;
-
-            try
-            {
-                conn = database.getConnection();
-                PreparedStatement statement;
-                if (object.getSaved())
-                {
-                    statement = record.getUpdateStatement(conn);
-                    statement.execute();
-                }
-                else
-                {
-                    long id;
-                    if (keys.length == 1)
-                    {
-                        id = database.getNextId(table);
-                        record.setLong(keys[0], id);
-                    }
-                    else
-                    {
-                        id = -1;
-                    }
-                    statement = record.getInsertStatement(conn);
-                    statement.execute();
-                    object.setSaved(id);
-                }
-            }
-            catch (Exception e)
-            {
-                throw new PersistenceException("Failed to save object", e);
-            }
-            finally
-            {
-                DatabaseUtils.close(conn);
-            }
-        }
-    }
+    public void save(Persistent object) throws PersistenceException;
 
     /**
      * Reverts the object to the saved state.
@@ -207,37 +81,8 @@ public class Persistence
      * @throws IllegalStateException if no state has been saved yet for the
      *         object in question.
      */
-    public void revert(Persistent object) throws PersistenceException, IllegalStateException
-    {
-        synchronized (object)
-        {
-            if (!object.getSaved())
-            {
-                throw new IllegalStateException("no state has been saved yet");
-            }
-            Connection conn = null;
-            try
-            {
-                conn = database.getConnection();
-                PreparedStatement statement = InputRecord.getSelectStatements(object, conn);
-                ResultSet rs = statement.executeQuery();
-                if (!rs.next())
-                {
-                    throw new PersistenceException("saved state was lost");
-                }
-                InputRecord irecord = new InputRecord(rs);
-                object.setData(irecord);
-            }
-            catch (Exception e)
-            {
-                throw new PersistenceException("failed to revert object's state", e);
-            }
-            finally
-            {
-                DatabaseUtils.close(conn);
-            }
-        }
-    }
+    public void revert(Persistent object)
+        throws PersistenceException, IllegalStateException;
 
     /**
      * Removes an object from the database.
@@ -245,33 +90,7 @@ public class Persistence
      * @param object the object to be removed.
      * @throws PersistenceException if any exception occured.
      */
-    public void delete(Persistent object) throws PersistenceException
-    {
-        synchronized (object)
-        {
-            if (!object.getSaved())
-            {
-                throw new IllegalStateException("no state has been saved yet");
-            }
-            Connection conn = null;
-            try
-            {
-                conn = database.getConnection();
-                OutputRecord record = new OutputRecord(object);
-                object.getData(record);
-                PreparedStatement statement = record.getDeleteStatement(conn); 
-                statement.execute();
-            }
-            catch (Exception e)
-            {
-                throw new PersistenceException("Failed to delete object", e);
-            }
-            finally
-            {
-                DatabaseUtils.close(conn);
-            }
-        }
-    }
+    public void delete(Persistent object) throws PersistenceException;
 
     /**
      * An utility method for checking for existence of rows.
@@ -282,34 +101,8 @@ public class Persistence
      *         or more rows in the <code>table</code>.
      * @throws PersistenceException if any exception occured.
      */
-    public boolean exists(String table, String where) throws PersistenceException
-    {
-        Connection conn = null;
-        try
-        {
-            conn = database.getConnection();
-            Statement statement = conn.createStatement();
-            ResultSet rs;
-            if (where != null)
-            {
-                rs = statement.executeQuery("SELECT DISTINCT 1 FROM " + table + " WHERE " + where);
-            }
-            else
-            {
-                rs = statement.executeQuery("SELECT DISTINCT 1 FROM " + table);
-            }
-            return (rs.next());
-        }
-        catch (Exception e)
-        {
-            throw new PersistenceException("Failed to execute query", e);
-        }
-        finally
-        {
-            DatabaseUtils.close(conn);
-        }
-    }
-
+    public boolean exists(String table, String where) throws PersistenceException;
+    
     /**
      * An utility method for checking the number of matching rows.
      *
@@ -318,35 +111,5 @@ public class Persistence
      * @return the number of <code>table</code> matching the condition.
      * @throws PersistenceException if any exception occured.
      */
-    public int count(String table, String where) throws PersistenceException
-    {
-        Connection conn = null;
-        try
-        {
-            conn = database.getConnection();
-            Statement statement = conn.createStatement();
-            ResultSet rs;
-            if (where != null)
-            {
-                rs = statement.executeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + where);
-            }
-            else
-            {
-                rs = statement.executeQuery("SELECT COUNT(*) FROM " + table);
-            }
-            if (!rs.next())
-            {
-                throw new PersistenceException("internal error - no data???");
-            }
-            return (rs.getInt(1));
-        }
-        catch (Exception e)
-        {
-            throw new PersistenceException("Failed to execute query", e);
-        }
-        finally
-        {
-            DatabaseUtils.close(conn);
-        }
-    }
+    public int count(String table, String where) throws PersistenceException;
 }

@@ -77,7 +77,7 @@ public class PersistenceTest extends TestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
         Database database = new Database(dataSource, idGenerator, transaction);
-        persistence = new Persistence(database, logger);
+        persistence = new DefaultPersistence(database, logger);
     }
 
     /*

@@ -47,6 +47,7 @@ import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
@@ -88,7 +89,7 @@ public class DBParametersTest extends TestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
         Database database = new Database(dataSource, idGenerator, transaction);
-        persistence = new Persistence(database, logger);
+        persistence = new DefaultPersistence(database, logger);
         manager = new DBParametersManager(database, logger);
     }
 

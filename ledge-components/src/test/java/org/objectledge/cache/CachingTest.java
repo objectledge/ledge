@@ -51,6 +51,7 @@ import org.objectledge.database.Database;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
@@ -90,7 +91,7 @@ public class CachingTest extends TestCase
         IdGenerator idGenerator = new IdGenerator(dataSource);
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
         Database database = new Database(dataSource, idGenerator, transaction);
-        Persistence persistence = new Persistence(database, logger);
+        Persistence persistence = new DefaultPersistence(database, logger);
         notification = new Notification();
 
         String root = System.getProperty("ledge.root");
