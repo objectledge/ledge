@@ -43,7 +43,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.18 2004-01-20 14:14:19 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.19 2004-01-21 11:03:24 pablo Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -196,6 +196,11 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Builder findEnclosingBuilder(Builder builder)
     {
+    	if(defaultBuilder.equals(builder))
+    	{
+    		return defaultBuilder;
+    	}
+
         String view = findViewName(builder);
         Sequence sequence = nameSequenceFactory.
             getClassNameSequence(VIEWS, view, true);
@@ -221,6 +226,11 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public String findViewName(Builder builder)
     {
+    	//TODO what to do if default builder was requested???
+    	if(defaultBuilder.equals(builder))
+    	{
+    		return null;
+    	}
         return nameSequenceFactory.getView(VIEWS, builder.getClass());
     }
 

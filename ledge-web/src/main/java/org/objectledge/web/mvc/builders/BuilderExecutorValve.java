@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.10 2004-01-19 13:14:37 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.11 2004-01-21 11:03:23 pablo Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -138,7 +138,8 @@ public class BuilderExecutorValve implements Runnable
 	        {
 	            throw new PipelineProcessingException(e);
 	        }
-	
+
+			//TODO: How to stop - maybe on defaultBuilder and defaultTemplate 	
 			// get next view build level
 	        ViewPair pair = builder.getEnclosingViewPair();
 			if(pair != null)
@@ -159,6 +160,13 @@ public class BuilderExecutorValve implements Runnable
 					enclosingTemplate = templateFinder.findEnclosingBuilderTemplate(template);
 				}
 				template = enclosingTemplate;
+				
+				//WARN: quick hack
+				if(classFinder.getDefaultBuilder().equals(builder)
+				&& templateFinder.getDefaultTemplate().equals(template))
+				{
+					break;
+				}
 			}
 			else
 			{
