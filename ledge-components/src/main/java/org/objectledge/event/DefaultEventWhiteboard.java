@@ -45,7 +45,7 @@ import org.jcontainer.dna.Logger;
  * Default event forwarder implementation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultEventWhiteboard.java,v 1.1 2004-03-01 13:33:45 fil Exp $
+ * @version $Id: DefaultEventWhiteboard.java,v 1.2 2005-01-21 06:12:02 pablo Exp $
  */
 public class DefaultEventWhiteboard implements EventWhiteboard
 {
@@ -65,7 +65,7 @@ public class DefaultEventWhiteboard implements EventWhiteboard
 
     // Initailization ////////////////////////////////////////////////////////
 
-    DefaultEventWhiteboard(EventWhiteboardFactory eventSystem, Logger logger)
+    public DefaultEventWhiteboard(EventWhiteboardFactory eventSystem, Logger logger)
     {
         this.logger = logger;
         this.eventSystem = eventSystem;

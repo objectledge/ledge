@@ -30,8 +30,8 @@
 
 <!-- Relax NG schema for XMLI18n component configuration -->
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
-  <include href="AbstractScheduler.rng">
-    <start>
+  <include href="../AbstractScheduler.rng">
+    <start combine="choice">
 	  <element name="config">
 	    <interleave>
           <ref name="baseConfig"/>
