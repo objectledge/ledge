@@ -29,6 +29,8 @@
 package org.objectledge.filesystem;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 
@@ -41,7 +43,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileSystemProvider.java,v 1.1 2004-01-08 10:12:00 fil Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.2 2004-01-13 12:46:10 fil Exp $
  */
 public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider
@@ -74,5 +76,25 @@ public class ServletFileSystemProvider
     public InputStream getInputStream(String path) 
     {
 		return context.getResourceAsStream(path);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public URL getResource(String path)
+        throws MalformedURLException
+    {
+        if(path.charAt(0) != '/')
+        {
+            path = "/"+path;
+        }
+        if(context.getResourceAsStream(path) != null)
+        {
+            return context.getResource(path);
+        }
+        else
+        {
+            return null;
+        }
     }
 }

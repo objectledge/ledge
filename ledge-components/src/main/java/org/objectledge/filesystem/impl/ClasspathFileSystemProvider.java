@@ -39,7 +39,7 @@ import org.objectledge.ComponentInitializationError;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.2 2003-12-03 14:14:13 mover Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.3 2004-01-13 12:46:12 fil Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
@@ -101,5 +101,13 @@ public class ClasspathFileSystemProvider
             path = path.substring(1);
         }
 		return classLoader.getResourceAsStream(path);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public URL getResource(String path)
+    {
+        return classLoader.getResource(path);
     }
 }

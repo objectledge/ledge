@@ -31,12 +31,14 @@ package org.objectledge.filesystem;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Specifies the contract between FileSystem abstarction and its concrete delegates.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemProvider.java,v 1.3 2003-12-04 14:42:21 fil Exp $
+ * @version $Id: FileSystemProvider.java,v 1.4 2004-01-13 12:46:12 fil Exp $
  */
 public interface FileSystemProvider
 {
@@ -185,6 +187,15 @@ public interface FileSystemProvider
      *         if the operation is not supported.
      */
     public RandomAccessFile getRandomAccess(String path, String mode);
+
+    /**
+     * Returns an URL to the resource.
+     * 
+     * @param path the abstract pathname.
+     * @return an URL to the resource, or null if not available.
+     * @throws MalformedURLException if the path contains invalid characters.
+     */
+    public URL getResource(String path) throws MalformedURLException;
 
     /**
      * Returns the time of the last modificaion of the specified file.

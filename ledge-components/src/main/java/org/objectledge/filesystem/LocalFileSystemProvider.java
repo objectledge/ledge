@@ -37,6 +37,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.LocalRandomAccessFile;
@@ -51,7 +53,7 @@ import org.objectledge.filesystem.impl.LocalRandomAccessFile;
  * considererd to be relative the the running user's current directory.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.1 2004-01-08 10:12:02 fil Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.2 2004-01-13 12:46:12 fil Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -353,6 +355,22 @@ public class LocalFileSystemProvider
 				return null;
 			}
 		}
+    }
+
+    /**
+     * {@inheritDoc}
+     */    
+    public URL getResource(String path) 
+        throws MalformedURLException
+    {
+        if(exists(path))
+        {
+            return getFile(path).toURL();
+        }
+        else
+        {
+            return null;
+        }
     }
     
     /**

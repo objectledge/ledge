@@ -54,7 +54,7 @@ import org.picocontainer.lifecycle.Stoppable;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.13 2004-01-08 12:50:52 fil Exp $
+ * @version $Id: FileSystem.java,v 1.14 2004-01-13 12:46:12 fil Exp $
  */
 public class FileSystem
     implements Startable, Stoppable
@@ -171,26 +171,16 @@ public class FileSystem
     public URL getResource(String path)
         throws MalformedURLException
     {
-        if (path.startsWith(protocol))
+        for (Iterator i = providers.iterator(); i.hasNext();)
         {
-            if (!exists(path.substring(protocol.length()+3)))
+            FileSystemProvider fp = (FileSystemProvider)i.next();
+            URL url = fp.getResource(path);
+            if (url != null)
             {
-                return null;
+                return url;
             }
         }
-        else
-        {
-            if (!exists(path))
-            {
-                return null;
-            }
-            if(path.charAt(0) != '/')
-            {
-                path = "/"+path;
-            }
-            path = protocol + "://" + path;
-        }
-        return new URL(null, path, urlStreamHandler);
+        return null;
     }
 
     /**
