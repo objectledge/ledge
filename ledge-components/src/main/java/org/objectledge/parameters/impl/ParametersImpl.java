@@ -6,18 +6,21 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.UndefinedParameterException;
+import org.objectledge.utils.StringUtils;
 
 /**
  * A simple implementation of parameters container.
  *
- *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: ParametersImpl.java,v 1.1 2003-11-27 17:02:48 pablo Exp $
+ * @version $Id: ParametersImpl.java,v 1.2 2003-11-28 12:28:11 pablo Exp $
  */
 public class ParametersImpl implements Parameters
 {
@@ -82,7 +85,6 @@ public class ParametersImpl implements Parameters
 	 */
 	public ParametersImpl(Parameters source)
 	{
-		this();
 		String[] names = source.getParameterNames();
 		for(int i=0; i<names.length; i++)
 		{
@@ -108,7 +110,7 @@ public class ParametersImpl implements Parameters
 		}
 		if(values.length > 1)
 		{
-			throw new AmbiguousParameterException("Parameter '"+name+"'is not unique");
+			throw new AmbiguousParameterException("Parameter '"+name+"'has multiple values");
 		}
 		return values[0];
     }
@@ -125,7 +127,7 @@ public class ParametersImpl implements Parameters
 		}
 		if(values.length > 1)
 		{
-			throw new AmbiguousParameterException("Parameter '"+name+"'is not unique");
+			throw new AmbiguousParameterException("Parameter '"+name+"'has multiple values");
 		}
 		return values[0];
     }
@@ -138,9 +140,11 @@ public class ParametersImpl implements Parameters
 		String[] values = (String[])map.get(name);
 		if(values == null)
 		{
-			values = new String[0];
+			return new String[0];
 		}
-		return values;
+		String[] target = new String[values.length];
+		System.arraycopy(values,0,target,0,values.length); 
+		return target; 
     }
 
 	/**
@@ -157,7 +161,7 @@ public class ParametersImpl implements Parameters
 	 */
     public boolean getBoolean(String name, boolean defaultValue)
     {
-    	String value = get(name, ""+defaultValue);
+    	String value = get(name, Boolean.toString(defaultValue));
     	return value.equals(TRUE);
     }
 
@@ -188,7 +192,7 @@ public class ParametersImpl implements Parameters
 	 */
     public float getFloat(String name, float defaultValue)
     {
-    	return Float.parseFloat(get(name,""+defaultValue));
+    	return Float.parseFloat(get(name,Float.toString(defaultValue)));
     }
 
     /**
@@ -218,7 +222,7 @@ public class ParametersImpl implements Parameters
 	 */
     public int getInt(String name, int defaultValue)
     {
-		return Integer.parseInt(get(name, ""+defaultValue));
+		return Integer.parseInt(get(name, Integer.toString(defaultValue)));
     }
 
     /**
@@ -248,7 +252,7 @@ public class ParametersImpl implements Parameters
 	 */
     public long getLong(String name, long defaultValue)
     {
-        return Long.parseLong(get(name,""+defaultValue));
+        return Long.parseLong(get(name,Long.toString(defaultValue)));
     }
     
 	/**
@@ -309,10 +313,23 @@ public class ParametersImpl implements Parameters
 	 */
     public void remove(String name, String value)
     {
-    	//TODO
     	String[] values = (String[])map.get(name);
-    	//...
-    	//...  
+    	if(values == null || values.length ==0)
+    	{
+    		return;
+    	}
+    	ArrayList list = new ArrayList();
+    	for(int i = 0; i < values.length; i++)
+    	{
+    		if(!((values[i] == null && value == null) ||
+    		    (value != null && value.equals(values[i]))))
+    		{
+				list.add(values[i]);
+    		}
+    	}
+    	values = new String[list.size()];
+    	list.toArray(values);
+    	map.put(name, values);
     }
 
     /**
@@ -320,7 +337,7 @@ public class ParametersImpl implements Parameters
      */
     public void remove(String name, float value)
     {
-    	throw new UnsupportedOperationException("not implemented yet");    
+    	remove(name, Float.toString(value));    
     }
 
     /**
@@ -328,7 +345,7 @@ public class ParametersImpl implements Parameters
      */
     public void remove(String name, int value)
     {
-    	throw new UnsupportedOperationException("not implemented yet");
+    	remove(name, Integer.toString(value));
     }
 
     /**
@@ -336,7 +353,7 @@ public class ParametersImpl implements Parameters
      */
     public void remove(String name, long value)
     {
-    	throw new UnsupportedOperationException("not implemented yet");
+    	remove(name, Long.toString(value));
     }
 
 	/**
@@ -344,7 +361,9 @@ public class ParametersImpl implements Parameters
 	 */
     public void set(String name, String value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+		String[] values = new String[1];
+		values[0] = value;
+		map.put(name, values);
     }
 
     /**
@@ -352,8 +371,9 @@ public class ParametersImpl implements Parameters
      */
     public void set(String name, String[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+		System.arraycopy(values,0,target,0,values.length); 
+		map.put(name, target);
     }
 
 	/**
@@ -361,7 +381,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void set(String name, boolean value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+        set(name,Boolean.toString(value));
     }
 
     /**
@@ -369,8 +389,12 @@ public class ParametersImpl implements Parameters
      */
     public void set(String name, boolean[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+    	for(int i = 0; i < values.length; i++)
+    	{
+    		target[i] = Boolean.toString(values[i]);
+    	}
+    	map.put(name, target);
     }
 
 	/**
@@ -378,7 +402,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void set(String name, float value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+        set(name,Float.toString(value));
     }
 
     /**
@@ -386,8 +410,12 @@ public class ParametersImpl implements Parameters
      */
     public void set(String name, float[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+		for(int i = 0; i < values.length; i++)
+		{
+			target[i] = Float.toString(values[i]);
+		}
+		map.put(name, target);
     }
 
 	/**
@@ -395,7 +423,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void set(String name, int value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+    	set(name,Integer.toString(value));
     }
 
     /**
@@ -403,8 +431,12 @@ public class ParametersImpl implements Parameters
      */
     public void set(String name, int[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+		for(int i = 0; i < values.length; i++)
+		{
+			target[i] = Integer.toString(values[i]);
+		}
+		map.put(name, target);
     }
 
 	/**
@@ -412,7 +444,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void set(String name, long value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+        set(name,Long.toString(value));
     }
 
     /**
@@ -420,8 +452,12 @@ public class ParametersImpl implements Parameters
      */
     public void set(String name, long[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+		for(int i = 0; i < values.length; i++)
+		{
+			target[i] = Long.toString(values[i]);
+		}
+		map.put(name, target);    
     }
 
 	/**
@@ -429,7 +465,19 @@ public class ParametersImpl implements Parameters
 	 */
     public void add(String name, String value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+		String[] values = (String[])map.get(name);
+		if(values == null || values.length == 0)
+		{
+			String[] target = new String[] { value };
+			map.put(name, target);
+		}
+		else
+		{
+		    String[] target = new String[values.length+1];
+		    System.arraycopy(values, 0, target, 0, values.length);
+		    target[values.length] = value;
+		    map.put(name,target);   
+		}
     }
     
 	/**
@@ -437,7 +485,20 @@ public class ParametersImpl implements Parameters
 	 */
 	public void add(String name, String[] values)
 	{
-		throw new UnsupportedOperationException("not implemented yet");
+		String[] prevValues = (String[])map.get(name);
+		if(prevValues == null || prevValues.length == 0)
+		{
+			String[] target = new String[values.length];
+			System.arraycopy(values, 0, target, 0, values.length);
+			map.put(name, target);
+		}
+		else
+		{
+			String[] target = new String[prevValues.length + values.length];
+			System.arraycopy(prevValues, 0, target, 0, values.length);
+			System.arraycopy(values, 0, target, prevValues.length, values.length);
+			map.put(name,target);   
+		}
 	}
 
 	/**
@@ -445,7 +506,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void add(String name, boolean value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+        add(name, Boolean.toString(value));
     }
 
     /**
@@ -453,8 +514,12 @@ public class ParametersImpl implements Parameters
      */
     public void add(String name, boolean[] values)
     {
-        // TODO Auto-generated method stub
-    
+        String[] target = new String[values.length];
+        for(int i = 0; i < values.length; i++)
+        {
+        	target[i] = Boolean.toString(values[i]);
+        }
+  		add(name, target);
     }
 
 	/**
@@ -462,7 +527,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void add(String name, float value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+		add(name, Float.toString(value));
     }
 
     /**
@@ -470,8 +535,12 @@ public class ParametersImpl implements Parameters
      */
     public void add(String name, float[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+		for(int i = 0; i < values.length; i++)
+		{
+			target[i] = Float.toString(values[i]);
+		}
+		add(name, target);
     }
 
 	/**
@@ -479,7 +548,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void add(String name, int value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+		add(name, Integer.toString(value));
     }
 
     /**
@@ -487,8 +556,12 @@ public class ParametersImpl implements Parameters
      */
     public void add(String name, int[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+		for(int i = 0; i < values.length; i++)
+		{
+			target[i] = Integer.toString(values[i]);
+		}
+		add(name, target);
     }
 
 	/**
@@ -496,7 +569,7 @@ public class ParametersImpl implements Parameters
 	 */
     public void add(String name, long value)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+		add(name, Long.toString(value));
     }
 
     /**
@@ -504,16 +577,35 @@ public class ParametersImpl implements Parameters
      */
     public void add(String name, long[] values)
     {
-        // TODO Auto-generated method stub
-    
+		String[] target = new String[values.length];
+		for(int i = 0; i < values.length; i++)
+		{
+			target[i] = Long.toString(values[i]);
+		}
+		add(name, target);
     }
 
 	/**
 	 * {@inheritDoc}
 	 */
-    public void add(Parameters parameters, boolean override)
+    public void add(Parameters parameters, boolean overwrite)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+		String[] names = parameters.getParameterNames();
+		for(int i=0; i<names.length; i++)
+		{
+			String[] values = parameters.getStrings(names[i]);
+			if(values != null)
+			{
+				if(overwrite)
+				{
+					set(names[i], values);
+				}
+				else
+				{
+					add(names[i], values);
+				}
+			}
+		}
     }
 
 	/**
@@ -521,7 +613,17 @@ public class ParametersImpl implements Parameters
 	 */
     public String getString()
     {
-        throw new UnsupportedOperationException("not implemented yet");
+    	StringBuffer sb = new StringBuffer();
+		Iterator it = map.keySet().iterator();
+		while(it.hasNext())
+		{
+			String name = (String)it.next();
+			sb.append(name);
+			sb.append('=');
+			sb.append(toString(name));
+			sb.append('\n');
+		}
+    	return sb.toString();
     }
 
 	/**
@@ -529,7 +631,17 @@ public class ParametersImpl implements Parameters
 	 */
     public Parameters getChild(String prefix)
     {
-        throw new UnsupportedOperationException("not implemented yet");
+    	Parameters target = new ParametersImpl();
+		Iterator it = map.keySet().iterator();
+		while(it.hasNext())
+		{
+			String name = (String)it.next();
+			if(name.startsWith(prefix) && name.length()>prefix.length())
+			{
+				target.set(name.substring(prefix.length()), getStrings(name));				
+			}
+		}
+    	return target;
     }
     
     private void loadParameters(LineNumberReader reader)
@@ -542,40 +654,98 @@ public class ParametersImpl implements Parameters
 		while(reader.ready())
 		{
 			// merge broken lines
-			String line = reader.readLine().trim();
-			if(line.startsWith("#") || line.length()==0)
-			{
-				continue;
-			}
-			int startingLine = reader.getLineNumber();
 			StringBuffer sb = new StringBuffer();
-			while(line.endsWith("\\") && reader.ready())
+			String line = null;
+			boolean breakAtEnd = false;
+			int lastBrokenLine = 0;
+			do
 			{
-				if(line.endsWith("\\"))
-				{
-					sb.append(line.substring(0, line.length()-1));
-				}
-				else
-				{
-					sb.append(line);
-				}
 				line = reader.readLine().trim();
+				if(line.length() > 0 && !line.startsWith("#"))
+				{
+					if(line.endsWith("\\"))
+					{
+						breakAtEnd = true;
+						lastBrokenLine = reader.getLineNumber();
+						sb.append(line.substring(0, line.length()-1));
+					}
+					else
+					{
+						breakAtEnd = false;
+						sb.append(line);
+					}
+				}
 			}
-						
-			while(line == null)
+			while((line.endsWith("\\") || line.length() == 0 || line.startsWith("#")) 
+					&& reader.ready());
+			if(breakAtEnd)
 			{
-				line = reader.readLine();
-				sb.append(line);
-			}							
-			if(line.endsWith("\\"))
-			{
-				throw new IllegalArgumentException("The "+startingLine+" line is not ended");
+				throw new IllegalArgumentException("The "+lastBrokenLine+" line is not ended");
 			}
 			// process the line			
-
-
-			// ...
+			line = sb.toString();
+			int delim = line.indexOf('=');
+			if(delim == -1)
+			{
+				throw new IllegalArgumentException("The property '"+line+"' has no '=' delimiter");
+			}
+			String name = line.substring(0,delim).trim();
+			String value = line.substring(delim+1).trim();
+			// process the value
+			if(value.indexOf(',') == -1)
+			{
+				add(name, value);
+			}
+			StringTokenizer st = new StringTokenizer(value,",");
+			ArrayList values = new ArrayList();
+			while(st.hasMoreTokens())
+			{
+				String v = st.nextToken();
+				while(v.endsWith("\\") && st.hasMoreTokens())
+				{
+					v = st.nextToken();
+					v = v + "," + st.nextToken();  					
+				}
+				values.add(StringUtils.expandUnicodeEscapes(v));
+			}
+			String[] target = new String[values.size()];
+			values.toArray(target);
+			add(name, target);
 		}
+    }
+    
+    /** 
+     * Get string representation of parameter values
+     *  
+     * @param name
+     * @return
+     */
+    private String toString(String name)
+    {
+		StringBuffer sb = new StringBuffer();
+		String[] values = (String[])map.get(name);
+		for(int i = 0; i < values.length; i++)
+	    {
+	    	String value = values[i];
+			int index = value.indexOf(',');
+			int start = 0;
+			while(index >= 0)
+			{
+				sb.append(value.substring(start, index));
+			    sb.append("\\,");
+				start = index + 1;
+				index = value.indexOf(',', start);
+			}
+	    	if(start < value.length())
+	    	{
+	    		sb.append(value.substring(start));
+	    	}
+			if(i == (values.length - 1))
+			{
+				sb.append(",");			
+			}
+		}
+    	return sb.toString();	
     }
     
 }
