@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.10 2004-08-25 08:01:05 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.11 2004-08-25 08:16:42 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -90,16 +90,17 @@ public abstract class AbstractI18n implements I18n
 		throws ConfigurationException
 	{
 		this.logger = logger;
-		undefinedValue = config.getChild("undefined_value").getValue(DEFAULT_UNDEFINED_VALUE);
-		useDefaultLocale = config.getChild("use_default_locale").
-			getValueAsBoolean(DEFAULT_USE_DEFAULT_LOCALE);
-		useKeyIfUndefined = config.getChild("use_key_if_undefined").
-			getValueAsBoolean(DEFAULT_USE_KEY_IF_UNDEFINED);
+		undefinedValue = config.getChild("undefined-value-marker").
+			getValue(DEFAULT_UNDEFINED_VALUE);
+		useDefaultLocale = config.getChild("default-locale-fallback").
+			getAttributeAsBoolean("enabled", DEFAULT_USE_DEFAULT_LOCALE);
+		useKeyIfUndefined = config.getChild("key-fallback").
+			getAttributeAsBoolean("enabled", DEFAULT_USE_KEY_IF_UNDEFINED);
 		localeMap = new HashMap();
 
-		if(config.getChild("supported_locales", false) != null)
+		if(config.getChild("supported-locales", false) != null)
 		{
-			Configuration[] locales = config.getChild("supported_locales").getChildren(); 
+			Configuration[] locales = config.getChild("supported-locales").getChildren(); 
 			supportedLocales =  new Locale[locales.length];
 			for(int i=0; i<locales.length; i++)
 			{

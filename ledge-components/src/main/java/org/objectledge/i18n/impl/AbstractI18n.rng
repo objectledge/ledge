@@ -35,7 +35,7 @@
   </start>
   <define name="baseConfig">
     <interleave>
-      <element name="supported_locales">
+      <element name="supported-locales">
         <oneOrMore>
           <element name="locale">
             <optional>
@@ -47,21 +47,29 @@
           </element>
         </oneOrMore>
       </element>
+      <optional>
+        <!-- perform fallback to default locale if value not found in requested one. defualt true -->
+        <element name="default-locale-fallback">  
+          <attribute name="enabled">
+            <text/>
+          </attribute>
+          <empty/>
+        </element>
+      </optional>
       <optional>  
-        <element name="undefined_value">  
+        <!-- return key if value not found. default true. if false undefined-value-marked will be used -->
+        <element name="key-fallback">  
+          <attribute name="enabled">
+            <text/>
+          </attribute>
+          <empty/>
+        </element>
+      </optional>
+      <optional>  
+        <element name="undefined-value-marker">  
           <text/>
         </element>
       </optional>    
-      <optional>
-        <element name="use_default_locale">  
-          <text/>
-        </element>
-      </optional>
-      <optional>  
-        <element name="use_key_if_undefined">  
-          <text/>
-        </element>
-      </optional>
     </interleave>
   </define>  
 </grammar>

@@ -28,7 +28,7 @@
 --> 
 
 <config>
- <supported_locales>
-  <locale default="true">pl_PL</locale>
- </supported_locales>
+  <supported-locales>
+    <locale default="true">pl_PL</locale>
+  </supported-locales>
 </config>
