@@ -36,14 +36,14 @@ import org.objectledge.context.Context;
  *
  * <p>Created on Jan 14, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileUpload.java,v 1.2 2004-01-14 13:28:48 fil Exp $
+ * @version $Id: FileUpload.java,v 1.3 2004-01-14 14:07:15 fil Exp $
  */
 public class FileUpload
 {
     // constants ////////////////////////////////////////////////////////////////////////////////
     
     /** context key to store the upload map */
-    public static final String UPLOAD_CONTEXT_KEY = "org.objectledge.upload.FileUpload.container";
+    public static final String UPLOAD_CONTEXT_KEY = "org.objectledge.upload.FileUpload.uploadMap";
     
     // instance variables ///////////////////////////////////////////////////////////////////////
     
