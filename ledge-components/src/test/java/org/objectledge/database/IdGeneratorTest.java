@@ -27,7 +27,6 @@
 // 
 package org.objectledge.database;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -45,7 +44,7 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGeneratorTest.java,v 1.1 2004-02-04 12:22:57 fil Exp $
+ * @version $Id: IdGeneratorTest.java,v 1.2 2004-02-23 14:25:30 fil Exp $
  */
 public class IdGeneratorTest extends DatabaseTestCase
 {
