@@ -30,6 +30,7 @@ package org.objectledge.pico.customization;
 
 import junit.framework.TestCase;
 
+import org.jcontainer.dna.Configuration;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
@@ -51,7 +52,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.10 2004-01-13 14:02:18 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.11 2004-01-16 08:53:16 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -89,11 +90,15 @@ public class CustomizationTest extends TestCase
             ConfigurationFactory.class, 
             ConfigurationFactory.class,
             new Parameter[] {
-                new ComponentParameter(MutablePicoContainer.class),
                 new ComponentParameter(FileSystem.class),
                 new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
             }).getComponentInstance(container);
+        container.registerComponent(new CustomizedComponentAdapter(
+            Configuration.class, 
+            new DefaultPicoContainer(),
+            (CustomizedComponentProvider)container.
+                getComponentInstance(ConfigurationFactory.class)));
         container.registerComponentImplementation(LoggingConfigurator.class, 
             LoggingConfigurator.class).getComponentInstance(container);
         container.registerComponentImplementation(LoggerFactory.class, LoggerFactory.class).

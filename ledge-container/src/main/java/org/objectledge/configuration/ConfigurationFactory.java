@@ -38,7 +38,6 @@ import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.jcontainer.dna.impl.SAXConfigurationSerializer;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.pico.customization.CustomizedComponentAdapter;
 import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.UnsupportedKeyTypeException;
 import org.objectledge.xml.XMLValidator;
@@ -47,7 +46,6 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
-import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 import org.xml.sax.InputSource;
@@ -62,7 +60,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.18 2004-01-14 11:57:39 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.19 2004-01-16 08:53:16 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -78,24 +76,18 @@ public class ConfigurationFactory
     /**
      * Creates a new instance of ConfigurationFactory.
      * 
-     * @param container the container we are being registered to.
      * @param fileSystem the file system to read configurations from.
      * @param xmlValidator the validator for configuration files.
      * @param directory the name of the directory where configurations reside.
      * @throws IOException if the RelaxNG schema cannot be found in classpath.
      */
-    public ConfigurationFactory(MutablePicoContainer container, FileSystem fileSystem, 
-        XMLValidator xmlValidator, String directory)
+    public ConfigurationFactory(FileSystem fileSystem, XMLValidator xmlValidator, String directory)
         throws IOException
     {
         this.fileSystem = fileSystem;
         this.xmlValidator = xmlValidator;
         this.directory = directory;
         this.relaxngUrl = fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA);
-        if(container != null)
-        {
-            registerAdapter(container);
-        }
     }
 
     /**
@@ -326,19 +318,5 @@ public class ConfigurationFactory
             throw new SAXException("malformed schema "+schemaPath, e);
         }
         xmlValidator.validate(fileSystem.getResource(configuration), schemaUrl);
-    }
-
-    /**
-     * Registers a CustomizedComponentAdapter for the {@link Configuration} type in the
-     * specified container.
-     * 
-     * @param container the container.
-     */
-    protected void registerAdapter(MutablePicoContainer container)
-    {
-        MutablePicoContainer configurationContainer = new DefaultPicoContainer();
-        ComponentAdapter configurationAdapter = new CustomizedComponentAdapter(Configuration.class, 
-            configurationContainer, this);
-        container.registerComponent(configurationAdapter);
     }
 }

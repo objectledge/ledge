@@ -9,12 +9,19 @@
     </adapter-factory>
     
     <component class="org.objectledge.xml.XMLValidator"/>
-    <component class="org.objectledge.configuration.ConfigurationFactory" preload="true">
-      <component-parameter/>
+    <component class="org.objectledge.configuration.ConfigurationFactory">
       <component-parameter/>
       <component-parameter/>
       <constant-parameter value="/config"/>
     </component>
+    
+    <container key="org.objectledge.configuration.ConfigurationFactory.container"/>
+    <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+      <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
+      <component-parameter key="org.objectledge.configuration.ConfigurationFactory.container"/>
+      <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
+    </component-adapter>
+    
 
     <component class="org.objectledge.logging.LoggingConfigurator" preload="true"/>
     <component class="org.objectledge.logging.LoggerFactory" preload="true"/>

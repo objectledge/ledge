@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactoryTest.java,v 1.11 2004-01-13 14:02:19 fil Exp $
+ * @version $Id: ConfigurationFactoryTest.java,v 1.12 2004-01-16 08:53:16 fil Exp $
  */
 public class ConfigurationFactoryTest 
     extends TestCase
@@ -73,7 +73,7 @@ public class ConfigurationFactoryTest
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         XMLValidator xv = new XMLValidator();
-        cf = new ConfigurationFactory(null, fs, xv, "config");
+        cf = new ConfigurationFactory(fs, xv, "config");
     }
 
     public void testGetConfig()
