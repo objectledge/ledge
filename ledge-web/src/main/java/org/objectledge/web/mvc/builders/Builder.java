@@ -33,7 +33,7 @@ import org.objectledge.templating.Template;
  * Builder of a single view element.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.6 2005-02-17 17:04:20 zwierzem Exp $
+ * @version $Id: Builder.java,v 1.7 2005-02-21 16:48:28 rafal Exp $
  */
 ///CLOVER:OFF
 public interface Builder
@@ -51,8 +51,23 @@ public interface Builder
     public String route(String thisViewName);
     
 	/**
-	 * Build method executes builder logic which should return rendered <code>String</code>.
-	 * 
+	 * Returns a manually chosen builder and template in which currently executed builder will be
+	 * embedded in. 
+     * 
+     * <p>Three options are available: returning {@link EnclosingView#DEFAULT} to proceed with 
+     * default behaviour, returning {@link EnclosingView#TOP} to terminate enclosure loop, or 
+     * returing an EnlosigView object created using {@link EnclosingView#EnclosingView(String)} to
+     * request enclosing withing a specific view.</p>    
+     * 
+     * @param thisViewName the actual template used to build current builder (the one on which the 
+     * method is called).
+	 * @return the enclosing encosing view.
+	 */
+	public EnclosingView getEnclosingView(String thisViewName);
+
+    /**
+     * Build method executes builder logic which should return rendered <code>String</code>.
+     * 
      * @param template template to be used during building.
      * @param embeddedBuildResults string containing results of embedded builder's rendering.
      * 
@@ -60,28 +75,5 @@ public interface Builder
      * @throws BuildException on problems with view element building.
      */
     public String build(Template template, String embeddedBuildResults)
-	   throws BuildException;
-    
-	/**
-	 * Returns a manually chosen builder and template in which currently executed builder will be
-	 * embedded in. 
-     * 
-     * <p>Both builder and template may be chosen separately - if <code>null</code> is returned for
-     * either template or builder, finder component is used to search for a proper template and/or 
-     * builder for embedded builder. If <code>null</code> pair is returned the current builder is
-     * the top level one, and the building process stops.</p>
-	 * 
-     * @param thisViewName the actual template used to build current 
-     *         builder (the one on which the method is called).
-	 * @return encosing view pair, or <code>null</code> if this is the top level builder.
-	 */
-	public EnclosingView getEnclosingView(String thisViewName);
-
-    /**
-     * Selects a template for rendering the builder explicitly.
-     * 
-     * @return template used for rendering this builder, or <code>null</code> to use template
-     *         selected by the builder component.
-     */
-    public Template getTemplate(); 
+       throws BuildException;    
 }

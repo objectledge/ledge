@@ -55,7 +55,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.16 2005-02-17 17:10:25 zwierzem Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.17 2005-02-21 16:48:16 rafal Exp $
  */
 public class BuilderExecutorValveTest 
 	extends LedgeTestCase
@@ -119,15 +119,6 @@ public class BuilderExecutorValveTest
         mvcContext.setView("Router");
         executor.process(context);
         assertEquals("Default(RoutedTo())", mvcContext.getBuildResult());
-    }
-    
-    public void testOverride()
-        throws Exception
-    {
-        setUp("builders");
-        mvcContext.setView("Overrider");
-        executor.process(context);
-        assertEquals("Default(OverridenTo())", mvcContext.getBuildResult());
     }
     
     public void testInfiniteRoute()

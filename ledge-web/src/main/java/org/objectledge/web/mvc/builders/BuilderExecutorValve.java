@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.26 2005-02-21 10:10:13 rafal Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.27 2005-02-21 16:48:28 rafal Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -117,12 +117,9 @@ public class BuilderExecutorValve
 		for (enclosures = 0; enclosures < maxEnclosures; enclosures++)
 		{
             builder = classFinder.findBuilder(viewName);
-            template = templateFinder.findBuilderTemplate(viewName);
-            
             if(builder != null)
             {
                 // route builder -------------------------------------------------------------------
-                boolean builderRouted = false;
                 int routeCalls;
                 for (routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
                 {
@@ -134,7 +131,6 @@ public class BuilderExecutorValve
                     }
                     viewName = routeBuilderName;
                     builder = classFinder.findBuilder(viewName);
-                    builderRouted = true;
                 }
                 if(routeCalls >= maxRouteCalls)
                 {
@@ -142,19 +138,9 @@ public class BuilderExecutorValve
                 }
                 // security check ------------------------------------------------------------------
                 securityHelper.checkSecurity(builder, context);
-                // get the template ----------------------------------------------------------------
-                // let builder override the template
-                Template overrideTemplate = builder.getTemplate(); 
-                if(overrideTemplate != null)
-                {
-                    template = overrideTemplate;
-                }
-                // find a template for this builder
-                if(overrideTemplate == null && builderRouted)
-                {
-                    template = templateFinder.findBuilderTemplate(viewName);
-                }
             }
+            // get template ------------------------------------------------------------------------
+            template = templateFinder.findBuilderTemplate(viewName);
 
 			// build view level --------------------------------------------------------------------
 			embeddedResult = embeddedResult == null ? "": embeddedResult;
