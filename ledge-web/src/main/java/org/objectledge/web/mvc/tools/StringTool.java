@@ -27,11 +27,13 @@
 //
 package org.objectledge.web.mvc.tools;
 
+import org.objectledge.utils.StringUtils;
+
 /**
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.2 2004-07-01 11:40:34 zwierzem Exp $
+ * @version $Id: StringTool.java,v 1.3 2004-09-03 09:47:10 pablo Exp $
  */
 public class StringTool
 {
@@ -53,5 +55,16 @@ public class StringTool
             return buf.toString();
         }
         return str;
+    }
+    
+    /** 
+     * See the StringUtils class.
+     * 
+     * @param input the input string.
+     * @return the output.
+     */
+    public String toOctalUnicode(String input)
+    {
+        return StringUtils.toOctalUnicode(input);
     }
 }

@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.16 2004-08-04 12:29:19 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.17 2004-09-03 09:45:31 pablo Exp $
  */
 public class StringUtils
 {
@@ -444,4 +444,31 @@ public class StringUtils
         sb.append(input);
         return sb.toString();
     }
+    
+    /** 
+     * Creates ascii based unicode representation of the string.
+     * Each unicode character of the input will be tranformed to 8 ascii 
+     * characters in the following format:
+     * "\"&lt;octal lower byte&gt;"\"&lt;octal higher byte&gt;
+     * i.e. the output string looks as follows:
+     * "\124\000\102\001\165\000\155\000".
+     *
+     * @param input the input string.
+     * @return the output.
+     */
+    public static String toOctalUnicode(String input)
+    {
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < input.length(); i++)
+        {
+            int value = (int)input.charAt(i);
+            String upper = fillString(Integer.toOctalString(value/256), 3, '0');
+            String lower = fillString(Integer.toOctalString(value%256), 3, '0');            
+            sb.append("\\");
+            sb.append(lower);
+            sb.append("\\");
+            sb.append(upper);
+        }
+        return sb.toString();
+    }    
 }
