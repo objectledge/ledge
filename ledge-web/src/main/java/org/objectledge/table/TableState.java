@@ -1,5 +1,5 @@
 // 
-//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+//Copyright (c) 2003, 2004 Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 //All rights reserved. 
 // 
 //Redistribution and use in source and binary forms, with or without modification,  
@@ -48,7 +48,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.2 2004-02-12 13:50:15 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.3 2004-03-05 12:13:46 zwierzem Exp $
  */
 public class TableState
 implements Cloneable
@@ -59,9 +59,6 @@ implements Cloneable
     /** Table root object id,  default: <code>empty string</code>. */
     private String rootId = "";
 
-    /** Set of selected node ids. */
-    private Set selected = new HashSet();
-
     /** Expanded all switch, default: <code>false</code>. */
     private boolean allExpanded = false;
 
@@ -71,8 +68,8 @@ implements Cloneable
     /** Name of a column selected for sorting, default: <code>null</code>. */
     private String sortColumnName;
 
-    /** Current sorting direction, default: <code>{@link TableConstants#SORT_ASC}</code>. */
-    private int sortDir = TableConstants.SORT_ASC;
+    /** Is current sorting direction ascending, default: <code>true</code>. */
+    private boolean ascendingSort = true;
 
     /** Sorting comparators by tree level map. */
     private Map sorting = new HashMap();
@@ -86,12 +83,8 @@ implements Cloneable
     /** Current table page size, default: <code>0</code>. */
     private int pageSize = 0;
 
-    /** Current table viewType, default: <code>{@link
-     * TableConstants#VIEW_AS_LIST}</code>. */
-    private int viewType = TableConstants.VIEW_AS_LIST;
-
-    /** Multiselect switch, default: <code>false</code>. */
-    private boolean multiSelect = false;
+    /** Is current table's view tree like, default <code>false</code>. */
+    private boolean treeView = false;
 
     /** ShowRoot switch, default: <code>false</code>, which is good for lists and forests. */
     private boolean showRoot = false;
@@ -166,81 +159,6 @@ implements Cloneable
     public void setRootId(String rootId)
     {
         this.rootId = rootId;
-    }
-
-    /**
-     * Checks whether a row with a given id is selected
-     *
-     * @param rowId id of a checked row
-     * @return <code>true</code> if a row with a given id is selected.
-     */
-    public boolean isSelected(String rowId)
-    {
-        return selected.contains(rowId);
-    }
-
-    /**
-     * Sets a row's selected state. -
-     * if this state is <i>not</i> multiselectable,
-     * other selected rows are cleared.
-     *
-     * @param rowId of node
-     */
-    public void setSelected(String rowId)
-    {
-        if(!multiSelect)
-        {
-            selected.clear();
-        }
-        selected.add(rowId);
-    }
-
-	/**
-	 * Sets selected state on a number of rows 
-	 * - works only for multiselect set to <code>false</code>.
-	 *
-	 * @param rowIds the ids of rows.
-	 */
-	public void setSelected(String[] rowIds)
-	{
-		if(multiSelect)
-		{
-			for(int i=0; i < rowIds.length; i++)
-			{
-				selected.add(rowIds[i]);
-			}
-		}
-	}
-
-    /**
-     * Toggles a row's selected state. -
-     * if this state is <i>not</i> multiselectable and the row is getting selected,
-     * other selected rows are cleared.
-     *
-     * @param rowId of node
-     */
-    public void toggleSelected(String rowId)
-    {
-        if(selected.contains(rowId))
-        {
-            selected.remove(rowId);
-        }
-        else
-        {
-            if(!multiSelect)
-            {
-                selected.clear();
-            }
-            selected.add(rowId);
-        }
-    }
-
-    /**
-     * Clears all selected rows.
-     */
-    public void clearSelected()
-    {
-        selected.clear();
     }
 
     /**
@@ -361,54 +279,25 @@ implements Cloneable
         this.sortColumnName = sortColumnName;
     }
 
-    /**
-     * Returns current sorting direction, default is: <code>{@link
-     * TableConstants#SORT_ASC}</code>.
-     * @see TableConstants#SORT_ASC
-     * @see TableConstants#SORT_DESC
-     * @return the current sorting direction
-     */
-    public int getSortDir()
-    {
-        return sortDir;
-    }
+	/**
+	 * Returns current sorting direction.
+	 * 
+	 * @return <code>true</code> for ascending, <code>false</code> for descending.
+	 */
+	public boolean getAscSort()
+	{
+		return ascendingSort;
+	}
 
-    /**
-     * Sets the sorting direction, if a given value is not equal to
-     * <code>{@link TableConstants#SORT_ASC}</code> or
-     * <code>{@link TableConstants#SORT_DESC}</code>,
-     * a default value (<code>{@link TableConstants#SORT_ASC}</code>)
-     * is set.
-     *
-     * @param sortDir the sortDir constant
-     */
-    public void setSortDir(int sortDir)
-    {
-        if(   sortDir == TableConstants.SORT_ASC
-           || sortDir == TableConstants.SORT_DESC)
-        {
-            this.sortDir = sortDir;
-        }
-        else
-        {
-            this.sortDir = TableConstants.SORT_ASC;
-        }
-    }
-
-    /**
-     * Reverses the sorting direction.
-     */
-    public void toggleSortDir()
-    {
-        if(this.sortDir == TableConstants.SORT_ASC)
-        {
-            this.sortDir = TableConstants.SORT_DESC;
-        }
-        else
-        {
-            this.sortDir = TableConstants.SORT_ASC;
-        }
-    }
+	/**
+	 * Sets the current sorting direction.
+	 *
+	 * @param ascendingSort <code>true</code> for ascending, <code>false</code> for descending.
+	 */
+	public void setAscSort(boolean ascendingSort)
+	{
+		this.ascendingSort = ascendingSort;
+	}
 
     /**
      * Returns the filters defined for this.
@@ -503,57 +392,23 @@ implements Cloneable
     }
 
     /**
-     * Returns current viewType, default is: <code>{@link
-     * TableConstants#VIEW_AS_LIST}</code>.
-     * @see TableConstants#VIEW_AS_LIST
-     * @see TableConstants#VIEW_AS_TREE
-     * @return the current viewType
+     * Returns current view type.
+     * 
+     * @return <code>true</code> if the view is tree like, <code>false</code> for list like view.
      */
-    public int getViewType()
+    public boolean getTreeView()
     {
-        return viewType;
+        return treeView;
     }
 
     /**
-     * Sets the viewType, if a given value is not equal to
-     * <code>{@link TableConstants#VIEW_AS_LIST}</code> or
-     * <code>{@link TableConstants#VIEW_AS_TREE}</code>,
-     * a default value (<code>{@link TableConstants#VIEW_AS_LIST}</code>)
-     * is set.
+     * Sets the view type for this state.
      *
-     * @param viewType the viewType constant
+     * @param treeView <code>true</code> for the tree view, <code>false</code> for list view.
      */
-    public void setViewType(int viewType)
+    public void setTreeView(boolean treeView)
     {
-        if(   viewType == TableConstants.VIEW_AS_LIST
-           || viewType == TableConstants.VIEW_AS_TREE)
-        {
-            this.viewType = viewType;
-        }
-        else
-        {
-            this.viewType = TableConstants.VIEW_AS_LIST;
-        }
-    }
-
-    /**
-     * Returns the multi select option.
-     *
-     * @return the multi select.
-     */
-    public boolean getMultiSelect()
-    {
-        return multiSelect;
-    }
-
-    /**
-     * Sets the multiselect switch.
-     *
-     * @param multi the multiselect switch.
-     */
-    public void setMultiSelect(boolean multi)
-    {
-        this.multiSelect = multi;
+        this.treeView = treeView;
     }
 
     /**
