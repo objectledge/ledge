@@ -28,6 +28,7 @@
 
 package org.objectledge.database.persistence;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -44,6 +45,20 @@ public class TestObject implements Persistent
     
     private Date date;
 
+    private boolean valueBoolean;
+    
+    private float valueFloat;
+    
+    private BigDecimal valueDecimal;
+    
+    private Date valueTime;
+    
+    private Date valueTimestamp;
+    
+    private short valueShort;
+    
+    private byte valueByte;
+    
     public TestObject()
     {
         this("",null);
@@ -55,6 +70,7 @@ public class TestObject implements Persistent
         this.date = date;
         this.value = value;
     }
+    
 
     /**
      * {@inheritDoc}
@@ -80,6 +96,13 @@ public class TestObject implements Persistent
         record.setLong("id", id);
         record.setString("value", value);
         record.setDate("date",date);
+        record.setBoolean("value_boolean",valueBoolean);
+        record.setFloat("value_float",valueFloat);
+        record.setBigDecimal("value_decimal",valueDecimal);
+        record.setTime("value_time",valueTime);
+        record.setTimestamp("value_timestamp",valueTimestamp);
+        record.setShort("value_short",valueShort);
+        record.setByte("value_byte",valueByte);
     }
 
     /**
@@ -90,6 +113,13 @@ public class TestObject implements Persistent
         id = record.getLong("id");
         value = record.getString("value");
         date = record.getDate("date");
+        valueBoolean = record.getBoolean("value_boolean");
+        valueFloat = record.getFloat("value_float");
+        valueDecimal = record.getBigDecimal("value_decimal");
+        valueTime = record.getDate("value_time");
+        valueTimestamp = record.getDate("value_timestamp");
+        valueShort = record.getShort("value_short");
+        valueByte = record.getByte("value_byte");
     }
 
     /**

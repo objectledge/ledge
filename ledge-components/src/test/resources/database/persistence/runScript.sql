@@ -35,5 +35,12 @@ DROP TABLE test_object IF EXISTS;
 CREATE TABLE test_object ( 
   id BIGINT NOT NULL,
   value VARCHAR(255),
-  date DATE
+  date DATE,
+  value_boolean BIT,
+  value_float FLOAT,
+  value_decimal DECIMAL,
+  value_time TIME,
+  value_timestamp TIMESTAMP,
+  value_byte TINYINT,
+  value_short SMALLINT
 );
