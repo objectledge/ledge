@@ -39,7 +39,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.objectledge.filesystem.FileSystem;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,7 +66,7 @@ import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
  * 
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.7 2004-01-13 13:26:39 fil Exp $
+ * @version $Id: XMLValidator.java,v 1.8 2004-01-14 10:43:02 fil Exp $
  */
 public class XMLValidator
 {
@@ -87,7 +86,6 @@ public class XMLValidator
     /**
      * Creates a new instance of the validator.
      * 
-     * @param fileSystem the filesystem to read files from.
      * @throws ParserConfigurationException if the JAXP parser factory is misconfigured.
      * @throws SAXException if the JAXP parser factory is misconfigured.
      */
