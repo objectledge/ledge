@@ -28,12 +28,14 @@
 
 package org.objectledge.parameters;
 
+import java.util.Set;
+
 /**
  * A container of parameters.
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.7 2004-01-08 15:59:05 fil Exp $
+ * @version $Id: Parameters.java,v 1.8 2004-01-12 12:14:57 pablo Exp $
  */
 public interface Parameters
 {
@@ -194,7 +196,7 @@ public interface Parameters
      * @param name the parameter name.
      */
     public void remove(String name);
-
+    
     /**
      * Remove all parameters with a specified name and string value.
      *
@@ -226,6 +228,20 @@ public interface Parameters
 	 * @param value the parameter value.
 	 */
 	public void remove(String name, long value);
+	
+	/**
+	 * Remove all parameters with a name contained in given set.
+	 *
+	 * @param keys the set of keys.
+	 */
+	public void remove(Set keys);
+	
+	/**
+	 * Remove all except those with a keys specified in the set.
+	 *
+	 * @param keys the set of names.
+	 */
+	public void removeExcept(Set keys);
     
     /**
      * Set the parameter.

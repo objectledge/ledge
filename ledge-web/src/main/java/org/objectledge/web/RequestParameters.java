@@ -35,17 +35,30 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.objectledge.context.Context;
 import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
 
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.5 2004-01-08 15:58:50 fil Exp $
+ * @version $Id: RequestParameters.java,v 1.6 2004-01-12 12:14:58 pablo Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
     /** The context key under wich the request parameters are stored. */
 	public static final String CONTEXT_KEY = "objectledge.web.parameters";
+
+	/**
+	 * Usefull method to retrieve parameters from context.
+	 *
+	 * @param context the context.
+	 * @return the request parameters.
+	 */
+	public static Parameters retrieve(Context context)
+	{
+		return (Parameters)context.getAttribute(CONTEXT_KEY);
+	}
 	
     /**
      * Load the parameter container with parameters found in http request.

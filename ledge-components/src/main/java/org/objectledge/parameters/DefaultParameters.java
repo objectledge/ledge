@@ -37,6 +37,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.objectledge.utils.StringUtils;
@@ -45,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.2 2004-01-08 15:59:05 fil Exp $
+ * @version $Id: DefaultParameters.java,v 1.3 2004-01-12 12:14:57 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -380,6 +381,38 @@ public class DefaultParameters implements Parameters
     {
     	remove(name, Long.toString(value));
     }
+    
+	/**
+	 * Remove all parameters with a name contained in given set.
+	 *
+	 * @param keys the set of keys.
+	 */
+	public void remove(Set keys)
+	{
+		Iterator it = keys.iterator();
+		while(it.hasNext())
+		{
+			map.remove(it.next());
+		}
+	}
+    
+	/**
+	 * Remove all except those with a keys specified in the set.
+	 *
+	 * @param keys the set of names.
+	 */
+	public void removeExcept(Set keys)
+	{
+		Iterator it = map.keySet().iterator();
+		while(it.hasNext())
+		{
+			String key = (String)it.next();
+			if(!keys.contains(key))
+			{
+				map.remove(key);
+			}
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
