@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.2 2004-05-17 15:04:00 fil Exp $ -->
+<!-- $Id: project.xml,v 1.3 2004-05-19 15:53:29 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -52,37 +52,37 @@
   <mailingLists>
     <mailingList>
       <name>ObjectLedge release announcements</name>
-      <subscribe>objectledge-announce-subscribe@lists.objectledge.org</subscribe>
-      <unsubscribe>objectledge-announce-unsubscribe@lists.objectledge.org</unsubscribe>
+      <subscribe>objectledge-announce-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-announce-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
       <archive>http://lists.objectledge.org/pipermail/objectledge-announce/</archive>
     </mailingList>
     <mailingList>
       <name>ObjectLedge users discussion</name>
-      <subscribe>objectledge-user-subscribe@lists.objectledge.org</subscribe>
-      <unsubscribe>objectledge-user-unsubscribe@lists.objectledge.org</unsubscribe>
+      <subscribe>objectledge-user-request@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-user-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
       <archive>http://lists.objectledge.org/pipermail/objectledge-user/</archive>
     </mailingList>
     <mailingList>
       <name>ObjectLedge developers discussion</name>
-      <subscribe>objectledge-dev-subscribe@lists.objectledge.org</subscribe>
-      <unsubscribe>objectledge-dev-unsubscribe@lists.objectledge.org</unsubscribe>
+      <subscribe>objectledge-dev-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-dev-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
       <archive>http://lists.objectledge.org/pipermail/objectledge-dev/</archive>
     </mailingList>
     <mailingList>
       <name>ObjectLedge commit messages</name>
-      <subscribe>objectledge-cvs-subscribe@lists.objectledge.org</subscribe>
-      <unsubscribe>objectledge-cvs-unsubscribe@lists.objectledge.org</unsubscribe>
+      <subscribe>objectledge-cvs-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-cvs-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
       <archive>http://lists.objectledge.org/pipermail/objectledge-cvs/</archive>
     </mailingList>
     <mailingList>
       <name>ObjectLedge commit messages (html version)</name>
-      <subscribe>objectledge-cvshtml-subscribe@lists.objectledge.org</subscribe>
-      <unsubscribe>objectledge-cvshtml-unsubscribe@lists.objectledge.org</unsubscribe>
+      <subscribe>objectledge-cvshtml-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-cvshtml-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
     </mailingList>
     <mailingList>
       <name>ObjectLedge issue tracking</name>
-      <subscribe>objectledge-issues-subscribe@lists.objectledge.org</subscribe>
-      <unsubscribe>objectledge-issues-unsubscribe@lists.objectledge.org</unsubscribe>
+      <subscribe>objectledge-issues-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-issues-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
       <archive>http://lists.objectledge.org/pipermail/objectledge-issues/</archive>
     </mailingList>
   </mailingLists>
