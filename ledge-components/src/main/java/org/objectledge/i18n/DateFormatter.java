@@ -43,9 +43,9 @@ import org.objectledge.utils.StringUtils;
  * The date formater component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DateFormater.java,v 1.2 2004-09-17 13:10:47 rafal Exp $
+ * @version $Id: DateFormatter.java,v 1.1 2004-09-17 13:13:53 rafal Exp $
  */
-public class DateFormater
+public class DateFormatter
 {
 	/** logger */
 	protected Logger logger;
@@ -62,7 +62,7 @@ public class DateFormater
 	 * @param config the configuration.
 	 * @param logger the logger. 
 	 */
-	public DateFormater(Configuration config, Logger logger)
+	public DateFormatter(Configuration config, Logger logger)
 		throws ConfigurationException
 	{
 		this.logger = logger;

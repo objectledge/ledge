@@ -44,7 +44,7 @@ public class WebDateFormatToolFactory implements ContextToolFactory
 	protected Context context;
 	
 	/** date formater */
-	protected DateFormater dateFormater;
+	protected DateFormatter dateFormater;
 		
 	/**
 	 * Component constructor.
@@ -52,7 +52,7 @@ public class WebDateFormatToolFactory implements ContextToolFactory
 	 * @param context the context.
 	 * @param i18n the i18n component. 
 	 */
-	public WebDateFormatToolFactory(Context context, DateFormater dateFormater)
+	public WebDateFormatToolFactory(Context context, DateFormatter dateFormater)
 	{
 		this.context = context;
 		this.dateFormater = dateFormater;

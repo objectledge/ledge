@@ -43,12 +43,12 @@ import java.util.TimeZone;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DateFormatTool.java,v 1.1 2004-09-01 08:18:34 pablo Exp $
+ * @version $Id: DateFormatTool.java,v 1.2 2004-09-17 13:13:53 rafal Exp $
  */
 public class DateFormatTool
 {
     /** the date formater */
-    protected DateFormater dateFormater;
+    protected DateFormatter dateFormater;
     
 	/** current locale */
 	protected Locale locale;
@@ -61,7 +61,7 @@ public class DateFormatTool
 	 * @param i18n the i18n component.
 	 * @param locale the locale.
 	 */
-	public DateFormatTool(DateFormater dateFormater, Locale locale, DateFormat format)
+	public DateFormatTool(DateFormatter dateFormater, Locale locale, DateFormat format)
 	{
 		this.dateFormater = dateFormater;
 		this.locale = locale;
