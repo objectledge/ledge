@@ -47,7 +47,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.8 2004-07-02 10:45:03 zwierzem Exp $
+ * @version $Id: DefaultParameters.java,v 1.9 2004-07-05 13:49:27 zwierzem Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -57,12 +57,21 @@ public class DefaultParameters implements Parameters
     /** The main parameters map */
     protected Map map;
 
+	/**
+     * Method used in constructors to choose backing <code>Map</code> implementation. 
+     * By default a <code>HashMap</code> is used.
+     */
+    protected void setupMap()
+    {
+        map = new HashMap();
+    }
+    
     /**
      * Create the empty container.
      */
     public DefaultParameters()
     {
-        map = new HashMap();
+        setupMap();
     }
 
     /**
@@ -72,7 +81,7 @@ public class DefaultParameters implements Parameters
      */
     public DefaultParameters(String configuration)
     {
-        this();
+        setupMap();
         try
         {
             LineNumberReader reader = new LineNumberReader(new StringReader(configuration));
@@ -95,7 +104,7 @@ public class DefaultParameters implements Parameters
     public DefaultParameters(InputStream is, String encoding)
         throws IOException, UnsupportedEncodingException
     {
-        this();
+        setupMap();
         LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, encoding));
         loadParameters(reader);
     }
@@ -107,7 +116,7 @@ public class DefaultParameters implements Parameters
      */
     public DefaultParameters(Parameters source)
     {
-        this();
+        setupMap();
         String[] names = source.getParameterNames();
         for (int i = 0; i < names.length; i++)
         {
