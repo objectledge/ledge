@@ -40,10 +40,40 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.27 2005-02-28 10:32:33 rafal Exp $
+ * @version $Id: MVCFinder.java,v 1.28 2005-02-28 10:47:46 rafal Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
+    /**
+     * Different kinds of UI elements handled by the finder.
+     */
+    protected enum Kind
+    {
+        /** View element. */
+        VIEW("views"),
+        /** Action element. */
+        ACTION("actions"),
+        /** Component element. */
+        COMPONENT("components");
+        
+        private Kind(String infix)
+        {
+            this.infix = infix;
+        }
+        
+        private final String infix;
+        
+        /**
+         * Returns the path infix used by name sequences.
+         * 
+         * @return the path infix used by name sequences.
+         */
+        public String getInfix()
+        {
+            return infix;
+        }
+    }
+    
 	/** Internal constant for choosing "views" package name part. */
 	private static final String VIEWS = "views";
 	/** Internal constant for choosing "actions" package name part. */
@@ -88,7 +118,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Template findBuilderTemplate(String view)
     {
-		return findTemplate(VIEWS, view, true, "findBuilderTemplate");
+		return findTemplate(Kind.VIEW, view, true, "findBuilderTemplate");
     }
 
 	// component templates ////////////////////////////////////////////////////////////////////////
@@ -98,7 +128,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Template getComponentTemplate(String name)
 	{
-		return findTemplate(COMPONENTS, name, false, "getComponentTemplate");
+		return findTemplate(Kind.COMPONENT, name, false, "getComponentTemplate");
 	}
 
 	// actions //////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +138,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Valve getAction(String actionName)
 	{
-		return (Valve)findObject(ACTIONS, actionName, false, "getAction");
+		return (Valve)findObject(Kind.ACTION, actionName, false, "getAction");
 	}
 
     // builders /////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +148,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Builder findBuilder(String view)
     {
-		return (Builder) findObject(VIEWS, view, true, "findBuilder");
+		return (Builder) findObject(Kind.VIEW, view, true, "findBuilder");
     }
 
 	/**
@@ -181,19 +211,17 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	public Component getComponent(String componentName)
 	{
 		return (Component)
-            findObject(COMPONENTS, componentName, false, "getComponent");
+            findObject(Kind.COMPONENT, componentName, false, "getComponent");
 	}    
 
     // implementation ///////////////////////////////////////////////////////////////////////////
 
-	private Template findTemplate(
-		String classType,
-		String templateName,
-		boolean fallback, String methodName)
+	private Template findTemplate(Kind kind, String templateName, boolean fallback,
+        String methodName)
 	{
 		if(templateName != null && templateName.length() != 0)
 		{
-			Sequence sequence = getTemplateNameSequence(classType, templateName, fallback, false);
+			Sequence sequence = getTemplateNameSequence(kind, templateName, fallback, false);
 			while(sequence.hasNext())
 			{
 				String name = sequence.next();
@@ -217,28 +245,25 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     /**
      * Return a template lookup sequence.
      * 
-     * @param classType the kind of template being looked up.
+     * @param kind the kind of template being looked up.
      * @param templateName the view name.
      * @param fallback perform fallback.
      * @param enclosing obsolete paramter.
      * @return a lookup sequence.
      */
-    protected Sequence getTemplateNameSequence(String classType, String templateName,
+    protected Sequence getTemplateNameSequence(Kind kind, String templateName,
         boolean fallback, boolean enclosing)
     {
         return nameSequenceFactory.
-        	getTemplateNameSequence(classType, templateName, fallback, enclosing);
+        	getTemplateNameSequence(kind.getInfix(), templateName, fallback, enclosing);
     }
 
-    private Object findObject(
-        String classType,
-        String className,
-        boolean fallback, String methodName)
+    private Object findObject(Kind kind, String className, boolean fallback, String methodName)
 	{
 		if(className != null && className.length() != 0)
 		{
 			Sequence sequence = nameSequenceFactory.
-				getClassNameSequence(classType, className, fallback, false);
+				getClassNameSequence(kind.getInfix(), className, fallback, false);
 			while(sequence.hasNext())
 			{
 				String name = sequence.next();

@@ -38,7 +38,7 @@ import org.picocontainer.MutablePicoContainer;
  * An implemention of MVCFinder that looks up localized view templates.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: I18nMVCFinder.java,v 1.1 2005-02-21 17:47:49 rafal Exp $
+ * @version $Id: I18nMVCFinder.java,v 1.2 2005-02-28 10:47:46 rafal Exp $
  */
 public class I18nMVCFinder
     extends MVCFinder
@@ -67,7 +67,7 @@ public class I18nMVCFinder
     /**
      * {@inheritDoc}
      */
-    protected Sequence getTemplateNameSequence(String kind, String view, boolean fallback,
+    protected Sequence getTemplateNameSequence(Kind kind, String view, boolean fallback,
         boolean enclosing)
     {
         Sequence viewLookupSequence = super
