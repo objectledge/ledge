@@ -15,7 +15,7 @@ import pl.caltha.services.xml.XMLDataReader;
  * Base class for XML builders.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
+ * @version $Id: AbstractBuilder.java,v 1.3 2005-02-10 17:49:42 rafal Exp $
  */
 public abstract class AbstractBuilder 
     extends DefaultHandler
@@ -45,22 +45,16 @@ public abstract class AbstractBuilder
     //------------------------------------------------------------------------
     // Builder
     /** Called on start of building process. */
-    protected void startBuild(Object builtObject)
-    throws ConstructionException
-    {
-    }
+    protected abstract void startBuild(Object builtObject)
+        throws ConstructionException;
 
     /** Called on end of building process. */
-    protected void endBuild(Object builtObject)
-    throws ConstructionException
-    {
-    }
+    protected abstract void endBuild(Object builtObject)
+        throws ConstructionException;
 
     /** Builds upon element name and its attributes. */
-    protected void startElement(String elementName, Attributes atts)
-    throws SAXException
-    {
-    }
+    protected abstract void startElement(String elementName, Attributes atts)
+        throws SAXException;
 
     /** Builds an object. */
     public void build(Object builtObject, XMLDataReader reader, InputSource is, org.xml.sax.ErrorHandler errorHandler)

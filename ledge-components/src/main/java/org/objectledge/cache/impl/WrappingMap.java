@@ -40,7 +40,7 @@ import java.util.Set;
  * and mapping access tracking.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WrappingMap.java,v 1.3 2005-02-09 22:02:24 rafal Exp $
+ * @version $Id: WrappingMap.java,v 1.4 2005-02-10 17:49:44 rafal Exp $
  */
 public abstract class WrappingMap 
     extends DelegateMap
@@ -270,7 +270,7 @@ public abstract class WrappingMap
      * Wrapping entry.
      * 
      */
-    protected class WrappingEntry
+    protected abstract class WrappingEntry
     {
         private Object value;
         
@@ -297,9 +297,7 @@ public abstract class WrappingMap
         /**
          * Updates the entry's timestamp.
          */
-        public void touch()
-        {
-        }
+        public abstract void touch();
     }
     
     /**
