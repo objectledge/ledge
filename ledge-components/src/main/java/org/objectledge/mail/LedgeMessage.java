@@ -31,7 +31,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.5 2004-12-27 05:17:32 rafal Exp $
+ * @version $Id: LedgeMessage.java,v 1.6 2005-04-05 10:57:05 zwierzem Exp $
  */
 public class LedgeMessage
 {
@@ -68,7 +68,7 @@ public class LedgeMessage
     private Templating templating;
 
     /** Attachment list. */
-    private List attachments = new ArrayList();
+    private List<DataSource> attachments = new ArrayList<DataSource>();
     
     /** Related content map. */
     private Map related = new HashMap();
@@ -184,14 +184,14 @@ public class LedgeMessage
     }
 
     /**
-     * Returns the attachment list.
+     * Returns the attachment list for external modification.
      *
      * <p>Add <code>DataSource</code> objects containing the message
      * attchments to this list.</p>
      * 
      * @return the attachemnt list.
      */
-    public List getAttachments()
+    public List<DataSource> getAttachments()
     {
         return attachments;
     }
