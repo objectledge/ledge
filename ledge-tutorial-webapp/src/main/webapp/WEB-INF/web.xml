@@ -27,6 +27,10 @@
   </mime-mapping>
   <!-- -->
   
+  <security-role>
+    <role-name>nobody</role-name>
+  </security-role>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Application data</web-resource-name>
