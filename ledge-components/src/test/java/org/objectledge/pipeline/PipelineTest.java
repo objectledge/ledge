@@ -28,36 +28,74 @@
 
 package org.objectledge.pipeline;
 
-import junit.framework.TestCase;
-
-import org.apache.log4j.Logger;
-import org.jcontainer.dna.impl.Log4JLogger;
+import org.jcontainer.dna.Logger;
+import org.jmock.builder.Mock;
 import org.objectledge.context.Context;
+import org.objectledge.utils.LedgeTestCase;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class PipelineTest extends TestCase
+public class PipelineTest extends LedgeTestCase
 {
+    private Context context;
+    private Mock loggerMock;
+    private Mock tryValveMock;
+    private Mock catchValveMock;
+    private Mock finallyValveMock;
 
-    /**
-     * Constructor for PipelineTest.
-     * @param arg0
-     */
-    public PipelineTest(String arg0)
+    private Logger logger;
+    private Valve tryValve;
+    private Valve catchValve;
+    private Valve finallyValve;
+    private Valve pipe; 
+
+    public void setUp()
     {
-        super(arg0);
+        context = new Context();
+        loggerMock = new Mock(Logger.class);
+        tryValveMock = new Mock(Valve.class);
+        catchValveMock = new Mock(Valve.class);
+        finallyValveMock = new Mock(Valve.class);
+
+        logger = (Logger)loggerMock.proxy();
+        tryValve = (Valve)tryValveMock.proxy();
+        catchValve = (Valve)catchValveMock.proxy();
+        finallyValve = (Valve)finallyValveMock.proxy();
+        pipe = new ErrorHandlingPipeline(logger, new Valve[] { tryValve }, new Valve[] { catchValve }, new Valve[] { finallyValve });
     }
 
-    public void testRun()
-        throws Exception
+    public void testRun() throws Exception
     {
-    	Context context = new Context();
-    	Valve[] runnable = new Valve[0];
-    	Logger logger = Logger.getLogger(ErrorHandlingPipeline.class);
-    	Valve pipe = new ErrorHandlingPipeline(new Log4JLogger(logger), 
-    								 runnable, runnable, runnable);
-		pipe.process(context);
+        tryValveMock.expect(once()).method("process");
+        finallyValveMock.expect(once()).method("process");
+        pipe.process(context);
+    }
+    
+    public void testRun2() throws Exception
+    {
+        tryValveMock.expect(once()).method("process").will(throwException(new ProcessingException("foo")));
+        catchValveMock.expect(once()).method("process");
+        finallyValveMock.expect(once()).method("process");
+        loggerMock.expect(once()).method("error");
+        pipe.process(context);
+    }
+
+    public void testRun3() throws Exception
+    {
+        tryValveMock.expect(once()).method("process").will(throwException(new ProcessingException("foo")));
+        catchValveMock.expect(once()).method("process").will(throwException(new ProcessingException("foo")));
+        loggerMock.expect(atLeastOnce()).method("error");
+        finallyValveMock.expect(once()).method("process");
+        pipe.process(context);
+    }
+        
+    public void testRun4() throws Exception
+    {        
+        tryValveMock.expect(once()).method("process");
+        loggerMock.expect(once()).method("error");
+        finallyValveMock.expect(once()).method("process").will(throwException(new ProcessingException("foo")));
+        pipe.process(context);
     }
 }
