@@ -41,12 +41,18 @@ import org.picocontainer.lifecycle.Stoppable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransactionTest.java,v 1.3 2004-02-06 15:38:26 fil Exp $
+ * @version $Id: JotmTransactionTest.java,v 1.4 2004-02-09 08:45:32 fil Exp $
  */
 public class JotmTransactionTest extends TestCase
 {
+    private Context context;
+    
+    private Logger log;
+    
     private Transaction transaction;
 
+    private Transaction.GuardValve valve;
+    
     /**
      * Constructor for JotmTransactionTest.
      * @param arg0
@@ -61,8 +67,11 @@ public class JotmTransactionTest extends TestCase
     {
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
-        transaction = new JotmTransaction(0, new Context(), log);
+        log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
+        context = new Context();
+        context.clearAttributes();
+        transaction = new JotmTransaction(2, context, log);
+        valve = new Transaction.GuardValve(transaction, log);
     }
     
     public void tearDown()
@@ -108,6 +117,7 @@ public class JotmTransactionTest extends TestCase
             transaction.commit(controller2);
         }
         transaction.commit(controller1);
+        valve.process(context);
     }
 
     public void testNestedRollback()
@@ -142,5 +152,33 @@ public class JotmTransactionTest extends TestCase
         {
             assertEquals("commit failed", e.getMessage());
         }
+    }
+    
+    public void testGuardValve()
+        throws Exception
+    {
+        boolean controller1 = transaction.begin();
+        assertTrue(controller1);
+        {
+            boolean controller2 = transaction.begin();
+            assertFalse(controller2);
+            transaction.commit(controller2);
+        }
+        valve.process(context);
+    }
+
+    public void testGuardValveNoTracing()
+        throws Exception
+    {
+        transaction = new JotmTransaction(0, context, log);
+        valve = new Transaction.GuardValve(transaction, log);
+        boolean controller1 = transaction.begin();
+        assertTrue(controller1);
+        {
+            boolean controller2 = transaction.begin();
+            assertFalse(controller2);
+            transaction.commit(controller2);
+        }
+        valve.process(context);
     }
 }
