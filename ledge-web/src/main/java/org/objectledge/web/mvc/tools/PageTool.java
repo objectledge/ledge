@@ -39,7 +39,7 @@ import java.util.Set;
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.6 2004-12-23 07:18:14 rafal Exp $
+ * @version $Id: PageTool.java,v 1.7 2005-01-27 00:59:03 pablo Exp $
  */
 public class PageTool
 {
@@ -85,7 +85,7 @@ public class PageTool
     }
 
 	/** Used to recycle {@link LinkTool}s. */
-	LinkTool getLinkTool()
+	public LinkTool getLinkTool()
 	{
 		return parentLinkTool;
 	}
