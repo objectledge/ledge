@@ -28,25 +28,19 @@
 
 package org.objectledge.utils;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
- * This class contains various functions for manipulating Java Strings.
+ * This class contains various functions for collections.
  *
  * @author <a href="mailto:damian@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: CollectionUtils.java,v 1.1 2005-02-25 10:36:31 pablo Exp $
+ * @version $Id: CollectionUtils.java,v 1.2 2005-03-04 18:52:31 zwierzem Exp $
  */
 public class CollectionUtils
 {
