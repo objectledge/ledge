@@ -27,6 +27,9 @@
 // 
 package org.objectledge.threads.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Logger;
@@ -39,10 +42,16 @@ import org.objectledge.threads.Task;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DaemonTest.java,v 1.1 2004-01-30 14:40:05 fil Exp $
+ * @version $Id: DaemonTest.java,v 1.2 2004-02-02 11:37:34 fil Exp $
  */
 public class DaemonTest extends TestCase
 {
+    private static final int DELAY = 200;
+    
+    private static Map whiteboard = new HashMap();
+    
+    private static Logger log = 
+        new Log4JLogger(org.apache.log4j.Logger.getLogger(DaemonTest.class));
 
     /**
      * Constructor for DaemonTest.
@@ -56,152 +65,175 @@ public class DaemonTest extends TestCase
     public void testNormal()
         throws Exception
     {
-        Task task = new NormalTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = new CleanupValve();
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNotNull(context.getAttribute("interrupted"));
-        assertNotNull(context.getAttribute("cleaned up"));
+        synchronized(whiteboard)
+        {
+            Task task = new NormalTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new CleanupValve();
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNotNull(whiteboard.get("interrupted"));
+            assertNotNull(whiteboard.get("cleaned up"));
+        }
     }
     
     public void testEarlyExit()
         throws Exception
     {
-        Task task = new EarlyExitTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = new CleanupValve();
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNull(context.getAttribute("interrupted"));
-        assertNotNull(context.getAttribute("cleaned up"));
+        synchronized(whiteboard)
+        {
+            Task task = new EarlyExitTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new CleanupValve();
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNull(whiteboard.get("interrupted"));
+            assertNotNull(whiteboard.get("cleaned up"));
+        }
     }
     
-    public void testFailing()
+    public synchronized void testFailing()
         throws Exception
     {
-        Task task = new FailingTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = new CleanupValve();
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNull(context.getAttribute("interrupted"));
-        assertNotNull(context.getAttribute("cleaned up"));
+        synchronized(whiteboard)
+        {
+            Task task = new FailingTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new CleanupValve();
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNull(whiteboard.get("interrupted"));
+            assertNotNull(whiteboard.get("cleaned up"));
+        }
     }
 
-    public void testForcedStop()
+    public synchronized void testForcedStop()
         throws Exception
     {
-        Task task = new ForcedStopTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = new CleanupValve();
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNull(context.getAttribute("interrupted"));
-        assertNull(context.getAttribute("cleaned up"));
+        synchronized(whiteboard)
+        {
+            Task task = new ForcedStopTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new CleanupValve();
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNull(whiteboard.get("interrupted"));
+            assertNull(whiteboard.get("cleaned up"));
+        }
     }
     
-    public void testExternalStop()
+    public synchronized void testExternalStop()
         throws Exception
     {
-        Task task = new NormalTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = new CleanupValve();
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        Thread[] threads = new Thread[1];
-        assertEquals(1, threadGroup.activeCount());
-        threadGroup.enumerate(threads);
-        threads[0].stop();
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNull(context.getAttribute("interrupted"));
-        assertNull(context.getAttribute("cleaned up"));
+        synchronized(whiteboard)
+        {
+            Task task = new NormalTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new CleanupValve();
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            Thread[] threads = new Thread[1];
+            assertEquals(1, threadGroup.activeCount());
+            threadGroup.enumerate(threads);
+            threads[0].stop();
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNull(whiteboard.get("interrupted"));
+            assertNull(whiteboard.get("cleaned up"));
+        }
     }
     
-    public void testDoubleStop()
+    public synchronized void testDoubleStop()
         throws Exception
     {
-        Task task = new NormalTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = new CleanupValve();
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        daemon.stop();
-        Thread.sleep(100);
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNotNull(context.getAttribute("interrupted"));
-        assertNotNull(context.getAttribute("cleaned up"));
-        
+        synchronized(whiteboard)
+        {
+            Task task = new NormalTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new CleanupValve();
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNotNull(whiteboard.get("interrupted"));
+            assertNotNull(whiteboard.get("cleaned up"));
+        }
     }
 
-    public void testNoCleanup()
+    public synchronized void testNoCleanup()
         throws Exception
     {
-        Task task = new NormalTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = null;
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNotNull(context.getAttribute("interrupted"));
-        assertNull(context.getAttribute("cleaned up"));
+        synchronized(whiteboard)
+        {
+            Task task = new NormalTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = null;
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNotNull(whiteboard.get("interrupted"));
+            assertNull(whiteboard.get("cleaned up"));
+        }
     }
 
-    public void testFailedCleanup()
+    public synchronized void testFailedCleanup()
         throws Exception
     {
-        Task task = new NormalTask();
-        int priority = Thread.NORM_PRIORITY;
-        ThreadGroup threadGroup = new ThreadGroup("Test group");
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        Context context = new Context();
-        context.clearAttributes();
-        Valve cleanup = new FailedCleanupValve();
-        Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-        Thread.sleep(100);
-        daemon.stop();
-        assertNotNull(context.getAttribute("started"));
-        assertNotNull(context.getAttribute("interrupted"));
-        assertNull(context.getAttribute("cleaned up"));
+        synchronized(whiteboard)
+        {
+            Task task = new NormalTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new FailedCleanupValve();
+            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Thread.sleep(DELAY);
+            daemon.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNotNull(whiteboard.get("interrupted"));
+            assertNull(whiteboard.get("cleaned up"));
+        }
     }
 
     private class NormalTask
@@ -211,12 +243,12 @@ public class DaemonTest extends TestCase
         {
            try
            {
-               context.setAttribute("started", "yes");
+               whiteboard.put("started", "yes");
                this.wait();
            }
            catch(InterruptedException e)
            {
-               context.setAttribute("interrupted", "yes");
+               whiteboard.put("interrupted", "yes");
                return;
            }
         }
@@ -227,7 +259,7 @@ public class DaemonTest extends TestCase
     {
         public void process(Context context)
         {
-            context.setAttribute("started", "yes");
+            whiteboard.put("started", "yes");
         }
     }
 
@@ -237,7 +269,7 @@ public class DaemonTest extends TestCase
         public void process(Context context)
             throws ProcessingException
         {
-            context.setAttribute("started", "yes");
+            whiteboard.put("started", "yes");
             throw new ProcessingException("processing failed");
         }
     }
@@ -249,12 +281,12 @@ public class DaemonTest extends TestCase
         {
            try
            {
-               context.setAttribute("started", "yes");
+               whiteboard.put("started", "yes");
                this.wait();
            }
            catch(InterruptedException e)
            {
-               context.setAttribute("interrupted", "yes");
+               whiteboard.put("interrupted", "yes");
                return;
            }
         }
@@ -270,7 +302,7 @@ public class DaemonTest extends TestCase
     {
         public void process(Context context)
         {
-            context.setAttribute("cleaned up", "yes");
+            whiteboard.put("cleaned up", "yes");
         }
     }
 
