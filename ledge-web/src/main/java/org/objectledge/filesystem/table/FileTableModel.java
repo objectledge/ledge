@@ -48,7 +48,7 @@ import org.objectledge.table.generic.GenericTreeRowSet;
  * Implementation of Table service based on file service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileTableModel.java,v 1.3 2005-02-14 17:25:34 zwierzem Exp $
+ * @version $Id: FileTableModel.java,v 1.4 2005-02-25 14:27:42 zwierzem Exp $
  */
 public class FileTableModel implements ExtendedTableModel
 {
@@ -130,7 +130,13 @@ public class FileTableModel implements ExtendedTableModel
             return new Object[0];
         }
         
-        String parentPath = normalizeDirPath(((FileObject)parent).getPath());
+        FileObject parentObject = (FileObject)parent;
+        if(!parentObject.isDirectory())
+        {
+            return new Object[0];
+        }
+        
+        String parentPath = normalizeDirPath(parentObject.getPath());
         String[] fileNames;
         try
         {
