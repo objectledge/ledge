@@ -54,7 +54,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.8 2004-07-01 11:42:14 zwierzem Exp $
+ * @version $Id: PageToolTest.java,v 1.9 2004-08-20 10:36:27 zwierzem Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -118,7 +118,7 @@ public class PageToolTest extends LedgeTestCase
 		assertNotSame(pageTool1, pageTool2);
 		pageToolFactory.recycleTool(pageTool1);
 		pageToolFactory.recycleTool(pageTool2);
-		assertEquals(pageToolFactory.getKey(), "page_tool");
+		assertEquals(pageToolFactory.getKey(), "pageTool");
 	}
 
     public void testSetTitle()
