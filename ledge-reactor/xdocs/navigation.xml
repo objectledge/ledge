@@ -4,7 +4,6 @@
   <title>ObjectLedge</title>
 
   <body>
-#if($reactorProjects)
     <menu name="Projects">
     #if ($createOverviewPage == "true" )
       <item name="${overviewPageLinkTitle}"
@@ -15,7 +14,6 @@ href="${overviewPageLink}.html"/>
 href="/${aggregateDir}${reactorProject.artifactId}/index.html"/>
     #end
     </menu>
-#end    
     <menu name="Overview">
       <item name="Goals"                   href="goals.html"/>
       <item name="Features"                href="features.html"/>
