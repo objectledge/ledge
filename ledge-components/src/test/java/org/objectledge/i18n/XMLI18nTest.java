@@ -45,6 +45,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.impl.LocalFileSystemProvider;
+import org.objectledge.i18n.impl.I18nTool;
 import org.objectledge.i18n.impl.XMLI18n;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -133,7 +134,14 @@ public class XMLI18nTest extends TestCase
 
     public void testGetTool()
     {
-    	assertNotNull(i18n.getTool());
+		I18nTool tool = (I18nTool)i18n.getTool();
+    	assertNotNull(tool);
+		String key = "foo_$1_bar_$2";
+		String[] values = new String[]{"foo","bar"};
+		assertEquals("foo_foo_bar_bar", tool.get(key, values));
+    	assertEquals("bar", tool.get("foo.bar.foo"));
+    	tool = tool.usePrefix("foo.bar");
+    	assertEquals("bar", tool.get("foo"));
     }
 
     public void testGetKey()
