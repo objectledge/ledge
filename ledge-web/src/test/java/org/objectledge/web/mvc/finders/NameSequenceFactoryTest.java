@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.6 2004-01-20 08:28:13 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.7 2004-01-20 09:17:41 fil Exp $
  */
 public class NameSequenceFactoryTest extends TestCase
 {
@@ -78,10 +78,16 @@ public class NameSequenceFactoryTest extends TestCase
         assertEquals("org.objectledge.test.views.foo.Default", classSequence.next());
         assertEquals("org.objectledge.test.views.Default", classSequence.next());
         assertEquals(false, classSequence.hasNext());
+        classSequence = factory.getClassNameSequence("views", "foo.Bar", false);
+        assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
+        assertEquals(false, classSequence.hasNext());
         Sequence templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", true);
         assertEquals("views/foo/Bar", templateSequence.next());
         assertEquals("views/foo/Default", templateSequence.next());
         assertEquals("views/Default", templateSequence.next());
+        assertEquals(false, templateSequence.hasNext());
+        templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", false);
+        assertEquals("views/foo/Bar", templateSequence.next());
         assertEquals(false, templateSequence.hasNext());
     }
     
@@ -113,6 +119,15 @@ public class NameSequenceFactoryTest extends TestCase
         Templating templating = getTemplating();
         Template barTemplate = templating.getTemplate("views/foo/Bar");
         assertEquals("foo.Bar", factory.getView("views", barTemplate));
+        try
+        {
+            factory.getView("components", barTemplate);
+            fail("exception should have been thrown");
+        }
+        catch(Exception e)
+        {
+            // success
+        }
     }
 
     public void testOverlap()
