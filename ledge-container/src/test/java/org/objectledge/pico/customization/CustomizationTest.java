@@ -12,6 +12,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.impl.LocalFileSystemProvider;
+import org.objectledge.logging.LoggerFactory;
 import org.objectledge.test.FooComponent;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -26,7 +27,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.2 2003-12-02 13:18:42 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.3 2003-12-02 15:24:14 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -67,11 +68,13 @@ public class CustomizationTest extends TestCase
                 new ComponentParameter(FileSystem.class),
                 new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
-            }
-        ).getComponentInstance(container);
+            }).getComponentInstance(container);
+        container.registerComponentImplementation(LoggerFactory.class, LoggerFactory.class).
+            getComponentInstance(container);
 
         container.registerComponentImplementation(FooComponent.class);
         FooComponent foo = (FooComponent)container.getComponentInstance(FooComponent.class);
         assertEquals(foo.getConfiguration().getValue("a"), "a");
+        foo.log();
     }
 }
