@@ -41,7 +41,7 @@ import org.objectledge.filesystem.FileSystem;
  * A derivate of log4j.RollingFileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeRollingFileAppender.java,v 1.1 2004-06-16 11:06:13 fil Exp $
+ * @version $Id: LedgeRollingFileAppender.java,v 1.1 2004-06-16 14:33:00 fil Exp $
  */
 public class LedgeRollingFileAppender
 	extends RollingFileAppender

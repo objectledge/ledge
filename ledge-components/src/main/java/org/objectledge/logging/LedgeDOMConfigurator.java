@@ -29,15 +29,13 @@ package org.objectledge.logging;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.config.PropertySetter;
-import org.apache.log4j.helpers.Loader;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.AppenderAttachable;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.pico.customization.CustomizingConstructorComponentAdapter;
 import org.picocontainer.ComponentAdapter;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoContainer;
+import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -51,9 +49,9 @@ import org.w3c.dom.NodeList;
  * implementation.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeDOMConfigurator.java,v 1.1 2004-06-16 11:03:10 fil Exp $
+ * @version $Id: LedgeDOMConfigurator.java,v 1.1 2004-06-16 14:33:00 fil Exp $
  */
-class LedgeDOMConfigurator
+public class LedgeDOMConfigurator
 	extends DOMConfigurator
 {
     private MutablePicoContainer dependencyContainer;
@@ -63,7 +61,7 @@ class LedgeDOMConfigurator
      * 
      * @param fileSystem the file system the appenders should use.
      */
-    LedgeDOMConfigurator(FileSystem fileSystem)
+    public LedgeDOMConfigurator(FileSystem fileSystem)
     {
         dependencyContainer = new DefaultPicoContainer();
         dependencyContainer.registerComponentInstance(FileSystem.class, fileSystem);
@@ -90,7 +88,7 @@ class LedgeDOMConfigurator
 
     private Object newInstance(Class clazz) throws InstantiationException
     {
-        ComponentAdapter adapter = new CustomizingConstructorComponentAdapter(clazz, clazz, null);
+        ComponentAdapter adapter = new ConstructorInjectionComponentAdapter(clazz, clazz, null);
         adapter.setContainer(dependencyContainer);
         return adapter.getComponentInstance(); 
     }

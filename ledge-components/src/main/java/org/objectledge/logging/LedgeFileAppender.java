@@ -40,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * A derivate of log4j.FileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeFileAppender.java,v 1.1 2004-06-16 11:06:13 fil Exp $
+ * @version $Id: LedgeFileAppender.java,v 1.1 2004-06-16 14:33:00 fil Exp $
  */
 public class LedgeFileAppender extends FileAppender
 {
@@ -80,6 +80,7 @@ public class LedgeFileAppender extends FileAppender
         }
 
         reset();
+        fileSystem.mkdirs(FileSystem.directoryPath(fileName));
         Writer fw = createWriter(fileSystem.getOutputStream(fileName, append));
         if(bufferedIO)
         {
