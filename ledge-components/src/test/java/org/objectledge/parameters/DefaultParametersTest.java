@@ -572,9 +572,9 @@ public class DefaultParametersTest extends TestCase
     }
 
 	/**
-	 * Test for void getString()
+	 * Test for void toString()
 	 */
-    public void testGetString()
+    public void testToString()
     {
         //TODO Implement getString().
     }

@@ -33,7 +33,7 @@ package org.objectledge.parameters;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.6 2003-12-03 14:39:27 mover Exp $
+ * @version $Id: Parameters.java,v 1.7 2004-01-08 15:59:05 fil Exp $
  */
 public interface Parameters
 {
@@ -404,7 +404,7 @@ public interface Parameters
      *
      * @return parsable String representation of the contained properties.
      */
-    public String getString();
+    public String toString();
 
     /**
      * Return a parameters object that represents a subset of parameters with specified prefix.

@@ -45,7 +45,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.1 2004-01-08 15:37:14 fil Exp $
+ * @version $Id: DefaultParameters.java,v 1.2 2004-01-08 15:59:05 fil Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -636,7 +636,7 @@ public class DefaultParameters implements Parameters
 	/**
 	 * {@inheritDoc}
 	 */
-    public String getString()
+    public String toString()
     {
     	StringBuffer sb = new StringBuffer();
 		Iterator it = map.keySet().iterator();
