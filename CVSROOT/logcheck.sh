@@ -33,3 +33,5 @@ while [ $# -ne 0 ]; do
   shift
 done
 echo -
+
+echo '$0' $@
