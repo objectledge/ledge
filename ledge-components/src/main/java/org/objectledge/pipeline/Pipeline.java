@@ -11,7 +11,7 @@ import org.objectledge.context.Context;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.2 2003-11-24 15:55:44 fil Exp $
+ * @version $Id: Pipeline.java,v 1.3 2003-11-25 08:18:31 fil Exp $
  */
 public class Pipeline
     implements Runnable
@@ -34,7 +34,8 @@ public class Pipeline
      * @param catchValves the valves to be used in the catch stage.
      * @param finalyValves the valves to be used in the finaly stage.
      */
-    public Pipeline(Context context, Runnable[] tryValves, Runnable[] catchValves, Runnable[] finalyValves)
+    public Pipeline(Context context, Runnable[] tryValves, Runnable[] catchValves, 
+        Runnable[] finalyValves)
     {
         this.context = context;
         this.tryValves = tryValves;

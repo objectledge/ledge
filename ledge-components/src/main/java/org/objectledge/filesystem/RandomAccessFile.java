@@ -13,7 +13,7 @@ import java.io.IOException;
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RandomAccessFile.java,v 1.1 2003-11-24 10:25:14 fil Exp $
+ * @version $Id: RandomAccessFile.java,v 1.2 2003-11-25 08:18:31 fil Exp $
  */
 public interface RandomAccessFile
 {
@@ -151,7 +151,7 @@ public interface RandomAccessFile
      * @param      b   the data.
      * @exception  IOException  if an I/O error occurs.
      */
-    public void write(byte b[])
+    public void write(byte[] b)
         throws IOException;
     
     /**
@@ -173,6 +173,6 @@ public interface RandomAccessFile
      * @param      len   the number of bytes to write.
      * @exception  IOException  if an I/O error occurs.
      */
-    public void write(byte b[], int off, int len)
+    public void write(byte[] b, int off, int len)
         throws IOException;
 }

@@ -13,7 +13,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,7 +28,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.2 2003-11-24 15:55:44 fil Exp $
+ * @version $Id: FileSystem.java,v 1.3 2003-11-25 08:18:31 fil Exp $
  */
 public class FileSystem
 {
@@ -678,12 +677,11 @@ public class FileSystem
      * @param encoding the character encoding to use for decoding bytes into 
      *        Unicode characters.
      * @return the contents of the file.
-     * @throws IOException if the operation fails.
-     * @throws UnsupportedEncodingException if the encoding is not supported 
-     *         by the VM.
+     * @throws IOException if the file cannot be read, or the specified encoding 
+     *         is not supported
      */ 
     public String read(String path, String encoding)
-        throws IOException, UnsupportedEncodingException
+        throws IOException
     {
         InputStream ins = getInputStream(path);
         if (ins == null)
@@ -769,12 +767,11 @@ public class FileSystem
      * @param string the String to be written
      * @param encoding the character encoding to use for encoding Unicode 
      *        characters into bytes.
-     * @throws IOException if the operation fails. 
-     * @throws UnsupportedEncodingException if the encoding is not supported 
-     *         by the VM.
+     * @throws IOException if the file cannot be written to, or the specified encoding is not 
+     *         supported.
      */
     public void write(String path, String string, String encoding)
-        throws IOException, UnsupportedEncodingException
+        throws IOException
     {
         OutputStream outs = getOutputStream(path);
         if (outs == null)

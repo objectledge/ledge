@@ -20,7 +20,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.2 2003-11-24 15:55:44 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.3 2003-11-25 08:18:31 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -156,7 +156,8 @@ public abstract class ReadOnlyFileSystemProvider
 				}
 				catch(NumberFormatException e)
 				{
-					throw new Error("invalid length "+length+" for file "+path+" in index "+location);
+					throw new Error("invalid length "+length+" for file "+path+" in index "+
+                        location);
 				}
 				try
 				{
@@ -167,22 +168,23 @@ public abstract class ReadOnlyFileSystemProvider
 					throw new Error("invalid time "+time+" for file "+path+" in index "+location);
 				}
 				StringTokenizer st = new StringTokenizer(path,"/");
-				String name = null;
+				String token = null;
                 Map current = directoryTree;
 				tokenLoop: while(st.hasMoreTokens())
 				{
-					name = st.nextToken();
+					token = st.nextToken();
 					if(st.hasMoreTokens())
 					{
-						current = (Map)current.get(name);
+						current = (Map)current.get(token);
 						if(current == null)
 						{
-							throw new Error("missing parent directory for "+path+" in index "+location);
+							throw new Error("missing parent directory for "+path+" in index "+
+                                location);
 						}
 					}
 					else
 					{
-						if(current.containsKey(name))
+						if(current.containsKey(token))
 						{
 							// we seem to be merging indices
 							continue tokenLoop;
@@ -197,7 +199,7 @@ public abstract class ReadOnlyFileSystemProvider
 						{
 							item = new Object();
 						}
-						current.put(name, item);
+						current.put(token, item);
 						listing.put(path, item);
 						times.put(path, timeObj);
 						lengths.put(path, lengthObj);
