@@ -26,28 +26,56 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.pico;
+package org.objectledge.pico.xml;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.picoextras.script.PicoCompositionException;
 
 /**
+ * Thrown when an unxepected tag is found in the composition source file.
  *
- *
+ * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.4 2003-12-09 12:41:43 fil Exp $
+ * @version $Id: UnknownElementException.java,v 1.1 2003-12-09 12:41:42 fil Exp $
  */
-public class AllTests
+public class UnknownElementException 
+    extends PicoCompositionException
 {
-
-    public static Test suite()
+    /**
+     * Creates a new exception instance.
+     */
+    public UnknownElementException()
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.pico");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(SequenceParameterTest.class));
-        //$JUnit-END$
-        suite.addTest(org.objectledge.pico.customization.AllTests.suite());
-        suite.addTest(org.objectledge.pico.xml.AllTests.suite());
-        return suite;
+        super();
+    }
+
+    /**
+     * Creates a new exception instance.
+     * 
+     * @param message the detail message.
+     */
+    public UnknownElementException(String message)
+    {
+        super(message);
+    }
+
+    /**
+     * Creates a new exception instance.
+     * 
+     * @param cause the root cause of the exception.
+     */
+    public UnknownElementException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    /**
+     * Creates a new exception instance.
+     * 
+     * @param message the detail message.
+     * @param cause the root cause of the exception.
+     */
+    public UnknownElementException(String message, Exception cause)
+    {
+        super(message, cause);
     }
 }

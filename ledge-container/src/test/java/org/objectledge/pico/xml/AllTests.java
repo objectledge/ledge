@@ -26,28 +26,26 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.pico;
+package org.objectledge.pico.xml;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
  *
- *
+ * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.4 2003-12-09 12:41:43 fil Exp $
+ * @version $Id: AllTests.java,v 1.1 2003-12-09 12:41:43 fil Exp $
  */
 public class AllTests
 {
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.pico");
+        TestSuite suite = new TestSuite("Test for org.objectledge.pico.xml");
         //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(SequenceParameterTest.class));
+        suite.addTest(new TestSuite(LedgeXmlFrontEndTest.class));
         //$JUnit-END$
-        suite.addTest(org.objectledge.pico.customization.AllTests.suite());
-        suite.addTest(org.objectledge.pico.xml.AllTests.suite());
         return suite;
     }
 }
