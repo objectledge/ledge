@@ -41,13 +41,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.utils.StringUtils;
 
 /**
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.9 2004-07-05 13:49:27 zwierzem Exp $
+ * @version $Id: DefaultParameters.java,v 1.10 2004-10-25 14:15:28 rafal Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -766,8 +767,8 @@ public class DefaultParameters implements Parameters
             // process the value
             if (value.indexOf(',') == -1)
             {
-                add(StringUtils.expandUnicodeEscapes(name), 
-                    StringUtils.expandUnicodeEscapes(value));
+                add(DatabaseUtils.unescapeSqlString(name), 
+                    DatabaseUtils.unescapeSqlString(value));
                 continue;
             }
             StringTokenizer st = new StringTokenizer(value, ",");
@@ -779,7 +780,7 @@ public class DefaultParameters implements Parameters
                 {
                     v = v.substring(0,v.length()-1) + "," + st.nextToken();
                 }
-                values.add(StringUtils.expandUnicodeEscapes(v));
+                values.add(DatabaseUtils.unescapeSqlString(v));
             }
             String[] target = new String[values.size()];
             values.toArray(target);

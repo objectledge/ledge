@@ -40,7 +40,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-import org.objectledge.utils.StringUtils;
+import org.objectledge.database.DatabaseUtils;
 
 /**
  * An implementation of {@link DefaultInputRecord} that wraps a
@@ -239,7 +239,7 @@ public class DefaultInputRecord implements InputRecord
     {
         try
         {
-            return StringUtils.expandUnicodeEscapes(rs.getString(field));
+            return DatabaseUtils.unescapeSqlString(rs.getString(field));
         }
         catch(SQLException e)
         {
