@@ -31,7 +31,6 @@ package org.objectledge.logging;
 import org.apache.log4j.LogManager;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.objectledge.pico.customization.CustomizedComponentAdapter;
 import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.UnsupportedKeyTypeException;
 import org.picocontainer.ComponentAdapter;
@@ -40,7 +39,6 @@ import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.defaults.CachingComponentAdapter;
-import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 import org.picocontainer.extras.DecoratingComponentAdapter;
@@ -50,7 +48,7 @@ import org.picocontainer.extras.ImplementationHidingComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.6 2004-01-09 10:56:12 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.7 2004-01-16 09:07:13 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -60,12 +58,11 @@ public class LoggerFactory
     /**
      * Creates a new instance of Factory and installs apropriate component adapter.
      * 
-     * @param container the container to connect to.
+     * @param loggerContainer the container to store loggers in.
      */
-    public LoggerFactory(MutablePicoContainer container)
+    public LoggerFactory(MutablePicoContainer loggerContainer)
     {
-        loggerContainer = new DefaultPicoContainer();
-        registerAdapter(container);
+        this.loggerContainer = loggerContainer;
     }
 
     /**
@@ -183,19 +180,6 @@ public class LoggerFactory
         adapter = new ImplementationHidingComponentAdapter(adapter);
         adapter = new CachingComponentAdapter(adapter);
         return adapter;
-    }
-    
-    /**
-     * Registers a CustomizedComponentAdapter for the {@link Logger} type in the
-     * specified container.
-     * 
-     * @param container the container.
-     */
-    protected void registerAdapter(MutablePicoContainer container)
-    {
-        ComponentAdapter loggerAdapter = new CustomizedComponentAdapter(Logger.class, 
-            loggerContainer, this);
-        container.registerComponent(loggerAdapter);
     }
     
     /**
