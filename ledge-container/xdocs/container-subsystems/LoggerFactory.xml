@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Logger factory</title>
+  </properties>
+
+  <body>
+    <section name="Logger factory">
+      <p>
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%">none</td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>log4j<br/></td>
+          </tr>
+        </table>
+      </p>
+
+      <p>Logger factory plugs into the container using 
+      <a href="../pico-extensions/ComponentCustomization.html">component customization</a> mechanism,
+      and provides components that declare a dependency on a DNA Logger (using a 
+      <code>org.jcontainer.dna.Logger</code> component parameter) with an initialized and ready to
+      go logger instance.</p>
+      
+      <p>The default implementation creates Log4j loggers, but it can be easily extended to work
+      with any other type of logger compatible with DNA.</p>
+      
+      <p>The LoggerFactory component has the ability to transparently replce the logger used by a 
+      component with another logger. (This is done using Pico's ImplementationHidingComponentAdapter).
+      This might be useful for run-time administraiton, especially in case of Logger objects that
+      are immutable.</p>
+      
+      <p><a href="http://dna.jcontainer.org/apidocs/org/jcontainer/dna/Logger.html">DNA Logger API</a>
+      
+      <p><a href="apidocs/org/objectledge/logging/LoggerFactory.html">View JavaDoc</a></p>
+		
+	  <p>Constructor parameters
+	    <table>
+	      <tr>
+	        <th>position</th>
+	        <th>type</th>
+	        <th widht="100%">descritpion</th>
+	      </tr>
+	      <tr>
+	        <td>1</td>
+	        <td><code>org.picocontainer.MutablePicoContainer</code></td>
+	        <td>
+	          the container where CustomzizedComponentAdapter for DNA Logger should be installed.
+	        </td>
+	      </tr>
+		</table>
+	  </p>
+    </section>
+  </body>
+</document>  

@@ -7,31 +7,61 @@
   <body>
     <section name="Container">
       <subsection name="Logging configurator">
-        <p>
+        <p>LoggingConfigurator resposibility is setting up the Log4j. It was introduced so that
+        log system configufration were preformed in a way uniform with oterh parts of the system.
         </p>
+        <p>Functionality anticipated in the future</p>
+        <ul>
+          <li>runtime modification of logging configuration, most notably logger verbosities</li>
+          <li>management of loggers through textual interaction, and possibly JMX</li>
+          <li>customized log4j file appenders working over Ledge FileSystem</li>
+        </ul>
 		<p class="more"><a href="LoggingConfigurator.html">more</a></p>        
       </subsection>
 
       <subsection name="Logger factory">
-        <p>
-        </p>
+        <p>Logger factory plugs into the container using 
+        <a href="../pico-extensions/ComponentCustomization.html">component customization</a> mechanism,
+        and provides components that declare a dependency on a DNA Logger (using a 
+        <code>org.jcontainer.dna.Logger</code> component parameter) with an initialized and ready to
+        go logger instance.</p>
 		<p class="more"><a href="LoggerFactory.html">more</a></p>        
       </subsection>
       
       <subsection name="Configuration factory">
-        <p>
-        </p>
+        <p>Configuration factory plugs into the container using 
+        <a href="../pico-extensions/ComponentCustomization.html">component customization</a> mechanism,
+        and provides components that declare a dependency on a DNA Configuration (using a 
+        <code>org.jcontainer.dna.Configuration</code> component parameter) with an initialized 
+        configuration object.</p>
+        <p>The contents of the configuration object are read from an XML file, and verified against
+        a RelaxNG schema.</p>
+        <p>Functionality anticipated in the future</p>
+        <ul>
+          <li>Detecting of components that support runtime reconfiguration (possibly by extending
+          <code>org.jcontainer.dna.Configurable</code>interface.</li>
+          <li>Triggering of re-reading configuration from files on reconfigurable components</li>
+          <li>Programmatic setting of configuration of reconfigurable components.</li> 
+        </ul>
 		<p class="more"><a href="ConfigurationFactory.html">more</a></p>        
       </subsection>
       
       <subsection name="Ledge container">
-        <p>
+        <p>LedgeContainer is a NanoContainer flawor, that uses the
+        <a href="../../../ledge-components/components/FileSystem.xml">FileSystem</a> component for 
+        loading the composition file, and parses it using 
+        <a href="../pico-extension/XMLFrontEnd.html">Ledge XMLFrontEnd</a>. It also pre-feeds
+        the internal PicoContainer with objects required by various container subsystems, including
+        a <code>FileSystem</code>, <code>ClassLoader</code> and confiuration directory path.
         </p>
 		<p class="more"><a href="LedgeContainer.html">more</a></p>        
       </subsection>
 
       <subsection name="Command line interface">
-        <p>
+        <p>Allows running Ledge applications from the command line. After the continer is started
+        and components are composed and configured, a designated component is looked up and method
+        <code>void main(String[])</code> is invoked on it. Note that it this mehtod should be 
+        non-static so it may take advantage of the actual component instance composed by the container.
         </p>
 		<p class="more"><a href="Main.html">more</a></p>        
       </subsection>

@@ -7,17 +7,40 @@
   <body>
     <section name="PicoContainer extensions">
       <subsection name="SequenceParameter">
-        <p></p>
+        <p>Allows hinting the component's constructor arguments of aggregated types. Both Java
+        arrays and java.util.Collection objects are supported. The elements of the sequence are
+        <code>org.picocontainer.Parameter</code> objects - they may resolve to constants,
+        component references, or nested sequences.
+        </p>
 		<p class="more"><a href="SequenceParameter.html">more</a></p>
 	  </subsection>
       
       <subsection name="Component customization">
-        <p></p>
+        <p>This mechanism introduces a concept of customized (polymorphic) components. When a 
+        customized component is requested during instantiation of a target component, a provider
+        class is asked for an actual object instance, depending on the target component's key and
+        implementation class.
+        </p>
+        <p>To use this mechanism, you need to use CustmomizingConstructorComponentAdapter instead of
+        ConstructorComponentAdapter for instantiating your compoments. Additionally you need to
+        register CustomizedComponentAdapter for each of the components you want polymorphic, using
+        apropriate CustomizedComponentProvider objects.
+        </p>
 		<p class="more"><a href="ComponentCustomization.html">more</a></p>
       </subsection>
       
       <subsection name="Enhanced XMLFrontEnd">
-        <p></p>
+        <p>Ledge XMLFrontEnd has the same functionality as the Nano-provided one but with a few 
+        changes and additions.
+        </p>
+        <ul>
+          <li>ComponentAdapterFactory may be declared for the top level container</li>
+          <li>ComponentAdapterFactory may be declared using tags, with nesting 
+            (DecoratingComponentAdapterFactoryPatern)</li>
+          <li>for both components and component-parameters, both string and class keys may be used</li>
+          <li><a href="SequenceParameter.html">SeuqenceParameters</a> are supported</li>
+          <li>The composition is checked against a RelaxNG schema.</li>
+        </ul>
 		<p class="more"><a href="XMLFrontEnd.html">more</a></p>
       </subsection>
     </section>

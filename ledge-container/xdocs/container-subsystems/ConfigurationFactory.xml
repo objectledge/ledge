@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Configuration factory</title>
+  </properties>
+
+  <body>
+    <section name="Configuration factory">
+      <p>
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%">
+              a <a href="../../../ledge-components/components/FileSystem.html">FileSystem</a><br/>
+              an <a href="../../../ledge-components/components/XMLValidator.html">XMLValidator</a><br/>
+            </td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>dna-impl</td>
+          </tr>
+        </table>
+      </p>
+      
+      <p>Configuration factory plugs into the container using 
+      <a href="../pico-extensions/ComponentCustomization.html">component customization</a> mechanism,
+      and provides components that declare a dependency on a DNA Configuration (using a 
+      <code>org.jcontainer.dna.Configuration</code> component parameter) with an initialized 
+      configuration object.</p>
+      <p>The contents of the configuration object are read from an XML file, and verified against
+      a RelaxNG schema.</p>
+      
+      <p><a href="http://relaxng.org">RelaxNG resources</a></p>
+      
+      <p><a href="http://dna.jcontainer.org/apidocs/org/jcontainer/dna/Configuration.html">DNA Configuration API</a>
+      
+      <p>Functionality anticipated in the future</p>
+      <ul>
+        <li>Detecting of components that support runtime reconfiguration (possibly by extending
+        <code>org.jcontainer.dna.Configurable</code>interface.</li>
+        <li>Triggering of re-reading configuration from files on reconfigurable components</li>
+        <li>Programmatic setting of configuration of reconfigurable components.</li> 
+      </ul>
+      
+      <p><a href="apidocs/org/objectledge/configuration/ConfigurationFactory.html">View JavaDoc</a></p>
+		
+	  <p>Constructor parameters
+	    <table>
+	      <tr>
+	        <th>position</th>
+	        <th>type</th>
+	        <th widht="100%">descritpion</th>
+	      </tr>
+	      <tr>
+	        <td>1</td>
+	        <td><code>org.picocontainer.MutablePicoContainer</code></td>
+	        <td>
+	          the container where CustomzizedComponentAdapter for DNA Configuration should be installed.
+	        </td>
+	      </tr>
+		  <tr>
+		    <td>2</td>
+		    <td><code>org.objectledge.filesystem.FileSystem</code></td>
+		    <td>The file system to read the configuration files from.</td>
+		  </tr>
+		  <tr>
+		    <td>3</td>
+		    <td><code>org.objectledge.xml.XMLValidator</code></td>
+		    <td>The validator for the configuration files.</td>
+		  </tr>
+		  <tr>
+		    <td>4</td>
+		    <td><code>java.lang.String</code></td>
+		    <td>The pathname of the directory where the configurations are loaded from.</td>
+		  </tr>
+		</table>
+	  </p>
+    </section>
+  </body>
+</document>  
+ 
