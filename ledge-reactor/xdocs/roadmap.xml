@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>ObjectLedge : roadmap </title>
+  </properties>
+  
+  <body>
+    <section>
+    <subsection name="0.1 release">
+      <p>Components</p>
+      <ul>
+        <li>FileSystem component, FileSystemProvider interface with Local and Classpath 
+          implmentations</li>
+        <li>XMLValidator component</li>  
+      </ul>
+      <p>Container</p>
+      <ul>
+        <li>Pico component customization (for Configuration and Logger parameters)</li>
+        <li>SequenceParameter class for enchancing composition semantics.</li>
+        <li>XmlFront end with nested component adatpers, sequence parameters and more.</li>
+        <li>Container: NanoContainer flavor that uses FileSystem for loading composition data.</li>
+        <li>Main class for starting from comand line.</li>
+      </ul>
+      <p>Web</p>
+      <ul>
+        <li>ServletContext FileSystemProvider implementation.</li>
+        <li>HttpRequestDispatcher interface.</li>
+        <li>Integration servlet.</li>
+      </ul>
+      <p>Maven plugin</p>
+      <ul>
+        <li>FileSystem file listings generation.</li>
+      </ul>
+    </subsection>
+    
+    <subsection name="0.2 release">
+      <p>Components</p>
+      <ul>
+        <li>Context component</li>
+        <li>Pipeline component</li>
+        <li>Pipeline HttpRequest dispatcher</li>
+        <li>Templating abstraction</li>
+        <li>Velocity Templating implementation</li>
+        <li>MVC classes abstraction</li>
+        <li>Parameters abstraction, default implementation</li>
+        <li>view components mapper</li>
+      </ul>      
+    </subsection>
+    </section>
+  </body>
+</document>
