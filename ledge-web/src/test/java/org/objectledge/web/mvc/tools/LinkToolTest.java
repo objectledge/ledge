@@ -70,10 +70,6 @@ public class LinkToolTest extends LedgeTestCase
     private Mock mockHttpServletResponse;
     private HttpServletResponse httpServletResponse;
 
-    public void setUp() throws Exception
-    {
-    }
-
     public void testFactoryTest() throws Exception
     {
         FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources/tools");
