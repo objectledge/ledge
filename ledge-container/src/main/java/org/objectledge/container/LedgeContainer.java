@@ -49,12 +49,13 @@ import org.picoextras.script.xml.XmlFrontEnd;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 
 /**
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.6 2004-01-13 13:27:38 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.7 2004-01-15 13:23:20 fil Exp $
  */
 public class LedgeContainer
     extends NanoContainer
@@ -148,9 +149,15 @@ public class LedgeContainer
             compositionUrl = getCompositionUrl();
             composition = getComposition(compositionUrl);
         }
+        catch(SAXParseException e)
+        {
+            throw new PicoCompositionException("parse error "+e.getMessage()+" in "+
+                e.getSystemId()+" at line "+e.getLineNumber(), e);
+        }
         catch(Exception e)
         {
-            throw new PicoCompositionException("composition file is missing or invalid", e);
+            throw new PicoCompositionException("composition file "+compositionUrl+
+                "is missing or invalid", e);
         }
 
         XmlFrontEnd frontEnd;
