@@ -109,6 +109,15 @@ public class XMLI18nTest extends TestCase
     	i18n.reload();
     }
 
+	/*
+	 * Test for Locale getDefaultLocale()
+	 */
+	public void testGetDefaultLocale()
+	{
+		Locale plLocale = new Locale("pl","PL");
+		assertEquals(plLocale, i18n.getDefaultLocale());
+	}
+
     /*
      * Test for String get(Locale, String)
      */

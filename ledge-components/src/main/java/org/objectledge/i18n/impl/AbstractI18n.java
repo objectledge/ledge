@@ -102,6 +102,14 @@ public abstract class AbstractI18n implements I18n, ContextToolFactory
 		localeMap = new HashMap();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Locale getDefaultLocale()
+	{
+		return defaultLocale;
+	}
+
     /**
      * {@inheritDoc}
      */

@@ -38,6 +38,13 @@ import java.util.Locale;
 public interface I18n
 {
 	/** 
+	 * Returns configured default locale.
+	 * 
+	 * @return the default locale object. 
+	 */
+	public Locale getDefaultLocale();
+	
+	/** 
 	 * Get the string value.
 	 * 
 	 * @param locale the locale.
