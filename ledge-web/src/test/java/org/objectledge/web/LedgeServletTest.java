@@ -44,7 +44,7 @@ import com.meterware.servletunit.ServletUnitClient;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServletTest.java,v 1.6 2004-01-14 12:28:07 fil Exp $
+ * @version $Id: LedgeServletTest.java,v 1.7 2004-01-29 09:50:38 fil Exp $
  */
 public class LedgeServletTest extends TestCase
 {
@@ -61,7 +61,7 @@ public class LedgeServletTest extends TestCase
     public void testLedgeServlet()
         throws Exception
     {
-        ServletRunner runner = getRunner("container1");
+        ServletRunner runner = getRunner("servlet");
         ServletUnitClient client = runner.newClient();
         WebRequest request = new GetMethodWebRequest("http://localhost/ledge");
         WebResponse response = client.getResponse(request);
@@ -69,23 +69,6 @@ public class LedgeServletTest extends TestCase
         assertEquals(200, response.getResponseCode());
         assertEquals("Hello world!", response.getText());
     }
-    
-	public void testLedgeServlet2()
-			throws Exception
-	{
-        ServletRunner runner = getRunner("container2");
-		ServletUnitClient client = runner.newClient();
-		WebRequest request = new GetMethodWebRequest("http://localhost/ledge");
-		WebResponse response = client.getResponse(request);
-		assertNotNull(response);
-		assertEquals(200, response.getResponseCode());
-		assertEquals("bar", response.getText());
-		request = new GetMethodWebRequest("http://localhost/ledge/foo/foo");
-		response = client.getResponse(request);
-		assertNotNull(response);
-		assertEquals(200, response.getResponseCode());
-		assertEquals("foo", response.getText());
-	}
     
     public ServletRunner getRunner(String resources)
         throws Exception
