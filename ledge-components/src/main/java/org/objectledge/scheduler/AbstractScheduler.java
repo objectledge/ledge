@@ -275,7 +275,7 @@ public abstract class AbstractScheduler
                                                 type+"' not registered");
         }
         Schedule schedule = factory.getInstance();
-        schedule.init(config);
+        schedule.init(this, config);
         return schedule;
     }
 

@@ -28,67 +28,34 @@
 
 package org.objectledge.scheduler;
 
-import java.util.Date;
-
 /**
- * Describes an algorithm for calculating job execution times.
+ * At schedule factory.
+ * 
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public interface Schedule
+public class AtScheduleFactory implements ScheduleFactory
 {
     /**
-     * Initialize the schedule.
-     *
-     * @param scheduler the scheduler. 
-     * @param config the configuration.
-     * @throws InvalidScheduleException if the specification is invalid. 
+     * Component constructor.
      */
-    public void init(AbstractScheduler scheduler, String config)
-        throws InvalidScheduleException;
-    
-    /**
-     * Returns the name of the schedule type.
-     *      
-     * @return the name of the schedule type.
-     */
-    public String getType();
+    public AtScheduleFactory()
+    {
+    }
 
     /**
-     * Return the schedule configuration.
-     *
-     * <p>The format of the string is dependant on the nature of
-     * the schedule.</p>
-     *
-     * @return the schedule configuration.
+     * {@inheritDoc}
      */
-    public String getConfig();
+    public Schedule getInstance()
+    {
+        AtSchedule schedule = new AtSchedule();
+        return schedule;
+    }
 
     /**
-     * Sets the schedule configuration.
-     *
-     * <p>The format of the string is dependant on the nature of
-     * the schedule.</p>
-     *
-     * @param config schedule configuration.
-     * @throws InvalidScheduleException if the specification is invalid
-     */     
-    public void setConfig(String config)
-        throws InvalidScheduleException;
-
-    /**
-     * Checks if the job should be run at the very startup of the scheduler.
-     *
-     * @return <code>true</code> if the job should be run during the startup
-     *         of the scheduler.
+     * {@inheritDoc}
      */
-    public boolean atStartup();
-
-    /**
-     * Calculates the time of the job's next run.
-     *
-     * @param currentTime the current time.
-     * @param lastRunTime the last time the job was run, or <code>null</code> 
-     * if unknown.
-     * @return job's next execution time of <code>null</code> for never again.
-     */
-    public Date getNextRunTime(Date currentTime, Date lastRunTime);
+    public String getName()
+    {
+        return "at";
+    }
 }

@@ -28,67 +28,42 @@
 
 package org.objectledge.scheduler;
 
-import java.util.Date;
+import org.objectledge.i18n.I18n;
 
 /**
- * Describes an algorithm for calculating job execution times.
+ * Cron schedule factory.
+ * 
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public interface Schedule
+public class CronScheduleFactory implements ScheduleFactory
 {
-    /**
-     * Initialize the schedule.
-     *
-     * @param scheduler the scheduler. 
-     * @param config the configuration.
-     * @throws InvalidScheduleException if the specification is invalid. 
-     */
-    public void init(AbstractScheduler scheduler, String config)
-        throws InvalidScheduleException;
+    /** i18n component */
+    private I18n i18n;
     
     /**
-     * Returns the name of the schedule type.
-     *      
-     * @return the name of the schedule type.
+     * Component constructor.
+     * 
+     * @param i18n the i18n component.
      */
-    public String getType();
+    public CronScheduleFactory(I18n i18n)
+    {
+        this.i18n = i18n;
+    }
 
     /**
-     * Return the schedule configuration.
-     *
-     * <p>The format of the string is dependant on the nature of
-     * the schedule.</p>
-     *
-     * @return the schedule configuration.
+     * {@inheritDoc}
      */
-    public String getConfig();
+    public Schedule getInstance()
+    {
+        CronSchedule schedule = new CronSchedule(i18n);
+        return schedule;
+    }
 
     /**
-     * Sets the schedule configuration.
-     *
-     * <p>The format of the string is dependant on the nature of
-     * the schedule.</p>
-     *
-     * @param config schedule configuration.
-     * @throws InvalidScheduleException if the specification is invalid
-     */     
-    public void setConfig(String config)
-        throws InvalidScheduleException;
-
-    /**
-     * Checks if the job should be run at the very startup of the scheduler.
-     *
-     * @return <code>true</code> if the job should be run during the startup
-     *         of the scheduler.
+     * {@inheritDoc}
      */
-    public boolean atStartup();
-
-    /**
-     * Calculates the time of the job's next run.
-     *
-     * @param currentTime the current time.
-     * @param lastRunTime the last time the job was run, or <code>null</code> 
-     * if unknown.
-     * @return job's next execution time of <code>null</code> for never again.
-     */
-    public Date getNextRunTime(Date currentTime, Date lastRunTime);
+    public String getName()
+    {
+        return "at";
+    }
 }
