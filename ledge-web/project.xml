@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.35 2004-06-02 07:10:40 fil Exp $ -->
+<!-- $Id: project.xml,v 1.36 2004-06-29 13:44:57 zwierzem Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -85,7 +85,7 @@
     <dependency>
       <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>
-      <version>2.3</version>
+      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
