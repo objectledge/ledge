@@ -77,10 +77,10 @@
   <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
     <component-parameter class-key="org.jcontainer.dna.Logger"/>
     <sequence-parameter>
-      <component-parameter class-key="org.objectledge.parameters.RequestParametersLoaderValve"/>
-      <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
       <component-parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
       <component-parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
+      <component-parameter class-key="org.objectledge.parameters.RequestParametersLoaderValve"/>
+      <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
       <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
       <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
       <component-parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
