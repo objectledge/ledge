@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.3 2004-05-18 10:58:38 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.4 2004-09-03 13:20:59 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
@@ -16,7 +16,7 @@
 
   <!-- reports -->
          
-  <j:if test="${!empty(pom.build.unitTestSourceDirectory)}">
+  <j:if test="${pom.build != null and pom.build.unitTestSourceDirectory != null and !empty(pom.build.unitTestSourceDirectory)}">
     <util:file var="testDir" name="${pom.build.unitTestSourceDirectory}"/>
     <j:if test="${testDir.exists()}">
       <postGoal name="xdoc:register-reports">
