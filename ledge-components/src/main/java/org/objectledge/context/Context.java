@@ -45,7 +45,7 @@ import java.util.Map;
  * being otherwise being eligible to collection.</p>  
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Context.java,v 1.3 2004-01-08 10:20:49 fil Exp $
+ * @version $Id: Context.java,v 1.4 2004-01-14 13:37:50 fil Exp $
  */
 public class Context
 {
@@ -64,6 +64,19 @@ public class Context
     }
 
     /**
+     * Return the value of a context attribute.
+     * 
+     * <p>Class object and the class name String are considered to be equivalent keys.</p>
+     * 
+     * @param key a Class key of the attribute.
+     * @return the value of the attribute.
+     */
+    public Object getAttribute(Class key)
+    {
+        return getAttributes().get(key.getName()); 
+    }
+
+    /**
      * Sets a new value of a context attribute.
      * 
      * @param name the name of the attribute.
@@ -73,6 +86,20 @@ public class Context
     public Object setAttribute(String name, Object value)
     {
         return getAttributes().put(name, value);
+    }
+
+    /**
+     * Sets a new value of a context attribute.
+     *
+     * <p>Class object and the class name String are considered to be equivalent keys.</p>
+     *       
+     * @param key Class key of the attribute.
+     * @param value the new value of the attribute.
+     * @return the old value of the attribute.
+     */    
+    public Object setAttribute(Class key, Object value)
+    {
+        return getAttributes().put(key.getName(), value);
     }
     
     /**

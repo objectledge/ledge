@@ -67,6 +67,9 @@ public class ContextTest extends TestCase
     {
     	context.setAttribute("foo","bar");
     	assertEquals("bar",context.getAttribute("foo"));
+        context.setAttribute(Object.class, "bzz");
+        assertEquals("bzz", context.getAttribute(Object.class));
+        assertEquals("bzz", context.getAttribute("java.lang.Object"));
     }
 
     public void testRemoveAttribute()
