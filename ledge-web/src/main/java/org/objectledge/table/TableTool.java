@@ -40,7 +40,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.2 2004-02-11 13:42:42 zwierzem Exp $
  */
 public class TableTool
 {
@@ -164,9 +164,8 @@ public class TableTool
     /**
      * Return the number of the current page of the table.
 	 * TODO: Add pageNumber sanity check either here or in RowSet.
-     *
+	 * @return the current page
      */
-	// @return the current page TODO
     public int getCurrentPage()
     {
         return state.getCurrentPage();
@@ -345,13 +344,13 @@ public class TableTool
     }
     
     
-	/**
+	/*
 	 * Sanitizes the number of the current page of the table - set a proper number in the state.
 	 * TODO: Add pageNumber sanity check either here or in RowSet.
 	 *
 	 * @return the sanitized page number 
 	 */
-	public int getCurrentPage(TableState state, int numberOfPages)
+/*	public int sanitizeCurrentPage(TableState state, int numberOfPages)
 	{
 		int perPage = state.getPageSize();
 		if(perPage == 0)
@@ -372,5 +371,5 @@ public class TableTool
 			}
 		}
 		return state.getCurrentPage();
-	}
+	}*/
 }
