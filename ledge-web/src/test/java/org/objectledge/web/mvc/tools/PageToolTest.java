@@ -54,7 +54,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.10 2004-12-22 08:58:17 rafal Exp $
+ * @version $Id: PageToolTest.java,v 1.11 2004-12-28 04:31:54 zwierzem Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -81,8 +81,8 @@ public class PageToolTest extends LedgeTestCase
 		Templating templating = new VelocityTemplating(config, logger, fs);
 		config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
 		WebConfigurator webConfigurator = new WebConfigurator(config);
-		config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactory.class);
-		linkToolFactory = new LinkToolFactory(config, context, webConfigurator);
+		config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactoryImpl.class);
+		linkToolFactory = new LinkToolFactoryImpl(config, context, webConfigurator);
 
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();

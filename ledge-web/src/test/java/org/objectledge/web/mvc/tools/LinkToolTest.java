@@ -87,8 +87,8 @@ public class LinkToolTest extends LedgeTestCase
         Templating templating = new VelocityTemplating(config, logger, fs);
         config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
         WebConfigurator webConfigurator = new WebConfigurator(config);
-        config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactory.class);
-        linkToolFactory = new LinkToolFactory(config, context, webConfigurator);
+        config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactoryImpl.class);
+        linkToolFactory = new LinkToolFactoryImpl(config, context, webConfigurator);
 
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
@@ -258,8 +258,8 @@ public class LinkToolTest extends LedgeTestCase
         templating = new VelocityTemplating(config, logger, fs);
         config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
         webConfigurator = new WebConfigurator(config);
-        config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactory.class);
-        linkToolFactory = new LinkToolFactory(config, context, webConfigurator);
+        config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactoryImpl.class);
+        linkToolFactory = new LinkToolFactoryImpl(config, context, webConfigurator);
 
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
