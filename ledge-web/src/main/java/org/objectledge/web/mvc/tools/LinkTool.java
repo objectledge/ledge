@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.12 2004-08-10 10:32:20 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.13 2004-08-19 15:21:24 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -725,7 +725,7 @@ public class LinkTool
 	 */
 	private LinkTool getLinkTool(LinkTool source)
 	{
-		LinkTool target = new LinkTool(httpContext, mvcContext, requestParameters, source.config);
+		LinkTool target = createInstance(source);
 		target.view = source.view;
 		target.action = source.action;
 		target.contentLink = source.contentLink;
@@ -738,6 +738,19 @@ public class LinkTool
 	    target.parameters = new SortedParameters(source.parameters);
 		return target;		
 	}
+    
+    /**
+     * Creates the LinkTool instance for copying. This method is intended to be overriden by
+     * extending classes in order to provide LinkTool instances of proper class.
+     * 
+     * @param source copied object
+     * @return created instance of the linktool.
+     */
+    protected LinkTool createInstance(LinkTool source)
+    {
+        return new LinkTool(source.httpContext, source.mvcContext, source.requestParameters,
+            source.config);
+    }
     
     private void checkSetParamName(String name)
     {

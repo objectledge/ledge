@@ -41,7 +41,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Context tool factory component to build the link tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinkToolFactory.java,v 1.4 2004-08-10 10:32:20 zwierzem Exp $
+ * @version $Id: LinkToolFactory.java,v 1.5 2004-08-19 15:21:24 zwierzem Exp $
  */
 public class LinkToolFactory implements ContextToolFactory
 {
@@ -85,7 +85,7 @@ public class LinkToolFactory implements ContextToolFactory
 	 */
 	public void recycleTool(Object tool)
 	{
-		//do nothing LinkTool is too simple object to be pooled
+        // these simple objects do not need recycling
 	}
 
 	/**
