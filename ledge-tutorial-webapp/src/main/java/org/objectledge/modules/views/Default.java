@@ -40,10 +40,15 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
  * A default view.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Default.java,v 1.3 2004-08-02 13:58:41 zwierzem Exp $
+ * @version $Id: Default.java,v 1.4 2005-02-11 13:53:52 rafal Exp $
  */
 public class Default extends DefaultBuilder
 {
+    /**
+     * Creates new Default builder instance.
+     * 
+     * @param context the processing context.
+     */
     public Default(Context context)
     {
         super(context);

@@ -40,11 +40,17 @@ public class TestingValve
 {
 	private String test;
 	
+    /**
+     * Creates new TestingValve instance.
+     */
 	public TestingValve()
 	{
 		test = "test";
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
 	public void process(Context context)
 	{
 		//do nothing

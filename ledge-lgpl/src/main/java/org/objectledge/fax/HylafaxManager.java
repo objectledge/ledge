@@ -23,7 +23,7 @@ import org.objectledge.threads.ThreadPool;
  * Fax manager implementation based on gnu.hylafax.* library.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: HylafaxManager.java,v 1.2 2005-02-09 22:02:13 rafal Exp $
+ * @version $Id: HylafaxManager.java,v 1.3 2005-02-11 13:54:19 rafal Exp $
  */
 public class HylafaxManager implements FaxManager
 {
@@ -273,6 +273,9 @@ public class HylafaxManager implements FaxManager
         }
     }
 
+    /**
+     * A task for pinging the HylaFax process.
+     */
     private class PingTask extends Task
     {
         /**
@@ -282,39 +285,37 @@ public class HylafaxManager implements FaxManager
         {
             loop: while(!Thread.interrupted())
             {
+                try
                 {
                     try
                     {
-                        try
-                        {
-                            prepare();
-                            client.noop();
-                        }
-                        catch(ServerResponseException e)
-                        {
-                            logger.error("Couldn't ping to server", e);
-                            destroy();
-                        }
-                        catch(IOException e)
-                        {
-                            logger.error("Couldn't ping to server", e);
-                            destroy();
-                        }
+                        prepare();
+                        client.noop();
                     }
-                    catch(FaxManagerException e)
+                    catch(ServerResponseException e)
                     {
-                        logger.error("Couldn't manage the hylafax connection");
+                        logger.error("Couldn't ping to server", e);
+                        destroy();
                     }
-                    synchronized(pingObject)
+                    catch(IOException e)
                     {
-                        try
-                        {
-                            pingObject.wait(pingDelay);
-                        }
-                        catch(InterruptedException e)
-                        {
-                            break loop;
-                        }
+                        logger.error("Couldn't ping to server", e);
+                        destroy();
+                    }
+                }
+                catch(FaxManagerException e)
+                {
+                    logger.error("Couldn't manage the hylafax connection");
+                }
+                synchronized(pingObject)
+                {
+                    try
+                    {
+                        pingObject.wait(pingDelay);
+                    }
+                    catch(InterruptedException e)
+                    {
+                        break loop;
                     }
                 }
             }
