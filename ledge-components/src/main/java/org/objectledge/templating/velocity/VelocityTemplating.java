@@ -50,7 +50,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.3 2003-12-08 10:34:42 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.4 2003-12-17 10:51:39 fil Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -217,7 +217,6 @@ public class VelocityTemplating implements Templating, LogSystem
     public void merge(TemplatingContext context, Template template, Writer target)
     	throws MergingException
     {
-        boolean success = false;
         try
         {
             ((VelocityTemplate)template).getTemplate().
