@@ -40,7 +40,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.1 2004-01-13 12:52:29 fil Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.2 2004-01-28 14:10:01 pablo Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
@@ -97,7 +97,7 @@ public class ClasspathFileSystemProvider
      */
     public InputStream getInputStream(String path)
     {
-        if(path.charAt(0) == '/')
+        if(path.length() > 0 && path.charAt(0) == '/')
         {
             path = path.substring(1);
         }
