@@ -25,111 +25,93 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.threads;
+package org.objectledge.threads.impl;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
+import org.apache.commons.pool.BasePoolableObjectFactory;
+import org.apache.commons.pool.ObjectPool;
+import org.apache.commons.pool.impl.GenericObjectPool;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
-import org.objectledge.threads.impl.Daemon;
-import org.objectledge.threads.impl.WorkerPool;
-import org.picocontainer.lifecycle.Stoppable;
+import org.objectledge.threads.Task;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.4 2004-01-30 15:52:33 fil Exp $
+ * @version $Id: WorkerPool.java,v 1.1 2004-01-30 15:52:27 fil Exp $
  */
-public class ThreadPool
-    implements Stoppable
+public class WorkerPool
 {
-    // constants ////////////////////////////////////////////////////////////////////////////////
+    private Logger log;
+
+    private Context context;
     
-    private static final String THREAD_GROUP_NAME = "Ledge ThreadPool";
-    
-    // instance variables ///////////////////////////////////////////////////////////////////////
-    
-    /** thread's processing context. */
-    private Context context;    
-    
-    /** cleanup valve (possibly pipeline). */
     private Valve cleanup;
     
-    /** thread pool's thread group. */
+    private ObjectPool pool;
+    
     private ThreadGroup threadGroup;
     
-    private int daemonPriority = Thread.MIN_PRIORITY;
+    private int priority;
     
-    private int workerPriority = Thread.MIN_PRIORITY;
-    
-    private Set threads = new HashSet();
+    private int counter = 1;
 
-    private Logger log;
-    
-    private WorkerPool workerPool;
-    
     /**
-     * Component constructor.
+     * Creates a daemon thread.
      * 
-     * @param context thread processing context.
-     * @param cleanup the valve that should be invoked every time the thread finishes it's work.
+     * @param priority the task's priority (see {@link java.lang.Thread} description).
+     * @param threadGroup the thread group where the thread should belong.
      * @param log the logger to use.
+     * @param context thread's processing context.
+     * @param cleanup cleanup valve to invoke, should the task terminate.
      */
-    public ThreadPool(Context context, Valve cleanup, Logger log)
+    public WorkerPool(int priority, ThreadGroup threadGroup, 
+        Logger log, Context context, Valve cleanup)
     {
+        this.priority = priority;
+        this.threadGroup = threadGroup;
+        this.log = log;
         this.context = context;
         this.cleanup = cleanup;
-        this.log = log;
-        this.threadGroup = new ThreadGroup(THREAD_GROUP_NAME);
-        this.workerPool = new WorkerPool(workerPriority, threadGroup, log, context, cleanup);
+        this.pool = new GenericObjectPool(new ObjectFactory());
     }
-    
+
     /**
-     * Run the worker task.
+     * Dispatches a Task using a Worker
      * 
-     * @param task the task to run.
+     * @param task the task to dispatch.
+     * @return the Worker running the task.
      * @throws ProcessingException if there is a proble with obtaing the worker.
-         */
-    public void runWorker(Task task)
+     */
+    public Worker dispatch(Task task)
         throws ProcessingException
     {
-        synchronized(threads)
+        try
         {
-            threads.add(workerPool.dispatch(task));     
+            Worker worker = (Worker)pool.borrowObject();
+            worker.dispatch(task);
+            return worker;
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to dispatch task", e);
         }
     }
     
     /**
-     * Run the daemon task.
-     * 
-     * @param task the task to run.
-     */
-    public void runDaemon(Task task)
+     * Interface to commons-pool package. 
+     */    
+    private class ObjectFactory
+        extends BasePoolableObjectFactory
     {
-        synchronized(threads)
+        /**
+         * {@inheritDoc}
+         */
+        public Object makeObject()
         {
-            threads.add(new Daemon(task, daemonPriority, threadGroup, log, context, cleanup));     
-        }
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
-        synchronized(threads)
-        {
-            Iterator i = threads.iterator();
-            while(i.hasNext())
-            {
-                Stoppable thread = (Stoppable)i.next();
-                thread.stop();
-                i.remove();
-            }
+            return new Worker("worker #"+(counter++), priority, pool, threadGroup, 
+                log, context, cleanup);
         }
     }
 }
