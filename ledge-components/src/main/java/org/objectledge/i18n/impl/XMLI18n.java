@@ -109,6 +109,10 @@ public class XMLI18n extends I18nBase
 			String[] files = fileSystem.list(localeDir);
 			for(int i=0; i<files.length; i++)
 			{
+				if(files[i].equals("CVS"))
+				{
+					continue;
+				}
 				Matcher m = localeFilePattern.matcher(files[i]);
 				if(!m.matches())
 				{
