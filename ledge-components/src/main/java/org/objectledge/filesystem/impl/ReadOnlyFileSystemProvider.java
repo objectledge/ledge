@@ -48,7 +48,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileSystem backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.14 2004-03-17 12:46:50 pablo Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.15 2004-03-19 13:52:11 pablo Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -274,12 +274,13 @@ public abstract class ReadOnlyFileSystemProvider
     {
 		if(listing != null)
 		{
-			return listing.containsKey(FileSystem.normalizedPath(path));
+			boolean contains = listing.containsKey(FileSystem.normalizedPath(path));
+            if(contains)
+            {
+                return true;
+            }
 		}
-		else
-		{
-			return getInputStream(path) != null;
-		}
+		return getInputStream(path) != null;
     }
 
     /**
