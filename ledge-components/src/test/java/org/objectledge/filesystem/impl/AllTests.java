@@ -12,7 +12,7 @@ import junit.framework.TestSuite;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.1 2003-11-25 14:56:38 fil Exp $
+ * @version $Id: AllTests.java,v 1.2 2003-11-26 09:25:05 mover Exp $
  */
 public class AllTests
 {
@@ -21,7 +21,7 @@ public class AllTests
     {
         TestSuite suite = new TestSuite("Test for org.objectledge.filesystem.impl");
         //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(LocalFileProviderTest.class));
+        suite.addTest(new TestSuite(LocalFileSystemProviderTest.class));
         //$JUnit-END$
         return suite;
     }

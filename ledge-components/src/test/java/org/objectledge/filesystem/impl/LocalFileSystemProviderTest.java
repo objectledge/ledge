@@ -11,9 +11,9 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileProviderTest.java,v 1.1 2003-11-25 14:56:38 fil Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.1 2003-11-26 09:23:56 mover Exp $
  */
-public class LocalFileProviderTest extends TestCase
+public class LocalFileSystemProviderTest extends TestCase
 {
     protected LocalFileSystemProvider provider;
 
@@ -21,7 +21,7 @@ public class LocalFileProviderTest extends TestCase
      * Constructor for LocalFileProviderTest.
      * @param arg0
      */
-    public LocalFileProviderTest(String arg0)
+    public LocalFileSystemProviderTest(String arg0)
     {
         super(arg0);
     }
@@ -70,12 +70,18 @@ public class LocalFileProviderTest extends TestCase
 
     public void testCanRead()
     {
-        //TODO Implement canRead().
+		assertEquals(provider.canRead("file"), true);
+		assertEquals(provider.canRead("nofile"), false);
+		assertEquals(provider.exists("unreadablefile"), true);
+		assertEquals(provider.canRead("unreadablefile"), false);
     }
 
     public void testCanWrite()
     {
-        //TODO Implement canWrite().
+		assertEquals(provider.canWrite("file"), true);
+		assertEquals(provider.canWrite("nofile"), false);
+		assertEquals(provider.exists("unwritablefile"), true);
+		assertEquals(provider.canWrite("unwritablefile"), false);
     }
 
     public void testList()
