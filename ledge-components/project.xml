@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.1 2003-11-24 10:25:14 fil Exp $ -->
+<!-- $Id: project.xml,v 1.2 2003-11-24 15:52:42 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
-  <extend>../ab-reactor/shared/project.xml</extend>
+  <extend>../ledge-reactor/shared/project.xml</extend>
 
   <!-- project info -->
   
-  <groupId>ab</groupId>
-  <id>ab-components</id>
+  <groupId>ledge</groupId>
+  <id>ledge-components</id>
   <currentVersion>0.1-dev</currentVersion>
   
   <name>Object Ledge - components</name>
