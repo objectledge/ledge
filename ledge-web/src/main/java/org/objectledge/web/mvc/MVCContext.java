@@ -38,7 +38,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.6 2004-01-16 15:10:36 zwierzem Exp $
+ * @version $Id: MVCContext.java,v 1.7 2004-01-21 09:40:03 pablo Exp $
  */
 public class MVCContext
 {
@@ -92,7 +92,7 @@ public class MVCContext
      */
 	public String getAction()
 	{
-		return view;
+		return action;
 	}
 
     /**
