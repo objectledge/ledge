@@ -37,13 +37,40 @@
       <url>http://dna.codehaus.org</url>
     </dependency>
     <dependency>
-      <groupId>jing</groupId>
-      <artifactId>jing</artifactId>
-      <version>20030619</version>
+      <groupId>msv</groupId>
+      <artifactId>msv</artifactId>
+      <version>20040506</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-      <url>http://www.thaiopensource.com/relaxng/jing.html</url>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>isorelax</groupId>
+      <artifactId>isorelax</artifactId>
+      <version>20040506</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>relaxngDatatype</groupId>
+      <artifactId>relaxngDatatype</artifactId>
+      <version>20040506</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+      <url>https://sourceforge.net/projects/relaxng</url>
+    </dependency>
+    <dependency>
+      <groupId>xsdlib</groupId>
+      <artifactId>xsdlib</artifactId>
+      <version>20040506</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+      <url>https://msv.dev.java.net/</url>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
