@@ -52,6 +52,8 @@ public class EventSystemTest extends TestCase
 {
     private EventWhiteboardFactory event;
     
+    private EventWhiteboard whiteboard;
+    
     private String testString;
     
     /**
@@ -69,22 +71,23 @@ public class EventSystemTest extends TestCase
         Valve cleanup = null;
         ThreadPool pool = new ThreadPool(cleanup, context, config, logger);
         event = new EventWhiteboardFactory(config,logger,pool);
+        whiteboard = event.newInstance();
     }
 
     public void testGetForwarder()
     {
-        EventWhiteboard ef = event.getForwarder();
+        EventWhiteboard ef = event.newInstance();
         assertNotNull(ef);
     }
 
     public void testAddListener()
     {
-        event.addListener(FooInterface.class,this,this);
+        whiteboard.addListener(FooInterface.class,this,this);
     }
 
     public void testRemoveListener()
     {
-        event.removeListener(FooInterface.class,this,this);
+        whiteboard.removeListener(FooInterface.class,this,this);
     }
 
     public void testAddRemoteListener()
@@ -102,17 +105,17 @@ public class EventSystemTest extends TestCase
         assertEquals(testString,"");
         
         Method method = FooInterface.class.getMethod("callBar",new Class[]{String.class});
-        event.fireEvent(method, new String[]{"foo"},this);
+        whiteboard.fireEvent(method, new String[]{"foo"},this);
         assertEquals(testString,"");
-        event.addListener(FooInterface.class,this,this);
-        event.fireEvent(method, new String[]{"foo"},this);
+        whiteboard.addListener(FooInterface.class,this,this);
+        whiteboard.fireEvent(method, new String[]{"foo"},this);
         assertEquals(testString,"foo");
     }
 
     public void testInboundOutboundForwarder()
         throws Exception
     {
-        EventWhiteboard ef = event.getForwarder();
+        EventWhiteboard ef = event.newInstance();
         EventWhiteboard outF = new OutboundEventWhiteboard(ef);
         EventWhiteboard inF = new InboundEventWhiteboard(ef);
         try

@@ -60,18 +60,15 @@ import org.objectledge.threads.ThreadPool;
  * InboundEventWhiteboard} and {@link OutboundEventWhiteboard}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventWhiteboardFactory.java,v 1.1 2004-03-01 13:33:45 fil Exp $
+ * @version $Id: EventWhiteboardFactory.java,v 1.2 2004-03-01 13:41:49 fil Exp $
  */
-public class EventWhiteboardFactory implements EventWhiteboard
+public class EventWhiteboardFactory
 {
     // Memeber objects ///////////////////////////////////////////////////////
 
     /** The logger */
     private Logger logger;
     
-    /** The event forwarder. */
-    private EventWhiteboard forwarder;
-
     /** Asynchronous mode flag. */
     private boolean asynchronous = false;
     
@@ -88,7 +85,6 @@ public class EventWhiteboardFactory implements EventWhiteboard
     public EventWhiteboardFactory(Configuration config, Logger logger, ThreadPool threadPool)
     {
         this.logger = logger;
-        forwarder = new DefaultEventWhiteboard(this, logger);
         if(config != null)
         {
             asynchronous = config.getChild("asynchronous").getValueAsBoolean(false);
@@ -104,53 +100,9 @@ public class EventWhiteboardFactory implements EventWhiteboard
      *
      * @return a new event forwarder.
      */
-    public EventWhiteboard getForwarder()
+    public EventWhiteboard newInstance()
     {
         return new DefaultEventWhiteboard(this, logger);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public void addListener(Class iface, Object listener, Object object)
-        throws IllegalArgumentException
-    {
-        forwarder.addListener(iface, listener, object);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void removeListener(Class iface, Object listener, Object object)
-    {
-        forwarder.removeListener(iface, listener, object);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void addRemoteListener(Class iface, Remote listener, Object object)
-        throws IllegalArgumentException
-    {
-        forwarder.addRemoteListener(iface, listener, object);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void removeRemoteListener(Class iface, Remote listener, Object object)
-        throws IllegalArgumentException
-    {
-        forwarder.removeRemoteListener(iface, listener, object);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void fireEvent(Method method, Object[] args, Object object)
-    {
-        forwarder.fireEvent(method, args, object);
     }
 
     /**
