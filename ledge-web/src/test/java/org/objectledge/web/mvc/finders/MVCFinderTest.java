@@ -49,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.3 2004-01-20 13:05:55 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.4 2004-01-20 13:12:33 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -95,6 +95,14 @@ public class MVCFinderTest extends TestCase
     {
         Template template = finder.findBuilderTemplate("foo.Bar");
         assertEquals( "views/foo/Bar", template.getName());
+        template = finder.findBuilderTemplate(null);
+        assertEquals(DefaultTemplate.class, template.getClass());
+        template = finder.findBuilderTemplate("foo.NonExistentView");
+        assertEquals("views/foo/Default", template.getName());
+        template = finder.findBuilderTemplate("NonExistentView");
+        assertEquals("views/Default", template.getName());
+        template = finder.findBuilderTemplate("nonexistentpackage.NonExistentView");
+        assertEquals("views/Default", template.getName());
     }
 
     public void testFindEnclosingBuilderTemplate()
