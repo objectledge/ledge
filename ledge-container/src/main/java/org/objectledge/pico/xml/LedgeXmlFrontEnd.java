@@ -59,11 +59,16 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.1 2003-12-09 12:41:42 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.2 2003-12-16 10:46:04 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
 {
+    // constants /////////////////////////////////////////////////////////////////////////////////
+    
+    /** Location of the container composition schema. */
+    public static final String SCHEMA_PATH = "org/objectledge/pico/xml/container.rng";
+    
     // instance variables ////////////////////////////////////////////////////////////////////////
     
     private StringToObjectConverter converter = new StringToObjectConverter();
