@@ -38,7 +38,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.8 2003-12-02 15:23:58 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.9 2003-12-03 13:01:00 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -110,9 +110,47 @@ public class ConfigurationFactory
         catch(Exception e)
         {
             throw new ComponentInitializationError("configuration file "+
-                path+" for component "+name+" does not fullfill schema constraints", e);
+                path+" for component "+name+" is malformed", e);
         }
         return configuration;
+    }
+    
+    /**
+     * Returns an input source for reading in the configuration file.
+     * 
+     * @param key the component key.
+     * @return the input source.
+     */
+    public InputSource getConfigurationSource(Object key)
+    {
+        String name = getComponentName(key);
+        String path = getComponentConfigurationPath(key);
+        String schema = getComponentConfigurationSchemaPath(key);
+        if(!fileSystem.exists(path))
+        {
+            throw new ComponentInitializationError("configuration file "+path+" for component "+
+                name+" not found");
+        }
+        if(!fileSystem.exists(schema))
+        {
+            throw new ComponentInitializationError("schema file "+schema+" for component "+
+                name+" not found");
+        }
+        try
+        {
+            checkSchema(path, schema);
+        }
+        catch(SAXParseException e)
+        {
+            throw new ComponentInitializationError("configuration file "+path+" for compoenent "+
+                name+" parse error "+e.getMessage()+" at line "+e.getLineNumber(), e);
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("configuration file "+
+                path+" for component "+name+" is malformed", e);
+        }
+        return new InputSource(fileSystem.getInputStream(path));
     }
     
     // CustomizedComponentProvider interface //////////////////////////////////////////////////////
