@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.2 2003-12-16 10:46:04 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.3 2003-12-17 11:23:30 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -289,17 +289,18 @@ public class LedgeXmlFrontEnd
     }
 
     /**
+     * Loads the contents of a container.
      * 
-     * @param reflectionFrontEnd
-     * @param containerElement
-     * @return
-     * @throws ClassNotFoundException
-     * @throws IOException
-     * @throws PicoCompositionException
+     * @param reflectionFrontEnd the reflection front end.
+     * @param containerElement the container composition element.
+     * @return a reflection front end (same as recieved, or different in the container has 
+     *         replace="true" attribute.
+     * @throws ClassNotFoundException if a missing class is referenced.
+     * @throws PicoCompositionException if the composition data is invalid.
      */
     protected ReflectionFrontEnd loadContainerContents(ReflectionFrontEnd reflectionFrontEnd, 
         Element containerElement) 
-        throws ClassNotFoundException, IOException, PicoCompositionException 
+        throws ClassNotFoundException, PicoCompositionException 
     {
         NodeList children = containerElement.getChildNodes();
         int componentCount = 0;
@@ -351,7 +352,11 @@ public class LedgeXmlFrontEnd
     }
 
     /**
-     * {@inheritDoc}
+     * Loads a container.
+     * 
+     * @param node composition element.
+     * @return a pico container.
+     * @throws ClassNotFoundException if a missing class is referenced.
      */
     protected MutablePicoContainer loadContainer(Node node)
         throws ClassNotFoundException
@@ -409,11 +414,12 @@ public class LedgeXmlFrontEnd
     }
 
     /**
+     * Loads a pseudo component.
      * 
-     * @param pico
-     * @param componentElement
-     * @throws ClassNotFoundException
-     * @throws PicoCompositionException
+     * @param pico the reflection front end.
+     * @param componentElement pseudo component composition element.
+     * @throws ClassNotFoundException if a missing class is refernced.
+     * @throws PicoCompositionException if the composition data is invalid.
      */
     protected void loadPseudoComponent(ReflectionFrontEnd pico, Element componentElement) 
         throws ClassNotFoundException, PicoCompositionException 
@@ -455,9 +461,10 @@ public class LedgeXmlFrontEnd
     }
 
     /**
-     * 
-     * @param container
-     * @return
+     * Creates a reflection front end.
+     *  
+     * @param container the container.
+     * @return a reflection front end.
      */
     protected ReflectionFrontEnd createReflectionFrontEnd(MutablePicoContainer container) 
     {
@@ -465,10 +472,11 @@ public class LedgeXmlFrontEnd
     }
     
     /**
-     * 
-     * @param parent
-     * @param container
-     * @return
+     * Creates a reflection front end.
+     *  
+     * @param parent the parent front end.
+     * @param container the container.
+     * @return a reflection front end.
      */
     protected ReflectionFrontEnd createReflectionFrontEnd(ReflectionFrontEnd parent, 
         MutablePicoContainer container) 
@@ -477,10 +485,11 @@ public class LedgeXmlFrontEnd
     }
 
     /**
+     * Loads a class definition.
      * 
-     * @param className
-     * @return
-     * @throws ClassNotFoundException
+     * @param className the name of the class.
+     * @return class definition object.
+     * @throws ClassNotFoundException if the class is missing.
      */    
     protected Class loadClass(String className)
         throws ClassNotFoundException

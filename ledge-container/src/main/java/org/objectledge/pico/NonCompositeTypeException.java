@@ -31,11 +31,11 @@ package org.objectledge.pico;
 import org.picocontainer.PicoIntrospectionException;
 
 /**
- * Thrown when a Collectoin or array type is excpected, but a scalar type is 
+ * Thrown when a Collection or array type is excpected, but a scalar type is recieved. 
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: NonCompositeTypeException.java,v 1.1 2003-12-08 12:35:27 fil Exp $
+ * @version $Id: NonCompositeTypeException.java,v 1.2 2003-12-17 11:23:37 fil Exp $
  */
 public class NonCompositeTypeException extends PicoIntrospectionException
 {
