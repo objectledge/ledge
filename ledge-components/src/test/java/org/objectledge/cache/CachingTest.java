@@ -202,10 +202,10 @@ public class CachingTest extends TestCase
         {
             Map map = caching.getInstance("timeout");
             map.put("k1","v");
-            Thread.sleep(400);
-            assertNotNull("@400", map.get("k1"));
-            Thread.sleep(600);
-            assertNull("@600", map.get("k1"));
+            Thread.sleep(500);
+            assertNotNull("@500", map.get("k1"));
+            Thread.sleep(1500);
+            assertNull("@2000", map.get("k1"));
         }
         catch(InterruptedException e)
         {

@@ -47,7 +47,7 @@
     <config>HashMap()</config>
   </instance>
   <instance name="timeout">
-    <config>TimeoutMap(500)</config>
+    <config>TimeoutMap(1000)</config>
   </instance>
   <instance name="LRU">
     <config>LRUMap(5)</config>
