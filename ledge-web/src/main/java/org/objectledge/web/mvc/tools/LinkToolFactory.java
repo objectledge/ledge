@@ -33,7 +33,6 @@ import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.web.mvc.tools.*;
 
 /**
  * Context tool factory component to build the link tool.
