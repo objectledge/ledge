@@ -34,7 +34,6 @@ import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.nanocontainer.NanoContainer;
 import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.PicoContainer;
 import org.realityforge.cli.CLArgsParser;
@@ -47,7 +46,7 @@ import org.realityforge.cli.CLUtil;
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.6 2004-02-19 15:12:20 fil Exp $
+ * @version $Id: Main.java,v 1.7 2004-02-20 08:41:11 fil Exp $
  */
 public class Main
 {
