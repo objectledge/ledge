@@ -190,65 +190,9 @@
 
   <goal name="ledge:workspace-dependencies">
     <!-- prepare includes -->
-    <util:tokenize var="patterns" delim=",">${ledge.workspaceDependencies.includesSuffix}</util:tokenize>
-    <j:new var="limit" className="java.lang.Integer">
-      <j:arg type="int" value="${size(patterns) - 1}"/>
-    </j:new>
-    <j:set var="prefix" value="${ledge.workspaceDependencies.includesPrefix}"/>
-    <j:new var="buff" className="java.lang.StringBuffer"/>
-    <j:forEach var="pattern" indexVar="count" items="${patterns}">
-      <j:invoke on="${buff}" method="append">
-        <j:arg value="${prefix}"/>
-      </j:invoke>
-      <j:invoke on="${buff}" method="append">
-        <j:arg value="${pattern}"/>
-      </j:invoke>
-      <j:if test="${count lt limit}">
-        <j:invoke method="append" on="${buff}">
-          <j:arg value=","/>
-        </j:invoke>
-      </j:if>
-    </j:forEach>
-    <j:set var="includes" value="${buff.toString()}"/>
-    <!-- preapre basedir -->
-    <j:new var="slashes" className="java.lang.Integer">
-      <j:arg type="int" value="0"/>
-    </j:new>
-    <j:set var="index" value="${prefix.indexOf('/')}"/>
-    <j:while test="${index gt 0}">
-       <j:new var="slashes" className="java.lang.Integer">
-         <j:arg type="int" value="${slashes + 1}"/>
-       </j:new>
-       <j:set var="index" value="${index+1}"/>
-       <j:invoke on="${prefix}" method="indexOf" var="index">
-         <j:arg value="/"/>
-	 <j:arg type="int" value="${index}"/>
-       </j:invoke>
-    </j:while>
-    <j:invoke on="${buff}" method="setLength">
-      <j:arg type="int" value="0"/> 
-    </j:invoke>
-    <j:invoke on="${buff}" method="append">
-      <j:arg value="${basedir}"/>
-    </j:invoke>
-    <j:new var="count" className="java.lang.Integer">
-      <j:arg type="int" value="0"/>
-    </j:new>
-    <j:while test="${count lt slashes}">
-      <j:invoke on="${buff}" method="append">
-        <j:arg value="/.."/>
-      </j:invoke>
-       <j:new var="count" className="java.lang.Integer">
-         <j:arg type="int" value="${count + 1}"/>
-       </j:new>
-    </j:while>
-    <util:file var="reactorBasedir" name="${buff.toString()}"/>
-    <j:set var="reactorBasedir" value="${reactorBasedir.canonicalFile.path}"/>
-    <echo>Parsing projects matching ${includes} in ${reactorBasedir}</echo>
     <maven:reactor 
-      basedir="${reactorBasedir}"
-      includes="${includes}"
-      excludes="${basedir}/project.xml"
+      basedir="${basedir}"
+      includes="${ledge.workspaceDependencies.includes}"
       postProcessing="true"
       collectOnly="true"
       collectionVar="projects"
@@ -300,10 +244,7 @@
     <j:forEach var="project" items="${projects}">
       <j:set var="deps" value="${depMap.get(project)}"/>
       <j:invoke method="append" on="${buff}">
-        <j:arg value="${newLine}    "/>
-      </j:invoke>
-      <j:invoke method="append" on="${buff}">
-        <j:arg value="${project}: "/>
+        <j:arg value="${project}:"/>
       </j:invoke>
       <j:new var="limit" className="java.lang.Integer">
         <j:arg type="int" value="${size(deps) - 1}"/>
@@ -314,12 +255,17 @@
         </j:invoke>
         <j:if test="${count lt limit}">
           <j:invoke method="append" on="${buff}">
-            <j:arg value=", "/>
+            <j:arg value=","/>
           </j:invoke>
 	</j:if>
       </j:forEach>
+      <j:invoke method="append" on="${buff}">
+        <j:arg value="${newLine}"/>
+      </j:invoke>
     </j:forEach>
-    <echo>Dependencies among projects in the workspace ${buff.toString()}</echo>
+    <j:set var="output" value="${basedir}/depedencies"/>
+    <echo>Writing dependency information to ${output}</echo>
+    <j:file name="${output}" omitXmlDeclaration="true">${buff.toString()}</j:file>
   </goal>
 
 </project>
