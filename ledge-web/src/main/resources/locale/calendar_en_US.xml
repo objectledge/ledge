@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--  
+ Copyright (c) 2003, 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+--> 
+<strings>
+<prefix name="days">
+  <prefix name="1"><value>Sunday</value></prefix>
+  <prefix name="2"><value>Monday</value></prefix>
+  <prefix name="3"><value>Tuesday</value></prefix>
+  <prefix name="4"><value>Wednesday</value></prefix>
+  <prefix name="5"><value>Thursday</value></prefix>
+  <prefix name="6"><value>Friday</value></prefix>
+  <prefix name="7"><value>Saturday</value></prefix>
+</prefix>
+
+<prefix name="ondays">
+  <prefix name="1"><value>on Sunday</value></prefix>
+  <prefix name="2"><value>on Monday</value></prefix>
+  <prefix name="3"><value>on Tuesday</value></prefix>
+  <prefix name="4"><value>on Wednesday</value></prefix>
+  <prefix name="5"><value>on Thursday</value></prefix>
+  <prefix name="6"><value>on Friday</value></prefix>
+  <prefix name="7"><value>on Saturday</value></prefix>
+</prefix>
+
+<prefix name="shortdays">
+  <prefix name="1"><value>Su</value></prefix>
+  <prefix name="2"><value>Mo</value></prefix>
+  <prefix name="3"><value>Tu</value></prefix>
+  <prefix name="4"><value>We</value></prefix>
+  <prefix name="5"><value>Th</value></prefix>
+  <prefix name="6"><value>Fr</value></prefix>
+  <prefix name="7"><value>Sa</value></prefix>
+</prefix>
+
+<prefix name="months">
+  <prefix name="0"><value>January</value></prefix>
+  <prefix name="1"><value>February</value></prefix>
+  <prefix name="2"><value>March</value></prefix>
+  <prefix name="3"><value>April</value></prefix>
+  <prefix name="4"><value>May</value></prefix>
+  <prefix name="5"><value>June</value></prefix>
+  <prefix name="6"><value>July</value></prefix>
+  <prefix name="7"><value>August</value></prefix>
+  <prefix name="8"><value>September</value></prefix>
+  <prefix name="9"><value>October</value></prefix>
+  <prefix name="10"><value>November</value></prefix>
+  <prefix name="11"><value>December</value></prefix>
+</prefix>
+
+<prefix name="ofmonths">
+  <prefix name="0"><value>of January</value></prefix>
+  <prefix name="1"><value>of February</value></prefix>
+  <prefix name="2"><value>of March</value></prefix>
+  <prefix name="3"><value>of April</value></prefix>
+  <prefix name="4"><value>of May</value></prefix>
+  <prefix name="5"><value>of June</value></prefix>
+  <prefix name="6"><value>of July</value></prefix>
+  <prefix name="7"><value>of August</value></prefix>
+  <prefix name="8"><value>of September</value></prefix>
+  <prefix name="9"><value>of October</value></prefix>
+  <prefix name="10"><value>of November</value></prefix>
+  <prefix name="11"><value>of December</value></prefix>
+</prefix>
+      
+</strings>
