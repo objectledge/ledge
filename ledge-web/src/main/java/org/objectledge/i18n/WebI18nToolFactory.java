@@ -38,10 +38,10 @@ import org.objectledge.templating.tools.ContextToolFactory;
  */
 public class WebI18nToolFactory implements ContextToolFactory
 {
-	/** context */
+	/** The context. */
 	protected Context context;
 	
-	/** i18n component */
+	/** The i18n component. */
 	protected I18n i18n;
 		
 	/**

@@ -55,20 +55,20 @@ public class DatabaseContext implements Context
     /** Environment entry for persistence component. */
     public static final String PERSISTENCE = "org.objectledge.database.persistence.Persistence";
 
-    /** the persistence component */
+    /** the persistence component. */
     protected Persistence persistence;
     
-    /** The enviroment */
+    /** The enviroment. */
     protected Hashtable env;
 
-    /** The default parser */
+    /** The default parser. */
     protected static NameParser parser = new DefaultNameParser();
     
-    /** The context persistent delegate */
+    /** The context persistent delegate. */
     protected PersistentContext context;
     
     /**
-     * The context constructor used by initial context factory;
+     * The context constructor used by initial context factory.
      * 
      * @param env the environment 
      */
@@ -102,7 +102,7 @@ public class DatabaseContext implements Context
     }
 
     /**
-     * The context constructor;
+     * The context constructor.
      * 
      * @param env the environment.
      * @param context the persistent context delegate.

@@ -75,31 +75,31 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.1 2004-02-26 11:34:25 fil Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.2 2004-12-23 07:17:08 rafal Exp $
  */
 public class DefaultCacheFactory
     implements CacheFactorySPI, CacheFactory
 {
     // constants ////////////////////////////////////////////////////////////
-    /** Type constant for HashMap */
+    /** Type constant for HashMap. */
     public static final String HASH_MAP_TYPE = "HashMap";
 
-    /** Type constant for TimeoutMap */
+    /** Type constant for TimeoutMap. */
     public static final String TIMEOUT_MAP_TYPE = "TimeoutMap";
 
-    /** Type constant for LRUMap */
+    /** Type constant for LRUMap. */
     public static final String LRU_MAP_TYPE = "LRUMap";
 
-    /** Type constant for SoftMap */
+    /** Type constant for SoftMap. */
     public static final String SOFT_MAP_TYPE = "SoftMap";
 
-    /** Type constant for FactoryMap */
+    /** Type constant for FactoryMap. */
     public static final String FACTORY_MAP_TYPE = "FactoryMap";
 
-    /** Type constant for DistributedMap */
+    /** Type constant for DistributedMap. */
     public static final String DISTRIBUTED_MAP_TYPE = "DistributedMap";
 
-    /** Type constant for StatisticsMap */
+    /** Type constant for StatisticsMap. */
     public static final String STATISTICS_MAP_TYPE = "StatisticsMap";
     
     /** The default implementation HashMap implementation. */

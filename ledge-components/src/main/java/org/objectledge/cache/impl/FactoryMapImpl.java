@@ -39,7 +39,7 @@ import org.objectledge.cache.spi.FactoryMap;
  * An implementation of factory map.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: FactoryMapImpl.java,v 1.2 2004-02-26 11:34:28 fil Exp $
+ * @version $Id: FactoryMapImpl.java,v 1.3 2004-12-23 07:16:50 rafal Exp $
  */
 public class FactoryMapImpl
     extends DelegateMap
@@ -53,7 +53,7 @@ public class FactoryMapImpl
     // initialization ///////////////////////////////////////////////////////
 
     /**
-     * Constructs a FactoryMapImpl
+     * Constructs a FactoryMapImpl.
      */
     public FactoryMapImpl()
     {
@@ -61,7 +61,7 @@ public class FactoryMapImpl
     }
     
     /**
-     * Constructs a FactoryMapImpl
+     * Constructs a FactoryMapImpl.
      *
      * @param factory the value factory.
      * @param delegate the storage delegate

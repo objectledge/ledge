@@ -38,20 +38,20 @@ import org.objectledge.authentication.UserManager;
 /**
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseAuthenticationAction.java,v 1.1 2004-08-27 07:57:50 rafal Exp $
+ * @version $Id: BaseAuthenticationAction.java,v 1.2 2004-12-23 07:18:09 rafal Exp $
  */
 public class BaseAuthenticationAction
 {
-    /** login parameter name */
+    /** login parameter name. */
     public static final String LOGIN_PARAM = "login";
 
-    /** password parameter name */
+    /** password parameter name. */
     public static final String PASSWORD_PARAM = "password";
 
-    /** the logger */
+    /** the logger. */
     protected Logger logger;
 
-    /** the authentication component */
+    /** the authentication component. */
     protected UserManager userManager;
 
     /**

@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.7 2004-07-01 11:39:56 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.8 2004-12-23 07:17:47 rafal Exp $
  */
 public class TableTool
 {
@@ -495,7 +495,9 @@ public class TableTool
         }
 
 		/**
-		 * This boxes type, one of:
+         * Returns box type.
+         * 
+		 * Type is one of:
 		 * <ul>
 		 * <li><code>I</code> - a line</li>
 		 * <li><code>L</code> - a line</li>

@@ -43,7 +43,7 @@ import org.objectledge.web.HttpContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocaleLoaderValve.java,v 1.11 2004-12-22 08:58:32 rafal Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.12 2004-12-23 07:17:36 rafal Exp $
  */
 public class LocaleLoaderValve 
     extends AbstractI18nValve
@@ -52,7 +52,7 @@ public class LocaleLoaderValve
     private I18n i18n;
     
     /**
-     * Constructor
+     * Constructor.
      * 
      * @param logger the logger.
      * @param i18n the i18n component.

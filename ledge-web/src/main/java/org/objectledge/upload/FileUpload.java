@@ -38,16 +38,16 @@ import org.objectledge.context.Context;
  *
  * <p>Created on Jan 14, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileUpload.java,v 1.5 2004-02-03 11:30:39 pablo Exp $
+ * @version $Id: FileUpload.java,v 1.6 2004-12-23 07:18:20 rafal Exp $
  */
 public class FileUpload
 {
     // constants ////////////////////////////////////////////////////////////////////////////////
     
-    /** context key to store the upload map */
+    /** context key to store the upload map. */
     public static final String UPLOAD_CONTEXT_KEY = "org.objectledge.upload.FileUpload.uploadMap";
     
-    /** the default upload limit */
+    /** the default upload limit. */
     public static final int DEFAULT_UPLOAD_LIMIT = 4194304;
 
     // instance variables ///////////////////////////////////////////////////////////////////////

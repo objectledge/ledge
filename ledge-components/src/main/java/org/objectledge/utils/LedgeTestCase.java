@@ -170,7 +170,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     }
         
     /**
-     * Create a Constraint on map elements
+     * Create a Constraint on map elements.
      * 
      * @param key of the element to check.
      * @param c the constraint to check on the element.

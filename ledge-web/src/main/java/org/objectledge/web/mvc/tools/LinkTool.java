@@ -64,18 +64,18 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.17 2004-12-22 08:58:14 rafal Exp $
+ * @version $Id: LinkTool.java,v 1.18 2004-12-23 07:18:14 rafal Exp $
  */
 public class LinkTool
 {
-	/** utf encoding */
+	/** utf encoding. */
 	public static final String PARAMETER_ENCODING = "UTF-8";
 	
-    /** query string parameter values encoder */
+    /** query string parameter values encoder. */
     private static final org.objectledge.encodings.URLEncoder QUERY_STRING_ENCODER =
         new org.objectledge.encodings.URLEncoder();
     
-	/** link tool factory */
+	/** link tool factory. */
 	private LinkToolFactory factory;
 	
     /** configuration. */
@@ -886,7 +886,7 @@ public class LinkTool
 	}
     
     /**
-     * Represents the shared configuration of the LinkTools
+     * Represents the shared configuration of the LinkTools.
      *
      * <p>Created on Jan 14, 2004</p>
      * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
@@ -894,10 +894,10 @@ public class LinkTool
     public static class Configuration
         implements Configurable
     {        
-        /** the default query separator */
+        /** the default query separator. */
         public static final String DEFAULT_QUERY_SEPARATOR = "&";
 
-        /** the default base content path */
+        /** the default base content path. */
         public static final String DEFAULT_BASE_CONTENT_PATH = "/content";
 
         /** the sticky parameters keys */

@@ -32,10 +32,10 @@ import java.util.Map;
 import org.jmock.core.Constraint;
 
 /**
- * A constraint for Map elements
+ * A constraint for Map elements.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MapElement.java,v 1.2 2004-03-24 14:40:15 fil Exp $
+ * @version $Id: MapElement.java,v 1.3 2004-12-23 07:16:47 rafal Exp $
  */
 public class MapElement implements Constraint
 {

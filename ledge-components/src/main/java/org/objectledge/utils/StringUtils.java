@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.18 2004-12-21 10:43:31 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.19 2004-12-23 07:16:47 rafal Exp $
  */
 public class StringUtils
 {
@@ -132,7 +132,7 @@ public class StringUtils
 
 	/**
 	 * Escapes characters outside the US-ASCII range as Java unicode scapes
-	 * (&#2F;uxxxx where x is a hexadecimal digit.)
+	 * (&#2F;uxxxx where x is a hexadecimal digit).
 	 *
 	 * @param s the string to process.
 	 * @return processed string.

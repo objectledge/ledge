@@ -45,7 +45,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.11 2004-10-07 15:30:54 zwierzem Exp $
+ * @version $Id: HttpContext.java,v 1.12 2004-12-23 07:17:51 rafal Exp $
  */
 public class HttpContext
 {
@@ -115,7 +115,7 @@ public class HttpContext
 	}
 	
     /**
-     * Sends a temporary redirect response to new location
+     * Sends a temporary redirect response to new location.
      *
      * @param location the redirect location URL.
      * @throws java.io.IOException If an input or output exception occurs.

@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.25 2004-09-27 19:05:37 zwierzem Exp $
+ * @version $Id: FileSystem.java,v 1.26 2004-12-23 07:17:13 rafal Exp $
  */
 public class FileSystem
 {
@@ -862,7 +862,7 @@ public class FileSystem
     }
 
     /**
-     * Write the data read from an InputStream into a file
+     * Write the data read from an InputStream into a file.
      * 
      * @param path the pathname of the file
      * @param in the steram to read data from.

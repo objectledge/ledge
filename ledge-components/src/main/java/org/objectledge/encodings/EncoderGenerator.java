@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * Generator for encoding converter tables.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: EncoderGenerator.java,v 1.3 2004-03-12 15:49:16 zwierzem Exp $
+ * @version   $Id: EncoderGenerator.java,v 1.4 2004-12-23 07:16:31 rafal Exp $
  */
 public class EncoderGenerator
 {
@@ -178,7 +178,7 @@ public class EncoderGenerator
         out.write(" * Encoder for "+encodingName+" character set.\n");
         out.write(" *\n");
         out.write(" * @author <a href=\"mailto:dgajda@caltha.pl\">Damian Gajda</a>\n");
-        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.3 2004-03-12 15:49:16 zwierzem Exp $\n");
+        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.4 2004-12-23 07:16:31 rafal Exp $\n");
         out.write(" */\n");
         out.write("public class CharEncoder"+encodingName+"\n");
         out.write("         extends CharEncoder\n");
@@ -258,7 +258,7 @@ public class EncoderGenerator
 
 
     /**
-     * The main program for the EncodingConverterTableGenerator class
+     * The main program for the EncodingConverterTableGenerator class.
      *
      * @param argv  The command line arguments
      */
@@ -405,7 +405,7 @@ public class EncoderGenerator
 
 
     /**
-     * Description of the Class
+     * Description of the Class.
      *
      * @author    damian
      * @version
@@ -413,7 +413,7 @@ public class EncoderGenerator
     public static class UnicodeComparator implements Comparator
     {
         /**
-         * Description of the Method
+         * Description of the Method.
          *
          * @param o1  Description of Parameter
          * @param o2  Description of Parameter

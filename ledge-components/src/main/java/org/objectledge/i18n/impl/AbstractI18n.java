@@ -44,23 +44,23 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.17 2004-12-22 08:35:01 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.18 2004-12-23 07:16:25 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
-	/** undefinied value */
+	/** undefinied value. */
 	public static final String DEFAULT_UNDEFINED_VALUE = "[?]";
 	
-	/** default locale */
+	/** default locale. */
 	public static final String DEFAULT_LOCALE = "en_US";
 	
-	/** default setting for locale defaulting */
+	/** default setting for locale defaulting. */
 	public static final boolean DEFAULT_USE_DEFAULT_LOCALE = true;
 	
-	/** default setting for using key as undefinied value */
+	/** default setting for using key as undefinied value. */
 	public static final boolean DEFAULT_USE_KEY_IF_UNDEFINED = true;
 	
-	/** logger */
+	/** logger. */
 	protected Logger logger;
 	
 	/** string returned when a key has no defined value */
@@ -75,10 +75,10 @@ public abstract class AbstractI18n implements I18n
 	/** use key if undefined switch */
 	private boolean useKeyIfUndefined;
 	
-	/** the localization bundles map */
+	/** the localization bundles map. */
 	protected Map localeMap;
 	
-	/** supported locale */
+	/** supported locale. */
 	protected Locale[] supportedLocales;
 	
 	/** names of the supported locales. */

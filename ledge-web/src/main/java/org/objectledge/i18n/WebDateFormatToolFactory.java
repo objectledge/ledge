@@ -40,10 +40,10 @@ import org.objectledge.templating.tools.ContextToolFactory;
  */
 public class WebDateFormatToolFactory implements ContextToolFactory
 {
-	/** context */
+	/** The context. */
 	protected Context context;
 	
-	/** date formater */
+	/** The date formater. */
 	protected DateFormatter dateFormater;
 		
 	/**

@@ -41,12 +41,12 @@ import org.objectledge.table.TableStateManager;
  * Base class for all table actions.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseTableAction.java,v 1.1 2004-05-18 13:59:31 pablo Exp $
+ * @version $Id: BaseTableAction.java,v 1.2 2004-12-23 07:18:11 rafal Exp $
  */
 public abstract class BaseTableAction
 	implements Valve
 {
-    /** table service */
+    /** table service. */
     protected TableStateManager tableStateManager;
 
 	/**

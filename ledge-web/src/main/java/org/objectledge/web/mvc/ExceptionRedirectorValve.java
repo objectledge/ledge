@@ -65,7 +65,7 @@ public class ExceptionRedirectorValve implements Valve
     private Map exceptionLoggingLevelMap;
 
     /**
-     * Component constructor
+     * Component constructor.
      * 
      * @param config the configuration.
      * @param logger the logger.

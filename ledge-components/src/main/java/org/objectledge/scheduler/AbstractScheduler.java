@@ -64,7 +64,7 @@ public abstract class AbstractScheduler implements Startable
     /** the container */
     private MutablePicoContainer container;
     
-    /** the configuration */
+    /** the configuration. */
     protected Configuration config;
     
     /** The logging facility. */
@@ -85,7 +85,7 @@ public abstract class AbstractScheduler implements Startable
     /** Runners of a specific job. */
     private Map runners = new HashMap();
 
-    /** The date format to be used for the UI */
+    /** The date format to be used for the UI. */
     protected DateFormat format;
 
     /**

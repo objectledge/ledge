@@ -77,22 +77,22 @@ public class DirectoryUserManager extends UserManager
         "uidObject", "simpleSecurityObject" 
     };
     
-    /** the logger */    
+    /** the logger. */    
     protected Logger logger;
     
-    /** the login attribute key */
+    /** the login attribute key. */
     protected String loginAttribute;
     
-    /** the password attribute key */
+    /** the password attribute key. */
     protected String passwordAttribute;
     
-    /** the anonymous name */
+    /** the anonymous name. */
     protected String anonymousName;
     
-    /** the superuser name */
+    /** the superuser name. */
     protected String superuserName;
     
-    /** The objectClass of newly created containers */
+    /** The objectClass of newly created containers. */
     protected String[] objectClass;
  
     /** the directory context. */

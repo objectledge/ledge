@@ -45,7 +45,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.15 2004-12-20 16:12:07 pablo Exp $
+ * @version $Id: DatabaseUtils.java,v 1.16 2004-12-23 07:17:18 rafal Exp $
  */
 public class DatabaseUtils
 {
@@ -132,7 +132,7 @@ public class DatabaseUtils
     }
 
     /**
-     * Close the connection
+     * Close the connection.
      * 
      * @param conn the connection.
      * @param stmt the statement.

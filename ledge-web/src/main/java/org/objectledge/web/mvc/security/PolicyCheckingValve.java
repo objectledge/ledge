@@ -41,7 +41,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 
 /**
- *  Valve to check rights on views & actions
+ * Valve to check rights on views & actions.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */

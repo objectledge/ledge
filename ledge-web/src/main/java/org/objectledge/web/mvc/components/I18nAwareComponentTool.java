@@ -36,12 +36,12 @@ import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareComponentTool.java,v 1.2 2004-08-20 10:04:54 zwierzem Exp $
+ * @version $Id: I18nAwareComponentTool.java,v 1.3 2004-12-23 07:18:02 rafal Exp $
  */
 public class I18nAwareComponentTool
 	extends ComponentTool
 {
-    /** The template resolver */
+    /** The template resolver. */
     protected I18nAwareTemplateResolver resolver;
     
     /**

@@ -43,17 +43,17 @@ import org.objectledge.utils.StringUtils;
  * The date formater component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DateFormatter.java,v 1.2 2004-12-22 08:34:57 rafal Exp $
+ * @version $Id: DateFormatter.java,v 1.3 2004-12-23 07:16:19 rafal Exp $
  */
 public class DateFormatter
 {
-	/** logger */
+	/** The logger. */
 	protected Logger logger;
 
-	/** locale map */
+	/** The locale map. */
 	protected Map localeMap;
 	
-	/** default locale patterns */
+	/** The default locale patterns. */
 	protected Map defaultPatterns;
 	
 	/**

@@ -36,12 +36,12 @@ import org.objectledge.context.Context;
  * try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ErrorHandlingPipeline.java,v 1.2 2004-06-25 12:53:43 fil Exp $
+ * @version $Id: ErrorHandlingPipeline.java,v 1.3 2004-12-23 07:16:53 rafal Exp $
  */
 public class ErrorHandlingPipeline
     implements Valve
 {
-    /** key to store the exception in the context */
+    /** key to store the exception in the context. */
     public static final String PIPELINE_EXCEPTION = "org.objectledge.pipeline.Pipeline.exception";
     
     private Logger logger;

@@ -3,11 +3,11 @@ package org.objectledge.authentication;
 import java.security.Principal;
 
 /**
- * An implementation of {@link Principal} interface
+ * An implementation of {@link Principal} interface.
  * 
  * @author <a href="mailto:rafal@apache.org">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@apache.org">Pawel Potempski</a>
- * @version $Id: DefaultPrincipal.java,v 1.1 2004-01-21 13:24:50 pablo Exp $
+ * @version $Id: DefaultPrincipal.java,v 1.2 2004-12-23 07:16:34 rafal Exp $
  */
 public class DefaultPrincipal
     implements Principal

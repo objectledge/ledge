@@ -39,7 +39,7 @@ import java.util.Set;
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.5 2004-07-02 10:46:52 zwierzem Exp $
+ * @version $Id: PageTool.java,v 1.6 2004-12-23 07:18:14 rafal Exp $
  */
 public class PageTool
 {
@@ -49,22 +49,24 @@ public class PageTool
     /** Represents contents of title header tag. */
     private StringBuffer title = new StringBuffer(100);
 
-    /** Contains @link{StyleLink} objects. */
+    /** Contains {@link StyleLink} objects. */
     protected ArrayList styleLinks = new ArrayList();
-    /** Contains @link{StyleLink} objects' signatures, it is used to prevent multiple additions of
+    
+    /** Contains {@link StyleLink} objects' signatures, it is used to prevent multiple additions of
      * the same style link. */
     protected Set styleLinksSet = new HashSet();
 
-    /** Contains @link{ScriptLink} objects. */
+    /** Contains {@link ScriptLink} objects. */
     protected ArrayList scriptLinks = new ArrayList();
-    /** Contains @link{ScriptLink} objects' signatures, it is used to prevent multiple additions of
+    
+    /** Contains {@link ScriptLink} objects' signatures, it is used to prevent multiple additions of
      * the same script link. */
     protected Set scriptLinksSet = new HashSet();
 
-    /** Contains @link{Meta} objects. */
+    /** Contains {@link Meta} objects. */
     protected ArrayList nameMetas = new ArrayList();
     
-    /** Contains @link{Meta} objects. */
+    /** Contains {@link Meta} objects. */
     protected ArrayList httpEquivMetas = new ArrayList();
 
     /** Parent of LinkTool used to generate resource links. */

@@ -43,14 +43,14 @@ import java.util.TimeZone;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DateFormatTool.java,v 1.4 2004-12-22 08:34:58 rafal Exp $
+ * @version $Id: DateFormatTool.java,v 1.5 2004-12-23 07:16:19 rafal Exp $
  */
 public class DateFormatTool
 {
-    /** the date formater */
+    /** The date formater. */
     protected DateFormatter dateFormater;
     
-	/** current locale */
+	/** The current locale. */
 	protected Locale locale;
 
     /** The DateFormat in use. */

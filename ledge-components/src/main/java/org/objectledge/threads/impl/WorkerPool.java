@@ -45,7 +45,7 @@ import org.picocontainer.Startable;
  * Manages a pool of worker threads.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerPool.java,v 1.5 2004-02-17 15:48:42 fil Exp $
+ * @version $Id: WorkerPool.java,v 1.6 2004-12-23 07:17:16 rafal Exp $
  */
 public class WorkerPool
 {
@@ -90,7 +90,7 @@ public class WorkerPool
     }
 
     /**
-     * Dispatches a Task using a Worker
+     * Dispatches a Task using a Worker.
      * 
      * @param task the task to dispatch.
      */

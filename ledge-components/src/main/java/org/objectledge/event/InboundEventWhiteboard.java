@@ -45,7 +45,7 @@ import java.rmi.Remote;
  * unwanted local-echoing of events will be avoided.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: InboundEventWhiteboard.java,v 1.1 2004-03-01 13:33:45 fil Exp $
+ * @version $Id: InboundEventWhiteboard.java,v 1.2 2004-12-23 07:16:39 rafal Exp $
  */
 public class InboundEventWhiteboard implements EventWhiteboard
 {
@@ -53,7 +53,7 @@ public class InboundEventWhiteboard implements EventWhiteboard
     private EventWhiteboard delegate;
 
     /**
-     * Contstructs an <code>InboundEventWhiteboard</code>
+     * Contstructs an <code>InboundEventWhiteboard</code>.
      *
      * @param delegate the underlying <code>EventWhiteboard</code>
      */

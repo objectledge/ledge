@@ -39,7 +39,7 @@ import org.objectledge.web.WebConfigurator;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.6 2004-09-14 11:41:10 rafal Exp $
+ * @version $Id: MVCInitializerValve.java,v 1.7 2004-12-23 07:17:59 rafal Exp $
  */
 public class MVCInitializerValve 
     implements Valve
@@ -48,7 +48,7 @@ public class MVCInitializerValve
 	private WebConfigurator webConfigurator;
 	
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
 	 * @param webConfigurator the web configuration component.
 	 */

@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as list.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericListRowSet.java,v 1.4 2004-07-01 11:40:06 zwierzem Exp $
+ * @version $Id: GenericListRowSet.java,v 1.5 2004-12-23 07:17:41 rafal Exp $
  */
 public class GenericListRowSet extends BaseGenericRowSet
 {
@@ -73,7 +73,7 @@ public class GenericListRowSet extends BaseGenericRowSet
     }
 
     /**
-     * Sorts rows collection for list view
+     * Sorts rows collection for list view.
      *
      * @param rowsList list of table rows for current view.
      */

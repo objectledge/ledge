@@ -29,10 +29,10 @@
 package org.objectledge.table;
 
 /**
- * TableFilter specifies a partial view of a table (tree)
+ * TableFilter specifies a partial view of a table (tree).
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableFilter.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableFilter.java,v 1.2 2004-12-23 07:17:47 rafal Exp $
  */
 public interface TableFilter
 {

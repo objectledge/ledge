@@ -33,14 +33,14 @@ import org.relaxng.datatype.DatatypeException;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLSchemaDatatype.java,v 1.1 2004-05-12 09:54:03 zwierzem Exp $
+ * @version $Id: XMLSchemaDatatype.java,v 1.2 2004-12-23 07:17:21 rafal Exp $
  */
 public class XMLSchemaDatatype extends AbstractDatatype 
 {
 	private org.relaxng.datatype.Datatype datatype;
 	
 	/**
-	 * Creates an instance of a datatype backed by a XML schema defined datatype
+	 * Creates an instance of a datatype backed by a XML schema defined datatype.
 	 * @param name local name of the datatype
 	 * @param datatype the actual XML schema datatype
 	 */

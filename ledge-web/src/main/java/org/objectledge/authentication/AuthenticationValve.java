@@ -40,7 +40,7 @@ import org.objectledge.web.WebConstants;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.11 2004-12-22 08:58:16 rafal Exp $
+ * @version $Id: AuthenticationValve.java,v 1.12 2004-12-23 07:17:43 rafal Exp $
  */
 public class AuthenticationValve 
     implements Valve
@@ -49,7 +49,7 @@ public class AuthenticationValve
 	private UserManager userManager;
 	
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
      * @param userManager the user manager component.
 	 */

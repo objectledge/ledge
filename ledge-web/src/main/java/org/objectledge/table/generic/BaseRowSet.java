@@ -36,7 +36,7 @@ import org.objectledge.table.TableState;
  * This class provides some utility methods for {@link TableRowSet} implementations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseRowSet.java,v 1.3 2004-07-01 11:40:06 zwierzem Exp $
+ * @version $Id: BaseRowSet.java,v 1.4 2004-12-23 07:17:41 rafal Exp $
  */
 public abstract class BaseRowSet implements TableRowSet
 {
@@ -50,7 +50,7 @@ public abstract class BaseRowSet implements TableRowSet
     protected TableFilter[] filters;
 
     /**
-     * construct the object
+     * construct the object.
      *
      * @param state the state of the table instance
      * @param filters a list of filters to be used while creating the rows set

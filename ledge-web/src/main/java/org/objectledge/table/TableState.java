@@ -45,7 +45,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.5 2004-07-01 11:39:56 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.6 2004-12-23 07:17:47 rafal Exp $
  */
 public class TableState
 {
@@ -135,9 +135,9 @@ public class TableState
     }
 
     /**
-     * Returns the root id of the table
+     * Returns the root id of the table.
      *
-     * @return the root id
+     * @return the root id.
      */
     public String getRootId()
     {
@@ -145,9 +145,9 @@ public class TableState
     }
 
     /**
-     * Sets root id
+     * Sets root id.
      *
-     * @param rootId the root id
+     * @param rootId the root id.
      */
     public void setRootId(String rootId)
     {
@@ -293,9 +293,9 @@ public class TableState
 	}
 
     /**
-     * Returns the current page
+     * Returns the current page.
      *
-     * @return the current page
+     * @return the current page.
      */
     public int getCurrentPage()
     {
@@ -303,9 +303,9 @@ public class TableState
     }
 
     /**
-     * Sets the current page
+     * Sets the current page.
      *
-     * @param currentPage the current page
+     * @param currentPage the current page.
      */
     public void setCurrentPage(int currentPage)
     {
@@ -313,9 +313,9 @@ public class TableState
     }
 
     /**
-     * Returns the page size
+     * Returns the page size.
      *
-     * @return the page size
+     * @return the page size.
      */
     public int getPageSize()
     {
@@ -323,9 +323,9 @@ public class TableState
     }
 
     /**
-     * Sets the maximal number of pages
+     * Sets the maximal number of pages.
      *
-     * @param pageSize the number of pages
+     * @param pageSize the number of pages.
      */
     public void setPageSize(int pageSize)
     {

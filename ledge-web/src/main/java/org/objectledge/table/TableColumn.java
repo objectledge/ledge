@@ -43,7 +43,7 @@ import java.util.Map;
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumn.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableColumn.java,v 1.2 2004-12-23 07:17:47 rafal Exp $
  */
 public class TableColumn
 {
@@ -116,7 +116,7 @@ public class TableColumn
     }
 
     /**
-     * Retrieve column property
+     * Retrieve column property.
      *
      * @param key of the column
      * @return the object value
@@ -127,7 +127,7 @@ public class TableColumn
     }
 
     /**
-     * Sets the column property
+     * Sets the column property.
      *
      * @param key the key of property
      * @param value the value of the property

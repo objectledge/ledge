@@ -41,14 +41,14 @@ import org.objectledge.filesystem.FileSystem;
  * A helper class that implements the velocity resource loader class.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LedgeResourceLoader.java,v 1.3 2004-02-10 12:04:19 fil Exp $
+ * @version $Id: LedgeResourceLoader.java,v 1.4 2004-12-23 07:16:59 rafal Exp $
  */
 public class LedgeResourceLoader extends ResourceLoader
 {
-	/** FileSystem properties key */
+	/** FileSystem properties key. */
 	public static final String LEDGE_FILE_SYSTEM = "filesystem";
 
-    /** LogSystem properties key */
+    /** LogSystem properties key. */
     public static final String LOG_SYSTEM = "logsystem";
 	 
 	/** the file system */

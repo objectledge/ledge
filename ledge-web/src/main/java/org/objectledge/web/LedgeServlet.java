@@ -51,14 +51,14 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.14 2004-02-17 15:50:26 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.15 2004-12-23 07:17:51 rafal Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
     /** The request dispatcher. */
     protected HttpDispatcher dispatcher;
     
-    /** The container */
+    /** The container. */
     protected LedgeContainer container;
     
     /**

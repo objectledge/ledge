@@ -33,11 +33,11 @@ import org.objectledge.parameters.Parameters;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DBParametersManager.java,v 1.9 2004-03-11 13:16:35 fil Exp $
+ * @version $Id: DBParametersManager.java,v 1.10 2004-12-23 07:16:22 rafal Exp $
  */
 public interface DBParametersManager
 {
-    /** the table name */
+    /** the table name. */
     public static final String TABLE_NAME = "ledge_parameters";
 
     /**

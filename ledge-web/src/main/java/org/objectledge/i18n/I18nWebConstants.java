@@ -29,7 +29,7 @@
 package org.objectledge.i18n;
 
 /**
- * The constants used by i18n web components 
+ * The constants used by i18n web components. 
  */
 public final class I18nWebConstants
 {

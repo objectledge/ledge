@@ -35,7 +35,7 @@ import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
 
 /**
- * Persistent representation of java.naming.Context
+ * Persistent representation of java.naming.Context.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
@@ -49,7 +49,7 @@ public class PersistentContext implements Persistent
     /** The key columns. */
     public static final String[] KEY_COLUMNS = new String[] { "context_id" };
 
-    /** the object factory */
+    /** the object factory. */
     public static final PersistentFactory FACTORY = new PersistentFactory()
     {
         public Persistent newInstance()

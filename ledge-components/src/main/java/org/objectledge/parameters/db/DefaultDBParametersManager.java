@@ -17,7 +17,7 @@ import org.objectledge.parameters.Parameters;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultDBParametersManager.java,v 1.1 2004-03-11 13:16:35 fil Exp $
+ * @version $Id: DefaultDBParametersManager.java,v 1.2 2004-12-23 07:16:22 rafal Exp $
  */
 public class DefaultDBParametersManager implements DBParametersManager
 {
@@ -31,7 +31,7 @@ public class DefaultDBParametersManager implements DBParametersManager
     private Map localCache;
     
     /**
-     * Component cons
+     * Component cons.
      * 
      * @param database the database access component.
      * @param logger the logger.

@@ -36,7 +36,7 @@ package org.objectledge.scheduler;
 public interface ScheduleFactory
 {
     /**
-     * Create new schedule object 
+     * Create new schedule object. 
      * 
      * @return the instance of schedule object.
      */

@@ -47,7 +47,7 @@ import org.picocontainer.PicoContainer;
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.8 2004-06-01 09:05:58 fil Exp $
+ * @version $Id: Main.java,v 1.9 2004-12-23 07:16:00 rafal Exp $
  */
 public class Main
 {
@@ -72,9 +72,9 @@ public class Main
     }
 
     /**
-     * Command line entry point
+     * Command line entry point.
      * 
-     * @param args command line arguments;
+     * @param args command line arguments.
      */
     public static void main(String[] args)
     {

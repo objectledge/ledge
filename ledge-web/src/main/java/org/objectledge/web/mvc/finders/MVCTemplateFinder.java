@@ -30,10 +30,10 @@ package org.objectledge.web.mvc.finders;
 import org.objectledge.templating.Template;
 
 /**
- * Finds templates that should be used for rendering specific views
+ * Finds templates that should be used for rendering specific views.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCTemplateFinder.java,v 1.8 2004-01-21 14:39:59 fil Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.9 2004-12-23 07:18:05 rafal Exp $
  */
 public interface MVCTemplateFinder
 {

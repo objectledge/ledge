@@ -31,7 +31,7 @@ package org.objectledge.database.persistence;
  * Implemented by objects that are made persistent using a relational
  * database.
  *
- * @version $Id: PersistentObject.java,v 1.2 2004-02-23 14:22:04 fil Exp $
+ * @version $Id: PersistentObject.java,v 1.3 2004-12-23 07:16:56 rafal Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public abstract class PersistentObject
@@ -39,7 +39,7 @@ public abstract class PersistentObject
 {
     // Member objects ////////////////////////////////////////////////////////
 
-    /** The 'saved' flag state */
+    /** The 'saved' flag state. */
     protected boolean saved;
 
     // Persistent interface //////////////////////////////////////////////////

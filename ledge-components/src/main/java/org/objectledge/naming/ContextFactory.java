@@ -21,7 +21,7 @@ import org.picocontainer.PicoContainer;
  *
  * @author <a href="mail:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mail:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ContextFactory.java,v 1.5 2004-02-17 15:48:44 fil Exp $
+ * @version $Id: ContextFactory.java,v 1.6 2004-12-23 07:16:43 rafal Exp $
  */
 public class ContextFactory
 {
@@ -166,7 +166,7 @@ public class ContextFactory
     }
     
     /**
-     * Returns the specified directory context;
+     * Returns the specified directory context.
      *
      * @param name the directory context identifier used in the configuration file
      * @return thread-safe view of the context.

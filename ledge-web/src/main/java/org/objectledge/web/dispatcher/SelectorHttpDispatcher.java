@@ -42,10 +42,10 @@ import org.objectledge.selector.Variables;
 import org.objectledge.web.HttpDispatcher;
 
 /**
- * A dispatcher that provides rule based selection of other dispatchers
+ * A dispatcher that provides rule based selection of other dispatchers.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SelectorHttpDispatcher.java,v 1.1 2004-01-27 15:22:24 fil Exp $
+ * @version $Id: SelectorHttpDispatcher.java,v 1.2 2004-12-23 07:18:17 rafal Exp $
  */
 public class SelectorHttpDispatcher
     implements HttpDispatcher

@@ -51,7 +51,7 @@ import org.xml.sax.SAXParseException;
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.11 2004-06-01 15:34:50 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.12 2004-12-23 07:16:00 rafal Exp $
  */
 public class LedgeContainer
 {
@@ -76,7 +76,7 @@ public class LedgeContainer
     // initialization //////////////////////////////////////////////////////////////////////////
 
     /**
-     * Creates an instance of the LedgeContainer
+     * Creates an instance of the LedgeContainer.
      * 
      * @param fs the FileSystem
      * @param configBase configuration directory.

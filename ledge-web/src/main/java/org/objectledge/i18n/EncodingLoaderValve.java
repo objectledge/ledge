@@ -45,7 +45,7 @@ import org.objectledge.web.WebConfigurator;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EncodingLoaderValve.java,v 1.3 2004-12-22 08:58:32 rafal Exp $
+ * @version $Id: EncodingLoaderValve.java,v 1.4 2004-12-23 07:17:36 rafal Exp $
  */
 public class EncodingLoaderValve 
     extends AbstractI18nValve
@@ -54,7 +54,7 @@ public class EncodingLoaderValve
     private WebConfigurator webConfigurator;
     
     /**
-     * Constructor
+     * Constructor.
      * 
      * @param logger the logger.
      * @param webConfigurator the web configurator component.

@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.4 2004-03-19 13:32:29 zwierzem Exp $
+ * @version $Id: UserAgentTool.java,v 1.5 2004-12-23 07:18:14 rafal Exp $
  */
 public class UserAgentTool
 {
@@ -89,7 +89,7 @@ public class UserAgentTool
     }
 
     /**
-     * Return the UA Family
+     * Return the UA Family.
      *
      * @return the UA family.
      */

@@ -29,7 +29,7 @@
 package org.objectledge.web;
 
 /**
- * The constants used by web components 
+ * The constants used by web components. 
  */
 public final class WebConstants
 {

@@ -41,7 +41,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  */
 public class ComponentToolFactory implements ContextToolFactory
 {
-	/** context */
+	/** The context. */
 	protected Context context;
 	/** The class finder for finding component objects. */
 	protected MVCClassFinder classFinder;

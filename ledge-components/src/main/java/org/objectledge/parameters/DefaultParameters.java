@@ -47,14 +47,14 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.12 2004-12-21 06:30:24 rafal Exp $
+ * @version $Id: DefaultParameters.java,v 1.13 2004-12-23 07:17:05 rafal Exp $
  */
 public class DefaultParameters implements Parameters
 {
     /** string representation for boolean <code>true</code> value. */
     public static final String TRUE = "true";
 
-    /** The main parameters map */
+    /** The main parameters map. */
     protected Map map;
 
 	/**
@@ -789,7 +789,7 @@ public class DefaultParameters implements Parameters
     }
 
     /** 
-     * Get string representation of parameter values
+     * Get string representation of parameter values.
      *  
      * @param name the name of the parameters.
      * @return the string representation of the parameter value(s). 

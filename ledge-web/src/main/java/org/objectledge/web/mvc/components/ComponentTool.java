@@ -38,11 +38,11 @@ import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.8 2004-08-20 10:04:54 zwierzem Exp $
+ * @version $Id: ComponentTool.java,v 1.9 2004-12-23 07:18:02 rafal Exp $
  */
 public class ComponentTool
 {
-    /** The context */
+    /** The context. */
     protected Context context;
     
 	/** The class finder for finding component objects. */

@@ -39,7 +39,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * <code>java.io.RandomAccessFile</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalRandomAccessFile.java,v 1.3 2003-12-04 14:08:18 fil Exp $
+ * @version $Id: LocalRandomAccessFile.java,v 1.4 2004-12-23 07:16:36 rafal Exp $
  */
 public class LocalRandomAccessFile implements RandomAccessFile
 {
@@ -47,7 +47,7 @@ public class LocalRandomAccessFile implements RandomAccessFile
     private java.io.RandomAccessFile file;
     
     /** 
-     * Creates a new instance of LocalRandomAccess
+     * Creates a new instance of LocalRandomAccess.
      * 
      * @param file a java.io.File object.
      * @param mode access mode 

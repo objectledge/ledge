@@ -40,17 +40,17 @@ import org.objectledge.xml.XMLGrammarCache;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DatatypeSetManager.java,v 1.1 2004-05-12 09:54:03 zwierzem Exp $
+ * @version $Id: DatatypeSetManager.java,v 1.2 2004-12-23 07:17:10 rafal Exp $
  */
 public class DatatypeSetManager
 {
-	/** logger */
+	/** the logger. */
 	protected Logger logger; 
 	
-	/** the provided datatype sets */
+	/** the provided datatype sets. */
 	protected Map datatypeSets = new Hashtable();
 
-	/** the datatype sets' factories */
+	/** the datatype sets' factories. */
 	protected List factories = new ArrayList();
 	
 	/**

@@ -40,7 +40,7 @@ import org.objectledge.cache.spi.StatisticsMap;
  *
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsMapImpl.java,v 1.2 2004-02-26 11:34:28 fil Exp $
+ * @version $Id: StatisticsMapImpl.java,v 1.3 2004-12-23 07:16:50 rafal Exp $
  */
 public class StatisticsMapImpl
     extends DelegateMap
@@ -65,7 +65,7 @@ public class StatisticsMapImpl
     // initialization ////////////////////////////////////////////////////////
 
     /**
-     * Constructs a StatisticsMapImpl
+     * Constructs a StatisticsMapImpl.
      */
     public StatisticsMapImpl()
     {

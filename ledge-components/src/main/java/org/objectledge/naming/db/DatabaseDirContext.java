@@ -65,9 +65,9 @@ import org.objectledge.database.persistence.PersistenceException;
 public class DatabaseDirContext extends DatabaseContext implements DirContext
 {
     /**
-     * The directory context constructor;
+     * The directory context constructor.
      * 
-     * @param env the environment 
+     * @param env the environment. 
      */
     public DatabaseDirContext(Hashtable env)
     {
@@ -75,7 +75,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     }
 
     /**
-     * The context constructor;
+     * The context constructor.
      * 
      * @param env the environment.
      * @param context the persistent context delegate.
