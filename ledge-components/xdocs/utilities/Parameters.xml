@@ -27,7 +27,7 @@
                   </ul>
                 </li>
                 <li>A NumberFormatException will be thrown by the numeric value retrieval methods if the 
-                 value is not a correct number representation.</li>
+                  value is not a correct number representation.</li>
               </ol>
             </li>
             <li>Parameter may have more than one value.
@@ -51,6 +51,9 @@
                 <li>A parameter is represented as &lt;name&gt; '=' &lt;values&gt; pairs.</li>
                 <li>Parameters withing a set are newline separater. Thus newline characters in
                 parameter values need to be '\' escaped.</li>
+                <li>Any characters outside the 7 bit US-ASCII range must be escaped using Java
+                Unicode sequences when generating the string representation. Both escape
+                sequences and Unicode characters must be accepted when parsing.</li>
               </ol>
             </li>
           </ol>
