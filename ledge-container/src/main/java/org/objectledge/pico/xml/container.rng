@@ -42,13 +42,13 @@
       <optional>
         <ref name="adapter-factory"/>
       </optional>
-      <oneOrMore>
+      <zeroOrMore>
         <choice>
           <ref name="component"/>
           <ref name="pseudo-component"/>
           <ref name="container"/>
         </choice>
-      </oneOrMore>
+      </zeroOrMore>
     </element>
   </define>
 
@@ -60,7 +60,10 @@
       <attribute name="adapter-factory"/>
     </optional>  
     <optional>
-      <attribute name="key"/>
+      <choice>
+        <attribute name="key"/>
+        <attribute name="class-key"/>
+      </choice>
     </optional>  
     <optional>
       <attribute name="class"/>
