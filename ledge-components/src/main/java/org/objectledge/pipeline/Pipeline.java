@@ -34,7 +34,7 @@ import org.objectledge.context.Context;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.4 2003-12-03 14:39:36 mover Exp $
+ * @version $Id: Pipeline.java,v 1.5 2003-12-22 16:53:52 pablo Exp $
  */
 public class Pipeline
     implements Runnable
@@ -47,7 +47,7 @@ public class Pipeline
     
     private Runnable[] catchValves;
     
-    private Runnable[] finalyValves;
+    private Runnable[] finallyValves;
     
     /**
      * Constructs a new instance of the pipeline.
@@ -55,15 +55,15 @@ public class Pipeline
      * @param context the context.
      * @param tryValves the valves to be used in the try stage.
      * @param catchValves the valves to be used in the catch stage.
-     * @param finalyValves the valves to be used in the finaly stage.
+     * @param finallyValves the valves to be used in the finaly stage.
      */
     public Pipeline(Context context, Runnable[] tryValves, Runnable[] catchValves, 
-        Runnable[] finalyValves)
+        Runnable[] finallyValves)
     {
         this.context = context;
         this.tryValves = tryValves;
-        this.catchValves = finalyValves;
-        this.finalyValves = finalyValves;
+        this.catchValves = catchValves;
+        this.finallyValves = finallyValves;
     }
 
     /**
@@ -73,4 +73,35 @@ public class Pipeline
     {
         
     }
+    
+    /**
+     * Get catch valves
+     * 
+     * @return the catch valves.
+     */
+    public Runnable[] getCatchValves()
+    {
+        return catchValves;
+    }
+
+    /**
+     * Get finally valves
+     * 
+     * @return the finally valves.
+     */
+    public Runnable[] getFinallyValves()
+    {
+        return finallyValves;
+    }
+
+    /**
+     * Get try valves
+     * 
+     * @return the try valves.
+     */
+    public Runnable[] getTryValves()
+    {
+        return tryValves;
+    }
+
 }
