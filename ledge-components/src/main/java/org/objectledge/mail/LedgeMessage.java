@@ -29,9 +29,9 @@ import org.objectledge.templating.TemplatingContext;
 /**
  * Wraping class around the javaMail message
  *
- * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.2 2004-02-12 11:43:05 pablo Exp $
+ * @version $Id: LedgeMessage.java,v 1.3 2004-12-22 16:52:23 pablo Exp $
  */
 public class LedgeMessage
 {
