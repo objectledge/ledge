@@ -14,5 +14,6 @@
     <classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4-dev.jar"/>
     <classpathentry kind="src" path="/nano-reflection"/>
     <classpathentry kind="src" path="/nano-script"/>
+    <classpathentry kind="src" path="/nano-container"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
