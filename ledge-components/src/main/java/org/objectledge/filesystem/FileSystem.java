@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.24 2004-09-27 13:30:56 zwierzem Exp $
+ * @version $Id: FileSystem.java,v 1.25 2004-09-27 19:05:37 zwierzem Exp $
  */
 public class FileSystem
 {
@@ -1068,6 +1068,10 @@ public class FileSystem
      */
     public boolean checkPathChars(String path)
     {
+        if(path == null || path.length() == 0)
+        {
+            return false;
+        }
         for (Iterator i = providers.iterator(); i.hasNext();)
         {
             FileSystemProvider fp = (FileSystemProvider)i.next();
