@@ -27,7 +27,6 @@
     <component class="org.objectledge.context.Context"/>
     <component class="org.objectledge.web.mvc.MVCContextInitializator"/>
     <component class="org.objectledge.web.RequestParametersLoader"/>
-    <component class="org.objectledge.web.RequestParametersLoaderTestValve"/>
     <component class-key="org.objectledge.templating.Templating"
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
     <component class="org.objectledge.templating.TemplatingContextLoader"/>
@@ -47,7 +46,6 @@
       <component-parameter class-key="org.jcontainer.dna.Logger"/>
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
         <component-parameter class-key="org.objectledge.web.RequestParametersLoader"/>
-        <component-parameter class-key="org.objectledge.web.RequestParametersLoaderTestValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.MVCContextInitializator"/>
         <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
         <component-parameter class-key="org.objectledge.templating.ContextToolPopulator"/>
