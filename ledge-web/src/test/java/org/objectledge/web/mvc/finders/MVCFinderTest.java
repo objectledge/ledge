@@ -42,6 +42,7 @@ import org.objectledge.test.actions.foo.TestAction;
 import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.DefaultTemplate;
+import org.objectledge.web.mvc.components.Component;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
@@ -49,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.4 2004-01-20 13:12:33 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.5 2004-01-20 13:39:48 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -168,11 +169,23 @@ public class MVCFinderTest extends TestCase
         assertEquals(DefaultBuilder.class, builder.getClass());        
     }
 
-    /*
-     * Test for String findViewName(Builder)
-     */
-    public void testFindViewNameBuilder()
+    public void testGetComponentTemplate()
     {
-        //TODO Implement findViewName().
+        Template template = finder.getComponentTemplate("one.Component");
+        assertEquals("components/one/Component", template.getName());
+        template = finder.getComponentTemplate(null);
+        assertNull(template);
+        template = finder.getComponentTemplate("one.NonexistentComponent");
+        assertNull(template);
+    }
+
+    public void testGetComponent()
+    {
+        Component component = finder.getComponent("one.Component");
+        assertEquals(org.objectledge.test.components.one.Component.class, component.getClass());
+        component = finder.getComponent(null);
+        assertNull(component);
+        component = finder.getComponent("one.NonexistentComponent");
+        assertNull(component);
     }
 }
