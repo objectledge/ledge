@@ -87,7 +87,7 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-beta-5-SNAPSHOT</version>
+      <version>1.0-beta-5</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
