@@ -34,6 +34,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.jmock.Constraint;
 import org.jmock.builder.MockObjectTestCase;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLValidator;
@@ -47,27 +48,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
 {
     private FileSystem fileSystem;
 
-    
-    /**
-     * Get the configuration.
-     * 
-     * @param fs the file system.
-     * @param name the config file name.
-     * @return the configuration
-     * @throws Exception if happens.
-     */
-    protected Configuration getConfig(FileSystem fs, String name) throws Exception
-    {
-        InputSource source = new InputSource(fs.getInputStream(name));
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-        SAXConfigurationHandler handler = new SAXConfigurationHandler();
-        reader.setContentHandler(handler);
-        reader.setErrorHandler(handler);
-        reader.parse(source);
-        return handler.getConfiguration();
-    }
-    
+    // filesystem ///////////////////////////////////////////////////////////////////////////////    
  
     protected FileSystem getFileSystem() throws Exception
     {
@@ -91,6 +72,28 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         return FileSystem.getStandardFileSystem(root);
     } 
     
+    // configuraitons & schemata /////////////////////////////////////////////////////////////////
+
+    /**
+     * Get the configuration.
+     * 
+     * @param fs the file system.
+     * @param name the config file name.
+     * @return the configuration
+     * @throws Exception if happens.
+     */
+    protected Configuration getConfig(FileSystem fs, String name) throws Exception
+    {
+        InputSource source = new InputSource(fs.getInputStream(name));
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+        SAXConfigurationHandler handler = new SAXConfigurationHandler();
+        reader.setContentHandler(handler);
+        reader.setErrorHandler(handler);
+        reader.parse(source);
+        return handler.getConfiguration();
+    }
+    
     protected void checkSchema(String configuration, String schema)
         throws Exception
     {
@@ -98,6 +101,20 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         XMLValidator validator = new XMLValidator();
         URL schemaUrl = fileSystem.getResource(schema);
         validator.validate(fileSystem.getResource(configuration), schemaUrl);
+    }
+    
+    // jMock goodies ////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Create a Constraint on map elements
+     * 
+     * @param key of the element to check.
+     * @param c the constraint to check on the element.
+     * @return Constraint instance.
+     */
+    public Constraint mapElement(Object key, Constraint c)
+    {
+        return new MapElement(key, c);
     }
     
 }
