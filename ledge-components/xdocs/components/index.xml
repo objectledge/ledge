@@ -76,10 +76,19 @@
       </subsection>      
 
       <subsection name="EventSystem">
-        <p></p>
+        <p>Provides a common facility for associating event generators with receivers.</p>
 		<p class="more"><a href="EventSystem.html">more</a></p>
       </subsection>     
-      
+
+	  <subsection name="Database">
+        <p>A convenience wrapper around database related components.</p>
+		<p class="more"><a href="Database.html">more</a></p>
+      </subsection>     
+          
+	  <subsection name="Persistence">
+        <p>The persistence component provides simple Object-Relational Database mapping.</p>
+		<p class="more"><a href="Persistence.html">more</a></p>
+      </subsection>           
     </section>
   </body>
 </document>

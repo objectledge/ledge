@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>DefaultParameters</title>
+  </properties>
+
+  <body>
+    <section name="DBParameters">
+      <subsection name="Description">
+         <p>DBParamteres is a persistent, database based implementation of <code>Parameters</code>
+         interface.</p>
+         <p>The container livecycle is managed by <code>DBParametersManager</code>, 
+         which allows you to create new container, retrieve or delete them from database.
+         You don't have to call any <code>update()</code> method. All container modification are 
+         automatically write down to the storage. All parameters retrievings are speed up with local cache.
+         </p>
+         
+      </subsection>
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>DBParameters <a href="../../apidocs/org/objectledge/parameters/db/DBParameters.html">JavaDoc</a></li>
+            <li>DBParameters <a href="../../xref/org/objectledge/parameters/db/DBParameters.html">XRef</a></li>
+            <li>DBParameters <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/parameters/db/DBParameters.java">CVS log</a></li>
+          </ul>
+        </p>
+        <p>
+          <ul>
+            <li>DBParametersManager <a href="../../apidocs/org/objectledge/parameters/db/DBParametersManager.html">JavaDoc</a></li>
+            <li>DBParametersManager <a href="../../xref/org/objectledge/parameters/db/DBParametersManager.html">XRef</a></li>
+            <li>DBParametersManager <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/parameters/db/DBParametersManager.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="Database.html">Database</a>, 
+                <a href="../../../../ledge-container/docs/container-subsystems/LoggerFactory.html">LoggerFactory</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>DNA API (dna:dna-api)</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">		
+  	    <p>
+	      <table>
+	        <tr>
+              <th>position</th>
+	          <th>type</th>
+	          <th widht="100%">description</th>
+            </tr>
+            <tr>
+	          <td>1</td>
+	          <td><code>org.objectledge.database.Database</code></td>
+	          <td>the database</td>
+	        </tr>
+		    <tr>
+		      <td>2</td>
+		      <td><code>org.jcontainer.dna.Logger</code></td>
+		      <td>the logger</td>
+		    </tr>
+		  </table>
+	    </p>
+	  </subsection>
+    </section>
+  </body>
+</document>
+      

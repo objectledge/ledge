@@ -76,6 +76,11 @@
               interface.</p>
               <p class="more"><a href="parameters/DefaultParameters.html">more</a></p>
             </li>
+            <li>
+              <p>DBParamteres is a persistent, database based implementation of <code>Parameters</code>
+              interface.</p>
+              <p class="more"><a href="parameters/DBParameters.html">more</a></p>
+            </li>
           </ul>
         </p>
       </subsection>

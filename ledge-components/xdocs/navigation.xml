@@ -14,10 +14,10 @@
 
     <menu name="Reference">
 
-      <item name="Components"            href="/components/index.html" collapse="true">
+      <item name="Components"              href="/components/index.html" collapse="true">
         <item name="FileSystem"            href="/components/FileSystem.html" collapse="true">
-          <item name="Local provider"     href="/components/LocalFileSystemProvider.html"/>
-          <item name="Classpath provider" href="/components/ClasspathFileSystemProvider.html"/>
+          <item name="Local provider"      href="/components/LocalFileSystemProvider.html"/>
+          <item name="Classpath provider"  href="/components/ClasspathFileSystemProvider.html"/>
         </item>
         <item name="XMLValidator"          href="/components/XMLValidator.html"/>
         <item name="Context"               href="/components/Context.html"/>
@@ -26,10 +26,12 @@
           <item name="XMLI18n"             href="/components/i18n/XMLI18n.html"/>
         </item>
         <item name="Templating"			   href="/components/Templating.html" collapse="true">
-          <item name="Context tools"    href="/components/templating/ContextTools.html"/>
+          <item name="Context tools"       href="/components/templating/ContextTools.html"/>
           <item name="Velocity Templating" href="/components/templating/VelocityTemplating.html"/>
         </item>   
-        <item name="EventSystem"		   href="/components/EventSystem.html"/>             
+        <item name="EventSystem"		   href="/components/EventSystem.html"/>
+		<item name="Database"			   href="/components/Database.html"/>                    
+        <item name="Persistence"		   href="/components/Persistence.html"/>
         <item name="MailSystem"			   href="/components/MailSystem.html"/>
         <item name="ContextFatory"		   href="/components/ContextFactory.html"/>        
         <item name="ThreadPool"			   href="/components/ThreadPool.html"/>
@@ -37,11 +39,13 @@
           <item name="DB Scheduler"        href="/components/scheduler/DBScheduler.html"/>
           <item name="Transient Scheduler" href="/components/scheduler/TransientScheduler.html"/>
         </item>
+        
       </item>
 
-      <item name="Utilities"             href="/utilities/index.html" collapse="true">
+      <item name="Utilities"               href="/utilities/index.html" collapse="true">
         <item name="Parameters"            href="/utilities/Parameters.html" collapse="true">
-          <item name="DefaultParamters"      href="/utilities/parameters/DefaultParameters.html"/>
+          <item name="DefaultParamters"    href="/utilities/parameters/DefaultParameters.html"/>
+          <item name="DBParameters"  	   href="/utilities/parameters/DBParameters.html"/>
         </item>
         <item name="StringUtils"           href="/utilities/StringUtils.html"/>
       </item>

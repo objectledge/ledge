@@ -49,13 +49,13 @@
         <element name="session">
           <attribute name="name"/>
 		  <zeroOrMore>
-	        <element name="property">
-			  <attribute name="name"/>
-		      <choice>
+            <element name="property">
+              <attribute name="name"/>
+              <choice>
                 <attribute name="value"/>
                 <text/>
               </choice>
-			</element>
+            </element>
           </zeroOrMore>
         </element>
       </oneOrMore>
@@ -66,9 +66,9 @@
       <zeroOrMore>
         <element name="credential">
           <attribute name="protocol"/>
-		  <attribute name="username"/>
-	      <attribute name="password"/>
-	    </element>
+          <attribute name="username"/>
+          <attribute name="password"/>
+        </element>
       </zeroOrMore>
     </element>
   </optional>
