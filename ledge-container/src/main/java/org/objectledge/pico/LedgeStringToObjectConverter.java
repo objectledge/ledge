@@ -37,7 +37,7 @@ import org.nanocontainer.reflection.StringToObjectConverter;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeStringToObjectConverter.java,v 1.4 2004-12-27 05:18:03 rafal Exp $
+ * @version $Id: LedgeStringToObjectConverter.java,v 1.5 2005-01-21 06:30:39 rafal Exp $
  */
 public class LedgeStringToObjectConverter extends StringToObjectConverter
 {
@@ -65,6 +65,18 @@ public class LedgeStringToObjectConverter extends StringToObjectConverter
                 }    
             }
         );
+        register(Boolean.TYPE,
+            new Converter()
+            {
+                public Object convert(String in)
+                {
+                    if (in == null || in.length() == 0) {
+                        return Boolean.FALSE;
+                    }
+                    char c = in.toLowerCase().charAt(0);
+                    return c == '1' || c == 'y' || c == 't' ? Boolean.TRUE : Boolean.FALSE;
+                }
+            });
         register(Class.class,
             new Converter()
             {
