@@ -48,7 +48,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.2 2004-02-12 13:50:15 zwierzem Exp $
  */
 public class TableState
 implements Cloneable
@@ -62,13 +62,13 @@ implements Cloneable
     /** Set of selected node ids. */
     private Set selected = new HashSet();
 
-    /** Expanded all switch */
+    /** Expanded all switch, default: <code>false</code>. */
     private boolean allExpanded = false;
 
     /** Set of expanded nodes ids. */
     private Set expanded = new HashSet();
 
-    /** Name of a column selected for sorting. */
+    /** Name of a column selected for sorting, default: <code>null</code>. */
     private String sortColumnName;
 
     /** Current sorting direction, default: <code>{@link TableConstants#SORT_ASC}</code>. */
@@ -194,6 +194,23 @@ implements Cloneable
         }
         selected.add(rowId);
     }
+
+	/**
+	 * Sets selected state on a number of rows 
+	 * - works only for multiselect set to <code>false</code>.
+	 *
+	 * @param rowIds the ids of rows.
+	 */
+	public void setSelected(String[] rowIds)
+	{
+		if(multiSelect)
+		{
+			for(int i=0; i < rowIds.length; i++)
+			{
+				selected.add(rowIds[i]);
+			}
+		}
+	}
 
     /**
      * Toggles a row's selected state. -
@@ -574,44 +591,5 @@ implements Cloneable
     public void setMaxVisibleDepth(int maxVisibleDepth)
     {
         this.maxVisibleDepth = maxVisibleDepth;
-    }
-
-    /**
-     * Clone support for TableState object during TableData cloning
-     *
-     * @return cloned TableState object
-     */
-    public Object clone()
-    {
-        TableState next = null;
-        // 1. Bitwise object copy
-        try
-        {
-            next = (TableState)(super.clone());
-        }
-        catch(CloneNotSupportedException e)
-        {
-            // this should never happen
-        }
-
-        // 2. copy fields which are references
-        next.selected = new HashSet(selected);
-        next.expanded = new HashSet(expanded);
-        next.sorting = new HashMap(sorting);
-
-        next.filters = new TableFilter[filters.length];
-        for(int i=0; i<filters.length; i++)
-        {
-            next.filters[i] = filters[i];
-        }
-
-        // root Id is copied via reference
-        // Its a String - it will never get modified - it will always be replaced
-
-        // currentPage is bitwise copied
-        // pages Size is bitwise copied
-        // viewType is bitwise copied
-
-        return next;
     }
 }
