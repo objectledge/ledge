@@ -26,13 +26,9 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web.parameters;
-
-import java.io.PrintWriter;
+package org.objectledge.parameters;
 
 import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 
@@ -40,15 +36,15 @@ import org.objectledge.web.HttpContext;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderTestValve.java,v 1.8 2004-01-23 08:17:07 fil Exp $
+ * @version $Id: RequestParametersLoaderValve.java,v 1.1 2004-01-23 11:22:45 pablo Exp $
  */
-public class RequestParametersLoaderTestValve 
+public class RequestParametersLoaderValve 
     implements Valve
 {
 	/**
 	 * Constructor
 	 */
-	public RequestParametersLoaderTestValve()
+	public RequestParametersLoaderValve()
 	{
 	}
 	
@@ -56,23 +52,12 @@ public class RequestParametersLoaderTestValve
      * Run the pipeline valve - parse and load the parameters into the context.
      * 
      * @param context the context.
-     * @throws ProcessingException if the processing fails.
      */
     public void process(Context context)
-        throws ProcessingException
     {
-    	Parameters parameters = RequestParameters.getRequestParameters(context);
-		HttpContext httpContext = HttpContext.getHttpContext(context);
-		httpContext.setContentType("text/html");
-		try
-		{
-			PrintWriter pw = httpContext.getPrintWriter();
-			pw.print(parameters.get("foo","bar"));
-			pw.close();
-		}
-		catch(Exception e)
-		{
-			throw new ProcessingException("",e);
-		}
+    	RequestParameters parameters = new RequestParameters();
+    	HttpContext httpContext = HttpContext.getHttpContext(context);
+    	parameters.init(httpContext.getRequest(), httpContext.getEncoding());
+    	context.setAttribute(RequestParameters.class, parameters);
     }
 }

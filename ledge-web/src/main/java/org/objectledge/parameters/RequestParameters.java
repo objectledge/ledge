@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web.parameters;
+package org.objectledge.parameters;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -36,13 +36,11 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.objectledge.context.Context;
-import org.objectledge.parameters.DefaultParameters;
-import org.objectledge.parameters.Parameters;
 
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.2 2004-01-14 14:12:15 fil Exp $
+ * @version $Id: RequestParameters.java,v 1.1 2004-01-23 11:22:45 pablo Exp $
  */
 public class RequestParameters extends DefaultParameters
 {

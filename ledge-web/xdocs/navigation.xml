@@ -20,6 +20,7 @@
       <item name="Components" href="/components/index.html" collapse="true">
         <item name="Servlet FS provider" href="/components/ServletFileSystemProvider.html"/>
         <item name="Upload valve" href="/components/UploadValve.html"/>
+        <item name="Request Parameters Loader valve" href="/components/RequestParameters.html"/>
       </item>
     </menu>
   </body>

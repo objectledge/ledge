@@ -23,6 +23,13 @@
         </p>
         <p class="more"><a href="UploadValve.html">more</a></p>
       </subsection>
+      
+      <subsection name="Request parameters loader valve">
+        <p>The pipeline processing valve that read the parameters from request parameters and 
+        from parsed url path and store it as a parameters container in thread context.
+        </p>
+        <p class="more"><a href="RequestParameters.html">more</a></p>
+      </subsection>
     </section>
   </body>
 </document>

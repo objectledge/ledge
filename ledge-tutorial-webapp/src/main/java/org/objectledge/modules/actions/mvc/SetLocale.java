@@ -34,20 +34,20 @@ import javax.servlet.http.Cookie;
 
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.parameters.RequestParameters;
 
 /**
  * Set encoding action.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetLocale.java,v 1.3 2004-01-23 08:17:04 fil Exp $
+ * @version $Id: SetLocale.java,v 1.4 2004-01-23 11:23:21 pablo Exp $
  */
 public class SetLocale 
     implements Valve, WebConstants

@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web.tools;
+package org.objectledge.web.mvc.tools;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -42,10 +42,10 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.parameters.RequestParameters;
 
 /**
  * Context tool used to build web application links.

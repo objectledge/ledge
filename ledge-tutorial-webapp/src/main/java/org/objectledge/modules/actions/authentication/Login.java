@@ -33,11 +33,11 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.Authentication;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.parameters.RequestParameters;
 
 /**
  * Login action.
@@ -45,7 +45,7 @@ import org.objectledge.web.parameters.RequestParameters;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Login.java,v 1.4 2004-01-23 08:17:05 fil Exp $
+ * @version $Id: Login.java,v 1.5 2004-01-23 11:23:21 pablo Exp $
  */
 public class Login 
     extends BaseAuthenticationAction
