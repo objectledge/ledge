@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.14 2004-09-17 08:10:45 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.15 2004-10-08 09:32:57 zwierzem Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -151,6 +151,22 @@ public abstract class AbstractI18n implements I18n
 	    return (String)localeNames.get(locale);
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
+    public boolean defined(Locale locale, String key)
+    {
+        String value = getInternal(locale, key);
+        return value != null;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public boolean defined(String key)
+    {
+        return defined(this.defaultLocale, key);
+    }
+    
     /**
      * {@inheritDoc}
      */

@@ -35,7 +35,7 @@ import java.util.Locale;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18n.java,v 1.8 2004-09-14 14:20:45 rafal Exp $
+ * @version $Id: I18n.java,v 1.9 2004-10-08 09:32:57 zwierzem Exp $
  */
 public interface I18n
 {
@@ -61,14 +61,31 @@ public interface I18n
 	 */
 	public String getLocaleName(Locale locale);
 	
-	/** 
+    /** 
+     * Checks if a string value is defined for a default locale.
+     * 
+     * @param key the key.
+     * @return <code>true</code> if the string is defined
+     */
+    public boolean defined(String key);
+
+    /** 
+     * Checks if a string value is defined for a given locale.
+     * 
+     * @param locale the locale.
+     * @param key the key.
+     * @return <code>true</code> if the string is defined
+     */
+    public boolean defined(Locale locale, String key);
+
+    /** 
 	 * Get the string value.
 	 * 
 	 * @param locale the locale.
 	 * @param key the key.
 	 * @return the string value.
 	 */
-	String get(Locale locale, String key);
+	public String get(Locale locale, String key);
 	
     /** 
      * Get the string value with given default value if the string is missing in
@@ -79,7 +96,7 @@ public interface I18n
      * @param defaultValue the default value in case key mapping is missing.
      * @return the string value.
      */
-    String get(Locale locale, String key, String defaultValue);
+    public String get(Locale locale, String key, String defaultValue);
 
     /**
 	 * Get the string and replace $[1..n] variables with given values.
@@ -89,11 +106,11 @@ public interface I18n
 	 * @param values the values use for substitution.
 	 * @return the the output string.
 	 */
-	String get(Locale locale, String key, String[] values);
+	public String get(Locale locale, String key, String[] values);
 	
 	/**
 	 * Reload the localization.
 	 * 
 	 */
-	void reload();
+	public void reload();
 }
