@@ -148,24 +148,32 @@ public class XMLI18n extends AbstractI18n
 						map = new HashMap();
 						newLocaleMap.put(locale, map);
 					}
-					loadFile(files[i], map, prefix);
+                    loadFile(files[i], map, prefix);
 				}		        
 		    }
 		}
-		catch(Exception e)	
+		catch(IOException e)	
 		{
 			throw new ComponentInitializationError("Exception during locale loading",e);
 		}
+        catch(SAXException e)
+        {
+            throw new ComponentInitializationError("Exception during locale loading",e);
+        }
+        catch(ParserConfigurationException e)
+        {
+            throw new ComponentInitializationError("Exception during locale loading",e);
+        }
 		localeMap = newLocaleMap;
 	}
 
 	private void loadFile(String file, Map map, String prefix)
-		throws MalformedURLException, SAXException, ParserConfigurationException, IOException
+        throws MalformedURLException, SAXException, ParserConfigurationException, IOException
 	{
-        xmlValidator.validate(fileSystem.getResource(localeDir+file), 
-            fileSystem.getResource(LOCALIZATION_SCHEMA));
 		try
 		{
+            xmlValidator.validate(fileSystem.getResource(localeDir+file), 
+                fileSystem.getResource(LOCALIZATION_SCHEMA));
 			InputStream is = fileSystem.getInputStream(localeDir+file);
 			handler.init(map, prefix);
 			parser.parse(is, handler);
@@ -173,7 +181,8 @@ public class XMLI18n extends AbstractI18n
 		catch(SAXParseException e)
 		{
 			throw new ComponentInitializationError("error parsing "+file+
-				 " on line "+((SAXParseException)e).getLineNumber(), e);
+				 " on line "+((SAXParseException)e).getLineNumber()+
+                 ", column "+((SAXParseException)e).getColumnNumber(), e);
 		}
 	}
 	
@@ -189,9 +198,6 @@ public class XMLI18n extends AbstractI18n
 
 		/** prefix stack */
 		private LinkedList prefix = new LinkedList();
-
-		/** current item */
-		private String item;
 
 		/** string buffer */
 		private StringBuffer sb = new StringBuffer();
@@ -215,7 +221,6 @@ public class XMLI18n extends AbstractI18n
 		{
 			this.basePrefix = basePrefix;
 		    this.map = map;
-			item = null;
 		   	prefix.clear();
 	    }
 
@@ -239,30 +244,12 @@ public class XMLI18n extends AbstractI18n
 		    String name;
 		    if("prefix".equals(localName))
 			{
-			    if(item != null)
-			    {
-			        throw new SAXParseException("<prefix> cannot be nested inside <item>", 
-												 locator);
-				}
 				name = attributes.getValue("name");
-				if(name == null)
-				{
-				    throw new SAXParseException("name attribute required", locator);
-				}
 				prefix.addLast(name);
 			}
-			else if("item".equals(localName))
+			else if("value".equals(localName))
 			{
-			    if(item != null)
-				{
-				    throw new SAXParseException("<item> can not be nested", locator);
-				}
-				name = attributes.getValue("name");
-				if(name == null)
-				{
-				    throw new SAXParseException("name attribute required", locator);
-				}
-				item = name;
+                currentChars.setLength(0);
 			}
 	    }
 
@@ -276,19 +263,11 @@ public class XMLI18n extends AbstractI18n
 			{
 			    prefix.removeLast();
 			}
-			else if("item".equals(localName))
+			else if("value".equals(localName))
 			{
-                // TODO build stack for multiple method invocation in case
-                // the text processing was interrupted by other event.  
-                String value = currentChars.toString();
-                currentChars.setLength(0);
-                value = value.trim();
+                String value = currentChars.toString().trim();
                 if(value.length()>0)
                 {
-                    if(item==null)
-                    {
-                        throw new SAXParseException("strings need to be nested in <item>", locator);
-                    }
                     sb.setLength(0);
                     if(basePrefix != null && basePrefix.length()>0)
                     {
@@ -300,9 +279,12 @@ public class XMLI18n extends AbstractI18n
                     }
                     for (int i = 0; i < prefix.size(); i++)
                     {
-                        sb.append(prefix.get(i)).append('.');
+                        if(i > 0)
+                        {
+                            sb.append('.');
+                        }
+                        sb.append(prefix.get(i));
                     }
-                    sb.append(item);
                     String name = sb.toString();
                     if (map.containsKey(name))
                     {
@@ -313,7 +295,6 @@ public class XMLI18n extends AbstractI18n
                         map.put(name, value);
                     }
                 }
-    		    item = null;
 			}
 		}
     
@@ -324,7 +305,6 @@ public class XMLI18n extends AbstractI18n
 			throws SAXParseException
         {
             currentChars.append(ch, start, length);
-            
-        			}
+        }
     }
 }

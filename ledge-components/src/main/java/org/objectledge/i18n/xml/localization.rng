@@ -35,18 +35,27 @@
       </zeroOrMore>
     </element>
   </start>
+
   <define name="node">
-    <choice>
-      <element name="prefix">
-        <attribute name="name"/>
-        <zeroOrMore>
-          <ref name="node"/>
-        </zeroOrMore>
-      </element>
-      <element name="item">
-        <attribute name="name"/>
-        <text/>
-      </element>      
-    </choice>
+    <element name="prefix">
+      <attribute name="name"/>
+      <choice>
+        <group>
+          <optional>
+            <ref name="value-element"/>
+          </optional>
+          <oneOrMore>
+            <ref name="node"/>
+          </oneOrMore>
+        </group>
+        <ref name="value-element"/>
+      </choice>
+    </element>
+  </define>
+
+  <define name="value-element">
+    <element name="value">
+      <text/>
+    </element>
   </define>
 </grammar>
