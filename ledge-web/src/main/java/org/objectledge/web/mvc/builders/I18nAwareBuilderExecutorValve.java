@@ -32,10 +32,11 @@ import org.objectledge.i18n.I18nAwareTemplateResolver;
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.8 2004-08-19 13:40:05 pablo Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.9 2004-08-20 10:03:43 zwierzem Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
@@ -48,6 +49,7 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
      * @param context the context.
      * @param classFinder the class finder.
      * @param templateFinder the template finder.
+     * @param securityHelper security helper for access checking
      * @param maxRouteCalls the max route calls.
      * @param maxEnclosures the max enclosures. 
      * @param i18n an i18n component for choosing templates upon currently selected Locale.
@@ -57,11 +59,12 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
         Context context,
         MVCClassFinder classFinder,
         MVCTemplateFinder templateFinder,
+        SecurityHelper securityHelper,
         int maxRouteCalls,
         int maxEnclosures,
         I18nAwareTemplateResolver resolver)
     {
-        super(context, classFinder, templateFinder, maxRouteCalls, maxEnclosures);
+        super(context, classFinder, templateFinder, securityHelper, maxRouteCalls, maxEnclosures);
         this.resolver = resolver;
     }
     

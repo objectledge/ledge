@@ -38,7 +38,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.11 2004-02-28 13:41:06 pablo Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.12 2004-08-20 10:03:28 zwierzem Exp $
  */
 public class ActionExecutorValve 
     implements Valve
@@ -46,14 +46,19 @@ public class ActionExecutorValve
 	/** Finder for builder objects. */
 	protected MVCClassFinder classFinder;
 
+    /** SecurityHelper for access checking. */
+    protected SecurityHelper securityHelper;
+
 	/**
 	 * Component constructor.
 	 * 
 	 * @param classFinder finder for runnable action objects
+     * @param securityHelper security helper for access checking
 	 */
-	public ActionExecutorValve(MVCClassFinder classFinder)
+	public ActionExecutorValve(MVCClassFinder classFinder, SecurityHelper securityHelper)
 	{
 		this.classFinder = classFinder;
+        this.securityHelper = securityHelper;
 	}
 	
     /**
@@ -76,7 +81,7 @@ public class ActionExecutorValve
             {
                 throw new ProcessingException("unavailable action "+actionName);
             }
-            SecurityHelper.checkSecurity(action, context);
+            securityHelper.checkSecurity(action, context);
             action.process(context);
         }
     }

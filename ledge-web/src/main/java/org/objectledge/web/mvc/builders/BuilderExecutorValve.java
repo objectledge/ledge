@@ -42,7 +42,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.19 2004-05-18 11:25:08 pablo Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.20 2004-08-20 10:03:43 zwierzem Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -51,6 +51,8 @@ public class BuilderExecutorValve
 	protected MVCClassFinder classFinder;
 	/** Finder for template objects. */
 	protected MVCTemplateFinder templateFinder;
+    /** SecurityHelper for access checking. */
+    protected SecurityHelper securityHelper;
 	/** maximum number of route calls per builder. */
 	protected int maxRouteCalls;  
 	/** maximum number of builder enclosures. */
@@ -58,24 +60,27 @@ public class BuilderExecutorValve
     /** the default builder. */
     protected Builder defaultBuilder;
     /** the default template. */
-    protected Template defaultTemplate;
-
+    protected Template defaultTemplate;    
+    
 	/**
 	 * Component constructor.
 	 * 
      * @param context used application context
      * @param classFinder finder for builder objects
      * @param templateFinder finder for template objects
+     * @param securityHelper security helper for access checking
      * @param maxRouteCalls maxmimal number of {@link Builder#route()} calls per {@link Builder}
      * @param maxEnclosures maxmimal number of {@link Builder} enclosures
      * 	(also {@link Builder#getEnclosingViewPair()} calls)
 	 */
-	public BuilderExecutorValve(Context context, MVCClassFinder classFinder, 
-        MVCTemplateFinder templateFinder, int maxRouteCalls, int maxEnclosures)
+	public BuilderExecutorValve(Context context, MVCClassFinder classFinder,
+        MVCTemplateFinder templateFinder, SecurityHelper securityHelper,
+        int maxRouteCalls, int maxEnclosures)
 	{
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
-		this.maxRouteCalls = maxRouteCalls;
+        this.securityHelper = securityHelper;
+        this.maxRouteCalls = maxRouteCalls;
 		this.maxEnclosures = maxEnclosures;
         // take them in through pico?        
         this.defaultBuilder = new DefaultBuilder(context);
@@ -125,7 +130,7 @@ public class BuilderExecutorValve
                         "exceeded");
                 }
                 // security check
-                SecurityHelper.checkSecurity(builder, context);
+                securityHelper.checkSecurity(builder, context);
                 // get the template
                 // let builder override the template
                 Template overrideTemplate = builder.getTemplate(); 

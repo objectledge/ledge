@@ -44,6 +44,7 @@
   <component class="org.objectledge.authentication.AuthenticationValve"/>
   <component class="org.objectledge.parameters.RequestParametersLoaderValve"/>
 
+  <component class="org.objectledge.web.mvc.security.SecurityHelper"/>
   <component class="org.objectledge.web.mvc.finders.NameSequenceFactory"/>
   <container key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
   <component class="org.objectledge.web.mvc.finders.MVCFinder">
@@ -54,6 +55,7 @@
   </component>
   <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
   <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
+    <component-parameter/>
     <component-parameter/>
     <component-parameter/>
     <component-parameter/>
