@@ -53,7 +53,7 @@ import java.util.StringTokenizer;
  * UndefinedVariableException is thrown.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IntrospectionVariables.java,v 1.1 2004-01-22 11:28:01 fil Exp $
+ * @version $Id: IntrospectionVariables.java,v 1.2 2004-01-23 13:36:03 fil Exp $
  */
 public class IntrospectionVariables
     implements Variables
@@ -101,7 +101,7 @@ public class IntrospectionVariables
                 return false;
             }
         }
-        return true;
+        return !st.hasMoreTokens();
     }
     
     /**
