@@ -39,7 +39,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * <code>java.io.RandomAccessFile</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalRandomAccessFile.java,v 1.2 2003-12-03 14:14:13 mover Exp $
+ * @version $Id: LocalRandomAccessFile.java,v 1.3 2003-12-04 14:08:18 fil Exp $
  */
 public class LocalRandomAccessFile implements RandomAccessFile
 {
@@ -50,8 +50,9 @@ public class LocalRandomAccessFile implements RandomAccessFile
      * Creates a new instance of LocalRandomAccess
      * 
      * @param file a java.io.File object.
-     * @param mode access mode {@see java.io.RandomAccessFile(java.io.File,String)}.
-     * @throws FileNotFoundException if the file does not exist. 
+     * @param mode access mode 
+     * @throws FileNotFoundException if the file does not exist.
+     * @see java.io.RandomAccessFile#RandomAccessFile(File,String) 
      */
     public LocalRandomAccessFile(File file, String mode)
         throws FileNotFoundException
