@@ -64,7 +64,7 @@ import org.objectledge.web.WebConfigurator;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.8 2004-07-02 11:49:46 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.9 2004-07-02 14:33:17 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -577,10 +577,10 @@ public class LinkTool
         try
         {
             // prepare server part if needed
-            String serverPart = buildServerPart(sb);
+            sb.setLength(0);
+            appendServerPart(sb);
 
             // prepare address part
-            sb.setLength(0);
             sb.append(httpContext.getRequest().getContextPath());
 
             if (contentLink)
@@ -592,9 +592,7 @@ public class LinkTool
                 sb.append(httpContext.getRequest().getServletPath());
 
                 String[] keys = parameters.getParameterNames();
-
                 appendPathInfo(sb, keys);
-
                 appendQueryString(sb, keys);
             }
             
@@ -603,22 +601,13 @@ public class LinkTool
                 sb.append('#').append(fragment);
             }
             
-            String addressPart = sb.toString();
+            // return link
+            String link = sb.toString(); 
             if (includeSession)
             {
-                addressPart = httpContext.getResponse().encodeURL(addressPart);
+                link = httpContext.getResponse().encodeURL(link);
             }
-            sb.setLength(0);
-            if (serverPart == null)
-            {
-                return addressPart;
-            }
-            else
-            {
-                sb.append(serverPart);
-                sb.append(addressPart);
-                return sb.toString();
-            }
+            return link;
         }
         ///CLOVER:OFF
         catch (UnsupportedEncodingException e)
@@ -628,12 +617,10 @@ public class LinkTool
         ///CLOVER:ON
     }
 
-    private String buildServerPart(StringBuffer sb)
+    private void appendServerPart(StringBuffer sb)
     {
-        String serverPart = null;
         if (showProtocolName)
         {
-            sb.setLength(0);
             sb.append(protocolName);
             sb.append("://");
             sb.append(httpContext.getRequest().getServerName());
@@ -644,9 +631,7 @@ public class LinkTool
             {
                 sb.append(':').append(port);
             }
-            serverPart = sb.toString();
         }
-        return serverPart;
     }
 
     private void appendContentLink(StringBuffer sb)
