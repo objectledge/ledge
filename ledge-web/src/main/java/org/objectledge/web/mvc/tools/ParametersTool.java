@@ -28,7 +28,10 @@
 
 package org.objectledge.web.mvc.tools;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.objectledge.parameters.Parameters;
 import org.objectledge.web.mvc.MVCContext;
@@ -37,7 +40,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Give a read only access to request parameters.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ParametersTool.java,v 1.3 2005-03-10 09:56:58 zwierzem Exp $
+ * @version $Id: ParametersTool.java,v 1.4 2005-04-06 14:27:14 zwierzem Exp $
  */
 public class ParametersTool
 {
@@ -108,6 +111,20 @@ public class ParametersTool
     public String[] getStrings(String name)
     {
         return parameters.getStrings(name);
+    }
+
+    /**
+     * Return all values of the parameter with specified name as a list of strings. 
+     * 
+     * @param name the name of the parameters.
+     * @return the list of the string values of the parameter.
+    */
+    public List<String> getStringsList(String name)
+    {
+        String[] a = parameters.getStrings(name);
+        List<String> l = new ArrayList(a.length);
+        l.addAll(Arrays.asList(a));
+        return l;
     }
 
     /**
