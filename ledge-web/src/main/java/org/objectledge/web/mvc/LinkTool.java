@@ -54,7 +54,7 @@ import org.objectledge.web.parameters.RequestParameters;
 public class LinkTool
 {
 	/** utf encoding */
-	public static final String UTF_8 = "UTF-8";
+	public static final String PARAMETER_ENCODING = "UTF-8";
 	
 	/** link tool factory */
 	private LinkToolFactory factory;
@@ -616,8 +616,8 @@ public class LinkTool
                     String[] values = parameters.getStrings(key);
                     for (int j = 0; j < values.length; j++)
                     {
-                        sb.append('/').append(URLEncoder.encode(key, UTF_8));
-                        sb.append('/').append(URLEncoder.encode(values[j], UTF_8));
+                        sb.append('/').append(URLEncoder.encode(key, PARAMETER_ENCODING));
+                        sb.append('/').append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
                     }
                 }
 
@@ -640,9 +640,9 @@ public class LinkTool
                         String[] values = parameters.getStrings(key);
                         for (int j = 0; j < values.length; j++)
                         {
-                            sb.append(URLEncoder.encode(key, UTF_8));
+                            sb.append(URLEncoder.encode(key, PARAMETER_ENCODING));
                             sb.append('=');
-                            sb.append(URLEncoder.encode(values[j], UTF_8));
+                            sb.append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
                             if (j < values.length - 1)
                             {
                                 sb.append(config.getQuerySeparator());
