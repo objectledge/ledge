@@ -43,10 +43,11 @@ import org.realityforge.cli.CLOptionDescriptor;
 import org.realityforge.cli.CLUtil;
 
 /**
+ * An entry point to ObjectLedge in command line environment.
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.2 2003-12-23 15:52:28 fil Exp $
+ * @version $Id: Main.java,v 1.3 2004-01-14 11:44:48 fil Exp $
  */
 public class Main
 {

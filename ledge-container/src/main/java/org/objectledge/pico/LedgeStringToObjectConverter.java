@@ -33,10 +33,11 @@ import org.picoextras.reflection.InvalidConversionException;
 import org.picoextras.reflection.StringToObjectConverter;
 
 /**
+ * Converts strings to a number of predefined Java classes.
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeStringToObjectConverter.java,v 1.1 2004-01-09 14:15:51 fil Exp $
+ * @version $Id: LedgeStringToObjectConverter.java,v 1.2 2004-01-14 11:44:47 fil Exp $
  */
 public class LedgeStringToObjectConverter extends StringToObjectConverter
 {
