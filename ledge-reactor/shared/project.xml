@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.17 2004-02-19 08:18:33 fil Exp $ -->
+<!-- $Id: project.xml,v 1.18 2004-02-19 08:19:45 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -13,7 +13,7 @@
   <!-- logo -->
   <inceptionYear>2003</inceptionYear>
   <package>org.objectledge</package>
-  <issueTrackingUrl>http://objectledge.org/jira</issueTrackingUrl>
+  <issueTrackingUrl>http://objectledge.org/jira/secure/BrowseProject.jspa?id=10010</issueTrackingUrl>
    
   <url>http://objectledge.org/</url>
   
