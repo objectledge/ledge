@@ -56,7 +56,9 @@ public class I18nTool
 	 * Default constructor.
 	 * 
 	 * @param i18n the i18n component.
-	 * @param prefix the prefix;
+	 * @param factory the factory.
+	 * @param locale the locale.
+	 * @param prefix the prefix.	 
 	 */
 	public I18nTool(I18n i18n, ContextToolFactory factory, Locale locale, String prefix)
 	{

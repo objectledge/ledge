@@ -88,11 +88,12 @@ public class XMLI18n extends AbstractI18n
 	 * @param config the configuration.
 	 * @param logger the logger.
 	 * @param fileSystem the file system.
-	 * @param localeDir the locale files directory.
+	 * @param xmlValidator the XML Validator.
 	 * @throws ParserConfigurationException if happen.
 	 * @throws SAXException if happen.
 	 */	
-	public XMLI18n(Configuration config, Logger logger, FileSystem fileSystem, XMLValidator xmlValidator)
+	public XMLI18n(Configuration config, Logger logger,
+					FileSystem fileSystem, XMLValidator xmlValidator)
 		throws ParserConfigurationException, SAXException 
 	{
 		super(config, logger);
