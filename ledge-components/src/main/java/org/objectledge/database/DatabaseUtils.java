@@ -29,6 +29,7 @@ package org.objectledge.database;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,7 +44,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.9 2004-02-12 10:26:50 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.10 2004-03-10 14:28:23 fil Exp $
  */
 public class DatabaseUtils
 {
@@ -178,13 +179,14 @@ public class DatabaseUtils
      * </p>
      * 
      * @param dataSource source of connections to the database.
-     * @param script the reader to read script from.
+     * @param reader the reader to read script from.
      * @throws IOException if the script cannot be read.
      * @throws SQLException if there is a problem executing the script. 
      */
-    public static void runScript(DataSource dataSource, LineNumberReader script)
+    public static void runScript(DataSource dataSource, Reader reader)
         throws IOException, SQLException
     {
+        LineNumberReader script = new LineNumberReader(reader);
         StringBuffer buff = new StringBuffer();
         int start;
         
