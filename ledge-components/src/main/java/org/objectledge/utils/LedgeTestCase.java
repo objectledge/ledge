@@ -42,6 +42,7 @@ import org.jmock.core.Constraint;
 import org.jmock.core.CoreMock;
 import org.jmock.core.DynamicMock;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
@@ -104,7 +105,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     {
 
         getFileSystem();
-        XMLValidator validator = new XMLValidator();
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         URL rngUrl = fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA);
         URL schemaUrl = fileSystem.getResource(schema);
         URL configUrl = fileSystem.getResource(configuration);

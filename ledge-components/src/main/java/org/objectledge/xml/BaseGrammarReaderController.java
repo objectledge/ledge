@@ -25,9 +25,7 @@
 //ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 //POSSIBILITY OF SUCH DAMAGE. 
 //
-package org.objectledge.datatype.xml;
-
-import org.jcontainer.dna.Logger;
+package org.objectledge.xml;
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -40,9 +38,9 @@ import com.sun.msv.reader.GrammarReaderController;
  * GrammarReaderController that logs all warnings and throws exceptions on errors.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LoggingGrammarReaderController.java,v 1.1 2004-05-12 09:54:03 zwierzem Exp $
+ * @version $Id: BaseGrammarReaderController.java,v 1.1 2004-06-01 11:13:11 zwierzem Exp $
  */
-public class LoggingGrammarReaderController implements GrammarReaderController
+public abstract class BaseGrammarReaderController implements GrammarReaderController
 {
 	/** Loaded grammar URI. */
 	private String grammarUri;
@@ -50,40 +48,33 @@ public class LoggingGrammarReaderController implements GrammarReaderController
     /** Entity resolution is delegated to this object, it can be <code>null</null>. */
     private EntityResolver entityResolver;
 
-    /** Used to log warnings. */
-    private Logger logger;
-
     /** Used to compose information of location of errors and warnings. */
     private StringBuffer locationMessage = new StringBuffer(64);
 
 	/**
-	 * Creates a logging grammar reader controller.
+	 * Creates a grammar reader controller.
 	 * 
 	 * @param grammarUri URI of a loaded grammar - provided for better warning description
-	 * @param logger logger used to log warnings
 	 * @param entityResolver optional entity resolver.
 	 */
-    public LoggingGrammarReaderController(
+    public BaseGrammarReaderController(
         String grammarUri,
-        Logger logger,
         EntityResolver entityResolver)
     {
     	this.grammarUri = grammarUri;
-        this.logger = logger;
         this.entityResolver = entityResolver;
     }
 
 	/**
-	 * Creates a logging grammar reader controller.
+	 * Creates a grammar reader controller without entity resolver.
 	 * 
 	 * @param grammarUri URI of a loaded grammar - provided for better warning description
-	 * @param logger logger used to log warnings
 	 */
-    public LoggingGrammarReaderController(String grammarUri, Logger logger)
+    public BaseGrammarReaderController(String grammarUri)
     {
-        this(grammarUri, logger, null);
+        this(grammarUri, null);
     }
-
+	
     //------------------------------------------------------------------------
     // EntityResolver methods
 
@@ -113,18 +104,17 @@ public class LoggingGrammarReaderController implements GrammarReaderController
     // GrammarReaderController methods
 
     /**
-     * Logs a grammar warning.
+     * Receives warning notification - does nothing.
      * 
      * @param loc warning location info
      * @param errorMessage warning message
      */
     public void warning(Locator[] loc, String errorMessage)
     {
-		logger.warn(getLocationMessage("warning", loc, errorMessage));
     }
 
     /**
-     * Throws a runtime exception on grammar error.
+     * Receives error notification - does nothing.
      * 
      * @param loc error location info
      * @param errorMessage error message
@@ -132,30 +122,20 @@ public class LoggingGrammarReaderController implements GrammarReaderController
      */
     public void error( Locator[] loc, String errorMessage, Exception nestedException )
     {
-        String message;
-        if(nestedException instanceof SAXException)
-        {
-            message = "SAXException occured";
-        }
-        else
-        {
-            message = errorMessage;
-        }
-
-        if(nestedException != null)
-        {
-            throw new RuntimeException(getLocationMessage("error", loc, message), nestedException);
-        }
-        else
-        {
-			throw new RuntimeException(getLocationMessage("error", loc, message));
-        }
     }
 
     //------------------------------------------------------------------------
     // Utility methods
 
-    private String getLocationMessage(String type, Locator[] loc, String errorMessage)
+	/**
+	 * Prepares a location message.
+	 * 
+	 * @param type message type - 'error' or 'warning'
+	 * @param loc locator of the error or warning
+	 * @param errorMessage a message
+	 * @return formatted location message
+	 */
+    protected String getLocationMessage(String type, Locator[] loc, String errorMessage)
     {
         // init buffer
         locationMessage.setLength(0);

@@ -48,6 +48,7 @@ import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.Startable;
 import org.xml.sax.InputSource;
@@ -56,7 +57,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.4 2004-02-17 15:48:46 fil Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.5 2004-06-01 11:14:09 zwierzem Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -269,7 +270,7 @@ public class XaPoolDataSourceTest extends TestCase
         URL configUrl = fs.getResource(configPath);
         URL schemaUrl = fs.getResource(schemaPath);
         
-        XMLValidator validator = new XMLValidator();
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         validator.validate(configUrl, schemaUrl);
         InputSource source = new InputSource(configUrl.toString());
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();

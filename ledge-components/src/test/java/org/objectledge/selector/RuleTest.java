@@ -38,6 +38,7 @@ import junit.framework.TestCase;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
@@ -46,7 +47,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RuleTest.java,v 1.1 2004-01-26 13:43:31 fil Exp $
+ * @version $Id: RuleTest.java,v 1.2 2004-06-01 11:13:57 zwierzem Exp $
  */
 public class RuleTest extends TestCase
 {
@@ -76,7 +77,7 @@ public class RuleTest extends TestCase
         {
             throw new Exception("fs config invalid, or files missing");
         }
-        XMLValidator validator = new XMLValidator();
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         try
         {
             validator.validate(configUrl, schemaUrl);

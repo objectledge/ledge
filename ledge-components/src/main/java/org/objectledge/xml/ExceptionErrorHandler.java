@@ -25,62 +25,41 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 //
-package org.objectledge.datatype.xml;
+package org.objectledge.xml;
 
-import java.net.URL;
-import java.util.Hashtable;
-import java.util.Map;
-
-import org.objectledge.datatype.AbstractDatatypeSet;
-import org.objectledge.datatype.Datatype;
-import org.objectledge.xml.XMLGrammarCache;
-
-import com.sun.msv.grammar.DataExp;
-import com.sun.msv.grammar.Grammar;
-import com.sun.msv.grammar.util.ExpressionWalker;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.SAXException;
 
 /**
+ * An <code>ErrorHandler</code> throwing the exception on any error.
+ * Warnings are ignored.
+ *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLSchemaDatatypeSet.java,v 1.2 2004-06-01 11:13:13 zwierzem Exp $
+ * @version $Id: ExceptionErrorHandler.java,v 1.1 2004-06-01 11:13:11 zwierzem Exp $
  */
-public class XMLSchemaDatatypeSet extends AbstractDatatypeSet
+public class ExceptionErrorHandler implements ErrorHandler
 {
-	private Map datatypes = new Hashtable();
-	
 	/**
-	 * Creates a XML schema backed datatype set.
-	 * 
-	 * @param grammarUri URI of the grammar containing datatype definitions for this datatype set
-	 * @param grammarCache grammar cache is used to load and cache the grammar
-	 * @throws Exception thrown on problems when loading the grammar
+	 * {@inheritDoc}
 	 */
-    public XMLSchemaDatatypeSet(URL grammarUri, XMLGrammarCache grammarCache)
-    	throws Exception
-    {
-        super(grammarUri.toString());
-		Grammar gramar = grammarCache.getGrammar(grammarUri);
-		gramar.getTopLevel().visit(new DatatypeFinder());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected Datatype getDatatypeInternal(String name)
-    {
-		return (Datatype) datatypes.get(name);
-    }
-
-	// implementation -----------------------------------------------------------------------------
+	public void warning(SAXParseException e) throws SAXException
+	{
+	}
 
 	/**
-	 * An expression walker which looks for datatype expressions. 
+	 * {@inheritDoc}
 	 */
-    private class DatatypeFinder extends ExpressionWalker
-    {
-		public void onData( DataExp exp )
-		{
-			Datatype datatype = new XMLSchemaDatatype(exp.getName().localName, exp.getType());
-			datatypes.put(datatype.getName(), datatype);
-		}
-    }
+	public void error(SAXParseException e) throws SAXException
+	{
+	    throw e;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void fatalError(SAXParseException e) throws SAXException
+	{
+	    throw e;
+	}
 }

@@ -27,13 +27,16 @@
 //
 package org.objectledge.datatype.xml;
 
+import java.net.URL;
+
 import org.objectledge.datatype.DatatypeSet;
 import org.objectledge.datatype.DatatypeSetFactory;
-import org.objectledge.xml.XMLGrammarCache;;
+import org.objectledge.xml.XMLGrammarCache;
+;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLSchemaDatatypeSetFactory.java,v 1.1 2004-05-12 09:54:03 zwierzem Exp $
+ * @version $Id: XMLSchemaDatatypeSetFactory.java,v 1.2 2004-06-01 11:13:13 zwierzem Exp $
  */
 public class XMLSchemaDatatypeSetFactory implements DatatypeSetFactory
 {
@@ -56,7 +59,7 @@ public class XMLSchemaDatatypeSetFactory implements DatatypeSetFactory
     {
         try
         {
-            return new XMLSchemaDatatypeSet(name, grammarCache);
+            return new XMLSchemaDatatypeSet(new URL(name), grammarCache);
         }
         catch (Exception e)
         {

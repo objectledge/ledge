@@ -30,6 +30,7 @@ package org.objectledge.i18n.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -51,8 +52,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import com.thaiopensource.validate.IncorrectSchemaException;
 
 /**
  * I18n Component XML implementation.
@@ -158,7 +157,7 @@ public class XMLI18n extends AbstractI18n
 	}
 
 	private void loadFile(String file, Map map, String prefix)
-		throws IOException, SAXException, IncorrectSchemaException
+		throws MalformedURLException, SAXException, ParserConfigurationException, IOException
 	{
         xmlValidator.validate(fileSystem.getResource(localeDir+file), 
             fileSystem.getResource(LOCALIZATION_SCHEMA));

@@ -39,6 +39,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
@@ -47,7 +48,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SelectorTest.java,v 1.2 2004-01-27 13:26:40 fil Exp $
+ * @version $Id: SelectorTest.java,v 1.3 2004-06-01 11:13:57 zwierzem Exp $
  */
 public class SelectorTest extends TestCase
 {
@@ -77,7 +78,7 @@ public class SelectorTest extends TestCase
         {
             throw new Exception("fs config invalid, or files missing");
         }
-        XMLValidator validator = new XMLValidator();
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         try
         {
             validator.validate(configUrl, schemaUrl);

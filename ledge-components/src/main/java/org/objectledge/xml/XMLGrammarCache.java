@@ -27,13 +27,13 @@
 //
 package org.objectledge.xml;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.jcontainer.dna.Logger;
-import org.objectledge.datatype.xml.LoggingGrammarReaderController;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -44,26 +44,22 @@ import com.sun.msv.grammar.Grammar;
  * Grammar cache - loads and caches MSV's Grammar objects.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLGrammarCache.java,v 1.1 2004-05-12 09:54:04 zwierzem Exp $
+ * @version $Id: XMLGrammarCache.java,v 1.2 2004-06-01 11:13:11 zwierzem Exp $
  */
 public class XMLGrammarCache
 {
-	private Logger logger;
 	private SAXParserFactory parserFactory;
 	private HashMap grammars = new HashMap();
 
 	/**
 	 * Creates a XML grammar cache.
 	 * 
-	 * @param logger used for login warnings and informative messages.
 	 * @throws ParserConfigurationException on errors with XML parser configuration
 	 * @throws SAXException on errors with XML parser configuration
 	 */
-    public XMLGrammarCache(Logger logger)
+    public XMLGrammarCache()
 		throws ParserConfigurationException, SAXException
     {
-		this.logger = logger;
-
 		this.parserFactory = SAXParserFactory.newInstance();
 		parserFactory.setNamespaceAware(true);
 		parserFactory.setValidating(false);
@@ -74,10 +70,12 @@ public class XMLGrammarCache
      * 
      * @param grammarURI URI of a loaded grammar
      * @return loaded grammar
-     * @throws Exception on errors while loading grammar
+     * @throws ParserConfigurationException if parser is badly configured.
+     * @throws IOException if the schema does not exist.
+     * @throws SAXException if the schema is malformed.
      */
-    public synchronized Grammar getGrammar(String grammarURI)
-	    throws Exception
+    public synchronized Grammar getGrammar(URL grammarURI)
+    	throws SAXException, ParserConfigurationException, IOException
     {
         if(grammars.containsKey(grammarURI))
         {
@@ -98,13 +96,13 @@ public class XMLGrammarCache
      * This method loads grammars.
      * 
      * @param grammarURI grammar to be loaded
-     * @throws Exception on errors while loading grammar
+     * @throws ParserConfigurationException if parser is badly configured.
+     * @throws IOException if the schema does not exist.
+     * @throws SAXException if the schema is malformed.
      */
-    private Grammar loadGrammar(String grammarURI)
-    	throws Exception
+    private Grammar loadGrammar(URL grammarURI)
+    throws SAXException, ParserConfigurationException, IOException
     {
-        logger.info("loading grammar '"+grammarURI+"'");
-
         Grammar grammar=null;
         final long stime = System.currentTimeMillis();
         // parse schema and other XML-based grammars
@@ -113,17 +111,16 @@ public class XMLGrammarCache
         org.xml.sax.EntityResolver er = null; 
 		// TODO Add objectledge input source creation ??
         grammar = com.sun.msv.reader.util.GrammarLoader.loadSchema(
-			new InputSource(grammarURI), 
-        	new LoggingGrammarReaderController(grammarURI, logger, er),
+			new InputSource(grammarURI.toString()),
+        	new ExceptionGrammarReaderController(grammarURI.toString(), er),
         	parserFactory);
 
         if(grammar == null)
         {
-            throw new Exception("Unknow reason for error when loading grammar '"+grammarURI+"'");
+            throw new SAXException("Unknow reason for error when loading grammar '"+grammarURI+"'");
         }
 
         long parsingTime = System.currentTimeMillis();
-        logger.info("grammar parsing time "+new Long(parsingTime-stime)+" '"+grammarURI+"'");
 
         return grammar;
     }

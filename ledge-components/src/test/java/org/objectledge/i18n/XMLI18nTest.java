@@ -46,6 +46,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.i18n.xml.XMLI18n;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -94,7 +95,7 @@ public class XMLI18nTest extends TestCase
             reader.parse(source);
             Configuration config = handler.getConfiguration();
             Logger logger = Logger.getLogger(XMLI18n.class);
-            XMLValidator validator = new XMLValidator();
+            XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             i18n = new XMLI18n(config, new Log4JLogger(logger), fs, validator);
         }
         catch (Exception e)

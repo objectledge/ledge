@@ -50,6 +50,7 @@ import org.objectledge.i18n.xml.XMLI18n;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.scheduler.cron.TokenMgrError;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
@@ -85,7 +86,7 @@ public class TransientSchedulerTest extends TestCase
         Context context = new Context();
         ThreadPool threadPool = new ThreadPool(null, context,config, logger);
         config = getConfig("config/org.objectledge.scheduler.TransientScheduler.xml");
-        XMLValidator validator = new XMLValidator();
+        XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         I18n i18n = new XMLI18n(config, logger, fs, validator);
         
         ScheduleFactory[] scheduleFactories = new ScheduleFactory[2];

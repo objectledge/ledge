@@ -30,76 +30,54 @@ package org.objectledge.xml;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.thaiopensource.util.PropertyMap;
-import com.thaiopensource.util.PropertyMapBuilder;
-import com.thaiopensource.validate.IncorrectSchemaException;
-import com.thaiopensource.validate.Schema;
-import com.thaiopensource.validate.SchemaReader;
-import com.thaiopensource.validate.ValidateProperty;
-import com.thaiopensource.validate.Validator;
-import com.thaiopensource.validate.auto.AutoSchemaReader;
-import com.thaiopensource.validate.rng.RngProperty;
-import com.thaiopensource.xml.sax.DraconianErrorHandler;
-import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
+import com.sun.msv.grammar.Grammar;
+import com.sun.msv.verifier.DocumentDeclaration;
+import com.sun.msv.verifier.Verifier;
+import com.sun.msv.verifier.regexp.REDocumentDeclaration;
 
 /**
- * Validates XML files against schemata using Jing library.
- * TODO: implement MSV based validator using XMLGrammarCache
+ * Validates XML files against schemata using MSV library.
  *
- * <p>The primary schema language used throughout ObjectLedge project is RelaxNG, but the Jing
+ * <p>The primary schema language used throughout ObjectLedge project is RelaxNG, but the MSV
  * library determines the schema languague using XML namespace of the top level element. At the
- * moment XML based schema languages supported by Jing and thus by XMLValidator are W3C XSD, 
- * Scheamtron and Namespace Routing Language.</p>
+ * moment XML based schema languages supported by MSV and thus by XMLValidator are RelaxNG,
+ * W3C XSD, and others.</p>
  * 
- *
- * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.9 2004-05-12 10:19:10 zwierzem Exp $
+ * @author <a href="rafal@caltha.pl">Rafal Krzewski</a>
+ * @author <a href="dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: XMLValidator.java,v 1.10 2004-06-01 11:13:11 zwierzem Exp $
  */
 public class XMLValidator
 {
-    private SchemaReader schemaReader;
-    
+	private XMLGrammarCache grammarCache;
+	
     private SAXParser saxParser;
-    
-    private PropertyMap properties;
+    private ExceptionErrorHandler errorHandler = new ExceptionErrorHandler();
 
-    private Map schemas = new HashMap();
-    
-    private Map validators = new HashMap();
-
-    /** Pathname of the relaxng schema.*/
-    public static final String RELAXNG_SCHEMA = "org/objectledge/xml/relaxng.rng";
+	/** Pathname of the relaxng schema.*/
+	public static final String RELAXNG_SCHEMA = "org/objectledge/xml/relaxng.rng";
 
     /**
      * Creates a new instance of the validator.
      * 
+     * @param grammarCache system grammar cache for retrieving grammars used for validation 
      * @throws ParserConfigurationException if the JAXP parser factory is misconfigured.
      * @throws SAXException if the JAXP parser factory is misconfigured.
      */
-    public XMLValidator() 
+    public XMLValidator(XMLGrammarCache grammarCache) 
         throws ParserConfigurationException, SAXException
     {
-        schemaReader = new AutoSchemaReader();
-        PropertyMapBuilder propertyMapBuilder = new PropertyMapBuilder();
-        ErrorHandler eh = new DraconianErrorHandler();
-        ValidateProperty.ERROR_HANDLER.put(propertyMapBuilder, eh);
-        ValidateProperty.XML_READER_CREATOR.put(propertyMapBuilder, new Jaxp11XMLReaderCreator());
-        RngProperty.CHECK_ID_IDREF.add(propertyMapBuilder);
-        properties = propertyMapBuilder.toPropertyMap();
+		this.grammarCache = grammarCache;
+    	
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         parserFactory.setNamespaceAware(true);
         parserFactory.setValidating(false);
@@ -111,76 +89,35 @@ public class XMLValidator
      * 
      * @param fileUrl the URL of the file to be validated.
      * @param schemaUrl the URL of the schema to be used.
-     * @throws IOException if any of the files cannot be read.
-     * @throws SAXException if any of the files are malformed.
-     * @throws IncorrectSchemaException if the schema is invalid.
-     */
-    public void validate(URL fileUrl, URL schemaUrl)
-        throws IOException, SAXException, IncorrectSchemaException
-    {
-        Validator validator = null;
-        try
-        {
-            validator = getValidator(schemaUrl);
-            XMLReader reader = saxParser.getXMLReader();
-            InputSource source = new InputSource(fileUrl.toString());
-            reader.setContentHandler(validator.getContentHandler());
-            reader.setDTDHandler(validator.getDTDHandler());
-            reader.parse(source);
-        }
-        finally
-        {
-            if(validator != null)
-            {
-                releaseValidator(validator, schemaUrl);
-            }
-        }
-    }
-    
-    /**
-     * Returns a thread-exclusive validator instance.
-     * 
-     * @param schemaUrl the URL of the schema to be used.
-     * @return a thread-exclusive validator instance.
+     * @throws ParserConfigurationException if parser is badly configured.
      * @throws IOException if the schema does not exist.
      * @throws SAXException if the schema is malformed.
-     * @throws IncorrectSchemaException if the schema is invalid.
      */
-    public synchronized Validator getValidator(URL schemaUrl)
-        throws IOException, SAXException, IncorrectSchemaException
+    public void validate(URL fileUrl, URL schemaUrl)
+        throws SAXException, ParserConfigurationException, IOException
     {
-        Schema schema;
-        if(validators.containsKey(schemaUrl))
-        {
-            List list = (List)validators.get(schemaUrl);
-            if(!list.isEmpty())
-            {
-                return (Validator)list.remove(0);
-            }
-            else
-            {
-                schema = (Schema)schemas.get(schemaUrl);
-            }
-        }
-        else
-        {
-            schema = schemaReader.createSchema(new InputSource(schemaUrl.toString()), properties);
-            schemas.put(schemaUrl, schema);
-            validators.put(schemaUrl, new ArrayList());
-        }
-        return schema.createValidator(properties);        
+        Verifier verifier = getVerifier(schemaUrl);
+        XMLReader reader = saxParser.getXMLReader();
+        InputSource source = new InputSource(fileUrl.toString());
+		reader.setContentHandler(verifier);
+		reader.setDTDHandler(verifier);
+        reader.parse(source);
     }
     
     /**
-     * Returns a validator to the pool.
+     * Returns a thread-exclusive verifier instance.
      * 
-     * @param validator the validator instance.
-     * @param schemaUrl the path of the assoicated schema.
+     * @param schemaUrl the URL of the schema to be used.
+     * @return a thread-exclusive verifier instance.
+     * @throws ParserConfigurationException if parser is badly configured.
+     * @throws IOException if the schema does not exist.
+     * @throws SAXException if the schema is malformed.
      */
-    public synchronized void releaseValidator(Validator validator, URL schemaUrl)
+    public Verifier getVerifier(URL schemaUrl)
+        throws SAXException, ParserConfigurationException, IOException
     {
-        validator.reset();
-        List list = (List)validators.get(schemaUrl);
-        list.add(validator);
+		Grammar grammar = grammarCache.getGrammar(schemaUrl);
+        DocumentDeclaration documentDeclaration = new REDocumentDeclaration(grammar); 
+        return new Verifier(documentDeclaration, errorHandler); 
     }
 }
