@@ -96,7 +96,7 @@ public class XMLI18nTest extends TestCase
             Configuration config = handler.getConfiguration();
             Logger logger = Logger.getLogger(XMLI18n.class);
             XMLValidator validator = new XMLValidator(fs);
-            i18n = new XMLI18n(config, new Log4JLogger(logger), fs, validator, "locale/");
+            i18n = new XMLI18n(config, new Log4JLogger(logger), fs, validator);
         }
         catch (Exception e)
         {

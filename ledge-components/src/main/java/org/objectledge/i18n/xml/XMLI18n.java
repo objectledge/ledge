@@ -92,13 +92,17 @@ public class XMLI18n extends I18nBase
 	 * @throws ParserConfigurationException if happen.
 	 * @throws SAXException if happen.
 	 */	
-	public XMLI18n(Configuration config, Logger logger, FileSystem fileSystem, XMLValidator xmlValidator, String localeDir)
+	public XMLI18n(Configuration config, Logger logger, FileSystem fileSystem, XMLValidator xmlValidator)
 		throws ParserConfigurationException, SAXException 
 	{
 		super(config, logger);
 		System.out.println("XMLI18n init called");
 		this.fileSystem = fileSystem;
-		this.localeDir = localeDir;
+		localeDir = config.getChild("localization-directory").getValue("/locale");
+        if(!localeDir.endsWith("/"))
+        {
+            localeDir = localeDir+"/";
+        }
         this.xmlValidator = xmlValidator;
 		localeFilePattern = Pattern.
 			compile("[a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.xml");

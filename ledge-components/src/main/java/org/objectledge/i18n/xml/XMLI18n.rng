@@ -33,7 +33,14 @@
   <include href="../impl/I18nBase.rng">
     <start>
 	  <element name="config">
-        <ref name="baseConfig"/>
+	    <interleave>
+	      <optional>
+  	        <element name="localization-directory">
+	          <text/>
+	        </element>
+	      </optional>
+          <ref name="baseConfig"/>
+        </interleave>
       </element>
     </start>
   </include>

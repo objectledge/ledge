@@ -30,14 +30,7 @@
     <component class="org.objectledge.templating.TemplatingContextLoader"/>
     <component class="org.objectledge.templating.ContextToolPopulator"/>
     
-    <component class-key="org.objectledge.i18n.I18n"
-		       class="org.objectledge.i18n.xml.XMLI18n">
-      <component-parameter class-key="org.jcontainer.dna.Configuration"/>
-      <component-parameter class-key="org.jcontainer.dna.Logger"/>
-      <component-parameter class-key="org.objectledge.filesystem.FileSystem"/>		       
-      <component-parameter class-key="org.objectledge.xml.XMLValidator"/>		       
-      <constant-parameter value="locale/"/>
-    </component>
+    <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
     <component class="org.objectledge.i18n.impl.WebI18nToolFactory"/>
     <component class="org.objectledge.templating.ContextTools">
 	  <sequence-parameter class="[Lorg.objectledge.templating.ContextToolFactory;">
