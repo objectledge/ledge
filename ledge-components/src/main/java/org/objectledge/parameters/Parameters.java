@@ -5,7 +5,7 @@ package org.objectledge.parameters;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.2 2003-11-27 12:31:22 pablo Exp $
+ * @version $Id: Parameters.java,v 1.3 2003-11-27 14:57:58 pablo Exp $
  */
 public interface Parameters
 {
@@ -27,10 +27,10 @@ public interface Parameters
     public String get(String name, String defaultValue);
 
     /**
-     * Return all the parameters with specified name as an array. 
+     * Return all values of the parameter with specified name as an array. 
      * 
      * @param name the name of the parameters.
-     * @return the array of the string values of the parameters.
+     * @return the array of the string values of the parameter.
     */
     public String[] getStrings(String name);
 
@@ -51,12 +51,20 @@ public interface Parameters
      */
     public boolean getBoolean(String name, boolean defaultValue);
 
+	/**
+	 * Return all values of the parameter with specified name as an array. 
+	 * 
+	 * @param name the name of the parameters.
+	 * @return the array of the boolean values of the parameter.
+	*/
+	public boolean[] getBooleans(String name);
+
     /**
      * Return the parameter with specified name. 
      * 
      * @param name the name of the parameter.
      * @return the float value of the parameter.
-     * @throws NumberFormatException.
+     * @throws NumberFormatException if parameter is not a number.
      */
     public float getFloat(String name) throws NumberFormatException;
 
@@ -69,12 +77,20 @@ public interface Parameters
      */
     public float getFloat(String name, float defaultValue);
 
+	/**
+	 * Return all values of the parameter with specified name as an array. 
+	 * 
+	 * @param name the name of the parameters.
+	 * @return the array of the float values of the parameter.
+	*/
+	public float[] getFloats(String name);
+
     /**
      * Return the parameter with specified name. 
      * 
      * @param name the name of the parameter.
      * @return the integer value of the parameter.
-     * @throws NumberFormatException.
+     * @throws NumberFormatException if parameter is not a number.
      */
     public int getInt(String name) throws NumberFormatException;
 
@@ -87,12 +103,20 @@ public interface Parameters
      */
     public int getInt(String name, int defaultValue);
 
+	/**
+	 * Return all values of the parameter with specified name as an array. 
+	 * 
+	 * @param name the name of the parameters.
+	 * @return the array of the integer values of the parameter.
+	*/
+	public int[] getInts(String name);
+
     /**
      * Return the parameter with specified name. 
      * 
      * @param name the name of the parameter.
      * @return the integer value of the parameter.
-     * @throws NumberFormatException.
+     * @throws NumberFormatException if parameter is not a number.
      */
     public long getLong(String name) throws NumberFormatException;
 
@@ -101,7 +125,7 @@ public interface Parameters
 	 * 
 	 * @param name the name of the parameter.
 	 * @return the array of parameter values.
-	 * @throws NumberFormatException.
+	 * @throws NumberFormatException if parameter is not a number.
 	 */
 	public long[] getLongs(String name) throws NumberFormatException;
 
@@ -148,7 +172,31 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void remove(String name, String value);
-
+    
+	/**
+	 * Remove all parameters with a specified name and value.
+	 *
+	 * @param name the parameter name.
+	 * @param value the parameter value.
+	 */
+	public void remove(String name, float value);
+    
+	/**
+	 * Remove all parameters with a specified name and value.
+	 *
+	 * @param name the parameter name.
+	 * @param value the parameter value.
+	 */
+	public void remove(String name, int value);
+        
+	/**
+	 * Remove all parameters with a specified name and value.
+	 *
+	 * @param name the parameter name.
+	 * @param value the parameter value.
+	 */
+	public void remove(String name, long value);
+    
     /**
      * Set the parameter.
      * 
@@ -156,7 +204,15 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void set(String name, String value);
-
+    
+	/**
+	 * Set the parameter.
+	 * 
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void set(String name, String[] values);
+    
     /**
      * Set the parameter.
      * 
@@ -164,6 +220,14 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void set(String name, boolean value);
+
+	/**
+	 * Set the parameter.
+	 * 
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void set(String name, boolean[] values);
 
     /**
      * Set the parameter.
@@ -173,6 +237,14 @@ public interface Parameters
      */
     public void set(String name, float value);
 
+	/**
+	 * Set the parameter.
+	 * 
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void set(String name, float[] values);
+
     /**
      * Set the parameter.
      * 
@@ -181,6 +253,14 @@ public interface Parameters
      */
     public void set(String name, int value);
 
+	/**
+	 * Set the parameter.
+	 * 
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void set(String name, int[] values);
+
     /**
      * Set the parameter.
      * 
@@ -188,6 +268,14 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void set(String name, long value);
+    
+	/**
+	 * Set the parameter.
+	 * 
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void set(String name, long[] values);
 
     /**
      * Add the parameter.
@@ -201,7 +289,7 @@ public interface Parameters
 	 * Add the parameter.
 	 *
 	 * @param name the parameter name.
-	 * @param value the parameter values.
+	 * @param values the parameter values.
 	 */
 	public void add(String name, String[] values);
 
@@ -212,6 +300,14 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void add(String name, boolean value);
+    
+	/**
+	 * Add the parameter.
+	 *
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void add(String name, boolean[] values);
 
     /**
      * Add the parameter.
@@ -220,6 +316,14 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void add(String name, float value);
+    
+	/**
+	 * Add the parameter.
+	 *
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void add(String name, float[] values);
 
     /**
      * Add the parameter.
@@ -228,6 +332,14 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void add(String name, int value);
+    
+	/**
+	 * Add the parameter.
+	 *
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void add(String name, int[] values);
 
     /**
      * Add the parameter.
@@ -237,6 +349,14 @@ public interface Parameters
      */
     public void add(String name, long value);
 
+	/**
+	 * Add the parameter.
+	 *
+	 * @param name the parameter name.
+	 * @param values the parameter values.
+	 */
+	public void add(String name, long[] values);
+	
     /**
      * Adds all parameters from another container to this container.
      *
@@ -247,7 +367,7 @@ public interface Parameters
      * @param parameters the parameters object.
      * @param overwrite the overwrite switch.
      */
-    public void add(Parameters parameters, boolean override);
+    public void add(Parameters parameters, boolean overwrite);
 
     /**
      * Returns the contained properties as a parsable String.
