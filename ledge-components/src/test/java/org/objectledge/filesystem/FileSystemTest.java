@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.5 2004-01-29 10:14:55 pablo Exp $
+ * @version $Id: FileSystemTest.java,v 1.6 2004-03-17 12:47:26 pablo Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -145,7 +145,38 @@ public class FileSystemTest extends TestCase
     public void testGetRandomAccess()
        throws Exception
     {
-        assertNotNull(fs.getRandomAccess("filex","r"));
+        RandomAccessFile file = fs.getRandomAccess("filex","rw");
+        assertNotNull(file);
+        file.write("abcd".getBytes(), 0, 4);
+        byte[] buff = new byte[4];
+        
+        
+        long ptr = file.getFilePointer();
+        assertTrue(4L == ptr);
+        file.seek(0);
+        ptr = file.getFilePointer();
+        assertTrue(0L == ptr);
+        assertTrue(4L == file.length());
+        int r = file.read();
+        ptr = file.getFilePointer();
+        assertTrue(1L == ptr);
+        int rb = file.read(buff);
+        ptr = file.getFilePointer();
+        assertTrue(4L == ptr);
+        assertEquals(3, rb);
+        file.seek(0);
+        int roff = file.read(buff, 0, 4);
+        assertEquals(4, roff);
+        file.seek(0);
+        file.skipBytes(2);
+        ptr = file.getFilePointer();
+        assertTrue(2L == ptr);
+        file.write("efg".getBytes());
+        file.write('h');
+        assertTrue(6L == file.length());
+        file.setLength(4);
+        assertTrue(4L == file.length());
+        file.close();
     }
     
     public void testIsFile()
