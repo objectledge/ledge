@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.2 2003-11-25 13:09:52 fil Exp $ -->
+<!-- $Id: project.xml,v 1.3 2003-11-28 11:15:28 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -24,6 +24,12 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer-1.0</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>objectledge</groupId>
+      <artifactId>ledge-components</artifactId>
       <version>SNAPSHOT</version>
     </dependency>
   </dependencies>
