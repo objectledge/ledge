@@ -6,7 +6,7 @@
   <name>Ledge tutorial webapp</name>
   <id>ledge-tutorial-webapp</id>
   <groupId>ledge</groupId>
-  <currentVersion>0.1-dev</currentVersion>
+  <currentVersion>0.3-dev</currentVersion>
   
   <dependencies>
     <dependency>
