@@ -12,7 +12,7 @@
  * @param ds_current java.util.Date object with date to select initially.
  * @param ds_enabled java.lang.Boolean tells if this date selector should be enabled
  *#
-#macro(date_selector_base $name $ds_current $ds_enabled)
+#macro(date_selector_base $name $ds_current $ds_enabled $minutes)
   $pageTool.addScriptLink('script/DateSelector.js')
   #set($monthNames = $i18n.usePrefix('calendar.ofmonths'))
   #set($ds_current_fields = $format_date.getFields($ds_current))
@@ -37,7 +37,7 @@
   #end
   </select>
   <select name="${name}_minute" onChange="dateElementChanged(this)"#if(!$ds_enabled) disabled#end>
-  #foreach($minute in [0..59])
+  #foreach($minute in $minutes)
     <option value="$minute" #if ($minute.intValue() == $ds_current_fields.get(4))selected #end>$minute</option>  
   #end
   </select>
@@ -56,14 +56,14 @@
  *        time format
  * @param current timestamp object with date to select initially.
  *#
-#macro(date_selector $name $current)
+#macro(date_selector $name $current $minutes)
   #set($ds_enabled = true)
   #if($current)
     #set($ds_current = $format_date.getDate($current))
   #else
     #set($ds_current = $format_date.now())
   #end
-  #date_selector_base($name $ds_current $ds_enabled)
+  #date_selector_base($name $ds_current $ds_enabled $minutes)
 #end
 
 #**
@@ -75,7 +75,7 @@
  * @param current java.util.Date object with date to select initially.
  * @param disalbed_label the label for the 'no date' option.
  *#
-#macro(date_selector_optional $name $current $disabled_label)
+#macro(date_selector_optional $name $current $disabled_label $minutes)
   <input type="radio" name="${name}_enabled" value="false" id="${name}_enabled_false"#if(!$current) checked#end onChange="dateEnabled(this)">
   <label for="${name}_enabled_false">$disabled_label</label>
   <input type="radio" name="${name}_enabled" value="true"#if($current) checked#end onChange="dateEnabled(this)">
@@ -86,5 +86,5 @@
   	#set($ds_enabled = false)
   	#set($ds_current = $format_date.now())
   #end
-  #date_selector_base($name $ds_current $ds_enabled)
+  #date_selector_base($name $ds_current $ds_enabled $minutes)
 #end
