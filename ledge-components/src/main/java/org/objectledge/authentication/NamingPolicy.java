@@ -44,7 +44,7 @@ import org.objectledge.parameters.Parameters;
  * Specifies a policy of naming accounts in the system.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NamingPolicy.java,v 1.2 2004-02-24 15:50:51 pablo Exp $
+ * @version $Id: NamingPolicy.java,v 1.3 2004-08-05 10:19:25 pablo Exp $
  */
 public class NamingPolicy
 {
@@ -174,7 +174,7 @@ public class NamingPolicy
      * Represents syntax of a compound disthinguished name element. 
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: NamingPolicy.java,v 1.2 2004-02-24 15:50:51 pablo Exp $
+     * @version $Id: NamingPolicy.java,v 1.3 2004-08-05 10:19:25 pablo Exp $
      */    
     public static class Token
     {
@@ -307,7 +307,6 @@ public class NamingPolicy
         public String get(String image, String propertyName)
             throws IllegalArgumentException, InvalidNameException
         {
-            System.out.println("TESTUJE: "+image+ " : "+propertyName);
             int lastPos = 0;
             int nextPos = image.length();
             for(int i=0; i<strings.length+properties.length; i++)
