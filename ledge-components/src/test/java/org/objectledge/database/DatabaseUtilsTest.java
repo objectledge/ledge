@@ -43,7 +43,7 @@ import org.objectledge.filesystem.FileSystem;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtilsTest.java,v 1.5 2004-03-11 12:55:27 fil Exp $
+ * @version $Id: DatabaseUtilsTest.java,v 1.6 2004-10-25 14:54:54 rafal Exp $
  */
 public class DatabaseUtilsTest extends TestCase
 {    
@@ -125,15 +125,17 @@ public class DatabaseUtilsTest extends TestCase
         throws Exception
     {
         // Shalom!
-        assertEquals("!\u05DD\u05D5\u05DC\u05E9",
-            DatabaseUtils.unescapeSqlString("!\\u05DD\\u05D5\\u05DC\\u05E9"));
+        assertEquals("!\u05E9\u05DC\u05D5\u05DD",
+            DatabaseUtils.unescapeSqlString("!\u05E9\u05DC\u05D5\u05DD"));
     }
 
     public void testEscapeSqlString()
         throws Exception
     {
-        assertEquals("foo\\'s home directory is c:\\\\users\\\\foo",
-            DatabaseUtils.escapeSqlString("foo's home directory is c:\\users\\foo"));
+        assertEquals("\u05E2\u05D6\u05E8\u05D0\\'s home directory is "+
+            "c:\\\\users\\\\\u05E2\u05D6\u05E8\u05D0",
+            DatabaseUtils.escapeSqlString("\u05E2\u05D6\u05E8\u05D0's home directory is "+
+                "c:\\users\\\u05E2\u05D6\u05E8\u05D0"));
     }
 
     public void testRunScript()

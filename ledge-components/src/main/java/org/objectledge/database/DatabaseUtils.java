@@ -45,7 +45,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.13 2004-03-11 15:19:32 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.14 2004-10-25 14:54:55 rafal Exp $
  */
 public class DatabaseUtils
 {
@@ -153,7 +153,7 @@ public class DatabaseUtils
      */
     public static String unescapeSqlString(String input)
     {
-        return StringUtils.expandUnicodeEscapes(input);
+        return input;
     }
     
     /**
@@ -164,7 +164,7 @@ public class DatabaseUtils
      */
     public static String escapeSqlString(String input)
     {
-        return StringUtils.backslashEscape(StringUtils.escapeNonASCIICharacters(input), "'\\");
+        return StringUtils.backslashEscape(input, "'\\");
     }
     
     /**
