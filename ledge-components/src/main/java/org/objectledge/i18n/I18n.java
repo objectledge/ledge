@@ -28,6 +28,7 @@
 
 package org.objectledge.i18n;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -35,7 +36,7 @@ import java.util.Locale;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18n.java,v 1.9 2004-10-08 09:32:57 zwierzem Exp $
+ * @version $Id: I18n.java,v 1.10 2004-12-20 16:08:05 pablo Exp $
  */
 public interface I18n
 {
@@ -107,6 +108,16 @@ public interface I18n
 	 * @return the the output string.
 	 */
 	public String get(Locale locale, String key, String[] values);
+
+    /**
+	 * Get the string and replace $[1..n] variables with given values.
+	 *
+	 * @param locale the locale.
+	 * @param key the key.
+	 * @param values the values use for substitution.
+	 * @return the the output string.
+	 */
+	public String get(Locale locale, String key, List values);	
 	
 	/**
 	 * Reload the localization.

@@ -28,6 +28,7 @@
 
 package org.objectledge.i18n;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.objectledge.utils.StringUtils;
@@ -37,7 +38,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.9 2004-08-20 08:03:45 zwierzem Exp $
+ * @version $Id: I18nTool.java,v 1.10 2004-12-20 16:08:05 pablo Exp $
  */
 public class I18nTool
 {
@@ -146,7 +147,19 @@ public class I18nTool
 	{
 		return i18n.get(locale, getKey(key), values);
 	}
-    
+
+    /**
+	 * Get the string and replace $[1..n] variables with given values.
+	 *
+	 * @param key the key.
+	 * @param values the values use for substitution.
+	 * @return the output string.
+	 */
+	public String get(String key, List values)
+	{
+		return i18n.get(locale, key, values);
+	}	
+	
     // implementation ------------------------------------------------------------------------------
 
     /**
