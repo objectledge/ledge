@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.7 2004-02-10 10:06:46 fil Exp $
+ * @version $Id: Transaction.java,v 1.8 2004-03-12 11:45:18 fil Exp $
  */
 public abstract class Transaction
 {
@@ -190,7 +190,10 @@ public abstract class Transaction
         {
             try
             {
-                getUserTransaction().setRollbackOnly();
+                if(getUserTransaction().getStatus() == Status.STATUS_ACTIVE)
+                {
+                    getUserTransaction().setRollbackOnly();
+                }
             }
             catch(Exception e)
             {
