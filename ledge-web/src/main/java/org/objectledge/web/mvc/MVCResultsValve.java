@@ -31,8 +31,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.utils.StackTrace;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 
@@ -40,7 +42,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.6 2005-02-10 17:49:04 rafal Exp $
+ * @version $Id: MVCResultsValve.java,v 1.7 2005-02-14 18:12:24 pablo Exp $
  */
 public class MVCResultsValve 
     implements Valve
@@ -64,7 +66,17 @@ public class MVCResultsValve
 				httpContext.setContentType("text/html");
 				if(result == null)
 				{
-					result = "no processing result was set in mvcContext " +							 "- check the pipeline configuration";
+                    Exception e = (Exception)context.
+                        getAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION);
+                    if(e != null)
+                    {
+                        result = new StackTrace(e).toString();
+                    }
+                    else
+                    {
+                        result = "no processing result was set in mvcContext "
+                                 +"- check the pipeline configuration";
+                    }
 				}
 				httpContext.getResponse().setContentLength(
 			       	StringUtils.getByteCount(result, httpContext.getEncoding()));

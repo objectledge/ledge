@@ -36,7 +36,7 @@ import org.objectledge.context.Context;
  * try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ErrorHandlingPipeline.java,v 1.3 2004-12-23 07:16:53 rafal Exp $
+ * @version $Id: ErrorHandlingPipeline.java,v 1.4 2005-02-14 18:12:36 pablo Exp $
  */
 public class ErrorHandlingPipeline
     implements Valve
@@ -118,7 +118,10 @@ public class ErrorHandlingPipeline
             ///CLOVER:ON
             catch(Throwable ee)
             {
-                logger.error("Exception in catch section", ee);
+                context.setAttribute(PIPELINE_EXCEPTION, 
+                    new ProcessingException("exception occured while handling the exception: "+
+                        e.toString()+" see logs for detailed message", ee));
+                logger.error("Exception in catch section", e);
             }
         }
         finally
