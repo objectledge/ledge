@@ -32,13 +32,14 @@ import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 
 /**
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.5 2004-06-29 13:40:13 zwierzem Exp $
+ * @version $Id: MVCInitializerValve.java,v 1.6 2004-09-14 11:41:10 rafal Exp $
  */
 public class MVCInitializerValve 
     implements Valve
@@ -68,5 +69,8 @@ public class MVCInitializerValve
         mvcContext.setAction(requestParamters.get(webConfigurator.getActionToken(), null));
         mvcContext.setView(requestParamters.get(webConfigurator.getViewToken(), null));
     	context.setAttribute(MVCContext.class, mvcContext);
+    	
+    	HttpContext httpContext = HttpContext.getHttpContext(context);
+    	httpContext.setContentType(webConfigurator.getDefaultContentType());
     }
 }
