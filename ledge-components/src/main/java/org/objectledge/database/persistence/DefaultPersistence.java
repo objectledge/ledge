@@ -44,7 +44,7 @@ import org.objectledge.database.DatabaseUtils;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DefaultPersistence.java,v 1.1 2004-02-24 09:13:44 fil Exp $
+ * @version $Id: DefaultPersistence.java,v 1.2 2004-02-24 11:37:48 fil Exp $
  */
 public class DefaultPersistence implements Persistence
 {
@@ -83,13 +83,13 @@ public class DefaultPersistence implements Persistence
         {
             conn = database.getConnection();
             Persistent obj = factory.newInstance();
-            PreparedStatement statement = InputRecord.getSelectStatement(id, obj, conn);
+            PreparedStatement statement = DefaultInputRecord.getSelectStatement(id, obj, conn);
             ResultSet rs = statement.executeQuery();
             if (!rs.next())
             {
                 return null;
             }
-            InputRecord record = new InputRecord(rs);
+            InputRecord record = new DefaultInputRecord(rs);
             obj.setData(record);
             obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
             return obj;
@@ -123,9 +123,9 @@ public class DefaultPersistence implements Persistence
         {
             conn = database.getConnection();
             Persistent obj = factory.newInstance();
-            PreparedStatement statement = InputRecord.getSelectStatement(where, obj, conn);
+            PreparedStatement statement = DefaultInputRecord.getSelectStatement(where, obj, conn);
             ResultSet rs = statement.executeQuery();
-            InputRecord record = new InputRecord(rs);
+            InputRecord record = new DefaultInputRecord(rs);
             ArrayList list = new ArrayList();
             while (rs.next())
             {
@@ -156,7 +156,7 @@ public class DefaultPersistence implements Persistence
     {
         synchronized (object)
         {
-            OutputRecord record = new OutputRecord(object);
+            OutputRecord record = new DefaultOutputRecord(object);
             String table = object.getTable();
             String[] keys = object.getKeyColumns();
             object.getData(record);
@@ -219,13 +219,13 @@ public class DefaultPersistence implements Persistence
             try
             {
                 conn = database.getConnection();
-                PreparedStatement statement = InputRecord.getSelectStatements(object, conn);
+                PreparedStatement statement = DefaultInputRecord.getSelectStatements(object, conn);
                 ResultSet rs = statement.executeQuery();
                 if (!rs.next())
                 {
                     throw new PersistenceException("saved state was lost");
                 }
-                InputRecord irecord = new InputRecord(rs);
+                InputRecord irecord = new DefaultInputRecord(rs);
                 object.setData(irecord);
             }
             catch (Exception e)
@@ -257,7 +257,7 @@ public class DefaultPersistence implements Persistence
             try
             {
                 conn = database.getConnection();
-                OutputRecord record = new OutputRecord(object);
+                OutputRecord record = new DefaultOutputRecord(object);
                 object.getData(record);
                 PreparedStatement statement = record.getDeleteStatement(conn); 
                 statement.execute();
