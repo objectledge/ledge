@@ -28,10 +28,36 @@
 --> 
 
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
-  <include href="I18nBaseConfig.rng"/>
   <start>
 	<element name="config">
 	  <ref name="baseConfig"/>
 	</element>
   </start>
+  <define name="baseConfig">
+    <optional>
+      <element name="context_tool_key">
+        <text/>
+      </element>
+    </optional>    
+    <optional>  
+      <element name="undefined_value">  
+        <text/>
+      </element>
+    </optional>    
+    <optional>
+      <element name="default_locale">  
+        <text/>
+      </element>
+    </optional>    
+    <optional>
+      <element name="use_default_locale">  
+        <text/>
+      </element>
+    </optional>
+    <optional>  
+      <element name="use_key_if_undefined">  
+        <text/>
+      </element>
+    </optional>
+  </define>  
 </grammar>
