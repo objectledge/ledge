@@ -39,6 +39,7 @@ import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.defaults.CachingComponentAdapter;
+import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 import org.picocontainer.extras.DecoratingComponentAdapter;
@@ -48,7 +49,7 @@ import org.picocontainer.extras.ImplementationHidingComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.7 2004-01-16 09:07:13 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.8 2004-01-16 10:23:14 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -57,12 +58,10 @@ public class LoggerFactory
 
     /**
      * Creates a new instance of Factory and installs apropriate component adapter.
-     * 
-     * @param loggerContainer the container to store loggers in.
      */
-    public LoggerFactory(MutablePicoContainer loggerContainer)
+    public LoggerFactory()
     {
-        this.loggerContainer = loggerContainer;
+        this.loggerContainer = new DefaultPicoContainer();
     }
 
     /**
@@ -113,10 +112,7 @@ public class LoggerFactory
     /**
      * {@inheritDoc}
      */
-    public ComponentAdapter getCustomizedAdapter(
-        MutablePicoContainer dependenciesContainer,
-        Object componentKey,
-        Class componentImplementaion)
+    public ComponentAdapter getCustomizedAdapter(Object componentKey, Class componentImplementaion)
         throws PicoInitializationException, PicoIntrospectionException, UnsupportedKeyTypeException
     {
         String marker = getComponentMarker(componentKey);

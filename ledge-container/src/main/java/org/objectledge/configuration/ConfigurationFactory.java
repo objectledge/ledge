@@ -42,7 +42,6 @@ import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.UnsupportedKeyTypeException;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.ComponentAdapter;
-import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
@@ -60,7 +59,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.19 2004-01-16 08:53:16 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.20 2004-01-16 10:23:14 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -181,8 +180,7 @@ public class ConfigurationFactory
     /**
      * {@inheritDoc}
      */
-    public ComponentAdapter getCustomizedAdapter(MutablePicoContainer dependenciesContainer, 
-        Object componentKey, Class componentImplementation)
+    public ComponentAdapter getCustomizedAdapter(Object componentKey, Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException
     {
         return new InstanceComponentAdapter(getComponentName(componentKey), 
