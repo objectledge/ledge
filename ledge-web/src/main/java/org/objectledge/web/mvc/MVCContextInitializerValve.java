@@ -35,9 +35,9 @@ import org.objectledge.web.WebConfigurator;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCContextInitializator.java,v 1.5 2004-01-14 14:13:09 fil Exp $
+ * @version $Id: MVCContextInitializerValve.java,v 1.1 2004-01-15 09:24:35 fil Exp $
  */
-public class MVCContextInitializator implements Runnable
+public class MVCContextInitializerValve implements Runnable
 {
 	/** the context */
 	private Context context;
@@ -51,7 +51,7 @@ public class MVCContextInitializator implements Runnable
 	 * @param context the context.
 	 * @param webConfigurator the web configuration component.
 	 */
-	public MVCContextInitializator(Context context, WebConfigurator webConfigurator)
+	public MVCContextInitializerValve(Context context, WebConfigurator webConfigurator)
 	{
 		this.context = context;		
 		this.webConfigurator = webConfigurator;
