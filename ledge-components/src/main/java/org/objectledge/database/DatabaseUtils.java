@@ -27,6 +27,8 @@
 // 
 package org.objectledge.database;
 
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,6 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.sql.DataSource;
+
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.utils.StringUtils;
@@ -43,7 +47,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.4 2004-02-03 14:39:10 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.5 2004-02-04 12:18:13 fil Exp $
  */
 public class DatabaseUtils
 {
@@ -186,5 +190,74 @@ public class DatabaseUtils
         throws ParseException
     {
         return df.parse(source);
+    }
+    
+    /**
+     * Executes an SQL script.
+     * 
+     * <p>
+     *   <ul>
+     *     <li>Lines starting with # are ignored</li>
+     *     <li>Statements may span multiple lines, line with a semicolon as the last charcter 
+     *         terminates the statement.</li>
+     *     <li>Script execution is aborted when execution of an statement throws an exception.</li>
+     *   </ul>
+     * </p>
+     * 
+     * @param dataSource source of connections to the database.
+     * @param script the reader to read script from.
+     * @throws IOException if the script cannot be read.
+     * @throws SQLException if there is a problem executing the script. 
+     */
+    public static void runScript(DataSource dataSource, LineNumberReader script)
+        throws IOException, SQLException
+    {
+        StringBuffer buff = new StringBuffer();
+        int start;
+        
+        Connection conn = dataSource.getConnection();
+        Statement stmt = conn.createStatement();
+        try
+        {
+            while(script.ready())
+            {
+                buff.setLength(0);
+                String line = script.readLine();
+                if( line.trim().length() == 0 || line.charAt(0) == '#')
+                {
+                    continue;
+                }
+                start = script.getLineNumber();
+                while(script.ready() && line.charAt(line.length()-1) != ';')
+                {
+                    buff.append(line);
+                    line = script.readLine();
+                    if(line.trim().length() == 0 || line.charAt(0) == '#')
+                    {
+                        continue;
+                    }
+                }
+                if(line.charAt(line.length()-1) != ';')
+                {
+                    throw new SQLException("unterminated statement at line "+start);
+                }
+                buff.append(line);                
+                buff.setLength(buff.length()-1); // remove ;
+                try
+                {
+                    stmt.execute(buff.toString());
+                }
+                catch(SQLException e)
+                {
+                    throw (SQLException)
+                        new SQLException("error executing statement at line "+start).initCause(e);
+                }
+            }
+        }
+        finally
+        {
+            close(stmt);
+            close(conn);
+        }
     }
 }
