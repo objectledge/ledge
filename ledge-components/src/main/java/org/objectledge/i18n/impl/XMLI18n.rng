@@ -30,49 +30,10 @@
 
 <!-- Relax NG schema for XMLI18n component configuration -->
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
-
+  <include href="I18nBaseConfig.rng"/>
   <start>
 	<element name="config">
       <ref name="baseConfig"/>
     </element>
   </start>
-
-  <define name="baseConfig">
-
-    <!-- the context key for i18n tool -->  
-    <optional>
-      <element name="context_tool_key">
-        <text/>
-      </element>
-    </optional>    
-
-    <!-- the string representation of undefined value -->        
-    <optional>  
-      <element name="undefined_value">  
-        <text/>
-      </element>
-    </optional>    
-
-    <!-- if parameter is set the i18n component expands searching to default locale -->
-    <optional>
-      <element name="use_default_locale">  
-        <text/>
-      </element>
-    </optional>
-    
-    <!-- the locale used by i18n - used if previous parameter is set -->
-    <optional>
-      <element name="default_locale">  
-        <text/>
-      </element>
-    </optional>    
-    
-    <!-- if set the key is returned instead of undefined value -->
-    <optional>  
-      <element name="use_key_if_undefined">  
-        <text/>
-      </element>
-    </optional>
-
-  </define>
 </grammar>
