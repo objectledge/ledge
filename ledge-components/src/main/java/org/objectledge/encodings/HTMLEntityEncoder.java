@@ -39,7 +39,7 @@ import org.picocontainer.MutablePicoContainer;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.3 2004-02-17 15:48:46 fil Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.4 2004-03-12 15:49:16 zwierzem Exp $
  */
 public class HTMLEntityEncoder
 {
@@ -97,14 +97,14 @@ public class HTMLEntityEncoder
                c == '\'' && !doubleQuoteQuote ||
                c == '&' || c == '<' || c == '>')
             {
-                encodeEntity(buf, c);
+                encodeEntity(c, buf);
             }
             else
             // try to encode using normal encoding
             if(charsetEncoder != null && charsetEncoder.encode(c) == null)
             {
                 // if not, encode it using entity encoding
-                encodeEntity(buf, c);
+                encodeEntity(c, buf);
             }
             else
             {
@@ -162,7 +162,7 @@ public class HTMLEntityEncoder
             if(charsetEncoder.encode(c) == null)
             {
                 // if not, try to encode it using entity encoding
-                encodeEntity(buf, c);
+                encodeEntity(c, buf);
             }
             else
             {
@@ -195,7 +195,7 @@ public class HTMLEntityEncoder
 		}
     }
 
-    private void encodeEntity(StringBuffer buf, char c)
+    private void encodeEntity(char c, StringBuffer buf)
     {
         // encode it using entity encoding
         char[] encodedChar = HTML_ENTITY_ENCODER.encode(c);

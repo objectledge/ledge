@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * Generator for encoding converter tables.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: EncoderGenerator.java,v 1.2 2004-02-03 13:47:29 zwierzem Exp $
+ * @version   $Id: EncoderGenerator.java,v 1.3 2004-03-12 15:49:16 zwierzem Exp $
  */
 public class EncoderGenerator
 {
@@ -178,7 +178,7 @@ public class EncoderGenerator
         out.write(" * Encoder for "+encodingName+" character set.\n");
         out.write(" *\n");
         out.write(" * @author <a href=\"mailto:dgajda@caltha.pl\">Damian Gajda</a>\n");
-        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.2 2004-02-03 13:47:29 zwierzem Exp $\n");
+        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.3 2004-03-12 15:49:16 zwierzem Exp $\n");
         out.write(" */\n");
         out.write("public class CharEncoder"+encodingName+"\n");
         out.write("         extends CharEncoder\n");
@@ -211,7 +211,7 @@ public class EncoderGenerator
             char[] value = null;
             if(suffixIndex[i] != null)
             {
-                value = suffixIndex[i].getValue();
+                value = suffixIndex[i].getValue().toCharArray();
             }
 
             if(value != null)

@@ -32,10 +32,15 @@ package org.objectledge.encodings;
  * Mapping entry for encoder mappings defnitions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MappingEntry.java,v 1.1 2004-02-02 18:59:01 zwierzem Exp $
+ * @version $Id: MappingEntry.java,v 1.2 2004-03-12 15:49:16 zwierzem Exp $
  */
 public class MappingEntry
 {
+	/** Unicode character value for this mapping entry. */
+	private short unicodeCode;
+	/** Name of this mapping entry. */
+	private String value;
+
 	/**
 	 * Constructs a mapping entry.
 	 * @param unicodeCode code of unicode character
@@ -44,8 +49,7 @@ public class MappingEntry
     public MappingEntry(short unicodeCode, String name)
     {
         this.unicodeCode = unicodeCode;
-        value = new char[name.length()];
-        name.getChars(0, name.length(), value, 0);
+        this.value = name.intern();
     }
 
 	/**
@@ -65,9 +69,7 @@ public class MappingEntry
 	 */
     public MappingEntry(short unicodeCode, char code)
     {
-        this.unicodeCode = unicodeCode;
-        this.value = new char[1];
-        this.value[0] = code;
+        this(unicodeCode, new String(new char[] { code }));
     }
 
 	/**
@@ -90,11 +92,6 @@ public class MappingEntry
         this((short)unicodeCode, (char)code);
     }
 
-	/** Unicode character value for this mapping entry. */
-    private short unicodeCode;
-	/** Encoded character value for this mapping entry. */
-	private char[] value;
-
     /**
      * @return Unicode character value for this mapping entry.
      */
@@ -106,7 +103,7 @@ public class MappingEntry
     /**
      * @return Encoded character value for this mapping entry.
      */
-    public char[] getValue()
+    public String getValue()
     {
         return value;
     }
