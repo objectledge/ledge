@@ -93,7 +93,8 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
-        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getParameterNames").
+            will(returnValue((new Vector()).elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("/view/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
@@ -101,11 +102,13 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getServerPort").will(returnValue(80));
         mockHttpServletRequest.stubs().method("isSecure").will(returnValue(false));
-        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("www.objectledge.org"));
+        mockHttpServletRequest.stubs().method("getServerName").
+            will(returnValue("www.objectledge.org"));
 
         mockHttpServletResponse = mock(HttpServletResponse.class);
         httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
-        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
+        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).
+            will(new ReturnArgument());
         
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
         context.setAttribute(HttpContext.class, httpContext);
@@ -261,19 +264,22 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
-        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getParameterNames").
+            will(returnValue((new Vector()).elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
         mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/ledge"));
         mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue("/foo#bar"));
-        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("www.objectledge.org"));
+        mockHttpServletRequest.stubs().method("getServerName").
+            will(returnValue("www.objectledge.org"));
         mockHttpServletRequest.stubs().method("getServerPort").will(returnValue(443));
         mockHttpServletRequest.stubs().method("isSecure").will(returnValue(true));
 
         mockHttpServletResponse = mock(HttpServletResponse.class);
         httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
-        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
+        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).
+            will(new ReturnArgument());
 
         httpContext = new HttpContext(httpServletRequest, httpServletResponse);
 

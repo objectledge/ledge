@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SecurityHelper.java,v 1.7 2004-08-20 10:05:18 zwierzem Exp $
+ * @version $Id: SecurityHelper.java,v 1.8 2004-12-22 08:58:35 rafal Exp $
  */
 public class SecurityHelper
 {
@@ -58,6 +58,7 @@ public class SecurityHelper
      * @throws InsecureChannelException if secure channel was required.
      * @throws LoginRequiredException if authenticated user was required.
      * @throws AccessDeniedException if user has no rights to access the object.
+     * @throws ProcessingException if an application error occurs.
      */
     public void checkSecurity(Object obj, Context context)
         throws InsecureChannelException, LoginRequiredException, 

@@ -54,7 +54,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.13 2004-10-08 07:16:44 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.14 2004-12-22 08:59:00 rafal Exp $
  */
 public class RequestParameters extends SortedParameters
 {
@@ -160,18 +160,23 @@ public class RequestParameters extends SortedParameters
                                 "illegal state while parsing params");
                     }
                 }
-                else switch(state)
+                else
                 {
-                    case START:
-                    case NAME:
-                        name = URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING);
-                        state = SEPARATOR_AFTER_NAME;
-                    break;
-                    case VALUE:
-                        add(name, URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING));
-                        name = null;
-                        state = SEPARATOR_AFTER_VALUE;
-                    break;
+                    switch(state)
+                    {
+                        case START:
+                        case NAME:
+                            name = URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING);
+                            state = SEPARATOR_AFTER_NAME;
+                            break;
+                        case VALUE:
+                            add(name, URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING));
+                            name = null;
+                            state = SEPARATOR_AFTER_VALUE;
+                            break;
+                        default:
+                            break;  
+                    }
                 }
             }
         }

@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * <p>Item indices are used as ids.</p>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListTableModel.java,v 1.5 2004-07-01 11:40:06 zwierzem Exp $
+ * @version $Id: ListTableModel.java,v 1.6 2004-12-22 08:58:13 rafal Exp $
  */
 public class ListTableModel
     implements ExtendedTableModel
@@ -85,7 +85,7 @@ public class ListTableModel
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public TableRowSet getRowSet(TableState state, TableFilter[] filters)
     {
@@ -142,8 +142,9 @@ public class ListTableModel
 
     /**
      * Returns the id of the object.
+     * 
+     * @param parent the id of the parent.
      * @param child model object.
-     *
      * @return the id of the object.
      */
     public String getId(String parent, Object child)

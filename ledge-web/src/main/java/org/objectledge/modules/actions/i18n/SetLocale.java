@@ -48,13 +48,15 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetLocale.java,v 1.1 2004-09-06 11:08:29 zwierzem Exp $
+ * @version $Id: SetLocale.java,v 1.2 2004-12-22 08:58:27 rafal Exp $
  */
 public class SetLocale 
     implements Valve
 {
     /**
      * Action constructor.
+     * 
+     * @param context the context.
      */
     public SetLocale(Context context)
     {
@@ -64,6 +66,7 @@ public class SetLocale
      * Run the valve.
      * 
      * @param context the context.
+     * @throws ProcessingException if action processing fails.
      */
     public void process(Context context) throws ProcessingException
     {
@@ -109,7 +112,8 @@ public class SetLocale
             {
                 if (cookies[i].getName().equals(encodingCookieKey))
                 {
-                    httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, cookies[i].getValue());
+                    httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, 
+                        cookies[i].getValue());
                     httpContext.setEncoding(cookies[i].getValue());
                 }
             }

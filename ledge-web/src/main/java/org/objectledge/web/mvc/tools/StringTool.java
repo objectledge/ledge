@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.7 2004-12-21 10:47:52 rafal Exp $
+ * @version $Id: StringTool.java,v 1.8 2004-12-22 08:58:14 rafal Exp $
  */
 public class StringTool
 {
@@ -45,6 +45,13 @@ public class StringTool
         super();
     }
 
+    /**
+     * Trims the string to the specified lengtht.
+     * 
+     * @param str the string.
+     * @param maxLength maximum number of characters preserved.
+     * @return the trimmed string.
+     */
     public String shorten(String str, int maxLength)
     {
         if(str.length() > maxLength)
@@ -58,7 +65,12 @@ public class StringTool
     }
 
     /**
+     * Trims the string to the specified lengtht.
      * 
+     * @param source the string.
+     * @param length maximum number of characters preserved.
+     * @param suffix suffix to append if the string is acutally trimmed.
+     * @return the trimmed string.
      */
     public String shortenString(String source, int length, String suffix)
     {
@@ -83,7 +95,7 @@ public class StringTool
     /**
 	 * Convert int to long value.
 	 *
-	 * @param vaule the integer value.
+	 * @param value the integer value.
 	 * @return the long wrapper.
      */
     public Long getLongValue(int value)
@@ -94,7 +106,7 @@ public class StringTool
     /**
 	 * Convert string to long value.
 	 *
-	 * @param vaule the string value.
+	 * @param value the string value.
 	 * @return the long wrapper.
      */
     public Long getLongValue(String value)
@@ -105,7 +117,7 @@ public class StringTool
     /**
 	 * Convert int to string value.
 	 *
-	 * @param vaule the int value.
+	 * @param value the int value.
 	 * @return the string wrapper.
      */
     public String getString(int value)

@@ -47,13 +47,15 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.1 2004-09-06 11:08:29 zwierzem Exp $
+ * @version $Id: SetEncoding.java,v 1.2 2004-12-22 08:58:27 rafal Exp $
  */
 public class SetEncoding 
     implements Valve
 {
     /**
      * Action constructor.
+     * 
+     * @param context the context.
      */
     public SetEncoding(Context context)
     {
@@ -63,6 +65,7 @@ public class SetEncoding
      * Run the valve.
      * 
      * @param context the context.
+     * @throws ProcessingException if action processing fails.
      */
     public void process(Context context) throws ProcessingException
     {

@@ -44,12 +44,18 @@ import org.objectledge.web.mvc.components.DefaultComponent;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Locales.java,v 1.1 2004-09-17 08:12:29 rafal Exp $
+ * @version $Id: Locales.java,v 1.2 2004-12-22 08:58:51 rafal Exp $
  */
 public class Locales extends DefaultComponent
 {
     private I18n i18n;
     
+    /**
+     * Creates new Locales instance.
+     * 
+     * @param context the context.
+     * @param i18n the I18n compontent.
+     */
     public Locales(Context context, I18n i18n)
     {
         super(context);

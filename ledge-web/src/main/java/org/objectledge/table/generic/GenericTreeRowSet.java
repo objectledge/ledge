@@ -42,15 +42,16 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as tree.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericTreeRowSet.java,v 1.4 2004-07-01 11:40:06 zwierzem Exp $
+ * @version $Id: GenericTreeRowSet.java,v 1.5 2004-12-22 08:58:13 rafal Exp $
  */
 public class GenericTreeRowSet extends BaseGenericRowSet
 {
     /**
      * Constructs the object.
      *
-     * @param state the state of the table instance
-     * @param model the table model
+     * @param state the state of the table instance.
+     * @param filters the table filters.
+     * @param model the table model.
      */
     public GenericTreeRowSet(TableState state, TableFilter[] filters, ExtendedTableModel model)
     {

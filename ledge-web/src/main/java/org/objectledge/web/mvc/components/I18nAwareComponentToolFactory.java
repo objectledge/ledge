@@ -50,7 +50,8 @@ public class I18nAwareComponentToolFactory extends ComponentToolFactory
 	 * @param context the context.
 	 * @param classFinder the class finder.
 	 * @param templateFinder the template finder.
-     * @param securityHelper security helper for access checking
+     * @param securityHelper security helper for access checking.
+     * @param resolver the I18nAwareTemplateResolver component.
 	 */
     public I18nAwareComponentToolFactory(
         Context context,

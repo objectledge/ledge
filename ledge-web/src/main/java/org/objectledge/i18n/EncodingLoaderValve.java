@@ -45,7 +45,7 @@ import org.objectledge.web.WebConfigurator;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EncodingLoaderValve.java,v 1.2 2004-08-24 12:58:03 rafal Exp $
+ * @version $Id: EncodingLoaderValve.java,v 1.3 2004-12-22 08:58:32 rafal Exp $
  */
 public class EncodingLoaderValve 
     extends AbstractI18nValve
@@ -75,12 +75,14 @@ public class EncodingLoaderValve
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         String cookieKey = getCookieKeyBase(context);
-        String encodingCookieKey = "encoding" + cookieKey + "." + i18nContext.getLocale().toString();
+        String encodingCookieKey = "encoding" + cookieKey + "." + 
+            i18nContext.getLocale().toString();
         boolean setInCookie = false;
         boolean setInSession = false;
 
         // get encoding from session
-        String encoding = (String) httpContext.getSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY);
+        String encoding = (String) httpContext.
+            getSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY);
         
         // get encoding from cookie
         if (encoding == null)

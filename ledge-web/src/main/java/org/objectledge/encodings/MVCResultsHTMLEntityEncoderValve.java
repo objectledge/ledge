@@ -38,13 +38,18 @@ import org.objectledge.web.mvc.MVCContext;
  * values. This is very important for applications saving data into datatbases etc.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsHTMLEntityEncoderValve.java,v 1.1 2004-06-30 13:59:30 zwierzem Exp $
+ * @version $Id: MVCResultsHTMLEntityEncoderValve.java,v 1.2 2004-12-22 08:58:09 rafal Exp $
  */
 public class MVCResultsHTMLEntityEncoderValve
     implements Valve
 {
     private HTMLEntityEncoder encoder;
     
+    /**
+     * Creates new MVCResultsHTMLEntityEncoderValve instance.
+     * 
+     * @param encoder the HTMLEntityEncoder component.
+     */
     public MVCResultsHTMLEntityEncoderValve(HTMLEntityEncoder encoder)
     {
         this.encoder = encoder;

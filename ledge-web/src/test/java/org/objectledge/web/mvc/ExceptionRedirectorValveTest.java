@@ -80,7 +80,8 @@ public class ExceptionRedirectorValveTest extends LedgeTestCase
             context = new Context();
             context.clearAttributes();
             //prepare test
-            FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources/exception-redirector");
+            FileSystem fs = FileSystem.
+                getStandardFileSystem("src/test/resources/exception-redirector");
             XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
             Configuration config = configFactory.getConfig(WebConfigurator.class, 
@@ -90,13 +91,15 @@ public class ExceptionRedirectorValveTest extends LedgeTestCase
             mockHttpServletRequest = mock(HttpServletRequest.class);
             httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
             mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
-            mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+            mockHttpServletRequest.stubs().method("getParameterNames").
+                will(returnValue((new Vector()).elements()));
             mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
             mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
             mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
             mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
             mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
-            mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
+            mockHttpServletRequest.stubs().method("getServerName").
+                will(returnValue("objectledge.org"));
 
             mockHttpServletResponse = mock(HttpServletResponse.class);
             httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();

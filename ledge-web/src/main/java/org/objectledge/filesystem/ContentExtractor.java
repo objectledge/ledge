@@ -33,8 +33,6 @@ import java.io.OutputStream;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.FileSystemProvider;
 import org.picocontainer.Startable;
 
 /**
@@ -46,7 +44,7 @@ import org.picocontainer.Startable;
  * server.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ContentExtractor.java,v 1.1 2004-10-25 13:33:50 rafal Exp $
+ * @version $Id: ContentExtractor.java,v 1.2 2004-12-22 08:58:38 rafal Exp $
  */
 public class ContentExtractor
 	implements Startable

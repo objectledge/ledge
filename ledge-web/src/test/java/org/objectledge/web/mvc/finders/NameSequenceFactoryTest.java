@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.13 2004-06-25 12:55:35 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.14 2004-12-22 08:58:54 rafal Exp $
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
@@ -76,7 +76,8 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
         assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
         assertEquals(false, classSequence.hasNext());
 
-        Sequence templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", true, false);
+        Sequence templateSequence = factory.
+            getTemplateNameSequence("views", "foo.Bar", true, false);
         assertEquals("views/foo/Bar", templateSequence.next());
         assertEquals("views/foo/Default", templateSequence.next());
         assertEquals("views/Default", templateSequence.next());

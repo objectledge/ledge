@@ -31,7 +31,6 @@ package org.objectledge.i18n;
 import java.util.Locale;
 
 import org.objectledge.context.Context;
-import org.objectledge.i18n.I18n;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
@@ -41,7 +40,7 @@ import org.objectledge.templating.Templating;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareTemplateResolver.java,v 1.2 2004-08-31 11:08:31 pablo Exp $
+ * @version $Id: I18nAwareTemplateResolver.java,v 1.3 2004-12-22 08:58:32 rafal Exp $
  */
 public class I18nAwareTemplateResolver
 {

@@ -34,7 +34,7 @@ import org.objectledge.templating.Template;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactory.java,v 1.7 2004-06-16 08:34:05 fil Exp $
+ * @version $Id: NameSequenceFactory.java,v 1.8 2004-12-22 08:58:23 rafal Exp $
  */
 public class NameSequenceFactory
 {
@@ -201,7 +201,8 @@ public class NameSequenceFactory
      */    
     protected Sequence getClassNameFallbackSequence(String view, boolean skipFirst)
     {
-        return new ViewFallbackSequence(view, viewSeparator,classSeparator, classDefaultSuffix, skipFirst);
+        return new ViewFallbackSequence(view, viewSeparator,classSeparator, classDefaultSuffix, 
+            skipFirst);
     }
 
     /**

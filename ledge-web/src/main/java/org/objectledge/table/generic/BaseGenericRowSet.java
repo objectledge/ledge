@@ -44,7 +44,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.9 2004-07-01 11:40:06 zwierzem Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.10 2004-12-22 08:58:13 rafal Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -241,7 +241,8 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      * Builds tree nodes for the specified subtree and stores them in the
      * target list.
      *
-     * @param rootId the root node of the subtree.
+     * @param rootId the if of root node of the subtree.
+     * @param rootObject the root node of the subtree.
      * @param depth the nesting depth of the subtree root.
      * @param rowList the target node list.
      * @return the root of created subtree

@@ -48,7 +48,7 @@ import org.objectledge.web.mvc.security.LoginRequiredException;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Login.java,v 1.1 2004-08-27 07:57:50 rafal Exp $
+ * @version $Id: Login.java,v 1.2 2004-12-22 08:58:30 rafal Exp $
  */
 public class Login 
     extends BaseAuthenticationAction
@@ -69,8 +69,10 @@ public class Login
      * Runns the valve.
      *   
      * @param context the context.
+     * @throws ProcessingException if action processing fails.
      */
-    public void process(Context context) throws ProcessingException
+    public void process(Context context) 
+        throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);

@@ -42,15 +42,15 @@ import org.objectledge.web.HttpContext;
  * Base i18n processing valve with utility methods.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18nValve.java,v 1.1 2004-08-20 15:58:58 zwierzem Exp $
+ * @version $Id: AbstractI18nValve.java,v 1.2 2004-12-22 08:58:32 rafal Exp $
  */
 public abstract class AbstractI18nValve 
     implements Valve
 {
     /**
      * Creates a base name of the cookie.
-     * @param context
-     * @return
+     * @param context the request context.
+     * @return the basic part of cookie key.
      */
     protected String getCookieKeyBase(Context context)
     {
@@ -69,10 +69,11 @@ public abstract class AbstractI18nValve
     }
 
     /**
-     * Gets the cookie.
-     * @param httpContext
-     * @param cookieName
-     * @return
+     * Gets the cookie from the HTTP request.
+     * 
+     * @param httpContext the HTTPContext.
+     * @param cookieName the name of the cookie.
+     * @return the cookie object.
      */
     protected Cookie getCookie(HttpContext httpContext, String cookieName)
     {
@@ -92,10 +93,11 @@ public abstract class AbstractI18nValve
     }
 
     /**
-     * Sets the cookie for a year.
-     * @param httpContext
-     * @param name
-     * @param value
+     * Sets the cookie vaid for one year.
+     * 
+     * @param httpContext the HttpContext.
+     * @param name name of the cookie.
+     * @param value value of the cookie.
      */
     protected void setCookie(HttpContext httpContext, String name, String value)
     {

@@ -85,10 +85,12 @@ public class WebI18nTest extends LedgeTestCase
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("setCharacterEncoding");
-        mockHttpServletRequest.stubs().method("getCharacterEncoding").will(returnValue("ISO-8859-1"));
+        mockHttpServletRequest.stubs().method("getCharacterEncoding").
+            will(returnValue("ISO-8859-1"));
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
-        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).
+            elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
@@ -129,8 +131,10 @@ public class WebI18nTest extends LedgeTestCase
         HttpContext httpContext = HttpContext.getHttpContext(context);
         List cookieList = new ArrayList();
         
-        mockHttpServletRequest.stubs().method("getCookies").will(new ReturnListValuesAsArray(cookieList));
-        mockHttpServletResponse.stubs().method("addCookie").with(ANYTHING).will(new AddToList(cookieList));
+        mockHttpServletRequest.stubs().method("getCookies").
+            will(new ReturnListValuesAsArray(cookieList));
+        mockHttpServletResponse.stubs().method("addCookie").with(ANYTHING).
+            will(new AddToList(cookieList));
         mockHttpSession.stubs().method("getAttribute").with(ANYTHING).will(returnValue(null));
         mockHttpSession.stubs().method("setAttribute").with(ANYTHING, ANYTHING).isVoid();
 

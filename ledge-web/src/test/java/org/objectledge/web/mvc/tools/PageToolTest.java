@@ -54,7 +54,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.9 2004-08-20 10:36:27 zwierzem Exp $
+ * @version $Id: PageToolTest.java,v 1.10 2004-12-22 08:58:17 rafal Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -87,7 +87,8 @@ public class PageToolTest extends LedgeTestCase
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
-        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getParameterNames").
+            will(returnValue((new Vector()).elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
@@ -97,7 +98,8 @@ public class PageToolTest extends LedgeTestCase
 
         mockHttpServletResponse = mock(HttpServletResponse.class);
         httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
-        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
+        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).
+            will(new ReturnArgument());
 
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
 		context.setAttribute(HttpContext.class, httpContext);

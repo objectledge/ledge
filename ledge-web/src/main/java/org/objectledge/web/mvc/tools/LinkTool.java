@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.16 2004-10-07 15:31:29 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.17 2004-12-22 08:58:14 rafal Exp $
  */
 public class LinkTool
 {
@@ -972,7 +972,8 @@ public class LinkTool
                 throw new ComponentInitializationError("failed to configure the component", e);
             }
             ///CLOVER:ON
-            queryStringSeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
+            queryStringSeparator = config.getChild("query_separator").
+                getValue(DEFAULT_QUERY_SEPARATOR);
             externalContent = config.getChild("external_content").getValueAsBoolean(false);
             // TODO: remove WebConfigurator
             viewToken = webConfigurator.getViewToken();

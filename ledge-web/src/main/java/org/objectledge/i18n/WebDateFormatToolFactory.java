@@ -50,7 +50,7 @@ public class WebDateFormatToolFactory implements ContextToolFactory
 	 * Component constructor.
 	 *
 	 * @param context the context.
-	 * @param i18n the i18n component. 
+	 * @param dateFormater the date formatter. 
 	 */
 	public WebDateFormatToolFactory(Context context, DateFormatter dateFormater)
 	{

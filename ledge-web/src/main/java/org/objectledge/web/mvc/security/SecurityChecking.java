@@ -34,7 +34,7 @@ import org.objectledge.context.Context;
  * The interface of all mvc security objects.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SecurityChecking.java,v 1.4 2004-10-11 09:49:25 zwierzem Exp $
+ * @version $Id: SecurityChecking.java,v 1.5 2004-12-22 08:58:35 rafal Exp $
  */
 public interface SecurityChecking
 {
@@ -43,6 +43,7 @@ public interface SecurityChecking
      * 
      * @param context the context.
      * @return <code>true</code>if requires.
+     * @throws Exception if the requirement could not be determined due to application error.
      */
     public boolean requiresSecureChannel(Context context)
     	throws Exception;
@@ -52,6 +53,7 @@ public interface SecurityChecking
      * 
      * @param context the context.
      * @return <code>true</code>if requires.
+     * @throws Exception if the requirement could not be determined due to application error.
      */
     public boolean requiresAuthenticatedUser(Context context)
     	throws Exception;
@@ -65,6 +67,7 @@ public interface SecurityChecking
      * 
      * @param context the context.
      * @return <code>true</code>if requires.
+     * @throws Exception if the requirement could not be determined due to application error.
      */
     public boolean checkAccessRights(Context context)
     	throws Exception;

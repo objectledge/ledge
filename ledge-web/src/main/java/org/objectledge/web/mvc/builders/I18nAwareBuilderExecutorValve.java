@@ -36,7 +36,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.9 2004-08-20 10:03:43 zwierzem Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.10 2004-12-22 08:58:47 rafal Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
@@ -51,9 +51,8 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
      * @param templateFinder the template finder.
      * @param securityHelper security helper for access checking
      * @param maxRouteCalls the max route calls.
-     * @param maxEnclosures the max enclosures. 
-     * @param i18n an i18n component for choosing templates upon currently selected Locale.
-     * @param templating the templating component.
+     * @param maxEnclosures the max enclosures.
+     * @param resolver the I18mAwareTemplateResolver component. 
      */
     public I18nAwareBuilderExecutorValve(
         Context context,

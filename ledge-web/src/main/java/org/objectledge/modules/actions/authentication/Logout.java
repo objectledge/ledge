@@ -43,7 +43,7 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.1 2004-08-27 07:57:50 rafal Exp $ 
+ * @version $Id: Logout.java,v 1.2 2004-12-22 08:58:30 rafal Exp $ 
  */
 public class Logout 
     extends BaseAuthenticationAction
@@ -64,6 +64,7 @@ public class Logout
      * Runns the valve.
      *   
      * @param context the context.
+     * @throws ProcessingException if action processing fails.
      */
     public void process(Context context) throws ProcessingException
     {

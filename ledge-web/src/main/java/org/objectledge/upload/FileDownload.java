@@ -40,10 +40,11 @@ import org.objectledge.web.HttpContext;
  * An utility for the file download functionality.
  *
  * @author <a href="dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileDownload.java,v 1.2 2004-10-07 15:30:33 zwierzem Exp $
+ * @version $Id: FileDownload.java,v 1.3 2004-12-22 08:58:44 rafal Exp $
  */
 public class FileDownload
 {
+    /** Octet steram MIME type. */
     public static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     
     // instance variables ///////////////////////////////////////////////////////////////////////
@@ -56,7 +57,6 @@ public class FileDownload
     /**
      * Creates a FileDownload component.
      *
-     * @param config the configuration. 
      * @param context the context.
      */
     public FileDownload(Context context)

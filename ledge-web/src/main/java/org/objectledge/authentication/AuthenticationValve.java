@@ -40,7 +40,7 @@ import org.objectledge.web.WebConstants;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.10 2004-08-20 15:58:27 zwierzem Exp $
+ * @version $Id: AuthenticationValve.java,v 1.11 2004-12-22 08:58:16 rafal Exp $
  */
 public class AuthenticationValve 
     implements Valve
@@ -92,6 +92,7 @@ public class AuthenticationValve
         authenticationContext.setUserPrincipal(principal, authenticated);
         context.setAttribute(AuthenticationContext.class, authenticationContext);
         
-    	httpContext.getRequest().getSession().setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+    	httpContext.getRequest().getSession().setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, 
+            principal);
     }
 }
