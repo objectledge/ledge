@@ -66,11 +66,16 @@
 		    </tr>
 		    <tr>
 		      <td>4</td>
+		      <td>org.objectledge.web.mvc.builders.ViewEnclosureManager</td>
+		      <td>The enclosure manager.</td>
+		    </tr>
+		    <tr>
+		      <td>5</td>
 		      <td>int</td>
 		      <td>The maxmimal number of Builder#route() calls per Builder.</td>
 		    </tr>
 		    <tr>
-		      <td>5</td>
+		      <td>6</td>
 		      <td>int</td>
 		      <td>The maxmimal number of Builder enclosures.</td>
 		    </tr>
