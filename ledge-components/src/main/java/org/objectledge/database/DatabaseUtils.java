@@ -46,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * A set of utility functions for working with JDBC databases.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.20 2005-02-21 16:15:09 zwierzem Exp $
+ * @version $Id: DatabaseUtils.java,v 1.21 2005-03-30 09:20:04 rafal Exp $
  */
 public class DatabaseUtils
 {
@@ -222,21 +222,21 @@ public class DatabaseUtils
 	        while(script.ready())
 	        {
 	            buff.setLength(0);
-	            String line = script.readLine();
-	            if( line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
+	            String line = script.readLine().trim();
+	            if(line.length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
 	            {
 	                continue;
 	            }
 	            start = script.getLineNumber();
 	            while(script.ready() && line.charAt(line.length()-1) != ';')
 	            {
-	                buff.append(line);
-	                line = script.readLine();
-	                if(line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
+	                buff.append(line).append('\n');
+	                line = script.readLine().trim();
+	                if(line.length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
 	                {
 	                    if(script.ready())
 	                    {
-	                        line = script.readLine();
+	                        line = script.readLine().trim();
 	                        continue;
 	                    }
 	                    else
@@ -245,7 +245,7 @@ public class DatabaseUtils
 	                    }
 	                }
 	            }
-	            if(line.length() == 0 || line.trim().charAt(line.trim().length()-1) != ';')
+	            if(line.length() == 0 || line.charAt(line.length()-1) != ';')
 	            {
 	                throw new SQLException("unterminated statement at line "+start);
 	            }
