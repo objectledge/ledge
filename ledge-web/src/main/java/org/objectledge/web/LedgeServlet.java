@@ -38,7 +38,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jcontainer.dna.impl.Log4JLogger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.nanocontainer.Log4JNanoContainerMonitor;
 import org.objectledge.container.LedgeContainer;
 import org.objectledge.filesystem.FileSystem;
@@ -51,7 +52,7 @@ import org.objectledge.filesystem.impl.ServletFileProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.5 2003-12-23 08:21:54 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.6 2003-12-23 14:35:17 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -78,6 +79,8 @@ public class LedgeServlet extends HttpServlet
      */
     public void init(ServletConfig servletConfig) throws ServletException
     {
+        BasicConfigurator.configure();
+        Logger log = Logger.getLogger(ServletConfig.class);
         String rootParam = servletConfig.getServletName()+".root";
         String configParam = servletConfig.getServletName()+".config";
         String root = servletConfig.getInitParameter(rootParam);
@@ -112,18 +115,21 @@ public class LedgeServlet extends HttpServlet
         ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4096);
+        log.info("starting up: root="+root+" config="+config);
         try
         {
             container = new LedgeContainer(fs, config, new Log4JNanoContainerMonitor());    
         }
         catch(Exception e)
         {
+            log.error("failed to initialize container", e);
             throw new ServletException("failed to initialize container", e);
         }
         dispatcher = (HttpDispatcher)container.getRootContainer().
             getComponentInstance(HttpDispatcher.class);
         if(dispatcher == null)
         {
+            log.error("dispatcher component is missing");
             throw new ServletException("dispatcher component is missing");
         }
     }
