@@ -32,5 +32,5 @@ ledge-all-reactor -d ledge-all/ledge-reactor ledge-reactor
 ledge-all-tutorial-webapp -d ledge-all/ledge-tutorial-webapp ledge-tutorial-webapp
 ledge-all-web -d ledge-all/ledge-web ledge-web
 
-ledge-all -a ledge-all-components ledge-all-components ledge-all-maven-plugin ledge-all-maven-plugin ledge-all-tutorial-webapp ledge-all-web
+ledge-all -a ledge-all-components ledge-all-container ledge-all-maven-plugin ledge-all-reactor ledge-all-tutorial-webapp ledge-all-web
  
