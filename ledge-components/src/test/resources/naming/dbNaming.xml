@@ -31,12 +31,12 @@
   <context name="byKey" initial_factory="org.objectledge.naming.db.DatabaseInitialContextFactory">
     <component-property name="org.objectledge.database.persistence.Persistence"
     					class-key="org.objectledge.database.persistence.Persistence"/>
-    <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
+    <property name="java.naming.provider.url" value="dc=objectledge,dc=org"/>
   </context>
   <context name="byClass" initial_factory="org.objectledge.naming.db.DatabaseInitialContextFactory">
     <component-property name="org.objectledge.database.persistence.Persistence"
     					class-key="org.objectledge.database.persistence.Persistence"/>
-    <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
+    <property name="java.naming.provider.url" value="dc=objectledge,dc=org"/>
   </context>
   <context name="byClassKey" initial_factory="org.objectledge.naming.db.DatabaseInitialContextFactory">
     <component-property name="org.objectledge.database.persistence.Persistence"
