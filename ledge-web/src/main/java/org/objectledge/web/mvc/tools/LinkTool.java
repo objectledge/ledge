@@ -64,7 +64,7 @@ import org.objectledge.web.WebConfigurator;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.10 2004-07-05 13:52:12 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.11 2004-07-08 08:54:47 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -616,7 +616,7 @@ public class LinkTool
         ///CLOVER:OFF
         catch (UnsupportedEncodingException e)
         {
-            throw new RuntimeException("Unsupported exception occurred", e);
+            throw new RuntimeException("Exception occurred", e);
         }
         ///CLOVER:ON
     }
