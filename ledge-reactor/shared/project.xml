@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.15 2004-02-09 15:47:22 fil Exp $ -->
+<!-- $Id: project.xml,v 1.16 2004-02-10 09:33:15 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -56,6 +56,11 @@
       <subscribe>objectledge-cvs-subscribe@lists.objectledge.org</subscribe>
       <unsubscribe>objectledge-cvs-unsubscribe@lists.objectledge.org</unsubscribe>
       <archive>http://lists.objectledge.org/pipermail/objectledge-cvs/</archive>
+    </mailingList>
+    <mailingList>
+      <name>ObjectLedge commit messages (html version)</name>
+      <subscribe>objectledge-cvshtml-subscribe@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-cvshtml-unsubscribe@lists.objectledge.org</unsubscribe>
     </mailingList>
     <mailingList>
       <name>ObjectLedge issue tracking</name>
