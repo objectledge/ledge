@@ -44,7 +44,7 @@ import java.util.Set;
  * General purpose visitor that is capable of traversing arbitrary object graphs.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Visitor.java,v 1.4 2005-03-21 11:28:24 rafal Exp $
+ * @version $Id: Visitor.java,v 1.5 2005-03-21 11:29:18 rafal Exp $
  */
 public abstract class Visitor<T>
 {
@@ -99,7 +99,6 @@ public abstract class Visitor<T>
      * predecessor.
      * 
      * @param o traversal origin.
-     * @param v the visitor.
      */
     public void traverseDepthFirst(T o)
     {
@@ -111,7 +110,6 @@ public abstract class Visitor<T>
      * predecessor.
      * 
      * @param o traversal origin.
-     * @param v the visitor.
      */
     public void traverseBreadthFirst(T o)
     {
@@ -122,7 +120,6 @@ public abstract class Visitor<T>
      * Traverses object graph depth first - the successors will be visited before their predecessor.
      * 
      * @param o traversal origin.
-     * @param v the visitor.
      * @param s seen objects set.
      */
     private void traverseDepthFirst(T o, Set s)
@@ -144,7 +141,6 @@ public abstract class Visitor<T>
      * predecessor.
      * 
      * @param o traversal origin.
-     * @param v the visitor.
      * @param s seen objects set.
      */
     private void traverseBreadthFirst(T o, Set s)
