@@ -9,7 +9,7 @@ import pl.caltha.forms.internal.model.InstanceImpl;
  * Base Control implementation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NodeControl.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: NodeControl.java,v 1.2 2005-03-24 14:27:41 zwierzem Exp $
  */
 public class NodeControl extends NodeCaptionReference
 implements Control
@@ -42,9 +42,9 @@ implements Control
     {
         Object value = getValue(instance);
         boolean hasValue = (value != null);
-		if(hasValue && value instanceof String && ((String)value).length() > 0)
+        if(hasValue && value instanceof String)
         {
-			return true;
+            return ((String)value).length() > 0; // disallow empty strings 
         }
         return hasValue;
     }
