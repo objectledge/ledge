@@ -50,7 +50,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.9 2004-01-15 12:07:01 fil Exp $
+ * @version $Id: VelocityTemplating.java,v 1.10 2004-01-20 12:36:11 fil Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -117,6 +117,8 @@ public class VelocityTemplating implements Templating, LogSystem
 			"org.objectledge.templating.velocity.LedgeResourceLoader");
         engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LEDGE_FILE_SYSTEM,
         	 fileSystem);
+        engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
+             this);
         engine.setProperty(VelocityEngine.ENCODING_DEFAULT, encoding);
         try
         {

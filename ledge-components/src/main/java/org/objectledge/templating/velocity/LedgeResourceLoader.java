@@ -31,7 +31,9 @@ package org.objectledge.templating.velocity;
 import java.io.InputStream;
 
 import org.apache.commons.collections.ExtendedProperties;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.runtime.log.LogSystem;
 import org.apache.velocity.runtime.resource.Resource;
 import org.apache.velocity.runtime.resource.loader.ResourceLoader;
 import org.objectledge.filesystem.FileSystem;
@@ -40,15 +42,21 @@ import org.objectledge.filesystem.FileSystem;
  * A helper class that implements the velocity resource loader class.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LedgeResourceLoader.java,v 1.1 2003-12-08 10:34:43 pablo Exp $
+ * @version $Id: LedgeResourceLoader.java,v 1.2 2004-01-20 12:36:11 fil Exp $
  */
 public class LedgeResourceLoader extends ResourceLoader
 {
-	/** the properties key */
+	/** FileSystem properties key */
 	public static final String LEDGE_FILE_SYSTEM = "filesystem";
+
+    /** LogSystem properties key */
+    public static final String LOG_SYSTEM = "logsystem";
 	 
 	/** the file system */
 	private FileSystem fileSystem;
+    
+    /** the logger */
+    private LogSystem logSystem;
 	
 	/**
 	 * {@inheritDoc}
@@ -56,6 +64,7 @@ public class LedgeResourceLoader extends ResourceLoader
 	public void init(ExtendedProperties properties)
 	{		
 		fileSystem = (FileSystem)properties.get(LEDGE_FILE_SYSTEM);
+        logSystem = (LogSystem)properties.get(LOG_SYSTEM);
 	}
 
 	/**
@@ -64,7 +73,7 @@ public class LedgeResourceLoader extends ResourceLoader
 	public InputStream getResourceStream(String name) 
 			throws ResourceNotFoundException
 	{
-		System.out.println("Szukam:"+name);
+        logSystem.logVelocityMessage(LogSystem.DEBUG_ID, "LedgeResourceLoader: opening "+name);
 		InputStream is = fileSystem.getInputStream(name);
 		if(is == null)
 		{
