@@ -29,6 +29,7 @@
           <item name="Velocity Templating" href="/components/templating/VelocityTemplating.html"/>
         </item>        
         <item name="MailSystem"			   href="/components/MailSystem.html"/>
+        <item name="ContextFactory"		   href="/components/ContextFactory.html"/>        
       </item>
 
       <item name="Utilities"             href="/utilities/index.html" collapse="true">

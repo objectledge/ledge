@@ -74,7 +74,11 @@
         <p>Manages the mail sessions and allows to prepare and send email messages.</p>
 		<p class="more"><a href="MailSystem.html">more</a></p>
       </subsection>
-      
+
+      <subsection name="ContextFactory">
+        <p>This component provides a registry of JNDI naming and directory context.</p>
+		<p class="more"><a href="ContextFactory.html">more</a></p>
+      </subsection>
     </section>
   </body>
 </document>
