@@ -28,7 +28,6 @@
 
 package org.objectledge.web;
 
-import java.io.File;
 import java.io.InputStream;
 
 import junit.framework.TestCase;
@@ -45,7 +44,7 @@ import com.meterware.servletunit.ServletUnitClient;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServletTest.java,v 1.2 2003-12-23 14:36:59 fil Exp $
+ * @version $Id: LedgeServletTest.java,v 1.3 2003-12-23 15:51:57 fil Exp $
  */
 public class LedgeServletTest extends TestCase
 {
