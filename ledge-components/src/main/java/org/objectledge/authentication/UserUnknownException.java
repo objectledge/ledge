@@ -28,64 +28,20 @@
 
 package org.objectledge.authentication;
 
-import java.security.Principal;
-
 /**
- * Simple implementation of authentication.
+ * Thrown if user does not exist in the system.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class BaseAuthentication implements Authentication
+public class UserUnknownException extends Exception
 {
-    
-    /** the constructor */
-    public BaseAuthentication()
-    {
-    }
-    
-    //TODO config, many other things....
-    
-    /** anonymous name */
-    private String anonymousName = "anonymous";
-
     /**
-     * {@inheritDoc}
-     */
-    public Principal getAnonymousUser()
-    {
-        return new DefaultPrincipal(anonymousName);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public boolean checkPassword(String login, String password)
-            throws UserUnknownException
-    {
-        //TODO for now authenticate all users...
-        return true;
-    }
-    
-    /**
-     * Get the user.
+     * Constructor.
      * 
-     * @param dn the user name.
-     * @return the user principal.
+     * @param message the message.
      */
-    public Principal getUser(String dn)
+    public UserUnknownException(String message)
     {
-        // do not check if it exists
-        return new DefaultPrincipal(dn);
-    }
-    
-    /**
-     * Get the user name.
-     * 
-     * @param dn the user name.
-     * @return the user principal.
-     */
-    public String getUserName(String dn)
-    {
-        return dn;    
+        super(message);
     }
 }
