@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.9 2004-09-07 14:44:07 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.10 2004-12-20 06:43:47 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -18,7 +18,7 @@
 
   <inceptionYear>2003</inceptionYear>
   <package>org.objectledge</package>
-  <issueTrackingUrl>http://objectledge.org/jira/secure/BrowseProject.jspa?id=10010</issueTrackingUrl>
+  <issueTrackingUrl>http://objectledge.org/jira/secure/BrowseProject.jspa?id=10000</issueTrackingUrl>
   <url>http://objectledge.org/</url>
   <siteAddress>objectledge.org</siteAddress>
   <siteDirectory>/home/caltha/objectledge/www</siteDirectory>
