@@ -38,15 +38,16 @@ import org.objectledge.context.Context;
 public class ContextToolRecycler implements Runnable
 {
 	/** tool component */
-	ContextTools contextTools;
+	private ContextTools contextTools;
 	
 	/** context */
-	Context context;
+	private Context context;
 	
 	/**
 	 * Component constructor.
 	 * 
-	 * @param toolFactories the factories list.
+	 * @param context the context.
+	 * @param contextTools the context tool component.
 	 */
 	public ContextToolRecycler(Context context, ContextTools contextTools)
 	{
@@ -56,8 +57,6 @@ public class ContextToolRecycler implements Runnable
 	
 	/**
 	 * Recycle previously populated context tools. 
-	 * 
-	 * @param templatingContext the templating context.
 	 */
 	public void run()
 	{

@@ -87,8 +87,10 @@ public class I18nBase implements I18n, ContextToolFactory
 		contextToolKey = config.getChild("context_tool_key").getValue(DEFAULT_CONTEXT_TOOL_KEY);
 		undefinedValue = config.getChild("undefined_value").getValue(DEFAULT_UNDEFINED_VALUE);
 		defaultLocale = new Locale(config.getChild("default_locale").getValue(DEFAULT_LOCALE));
-		useDefaultLocale = config.getChild("use_default_locale").getValueAsBoolean(DEFAULT_USE_DEFAULT_LOCALE);
-		useKeyIfUndefined = config.getChild("use_key_if_undefined").getValueAsBoolean(DEFAULT_USE_KEY_IF_UNDEFINED);
+		useDefaultLocale = config.getChild("use_default_locale").
+			getValueAsBoolean(DEFAULT_USE_DEFAULT_LOCALE);
+		useKeyIfUndefined = config.getChild("use_key_if_undefined").
+			getValueAsBoolean(DEFAULT_USE_KEY_IF_UNDEFINED);
 		localeMap = new HashMap();
 	}
 	

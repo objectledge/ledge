@@ -52,6 +52,7 @@ public interface I18n
 	 * @param locale the locale.
 	 * @param key the key.
 	 * @param values the values use for substitution.
+	 * @return the the output string.
 	 */
 	String get(Locale locale, String key, String[] values);
 }
