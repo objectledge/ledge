@@ -88,7 +88,7 @@ public class DatabaseContext implements Context
         }
         catch(PersistenceException e)
         {
-            throw new RuntimeException("failed to load '"+dn+"' context from database");
+            throw new RuntimeException("failed to load '"+dn+"' context from database", e);
         }
         if(list.size() == 0)
         {
