@@ -39,12 +39,13 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.Pipeline;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.HttpDispatcher;
+import org.objectledge.web.WebConfigurator;
 
 /**
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.5 2004-01-12 14:50:23 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.6 2004-01-13 15:48:39 pablo Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
@@ -55,18 +56,24 @@ public class PipelineHttpDispatcher
     /** thead context. */
     private Context context;
     
+    /** web configurator */
+    private WebConfigurator webConfigurator;
+    
     /**
      * Creates a new pipeline dipspatcher.
      * 
      * @param pipeline the pipeline
      * @param context the thread context
+     * @param webConfigurator the web configuration component.
      * @throws ConfigurationException if the configuration is malformed.
      */
-    public PipelineHttpDispatcher(Pipeline pipeline, Context context)
+    public PipelineHttpDispatcher(Pipeline pipeline, Context context,
+    							   WebConfigurator webConfigurator)
         throws ConfigurationException
     {
         this.pipeline = pipeline;
         this.context = context;
+        this.webConfigurator = webConfigurator;
     }
     
     /**
@@ -76,6 +83,7 @@ public class PipelineHttpDispatcher
         throws ServletException, IOException
     {
         HttpContext httpContext = new HttpContext(request,response);
+        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.CONTEXT_KEY, httpContext);
         pipeline.run();
         context.removeAttribute(HttpContext.CONTEXT_KEY);

@@ -38,7 +38,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.3 2004-01-12 15:52:12 fil Exp $
+ * @version $Id: MVCContext.java,v 1.4 2004-01-13 15:48:39 pablo Exp $
  */
 public class MVCContext
 {
@@ -65,9 +65,6 @@ public class MVCContext
 	/** the locale */
 	private Locale locale;
 
-	/** the encoding */
-	private String encoding;
-
 	/** the media */
 	private String media;
 
@@ -90,7 +87,6 @@ public class MVCContext
 		authenticated = false;
 		// TODO load some default values - but from?
 		locale = new Locale("pl","PL");
-		encoding = "ISO-8859-2";
 	}
 	
     /**
@@ -153,26 +149,6 @@ public class MVCContext
     	this.locale = locale;
     }
 
-    /**
-     * Returns the encoding.
-     *
-     * @return the encoding.
-     */
-    public String getEncoding()
-	{
-		return encoding;
-	}
-
-    /**
-     * Sets the encoding.
-     *
-     * @param encoding the encoding.
-     */
-    public void setEncoding(String encoding)
-    {
-    	this.encoding = encoding;
-    }
-	
     /**
      * Returns the media.
      *

@@ -30,6 +30,9 @@ package org.objectledge.web;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +44,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.3 2004-01-12 14:37:12 fil Exp $
+ * @version $Id: HttpContext.java,v 1.4 2004-01-13 15:48:39 pablo Exp $
  */
 public class HttpContext
 {
@@ -71,6 +74,12 @@ public class HttpContext
 	/** response content type */
 	private String contentType;
 	
+	/** the output writer */
+	private PrintWriter writer;
+	
+	/** the encoding */
+	private String encoding;
+
 	/**
 	 * Construct new http context.
 	 * 
@@ -83,6 +92,7 @@ public class HttpContext
 		this.response = response;
 		directResponse = false;
 		contentType = request.getContentType();
+		encoding = "ISO-8859-1";
 	}
 	
     /**
@@ -132,6 +142,26 @@ public class HttpContext
 		return response.getOutputStream();
 	}
 
+	/**
+	 * Returns an PrintWriter for writing characters into the response.
+	 * 
+	 * @return a PrintWriter.
+	 * @throws IOException if happened.
+	 */
+	public PrintWriter getPrintWriter()
+		throws IOException
+	{
+		if(writer == null)
+		{
+			directResponse = true;
+			Writer osw = new OutputStreamWriter(response.getOutputStream(),
+												encoding);
+			writer = new PrintWriter(osw, false);
+			response.setContentType(getContentType());
+		}
+		return writer;
+	}
+
     /**
      * Sets the direct response flag.
      */
@@ -168,5 +198,25 @@ public class HttpContext
 	public void setContentType(String type)
 	{
 		contentType = type;
+	}
+	
+	/**
+	 * Returns the encoding.
+	 *
+	 * @return the encoding.
+	 */
+	public String getEncoding()
+	{
+		return encoding;
+	}
+
+	/**
+	 * Sets the encoding.
+	 *
+	 * @param encoding the encoding.
+	 */
+	public void setEncoding(String encoding)
+	{
+		this.encoding = encoding;
 	}
 }

@@ -46,7 +46,7 @@ import org.objectledge.web.mvc.MVCContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * 
- * @version $Id: LocaleLoaderValve.java,v 1.2 2004-01-12 15:52:11 fil Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.3 2004-01-13 15:48:39 pablo Exp $
  */
 public class LocaleLoaderValve implements Runnable, WebConstants
 {
@@ -163,7 +163,7 @@ public class LocaleLoaderValve implements Runnable, WebConstants
         				  getSession().getAttribute(ENCODING_SESSION_KEY);
         if (encoding != null)
         {
-            mvcContext.setEncoding(encoding);
+            httpContext.setEncoding(encoding);
         }
         else
         {
@@ -174,7 +174,7 @@ public class LocaleLoaderValve implements Runnable, WebConstants
                     sun.io.CharToByteConverter.getConverter(encodingString);
                     httpContext.getRequest().getSession().
                     	setAttribute(ENCODING_SESSION_KEY, encodingString);
-                    mvcContext.setEncoding(encodingString);
+                    httpContext.setEncoding(encodingString);
                 }
                 catch (java.io.UnsupportedEncodingException e)
                 {

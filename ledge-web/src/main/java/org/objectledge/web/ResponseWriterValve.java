@@ -39,7 +39,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResponseWriterValve.java,v 1.1 2004-01-13 14:56:53 pablo Exp $
+ * @version $Id: ResponseWriterValve.java,v 1.2 2004-01-13 15:48:39 pablo Exp $
  */
 public class ResponseWriterValve implements Runnable
 {
@@ -74,8 +74,8 @@ public class ResponseWriterValve implements Runnable
 					result = "no processing result was set in mvcContext " +							 "- check the pipeline configuration";
 				}
 				httpContext.getResponse().setContentLength(
-			       	StringUtils.getByteCount(result, mvcContext.getEncoding()));
-				 	PrintWriter out = new PrintWriter(httpContext.getOutputStream());
+			       	StringUtils.getByteCount(result, httpContext.getEncoding()));
+				PrintWriter out = httpContext.getPrintWriter();
 				out.write(result);
 				out.flush();
 			}
