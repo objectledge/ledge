@@ -33,10 +33,10 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.MVCConstants;
 
 /**
- * A default template which behaves as if it only contained <code>$embedded_placeholder</code>.
+ * A default template which behaves as if it only contained <code>$embeddedPlaceholder</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultTemplate.java,v 1.5 2004-01-22 08:17:12 fil Exp $
+ * @version $Id: DefaultTemplate.java,v 1.6 2004-08-02 13:59:03 zwierzem Exp $
  */
 public class DefaultTemplate implements Template
 {    

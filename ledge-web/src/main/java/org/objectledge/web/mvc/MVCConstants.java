@@ -31,11 +31,11 @@ package org.objectledge.web.mvc;
  * A set of constant values used throughout MVC package.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCConstants.java,v 1.3 2004-01-16 15:09:50 zwierzem Exp $
+ * @version $Id: MVCConstants.java,v 1.4 2004-08-02 13:59:03 zwierzem Exp $
  */
 ///CLOVER:OFF
 public interface MVCConstants
 {
 	/** Templating context key for embedded view elements. */
-	public static String EMBEDDED_PLACEHOLDER_KEY = "embedded_placeholder";
+	public static String EMBEDDED_PLACEHOLDER_KEY = "embeddedPlaceholder";
 }

@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
  * A default view.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Default.java,v 1.2 2004-06-29 13:39:17 zwierzem Exp $
+ * @version $Id: Default.java,v 1.3 2004-08-02 13:58:41 zwierzem Exp $
  */
 public class Default extends DefaultBuilder
 {
@@ -56,9 +56,9 @@ public class Default extends DefaultBuilder
         throws BuildException
     {
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        templatingContext.put("i18n_context", I18nContext.getI18nContext(context));
-        templatingContext.put("mvc_context", MVCContext.getMVCContext(context));
-        templatingContext.put("http_context", HttpContext.getHttpContext(context));
+        templatingContext.put("i18nContext", I18nContext.getI18nContext(context));
+        templatingContext.put("mvcContext", MVCContext.getMVCContext(context));
+        templatingContext.put("httpContext", HttpContext.getHttpContext(context));
         return super.build(template, embeddedBuildResults);
     }
 }
