@@ -36,6 +36,7 @@ import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.impl.LocalFileSystemProvider;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.test.FooComponent;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -50,7 +51,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.4 2003-12-03 15:15:23 mover Exp $
+ * @version $Id: CustomizationTest.java,v 1.5 2003-12-03 15:37:25 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -92,6 +93,8 @@ public class CustomizationTest extends TestCase
                 new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
             }).getComponentInstance(container);
+        container.registerComponentImplementation(LoggingConfigurator.class, 
+            LoggingConfigurator.class).getComponentInstance(container);
         container.registerComponentImplementation(LoggerFactory.class, LoggerFactory.class).
             getComponentInstance(container);
 
