@@ -38,6 +38,7 @@ import org.objectledge.logging.LoggerFactory;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
+import org.objectledge.test.actions.foo.TestAction;
 import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -46,7 +47,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.1 2004-01-20 11:23:20 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.2 2004-01-20 12:37:35 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -116,8 +117,19 @@ public class MVCFinderTest extends TestCase
     }
 
     public void testFindAction()
+        throws Exception
     {
-        //TODO Implement findAction().
+        Runnable action = finder.getAction("foo.TestAction");
+        assertEquals(TestAction.class, action.getClass());
+        try
+        {
+            finder.getAction("foo.NonExistentAction");
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            // success
+        }
     }
 
     public void testFindBuilder()
