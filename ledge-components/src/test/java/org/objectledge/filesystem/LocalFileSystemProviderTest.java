@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.5 2004-09-27 19:11:04 zwierzem Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.6 2004-10-13 10:33:29 rafal Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {
@@ -119,10 +119,28 @@ public class LocalFileSystemProviderTest extends TestCase
 					provider.canRead("file"));
 		assertFalse("The resource is readable - check test resources!", 
 					provider.canRead("nofile"));
-		assertTrue("The resource does not exist - check test resources!", 
-					provider.exists("unreadablefile"));
-		assertFalse("The resource is readable - check test resources!", 
-					provider.canRead("unreadablefile"));
+    }
+    
+    private static final String UNREADABLE_PATH = "src/test/resources/unreadablefile";
+
+    public void testCanReadUnreadable()
+    	throws IOException
+    {
+        if(System.getProperty("os.name").equals("Linux"))
+        {
+            Runtime.getRuntime().exec("chmod u-r "+UNREADABLE_PATH);
+            try
+            {
+        		assertTrue("The resource does not exist - check test resources!", 
+    				provider.exists("unreadablefile"));
+        		assertFalse("The resource is readable - check test resources!", 
+    				provider.canRead("unreadablefile"));
+            }
+            finally
+            {
+                Runtime.getRuntime().exec("chmod u+r "+UNREADABLE_PATH);
+            }
+        }
     }
 
     public void testCanWrite()
@@ -131,10 +149,28 @@ public class LocalFileSystemProviderTest extends TestCase
 					provider.canWrite("file"));
 		assertFalse("The resource is writable - check test resources!", 
 					provider.canWrite("nofile"));
-		assertTrue("The resource does not exist - check test resources!", 
+    }
+    
+    private static final String UNWRITABLE_PATH = "src/test/resources/unwritablefile";
+    
+    public void testCanWriteUnwritable()
+    	throws IOException
+    {
+        if(System.getProperty("os.name").equals("Linux"))
+        {
+            Runtime.getRuntime().exec("chmod u-w "+UNWRITABLE_PATH);
+            try
+            {
+	    		assertTrue("The resource does not exist - check test resources!", 
 					provider.exists("unwritablefile"));
-		assertFalse("The resource is writable - check test resources!", 
+	    		assertFalse("The resource is writable - check test resources!", 
 					provider.canWrite("unwritablefile"));
+            }
+            finally
+            {
+                Runtime.getRuntime().exec("chmod u+w "+UNWRITABLE_PATH);
+            }
+        }
     }
 
     public void testList()
