@@ -65,7 +65,7 @@
       <subsection name="Finder">
         <p>
         Finder is a component which performs automated Builder (View), template and Action lookup.
-        It provides a defaulting strategy for finding missing templates and performs operations
+        It provides a defaulting strategy for finding missing elements and performs operations
         needed to enclose Builders in one another, thus allowing complex layouts construction.
         </p>
         <p class="more"><a href="Finder.html">more</a></p>
