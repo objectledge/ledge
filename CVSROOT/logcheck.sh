@@ -25,3 +25,11 @@ ruby /home/damagecontrol/current/bin/requestbuild --url http://localhost:4712/pr
 # clean up
 #
 rm $TEMPFILE
+
+#debug
+echo -n "args "
+while [ $# -ne 0 ]; do
+  echo -n -$1
+  shift
+done
+echo -
