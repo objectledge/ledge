@@ -27,51 +27,72 @@
 // 
 package org.objectledge.web.mvc.builders;
 
-import org.objectledge.templating.Template;
-
 /**
- * Contains a pair of view construction elements - a builder and template.
+ * Contains information about the enclosing view.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ViewPair.java,v 1.2 2004-01-15 10:30:31 fil Exp $
+ * @version $Id: EnclosingView.java,v 1.1 2005-02-17 17:04:20 zwierzem Exp $
  */
-public class ViewPair
+public class EnclosingView
 {
-	/** Builder bound by this pair. */
-	private Builder builder;
-	
-	/** Template bound by this pair. */
-	private Template template;
-	
-	/**
-	 * Constructs a pair of view construction elements.
-	 * 
-     * @param builder builder bound by this pair - may be <code>null</code>.
-     * @param template template bound by this pair - may be <code>null</code>.
-     */
-    public ViewPair(Builder builder, Template template)
-	{
-		this.builder = builder;
-		this.template = template;
-	}
-	
+    public static final EnclosingView TOP = new EnclosingView(true);
+    public static final EnclosingView DEFAULT = new EnclosingView(false);
+    
+    private boolean top = false;
+    private String view;
+
     /**
-     * Returns builder bound by this pair - may be <code>null</code>.
-     * 
-     * @return builder bound by this pair.
+     * Constructs the top or default enclosing view.
+     * @param top <code>true</code> if the constructed enclosing view is the top view.
      */
-    public Builder getBuilder()
+    private EnclosingView(boolean top)
     {
-        return builder;
+        this.view = null;
+        this.top = top;
     }
 
     /**
-     * Returns template bound by this pair - may be <code>null</code>.
-     * 
-     * @return template bound by this pair.
+     * Constructs the overriding enclosing view.
+     * @param viewName Name of the enclosing view, cannot be <code>null</code>.
      */
-    public Template getTemplate()
+    public EnclosingView(String viewName)
     {
-        return template;
+        if(viewName == null)
+        {
+            throw new IllegalArgumentException("Override view name cannot be null");
+        }
+        this.view = viewName;
+    }
+
+    /**
+     * @return Returns the enclosing view name, <code>null</code> if not specified.
+     */
+    public String getView()
+    {
+        return view;
+    }
+
+    /**
+     * @return
+     */
+    public boolean override()
+    {
+        return view != null && !top;
+    }
+
+    /**
+     * @return
+     */
+    public boolean top()
+    {
+        return view == null && top;
+    }
+
+    /**
+     * @return
+     */
+    public boolean defaultBehaviour()
+    {
+        return view == null && !top;
     }
 }

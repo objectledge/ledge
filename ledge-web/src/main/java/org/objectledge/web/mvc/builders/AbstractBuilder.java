@@ -36,7 +36,7 @@ import org.objectledge.templating.TemplatingContext;
  * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.7 2005-02-16 17:19:28 zwierzem Exp $
+ * @version $Id: AbstractBuilder.java,v 1.8 2005-02-17 17:04:20 zwierzem Exp $
  */
 public abstract class AbstractBuilder implements Builder
 {
@@ -80,9 +80,9 @@ public abstract class AbstractBuilder implements Builder
 	/**
 	 * {@inheritDoc}
 	 */
-    public ViewPair getEnclosingViewPair(Template template)
+    public EnclosingView getEnclosingView(String thisViewName)
     {
-        return new ViewPair(null, null);
+        return EnclosingView.DEFAULT;
     }
 
 	/**

@@ -39,7 +39,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * using templates apropriate for the selected locale.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.11 2004-12-27 05:18:20 rafal Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.12 2005-02-17 17:04:20 zwierzem Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
@@ -53,6 +53,7 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
      * @param classFinder the class finder.
      * @param templateFinder the template finder.
      * @param securityHelper security helper for access checking
+     * @param viewEnclosureManager the template based enclosure manager
      * @param maxRouteCalls the max route calls.
      * @param maxEnclosures the max enclosures.
      * @param resolver the I18mAwareTemplateResolver component. 
@@ -62,11 +63,12 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
         MVCClassFinder classFinder,
         MVCTemplateFinder templateFinder,
         SecurityHelper securityHelper,
+        ViewEnclosureManager viewEnclosureManager,
         int maxRouteCalls,
         int maxEnclosures,
         I18nAwareTemplateResolver resolver)
     {
-        super(context, classFinder, templateFinder, securityHelper, maxRouteCalls, maxEnclosures);
+        super(context, classFinder, templateFinder, securityHelper, viewEnclosureManager, maxRouteCalls, maxEnclosures);
         this.resolver = resolver;
     }
     

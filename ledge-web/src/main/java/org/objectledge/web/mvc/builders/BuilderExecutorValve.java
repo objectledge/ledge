@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.24 2005-02-16 17:19:28 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.25 2005-02-17 17:04:20 zwierzem Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -54,6 +54,8 @@ public class BuilderExecutorValve
 	protected MVCTemplateFinder templateFinder;
     /** SecurityHelper for access checking. */
     protected SecurityHelper securityHelper;
+    /** ViewEnclosureManager for access template based view enclosures. */
+    protected ViewEnclosureManager viewEnclosureManager;
 	/** maximum number of route calls per builder. */
 	protected int maxRouteCalls;  
 	/** maximum number of builder enclosures. */
@@ -65,22 +67,23 @@ public class BuilderExecutorValve
     
 	/**
 	 * Component constructor.
-	 * 
-     * @param context used application context
-     * @param classFinder finder for builder objects
-     * @param templateFinder finder for template objects
-     * @param securityHelper security helper for access checking
-     * @param maxRouteCalls maxmimal number of {@link Builder#route(String)} calls per {@link Builder}
-     * @param maxEnclosures maxmimal number of {@link Builder} enclosures
-     * 	(also {@link Builder#getEnclosingViewPair(Template)} calls)
+	 * @param context used application context
+	 * @param classFinder finder for builder objects
+	 * @param templateFinder finder for template objects
+	 * @param securityHelper security helper for access checking
+	 * @param viewEnclosureManager the template based enclosure manager
+	 * @param maxRouteCalls maxmimal number of {@link Builder#route(String)} calls per {@link Builder}
+	 * @param maxEnclosures maxmimal number of {@link Builder} enclosures
+     * 	(also {@link Builder#getEnclosingView(String)} calls)
 	 */
 	public BuilderExecutorValve(Context context, MVCClassFinder classFinder,
         MVCTemplateFinder templateFinder, SecurityHelper securityHelper,
-        int maxRouteCalls, int maxEnclosures)
+        ViewEnclosureManager viewEnclosureManager, int maxRouteCalls, int maxEnclosures)
 	{
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
         this.securityHelper = securityHelper;
+        this.viewEnclosureManager = viewEnclosureManager;
         this.maxRouteCalls = maxRouteCalls;
 		this.maxEnclosures = maxEnclosures;
         // take them in through pico?        
@@ -105,13 +108,16 @@ public class BuilderExecutorValve
 		// get initial builder, template and embedded result
         String viewName = mvcContext.getView();
 		String embeddedResult = null;
-		Builder builder = classFinder.findBuilder(viewName);
-		Template template = templateFinder.findBuilderTemplate(mvcContext.getView());
+		Builder builder = null;
+		Template template = null;
 		
 		// start processing
 		int enclosures;
 		for (enclosures = 0; enclosures < maxEnclosures; enclosures++)
 		{
+            builder = classFinder.findBuilder(viewName);
+            template = templateFinder.findBuilderTemplate(viewName);
+            
             if(builder != null)
             {
                 // route builder -------------------------------------------------------------------
@@ -145,8 +151,7 @@ public class BuilderExecutorValve
                 // find a template for this builder
                 if(overrideTemplate == null && builderRouted)
                 {
-                    template = templateFinder.findBuilderTemplate(
-                        classFinder.findViewName(builder));
+                    template = templateFinder.findBuilderTemplate(viewName);
                 }
             }
 
@@ -172,38 +177,31 @@ public class BuilderExecutorValve
             }
             
             // get next view build level -----------------------------------------------------------
-            Builder enclosingBuilder = null;
-            Template enclosingTemplate = null;
+            // get enclosing builder
+            EnclosingView enclosingView = EnclosingView.DEFAULT;
             if(builder != null)
             {
-                ViewPair pair = builder.getEnclosingViewPair(actualTemplate);
-                if(pair == null)
-                {
-                    break;
-                }
-                enclosingBuilder = pair.getBuilder();
-                enclosingTemplate = pair.getTemplate();
+                enclosingView = builder.getEnclosingView(viewName);
             }
 
-			if(enclosingBuilder == null && builder != null)
+            if(enclosingView.defaultBehaviour())
+            {
+                enclosingView = viewEnclosureManager.getEnclosingView(enclosingView);
+            }
+            
+            // decide on enclosure type 
+            if(enclosingView.override())
+            {
+                viewName = enclosingView.getView();
+            }
+            else if(enclosingView.top())
+            {
+                break;
+            }
+            else if(viewName != null) // enclosingView.defaultBehaviour()
 			{
 				// shorten the builder path name, find new builder	
-				enclosingBuilder = classFinder.findEnclosingBuilder(builder);
-			}
-			builder = enclosingBuilder;
-            // TODO: viewName = enclosingViewName;
-
-			if(enclosingTemplate == null && template != null)
-			{
-				// shorten the template path name, find new template	
-				enclosingTemplate = templateFinder.findEnclosingBuilderTemplate(template);
-			}
-			template = enclosingTemplate;
-	        // -------------------------------------------------------------------------------------
-			
-			if(template == null && builder == null)
-			{
-				break;
+                viewName = classFinder.findEnclosingViewName(viewName);
 			}
 		}
 
