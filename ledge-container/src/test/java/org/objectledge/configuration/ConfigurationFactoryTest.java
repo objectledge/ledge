@@ -11,13 +11,15 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
+import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.impl.LocalFileSystemProvider;
+import org.objectledge.xml.XMLValidator;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactoryTest.java,v 1.2 2003-11-28 15:53:42 fil Exp $
+ * @version $Id: ConfigurationFactoryTest.java,v 1.3 2003-12-02 13:12:44 fil Exp $
  */
 public class ConfigurationFactoryTest 
     extends TestCase
@@ -43,8 +45,11 @@ public class ConfigurationFactoryTest
             throw new Exception("system property ledge.root undefined. use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs }, 4096, 4096);
-        cf = new ConfigurationFactory(null, fs, "config");
+        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
+            getClass().getClassLoader());
+        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
+        XMLValidator xv = new XMLValidator(fs);
+        cf = new ConfigurationFactory(null, fs, xv, "config");
     }
 
     public void testGetConfig()
