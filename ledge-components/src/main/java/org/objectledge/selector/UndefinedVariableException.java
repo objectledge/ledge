@@ -30,7 +30,7 @@ package org.objectledge.selector;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UndefinedVariableException.java,v 1.3 2004-01-23 13:36:29 fil Exp $
+ * @version $Id: UndefinedVariableException.java,v 1.4 2004-01-23 13:58:11 fil Exp $
  */
 public class UndefinedVariableException 
     extends EvaluationException
@@ -45,17 +45,6 @@ public class UndefinedVariableException
     public UndefinedVariableException(String variable)
     {
         this.variable = variable;
-    }
-    
-    /**
-     * Constructs a new exception instance.
-     * 
-     * @param nested the nested UndefinedVaraibleException.
-     * @param variable the name of the variable that is undefined.
-     */
-    public UndefinedVariableException(UndefinedVariableException nested, String variable)
-    {
-        this.variable = variable+"."+nested.getVariable();
     }
     
     /**
