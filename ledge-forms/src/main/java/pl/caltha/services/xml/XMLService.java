@@ -14,17 +14,10 @@ import pl.caltha.services.xml.validation.DOM4JValidator;
  * different sources.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: XMLService.java,v 1.2 2005-03-23 07:52:15 zwierzem Exp $
+ * @version $Id: XMLService.java,v 1.3 2005-03-23 10:39:11 zwierzem Exp $
  */
 public interface XMLService 
 {
-    /** The service name. */
-    public static final String SERVICE_NAME = "xml";
-
-    /** The logging facility where the service issues it's informational
-     * messages. */
-    public static final String LOGGING_FACILITY = "xml";
-
     /*Sk?d czytamy XMLa
      *
      * 1. InputSource
