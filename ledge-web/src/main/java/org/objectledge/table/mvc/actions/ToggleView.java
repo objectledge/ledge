@@ -30,7 +30,6 @@ package org.objectledge.table.mvc.actions;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 
@@ -39,7 +38,7 @@ import org.objectledge.table.TableStateManager;
  * 
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleView.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
+ * @version $Id: ToggleView.java,v 1.2 2004-03-05 12:14:15 zwierzem Exp $
  */
 public class ToggleView
     extends BaseTableAction
@@ -66,14 +65,13 @@ public class ToggleView
             return;
         }
 
-        int viewType = state.getViewType();
-        if(viewType == TableConstants.VIEW_AS_LIST)
+        if(state.getTreeView())
         {
-            state.setViewType(TableConstants.VIEW_AS_TREE);
+            state.setTreeView(false);
         }
         else
         {
-            state.setViewType(TableConstants.VIEW_AS_LIST);
+			state.setTreeView(true);
         }
     }
 }

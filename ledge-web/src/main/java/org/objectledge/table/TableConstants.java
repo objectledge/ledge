@@ -33,7 +33,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableConstants.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableConstants.java,v 1.2 2004-03-05 12:14:15 zwierzem Exp $
  */
 public interface TableConstants {
 
@@ -51,16 +51,4 @@ public interface TableConstants {
 
     /** Sort column name parameter key - <code>sort_column</code>. */
     public static final String SORT_COLUMN_PARAM_KEY = "sort_column";
-
-    /** Defines list type of view. */
-    public static final int VIEW_AS_LIST = 0;
-
-    /** Defines tree or forest type of view. */
-    public static final int VIEW_AS_TREE = 1;
-
-    /** Defines ascending sorting direction. */
-    public static final int SORT_ASC = 0;
-
-    /** Defines descending sorting direction. */
-    public static final int SORT_DESC = 1;
 }

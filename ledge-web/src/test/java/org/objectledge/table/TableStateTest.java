@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// Copyright (c) 2003, 2004 Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 // All rights reserved. 
 //   
 // Redistribution and use in source and binary forms, with or without modification,  
@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateTest.java,v 1.1 2004-02-12 13:51:20 zwierzem Exp $
+ * @version $Id: TableStateTest.java,v 1.2 2004-03-05 12:14:26 zwierzem Exp $
  */
 public class TableStateTest extends TestCase
 {
@@ -57,13 +57,12 @@ public class TableStateTest extends TestCase
     	assertEquals(state.getFilters().length, 0);
     	assertEquals(state.getId(), id);
     	assertEquals(state.getMaxVisibleDepth(), 0);
-    	assertFalse(state.getMultiSelect());
     	assertEquals(state.getPageSize(), 0);
     	assertEquals(state.getRootId(), "");
     	assertFalse(state.getShowRoot());
     	assertNull(state.getSortColumnName());
-    	assertEquals(state.getSortDir(), TableConstants.SORT_ASC);
-    	assertEquals(state.getViewType(), TableConstants.VIEW_AS_LIST);
+    	assertEquals(state.getAscSort(), true);
+    	assertEquals(state.getTreeView(), false);
     	
 		// check page sizes
 		state.setPageSize(4);
@@ -116,72 +115,18 @@ public class TableStateTest extends TestCase
 		assertEquals(state.getSortColumnName(), "sort-column");
     	
     	// check sort dir
-    	state.setSortDir(TableConstants.SORT_DESC);
-		assertEquals(state.getSortDir(), TableConstants.SORT_DESC);
-		state.toggleSortDir();
-		assertEquals(state.getSortDir(), TableConstants.SORT_ASC);
-		state.toggleSortDir();
-		assertEquals(state.getSortDir(), TableConstants.SORT_DESC);
-		state.setSortDir(12345);
-		assertEquals(state.getSortDir(), TableConstants.SORT_ASC);
+    	state.setAscSort(false);
+		assertEquals(state.getAscSort(), false);
+		state.setAscSort(true);
+		assertEquals(state.getAscSort(), true);
     	
     	//check view type
-    	state.setViewType(TableConstants.VIEW_AS_TREE);
-		assertEquals(state.getViewType(), TableConstants.VIEW_AS_TREE);
-		state.setViewType(TableConstants.VIEW_AS_LIST);
-		assertEquals(state.getViewType(), TableConstants.VIEW_AS_LIST);
-		state.setViewType(12345);
-		assertEquals(state.getViewType(), TableConstants.VIEW_AS_LIST);
+    	state.setTreeView(true);
+		assertEquals(state.getTreeView(), true);
+		state.setTreeView(false);
+		assertEquals(state.getTreeView(), false);
     }
     
-	public void testSelected()
-	{
-		TableState state = new TableState(id);
-		
-		assertFalse(state.isSelected("selected-id"));
-		state.setSelected("selected-id");
-		assertTrue(state.isSelected("selected-id"));
-		state.clearSelected();
-		assertFalse(state.isSelected("selected-id"));
-
-		state.toggleSelected("selected-id");
-		assertTrue(state.isSelected("selected-id"));
-		state.toggleSelected("selected-id2");
-		assertTrue(state.isSelected("selected-id2"));
-		assertFalse(state.isSelected("selected-id"));
-		state.toggleSelected("selected-id2");
-		assertFalse(state.isSelected("selected-id2"));
-
-		state.setSelected("selected-id1");
-		state.setSelected("selected-id2");
-		assertFalse(state.isSelected("selected-id1"));
-		assertTrue(state.isSelected("selected-id2"));
-
-		state.clearSelected();
-
-		state.setSelected(new String[] {"selected-id1","selected-id2"});
-		assertFalse(state.isSelected("selected-id1"));
-		assertFalse(state.isSelected("selected-id2"));
-		
-		state.setMultiSelect(true);
-
-		state.setSelected("selected-id1");
-		state.setSelected("selected-id2");
-		assertTrue(state.isSelected("selected-id1"));
-		assertTrue(state.isSelected("selected-id2"));
-		
-		state.toggleSelected("selected-id1");
-		state.toggleSelected("selected-id3");
-		assertFalse(state.isSelected("selected-id1"));
-		assertTrue(state.isSelected("selected-id2"));
-		assertTrue(state.isSelected("selected-id3"));
-
-		state.clearSelected();
-		
-		state.setSelected(new String[] {"selected-id1","selected-id2"});
-		assertTrue(state.isSelected("selected-id1"));
-		assertTrue(state.isSelected("selected-id2"));
-	}
 
 	public void testExpanded()
 	{

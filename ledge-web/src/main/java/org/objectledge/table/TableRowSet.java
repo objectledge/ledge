@@ -33,7 +33,7 @@ package org.objectledge.table;
  * provide model-specific implementations to increase performance of the model.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableRowSet.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableRowSet.java,v 1.2 2004-03-05 12:14:15 zwierzem Exp $
  */
 public interface TableRowSet
 {
@@ -71,7 +71,7 @@ public interface TableRowSet
      *
      * @param ancestorRow row which is an ancestor for the given descendant row
      * @param descendantRow row which is an descendant for the given ancestor row
-     * @return <code>true</code> if has more children
+     * @return <code>true</code> if ancestor has more children
      */
     public boolean hasMoreChildren(TableRow ancestorRow, TableRow descendantRow);
 

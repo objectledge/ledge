@@ -41,7 +41,7 @@ import org.objectledge.parameters.RequestParameters;
  * If the same column is set, sorting direction is changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetSortColumn.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
+ * @version $Id: SetSortColumn.java,v 1.2 2004-03-05 12:14:15 zwierzem Exp $
  */
 public class SetSortColumn extends BaseTableAction
 {
@@ -78,7 +78,7 @@ public class SetSortColumn extends BaseTableAction
         String originalSortColumnName = state.getSortColumnName();
         if(sortColumnName.equals(originalSortColumnName))
         {
-            state.toggleSortDir();
+            state.setAscSort(!state.getAscSort());
         }
         else
         {

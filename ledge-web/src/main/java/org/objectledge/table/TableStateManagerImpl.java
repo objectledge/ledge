@@ -29,7 +29,6 @@
 package org.objectledge.table;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -41,7 +40,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.2 2004-02-12 13:50:28 zwierzem Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.3 2004-03-05 12:14:15 zwierzem Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager

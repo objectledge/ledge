@@ -1,5 +1,5 @@
 // 
-//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+//Copyright (c) 2003, 2004 Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 //All rights reserved. 
 // 
 //Redistribution and use in source and binary forms, with or without modification,  
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.2 2004-02-11 13:42:42 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.3 2004-03-05 12:14:15 zwierzem Exp $
  */
 public class TableTool
 {
@@ -96,8 +97,7 @@ public class TableTool
      */
     public boolean getViewAsTree()
     {
-        int viewType = state.getViewType();
-        return (viewType == TableConstants.VIEW_AS_TREE);
+        return state.getTreeView();
     }
 
     /**
@@ -153,12 +153,11 @@ public class TableTool
     /**
      * Returns the direction of sorting.
      *
-     * @return <code>true</code> if sorting sirection is set to ascending
+     * @return <code>true</code> if sorting direction is set to ascending.
      */
     public boolean getAscSort()
     {
-        int sortdir = state.getSortDir();
-        return (sortdir == TableConstants.SORT_ASC);
+        return state.getAscSort();
     }
 
     /**
@@ -322,17 +321,6 @@ public class TableTool
     }
 
     /**
-     * Checks if a row is selected.
-     *
-     * @param row the row
-     * @return <code>true</code> if row is selected
-     */
-    public boolean isSelected(TableRow row)
-    {
-        return state.isSelected(row.getId());
-    }
-
-    /**
      * Checks if a row is expanded.
      *
      * @param row the row
@@ -343,7 +331,163 @@ public class TableTool
         return state.isExpanded(row.getId());
     }
     
-    
+    public List linesAndFolders(TableRow row)
+    {
+		List linesAndFolders = new ArrayList();
+		if( ! getViewAsTree() )
+		{
+			// -- list view
+			if (row.getChildCount() == 0) 
+			{
+				linesAndFolders.add(laFfile);
+			}
+			else 
+			{
+				linesAndFolders.add(laFfolder);
+			}
+			return linesAndFolders;
+		}
+
+		// -- tree view
+		
+		// only root
+		if(getRootRow() == row)
+		{
+			linesAndFolders.add(laFfolderopen);
+			return linesAndFolders;
+		}
+
+		// other rows
+		TableRow parent = getParent(row);
+		// -- lines generation START
+		for (Iterator iter = getAncestors(row).iterator(); iter.hasNext();)
+        {
+            TableRow ancestor = (TableRow) iter.next();
+			if(ancestor != parent)
+			{
+				if(hasMoreChildren(ancestor, row))
+				{
+					linesAndFolders.add(laFI);
+				}
+				else
+				{
+					linesAndFolders.add(laFblank);
+				}
+			}
+        }
+		// -- lines generation END
+		// -- plus minus and file/folder generation START
+		if (row.getChildCount() == 0)
+		{
+            if (hasMoreChildren(parent, row))
+            {
+                linesAndFolders.add(laFT);
+            }
+            else
+            {
+                linesAndFolders.add(laFL);
+            }
+            linesAndFolders.add(laFfile);
+        }
+        else // getChildCount() > 0
+        {
+            // allow toggle expand links attachment
+            if (hasMoreChildren(parent, row))
+            {
+                if (isExpanded(row))
+                {
+                    linesAndFolders.add(laFTminus); // link on this element
+                    linesAndFolders.add(laFfolderopen);
+                }
+                else
+                {
+                    linesAndFolders.add(laFTplus); // link on this element
+                    linesAndFolders.add(laFfolder);
+                }
+            }
+            else
+            {
+                if (isExpanded(row))
+                {
+                    linesAndFolders.add(laFLminus); // link on this element
+                    linesAndFolders.add(laFfolderopen);
+                }
+                else
+                {
+                    linesAndFolders.add(laFLplus); // link on this element
+                    linesAndFolders.add(laFfolder);
+                }
+            }
+        }
+        // -- plus minus and file/folder generation END
+		return linesAndFolders;
+    }
+
+	private static LinesAndFoldersBox laFI = new LinesAndFoldersBox("I");
+	private static LinesAndFoldersBox laFL = new LinesAndFoldersBox("L");
+	private static LinesAndFoldersBox laFT = new LinesAndFoldersBox("T");
+	private static LinesAndFoldersBox laFblank = new LinesAndFoldersBox("blank");
+	private static LinesAndFoldersBox laFLplus = new LinesAndFoldersBox("Lplus", "toggle-expand");
+	private static LinesAndFoldersBox laFLminus = new LinesAndFoldersBox("Lminus", "toggle-expand");
+	private static LinesAndFoldersBox laFTplus = new LinesAndFoldersBox("Tplus", "toggle-expand");
+	private static LinesAndFoldersBox laFTminus = new LinesAndFoldersBox("Tminus", "toggle-expand");
+	private static LinesAndFoldersBox laFfolder = new LinesAndFoldersBox("folder");
+	private static LinesAndFoldersBox laFfile = new LinesAndFoldersBox("file");
+	private static LinesAndFoldersBox laFfolderopen = new LinesAndFoldersBox("folderopen");
+
+	/** 
+	 * Represents an element of "lines and folders" line generated for a tree row.
+	 */  
+	public static class LinesAndFoldersBox
+	{
+		private String type;
+		private String linkType = "none";
+
+		public LinesAndFoldersBox(String type)
+		{
+			this.type = type;
+		}
+
+		public LinesAndFoldersBox(String type, String linkType)
+		{
+			this(type);
+			this.linkType = linkType;
+		}
+
+        /**
+         * Different from <code>none</code> if this box needs to have a link.
+         * 
+         * @return name of the type of the link.
+         */
+        public String getLinkType()
+        {
+            return linkType;
+        }
+
+		/**
+		 * This boxes type, one of:
+		 * <ul>
+		 * <li><code>I</code> - a line</li>
+		 * <li><code>L</code> - a line</li>
+		 * <li><code>T</code> - a line</li>
+		 * <li><code>blank</code> - empty element</li>
+		 * <li><code>Lplus</code> - a widget</li>
+		 * <li><code>Lminus</code> - a widget</li>
+		 * <li><code>Tplus</code> - a widget</li>
+		 * <li><code>Tminus</code> - a widget</li>
+		 * <li><code>folder</code> - an icon</li>
+		 * <li><code>file</code> - an icon</li>
+		 * <li><code>folderopen</code> - an icon</li>
+		 * </ul> 
+		 * 
+		 * @return name of the type of the box.
+		 */
+        public String getType()
+        {
+            return type;
+        }
+	}
+
 	/*
 	 * Sanitizes the number of the current page of the table - set a proper number in the state.
 	 * TODO: Add pageNumber sanity check either here or in RowSet.
