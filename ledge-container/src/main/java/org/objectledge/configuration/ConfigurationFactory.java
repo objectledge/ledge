@@ -61,7 +61,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.11 2003-12-03 15:35:03 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.12 2003-12-05 08:42:25 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -77,6 +77,7 @@ public class ConfigurationFactory
      * 
      * @param container the container we are being registered to.
      * @param fileSystem the file system to read configurations from.
+     * @param xmlValidator the validator for configuration files.
      * @param directory the name of the directory where configurations reside.
      */
     public ConfigurationFactory(MutablePicoContainer container, FileSystem fileSystem, 
@@ -204,6 +205,7 @@ public class ConfigurationFactory
      * 
      * @param componentKey the component key.
      * @return human readable name of the component.
+     * @throws UnsupportedKeyTypeException if the component key is of unsupported type.
      */
     protected String getComponentName(Object componentKey)
         throws UnsupportedKeyTypeException
@@ -283,7 +285,9 @@ public class ConfigurationFactory
      * 
      * @param configuration the configuration.
      * @param schemaPath the the schema file path.
-     * @throws Exception if a schema violation is detected.
+     * @throws IOException if the configuration, or schema cannot be read.
+     * @throws SAXException if the configuration, or schema cannot be parsed.
+     * @throws IncorrectSchemaException if the schema is malformed.
      */
     protected void checkSchema(Configuration configuration, String schemaPath)
         throws SAXException, IOException, IncorrectSchemaException
@@ -299,7 +303,9 @@ public class ConfigurationFactory
      * 
      * @param configuration the configuration file path.
      * @param schemaPath the the schema file path.
-     * @throws Exception if a schema violation is detected.
+     * @throws IOException if the configuration, or schema cannot be read.
+     * @throws SAXException if the configuration, or schema cannot be parsed.
+     * @throws IncorrectSchemaException if the schema is malformed.
      */
     protected void checkSchema(String configuration, String schemaPath)
         throws SAXException, IOException, IncorrectSchemaException
