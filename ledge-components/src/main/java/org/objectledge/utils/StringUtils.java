@@ -31,7 +31,10 @@ package org.objectledge.utils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -41,7 +44,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.19 2004-12-23 07:16:47 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.20 2005-01-21 03:53:35 pablo Exp $
  */
 public class StringUtils
 {
@@ -533,5 +536,149 @@ public class StringUtils
             out.append(lineOut);
         }
         return out.toString();
+    }
+    
+    // pathnames ////////////////////////////////////////////////////////////
+    
+    /**
+     * Normalizes a pathname.
+     *
+     * <p>This method removes redundant / characters, removes . and .. path elements,
+     * taking care that the paths dont reach outside filesystem root, removes trailing /
+     * from directories and adding leading / as neccessary.</p>
+     * 
+     * @param path the path.
+     * @return normalized path.
+     * @throws IllegalArgumentException if the path reaches outside the filesystem root.
+     */
+    public static String normalizedPath(String path)
+        throws IllegalArgumentException
+    {
+        StringTokenizer st = new StringTokenizer(path, "/");
+        ArrayList temp = new ArrayList(st.countTokens());
+        while(st.hasMoreTokens())
+        {
+            String t = st.nextToken();
+            if(t.equals("."))
+            {
+                continue;
+            }
+            else if(t.equals(".."))
+            {
+                if(temp.isEmpty())
+                {
+                    throw new IllegalArgumentException("path outside filesystem root: "+path);  
+                }
+                else
+                {
+                    temp.remove(temp.size()-1);
+                }
+            }
+            else
+            {
+                temp.add(t);
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        for(int i=0; i<temp.size(); i++)
+        {
+            sb.append('/').append((String)temp.get(i));
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * Returns the base name of a file.
+     * 
+     * <p>This method returns the contents of the pathname after the last '/' 
+     * character. </p>
+     *
+     * @param path the pathname of the file.
+     * @return the basename of the file.     
+     */
+    public static String basePath(String path)
+    {
+        int pos = path.lastIndexOf('/');
+        if(pos < 0)
+        {
+            return path;
+        }
+        else
+        {
+            return path.substring(pos+1);
+        }
+    }
+    
+    /**
+     * Returns hte directory name of a file.
+     * 
+     * <p>This method returns the normalized path before the last '/' character
+     * in the path.</p>
+     * 
+     * @param path the pathname of the file.
+     * @return the directory name of the file.   
+     */
+    public static String directoryPath(String path)
+    {
+        path = normalizedPath(path);
+        return path.substring(0, path.lastIndexOf('/'));        
+    }
+    
+    /**
+     * Returns the relative pathname of a file with respect to given
+     * base directory.
+     *
+     * @param path the pathname of a file.
+     * @param base the base pathname.
+     * @return the relative pathname.
+     * @throws IllegalArgumentException if the file is contained
+     *         outside of base.
+     */
+    public static String relativePath(String path, String base)
+        throws IllegalArgumentException
+    {
+        base = normalizedPath(base);
+        path = normalizedPath(path);
+        if(!path.startsWith(base))
+        {
+            throw new IllegalArgumentException(path+" is not contained in "+base);
+        }
+        return path.substring(base.length());
+    }    
+    
+    /**
+     *  
+     * @param s the String to process.
+     * @param t the macros (token -&gt; value)
+     * @return an expanded String
+     */
+    public static String expand(String s, Map t)
+    {
+        if(t==null || t.size()==0)
+            return s;
+        StringBuffer buff = new StringBuffer(s.length());
+        Iterator keys = t.keySet().iterator();
+        int pos, lastpos;
+        String k, v;
+        while(keys.hasNext())
+        {
+            k = (String)keys.next();
+            pos = s.indexOf(k);
+            if(pos < 0)
+                continue;
+            lastpos = 0;
+            v = (String)t.get(k);
+            buff.setLength(0);
+            while(pos >= 0)
+            {
+                buff.append(s.substring(lastpos, pos));
+                buff.append(v);
+                lastpos = pos+k.length();
+                pos = s.indexOf(k, lastpos);
+            }
+            buff.append(s.substring(lastpos));
+            s = buff.toString();
+        }
+        return s;
     }
 }
