@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: project.xml,v 1.1 2003-11-24 10:25:13 fil Exp $ -->
+<project>
+  <pomVersion>3</pomVersion>
+  
+  <extend>../ledge-reactor/shared/project.xml</extend>
+
+  <!-- project info -->
+  
+  <groupId>ab</groupId>
+  <id>ab-web</id>
+  <currentVersion>0.1-dev</currentVersion>
+  
+  <name>Object Ledge - web</name>
+  <shortDescription>Object Ledge - web package.</shortDescription>
+  <description>
+    This module contains a set of components for developing J2EE web applications.
+  </description>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
+      <version>2.3</version>
+    </dependency>
+  </dependencies>
+
+</project>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: project.xml,v 1.1 2003-11-24 10:25:15 fil Exp $ -->
+<project>
+  <pomVersion>3</pomVersion>
+  
+  <extend>../ledge-reactor/shared/project.xml</extend>
+
+  <!-- project info -->
+  
+  <groupId>objectledge</groupId>
+  <id>ledge-container</id>
+  <currentVersion>0.1-dev</currentVersion>
+  <name>Object Ledge - container</name>
+  <shortDescription>Object Ledge - container package.</shortDescription>
+  <description>
+    This module contains a Pico-based Type 3 IoC container.
+  </description>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picocontainer-1.0</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  
+</project>

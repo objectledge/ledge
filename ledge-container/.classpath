@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" output="ab-container/target/test-classes" path="src/test/java"/>
+    <classpathentry kind="src" path="src/main/java"/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="lib" path="/usr/local/eclipse-2.1.2/plugins/org.aspectj.ajde_1.1.4/aspectjrt.jar"/>
+    <classpathentry kind="src" path="/pico"/>
+    <classpathentry kind="src" path="/dna"/>
+    <classpathentry kind="src" path="/ab-components"/>
+    <classpathentry kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.0-SNAPSHOT.jar"/>
+    <classpathentry kind="output" path="target/classes"/>
+</classpath>

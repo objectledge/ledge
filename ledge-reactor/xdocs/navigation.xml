@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Labeo">
+
+  <title>Labeo</title>
+
+  <body>
+    <menu name="Projects">
+    #if ($createOverviewPage == "true" )
+      <item name="${overviewPageLinkTitle}"
+href="${overviewPageLink}.html"/>
+    #end
+    #foreach ($reactorProject in $reactorProjects)
+      <item name="$reactorProject.name"
+href="/${aggregateDir}${reactorProject.artifactId}/index.html"/>
+    #end
+    </menu>
+    <menu name="Overview">
+      <item name="Goals"                   href="goals.html"/>
+      <item name="Features"                href="features.html"/>
+      <item name="FAQ"                     href="faq.html"/>
+      <item name="Powered By"              href="powered.html"/>
+    </menu>
+  </body>
+</project>

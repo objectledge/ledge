@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: project.xml,v 1.1 2003-11-24 10:25:14 fil Exp $ -->
+<project>
+  <pomVersion>3</pomVersion>
+  
+  <extend>shared/project.xml</extend>
+
+  <!-- project info -->
+  
+  <groupId>objectledge</groupId>
+  <id>ledge-reactor</id>
+  <currentVersion>0.1-dev</currentVersion>
+  
+  <name>Object Ledge</name>
+  <shortDescription>Object Ledge - documentation package.</shortDescription>
+  <description>
+    This module contains general Object Ledge documentation.
+  </description>
+</project>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ledge-web</name>
+	<comment></comment>
+	<projects>
+		<project>ab-components</project>
+		<project>pico</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.ajdt.ui.ajbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.ajdt.ui.ajnature</nature>
+	</natures>
+</projectDescription>

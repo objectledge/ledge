@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="src/main/java"/>
+    <classpathentry kind="src" path="src/test/java"/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="lib" path="/usr/local/eclipse-2.1.2/plugins/org.aspectj.ajde_1.1.4/aspectjrt.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.3.jar"/>
+    <classpathentry kind="src" path="/ab-components"/>
+    <classpathentry kind="src" path="/pico"/>
+    <classpathentry kind="output" path="target/classes"/>
+</classpath>
