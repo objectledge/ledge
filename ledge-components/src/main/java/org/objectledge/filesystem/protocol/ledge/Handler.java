@@ -40,7 +40,7 @@ import org.objectledge.filesystem.impl.URLStreamHandlerImpl;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Handler.java,v 1.4 2004-11-04 11:12:55 rafal Exp $
+ * @version $Id: Handler.java,v 1.5 2004-11-04 11:21:41 rafal Exp $
  */
 public class Handler extends URLStreamHandler
 {
@@ -58,7 +58,7 @@ public class Handler extends URLStreamHandler
      */
     public static synchronized void init(URLStreamHandlerImpl h)
     {
-        if(handler != null)
+        if(handler == null)
         {
             handler = h;
         }
