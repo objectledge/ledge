@@ -34,6 +34,11 @@ import java.io.LineNumberReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
@@ -44,7 +49,7 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtilsTest.java,v 1.1 2004-02-04 13:20:46 fil Exp $
+ * @version $Id: DatabaseUtilsTest.java,v 1.2 2004-02-04 14:07:33 fil Exp $
  */
 public class DatabaseUtilsTest extends TestCase
 {    
@@ -122,25 +127,34 @@ public class DatabaseUtilsTest extends TestCase
     public void testUnescapeSqlString()
         throws Exception
     {
-        //TODO Implement unescapeSqlString().
+        // Shalom!
+        assertEquals("!\u05DD\u05D5\u05DC\u05E9",
+            DatabaseUtils.unescapeSqlString("!\\u05DD\\u05D5\\u05DC\\u05E9"));
     }
 
     public void testEscapeSqlString()
         throws Exception
     {
-        //TODO Implement escapeSqlString().
+        assertEquals("foo\\'s home directory is c:\\\\users\\\\foo",
+            DatabaseUtils.escapeSqlString("foo's home directory is c:\\users\\foo"));
     }
 
     public void testFormat()
         throws Exception
     {
-        //TODO Implement format().
+        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("CET"), new Locale("pl","PL"));
+        cal.set(2004, 1, 4, 14, 48, 02);
+        assertEquals("Wed, 4 Feb 2004 14:48:02 +0100", DatabaseUtils.format(cal.getTime()));
     }
 
     public void testParse()
         throws Exception
     {
-        //TODO Implement parse().
+        Date parsed = DatabaseUtils.parse("Wed, 4 Feb 2004 14:48:02 +0100");
+        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("CET"), new Locale("pl","PL"));
+        cal.set(2004, 1, 4, 14, 48, 02);
+        cal.set(Calendar.MILLISECOND, 0);
+        assertEquals(cal.getTime().getTime(), parsed.getTime());
     }
 
     public void testRunScript()
