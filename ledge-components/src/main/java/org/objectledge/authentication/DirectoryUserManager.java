@@ -53,6 +53,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.naming.ContextHelper;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.directory.DirectoryParameters;
 
 /**
  * The user manager implementation based on ldap.
@@ -383,8 +384,15 @@ public class DirectoryUserManager extends UserManager
      */
     public Parameters getPersonalData(Principal account) throws AuthenticationException
     {
-        // TODO Auto-generated method stub
-        return null;
+        try
+        {
+            DirContext ctx = directory.lookupDirContext(account.getName());
+            return new DirectoryParameters(ctx);
+        }
+        catch(NamingException e)
+        {
+            throw new AuthenticationException("Failed to lookup user personal data");
+        }
     }
 
     /**

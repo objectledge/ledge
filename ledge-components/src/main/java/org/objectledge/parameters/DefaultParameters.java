@@ -46,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.6 2004-01-27 16:47:25 fil Exp $
+ * @version $Id: DefaultParameters.java,v 1.7 2004-02-20 13:51:31 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -777,13 +777,13 @@ public class DefaultParameters implements Parameters
     /** 
      * Get string representation of parameter values
      *  
-     * @param name
-     * @return
+     * @param name the name of the parameters.
+     * @return the string representation of the parameter value(s). 
      */
-    private String toString(String name)
+    protected String toString(String name)
     {
         StringBuffer sb = new StringBuffer();
-        String[] values = (String[])map.get(name);
+        String[] values = getStrings(name);
         for (int i = 0; i < values.length; i++)
         {
             String value = values[i];

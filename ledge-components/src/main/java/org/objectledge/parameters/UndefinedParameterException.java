@@ -32,7 +32,7 @@ package org.objectledge.parameters;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UndefinedParameterException.java,v 1.3 2003-12-29 13:32:06 fil Exp $
+ * @version $Id: UndefinedParameterException.java,v 1.4 2004-02-20 13:51:31 pablo Exp $
  */
 ///CLOVER:OFF
 public class UndefinedParameterException
@@ -55,4 +55,15 @@ public class UndefinedParameterException
     {
         super(message);
     }
+    
+    /**
+     * Constructs a new UndefinedParameterException with a custom message.
+     * 
+     * @param message the message.
+     * @param t the root cause.
+     */
+    public UndefinedParameterException(String message, Throwable t)
+    {
+        super(message,t);
+    }    
 }
