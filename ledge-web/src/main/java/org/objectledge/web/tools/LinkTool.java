@@ -99,7 +99,7 @@ public class LinkTool
 	/** the resource path */
 	private String path;
 	
-	/** the fragment of the url */
+	/** the fragment part of the url */
 	private String fragment;
 	
 	/** the parameters */
@@ -244,19 +244,9 @@ public class LinkTool
      */
     public LinkTool set(String name, String value)
     {
+		checkSetParamName(name);
         LinkTool target = getLinkTool(this);
-        if (name.equals(config.getViewToken()))
-        {
-            target.view = value;
-        }
-        else if (name.equals(config.getActionToken()))
-        {
-            target.action = value;
-        }
-        else
-        {
-            target.parameters.set(name, value);
-        }
+		target.parameters.set(name, value);
         return target;
     }
 
@@ -269,6 +259,7 @@ public class LinkTool
      */
     public LinkTool set(String name, int value)
     {
+		checkSetParamName(name);
 		LinkTool target = getLinkTool(this);
 		target.parameters.set(name, value);
 		return target;
@@ -283,6 +274,7 @@ public class LinkTool
      */
     public LinkTool set(String name, long value)
     {
+		checkSetParamName(name);
         LinkTool target = getLinkTool(this);
         target.parameters.set(name, value);
         return target;
@@ -297,6 +289,7 @@ public class LinkTool
      */
     public LinkTool set(String name, float value)
     {
+		checkSetParamName(name);
         LinkTool target = getLinkTool(this);
         target.parameters.set(name, value);
         return target;
@@ -311,6 +304,7 @@ public class LinkTool
      */
     public LinkTool set(String name, boolean value)
     {
+		checkSetParamName(name);
         LinkTool target = getLinkTool(this);
         target.parameters.set(name, value);
         return target;
@@ -325,10 +319,16 @@ public class LinkTool
      */
     public LinkTool set(Parameters parameters)
     {
+		if (parameters.isDefined(config.getViewToken()))
+		{
+			checkSetParamName(config.getViewToken());
+		}
+		else if (parameters.isDefined(config.getActionToken()))
+		{
+			checkSetParamName(config.getActionToken());
+		}
         LinkTool target = getLinkTool(this);
         target.parameters = new DefaultParameters(parameters);
-        target.parameters.remove(config.getViewToken());
-        target.parameters.remove(config.getActionToken());
         return target;
     }
 
@@ -385,16 +385,9 @@ public class LinkTool
      */
     public LinkTool add(String name, String value)
     {
+		checkAddParamName(name);
         LinkTool target = getLinkTool(this);
-        if (name.equals(config.getViewToken()) || name.equals(config.getActionToken()))
-        {
-            throw new IllegalArgumentException("multiple values of the " + name + 
-                                                " parameter are not allowed");
-        }
-        else
-        {
-            target.parameters.add(name, value);
-        }
+        target.parameters.add(name, value);
         return target;
     }
 
@@ -407,6 +400,7 @@ public class LinkTool
      */
     public LinkTool add(String name, int value)
     {
+		checkAddParamName(name);
         LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
@@ -421,6 +415,7 @@ public class LinkTool
      */
     public LinkTool add(String name, long value)
     {
+		checkAddParamName(name);
         LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
@@ -435,6 +430,7 @@ public class LinkTool
      */
     public LinkTool add(String name, float value)
     {
+		checkAddParamName(name);
         LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
@@ -449,6 +445,7 @@ public class LinkTool
      */
     public LinkTool add(String name, boolean value)
     {
+		checkAddParamName(name);
         LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
@@ -462,6 +459,14 @@ public class LinkTool
      */
     public LinkTool add(Parameters parameters)
     {
+		if (parameters.isDefined(config.getViewToken()))
+		{
+			checkAddParamName(config.getViewToken());
+		}
+		else if (parameters.isDefined(config.getActionToken()))
+		{
+			checkAddParamName(config.getActionToken());
+		}
         LinkTool target = getLinkTool(this);
         target.parameters.add(parameters, false);
         return target;
@@ -478,11 +483,12 @@ public class LinkTool
         LinkTool target = getLinkTool(this);
         if (name.equals(config.getViewToken()))
         {
-            target.view = "";
+			throw new IllegalArgumentException("to unset the value of the view parameter, " +				"call the unsetView() method");
         }
         else if (name.equals(config.getActionToken()))
         {
-            target.action = "";
+			throw new IllegalArgumentException("to unset the value of the action parameter, " +
+				"call the unsetAction() method");
         }
         else
         {
@@ -516,6 +522,30 @@ public class LinkTool
         target.action = action;
         return target;
     }
+
+	/**
+	 * Removes the view parameter.
+	 *
+	 * @return the link tool.
+	 */
+	public LinkTool unsetView()
+	{
+		LinkTool target = getLinkTool(this);
+		target.view = "";
+		return target;
+	}
+
+	/**
+	 * Removes the action parameter.
+	 *
+	 * @return the link tool.
+	 */
+	public LinkTool unsetAction()
+	{
+		LinkTool target = getLinkTool(this);
+		target.action = "";
+		return target;
+	}
 
     /**
      * Produces a String representation of this link.
@@ -703,6 +733,34 @@ public class LinkTool
 		target.fragment = source.fragment;
 	    target.parameters = new DefaultParameters(source.parameters);
 		return target;		
+	}
+    
+    private void checkSetParamName(String name)
+    {
+		if (name.equals(config.getViewToken()))
+		{
+			throw new IllegalArgumentException("to set the value of the view parameter, " +
+				"call the view(String) method");
+		}
+		else if (name.equals(config.getActionToken()))
+		{
+			throw new IllegalArgumentException("to set the value of the action parameter, " +
+				"call the action(String) method");
+		}
+    }
+
+	private void checkAddParamName(String name)
+	{
+		if (name.equals(config.getViewToken()))
+		{
+			throw new IllegalArgumentException(
+				"multiple values of the view parameter are not allowed");
+		}
+		else if (name.equals(config.getActionToken()))
+		{
+			throw new IllegalArgumentException(
+				"multiple values of the action parameter are not allowed");
+		}
 	}
     
     /**
