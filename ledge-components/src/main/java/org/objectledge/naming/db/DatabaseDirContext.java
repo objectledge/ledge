@@ -448,8 +448,10 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
             }
             if(found)
             {
-                searchResult.add(new SearchResult(dn, null, 
-                                 filterAttributes(attributes, attributesToReturn)));
+                SearchResult result = new SearchResult(dn, null, filterAttributes(attributes,
+                    attributesToReturn));
+                result.setNameInNamespace(composeName(getNameInNamespace(), dn));
+                searchResult.add(result);
             }
         }
         return new DefaultEnumeration(searchResult);
