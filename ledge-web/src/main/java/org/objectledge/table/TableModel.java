@@ -37,7 +37,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableModel.java,v 1.2 2004-07-01 11:39:56 zwierzem Exp $
+ * @version $Id: TableModel.java,v 1.3 2004-08-19 12:16:54 zwierzem Exp $
  */
 public interface TableModel
 {
@@ -52,7 +52,8 @@ public interface TableModel
     public TableRowSet getRowSet(TableState state, TableFilter[] filters);
 
     /**
-     * Returns array of column definitions.
+     * Returns array of column definitions. They defitinions should be created on every call,
+     * because they may be modified during it's lifecycle.
      *
      * @return array of <code>TableColumn</code> objects
      */
