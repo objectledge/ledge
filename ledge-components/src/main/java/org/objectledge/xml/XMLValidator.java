@@ -61,7 +61,7 @@ import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.2 2003-12-03 14:39:53 mover Exp $
+ * @version $Id: XMLValidator.java,v 1.3 2003-12-03 15:34:01 fil Exp $
  */
 public class XMLValidator
 {
@@ -187,6 +187,7 @@ public class XMLValidator
      */
     public synchronized void releaseValidator(Validator validator, String schemaPath)
     {
+        validator.reset();
         List list = (List)validators.get(schemaPath);
         list.add(validator);
     }
