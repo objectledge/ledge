@@ -48,7 +48,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.17 2005-03-10 09:46:16 zwierzem Exp $
+ * @version $Id: DefaultParameters.java,v 1.18 2005-03-10 13:35:57 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -262,7 +262,14 @@ public class DefaultParameters implements Parameters
     public Date getDate(String name, Date defaultValue)
     {
         String value = get(name, Long.toString(defaultValue.getTime()));
-        return new Date(Long.parseLong(value));
+        try
+        {
+            return new Date(Long.parseLong(value));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
     /**
@@ -292,7 +299,14 @@ public class DefaultParameters implements Parameters
      */
     public float getFloat(String name, float defaultValue)
     {
-        return Float.parseFloat(get(name, Float.toString(defaultValue)));
+        try
+        {
+            return Float.parseFloat(get(name, Float.toString(defaultValue)));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
     /**
@@ -322,7 +336,14 @@ public class DefaultParameters implements Parameters
      */
     public int getInt(String name, int defaultValue)
     {
-        return Integer.parseInt(get(name, Integer.toString(defaultValue)));
+        try
+        {
+            return Integer.parseInt(get(name, Integer.toString(defaultValue)));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
     /**
@@ -352,7 +373,14 @@ public class DefaultParameters implements Parameters
      */
     public long getLong(String name, long defaultValue)
     {
-        return Long.parseLong(get(name, Long.toString(defaultValue)));
+        try
+        {
+            return Long.parseLong(get(name, Long.toString(defaultValue)));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
     /**
