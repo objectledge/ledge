@@ -1,5 +1,5 @@
 #
-# $Id: checkoutlist,v 1.5 2004-02-10 10:25:57 fil Exp $
+# $Id: checkoutlist,v 1.6 2004-10-15 09:31:43 rafal Exp $
 #
 # Copyright (c) 2002 by Ken A L Coar.  All rights reserved.
 #
@@ -31,7 +31,7 @@ cvsignore
 log_accum.pl
 mailmap
 passwd
-rcstemplate
+#rcstemplate
 readers
 SpackleConf.pm
 spackle.conf
