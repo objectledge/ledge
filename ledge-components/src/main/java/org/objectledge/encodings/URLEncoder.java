@@ -39,7 +39,7 @@ import java.io.Writer;
  * values, what is useful for putting path values in Query String fields.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: URLEncoder.java,v 1.4 2005-02-21 16:26:34 zwierzem Exp $
+ * @version $Id: URLEncoder.java,v 1.5 2005-03-03 16:29:32 zwierzem Exp $
  */
 public class URLEncoder
 {
@@ -71,9 +71,9 @@ public class URLEncoder
         PASS_THROUGH['*'] = true;
         PASS_THROUGH['/'] = true;
     }
-    
+
     /**
-     * Encodes a given text as an attribute with UTF-8 encoding.
+     * Encodes a given text as a query string value with UTF-8 encoding.
      *
      * @param text Text to be encoded
      * @param encodingName name of a chosen encoding.
@@ -81,6 +81,35 @@ public class URLEncoder
      * @throws UnsupportedEncodingException if the requested encoding is not supported.
      */
     public String encodeQueryStringValue(String text, String encodingName)
+        throws UnsupportedEncodingException
+    {
+        return encode(text, encodingName, true);
+    }
+
+    /**
+     * Encodes a given text as a query string value with UTF-8 encoding.
+     *
+     * @param text Text to be encoded
+     * @param encodingName name of a chosen encoding.
+     * @return encoded text
+     * @throws UnsupportedEncodingException if the requested encoding is not supported.
+     */
+    public String encodeContentPath(String text, String encodingName)
+        throws UnsupportedEncodingException
+    {
+        return encode(text, encodingName, false);
+    }
+    
+    /**
+     * Encodes a given text as a query string value or content path with UTF-8 encoding.
+     *
+     * @param text Text to be encoded
+     * @param encodingName name of a chosen encoding.
+     * @param isQSValue <code>true</code> for encoding a query string value
+     * @return encoded text
+     * @throws UnsupportedEncodingException if the requested encoding is not supported.
+     */
+    private String encode(String text, String encodingName, boolean isQSValue)
         throws UnsupportedEncodingException
     {
         if(text == null || text.length() == 0)
@@ -107,7 +136,14 @@ public class URLEncoder
             }
             else if(c == ' ')
             {
-                outputBuf.append('+');
+                if(isQSValue)
+                {
+                    outputBuf.append('+');
+                }
+                else
+                {
+                    outputBuf.append("%20");
+                }
             }
             else
             {
