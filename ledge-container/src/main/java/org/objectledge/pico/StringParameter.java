@@ -40,13 +40,29 @@ import org.picoextras.reflection.StringToObjectConverter;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: StringParameter.java,v 1.1 2004-01-09 14:15:51 fil Exp $
+ * @version $Id: StringParameter.java,v 1.2 2004-01-16 08:51:19 fil Exp $
  */
 public class StringParameter 
     implements Parameter
 {
     /** the string representation of the value */
     private String stringValue;
+    
+    /** the parmeter class */
+    private Class parameterType;
+    
+    /**
+     * Creates a new StringParamter instance.
+     * 
+     * @param stringValue the textual value of the component.
+     * @param parameterType the class of the parameter, or <code>null</code> to 
+     *        determine dynamically.
+     */
+    public StringParameter(String stringValue, Class parameterType)
+    {
+        this.stringValue = stringValue;
+        this.parameterType = parameterType;
+    }
     
     /**
      * Creates a new StringParamter instance.
@@ -55,7 +71,7 @@ public class StringParameter
      */
     public StringParameter(String stringValue)
     {
-        this.stringValue = stringValue;
+        this(stringValue, null);
     }
     
     /**
@@ -66,7 +82,15 @@ public class StringParameter
     {
         StringToObjectConverter converter = (StringToObjectConverter)componentRegistry.
             getComponentInstance(StringToObjectConverter.class);
-        Object value = converter.convertTo(expectedType, stringValue);
-        return new InstanceComponentAdapter(value, value);
+        Object value;
+        if(parameterType == null)
+        {
+           value = converter.convertTo(expectedType, stringValue);
+        }
+        else
+        {
+            value = converter.convertTo(parameterType, stringValue);
+        }
+        return new InstanceComponentAdapter(new Object(), value);
     }
 }
