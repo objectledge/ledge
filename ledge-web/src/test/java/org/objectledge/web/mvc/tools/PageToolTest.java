@@ -51,7 +51,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.1 2004-02-09 18:16:28 zwierzem Exp $
+ * @version $Id: PageToolTest.java,v 1.2 2004-02-10 10:40:38 zwierzem Exp $
  */
 public class PageToolTest extends TestCase
 {
@@ -108,6 +108,19 @@ public class PageToolTest extends TestCase
 		MVCInitializerValve mVCInitializer = new MVCInitializerValve(webConfigurator);
 		mVCInitializer.process(context);
 
+	}
+
+	public void testFactory()
+	{
+		PageToolFactory pageToolFactory = new PageToolFactory(linkToolFactory);
+		PageTool pageTool1 = (PageTool) pageToolFactory.getTool();
+		PageTool pageTool2 = (PageTool) pageToolFactory.getTool();
+		assertNotNull(pageTool1);
+		assertNotNull(pageTool2);
+		assertNotSame(pageTool1, pageTool2);
+		pageToolFactory.recycleTool(pageTool1);
+		pageToolFactory.recycleTool(pageTool2);
+		assertEquals(pageToolFactory.getKey(), "page_tool");
 	}
 
     public void testSetTitle()
@@ -187,36 +200,79 @@ public class PageToolTest extends TestCase
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool);
 		pageTool.addNameMeta("author", "Damian Gajda");
+		pageTool.addNameMeta("author", "Dodo");
 		pageTool.addNameMeta("contributor", "ZwieRzem");
 		List metas = pageTool.getNameMetas();
-		assertEquals(metas.size(), 2);
+		assertEquals(metas.size(), 3);
 		Iterator iter = metas.iterator();
 		PageTool.Meta meta1 = (PageTool.Meta) iter.next(); 
 		PageTool.Meta meta2 = (PageTool.Meta) iter.next(); 
+		PageTool.Meta meta3 = (PageTool.Meta) iter.next(); 
 		assertEquals(meta1.getName(), "author");
-		assertEquals(meta2.getName(), "contributor");
+		assertEquals(meta2.getName(), "author");
+		assertEquals(meta3.getName(), "contributor");
 		assertEquals(meta1.getContent(), "Damian Gajda");
-		assertEquals(meta2.getContent(), "ZwieRzem");
+		assertEquals(meta2.getContent(), "Dodo");
+		assertEquals(meta3.getContent(), "ZwieRzem");
 		assertNull(meta1.getHttpEquiv());
 		assertNull(meta2.getHttpEquiv());
+		assertNull(meta3.getHttpEquiv());
 	}
 
 	public void testAddHttpEquivMeta()
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool);
-		pageTool.addHttpEquivMeta("Header1", "Value1");
-		pageTool.addHttpEquivMeta("Header2", "Value2");
+		pageTool.addHttpEquivMeta("Header", "Value1");
+		pageTool.addHttpEquivMeta("Header", "Value2");
 		List metas = pageTool.getHttpEquivMetas();
 		assertEquals(metas.size(), 2);
 		Iterator iter = metas.iterator();
 		PageTool.Meta meta1 = (PageTool.Meta) iter.next(); 
 		PageTool.Meta meta2 = (PageTool.Meta) iter.next(); 
-		assertEquals(meta1.getHttpEquiv(), "Header1");
-		assertEquals(meta2.getHttpEquiv(), "Header2");
+		assertEquals(meta1.getHttpEquiv(), "Header");
+		assertEquals(meta2.getHttpEquiv(), "Header");
 		assertEquals(meta1.getContent(), "Value1");
 		assertEquals(meta2.getContent(), "Value2");
 		assertNull(meta1.getName());
 		assertNull(meta2.getName());
+	}
+
+	public void testGetLinkTool()
+	{
+		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+		PageTool pageTool = new PageTool(linkTool);
+		assertEquals(pageTool.getLinkTool(), linkTool);
+	}
+
+	public void testReset()
+	{
+		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+		PageTool pageTool = new PageTool(linkTool);
+		pageTool.setTitle("test title");
+		pageTool.insertTitlePrefix("prefix ");
+		pageTool.appendTitleSuffix(" suffix");
+		pageTool.addStyleLink("style/style1.css",1);
+		pageTool.addStyleLink("style/style2.css",2);
+		pageTool.addStyleLink("style/style1.css");
+		pageTool.addScriptLink("js/script1.js", "ISO-8859-1");
+		pageTool.addScriptLink("js/script2.js");
+		pageTool.addScriptLink("js/script1.js");
+		pageTool.addNameMeta("author", "Damian Gajda");
+		pageTool.addNameMeta("contributor", "ZwieRzem");
+		pageTool.addHttpEquivMeta("Header", "Value1");
+		pageTool.addHttpEquivMeta("Header", "Value2");
+		
+		pageTool.reset();
+
+		assertEquals(pageTool.getTitle(), "");
+		List links = pageTool.getStyleLinks();
+		assertEquals(links.size(), 0);
+		links = pageTool.getScriptLinks();
+		assertEquals(links.size(), 0);
+		List metas = pageTool.getNameMetas();
+		assertEquals(metas.size(), 0);
+		metas = pageTool.getHttpEquivMetas();
+		assertEquals(metas.size(), 0);
 	}
 }
