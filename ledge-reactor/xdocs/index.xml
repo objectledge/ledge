@@ -22,6 +22,22 @@
         </p>
       </subsection>
 
+      <subsection name="Project scope">
+        <p>
+          Here's a simple label for this project, taking pattern from SourceForge Trove. Hope it will give you a point on what Object Ledge is.
+          <ul>
+            <li>Development Status: <b>Alpha</b></li>
+            <li>Environment: <b>Web Environment, Console (Text Based), No Input/Output (Daemon), Other Environment</b></li>
+            <li>Intended Audience: <b>Developers, Information Technology</b></li>
+            <li>License: <b>OSI Approved BSD</b></li>
+            <li>Natural Language: <b>English</b></li>
+            <li>Operating System: <b>OS Independent</b></li>
+            <li>Programming Language: <b>Java</b></li>
+            <li>Topic: <b>Software Development</b></li>
+          </ul>
+        </p>
+      </subsection>
+
       <subsection name="Why the name?">
         <p>
           "Webster's Revised Unabridged Dictionary (1913)"<br/>
