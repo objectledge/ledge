@@ -35,7 +35,7 @@ import org.objectledge.context.Context;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.7 2003-12-30 14:59:39 pablo Exp $
+ * @version $Id: Pipeline.java,v 1.8 2004-01-08 16:33:42 fil Exp $
  */
 public class Pipeline
     implements Runnable
@@ -83,20 +83,63 @@ public class Pipeline
 		   		tryValves[i].run();
         	}
         }
-        catch(Exception e)
+        ///CLOVER:OFF
+        catch(VirtualMachineError e)
         {
-        	// TODO - remove this exception and log and handle it.
-        	logger.error("Exception occured",e);
-        	for(int i = 0; i < catchValves.length; i++)
-		    {
-				catchValves[i].run();
-		    }
+            throw e;
+        }
+        catch(ThreadDeath e)
+        {
+            throw e;
+        }
+        ///CLOVER:ON
+        catch(Throwable e)
+        {
+            logger.error("Exception in try section", e);
+            try
+            {
+                for(int i = 0; i < catchValves.length; i++)
+                {
+                    catchValves[i].run();
+                }
+            }
+            ///CLOVER:OFF
+            catch(VirtualMachineError ee)
+            {
+                throw ee;
+            }
+            catch(ThreadDeath ee)
+            {
+                throw ee;
+            }
+            ///CLOVER:ON
+            catch(Throwable ee)
+            {
+                logger.error("Exception in catch section", ee);
+            }
         }
         finally
         {
 			for(int i = 0; i < finallyValves.length; i++)
 			{
-				finallyValves[i].run();
+                try
+                {
+                    finallyValves[i].run();
+                }
+                ///CLOVER:OFF
+                catch(VirtualMachineError ee)
+                {
+                    throw ee;
+                }
+                catch(ThreadDeath ee)
+                {
+                    throw ee;
+                }
+                ///CLOVER:ON
+                catch(Throwable ee)
+                {
+                    logger.error("Exception in finally section", ee);
+                }
 			}
         }
     }
@@ -130,5 +173,4 @@ public class Pipeline
     {
         return tryValves;
     }
-
 }
