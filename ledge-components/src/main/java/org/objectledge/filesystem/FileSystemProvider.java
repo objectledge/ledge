@@ -38,7 +38,7 @@ import java.net.URL;
  * Specifies the contract between FileSystem abstarction and its concrete delegates.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemProvider.java,v 1.5 2004-09-24 11:24:34 zwierzem Exp $
+ * @version $Id: FileSystemProvider.java,v 1.6 2004-09-27 13:30:56 zwierzem Exp $
  */
 public interface FileSystemProvider
 {
@@ -55,6 +55,14 @@ public interface FileSystemProvider
      * @return <code>true</code> if the provider is readonly.
      */
     public boolean isReadOnly();
+
+    /**
+     * Returns <code>true</code> if the given path contains acceptable characters.
+     * 
+     * @param path the path.
+     * @return <code>true</code>  if the given path contains acceptable characters.
+     */
+    public boolean checkPathChars(String path);
 
     /**
      * Checks if the given file or directory exists.

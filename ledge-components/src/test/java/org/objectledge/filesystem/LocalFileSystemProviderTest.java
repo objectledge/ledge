@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.3 2004-09-24 11:25:37 zwierzem Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.4 2004-09-27 13:30:56 zwierzem Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {
@@ -84,6 +84,11 @@ public class LocalFileSystemProviderTest extends TestCase
         assertFalse("Provider is not read only", provider.isReadOnly());
     }
 
+    public void testCheckPathChars()
+    {
+        assertTrue(provider.checkPathChars("asciiChars"));
+    }
+    
     public void testExists()
     {
         assertTrue("File does not exist - check test resources!", provider.exists("file"));

@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.23 2004-09-24 11:24:34 zwierzem Exp $
+ * @version $Id: FileSystem.java,v 1.24 2004-09-27 13:30:56 zwierzem Exp $
  */
 public class FileSystem
 {
@@ -1059,6 +1059,25 @@ public class FileSystem
         }
         return path.substring(base.length());
     } 
+    
+    /**
+     * Returns <code>true</code> if the given path contains acceptable characters.
+     *
+     * @param path the path
+     * @return <code>true</code> if the given path contains acceptable characters.
+     */
+    public boolean checkPathChars(String path)
+    {
+        for (Iterator i = providers.iterator(); i.hasNext();)
+        {
+            FileSystemProvider fp = (FileSystemProvider)i.next();
+            if (!fp.checkPathChars(path))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     
     // standard filesystems /////////////////////////////////////////////////
     

@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.8 2004-09-24 11:25:37 zwierzem Exp $
+ * @version $Id: FileSystemTest.java,v 1.9 2004-09-27 13:30:56 zwierzem Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -450,7 +450,8 @@ public class FileSystemTest extends TestCase
         {
             //ok!
         }
-        
+
+        assertTrue(fs.checkPathChars("/only/ascii/characters"));
     }
     
     

@@ -55,7 +55,7 @@ import org.objectledge.filesystem.impl.LocalRandomAccessFile;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.3 2004-09-24 11:23:11 zwierzem Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.4 2004-09-27 13:30:56 zwierzem Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -137,6 +137,20 @@ public class LocalFileSystemProvider
     {
         return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean checkPathChars(String path)
+    {
+        if(path != null && path.length() > 0)
+        {
+            String newPath = rewritePath(path);
+            return newPath != null && newPath.equals(path);
+        }
+        return false;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -424,32 +438,38 @@ public class LocalFileSystemProvider
         throws UnsupportedCharactersInFilePathException
     {
         // TODO: Test this method
+        String newPath = rewritePath(path);
+        if(newPath != null && !newPath.equals(path))
+        {
+            // paths differ - get different characters
+            StringBuffer badCharacters = new StringBuffer();
+            int stop = path.length() < newPath.length() ? path.length() : newPath.length();
+            for(int i=0; i < stop; i++)
+            {
+                char c = path.charAt(i);
+                if(c != newPath.charAt(i))
+                {
+                    badCharacters.append(c);
+                }
+            }
+            for(int i=stop; i < newPath.length(); i++)
+            {
+                badCharacters.append(newPath.charAt(i));
+            }
+            throw new UnsupportedCharactersInFilePathException(badCharacters.toString());
+        }
+    }
+    
+    private String rewritePath(String path)
+    {
         try
         {
-            String newPath = new String(path.getBytes(encoding), encoding);
-            if(!newPath.equals(path))
-            {
-                // paths differ - get different characters
-                StringBuffer badCharacters = new StringBuffer();
-                int stop = path.length() < newPath.length() ? path.length() : newPath.length();
-                for(int i=0; i < stop; i++)
-                {
-                    char c = path.charAt(i);
-                    if(c != newPath.charAt(i))
-                    {
-                        badCharacters.append(c);
-                    }
-                }
-                for(int i=stop; i < newPath.length(); i++)
-                {
-                    badCharacters.append(newPath.charAt(i));
-                }
-                throw new UnsupportedCharactersInFilePathException(badCharacters.toString());
-            }
+            return new String(path.getBytes(encoding), encoding);
         }
         catch(UnsupportedEncodingException e)
         {
             // should never happen - look at the constructor
+            return null;
         }
     }
 
