@@ -45,7 +45,7 @@ import org.objectledge.web.HttpDispatcher;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: DummyDispatcher.java,v 1.1 2003-12-23 08:22:17 fil Exp $
+ * @version $Id: DummyDispatcher.java,v 1.2 2003-12-23 15:28:50 fil Exp $
  */
 public class DummyDispatcher 
     implements HttpDispatcher
@@ -71,6 +71,7 @@ public class DummyDispatcher
         Configuration[] items = config.getChildren("response");
         patterns = new Pattern[items.length];
         statuses = new int[items.length];
+        types = new String[items.length];
         responses = new String[items.length];
         for(int i=0; i<items.length; i++)
         {
