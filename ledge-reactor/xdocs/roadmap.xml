@@ -8,7 +8,7 @@
     <section>
     <subsection name="0.1 release">
       <p>Planned release: December 16, 2003</p>
-      <p>Actual release: - </p>
+      <p>Actual release: January 7, 2004 </p>
       <p>Components</p>
       <ul>
         <li>FileSystem component, FileSystemProvider interface with Local and Classpath 
