@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.1 2003-11-24 10:25:14 fil Exp $
+ * @version $Id: FileSystem.java,v 1.2 2003-11-24 15:55:44 fil Exp $
  */
 public class FileSystem
 {
@@ -48,6 +48,13 @@ public class FileSystem
      * read() methods. */
     private int maxReadSize;
 
+    /**
+     * Creates a new instance of the File System.
+     * 
+     * @param providers the backend implementations of the service.
+     * @param bufferSize the size of the buffers using for reading/writing files.
+     * @param maxReadSize maximum size of file that is loaded into memory as a single chunk.
+     */
     public FileSystem(FileSystemProvider[] providers, int bufferSize, int maxReadSize)
     {
         this.providers = Arrays.asList(providers);
@@ -59,6 +66,8 @@ public class FileSystem
 
     /**
      * Return the URL protocol name for this FileSystem.
+     * 
+     * @return the protocol prefix used by the service.
      */
     public String getProtocol()
     {
@@ -105,6 +114,7 @@ public class FileSystem
      * 
      * @param path the abstract pathname
      * @return an URL of <code>null</code> if the file is not found.
+     * @throws MalformedURLException if the pathname is not valid.
      */
     public URL getResource(String path)
         throws MalformedURLException
@@ -348,6 +358,9 @@ public class FileSystem
      * Returns the size of the specified file.
      *
      * <p>If the operation is not supported -1L is returned.</p>
+     * 
+     * @param path an abstract pathname.
+     * @return the lenght of the file
      */
     public long length(String path)
     {
@@ -606,6 +619,7 @@ public class FileSystem
      * Read the contents of a file and write them into an OutputStream.
      * 
      * @param path the pathname of the file.
+     * @param out the stream to write file contents to.
      * @throws IOException if the operation fails.
      */
     public void read(String path, OutputStream out) throws IOException

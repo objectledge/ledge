@@ -12,18 +12,31 @@ import org.objectledge.filesystem.FileSystem;
  * using Labeo FileService.
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: URLStreamHandlerImpl.java,v 1.1 2003-11-24 10:25:14 fil Exp $
+ *  @version $Id: URLStreamHandlerImpl.java,v 1.2 2003-11-24 15:55:44 fil Exp $
  */
 public class URLStreamHandlerImpl extends URLStreamHandler
 {
     private FileSystem fileSystem;
     
+    /**
+     * Creates a new instance of the stream handler implementation.
+     * 
+     * @param fileSystem the file system to use.
+     */
     public URLStreamHandlerImpl(FileSystem fileSystem)
     {
         this.fileSystem = fileSystem ;
     }
-    
-    protected URLConnection openConnection(URL url) throws IOException
+
+    /**
+     * Opens a connection to the file denoted by the URL.
+     * 
+     * @param url the url to connect to.
+     * @return an URL connection.
+     * @throws IOException if the URL is not using the right protocol.
+     */    
+    protected URLConnection openConnection(URL url) 
+        throws IOException
     {
 		if(url.getProtocol().equals(fileSystem.getProtocol()))
 		{

@@ -20,14 +20,15 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.1 2003-11-24 10:25:14 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.2 2003-11-24 15:55:44 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
 {
 	// constants ////////////////////////////////////////////////////////////
 	
-	public static final String[] listingLocation = new String[] 
+    /** locations of the file listings, in order of precedence. */
+	public static final String[] LISTING_LOCATION = new String[] 
 	{
 		"/WEB-INF/files.lst",
 		"/META-INF/files.lst",
@@ -53,14 +54,20 @@ public abstract class ReadOnlyFileSystemProvider
 
 	// initialization ///////////////////////////////////////////////////////
 	
+    /**
+     * Creates an instance of the provider
+     * 
+     * @param name the name of the provider.
+     * @param listingEncoding the character encoding used in the file listng.
+     */
 	public ReadOnlyFileSystemProvider(String name, String listingEncoding)
 	{
         this.name = name;
 		String location = null;
 		InputStream is = null;
-		for(int i=0; i<listingLocation.length; i++)
+		for(int i=0; i<LISTING_LOCATION.length; i++)
 		{
-			location = listingLocation[i];
+			location = LISTING_LOCATION[i];
 			is = getInputStream(location);
 			if(is != null)
 			{
@@ -73,16 +80,29 @@ public abstract class ReadOnlyFileSystemProvider
 		}
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isReadOnly()
     {
         return true;
     }
 
+    /**
+     * Processes a listing.
+     *  
+     * @param location the location of the listing
+     * @param encoding the character encoding used in the listing.
+     * @param is the stream used for reading the listing.
+     */
     // TODO throw a meaningful exception type
 	protected void processListing(String location, String encoding, InputStream is)
 	{
@@ -197,8 +217,8 @@ public abstract class ReadOnlyFileSystemProvider
 
 	// FileProvider interface ////////////////////////////////////////
 	
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#exists(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public boolean exists(String path)
     {
@@ -212,8 +232,8 @@ public abstract class ReadOnlyFileSystemProvider
 		}
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#isFile(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public boolean isFile(String path)
     {
@@ -227,8 +247,8 @@ public abstract class ReadOnlyFileSystemProvider
 		}
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#isDirectory(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public boolean isDirectory(String path)
     {
@@ -242,24 +262,24 @@ public abstract class ReadOnlyFileSystemProvider
 		}
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#canRead(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public boolean canRead(String path)
     {
 		return exists(path);
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#canWrite(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public boolean canWrite(String path)
     {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#list(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public String[] list(String dir) throws IllegalArgumentException
     {
@@ -284,14 +304,17 @@ public abstract class ReadOnlyFileSystemProvider
 		}
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean createNewFile(String path)
         throws IOException
     {
         throw new IOException("not supported");
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#mkdirs(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void mkdirs(String path) 
     	throws IOException
@@ -299,8 +322,8 @@ public abstract class ReadOnlyFileSystemProvider
     	throw new IOException("not supported");
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#delete(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void delete(String path) 
     	throws IOException
@@ -308,38 +331,38 @@ public abstract class ReadOnlyFileSystemProvider
 		throw new IOException("not supported");
     }
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#rename(java.lang.String, java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public void rename(String from, String to) throws IOException
     {
 		throw new IOException("not supported");
     }
 
-	/* (non-Javadoc)
-	 * @see net.labeo.services.file.spi.FileProvider#getInputStream(java.lang.String)
-	 */
+    /**
+     * {@inheritDoc}
+     */
 	public abstract InputStream getInputStream(String path); 
 
-    /* (non-Javadoc)
-     * @see net.labeo.services.file.spi.FileProvider#getOutputStream(java.lang.String, boolean)
+    /**
+     * {@inheritDoc}
      */
     public OutputStream getOutputStream(String path, boolean append)
     {
         return null;
     }
 
-	/* (non-Javadoc)
-	 * @see net.labeo.services.file.spi.FileProvider#getRandomAccess(java.lang.String, java.lang.String)
+    /**
+     * {@inheritDoc}
      */
     public RandomAccessFile getRandomAccess(String path, String mode)
     {
 		return null;
     }
 
-    /* (non-Javadoc)
-	 * @see net.labeo.services.file.spi.FileProvider#lastModified(java.lang.String)
-	 */
+    /**
+     * {@inheritDoc}
+     */
 	public long lastModified(String path)
 	{
 		if(times != null)
@@ -353,9 +376,9 @@ public abstract class ReadOnlyFileSystemProvider
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see net.labeo.services.file.spi.FileProvider#length(java.lang.String)
-	 */
+    /**
+     * {@inheritDoc}
+     */
 	public long length(String path)
 	{
 		if(lengths != null)
@@ -368,6 +391,4 @@ public abstract class ReadOnlyFileSystemProvider
 			return -1L;
 		}
 	}    
-    
-    // implementation ///////////////////////////////////////////////////////
 }
