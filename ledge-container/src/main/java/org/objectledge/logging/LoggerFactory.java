@@ -39,9 +39,7 @@ import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.PicoVerificationException;
-import org.picocontainer.defaults.DecoratingComponentAdapter;
 import org.picocontainer.defaults.DefaultPicoContainer;
-import org.picocontainer.defaults.ImplementationHidingComponentAdapter;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.picocontainer.defaults.Swappable;
 
@@ -49,7 +47,7 @@ import org.picocontainer.defaults.Swappable;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.10 2004-02-17 15:50:32 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.11 2004-03-16 08:37:26 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -117,7 +115,7 @@ public class LoggerFactory
         else
         {   
             Swappable proxy = (Swappable)loggerContainer.getComponentInstance(marker);
-            proxy.__hotSwap(logger);             
+            proxy.hotswap(logger);             
         }
     }
 
