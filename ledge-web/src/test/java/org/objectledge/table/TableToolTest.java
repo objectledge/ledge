@@ -37,7 +37,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableToolTest.java,v 1.1 2004-03-16 15:37:01 zwierzem Exp $
+ * @version $Id: TableToolTest.java,v 1.2 2004-07-01 11:42:14 zwierzem Exp $
  */
 public class TableToolTest extends TestCase
 {
@@ -71,19 +71,19 @@ public class TableToolTest extends TestCase
     
 	public void testGetId() throws TableException
     {
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
     	assertEquals(table.getId(), state.getId());
     }
     
 	public void testGetAscSort() throws TableException
     {
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
     	assertEquals(table.getAscSort(), state.getAscSort());
     }
     
 	public void testGetColumn() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		
     	try
         {
@@ -102,19 +102,19 @@ public class TableToolTest extends TestCase
 	
 	public void testGetCurrentPage() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getCurrentPage(), 1);
 	}
 	
 	public void testGetNumPages() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getNumPages(), 1);
 	}
 	
 	public void testGetPageNumber() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getPageNumber(10), 1);
 		assertEquals(table.getPageNumber(1), 1);
 		assertEquals(table.getPageNumber(-10), 1);
@@ -122,19 +122,19 @@ public class TableToolTest extends TestCase
 
 	public void testGetPageRowCount() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getPageRowCount(), 8);
 	}
 
 	public void testGetPageSize() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getPageSize(), 0);
 	}
 
 	public void testGetParent() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		List rows = table.getRows();
 		assertEquals(table.getParent((TableRow) rows.get(1)), rows.get(0));
 		assertEquals(table.getParent((TableRow) rows.get(4)), rows.get(2));
@@ -143,14 +143,14 @@ public class TableToolTest extends TestCase
 
 	public void testGetRelativePageNumber() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getRelativePageNumber(-2), 1);
 		assertEquals(table.getRelativePageNumber(2), 1);
 	}
 
 	public void testGetReverseAncestors() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		List rows = table.getRows();
 		List revAncestors = table.getReverseAncestors((TableRow) rows.get(4));
 		assertEquals(revAncestors.get(0), rows.get(2));
@@ -160,45 +160,45 @@ public class TableToolTest extends TestCase
 
 	public void testGetRootRow() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		List rows = table.getRows();
 		assertEquals(table.getRootRow(), rows.get(0));
 	}
 
 	public void testGetRows() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		List rows = table.getRows();
 		assertEquals(rows.size(), 8);
 	}
 
 	public void testGetShowRoot() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getShowRoot(), state.getShowRoot());
     }
 
 	public void testGetSortColumn() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertNull(table.getSortColumn());
 	}
 
 	public void testGetTotalRowCount() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getTotalRowCount(), 8);
 	}
 
 	public void testGetViewAsTree() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		assertEquals(table.getViewAsTree(), state.getTreeView());
 	}
 
 	public void testHasMoreChildren() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		List rows = table.getRows();
 		try
 		{
@@ -241,7 +241,7 @@ public class TableToolTest extends TestCase
 
 	public void testIsExpanded() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		List rows = table.getRows();
 		for (Iterator iter = rows.iterator(); iter.hasNext();)
         {
@@ -252,7 +252,7 @@ public class TableToolTest extends TestCase
 
 	public void testLinesAndFolders() throws TableException
 	{
-		TableTool table = new TableTool(state, new MockTableModel());
+		TableTool table = new TableTool(state, null, new MockTableModel());
 		List rows = table.getRows();
 		
 		List laf = table.linesAndFolders((TableRow) rows.get(0));
@@ -347,7 +347,7 @@ public class TableToolTest extends TestCase
 		
 		// list view
 		state.setTreeView(false); 
-		table = new TableTool(state, new MockTableModel());
+		table = new TableTool(state, null, new MockTableModel());
 		rows = table.getRows();
 		
 		laf = table.linesAndFolders((TableRow) rows.get(0));
@@ -424,9 +424,9 @@ public class TableToolTest extends TestCase
 		/**
 		 * {@inheritDoc}
 		 */
-		public TableRowSet getRowSet(TableState state)
+		public TableRowSet getRowSet(TableState state, TableFilter[] filters)
 		{
-			return new MockRowSet(state);
+			return new MockRowSet(state, filters);
 		}
 	}
 
@@ -448,7 +448,7 @@ public class TableToolTest extends TestCase
 		private TableRow[] rows;
 		private Map rowsByChild = new HashMap();
 		
-		public MockRowSet (TableState state)
+		public MockRowSet (TableState state, TableFilter[] filters)
 		{
 			this.state = state;
 			

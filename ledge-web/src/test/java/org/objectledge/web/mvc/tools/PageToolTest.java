@@ -54,7 +54,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.7 2004-06-28 10:08:37 fil Exp $
+ * @version $Id: PageToolTest.java,v 1.8 2004-07-01 11:42:14 zwierzem Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -88,6 +88,7 @@ public class PageToolTest extends LedgeTestCase
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
         mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
@@ -99,8 +100,6 @@ public class PageToolTest extends LedgeTestCase
         mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
 
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
-
-        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
 		context.setAttribute(HttpContext.class, httpContext);
 		RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
 		paramsLoader.process(context);
@@ -189,7 +188,7 @@ public class PageToolTest extends LedgeTestCase
 		PageTool.ScriptLink link1 = (PageTool.ScriptLink) iter.next(); 
 		PageTool.ScriptLink link2 = (PageTool.ScriptLink) iter.next(); 
 		assertEquals(link1.getCharset(), "ISO-8859-1");
-		assertNull(link2.getCharset());
+		assertEquals(link2.getCharset(), "UTF-8");
 		assertEquals(link1.getSrc(), "/test/content/js/script1.js");
 		assertEquals(link2.getSrc(), "/test/content/js/script2.js");
 	}

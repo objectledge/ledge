@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateTest.java,v 1.2 2004-03-05 12:14:26 zwierzem Exp $
+ * @version $Id: TableStateTest.java,v 1.3 2004-07-01 11:42:14 zwierzem Exp $
  */
 public class TableStateTest extends TestCase
 {
@@ -54,7 +54,6 @@ public class TableStateTest extends TestCase
     	assertTrue(state.isNew());
     	assertFalse(state.getAllExpanded());
     	assertEquals(state.getCurrentPage(), 1);
-    	assertEquals(state.getFilters().length, 0);
     	assertEquals(state.getId(), id);
     	assertEquals(state.getMaxVisibleDepth(), 0);
     	assertEquals(state.getPageSize(), 0);
@@ -72,28 +71,6 @@ public class TableStateTest extends TestCase
     	state.setCurrentPage(2);
 		assertEquals(state.getCurrentPage(), 2);
 		
-		// check filters
-		TableFilter filter = new TableFilter()
-		{
-			public boolean accept(Object object)
-			{
-				return false;
-			}
-		}; 
-		state.addFilter(filter);
-		assertEquals(state.getFilters()[0], filter);
-    	state.clearFilters();
-		assertEquals(state.getFilters().length, 0);
-		state.addFilter(filter);
-		assertEquals(state.getFilters()[0], filter);
-		state.addFilter(filter);
-		assertEquals(state.getFilters()[0], filter);
-		assertEquals(state.getFilters().length, 1);
-    	state.removeFilter(filter);
-		assertEquals(state.getFilters().length, 0);
-		state.removeFilter(filter);
-		assertEquals(state.getFilters().length, 0);
-    	
     	// check depth
     	state.setMaxVisibleDepth(2);
 		assertEquals(state.getMaxVisibleDepth(), 2);

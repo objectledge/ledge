@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringToolTest.java,v 1.1 2004-06-17 16:09:12 zwierzem Exp $
+ * @version $Id: StringToolTest.java,v 1.2 2004-07-01 11:42:14 zwierzem Exp $
  */
 public class StringToolTest extends TestCase
 {
@@ -52,7 +52,7 @@ public class StringToolTest extends TestCase
     {
 		StringTool stringTool = new StringTool();
         String str = stringTool.shorten("1234567890", 8);
-    	assertEquals(str, "12345...");
+    	assertEquals(str, "1234567\u2026");
         str = stringTool.shorten("1234567890", 10);
         assertEquals(str, "1234567890");
     }

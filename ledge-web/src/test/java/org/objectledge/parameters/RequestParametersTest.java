@@ -33,15 +33,10 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
-import org.jcontainer.dna.impl.Log4JLogger;
 import org.jmock.Mock;
 import org.objectledge.context.Context;
-import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.WebConfigurator;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -65,11 +60,6 @@ public class RequestParametersTest extends LedgeTestCase
     {
         super.setUp();
         context = new Context();
-        FileSystem fs = getFileSystem();
-        Logger logger = new Log4JLogger(org.apache.log4j.Logger.
-            getLogger(RequestParametersLoaderValve.class));
-        Configuration config = getConfig(fs,"config/org.objectledge.web.WebConfigurator.xml");
-        WebConfigurator webConfigurator = new WebConfigurator(config);
         
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
@@ -78,14 +68,10 @@ public class RequestParametersTest extends LedgeTestCase
         parameterNames.add("foo");
         mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue(parameterNames.elements()));
         mockHttpServletRequest.stubs().method("getParameterValues").with(eq("foo")).will(returnValue(new String[] { "bar" }));
+        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue("foo=barek"));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
-        mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
-        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
-        mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
-        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
 
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
-        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);

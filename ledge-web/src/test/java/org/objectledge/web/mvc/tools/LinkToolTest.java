@@ -94,6 +94,7 @@ public class LinkToolTest extends LedgeTestCase
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
         mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
@@ -107,9 +108,8 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
         
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
-
-        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
+
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);
         MVCInitializerValve mVCInitializer = new MVCInitializerValve(webConfigurator);
@@ -262,6 +262,7 @@ public class LinkToolTest extends LedgeTestCase
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
         mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
@@ -276,7 +277,6 @@ public class LinkToolTest extends LedgeTestCase
 
         httpContext = new HttpContext(httpServletRequest, httpServletResponse);
 
-        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);
