@@ -97,7 +97,7 @@ public class XMLI18n extends AbstractI18n
 		throws ParserConfigurationException, SAXException 
 	{
 		super(config, logger);
-		System.out.println("XMLI18n init called");
+		logger.info("XMLI18n init called");
 		this.fileSystem = fileSystem;
 		localeDir = config.getChild("localization-directory").getValue("/locale");
         if(!localeDir.endsWith("/"))
