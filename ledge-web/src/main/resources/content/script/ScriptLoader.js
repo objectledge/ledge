@@ -2,13 +2,12 @@
  * This script was created by Damian Gajda (zwierzem@ngo.pl)
  * Copyright 2002
  *
- * $Id: ScriptLoader.js,v 1.1 2004-11-25 11:28:17 rafal Exp $
+ * $Id: ScriptLoader.js,v 1.2 2005-03-08 07:43:17 zwierzem Exp $
  */
 
-function ScriptLoader(commonBasePath, appBasePath)
+function ScriptLoader(commonBasePath)
 {
     this.commonBasePath = this.fixBasePath(commonBasePath);
-    this.appBasePath = this.fixBasePath(appBasePath);
     this.loadedScripts = [];
 }
 
@@ -26,12 +25,6 @@ ScriptLoader.prototype.loadCommon =
 function (relativePath)
 {
     this.load(this.commonBasePath, relativePath);
-};
-
-ScriptLoader.prototype.loadApp =
-function (relativePath)
-{
-    this.load(this.appBasePath, relativePath);
 };
 
 ScriptLoader.prototype.load =
