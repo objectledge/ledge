@@ -40,7 +40,7 @@ import com.meterware.httpunit.parsing.HTMLParserFactory;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.2 2005-03-17 10:52:43 rafal Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.3 2005-03-17 10:53:27 rafal Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -53,7 +53,6 @@ public class LedgeWebTestCase
         String url = System.getProperty("base.url", "http://localhost:8080");
         String baseUrl = url.endsWith("/") ? url.substring(0, url.length()-1) : url;
         getTestContext().setBaseUrl(baseUrl);
-        // HTMLParserFactory.useJTidyParser();
     }
 
     // -- ObjectLedge specific asserts ----------------------------------------------------------
