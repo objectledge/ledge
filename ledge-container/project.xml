@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.29 2004-09-03 13:33:09 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.29.2.1 2004-09-03 14:40:59 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3</version>
       <url>http://objectledge.org/modules/ledge-components/</url>
     </dependency>
     <dependency>

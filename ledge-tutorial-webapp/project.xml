@@ -80,7 +80,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -88,7 +88,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-container</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -96,7 +96,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
