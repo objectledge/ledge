@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.9 2004-01-15 14:00:39 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.10 2004-01-19 13:14:37 zwierzem Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -131,6 +131,7 @@ public class BuilderExecutorValve implements Runnable
 			templatingContext.put(MVCConstants.EMBEDDED_PLACEHOLDER_KEY, embeddedResult);
 			try
 	        {
+	        	template = resolveTemplate(template);
 				embeddedResult = builder.build(template, embeddedResult);
 	        }
 	        catch (BuildException e)
@@ -175,4 +176,16 @@ public class BuilderExecutorValve implements Runnable
 		// store building result
 		mvcContext.setBuildResult(embeddedResult);
 	}
+
+    /**
+     * This method is to be overriden by BuilderExecutorValves which need a more specific template
+     * choosing. An example for such a valve is a I18nAwareBuilderExecutorValve.
+     * 
+     * @param template used as a base template.
+     * @return a template chosen upon the base template, in this case same template object.
+     */
+    protected Template resolveTemplate(Template template)
+    {
+        return template;
+    }
 }
