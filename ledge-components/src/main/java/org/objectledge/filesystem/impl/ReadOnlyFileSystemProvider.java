@@ -48,7 +48,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.11 2004-01-14 11:29:38 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.12 2004-01-14 11:31:45 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -100,6 +100,8 @@ public abstract class ReadOnlyFileSystemProvider
      * 
      * <p>{@link #getInputStream(String)} method must be functional at the point of calling this
      * method.</p>
+     * 
+     * @throws IOException if the listings cannot be processed.
      */
     protected void processListings()
         throws IOException
@@ -142,7 +144,7 @@ public abstract class ReadOnlyFileSystemProvider
      *  
      * @param location the location of the listing
      * @param is the stream used for reading the listing.
-     * @throws ComponentInitializationError if the index file is malformed.
+     * @throws IOException if the index file cannot be processed.
      */
 	protected void processListing(String location, InputStream is)
         throws IOException
