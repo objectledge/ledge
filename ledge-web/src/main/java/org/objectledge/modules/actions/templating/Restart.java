@@ -36,7 +36,7 @@ import org.objectledge.templating.Templating;
  * Restart .
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Restart.java,v 1.1 2005-01-28 03:01:32 pablo Exp $
+ * @version $Id: Restart.java,v 1.2 2005-01-28 04:13:41 rafal Exp $
  */
 public class Restart 
     implements Valve
@@ -46,7 +46,7 @@ public class Restart
     /**
      * Action constructor.
      * 
-     * @param context the context.
+     * @param templating the Templating component.
      */
     public Restart(Templating templating)
     {

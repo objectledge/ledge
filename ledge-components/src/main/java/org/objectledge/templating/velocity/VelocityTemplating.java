@@ -51,7 +51,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.16 2005-01-28 02:42:27 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.17 2005-01-28 04:13:34 rafal Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -90,14 +90,12 @@ public class VelocityTemplating implements Templating, LogSystem
     }
 
     /**
-     * @param config
-     * @param fileSystem
-     * @throws ComponentInitializationError
-     * @throws VirtualMachineError
-     * @throws ThreadDeath
+     * Restarts the templating subsystem.
+     * 
+     * @throws ComponentInitializationError if the restart fails for some reason.
      */
     public void restart() 
-        throws ComponentInitializationError, VirtualMachineError, ThreadDeath
+        throws ComponentInitializationError
     {
         engine = new VelocityEngine();
         extension = config.getChild("extension").getValue(".vt");
