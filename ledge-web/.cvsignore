@@ -2,6 +2,6 @@ bin
 *.ajsym
 target
 *.lst
-*.log
+*.log*
 .clover
 .settings
