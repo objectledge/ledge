@@ -15,8 +15,7 @@
           <tr>
             <th>required libraries</th>
             <td>
-              Jing (jing:jing:20030619)<br/>
-              Saxon (saxon:saxon:6.5.3)
+              Jing (jing), Saxon (saxon)
             </td>
           </tr>
         </table>
@@ -28,6 +27,8 @@
       library determines the schema languague using XML namespace of the top level element. At the
       moment XML based schema languages supported by Jing and thus by XMLValidator are W3C XSD, 
       Scheamtron and Namespace Routing Language.</p>
+
+      <p><a href="apidocs/org/objectledge/xmlvalidator/XMLValidator.html">View JavaDoc</a></p>
 
       <p>Constructor parameters
         <table>
