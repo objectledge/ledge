@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.actions.DefaultAction;
 import org.objectledge.web.mvc.builders.Builder;
@@ -41,7 +42,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.8 2004-01-19 14:44:28 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.9 2004-01-19 15:13:36 zwierzem Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -83,6 +84,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	{
 		this.container = container;
         this.templating = templating;
+        this.nameSequenceFactory = nameSequenceFactory;
         
 		container.registerComponentImplementation(DefaultBuilder.class);
 		container.registerComponentImplementation(DefaultAction.class);
@@ -93,15 +95,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	}
 
     // builder templates ////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Template getTemplate(String templateName)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 
   	/**
 	 * {@inheritDoc}

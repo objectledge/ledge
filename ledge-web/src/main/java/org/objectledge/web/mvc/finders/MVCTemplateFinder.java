@@ -28,26 +28,18 @@
 package org.objectledge.web.mvc.finders;
 
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
 
 /**
  * Finds templates that should be used for rendering specific views
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCTemplateFinder.java,v 1.4 2004-01-19 14:22:13 zwierzem Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.5 2004-01-19 15:13:36 zwierzem Exp $
  */
 public interface MVCTemplateFinder
 {
     // builders /////////////////////////////////////////////////////////////////////////////////
     
-	/**
-	 * Returns a template for a given template name. If no template is found, a <code>null</code>
-	 * is returned.
-	 * 
-	 * @param name template name to get template.
-	 * @return found template
-	 */
-	public Template getTemplate(String templateName);
-
 	/**
 	 * Returns an builder template for a given view name. If no template is found, a
 	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
