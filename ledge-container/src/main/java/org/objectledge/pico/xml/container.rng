@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+-->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" 
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <start>
+    <ref name="container"/>
+  </start>
+  
+  <define name="container">
+    <element name="container">
+      <ref name="attlist.container"/>
+      <optional>
+        <ref name="adapter-factory"/>
+      </optional>
+      <oneOrMore>
+        <choice>
+          <ref name="component"/>
+          <ref name="pseudo-component"/>
+          <ref name="container"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="attlist.container" combine="interleave">
+    <optional>
+      <attribute name="front-end"/>
+    </optional>  
+    <optional>
+      <attribute name="adapter-factory"/>
+    </optional>  
+    <optional>
+      <attribute name="key"/>
+    </optional>  
+    <optional>
+      <attribute name="class"/>
+    </optional>  
+    <optional>
+      <attribute name="replace" a:defaultValue="false">
+        <choice>
+          <value>false</value>
+          <value>true</value>
+        </choice>
+      </attribute>
+    </optional>  
+  </define>
+
+  <define name="adapter-factory">
+    <element name="adapter-factory">
+      <attribute name="class"/>
+      <optional>
+        <ref name="adapter-factory"/>
+      </optional>
+    </element>
+  </define>
+
+  <define name="component">
+    <element name="component">
+       <ref name="attlist.component"/>
+       <zeroOrMore>
+         <ref name="parameter"/>
+       </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="attlist.component" combine="interleave">
+    <attribute name="class"/>
+    <optional>
+      <attribute name="key"/>
+    </optional>
+    <optional>
+      <attribute name="preload" a:defaultValue="false">
+        <choice>
+          <value>false</value>
+          <value>true</value>
+        </choice>
+      </attribute>
+    </optional>  
+  </define>
+
+  <define name="parameter">
+    <choice>
+      <ref name="constant-parameter"/>
+      <ref name="component-parameter"/>
+      <ref name="sequence-parameter"/>
+    </choice>
+  </define>
+  
+  <define name="constant-parameter">
+    <element name="constant-parameter">
+      <optional>
+        <attribute name="class"/>
+      </optional>
+      <attribute name="value"/>
+    </element>
+  </define>
+  
+  <define name="component-parameter">
+    <element name="component-parameter">
+      <choice>
+        <attribute name="key"/>
+        <attribute name="class"/>
+      </choice>
+    </element>
+  </define>
+  
+  <define name="sequence-parameter">
+    <element name="sequence-parameter">
+      <attribute name="class"/>
+      <zeroOrMore>
+        <ref name="parameter"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  
+  <define name="pseudo-component">
+    <element name="pseudo-component">
+      <attribute name="factory"/>
+      <ref name="any-element"/>
+    </element>
+  </define>
+  
+  <define name="any-element">
+    <element>
+      <anyName/>
+      <zeroOrMore>
+        <choice>
+          <attribute>
+            <anyName/>
+          </attribute>
+          <text/>
+          <ref name="any-element"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>  
+</grammar>	 
