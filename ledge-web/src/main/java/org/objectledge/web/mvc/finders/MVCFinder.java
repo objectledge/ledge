@@ -40,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.29 2005-03-29 10:29:41 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.30 2005-03-29 10:53:24 zwierzem Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -138,7 +138,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Valve getAction(String actionName)
 	{
-		return (Valve)getObject(Kind.ACTION, actionName, "getAction");
+		return (Valve)findObject(Kind.ACTION, actionName, false, "getAction");
 	}
 
     // builders /////////////////////////////////////////////////////////////////////////////////
@@ -146,9 +146,9 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     /**
      * {@inheritDoc}
      */
-    public Builder getBuilder(String view)
+    public Builder findBuilder(String view)
     {
-        return (Builder) getObject(Kind.VIEW, view, "getBuilder");
+        return (Builder) findObject(Kind.VIEW, view, true, "getBuilder");
     }
 
 	/**
@@ -211,7 +211,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	public Component getComponent(String componentName)
 	{
 		return (Component)
-            getObject(Kind.COMPONENT, componentName, "getComponent");
+            findObject(Kind.COMPONENT, componentName, false, "getComponent");
 	}    
 
     // implementation ///////////////////////////////////////////////////////////////////////////
@@ -258,12 +258,12 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         	getTemplateNameSequence(kind.getInfix(), templateName, fallback, enclosing);
     }
 
-    private Object getObject(Kind kind, String className, String methodName)
+    private Object findObject(Kind kind, String className, boolean fallback, String methodName)
 	{
 		if(className != null && className.length() != 0)
 		{
 			Sequence sequence = nameSequenceFactory.
-				getClassNameSequence(kind.getInfix(), className, false, false);
+				getClassNameSequence(kind.getInfix(), className, fallback, false);
 			while(sequence.hasNext())
 			{
 				String name = sequence.next();
