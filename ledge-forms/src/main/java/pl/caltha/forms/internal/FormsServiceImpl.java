@@ -25,13 +25,11 @@ import pl.caltha.services.xml.XMLService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsServiceImpl.java,v 1.5 2005-03-23 07:52:16 zwierzem Exp $
+ * @version $Id: FormsServiceImpl.java,v 1.6 2005-03-24 06:33:45 zwierzem Exp $
  */
 public class FormsServiceImpl 
 implements FormsService
 {
-    public static final String LOGGING_FACILITY = "FormsService";
-
     private Logger log;
 
     private XMLService xmlService;
@@ -359,7 +357,7 @@ implements FormsService
     /** FormData is a container for storing form Instances in users session.
      *
      * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-     * @version $Id: FormsServiceImpl.java,v 1.5 2005-03-23 07:52:16 zwierzem Exp $
+     * @version $Id: FormsServiceImpl.java,v 1.6 2005-03-24 06:33:45 zwierzem Exp $
      */
     public class FormData
     {
