@@ -34,7 +34,6 @@ import java.util.List;
 
 import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 
@@ -43,7 +42,7 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as list.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericListRowSet.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: GenericListRowSet.java,v 1.2 2004-03-05 12:12:32 zwierzem Exp $
  */
 public class GenericListRowSet extends BaseGenericRowSet
 {
@@ -118,9 +117,8 @@ public class GenericListRowSet extends BaseGenericRowSet
         {
             return null;
         }
-        final Comparator objectComparator =
-            (state.getSortDir() == TableConstants.SORT_ASC) ?
-            column.getComparator() : column.getReverseComparator();
+        final Comparator objectComparator = 
+        	(state.getAscSort()) ? column.getComparator() : column.getReverseComparator();
 
         return new Comparator()
             {

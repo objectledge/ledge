@@ -34,7 +34,6 @@ import java.util.List;
 
 import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 
 
@@ -42,7 +41,7 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as tree.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericTreeRowSet.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: GenericTreeRowSet.java,v 1.2 2004-03-05 12:12:32 zwierzem Exp $
  */
 public class GenericTreeRowSet extends BaseGenericRowSet
 {
@@ -114,7 +113,7 @@ public class GenericTreeRowSet extends BaseGenericRowSet
             return null;
         }
 
-        if(state.getSortDir() == TableConstants.SORT_ASC)
+        if(state.getAscSort())
         {
             return column.getComparator();
         }

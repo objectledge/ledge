@@ -35,7 +35,6 @@ import java.util.Set;
 
 import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableRowSet;
 import org.objectledge.table.TableState;
 
@@ -47,7 +46,7 @@ import org.objectledge.table.TableState;
  * the UI on the fly, the toolkit provides {@link PathTreeElement} class.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PathTreeTableModel.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: PathTreeTableModel.java,v 1.2 2004-03-05 12:12:32 zwierzem Exp $
  */
 public class PathTreeTableModel
     implements ExtendedTableModel
@@ -95,13 +94,13 @@ public class PathTreeTableModel
      */
     public TableRowSet getRowSet(TableState state)
     {
-        if(state.getViewType() == TableConstants.VIEW_AS_LIST)
+        if(state.getTreeView())
         {
-            return new GenericListRowSet(state, this);
+			return new GenericTreeRowSet(state, this);
         }
         else
         {
-            return new GenericTreeRowSet(state, this);
+			return new GenericListRowSet(state, this);
         }
     }
 

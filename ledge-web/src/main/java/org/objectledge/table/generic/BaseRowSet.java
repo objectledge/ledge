@@ -36,7 +36,7 @@ import org.objectledge.table.TableState;
  * This class provides some utility methods for {@link TableRowSet} implementations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseRowSet.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: BaseRowSet.java,v 1.2 2004-03-05 12:12:32 zwierzem Exp $
  */
 public abstract class BaseRowSet implements TableRowSet
 {
@@ -62,10 +62,9 @@ public abstract class BaseRowSet implements TableRowSet
         }
     }
 
-    /**
-     * Returns a table state associated with this row set.
-     * @return table state object.
-     */
+	/**
+	 * {@inheritDoc}
+	 */
     public TableState getState()
     {
         return state;
