@@ -15,11 +15,11 @@ fi
 #
 # Tests pass, make the patch ready to commit and report.
 #
-$CVSROOT/CVSROOT/commit_prep.pl ${1+"$@"} < $TMPFILE || exit 2
+$CVSROOT/CVSROOT/commit_prep.pl ${1+"$@"} || exit 2
 
 #
 # Bridge to cvsspam
 #
-$CVSROOT/CVSROOT/record_lastdir.rb ${2} < $TMPFILE || exit 2
+$CVSROOT/CVSROOT/record_lastdir.rb ${2} || exit 2
 
 exit 0
