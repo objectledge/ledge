@@ -30,7 +30,7 @@ import org.objectledge.web.WebConstants;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.9 2004-05-06 13:20:44 pablo Exp $
+ * @version $Id: FileUploadValve.java,v 1.10 2004-06-30 11:10:55 zwierzem Exp $
  */
 public class FileUploadValve 
     implements Valve, WebConstants
@@ -73,11 +73,11 @@ public class FileUploadValve
     public void process(Context context)
         throws ProcessingException
     {
-        Map uploadMap = new HashMap();
         HttpContext httpContext = HttpContext.getHttpContext(context);
         if(httpContext.getRequest().getContentLength() > fileUpload.getUploadLimit())
         {
-            logger.debug("The request size exceeds upload limits");
+            // TOOD: Some error reporting for ohter parts of the application should be added here!! 
+            logger.warn("The request size exceeds upload limits");
             return;
         }
         String contentType = httpContext.getRequest().getContentType();
@@ -85,8 +85,8 @@ public class FileUploadValve
         {
             try
             {
+                Map uploadMap = new HashMap();
                 Session session = mailSystem.getSession();
-                session.setDebug(true);
                 String headers = "Content-Type: " + 
                 	   httpContext.getRequest().getContentType() +"\n\n";
                 InputStream uploadStream = new SequenceInputStream(
@@ -109,7 +109,7 @@ public class FileUploadValve
                     }
                 }
                 
-                // store the upload map into the RunData
+                // store the upload map into the context
                 context.setAttribute(FileUpload.UPLOAD_CONTEXT_KEY, uploadMap);
                 logger.debug("UploadValve has stored the upload map in the context");
             }
@@ -190,15 +190,9 @@ public class FileUploadValve
             byte[] contents = baos.toByteArray();
            
 			HttpContext httpContext = HttpContext.getHttpContext(context); 
-            String encoding = (String)httpContext.getRequest().getSession().
-                getAttribute(ENCODING_SESSION_KEY);
-            if(encoding == null)
-            {
-                encoding = webConfigurator.getDefaultEncoding();
-            }
-            String field = new String(contents, encoding);
+            String field = new String(contents, httpContext.getEncoding());
             Parameters parameters = RequestParameters.getRequestParameters(context);
-            parameters.add(name, field); 
+            parameters.add(name, field);
         } 
         else 
         {
@@ -207,7 +201,5 @@ public class FileUploadValve
             uploadMap.put(name, container);
             logger.debug("Upload Hook - craeted container "+name);
         }
-    }
-    
+    }    
 }
-
