@@ -7,13 +7,13 @@ package org.objectledge.pico.customization;
 
 import junit.framework.TestCase;
 
-import org.jcontainer.dna.Configuration;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
+import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.impl.LocalFileSystemProvider;
 import org.objectledge.test.FooComponent;
-import org.picocontainer.ComponentAdapter;
+import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.defaults.CachingComponentAdapterFactory;
@@ -26,7 +26,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.1 2003-11-28 15:52:44 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.2 2003-12-02 13:18:42 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -48,7 +48,9 @@ public class CustomizationTest extends TestCase
             throw new Exception("system property ledge.root undefined. use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs }, 4096, 4096);
+        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
+            getClass().getClassLoader());
+        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
 
         ComponentAdapterFactory factory = new CustomizingConstructorComponentAdapterFactory();
         factory = new CachingComponentAdapterFactory(factory);
@@ -56,12 +58,14 @@ public class CustomizationTest extends TestCase
 
         container.registerComponentInstance(MutablePicoContainer.class, container);
         container.registerComponentInstance(FileSystem.class, fs);
+        container.registerComponentImplementation(XMLValidator.class, XMLValidator.class);
         container.registerComponentImplementation(
             ConfigurationFactory.class, 
             ConfigurationFactory.class,
             new Parameter[] {
                 new ComponentParameter(MutablePicoContainer.class),
                 new ComponentParameter(FileSystem.class),
+                new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
             }
         ).getComponentInstance(container);
