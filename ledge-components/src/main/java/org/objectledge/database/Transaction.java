@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.5 2004-02-09 08:45:08 fil Exp $
+ * @version $Id: Transaction.java,v 1.6 2004-02-09 09:01:59 fil Exp $
  */
 public abstract class Transaction
 {
@@ -121,6 +121,12 @@ public abstract class Transaction
         }
         if(controler)
         {
+            if(ThreadDataSource.hasOpenConnections(context))
+            {
+                log.error("Thread owns open database connection(s) " +                    "that would ignore global transaction.\n"+ThreadDataSource.getTrace(context));
+                throw new SQLException("Thread owns open database connection(s) " +
+                    "that would ignore global transaction (see log)");
+            }
             try
             {
                 getUserTransaction().begin();
