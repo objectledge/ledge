@@ -53,7 +53,7 @@ import java.util.StringTokenizer;
  * UndefinedVariableException is thrown.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IntrospectionVariables.java,v 1.2 2004-01-23 13:36:03 fil Exp $
+ * @version $Id: IntrospectionVariables.java,v 1.3 2004-01-23 13:58:03 fil Exp $
  */
 public class IntrospectionVariables
     implements Variables
@@ -96,7 +96,7 @@ public class IntrospectionVariables
             {
                 value = getProperty(value, st.nextToken());
             }
-            catch(Exception e)
+            catch(UndefinedVariableException e)
             {
                 return false;
             }
@@ -111,10 +111,29 @@ public class IntrospectionVariables
         throws UndefinedVariableException, EvaluationException
     {
         StringTokenizer st = new StringTokenizer(name,".");
-        Object value = object;        
+        Object value = object;   
+        StringBuffer buff = new StringBuffer(); 
+        boolean first = true;    
         while(st.hasMoreTokens() && value != null)
         {
-            value = getProperty(value, st.nextToken());
+            String property = st.nextToken();
+            if(first)
+            {
+                first = false;
+            }
+            else
+            {
+                buff.append('.');
+            }
+            buff.append(property);
+            try
+            {
+                value = getProperty(value, property);
+            }
+            catch(UndefinedVariableException e)
+            {
+                throw new UndefinedVariableException(buff.toString());
+            }
         }
         return value;
     }
