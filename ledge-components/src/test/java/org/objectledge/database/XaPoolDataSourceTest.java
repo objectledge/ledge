@@ -57,7 +57,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.7 2004-06-28 10:08:46 fil Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.8 2004-06-28 10:37:57 fil Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -74,23 +74,53 @@ public class XaPoolDataSourceTest extends TestCase
         transaction = new JotmTransaction(0, new Context(), log, null);
         
         DefaultConfiguration conf = new DefaultConfiguration("config","","");
-        DefaultConfiguration conn = new DefaultConfiguration("connection","","config");
-        conf.addChild(conn);
+        DefaultConfiguration connConf = new DefaultConfiguration("connection","","config");
+        conf.addChild(connConf);
         DefaultConfiguration driver = new DefaultConfiguration("driver","","config/connection");
         driver.setValue("org.hsqldb.jdbcDriver"); 
-        conn.addChild(driver);    
+        connConf.addChild(driver);    
         DefaultConfiguration url = new DefaultConfiguration("url","","config/connection");
         url.setValue("jdbc:hsqldb:."); 
-        conn.addChild(url);    
+        connConf.addChild(url);    
         DefaultConfiguration user = new DefaultConfiguration("user","","config/connection");
         user.setValue("sa");
-        conn.addChild(user);
+        connConf.addChild(user);
         
         dataSource = new XaPoolDataSource(transaction, conf, null);
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try
+        {
+            conn = dataSource.getConnection();
+            conn.setAutoCommit(false);
+            stmt = conn.createStatement();
+            stmt.execute("CREATE TABLE test ( id BIGINT NOT NULL )");
+        }
+        finally
+        {
+            DatabaseUtils.close(conn, stmt, rs);
+        }
     }
     
     public void tearDown()
+    	throws Exception
     {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try
+        {
+            conn = dataSource.getConnection();
+            conn.setAutoCommit(false);
+            stmt = conn.createStatement();
+            stmt.execute("DROP TABLE test;");
+        }
+        finally
+        {
+            DatabaseUtils.close(conn, stmt, rs);
+        }
+        
         ((Startable)transaction).stop(); 
         ((Startable)dataSource).stop(); 
     }
@@ -106,7 +136,6 @@ public class XaPoolDataSourceTest extends TestCase
             conn = dataSource.getConnection();
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
-            stmt.execute("CREATE TABLE test ( id BIGINT NOT NULL )");
             stmt.execute("INSERT INTO test ( id ) VALUES ( 1 )");
             conn.rollback();
             rs = stmt.executeQuery("SELECT * FROM test WHERE id = 1");
