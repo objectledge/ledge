@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE.
 -->
-<!-- $Id: project.xml,v 1.61 2004-10-12 13:18:31 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.62 2005-02-04 02:31:18 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -77,7 +77,7 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-ledge-1</version>
+      <version>1.1</version>
       <url>http://picocontainer.org</url>
     </dependency>
     <dependency>

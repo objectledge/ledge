@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
  * implementation.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeDOMConfigurator.java,v 1.3 2004-12-22 08:34:55 rafal Exp $
+ * @version $Id: LedgeDOMConfigurator.java,v 1.4 2005-02-04 02:31:16 rafal Exp $
  */
 public class LedgeDOMConfigurator
 	extends DOMConfigurator
@@ -89,8 +89,7 @@ public class LedgeDOMConfigurator
     private Object newInstance(Class clazz) throws InstantiationException
     {
         ComponentAdapter adapter = new ConstructorInjectionComponentAdapter(clazz, clazz, null);
-        adapter.setContainer(dependencyContainer);
-        return adapter.getComponentInstance(); 
+        return adapter.getComponentInstance(dependencyContainer); 
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////

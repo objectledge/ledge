@@ -1,33 +1,5 @@
 <?xml version="1.0"?>
 <container>
-  <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
-    <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
-  </adapter-factory>
-
-  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
-             class="org.objectledge.pico.LedgeStringToObjectConverter"/>
-
-  <component class="org.objectledge.xml.XMLGrammarCache"/>
-  <component class="org.objectledge.xml.XMLValidator"/>
-
-  <component class="org.objectledge.configuration.ConfigurationFactory">
-    <component-parameter/>
-    <component-parameter/>
-    <constant-parameter value="/config"/>
-  </component>
-  <component class="org.objectledge.configuration.CustomizedConfigurationProvider"/>
-  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
-    <component-parameter class-key="org.objectledge.configuration.CustomizedConfigurationProvider"/>
-  </component-adapter>
-    
-  <component class="org.objectledge.logging.LoggingConfigurator"/>
-
-  <component class="org.objectledge.logging.LoggerFactory"/>
-  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
-    <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
-  </component-adapter>
 
   <!-- end of core config -->
 

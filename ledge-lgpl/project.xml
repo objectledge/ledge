@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.6 2004-10-15 10:30:50 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.7 2005-02-04 02:29:58 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -60,7 +60,7 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-ledge-1</version>
+      <version>1.1</version>
       <url>http://picocontainer.org/</url>
     </dependency>
     <dependency>
