@@ -35,6 +35,11 @@
       </element>
     </optional>    
     <optional>    
+      <element name="default_content_type">  
+        <text/>
+      </element>
+    </optional>    
+    <optional>    
       <element name="view_token">  
         <text/>
       </element>

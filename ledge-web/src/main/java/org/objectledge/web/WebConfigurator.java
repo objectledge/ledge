@@ -34,12 +34,15 @@ import org.jcontainer.dna.Configuration;
  * Configuration component - it provide the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: WebConfigurator.java,v 1.5 2004-08-20 16:08:17 zwierzem Exp $
+ * @version $Id: WebConfigurator.java,v 1.6 2004-09-14 11:40:43 rafal Exp $
  */
 public class WebConfigurator
 {
 	/** the default encoding */
 	public static final String DEFAULT_ENCODING = "UTF-8";
+
+	/** the default content type */
+	public static final String DEFAULT_CONTENT_TYPE = "text/html";
 	
 	/** the default view token */
 	public static final String DEFAULT_VIEW_TOKEN = "view";
@@ -49,6 +52,9 @@ public class WebConfigurator
 	
 	/** the default encoding */
 	private String defaultEncoding;
+	
+	/** the default content type */
+	private String defaultContentType;
 	
 	/** the view token */
 	private String viewToken;
@@ -64,6 +70,7 @@ public class WebConfigurator
 	public WebConfigurator(Configuration config)
 	{
 		defaultEncoding = config.getChild("default_encoding").getValue(DEFAULT_ENCODING);
+		defaultContentType = config.getChild("default_content_type").getValue(DEFAULT_ENCODING);
 		viewToken = config.getChild("view_token").getValue(DEFAULT_VIEW_TOKEN);
 		actionToken = config.getChild("action_token").getValue(DEFAULT_ACTION_TOKEN);
 	}
@@ -78,6 +85,16 @@ public class WebConfigurator
 		return defaultEncoding;
 	}
 
+	/**
+	 * Get the default content type.
+	 * 
+	 * @return the default content type.
+	 */
+	public String getDefaultContentType()
+	{
+		return defaultContentType;
+	}
+	
 	/**
 	 * Get the view token.
 	 * 
