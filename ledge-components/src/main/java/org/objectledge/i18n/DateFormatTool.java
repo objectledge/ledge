@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DateFormatTool.java,v 1.7 2005-02-07 01:29:04 rafal Exp $
+ * @version $Id: DateFormatTool.java,v 1.8 2005-03-22 11:11:35 pablo Exp $
  */
 public class DateFormatTool
 {
@@ -197,7 +197,7 @@ public class DateFormatTool
      */
     public List getFields(Date date, TimeZone zone)
     {
-        ArrayList list = new ArrayList(7);
+        ArrayList<Integer> list = new ArrayList<Integer>(7);
         if(date == null)
         {
             return list; 
