@@ -35,7 +35,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.9 2004-06-29 13:40:13 zwierzem Exp $
+ * @version $Id: MVCContext.java,v 1.10 2004-08-10 10:18:42 zwierzem Exp $
  */
 public class MVCContext
 {
@@ -50,8 +50,11 @@ public class MVCContext
 		return (MVCContext)context.getAttribute(MVCContext.class);
 	}
 
+    /** request parameters used to override params. */ 
+    //private RequestParameters requestParameters;
+    
 	/** the action parameter. */
-	protected String action;
+	private String action;
 
 	/** the view parameter. */
 	private String view;
@@ -65,6 +68,9 @@ public class MVCContext
 	 */
 	public MVCContext()
 	{
+        // TODO: Decide whether the parameters should be overriden setView/setAction ???
+        //RequestParameters requestParameters
+	    //this.requestParameters = requestParameters;
 	}
 	
     /**
