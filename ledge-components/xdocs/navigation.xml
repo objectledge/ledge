@@ -31,7 +31,8 @@
         </item>   
         <item name="EventSystem"		   href="/components/EventSystem.html"/>             
         <item name="MailSystem"			   href="/components/MailSystem.html"/>
-        <item name="ContextFactory"		   href="/components/ContextFactory.html"/>        
+        <item name="ContextFatory"		   href="/components/ContextFactory.html"/>        
+        <item name="ThreadPool"			   href="/components/ThreadPool.html"/>
         <item name="Scheduler"			   href="/components/Scheduler.html" collapse="true">
           <item name="DB Scheduler"        href="/components/scheduler/DBScheduler.html"/>
           <item name="Transient Scheduler" href="/components/scheduler/TransientScheduler.html"/>

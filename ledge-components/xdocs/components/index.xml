@@ -64,6 +64,12 @@
 		<p class="more"><a href="ContextFactory.html">more</a></p>
       </subsection>
 
+	  <subsection name="ThreadPool">
+	    <p>Executes <em>Tasks</em> asynchronously, using long running daemon threads, or 
+	    using worker threads from a pool of limited capacity.</p>
+		<p class="more"><a href="ThreadPool.html">more</a></p>
+	  </subsection>
+
       <subsection name="Scheduler">
         <p>The scheduler component manages the jobs that starts at specified points of time.</p>
 		<p class="more"><a href="Scheduler.html">more</a></p>
