@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ComponentsTests.java,v 1.8 2004-01-05 11:57:48 pablo Exp $
+ * @version $Id: ComponentsTests.java,v 1.8.2.1 2004-01-06 21:48:15 fil Exp $
  */
 public class ComponentsTests
 {
@@ -52,13 +52,8 @@ public class ComponentsTests
         //$JUnit-BEGIN$
 
         //$JUnit-END$
-		suite.addTest(org.objectledge.context.AllTests.suite());
-		suite.addTest(org.objectledge.i18n.AllTests.suite());
         suite.addTest(org.objectledge.filesystem.AllTests.suite());
-		suite.addTest(org.objectledge.parameters.AllTests.suite());
-		suite.addTest(org.objectledge.pipeline.AllTests.suite());
 		suite.addTest(org.objectledge.xml.AllTests.suite());
-        suite.addTest(org.objectledge.templating.AllTests.suite());
         return suite;
     }
 }

@@ -6,17 +6,6 @@
   
   <body>
     <section name="Components">
-      <subsection name="Context">
-        <p>Provides dependant components with a nontion of <em>thread context</em>, that is a set
-		of name - value pairs (boths elements are arbitrary Java objectss) that is specific
-		to the currently executing thread. This allows passing information across the method
-		call stack without actually pushing it through formal arguments. Servlet Request and
-		Response objects, authentication and transactiotion managment objects are conveniently
-		passed around using thread context.</p>
-
-		<p class="more"><a href="Context.html">more</a></p>
-      </subsection>
-      
       <subsection name="FileSystem">
         <p>FileSystem component provides a set of operations that are performed on files, directories
         and abstract pathnames, including: file reading, writing (streams, byte[], String), random 
@@ -50,16 +39,6 @@
         moment XML based schema languages supported by Jing and thus by XMLValidator are W3C XSD, 
         Scheamtron and Namespace Routing Language.</p>
 		<p class="more"><a href="XMLValidator.html">more</a></p>
-      </subsection>
-      
-      <subsection name="I18n">
-        <p>I18n component provides the access to the locale sensitive <code>String</code> resources.</p>
-		<p class="more"><a href="I18n.html">more</a></p>
-      </subsection>
-      
-      <subsection name="VelocityTemplating">
-        <p>Provides the simple templating based on velocity engine.</p>
-		<p class="more"><a href="VelocityTemplating.html">more</a></p>
       </subsection>
     </section>
   </body>
