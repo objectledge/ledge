@@ -38,11 +38,19 @@ import java.util.Date;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: InputRecord.java,v 1.4 2004-02-24 11:37:48 fil Exp $
+ * @version $Id: InputRecord.java,v 1.5 2004-05-06 13:51:54 pablo Exp $
  */
 public interface InputRecord
 {
     // DefaultInputRecord interface /////////////////////////////////////////////////
+    
+    /**
+     * Returns a <code>boolean</code> field value.
+     *
+     * @param field the name of the field.
+     * @return the field value as boolean.
+     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     */
     public abstract boolean getBoolean(String field) throws PersistenceException;
     /**
      * Returns a <code>byte</code> field value.

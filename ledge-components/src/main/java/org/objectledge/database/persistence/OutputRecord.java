@@ -41,7 +41,7 @@ import java.util.Date;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: OutputRecord.java,v 1.5 2004-02-24 11:37:48 fil Exp $
+ * @version $Id: OutputRecord.java,v 1.6 2004-05-06 13:53:25 pablo Exp $
  */
 public interface OutputRecord
 {
@@ -227,8 +227,17 @@ public interface OutputRecord
      *         specified value. 
      */
     public abstract void setNull(String field) throws PersistenceException;
+    
     // Implementation specific ///////////////////////////////////////////
+    
+    /**
+     * Get the where clasuse.
+     * 
+     * @return the clause.
+     * @throws PersistenceException if occured.
+     */
     public abstract String getWhereClause() throws PersistenceException;
+    
     /**
      * Builds an insert statement with contained data.
      *

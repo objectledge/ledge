@@ -35,11 +35,18 @@ import org.jcontainer.dna.ConfigurationException;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CacheFactory.java,v 1.1 2004-02-26 11:34:25 fil Exp $
+ * @version $Id: CacheFactory.java,v 1.2 2004-05-06 13:48:16 pablo Exp $
  */
 public interface CacheFactory
 {
     // CacheFactorySPI interface ////////////////////////////////////////////////
+    
+    /**
+     * Get the map.
+     * 
+     * @param type the type.
+     * @return the map. 
+     */
     public abstract Map getMap(String type);
 
     /**
