@@ -62,7 +62,7 @@ public class DefaultOutputRecord implements OutputRecord
     /**
      * Constructs an <code>OutputRecordImpl</code>.
      */
-    DefaultOutputRecord(Persistent object)
+    public DefaultOutputRecord(Persistent object)
     {
         fields = new HashMap();
         this.object = object;

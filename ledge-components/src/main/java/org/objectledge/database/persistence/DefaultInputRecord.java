@@ -58,7 +58,7 @@ public class DefaultInputRecord implements InputRecord
      *
      * @param rs the <code>ResultSet</code>.
      */
-    DefaultInputRecord(ResultSet rs)
+    public DefaultInputRecord(ResultSet rs)
     {
         this.rs = rs;
     }
