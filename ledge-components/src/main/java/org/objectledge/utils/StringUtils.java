@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.5 2004-01-13 14:53:53 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.6 2004-01-14 10:47:50 fil Exp $
  */
 public class StringUtils
 {
@@ -54,7 +54,7 @@ public class StringUtils
      *  Prepares a given String to be used as a HTTP cookie name.
    	 * 
   	 *
-  	 * @see StringUtils.cookieNameSafeString(String, String)
+  	 * @see StringUtils#cookieNameSafeString(String, String)
    	 * @param input Cookie name unsafe string.
    	 * @return a modified string.
    	 */
