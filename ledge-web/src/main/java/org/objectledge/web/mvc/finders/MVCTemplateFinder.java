@@ -33,9 +33,9 @@ import org.objectledge.templating.Template;
  * Finds templates that should be used for rendering specific views
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TemplateFinder.java,v 1.1 2004-01-15 09:27:05 fil Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.1 2004-01-15 10:49:01 fil Exp $
  */
-public interface TemplateFinder
+public interface MVCTemplateFinder
 {
 	/**
 	 * Returns an builder template for a given builder name. If no template is found, a

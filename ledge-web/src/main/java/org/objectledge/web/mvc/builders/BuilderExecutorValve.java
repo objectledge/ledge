@@ -34,13 +34,13 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.MVCConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
-import org.objectledge.web.mvc.finders.TemplateFinder;
+import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.4 2004-01-15 09:40:28 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.5 2004-01-15 10:49:01 fil Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -49,7 +49,7 @@ public class BuilderExecutorValve implements Runnable
 	/** Finder for builder objects. */
 	protected MVCClassFinder classFinder;
 	/** Finder for template objects. */
-	protected TemplateFinder templateFinder;
+	protected MVCTemplateFinder templateFinder;
 	/** maximum number of route calls per builder. */
 	protected int maxRouteCalls;  
 	/** maximum number of builder enclosures. */
@@ -65,7 +65,7 @@ public class BuilderExecutorValve implements Runnable
      * 	(also {@link Builder#getEnclosingViewPair()} calls)
 	 */
 	public BuilderExecutorValve(Context context, MVCClassFinder classFinder, 
-        TemplateFinder templateFinder, int maxRouteCalls, int maxEnclosures)
+        MVCTemplateFinder templateFinder, int maxRouteCalls, int maxEnclosures)
 	{
 		this.context = context;
 		this.classFinder = classFinder;
