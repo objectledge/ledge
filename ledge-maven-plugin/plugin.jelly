@@ -263,7 +263,7 @@
         <j:arg value="${newLine}"/>
       </j:invoke>
     </j:forEach>
-    <j:set var="output" value="${basedir}/depedencies"/>
+    <j:set var="output" value="${basedir}/dependencies"/>
     <echo>Writing dependency information to ${output}</echo>
     <j:file name="${output}" omitXmlDeclaration="true">${buff.toString()}</j:file>
   </goal>
