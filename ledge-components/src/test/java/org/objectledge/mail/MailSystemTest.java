@@ -41,13 +41,13 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
-import org.objectledge.LedgeTestCase;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.utils.LedgeTestCase;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 

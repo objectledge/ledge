@@ -26,31 +26,46 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.templating;
+package org.objectledge.templating.tools;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.jmock.builder.Mock;
+import org.objectledge.context.Context;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.templating.velocity.VelocityContext;
+import org.objectledge.utils.LedgeTestCase;
 
 /**
+ * Context tools test.
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class AllTests
+public class ContextToolsTest extends LedgeTestCase
 {
-	private AllTests()
-	{
-	}
+    private Mock toolFactoryMock = new Mock(ContextToolFactory.class);
+    private ContextToolFactory toolFactory = (ContextToolFactory)toolFactoryMock.proxy();
+    private TemplatingContext templatingContext;
+    
 
-	/**
-	 * @return the test.
-	 */
-    public static Test suite()
+    /**
+     * {@inheritDoc}
+     */
+    protected void setUp() throws Exception
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.templating");
-        //$JUnit-BEGIN$
+		super.setUp();
+    }
 
-        //$JUnit-END$
-        suite.addTest(org.objectledge.templating.tools.AllTests.suite());
-		suite.addTest(org.objectledge.templating.velocity.AllTests.suite());
-        return suite;
+	public void testLoadTools()
+        throws Exception
+	{
+        Context context = new Context();
+        templatingContext = new VelocityContext();
+	   	ContextTools contextTools = new ContextTools(new ContextToolFactory[]{toolFactory});
+        toolFactoryMock.expect(once()).method("getKey").will(returnValue("foo"));
+        toolFactoryMock.expect(once()).method("getTool").will(returnValue("bar"));
+        contextTools.populateTools(templatingContext);
+        assertEquals("bar", templatingContext.get("foo"));
+        toolFactoryMock.expect(once()).method("getKey").will(returnValue("foo"));
+        toolFactoryMock.expect(once()).method("recycleTool");
+        contextTools.recycleTools(templatingContext);
     }
 }

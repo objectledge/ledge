@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge;
+package org.objectledge.utils;
 
 import java.net.URL;
 
