@@ -33,7 +33,7 @@ import junit.framework.TestCase;
  * Generates a view lookup sequence based on a prefix, and fallback sequence.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequenceTest.java,v 1.6 2004-01-20 11:58:58 fil Exp $
+ * @version $Id: ViewLookupSequenceTest.java,v 1.7 2004-06-16 08:34:03 fil Exp $
  */
 public class ViewLookupSequenceTest extends TestCase
 {
@@ -49,7 +49,7 @@ public class ViewLookupSequenceTest extends TestCase
     public void testLookup()
     {
         ViewFallbackSequence fallbackSequence = 
-            new ViewFallbackSequence("a.b.c", '.', '/', "Default");
+            new ViewFallbackSequence("a.b.c", '.', '/', "Default", false);
         String[] prefices = { "one", "two" };
         ViewLookupSequence sequence;
         sequence = new ViewLookupSequence(prefices, '/', "views", fallbackSequence);
@@ -97,7 +97,7 @@ public class ViewLookupSequenceTest extends TestCase
     public void testDefault()
     {
         Sequence fallbackSequence = 
-            new ViewFallbackSequence("a.b.Default", '.', '/', "Default");
+            new ViewFallbackSequence("a.b.Default", '.', '/', "Default", false);
         String[] prefices = { "one", "two" };
         ViewLookupSequence sequence;
         sequence = new ViewLookupSequence(prefices, '/', "views", fallbackSequence);

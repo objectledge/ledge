@@ -110,12 +110,14 @@ import java.util.StringTokenizer;
  * </p>
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequence.java,v 1.5 2004-01-20 11:59:42 fil Exp $
+ * @version $Id: ViewFallbackSequence.java,v 1.6 2004-06-16 08:34:05 fil Exp $
  */
 public class ViewFallbackSequence
     implements Sequence
 {
     private String[] tokens;
+    
+    private int startPosition;
     
     private int position; 
     
@@ -127,14 +129,14 @@ public class ViewFallbackSequence
     
     /**
      * Constructs a view fallback sequence.
-     * 
      * @param path the view path.
      * @param inSeparator separator used in the path argument.
      * @param outSeparator separator to be used in generated paths.
      * @param defaultSuffix the suffix to append.
+     * @param skipFirst skip first result - used for looking up enclosing views.
      */
     public ViewFallbackSequence(String path, char inSeparator, 
-        char outSeparator, String defaultSuffix)
+        char outSeparator, String defaultSuffix, boolean skipFirst)
     {
         StringTokenizer tokenizer = new StringTokenizer(path, ""+inSeparator);
         if(path.equals(defaultSuffix) || path.endsWith(inSeparator+defaultSuffix))
@@ -149,7 +151,8 @@ public class ViewFallbackSequence
         {
             tokens[i] = tokenizer.nextToken();
         }
-        position = 0;
+        startPosition = skipFirst ? 1 : 0;
+        position = startPosition;
         this.outSeparator = outSeparator;
         this.defaultSuffix = defaultSuffix;
     }
@@ -159,7 +162,7 @@ public class ViewFallbackSequence
      */
     public void reset()
     {
-        position = 0;
+        position = startPosition;
     }
     
     /**

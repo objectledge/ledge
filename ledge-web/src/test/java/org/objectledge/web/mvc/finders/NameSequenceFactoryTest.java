@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.11 2004-06-02 07:10:48 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.12 2004-06-16 08:34:03 fil Exp $
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
@@ -65,27 +65,33 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
         throws Exception
     {
         NameSequenceFactory factory = getNameSequenceFactory("standard");
-        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar", true);
+        
+        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar", true, false);
         assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
         assertEquals("org.objectledge.test.views.foo.Default", classSequence.next());
         assertEquals("org.objectledge.test.views.Default", classSequence.next());
         assertEquals(false, classSequence.hasNext());
-        classSequence = factory.getClassNameSequence("views", "foo.Bar", false);
+
+        classSequence = factory.getClassNameSequence("views", "foo.Bar", false, false);
         assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
         assertEquals(false, classSequence.hasNext());
-        Sequence templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", true);
+
+        Sequence templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", true, false);
         assertEquals("views/foo/Bar", templateSequence.next());
         assertEquals("views/foo/Default", templateSequence.next());
         assertEquals("views/Default", templateSequence.next());
         assertEquals(false, templateSequence.hasNext());
-        templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", false);
+
+        templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", false, false);
         assertEquals("views/foo/Bar", templateSequence.next());
         assertEquals(false, templateSequence.hasNext());
-        templateSequence = factory.getTemplateNameSequence("views", "foo", true);
+
+        templateSequence = factory.getTemplateNameSequence("views", "foo", true, false);
         assertEquals("views/foo/Default", templateSequence.next());
         assertEquals("views/Default", templateSequence.next());
         assertEquals(false, templateSequence.hasNext());
-        templateSequence = factory.getTemplateNameSequence("views", "foo.Default", true);
+
+        templateSequence = factory.getTemplateNameSequence("views", "foo.Default", true, false);
         assertEquals("views/foo/Default", templateSequence.next());
         assertEquals("views/Default", templateSequence.next());
         assertEquals(false, templateSequence.hasNext());
@@ -95,7 +101,7 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
         throws Exception
     {
         NameSequenceFactory factory = getNameSequenceFactory("dots");
-        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar", true);
+        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar", true, false);
         assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
         assertEquals("org.objectledge.test.views.foo.Default", classSequence.next());
         assertEquals("org.objectledge.test.views.Default", classSequence.next());

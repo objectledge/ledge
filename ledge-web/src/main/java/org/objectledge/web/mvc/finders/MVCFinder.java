@@ -40,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.23 2004-02-17 15:50:26 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.24 2004-06-16 08:34:05 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -88,7 +88,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Template findBuilderTemplate(String view)
     {
-		return findTemplate(VIEWS, view, true, null, "findBuilderTemplate");
+		return findTemplate(VIEWS, view, true, false, null, "findBuilderTemplate");
     }
 
 	/**
@@ -97,23 +97,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     public Template findEnclosingBuilderTemplate(Template builderTemplate)
     {
         String view = findViewName(builderTemplate);
-        Sequence sequence = nameSequenceFactory.
-            getTemplateNameSequence(VIEWS, view, true);
-        sequence.next();
-        while(sequence.hasNext())
-        {
-            String name = sequence.next();
-            logger.debug("findEnclosingBuilderTemplate: trying "+name);
-            try
-            {
-                return templating.getTemplate(name);
-            }
-            catch(TemplateNotFoundException e)
-            {
-                // go on
-            }
-        }
-        return null;
+		return findTemplate(VIEWS, view, true, true, null, "findEnclosingBuilderTemplate");
     }
     
     /**
@@ -131,7 +115,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Template getComponentTemplate(String name)
 	{
-		return findTemplate(COMPONENTS, name, false, null, "getComponentTemplate");
+		return findTemplate(COMPONENTS, name, false, false, null, "getComponentTemplate");
 	}
 
 	// actions //////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +125,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
 	public Valve getAction(String actionName)
 	{
-		return (Valve)findObject(ACTIONS, actionName, false, "getAction");
+		return (Valve)findObject(ACTIONS, actionName, false, false, "getAction");
 	}
 
     // builders /////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +135,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Builder findBuilder(String view)
     {
-		return (Builder) findObject(VIEWS, view, true, "findBuilder");
+		return (Builder) findObject(VIEWS, view, true, false, "findBuilder");
     }
 
 	/**
@@ -160,23 +144,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     public Builder findEnclosingBuilder(Builder builder)
     {
         String view = findViewName(builder);
-        Sequence sequence = nameSequenceFactory.
-            getClassNameSequence(VIEWS, view, true);
-        sequence.next();
-        while(sequence.hasNext())
-        {
-            String name = sequence.next();
-            logger.debug("findEnclosingBuilder: trying "+name);
-            try
-            {
-                return (Builder)getClassInstance(name);
-            }
-            catch(ClassNotFoundException e)
-            {
-                // go on
-            }
-        }
-        return null;
+        return (Builder) findObject(VIEWS, view, true, true, "findBuilder");
     }
 
 	/**
@@ -195,7 +163,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	public Component getComponent(String componentName)
 	{
 		return (Component)
-            findObject(COMPONENTS, componentName, false, "getComponent");
+            findObject(COMPONENTS, componentName, false, false, "getComponent");
 	}    
 
     // implementation ///////////////////////////////////////////////////////////////////////////
@@ -203,13 +171,13 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	private Template findTemplate(
 		String classType,
 		String templateName,
-		boolean fallback,
+		boolean fallback, boolean enclosing, 
 		Template defaultTemplate, String methodName)
 	{
 		if(templateName != null && templateName.length() != 0)
 		{
 			Sequence sequence = nameSequenceFactory.
-				getTemplateNameSequence(classType, templateName, fallback);
+				getTemplateNameSequence(classType, templateName, fallback, enclosing);
 			while(sequence.hasNext())
 			{
 				String name = sequence.next();
@@ -230,13 +198,13 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     private Object findObject(
         String classType,
         String className,
-        boolean fallback,
+        boolean fallback, boolean enclosing, 
         String methodName)
 	{
 		if(className != null && className.length() != 0)
 		{
 			Sequence sequence = nameSequenceFactory.
-				getClassNameSequence(classType, className, fallback);
+				getClassNameSequence(classType, className, fallback, enclosing);
 			while(sequence.hasNext())
 			{
 				String name = sequence.next();

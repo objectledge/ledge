@@ -34,7 +34,7 @@ import org.objectledge.templating.Template;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactory.java,v 1.6 2004-01-19 16:04:54 fil Exp $
+ * @version $Id: NameSequenceFactory.java,v 1.7 2004-06-16 08:34:05 fil Exp $
  */
 public class NameSequenceFactory
 {
@@ -116,18 +116,21 @@ public class NameSequenceFactory
 
     /**
      * Produces a class name sequence for the specified view. 
-     * 
-     * @param view the view.
      * @param infix the path infix ("actions", "views","components")
-     * @param fallback <code>true</code>pefrorm scoping fallback
+     * @param view the view.
+     * @param fallback <code>true</code> to perform scoping fallback
+     * @param skipFirst <code>true</code> to skip first result in scoping fallback - 
+     *   used for looking up enclosing views. If fallback is <code>false</code> has no effect.
+     * 
      * @return name sequence.
      */
-    public Sequence getClassNameSequence(String infix, String view, boolean fallback)
+    public Sequence getClassNameSequence(String infix, String view, boolean fallback, 
+        boolean skipFirst)
     {
         Sequence fallbackSequence;
         if(fallback)
         {
-            fallbackSequence = getClassNameFallbackSequence(view);        
+            fallbackSequence = getClassNameFallbackSequence(view, skipFirst);        
         }
         else
         {
@@ -138,18 +141,21 @@ public class NameSequenceFactory
     
     /**
      * Produces a template name sequence for the specified view. 
-     * 
-     * @param view the view.
      * @param infix the path infix ("views", "components")
+     * @param view the view.
      * @param fallback <code>true</code>pefrorm scoping fallback
+     * @param skipFirst <code>true</code> to skip first result in scoping fallback - 
+     *   used for looking up enclosing views. If fallback is <code>false</code> has no effect.
+     * 
      * @return name sequence.
      */
-    public Sequence getTemplateNameSequence(String infix, String view, boolean fallback)
+    public Sequence getTemplateNameSequence(String infix, String view, boolean fallback, 
+        boolean skipFirst)
     {
         Sequence fallbackSequence; 
         if(fallback)
         {
-            fallbackSequence = getTemplateNameFallbackSequence(view);        
+            fallbackSequence = getTemplateNameFallbackSequence(view, skipFirst);        
         }
         else
         {
@@ -188,13 +194,14 @@ public class NameSequenceFactory
      * Produces the class name fallback sequence.
      * 
      * <p>This is a planned extension point.</p>
-     * 
      * @param view the view.
+     * @param skipFirst skip first result - used for looking up enclosing views.
+     * 
      * @return fallback sequence.
      */    
-    protected Sequence getClassNameFallbackSequence(String view)
+    protected Sequence getClassNameFallbackSequence(String view, boolean skipFirst)
     {
-        return new ViewFallbackSequence(view, viewSeparator,classSeparator, classDefaultSuffix);
+        return new ViewFallbackSequence(view, viewSeparator,classSeparator, classDefaultSuffix, skipFirst);
     }
 
     /**
@@ -212,14 +219,15 @@ public class NameSequenceFactory
      * Produces the template name fallback sequence.
      * 
      * <p>This is a planned extension point.</p>
-     * 
      * @param view the view.
+     * @param skipFirst skip first result - used for looking up enclosing views.
+     * 
      * @return fallback sequence.
      */    
-    protected Sequence getTemplateNameFallbackSequence(String view)
+    protected Sequence getTemplateNameFallbackSequence(String view, boolean skipFirst)
     {
         return new ViewFallbackSequence(view, viewSeparator,templateSeparator, 
-            templateDefaultSuffix);
+            templateDefaultSuffix, skipFirst);
     }
 
     /**
