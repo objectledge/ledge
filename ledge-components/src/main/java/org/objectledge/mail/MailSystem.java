@@ -33,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.7 2004-01-30 14:39:53 fil Exp $
+ * @version $Id: MailSystem.java,v 1.8 2004-02-11 10:42:59 pablo Exp $
  */
 public class MailSystem
 {
@@ -127,7 +127,7 @@ public class MailSystem
                         sessionProperties.setProperty("mail." + propertyName, propertyValue);
                     }
                     Session session = Session.getInstance(sessionProperties,
-                    	new LedgeAuthenticator(config.getChild("credentials")));
+                    	new LedgeAuthenticator(sessions[i].getChild("credentials")));
                     sessionsMap.put(name, session);
                 }
                 if(sessionsMap.size() == 0)
@@ -144,7 +144,6 @@ public class MailSystem
         {
             throw new ComponentInitializationError("invalid configuration", e);
         }
-    	// TODO fire daemon...
     }
 
     /**

@@ -57,19 +57,19 @@
               </choice>
             </element>
           </zeroOrMore>
+          <optional>
+            <element name="credentials">
+              <zeroOrMore>
+                <element name="credential">
+                  <attribute name="protocol"/>
+                  <attribute name="username"/>
+                  <attribute name="password"/>
+                </element>
+              </zeroOrMore>
+            </element>
+          </optional>
         </element>
       </oneOrMore>
-    </element>
-  </optional>
-  <optional>
-    <element name="credentials">
-      <zeroOrMore>
-        <element name="credential">
-          <attribute name="protocol"/>
-          <attribute name="username"/>
-          <attribute name="password"/>
-        </element>
-      </zeroOrMore>
     </element>
   </optional>
 </element>
