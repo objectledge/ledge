@@ -39,7 +39,7 @@ import java.util.Set;
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.3 2004-02-02 16:50:23 zwierzem Exp $
+ * @version $Id: PageTool.java,v 1.4 2004-06-29 13:38:08 zwierzem Exp $
  */
 public class PageTool
 {
@@ -346,6 +346,10 @@ public class PageTool
         ScriptLink(ResourceLink srcLink, String charset)
         {
             this.resLink = srcLink;
+            if(charset == null)
+            {
+                charset = "UTF-8";
+            }
             this.charset = charset;
         }
 
