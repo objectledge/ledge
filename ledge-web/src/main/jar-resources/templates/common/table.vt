@@ -30,18 +30,18 @@
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: table.vt,v 1.6 2004-07-02 10:45:16 zwierzem Exp $
+ * @version $Id: table.vt,v 1.7 2004-08-02 14:33:48 zwierzem Exp $
 *###
 #**
  * Displays a single header cell contents.
  *
  * @param $table the table tool.
  * @param $column TableColumn object.
- * @param $tableLink LinkTool with preset table_id parameter.
+ * @param $tableLink LinkTool with preset tableId parameter.
  *#
 #macro(tableView_headCellContent $table $column $tableLink)
   #if($column.isSortable())
-    <a href="$tableLink.action('table,SetSortColumn').set('sort_column',$column.name)">$column.label</a>
+    <a href="$tableLink.action('table,SetSortColumn').set('sortColumn',$column.name)">$column.label</a>
     #if($table.getSortColumn() && $table.getSortColumn() == $column)
       #if($table.getAscSort())
       <img src="$link.content('tree/down.gif')" border="0" />
@@ -58,7 +58,7 @@
  * Displays table headers.
  *
  * @param $table the table tool.
- * @param $tableLink LinkTool with preset table_id.
+ * @param $tableLink LinkTool with preset tableId.
  * @param $columnOrder list of column names.
  *#
 #macro(tableView_header $table $tableLink $columnOrder)
@@ -99,7 +99,7 @@
  * Displays the table pager.
  *
  * @param $table the table tool.
- * @param $tableLink LinkTool with preset table_id.
+ * @param $tableLink LinkTool with preset tableId.
  *#
 #macro(tableView_pager $table $tableLink)
 #if($table.numPages > 1)
@@ -117,7 +117,7 @@ $table.currentPage $i18n.get('table.page.of') $table.numPages |
  * Displays a relative pager
  *
  * @param $table the table tool.
- * @param $tableLink LinkTool with preset table_id.
+ * @param $tableLink LinkTool with preset tableId.
  *#
 #macro(tableView_relativePager $table $tableLink)
 #set($setPageLink = $tableLink.action('table,SetPage'))
@@ -138,14 +138,14 @@ $table.currentPage $i18n.get('table.page.of') $table.numPages |
  * Displays a page size chooser
  *
  * @param $table the table tool.
- * @param $tableLink LinkTool with preset table_id.
+ * @param $tableLink LinkTool with preset tableId.
  * @param $sizes a list of page sizes (ie. [10,20,50])
  *#
 #macro(tableView_pageSizeChooser $table $tableLink $sizes)
 #foreach($size in $sizes)
-<input type="radio" name="pageSize" id="size$size" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('page_size',$size)'" #if($table.pageSize == $size)checked#end> <label for="size$size">$size</label>
+<input type="radio" name="pageSize" id="size$size" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('pageSize',$size)'" #if($table.pageSize == $size)checked#end> <label for="size$size">$size</label>
 #end
-<input type="radio" name="pageSize" id="size0" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('page_size',0)'" #if($table.pageSize == 0)checked#end> <label for="size0">$i18n.get('table.page.all')</label>
+<input type="radio" name="pageSize" id="size0" onchange="document.location.href='$tableLink.action('table,SetPageSize').set('pageSize',0)'" #if($table.pageSize == 0)checked#end> <label for="size0">$i18n.get('table.page.all')</label>
 $i18n.get('table.page.size')
 #end
 
@@ -173,14 +173,14 @@ $i18n.get('table.page.size')
  * @param $row the row to displays tree images for.
  *#
 #macro(tableView_linesAndFolders $table $row $tableLink)
-#tableView_linesAndFoldersBase($table $row $tableLink.set('row_id',$row.id).action('table.ToggleExpanded'))##
+#tableView_linesAndFoldersBase($table $row $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))##
 #end
 
 #**
  * Displays a tree that displays row object's name property.
  *
  * @param $table the table model.
- * @param $tableLink LinkTool with preset table_id.
+ * @param $tableLink LinkTool with preset tableId.
  * @param $rowLink LinkTool with preconfigured links for table elements.
  * @param $rowIdParameterName the name of the request parameters to put row
  *        identifier to.
