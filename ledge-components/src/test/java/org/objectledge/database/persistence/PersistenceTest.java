@@ -69,7 +69,7 @@ public class PersistenceTest extends TestCase
         FileSystem fs = FileSystem.getStandardFileSystem(".");
         IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
+        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger, null);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         persistence = new DefaultPersistence(database, logger);
     }

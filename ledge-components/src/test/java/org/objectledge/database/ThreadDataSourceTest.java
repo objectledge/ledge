@@ -43,7 +43,7 @@ import org.objectledge.pipeline.Valve;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSourceTest.java,v 1.3 2004-02-09 09:03:21 fil Exp $
+ * @version $Id: ThreadDataSourceTest.java,v 1.4 2004-06-25 11:21:55 fil Exp $
  */
 public class ThreadDataSourceTest extends TestCase
 {
@@ -166,7 +166,7 @@ public class ThreadDataSourceTest extends TestCase
         throws Exception
     {
         setUp(0);
-        Transaction transaction = new JotmTransaction(0,context, log);
+        Transaction transaction = new JotmTransaction(0,context, log, null);
         Connection c1 = threadDataSource.getConnection();
         try
         {

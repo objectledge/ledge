@@ -104,7 +104,7 @@ public class DBSchedulerTest extends TestCase
         scheduleFactories[0] = new AtScheduleFactory();
         DataSource dataSource = getDataSource();
         IdGenerator idGenerator = new IdGenerator(dataSource);
-        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
+        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger, null);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);        
         
         Persistence persistence = new DefaultPersistence(database, logger);

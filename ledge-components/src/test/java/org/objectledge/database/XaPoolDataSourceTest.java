@@ -57,7 +57,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.5 2004-06-01 11:14:09 zwierzem Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.6 2004-06-25 11:21:55 fil Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -71,7 +71,7 @@ public class XaPoolDataSourceTest extends TestCase
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
-        transaction = new JotmTransaction(0, new Context(), log);
+        transaction = new JotmTransaction(0, new Context(), log, null);
         
         DefaultConfiguration conf = new DefaultConfiguration("config","","");
         DefaultConfiguration conn = new DefaultConfiguration("connection","","config");
@@ -86,7 +86,7 @@ public class XaPoolDataSourceTest extends TestCase
         user.setValue("sa");
         conn.addChild(user);
         
-        dataSource = new XaPoolDataSource(transaction, conf);
+        dataSource = new XaPoolDataSource(transaction, conf, null);
     }
     
     public void tearDown()
@@ -219,7 +219,7 @@ public class XaPoolDataSourceTest extends TestCase
         Configuration config = getConfig(
             "database/org.objectledge.database.XaPoolDataSource-minimal.xml",
             "org/objectledge/database/XaPoolDataSource.rng");
-        XaPoolDataSource source = new XaPoolDataSource(transaction, config);
+        XaPoolDataSource source = new XaPoolDataSource(transaction, config, null);
         Connection conn = source.getConnection();
         conn.close();
         ((Startable)source).stop();
@@ -231,7 +231,7 @@ public class XaPoolDataSourceTest extends TestCase
         Configuration config = getConfig(
             "database/org.objectledge.database.XaPoolDataSource-full.xml",
             "org/objectledge/database/XaPoolDataSource.rng");
-        XaPoolDataSource source = new XaPoolDataSource(transaction, config);
+        XaPoolDataSource source = new XaPoolDataSource(transaction, config, null);
         //Connection conn = source.getConnection();
         //conn.close();
         ((Startable)source).stop();

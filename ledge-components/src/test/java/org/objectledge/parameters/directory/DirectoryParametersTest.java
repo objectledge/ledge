@@ -103,7 +103,7 @@ public class DirectoryParametersTest extends TestCase
         DataSource ds = getDataSource();
         DefaultPicoContainer container = new DefaultPicoContainer();
         IdGenerator idGenerator = new IdGenerator(ds);
-        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
+        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger, null);
         Database database = new DefaultDatabase(ds, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
         container.registerComponentInstance(Persistence.class, persistence);            
