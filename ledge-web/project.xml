@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.44 2005-03-17 08:14:36 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.45 2005-04-06 14:20:06 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -171,7 +171,7 @@
     <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
-      <version>1.4</version>
+      <version>1.5-dev-20050406</version>
       <url>http://jakarta.apache.org/velocity/</url>
     </dependency>
     <dependency>

@@ -23,7 +23,7 @@
 	<classpathentry sourcepath="MAVEN_REPO/dna/sources/dna-impl-1.1-rc2-src.zip" kind="var" path="MAVEN_REPO/dna/jars/dna-impl-1.1-rc2.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/picocontainer/sources/picocontainer-1.1-src.zip" kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jmock/jars/jmock-1.0.0.RC1.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.5-dev-20050406.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/relaxngDatatype/jars/relaxngDatatype-20040506.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/msv/jars/msv-20040506.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jmock/jars/jmock-cglib-1.0.0.RC1.jar"/>

@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.13 2004-12-20 08:32:47 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.14 2005-04-06 14:20:03 zwierzem Exp $ -->
 
 <project>
   <extend>${ledgeCommon}/project.xml</extend>
@@ -48,7 +48,7 @@
     </dependency>
     <dependency>
       <id>velocity</id>
-      <version>1.4</version>
+      <version>1.5-dev-20050406</version>
     </dependency>
     <dependency>
       <groupId>javacc</groupId>
