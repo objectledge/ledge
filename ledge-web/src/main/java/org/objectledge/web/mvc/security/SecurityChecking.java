@@ -34,6 +34,7 @@ import org.objectledge.context.Context;
  * The interface of all mvc security objects.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: SecurityChecking.java,v 1.2 2004-06-24 15:20:02 pablo Exp $
  */
 public interface SecurityChecking
 {

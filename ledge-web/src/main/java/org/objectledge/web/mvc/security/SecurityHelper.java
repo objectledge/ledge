@@ -36,6 +36,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Util class used to check components security.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: SecurityHelper.java,v 1.4 2004-06-24 15:20:02 pablo Exp $
  */
 public abstract class SecurityHelper
 {

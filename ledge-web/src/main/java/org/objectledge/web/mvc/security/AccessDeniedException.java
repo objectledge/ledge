@@ -33,7 +33,7 @@ import org.objectledge.pipeline.ProcessingException;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
+ * @version $Id: AccessDeniedException.java,v 1.2 2004-06-24 15:20:02 pablo Exp $
  */
 public class AccessDeniedException extends ProcessingException
 {
