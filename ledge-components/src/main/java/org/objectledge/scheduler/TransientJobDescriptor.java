@@ -129,11 +129,11 @@ public class TransientJobDescriptor
         {
             super.setArgument(config.getAttribute("argument"));
         }
-        if(config.getAttribute("runCountLimit").length() > 0)
+        if(config.getAttribute("runCountLimit","").length() > 0)
         {
             super.setRunCountLimit(config.getAttributeAsInteger("runCountLimit"));
         }
-        if(config.getAttribute("runTimeLimit").length() > 0)
+        if(config.getAttribute("runTimeLimit","").length() > 0)
         {
             String range = config.getAttribute("runTimeLimit");
             int pos = range.indexOf("::");
@@ -156,7 +156,7 @@ public class TransientJobDescriptor
             }
             super.setTimeLimit(startDate, endDate);
         }
-        if(config.getAttribute("rentrant").length() > 0)
+        if(config.getAttribute("rentrant","").length() > 0)
         {
             super.setReentrant(config.getAttributeAsBoolean("reentrant"));
         }

@@ -64,6 +64,6 @@ public class CronScheduleFactory implements ScheduleFactory
      */
     public String getName()
     {
-        return "at";
+        return "cron";
     }
 }

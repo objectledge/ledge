@@ -101,7 +101,9 @@ public class TransientScheduler extends AbstractScheduler
         }
         catch (Exception e)
         {
+            ///CLOVER:OFF
             throw new ComponentInitializationError("failed to load jobs", e);
+            ///CLOVER:ON
         }
     }
 }
