@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>MailSystem</title>
+  </properties>
+
+  <body>
+    <section name="MailSystem">
+    
+      <subsection name="Description">
+        <p>Manages the mail sessions and allows to prepare and send email messages.</p>
+      </subsection>
+
+	  <subsection name="Browse">
+        <p>
+          <ul>
+            <li>MailSystem <a href="../apidocs/org/objectledge/mail/MailSystem.html">JavaDoc</a></li>
+            <li>MailSystem <a href="../apidocs/org/objectledge/mail/MailSystem.html">XRef</a></li>
+            <li>MailSystem <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/mail/MailSystem.java">CVS log</a></li>
+	        <li>MailSystem configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/mail/MailSystem.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>            
+          </ul>
+        </p>	    
+	  </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="FileSystem.html">FileSystem</a>, 
+                <a href="Templating.html">Templating</a>,
+                <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>, 
+                <a href="../../ledge-container/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>JavaMail (javamail), Java Activation Framework (jaf:activation)</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+    				   
+      <subsection name="Constructor parameters">		
+  	    <p>
+	      <table>
+	        <tr>
+              <th>position</th>
+	          <th>type</th>
+	          <th widht="100%">descritpion</th>
+            </tr>
+            <tr>
+	          <td>1</td>
+	          <td><code>org.jcontainer.dna.Configuration</code></td>
+	          <td>the configuration</td>
+	        </tr>
+		    <tr>
+		      <td>2</td>
+		      <td><code>import org.jcontainer.dna.Logger</code></td>
+		      <td>the logger</td>
+		    </tr>
+		    <tr>
+		      <td>3</td>
+		      <td><code>org.objectledge.filesystem.FileSystem</code></td>
+		      <td>the file system to support the FileSystemDataSource</td>
+		    </tr>
+	        <tr>
+	          <td>4</td>
+	          <td><code>org.objectledge.templating.Templating</code></td>
+	          <td>the templating system to support the template based messages</td>
+            </tr>
+		  </table>
+	    </p>
+	  </subsection>
+    </section>
+  </body>
+</document>  
+ 

@@ -3,6 +3,7 @@ package org.objectledge.mail;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +18,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.mail.impl.FileSystemDataSource;
 import org.objectledge.templating.Templating;
@@ -27,18 +30,12 @@ import org.objectledge.templating.Templating;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.2 2004-01-14 10:42:02 fil Exp $
+ * @version $Id: MailSystem.java,v 1.3 2004-01-19 16:53:51 pablo Exp $
  */
 public class MailSystem
 {
     // constants /////////////////////////////////////////////////////////////
     
-    /** The configuration option for mime file (mimeFile). */
-    public static final String MIME_FILE_KEY = "mimeFile";
-
-    /** The configuration option for the Big Brother account (bigBroter). */
-    public static final String BIG_BROTHER_KEY = "bigBrother";
-
     /** The default session name (default). */
     public static final String DEFAULT_SESSION = "default";
     
@@ -89,8 +86,51 @@ public class MailSystem
 		this.logger = logger;
 		this.fileSystem = fileSystem;
 		this.templating = templating;
-        
-        //TODO read the configuration...
+        try
+        {
+            String mimeTypeFilePath = config.getChild("mime_type_file_path")
+            	.getValue("/config/mimeType");
+            mimeMap = new MimetypesFileTypeMap(fileSystem.getInputStream(mimeTypeFilePath));
+            debugAddress = config.getChild("big_brother_email").getValue("");
+            String pattern = config.getChild("email_pattern")
+            	.getValue("^[-!\\.\\w]+@[^\\.][-a-zA-Z0-9]+(\\.[-a-zA-Z0-9]+)+");
+            emailAddressPattern = Pattern.compile(pattern);
+
+            Configuration sessionsNode = config.getChild("sessions");
+            if (sessionsNode != null)
+            {
+                Configuration[] sessions = sessionsNode.getChildren("session");
+                for (int i = 0; i < sessions.length; i++)
+                {
+                    String name = sessions[i].getAttribute("name");
+                    boolean isDefault = sessions[i].getAttributeAsBoolean("default", false);
+                    if (i == 0 || isDefault)
+                    {
+                        defaultSession = name;
+                    }
+                    Properties sessionProperties = new Properties();
+                    Configuration[] properties = sessions[i].getChildren("property");
+                    for (int j = 0; i < properties.length; j++)
+                    {
+                        String propertyName = properties[i].getAttribute("name");
+                        String propertyValue = properties[i].getAttribute("value", null);
+                        if (propertyValue == null)
+                        {
+                            propertyValue = properties[i].getValue();
+                        }
+                        sessionProperties.setProperty("mail." + propertyName, propertyValue);
+                    }
+                    Session session = Session.getInstance(sessionProperties,
+                    	new LedgeAuthenticator(config.getChild("credentials")));
+                    sessionsMap.put(name, session);
+                }
+            }
+        }
+        catch (ConfigurationException e)
+        {
+            throw new ComponentInitializationError("invalid configuration", e);
+        }
+    	// TODO fire daemon...
     }
 
     /**
@@ -226,22 +266,41 @@ public class MailSystem
 		/**
 		 * Create new Ledge authentication.
 		 * 
-		 * @param config the configuration.
+		 * @param credentialsConfig the configuration.
+		 * @throws ConfigurationException if happen.
 		 */
-        public LedgeAuthenticator(Configuration config)
+        public LedgeAuthenticator(Configuration credentialsConfig)
+        	throws ConfigurationException
         {
-        	//TODO configure the authenticator.
+			if (credentialsConfig != null)
+			{
+				Configuration[] credentials = credentialsConfig.getChildren("credential");
+				for (int i = 0; i < credentials.length; i++)
+				{
+					String protocol = credentials[i].getAttribute("protocol");
+					String userName = credentials[i].getAttribute("username");
+					String password = credentials[i].getAttribute("password");
+					addCredentials(protocol, userName, password);
+				}
+			}
         }
 
 		/**
 		 * Add credentials for the specified protocol.
          * 
          * @param protocol the protocol.
-         * @param credentials the credentials.
+         * @param username the user name.
+         * @param password the password.
 		 */
-        public void addCredentials(String protocol, String credentials)
+        public void addCredentials(String protocol, String username, String password)
         {
-        	throw new UnsupportedOperationException("not implemented yet");
+			Map protocolCredentials = (Map)authInfo.get(protocol);
+			if(protocolCredentials == null)
+			{
+				protocolCredentials = new HashMap();
+				authInfo.put(protocol, protocolCredentials);
+			}
+			protocolCredentials.put(username, password);
        	}
 
 		/**
@@ -252,7 +311,7 @@ public class MailSystem
             Map credentials = (Map)authInfo.get(getRequestingProtocol());
             if(credentials == null)
             {
-                credentials = (Map)authInfo.get(null);
+                credentials = (Map)authInfo.get("");
             }
             if(credentials != null)
             {

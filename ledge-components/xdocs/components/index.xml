@@ -69,6 +69,12 @@
         <p>Provides the simple templating based on velocity engine.</p>
 		<p class="more"><a href="VelocityTemplating.html">more</a></p>
       </subsection>
+      
+      <subsection name="MailSystem">
+        <p>Manages the mail sessions and allows to prepare and send email messages.</p>
+		<p class="more"><a href="MailSystem.html">more</a></p>
+      </subsection>
+      
     </section>
   </body>
 </document>
