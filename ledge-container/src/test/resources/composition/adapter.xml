@@ -13,7 +13,7 @@
     <component key="org.objectledge.filesystem.FileSystemProvider:classpath" 
                class="org.objectledge.filesystem.impl.ClasspathFileSystemProvider">
       <constant-parameter value="classpath"/>
-      <component-parameter class="java.lang.ClassLoader"/>
+      <component-parameter class-key="java.lang.ClassLoader"/>
     </component>
     <component class="org.objectledge.filesystem.FileSystem">
       <sequence-parameter class="[Lorg.objectledge.filesystem.FileSystemProvider;">
@@ -26,9 +26,9 @@
     
     <component class="org.objectledge.xml.XMLValidator"/>
     <component class="org.objectledge.configuration.ConfigurationFactory" preload="true">
-      <component-parameter class="org.picocontainer.MutablePicoContainer"/>
-      <component-parameter class="org.objectledge.filesystem.FileSystem"/>
-      <component-parameter class="org.objectledge.xml.XMLValidator"/>
+      <component-parameter class-key="org.picocontainer.MutablePicoContainer"/>
+      <component-parameter class-key="org.objectledge.filesystem.FileSystem"/>
+      <component-parameter class-key="org.objectledge.xml.XMLValidator"/>
       <constant-parameter value="/config"/>
     </component>
 

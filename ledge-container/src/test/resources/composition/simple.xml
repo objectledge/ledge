@@ -8,7 +8,7 @@
   <component key="org.objectledge.filesystem.FileSystemProvider:classpath" 
              class="org.objectledge.filesystem.impl.ClasspathFileSystemProvider">
     <constant-parameter value="classpath"/>
-    <component-parameter class="java.lang.ClassLoader"/>
+    <component-parameter class-key="java.lang.ClassLoader"/>
   </component>
   <component class="org.objectledge.filesystem.FileSystem">
     <sequence-parameter class="[Lorg.objectledge.filesystem.FileSystemProvider;">

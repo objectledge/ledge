@@ -132,7 +132,7 @@
     <element name="component-parameter">
       <choice>
         <attribute name="key"/>
-        <attribute name="class"/>
+        <attribute name="class-key"/>
       </choice>
     </element>
   </define>
