@@ -54,13 +54,14 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.11 2004-12-28 04:31:54 zwierzem Exp $
+ * @version $Id: PageToolTest.java,v 1.12 2005-03-30 13:23:53 rafal Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
 	private LinkToolFactory linkToolFactory;
 
 	private Context context;
+    private HttpContext httpContext = null;
 
 	private Mock mockHttpServletRequest;
     private HttpServletRequest httpServletRequest;
@@ -112,7 +113,7 @@ public class PageToolTest extends LedgeTestCase
 
 	public void testFactory()
 	{
-		PageToolFactory pageToolFactory = new PageToolFactory(linkToolFactory);
+		PageToolFactory pageToolFactory = new PageToolFactory(linkToolFactory, context);
 		PageTool pageTool1 = (PageTool) pageToolFactory.getTool();
 		PageTool pageTool2 = (PageTool) pageToolFactory.getTool();
 		assertNotNull(pageTool1);
@@ -126,7 +127,7 @@ public class PageToolTest extends LedgeTestCase
     public void testSetTitle()
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-    	PageTool pageTool = new PageTool(linkTool);
+    	PageTool pageTool = new PageTool(linkTool, httpContext);
     	pageTool.setTitle("test title");
     	assertEquals(pageTool.getTitle(), "test title");
     }
@@ -134,7 +135,7 @@ public class PageToolTest extends LedgeTestCase
     public void testAppendTitleSuffix()
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.setTitle("test title");
 		pageTool.appendTitleSuffix(" suffix");
 		assertEquals(pageTool.getTitle(), "test title suffix");
@@ -143,7 +144,7 @@ public class PageToolTest extends LedgeTestCase
     public void testInsertTitlePrefix()
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.setTitle("test title");
 		pageTool.insertTitlePrefix("prefix ");
 		assertEquals(pageTool.getTitle(), "prefix test title");
@@ -152,7 +153,7 @@ public class PageToolTest extends LedgeTestCase
     public void testGetTitle()
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.setTitle("test title");
 		pageTool.insertTitlePrefix("prefix ");
 		pageTool.appendTitleSuffix(" suffix");
@@ -162,7 +163,7 @@ public class PageToolTest extends LedgeTestCase
 	public void testAddStyleLink()
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.addStyleLink("style/style1.css",1);
 		pageTool.addStyleLink("style/style2.css",2);
 		pageTool.addStyleLink("style/style1.css");
@@ -180,7 +181,7 @@ public class PageToolTest extends LedgeTestCase
 	public void testAddScriptLink()
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.addScriptLink("js/script1.js", "ISO-8859-1");
 		pageTool.addScriptLink("js/script2.js");
 		pageTool.addScriptLink("js/script1.js");
@@ -198,7 +199,7 @@ public class PageToolTest extends LedgeTestCase
 	public void testAddNameMeta()
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.addNameMeta("author", "Damian Gajda");
 		pageTool.addNameMeta("author", "Dodo");
 		pageTool.addNameMeta("contributor", "ZwieRzem");
@@ -222,7 +223,7 @@ public class PageToolTest extends LedgeTestCase
 	public void testAddHttpEquivMeta()
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.addHttpEquivMeta("Header", "Value1");
 		pageTool.addHttpEquivMeta("Header", "Value2");
 		List metas = pageTool.getHttpEquivMetas();
@@ -241,14 +242,14 @@ public class PageToolTest extends LedgeTestCase
 	public void testGetLinkTool()
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		assertEquals(pageTool.getLinkTool(), linkTool);
 	}
 
 	public void testReset()
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool);
+		PageTool pageTool = new PageTool(linkTool, httpContext);
 		pageTool.setTitle("test title");
 		pageTool.insertTitlePrefix("prefix ");
 		pageTool.appendTitleSuffix(" suffix");

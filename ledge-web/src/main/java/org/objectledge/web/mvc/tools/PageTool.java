@@ -35,11 +35,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.objectledge.web.HttpContext;
+
 /**
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.10 2005-03-24 14:28:33 zwierzem Exp $
+ * @version $Id: PageTool.java,v 1.11 2005-03-30 13:23:54 rafal Exp $
  */
 public class PageTool
 {
@@ -71,17 +73,23 @@ public class PageTool
 
     /** Parent of LinkTool used to generate content resource links. */
     protected LinkTool parentLinkTool;
+    
 	/** LinkTool used to generate content resource links. */
 	protected LinkTool linkTool;
+
+    /** The http context. */
+    protected HttpContext httpContext;
 
 	/** 
 	 * Component constructor.
 	 * @param parentLinkTool the link tool used to generate links to page content resources.
+	 * @param httpContext the http context
 	 */
-	public PageTool(LinkTool parentLinkTool)
+	public PageTool(LinkTool parentLinkTool, HttpContext httpContext)
 	{
 		this.parentLinkTool = parentLinkTool;
         this.linkTool = parentLinkTool.sessionless();
+        this.httpContext = httpContext;
     }
 
 	/** 
@@ -463,5 +471,25 @@ public class PageTool
         {
             return content;
         }
+    }
+
+    /**
+     * Returns the content type of the current response. 
+     * 
+     * @return the content type.
+     */
+    public String getContentType()
+    {
+        return httpContext.getContentType();
+    }
+    
+    /**
+     * Returns the character encoding of the current reponse.
+     * 
+     * @return the encoding.
+     */
+    public String getEncoding()
+    {
+        return httpContext.getEncoding();
     }
 }

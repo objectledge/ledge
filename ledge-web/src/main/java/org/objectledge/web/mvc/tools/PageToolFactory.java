@@ -28,7 +28,9 @@
 
 package org.objectledge.web.mvc.tools;
 
+import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
+import org.objectledge.web.HttpContext;
 
 /**
  * Context tool factory component to build the link tool.
@@ -39,15 +41,18 @@ public class PageToolFactory implements ContextToolFactory
 {
     /** The linktool factory. */
 	protected LinkToolFactory linkToolFactory;
-	
+
+    protected Context context;
+    
 	/**
 	 * Component constructor.
 	 * @param linkToolFactory factory for creating
 	 * 		{@link LinkTool}s tools used by {@link PageTool}s.
  	 */
-	public PageToolFactory(LinkToolFactory linkToolFactory)
+	public PageToolFactory(LinkToolFactory linkToolFactory, Context context)
 	{
 		this.linkToolFactory = linkToolFactory;
+        this.context = context;
 	}
 	
     /**
@@ -55,7 +60,8 @@ public class PageToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		return new PageTool((LinkTool) linkToolFactory.getTool());
+		return new PageTool((LinkTool) linkToolFactory.getTool(), 
+            HttpContext.getHttpContext(context));
 	}
 	
 	/**
