@@ -45,6 +45,7 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
+import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.jcontainer.dna.Configuration;
@@ -102,7 +103,8 @@ public class DirectoryUserManager extends UserManager
     /** The name by login cache */
     private Map nameByLogin;
     
-    
+    /** The default search controls */
+    private SearchControls defaultSearchControls;
     
     /**
      * Creates an instance of the user manager.
@@ -130,6 +132,7 @@ public class DirectoryUserManager extends UserManager
         this.logger = logger;
         loginByName = new HashMap();
         nameByLogin = new HashMap();
+        defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").
             getValue(LOGIN_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").
@@ -530,15 +533,7 @@ public class DirectoryUserManager extends UserManager
             ctx = (DirContext)directory.getBaseContext().lookup("");
             logger.debug("looking up query= "+query+" in "+ ctx.getNameInNamespace());
             String[] attrIDs = {};
-            Attributes matchAttrs = new BasicAttributes(false);
-            // TODO make the query pairs list
-            String[] attributes = new String[0];
-            String[] values = new String[0];
-            for(int i = 0; i < attributes.length;i++)
-            {
-                matchAttrs.put(new BasicAttribute(attributes[i], values[i]));    
-            }
-            NamingEnumeration answer = ctx.search("", matchAttrs, attrIDs);
+            NamingEnumeration answer = ctx.search("", query, attrIDs, defaultSearchControls);
             List results = new ArrayList();
             while(answer.hasMore())
             {
@@ -552,5 +547,4 @@ public class DirectoryUserManager extends UserManager
             closeContext(ctx);
         }
     }
-
 }
