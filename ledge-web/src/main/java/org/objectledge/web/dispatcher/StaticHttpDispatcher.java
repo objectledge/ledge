@@ -45,9 +45,9 @@ import org.objectledge.web.HttpDispatcher;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: DummyDispatcher.java,v 1.2 2003-12-23 15:28:50 fil Exp $
+ * @version $Id: StaticHttpDispatcher.java,v 1.1 2003-12-29 12:57:38 fil Exp $
  */
-public class DummyDispatcher 
+public class StaticHttpDispatcher 
     implements HttpDispatcher
 {
     private Pattern[] patterns;
@@ -65,7 +65,7 @@ public class DummyDispatcher
      * @throws ConfigurationException if the configuration is malformed.
      * @throws PatternSyntaxException if the configuration contains invalid regular expression.
      */
-    public DummyDispatcher(Configuration config)
+    public StaticHttpDispatcher(Configuration config)
         throws ConfigurationException, PatternSyntaxException
     {
         Configuration[] items = config.getChildren("response");

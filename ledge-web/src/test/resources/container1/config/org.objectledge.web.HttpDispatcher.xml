@@ -28,5 +28,5 @@
 --> 
 
 <config>
-  <method name="GET">org.objectledge.web.dispatcher.DummyDispatcher</method>
+  <method name="GET">org.objectledge.web.dispatcher.StaticHttpDispatcher</method>
 </config>

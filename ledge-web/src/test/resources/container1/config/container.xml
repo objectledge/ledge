@@ -21,8 +21,8 @@
     <component class-key="org.objectledge.web.HttpDispatcher" 
     		   class="org.objectledge.web.dispatcher.HttpMethodDispatcher"/>
     		   
-    <component key="org.objectledge.web.dispatcher.DummyDispatcher"
-               class="org.objectledge.web.dispatcher.DummyDispatcher"/>
+    <component key="org.objectledge.web.dispatcher.StaticHttpDispatcher"
+               class="org.objectledge.web.dispatcher.StaticHttpDispatcher"/>
     
   </container>
 </container>
