@@ -29,26 +29,77 @@ package org.objectledge.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.objectledge.utils.StringUtils;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.1 2004-01-22 09:28:22 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.2 2004-01-22 10:52:51 pablo Exp $
  */
 public class DatabaseUtils
 {
     private DatabaseUtils()
     {
     }
-    
+
     // utilities //////////////////////////////////////////////////////////////////////////////
-    
+
+    /**
+     * Close the connection
+     * 
+     * @param conn the connection. 
+     */
     public static void close(Connection conn)
     {
+        try
+        {
+            if (conn != null)
+            {
+                conn.close();
+            }
+        }
+        catch (SQLException e)
+        {
+            //TODO report the exception to log.
+            throw new Error("Couldn't close the connection - " +                " this error will be replaced be silent error log",e);    
+        }
     }
-    
+
+    /**
+     * Close the connection
+     * 
+     * @param conn the connection.
+     * @param stmt the statement.
+     * @param rs the result set. 
+     */
     public static void close(Connection conn, Statement stmt, ResultSet rs)
     {
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+    
+    
+    /**
+     * Unescape the string that comes from query.
+     * 
+     * @param input the input string.
+     * @return the result string.
+     */
+    public static String unescapeSqlString(String input)
+    {
+        return StringUtils.expandUnicodeEscapes(input);
+    }
+    
+    /**
+     * Escape the \ and ' in string that goes to statement.
+     * 
+     * @param input the input string.
+     * @return the result string.
+     */
+    public static String escapeSqlString(String input)
+    {
+        return StringUtils.backslashEscape(StringUtils.escapeNonASCIICharacters(input), "'\\");
     }
 }
