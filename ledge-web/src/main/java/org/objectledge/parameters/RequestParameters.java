@@ -40,7 +40,7 @@ import org.objectledge.context.Context;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.3 2004-06-28 12:14:26 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.4 2004-06-29 13:40:51 zwierzem Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -65,21 +65,19 @@ public class RequestParameters extends DefaultParameters
     public RequestParameters(HttpServletRequest request, String encoding)
     	throws IllegalArgumentException
     {
+        Enumeration names = request.getParameterNames();
+        while (names.hasMoreElements())
+        {
+            String name = (String)names.nextElement();
+            String[] values = request.getParameterValues(name);
+            for (int i = 0; i < values.length; i++)
+            {
+                add(name, values[i]);
+            }
+        }
+
         try
         {
-            remove();
-            Enumeration names = request.getParameterNames();
-            while (names.hasMoreElements())
-            {
-                String name = (String)names.nextElement();
-                String[] values = request.getParameterValues(name);
-                name = fixEncoding(name, encoding);
-                for (int i = 0; i < values.length; i++)
-                {
-                    add(name, fixEncoding(values[i], encoding));
-                }
-            }
-
             if (request.getPathInfo() != null)
             {
                 StringTokenizer st = new StringTokenizer(request.getPathInfo(), "/");
@@ -107,18 +105,5 @@ public class RequestParameters extends DefaultParameters
             throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
         }
         ///CLOVER:ON
-    }
-
-    /**
-     * Converts the string to different encoding.
-     *
-     * @param name parameter name
-     * @param encoding the encoding
-     * @return converted name
-     */
-    private String fixEncoding(String name, String encoding) throws UnsupportedEncodingException
-    {
-        String fixed = new String(name.getBytes("ISO-8859-1"), encoding);
-        return fixed.trim();
     }
 }
