@@ -51,7 +51,6 @@ import org.objectledge.threads.ThreadPool;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.web.WebConstants;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -112,6 +111,7 @@ public class UploadTest extends LedgeTestCase
         Vector parameterNames = new Vector();
         parameterNames.add("foo");
         mockHttpServletRequest.stubs().method("getCharacterEncoding").will(returnValue("ISO-8859-2"));
+        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(null));
         mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue(parameterNames.elements()));
         mockHttpServletRequest.stubs().method("getParameterValues").with(eq("foo")).will(returnValue(new String[] { "bar" }));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
@@ -122,14 +122,7 @@ public class UploadTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getContentLength").will(returnValue((int)fs.length("up.txt")));
         mockHttpServletRequest.stubs().method("getInputStream").will(returnValue(sis));
 
-        mockHttpSession = mock(HttpSession.class);
-        httpSession = (HttpSession)mockHttpSession.proxy();
-        mockHttpServletRequest.stubs().method("getSession").will(returnValue(httpSession));
-        mockHttpSession.stubs().method("getAttribute").with(eq(WebConstants.ENCODING_SESSION_KEY)).will(returnValue("ISO-8859-1"));
-        
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
-
-        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);
