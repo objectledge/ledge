@@ -69,12 +69,11 @@
 	          <th widht="100%">descritpion</th>
 	        </tr>
 	        <tr>
-	        <tr>
 	          <td>1</td>
 	          <td><code>org.objectledge.pipeline.Valve</code></td>
 	          <td>the cleanup Valve</td>
 	        </tr>
-	        </tr>
+	        <tr>
 	          <td>2</td>
 	          <td><code>org.objectledge.context.Context</code></td>
 	          <td>the thread's context</td>
