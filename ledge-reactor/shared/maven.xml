@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.1 2003-11-24 10:25:14 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.2 2003-12-18 16:04:25 fil Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:ant="jelly:ant">
   <postGoal name="xdoc:register-reports">
-    <attainGoal name="maven-statcvs-plugin:register"/>
+    <j:set var="changelogs" value="ledge.changelogs"/>
+    <j:if test="${changelogs}">
+	  <attainGoal name="maven-statcvs-plugin:register"/>
+    </j:if>
+    <attainGoal name="maven-linkcheck-plugin:deregister"/>
     <attainGoal name="maven-pmd-plugin:register"/>
     <attainGoal name="maven-simian-plugin:register"/>
     <attainGoal name="maven-findbugs-plugin:register"/>
