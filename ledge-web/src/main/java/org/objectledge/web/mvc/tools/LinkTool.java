@@ -45,7 +45,6 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Context tool used to build web application links. It works in a pull manner. The template
@@ -68,7 +67,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.6 2004-07-01 11:46:18 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.7 2004-07-02 10:46:41 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -84,9 +83,6 @@ public class LinkTool
     /** configuration. */
     private LinkTool.Configuration config;
     
-	/** the mvc context */
-	private MVCContext mvcContext;
-	
 	/** the http context */
 	private HttpContext httpContext;
 
@@ -99,8 +95,8 @@ public class LinkTool
 	/** the action */
 	private String action;
 	
-	/** is resource link switch */
-	private boolean resourceLink;
+	/** is content link switch */
+	private boolean contentLink;
 	
 	/** include session information */
 	private boolean includeSession;
@@ -114,7 +110,7 @@ public class LinkTool
 	/** the port */
 	private int port;
 	
-	/** the resource path */
+	/** the content path */
 	private String path;
 	
 	/** the fragment part of the url */
@@ -136,22 +132,21 @@ public class LinkTool
 	{
 		this.context = context;
         this.config = config;
-		mvcContext = MVCContext.getMVCContext(context);
 		httpContext = HttpContext.getHttpContext(context);
 		requestParameters = RequestParameters.getRequestParameters(context);
-		resourceLink = false;
+		contentLink = false;
 		includeSession = true;
 		showProtocolName = false;
 		protocolName = ""; 
         port = 0;
-		view = null;
+		view = requestParameters.get(config.viewToken, "");
 		action = "";
 		parameters = new DefaultParameters();
 		fragment = null;
-		if(config.hasStickyParameters())
+		if(config.stickyParameterNames.size() > 0)
 		{
 			parameters = new DefaultParameters(requestParameters);
-		    parameters.removeExcept(config.getStickyParameters());
+		    parameters.removeExcept(config.stickyParameterNames);
 		}
 		sb = new StringBuffer();
 	}
@@ -246,16 +241,16 @@ public class LinkTool
     }
 
     /**
-     * Set link to point to the resource.
+     * Set link to point to the content.
      *
-     * @param path the path to static resource.
+     * @param path the path to content.
      * @return the link tool.
      */
-    public LinkTool resource(String path)
+    public LinkTool content(String path)
     {
         LinkTool target = getLinkTool(this);
-        target.resourceLink = true;
-        target.includeSession = !config.isContentExternal();
+        target.contentLink = true;
+        target.includeSession = !config.externalContent;
         target.path = path;
         return target;
     }
@@ -344,13 +339,13 @@ public class LinkTool
      */
     public LinkTool set(Parameters parameters)
     {
-		if (parameters.isDefined(config.getViewToken()))
+		if (parameters.isDefined(config.viewToken))
 		{
-			checkSetParamName(config.getViewToken());
+			checkSetParamName(config.viewToken);
 		}
-		else if (parameters.isDefined(config.getActionToken()))
+		else if (parameters.isDefined(config.actionToken))
 		{
-			checkSetParamName(config.getActionToken());
+			checkSetParamName(config.actionToken);
 		}
 		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
@@ -391,14 +386,14 @@ public class LinkTool
     public LinkTool self()
     {
         LinkTool target = getLinkTool(this);
-        target.parameters.remove(config.getStickyParameters());
+        target.parameters.remove(config.stickyParameterNames);
         target.parameters.add(requestParameters, true);
-        target.parameters.remove(config.getViewToken());
-        target.parameters.remove(config.getActionToken());
+        target.parameters.remove(config.viewToken);
+        target.parameters.remove(config.actionToken);
         String url = httpContext.getRequest().getRequestURI();
         if (url.indexOf('#') > 0)
         {
-            target.fragment = url.substring(url.indexOf('#') + 1);
+            target.fragment = url.substring(url.lastIndexOf('#') + 1);
         }
         return target;
     }
@@ -486,13 +481,13 @@ public class LinkTool
      */
     public LinkTool add(Parameters parameters)
     {
-		if (parameters.isDefined(config.getViewToken()))
+		if (parameters.isDefined(config.viewToken))
 		{
-			checkAddParamName(config.getViewToken());
+			checkAddParamName(config.viewToken);
 		}
-		else if (parameters.isDefined(config.getActionToken()))
+		else if (parameters.isDefined(config.actionToken))
 		{
-			checkAddParamName(config.getActionToken());
+			checkAddParamName(config.actionToken);
 		}
 		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
@@ -509,11 +504,11 @@ public class LinkTool
     public LinkTool unset(String name)
     {
         LinkTool target = getLinkTool(this);
-        if (name.equals(config.getViewToken()))
+        if (name.equals(config.viewToken))
         {
 			throw new IllegalArgumentException("to unset the value of the view parameter, " +				"call the unsetView() method");
         }
-        else if (name.equals(config.getActionToken()))
+        else if (name.equals(config.actionToken))
         {
 			throw new IllegalArgumentException("to unset the value of the action parameter, " +
 				"call the unsetAction() method");
@@ -590,84 +585,54 @@ public class LinkTool
             // prepare address part
             sb.setLength(0);
             sb.append(httpContext.getRequest().getContextPath());
-            if (resourceLink)
+
+            if (contentLink)
             {
-                appendResourceLink(sb);
+                appendContentLink(sb);
             }
             else
             {
-                String servletPath = httpContext.getRequest().getServletPath();
-                if (servletPath.charAt(0) != '/')
-                {
-                    sb.append('/');
-                }
-                if (servletPath.endsWith("/"))
-                {
-                    sb.append(servletPath.substring(0, servletPath.length() - 1));
-                }
-                else
-                {
-                    sb.append(servletPath);
-                }
+                sb.append(httpContext.getRequest().getServletPath());
 
-                if (view != null)
-                { 
-                    if(view.length()>0)
-                    {
-                        sb.append('/').append(config.getViewToken());
-                        sb.append('/').append(view);
-                    }
-                }
-                else
+                if (view != null && view.length() > 0)
                 {
-                    String requestView = requestParameters.get(config.getViewToken(), "");
-                    if (requestView.length() > 0)
-                    {
-                        sb.append('/').append(config.getViewToken());
-                        sb.append('/').append(requestView);
-                    }
+                    sb.append('/').append(config.viewToken).append('/').append(view);
                 }
 
                 String[] keys = parameters.getParameterNames();
                 List pathinfoParameterKeys = new ArrayList();
-                List queryParameterKeys;
-                if (!config.hasPathInfoParamters())
+                List queryStringParameterKeys;
+                if (config.pathinfoParameterNames.size() == 0)
                 {
-                    queryParameterKeys = Arrays.asList(keys);
+                    queryStringParameterKeys = Arrays.asList(keys);
                 }
                 else
                 {
-                    queryParameterKeys = new ArrayList(keys.length);
+                    queryStringParameterKeys = new ArrayList(keys.length);
                     for (int i = 0; i < keys.length; i++)
                     {
-                        if (!config.isPathInfoParameter(keys[i]))
+                        String key = keys[i];
+                        if (config.pathinfoParameterNames.contains(key))
                         {
-                            queryParameterKeys.add(keys[i]);
+                            pathinfoParameterKeys.add(key);
                         }
                         else
                         {
-                            pathinfoParameterKeys.add(keys[i]);
+                            queryStringParameterKeys.add(key);
                         }
                     }
                 }
 
-                for (int i = 0; i < pathinfoParameterKeys.size(); i++)
-                {
-                    String key = (String)pathinfoParameterKeys.get(i);
-                    String[] values = parameters.getStrings(key);
-                    for (int j = 0; j < values.length; j++)
-                    {
-                        sb.append('/').append(URLEncoder.encode(key, PARAMETER_ENCODING));
-                        sb.append('/').append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
-                    }
-                }
+                appendPathInfo(sb, pathinfoParameterKeys);
 
-                appendQueryString(sb, queryParameterKeys);
+                appendQueryString(sb, queryStringParameterKeys);
             }
+            
             if (fragment != null)
             {
                 sb.append('#').append(fragment);
             }
+            
             String addressPart = sb.toString();
             if (includeSession)
             {
@@ -714,9 +679,9 @@ public class LinkTool
         return serverPart;
     }
 
-    private void appendResourceLink(StringBuffer sb)
+    private void appendContentLink(StringBuffer sb)
     {
-        sb.append(config.getBaseResourcePath());
+        sb.append(config.baseContentPath);
         if (path.length() > 0)
         {
             if (path.charAt(0) != '/')
@@ -727,27 +692,40 @@ public class LinkTool
         }
     }
 
-    private void appendQueryString(StringBuffer sb, List queryParameterKeys)
+    private void appendPathInfo(StringBuffer sb, List pathinfoParameterKeys)
         throws UnsupportedEncodingException
     {
-        if (!action.equals("") || queryParameterKeys.size() > 0)
+        for (int i = 0; i < pathinfoParameterKeys.size(); i++)
         {
-            String querySeparator = config.getQuerySeparator();
+            String key = (String)pathinfoParameterKeys.get(i);
+            String[] values = parameters.getStrings(key);
+            for (int j = 0; j < values.length; j++)
+            {
+                sb.append('/').append(URLEncoder.encode(key, PARAMETER_ENCODING));
+                sb.append('/').append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
+            }
+        }
+    }
+    
+    private void appendQueryString(StringBuffer sb, List queryStringParameterKeys)
+        throws UnsupportedEncodingException
+    {
+        if (!action.equals("") || queryStringParameterKeys.size() > 0)
+        {
+            String querySeparator = config.queryStringSeparator;
             
             sb.append('?');
             if (!action.equals(""))
             {
-                sb.append(config.getActionToken());
-                sb.append('=');
-                sb.append(action);
-                if (queryParameterKeys.size() > 0)
+                sb.append(config.actionToken).append('=').append(action);
+                if (queryStringParameterKeys.size() > 0)
                 {
                     sb.append(querySeparator);
                 }
             }
-            for (int i = 0; i < queryParameterKeys.size(); i++)
+            for (int i = 0; i < queryStringParameterKeys.size(); i++)
             {
-                String key = (String)queryParameterKeys.get(i);
+                String key = (String)queryStringParameterKeys.get(i);
                 String[] values = parameters.getStrings(key);
                 for (int j = 0; j < values.length; j++)
                 {
@@ -759,7 +737,7 @@ public class LinkTool
                         sb.append(querySeparator);
                     }
                 }
-                if (i < queryParameterKeys.size() - 1)
+                if (i < queryStringParameterKeys.size() - 1)
                 {
                     sb.append(querySeparator);
                 }
@@ -778,7 +756,7 @@ public class LinkTool
 		LinkTool target = new LinkTool(context, source.config);
 		target.view = source.view;
 		target.action = source.action;
-		target.resourceLink = source.resourceLink;
+		target.contentLink = source.contentLink;
 		target.includeSession = source.includeSession;
 		target.showProtocolName = source.showProtocolName;
 		target.protocolName = source.protocolName;
@@ -792,12 +770,12 @@ public class LinkTool
     private void checkSetParamName(String name)
     {
 		// TODO: Add RFC characters check
-		if (name.equals(config.getViewToken()))
+		if (name.equals(config.viewToken))
 		{
 			throw new IllegalArgumentException("to set the value of the view parameter, " +
 				"call the view(String) method");
 		}
-		else if (name.equals(config.getActionToken()))
+		else if (name.equals(config.actionToken))
 		{
 			throw new IllegalArgumentException("to set the value of the action parameter, " +
 				"call the action(String) method");
@@ -807,12 +785,12 @@ public class LinkTool
 	private void checkAddParamName(String name)
 	{
 		// TODO: Add RFC characters check
-		if (name.equals(config.getViewToken()))
+		if (name.equals(config.viewToken))
 		{
 			throw new IllegalArgumentException(
 				"multiple values of the view parameter are not allowed");
 		}
-		else if (name.equals(config.getActionToken()))
+		else if (name.equals(config.actionToken))
 		{
 			throw new IllegalArgumentException(
 				"multiple values of the action parameter are not allowed");
@@ -831,26 +809,32 @@ public class LinkTool
         /** the default query separator */
         public static final String DEFAULT_QUERY_SEPARATOR = "&";
 
-        /** the default base resource path */
-        public static final String DEFAULT_BASE_RESOURCE_PATH = "/content";
+        /** the default base content path */
+        public static final String DEFAULT_BASE_CONTENT_PATH = "/content";
 
         /** the sticky parameters keys */
-        private Set stickyKeys = new HashSet();
+        private Set stickyParameterNames = new HashSet();
     
         /** the pathinfo parameters keys */
-        private Set pathinfoKeys = new HashSet();
+        private Set pathinfoParameterNames = new HashSet();
     
         /** the query separator */
-        private String querySeparator;
+        private String queryStringSeparator;
     
-        /** external resource switch */
+        /** external content switch */
         private boolean externalContent;
 
         /** the web configurator. */
         private WebConfigurator webConfigurator;
         
-        /** base resource path */
-        private String baseResourcePath;
+        /** base content path */
+        private String baseContentPath;
+        
+        /** currently used view parameter name */
+        private String viewToken;
+
+        /** currently used action parameter name */
+        private String actionToken;
 
         /**
          * Initializes the configuraiton object.
@@ -884,15 +868,15 @@ public class LinkTool
                     config.getChild("sticky").getChildren("key");
                 for (int i = 0; i < keys.length; i++)
                 {
-                    stickyKeys.add(keys[i].getValue());
+                    stickyParameterNames.add(keys[i].getValue());
                 }
                 keys = config.getChild("pathinfo").getChildren("key");
                 for (int i = 0; i < keys.length; i++)
                 {
-                    pathinfoKeys.add(keys[i].getValue());
+                    pathinfoParameterNames.add(keys[i].getValue());
                 }
-                baseResourcePath = config.getChild("baseResourcePath")
-                    .getValue(DEFAULT_BASE_RESOURCE_PATH);
+                baseContentPath =
+                    config.getChild("base_content_path").getValue(DEFAULT_BASE_CONTENT_PATH);
             }
             ///CLOVER:OFF
             catch (ConfigurationException e)
@@ -900,99 +884,11 @@ public class LinkTool
                 throw new ComponentInitializationError("failed to configure the component", e);
             }
             ///CLOVER:ON
-            querySeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
-            externalContent = config.getChild("external_resource").getValueAsBoolean(false);
-        }
-
-        /**
-         *  Get the query string separator. 
-         *
-         * @return the query separator. 
-         */
-        public String getQuerySeparator()
-        {
-            return querySeparator;
-        }
-    
-        /**
-         * Is external content.
-         * 
-         * @return <code>true</code>if resources are external.
-         */
-        public boolean isContentExternal()
-        {
-            return externalContent;
-        }
-        
-        /**
-         * Returns the set of sticky parameter names.
-         * 
-         * @return the set of sticky parameter names.
-         */
-        public Set getStickyParameters()
-        {
-            return stickyKeys;
-        }
-        
-        /**
-         * Checks if there are any sticky parameters.
-         * 
-         * @return <code>true</code> if there are any sticky parameters.
-         */
-        public boolean hasStickyParameters()
-        {
-            return !stickyKeys.isEmpty();
-        }
-        
-        /**
-         * Check if a parameter belongs to pathinfo.
-         * 
-         * @param paramName the parameter name.
-         * @return <code>true</code> belongs to pathinfo.
-         */
-        public boolean isPathInfoParameter(String paramName)
-        {
-            return pathinfoKeys.contains(paramName);
-        }        
-        
-        /**
-         * Checks if there are any pathinfo parametrers.
-         * 
-         * @return <code>true</code> if there are any pathinfo parameters.
-         */
-        public boolean hasPathInfoParamters()
-        {
-            return !pathinfoKeys.isEmpty();
-        }
-        
-        /**
-         * Get the base resource path.
-         * 
-         * @return the base resource path.
-         */
-        public String getBaseResourcePath()
-        {
-            return baseResourcePath;
-        }
-        
-        /**
-         * Returns the view parameter name,
-         * 
-         * @return view parameter name.
-         */
-        public String getViewToken()
-        {
-            return webConfigurator.getViewToken();
-        }
-        
-        /**
-         * Return the action parameter name.
-         * 
-         * @return action parameter name.
-         */
-        public String getActionToken()
-        {
-            return webConfigurator.getActionToken();
+            queryStringSeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
+            externalContent = config.getChild("external_content").getValueAsBoolean(false);
+            // TODO: remove WebConfigurator
+            viewToken = webConfigurator.getViewToken();
+            actionToken = webConfigurator.getActionToken();
         }
     }
 }

@@ -29,7 +29,7 @@
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
   <interleave>
-    <optional>    
+    <optional>
       <element name="query_separator">  
         <text/>
       </element>
@@ -38,7 +38,12 @@
       <element name="external_content">  
         <text/>
       </element>
-    </optional>    
+    </optional>
+    <optional>
+      <element name="base_content_path">
+        <text/>
+      </element>
+    </optional>
     <optional>
       <element name="sticky">
         <zeroOrMore>
