@@ -32,6 +32,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -45,7 +47,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.8 2004-07-02 10:45:44 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.9 2004-07-02 14:37:47 zwierzem Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -100,6 +102,10 @@ public class RequestParameters extends DefaultParameters
 
         // get path info parameters
         addURLParams(request.getPathInfo(), "/");
+
+        // speed up sorted parameters retrieval
+        Map tmp = new LinkedHashMap(map);
+        map = tmp;
     }
     
     private void addURLParams(String urlPart, String separator)
