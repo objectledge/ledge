@@ -14,7 +14,7 @@
           </tr>
           <tr>
             <th>required libraries</th>
-            <td>Log4j (log4j)</td>
+            <td>Log4j (log4j), DNA API (dna:dna-api), PicoContainer (picocontainer)</td>
           </tr>
         </table>
       </p>

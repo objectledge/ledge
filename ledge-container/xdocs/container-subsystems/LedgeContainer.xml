@@ -13,7 +13,8 @@
             <td width="100%">
               <a href="../../ledge-components/components/FileSystem.html">FileSystem</a>, 
               <a href="../../ledge-components/components/XMLValidator.html">XMLValidator</a>, 
-              <a href="../pico-extensions/LedgeXmlFrontEnd.html">LedgeXmlFrontEnd</a></td>
+              <a href="../pico-extensions/LedgeXmlFrontEnd.html">LedgeXmlFrontEnd</a>
+            </td>
           </tr>
           <tr>
             <th>required libraries</th>

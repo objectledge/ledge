@@ -17,7 +17,7 @@
           </tr>
           <tr>
             <th>required libraries</th>
-            <td>DNA implementation (dna:dna-impl)</td>
+            <td>PicoContainer (picocontainer), DNA API (dna:dna-api), DNA implementation (dna:dna-impl), Jing (jing)</td>
           </tr>
         </table>
       </p>
