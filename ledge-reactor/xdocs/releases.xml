@@ -18,7 +18,29 @@
           </tr>
           <tr>
             <th>Documentation</th>
-            <td>can be found <a href="http://objectledge.org/releases/0.1/">here</a></td>
+            <td>
+              can be browsed online <a href="http://objectledge.org/releases/0.1/">here</a>,
+              or downloaded <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.1-doc.zip">here</a> 
+            </td>
+          </tr>
+          <tr>
+            <th rowspan="3" valign="top">Deliverables</th>
+            <td>
+              source <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.1-src.zip">zip</a> 
+                     <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.1-src.tar.bz2">tar.bz2</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              docs <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.1-doc.zip">zip</a> 
+                   <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.1-doc.tar.bz2">tar.bz2</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              binaries <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.1-bin.zip">zip</a> 
+                       <a href="http://dist.objectledge.org/objectledge/distributions/ledge-all-0.1-bin.tar.bz2">tar.bz2</a>
+            </td>
           </tr>
         </table>
       </subsection>    
