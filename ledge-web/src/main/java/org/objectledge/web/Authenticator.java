@@ -37,7 +37,7 @@ import org.objectledge.context.Context;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Authenticator.java,v 1.1 2003-12-23 23:40:23 pablo Exp $
+ * @version $Id: Authenticator.java,v 1.2 2003-12-29 13:02:08 fil Exp $
  */
 public class Authenticator implements Runnable, WebConstants
 {
@@ -51,6 +51,7 @@ public class Authenticator implements Runnable, WebConstants
 	 * Constructor
 	 * 
 	 * @param context the context.
+     * @param authentication the authentication component.
 	 */
 	public Authenticator(Context context, Authentication authentication)
 	{

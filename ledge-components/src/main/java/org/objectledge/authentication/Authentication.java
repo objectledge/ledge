@@ -34,11 +34,16 @@ import java.security.Principal;
  * Authentication component interface
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Authentication.java,v 1.1 2003-12-23 23:39:18 pablo Exp $
+ * @version $Id: Authentication.java,v 1.2 2003-12-29 13:02:09 fil Exp $
  */
 ///CLOVER:OFF
 public interface Authentication
 {
+    /** 
+     * Returns the principal object designating the non-authenticated user. 
+     *
+     * @return the non-authenticated user's Principal. 
+     */
 	Principal getAnonymousUser();
 }
 ///CLOVER:ON

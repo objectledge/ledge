@@ -40,10 +40,11 @@ import org.objectledge.parameters.impl.ParametersImpl;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.3 2003-12-23 17:14:28 pablo Exp $
+ * @version $Id: RequestParameters.java,v 1.4 2003-12-29 13:02:08 fil Exp $
  */
 public class RequestParameters extends ParametersImpl
 {
+    /** The context key under wich the request parameters are stored. */
 	public static final String CONTEXT_KEY = "objectledge.web.parameters";
 	
     /**
