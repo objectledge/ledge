@@ -31,10 +31,10 @@ package org.objectledge.web.mvc.tools;
 import org.objectledge.templating.tools.ContextToolFactory;
 
 /**
- * Context tool factory component to build the user agent tool.
+ * Context tool factory component to build the string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringToolFactory.java,v 1.3 2005-02-10 17:49:06 rafal Exp $
+ * @version $Id: StringToolFactory.java,v 1.4 2005-03-01 10:31:19 zwierzem Exp $
  */
 public class StringToolFactory implements ContextToolFactory
 {
