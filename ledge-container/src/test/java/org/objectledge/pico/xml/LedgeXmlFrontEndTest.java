@@ -28,11 +28,14 @@
 
 package org.objectledge.pico.xml;
 
+import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.FooComponent;
 import org.picocontainer.MutablePicoContainer;
@@ -46,7 +49,7 @@ import org.xml.sax.InputSource;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEndTest.java,v 1.1 2003-12-09 12:41:43 fil Exp $
+ * @version $Id: LedgeXmlFrontEndTest.java,v 1.2 2003-12-15 15:34:10 fil Exp $
  */
 public class LedgeXmlFrontEndTest extends TestCase
 {
@@ -89,7 +92,31 @@ public class LedgeXmlFrontEndTest extends TestCase
         XmlFrontEnd xmlFrontEnd = new LedgeXmlFrontEnd();
         PicoContainer container = xmlFrontEnd.createPicoContainer(config.getDocumentElement(), 
             rootContainer);
-            
-        assertNotNull(container.getComponentInstance(FooComponent.class));
+        
+        FooComponent foo = (FooComponent)container.getComponentInstance(FooComponent.class);     
+        assertNotNull(foo);
+        foo.log();
+        
+        Logger log = Logger.getLogger(this.getClass());
+        dump(log, container, 0);
+    }
+    
+    private void dump(Logger log, PicoContainer container, int depth)
+    {
+        StringBuffer buff = new StringBuffer();
+        for(int i=0; i<depth; i++)
+        {
+            buff.append("  ");
+        }
+        String indent = buff.toString();
+        List components = container.getComponentInstances();
+        for(int i=0; i<components.size(); i++)
+        {
+            log.debug(indent+components.get(i));
+            if(components.get(i) instanceof PicoContainer && components.get(i) != container)
+            {
+                dump(log, (PicoContainer)components.get(i), depth+1);
+            }
+        }
     }
 }
