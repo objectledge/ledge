@@ -29,7 +29,6 @@
 package org.objectledge.configuration;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.parsers.SAXParserFactory;
@@ -63,7 +62,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.16 2004-01-13 13:26:37 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.17 2004-01-14 11:45:48 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
