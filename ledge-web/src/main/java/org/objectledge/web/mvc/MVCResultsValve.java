@@ -1,18 +1,18 @@
 // 
-// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// Copyright (c) 2003, 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 // All rights reserved. 
 // 
 // Redistribution and use in source and binary forms, with or without modification,  
 // are permitted provided that the following conditions are met: 
 //  
 // * Redistributions of source code must retain the above copyright notice,  
-// this list of conditions and the following disclaimer. 
+//   this list of conditions and the following disclaimer. 
 // * Redistributions in binary form must reproduce the above copyright notice,  
-// this list of conditions and the following disclaimer in the documentation  
-// and/or other materials provided with the distribution. 
+//   this list of conditions and the following disclaimer in the documentation  
+//   and/or other materials provided with the distribution. 
 // * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-// nor the names of its contributors may be used to endorse or promote products  
-// derived from this software without specific prior written permission. 
+//   nor the names of its contributors may be used to endorse or promote products  
+//   derived from this software without specific prior written permission. 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
@@ -40,7 +40,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.4 2004-01-26 16:49:19 pablo Exp $
+ * @version $Id: MVCResultsValve.java,v 1.5 2004-10-04 14:25:22 zwierzem Exp $
  */
 public class MVCResultsValve 
     implements Valve
@@ -61,11 +61,11 @@ public class MVCResultsValve
 	public void process(Context context)
         throws ProcessingException
 	{
-		MVCContext mvcContext = MVCContext.getMVCContext(context);
 		HttpContext httpContext = HttpContext.getHttpContext(context);
-		String result = mvcContext.getBuildResult();
 		if(!httpContext.getDirectResponse())
 		{
+            MVCContext mvcContext = MVCContext.getMVCContext(context);
+            String result = mvcContext.getBuildResult();
 			try
 			{
 				httpContext.setContentType("text/html");
