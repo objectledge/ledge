@@ -35,10 +35,156 @@ import java.util.Set;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.10 2005-02-22 20:05:42 zwierzem Exp $
+ * @version $Id: Parameters.java,v 1.11 2005-03-03 13:27:37 zwierzem Exp $
  */
-public interface Parameters extends ParametersRead
+public interface Parameters
 {
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the string value of the parameter.
+     */
+    public String get(String name);
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the string value of the parameter.
+     */
+    public String get(String name, String defaultValue);
+
+    /**
+     * Return all values of the parameter with specified name as an array. 
+     * 
+     * @param name the name of the parameters.
+     * @return the array of the string values of the parameter.
+    */
+    public String[] getStrings(String name);
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the boolean value of the parameter.
+     */
+    public boolean getBoolean(String name);
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the boolean value of the parameter.
+     */
+    public boolean getBoolean(String name, boolean defaultValue);
+
+	/**
+	 * Return all values of the parameter with specified name as an array. 
+	 * 
+	 * @param name the name of the parameters.
+	 * @return the array of the boolean values of the parameter.
+	*/
+	public boolean[] getBooleans(String name);
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the float value of the parameter.
+     * @throws NumberFormatException if parameter is not a number.
+     */
+    public float getFloat(String name) throws NumberFormatException;
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the float value of the parameter.
+     */
+    public float getFloat(String name, float defaultValue);
+
+	/**
+	 * Return all values of the parameter with specified name as an array. 
+	 * 
+	 * @param name the name of the parameters.
+	 * @return the array of the float values of the parameter.
+	 * @throws NumberFormatException if anyone of the values is not a number. 
+	*/
+	public float[] getFloats(String name) throws NumberFormatException;
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the integer value of the parameter.
+     * @throws NumberFormatException if parameter is not a number.
+     */
+    public int getInt(String name) throws NumberFormatException;
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the integer value of the parameter.
+     */
+    public int getInt(String name, int defaultValue);
+
+	/**
+	 * Return all values of the parameter with specified name as an array. 
+	 * 
+	 * @param name the name of the parameters.
+	 * @return the array of the integer values of the parameter.
+	 * @throws NumberFormatException if anyone of the values is not a number.
+	*/
+	public int[] getInts(String name) throws NumberFormatException;
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the integer value of the parameter.
+     * @throws NumberFormatException if parameter is not a number.
+     */
+    public long getLong(String name) throws NumberFormatException;
+
+	/**
+	 * Return the parameter as array of long values. 
+	 * 
+	 * @param name the name of the parameter.
+	 * @return the array of parameter values.
+	 * @throws NumberFormatException if parameter is not a number.
+	 */
+	public long[] getLongs(String name) throws NumberFormatException;
+
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the integer value of the parameter.
+     */
+    public long getLong(String name, long defaultValue);
+
+    /**
+     * Return the names of all parameters.
+     * 
+     * @return the parameter names.
+     */
+    public String[] getParameterNames();
+
+    /**
+     * Checks whether parameter is defined.
+     * 
+     * @param name the name of the parameter.
+     * @return <code>true</code> if parameter is defined.
+     */
+    public boolean isDefined(String name);
+
     /**
      * Remove all parameters.
      */
