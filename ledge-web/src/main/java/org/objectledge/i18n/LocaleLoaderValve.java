@@ -28,13 +28,11 @@
 
 package org.objectledge.i18n;
 
-import java.security.Principal;
 import java.util.Locale;
 
 import javax.servlet.http.Cookie;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
@@ -45,7 +43,7 @@ import org.objectledge.web.HttpContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocaleLoaderValve.java,v 1.9 2004-08-24 12:56:53 rafal Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.10 2004-08-24 14:41:16 zwierzem Exp $
  */
 public class LocaleLoaderValve 
     extends AbstractI18nValve
