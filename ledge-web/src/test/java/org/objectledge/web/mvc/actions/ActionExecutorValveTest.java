@@ -107,7 +107,7 @@ public class ActionExecutorValveTest extends TestCase
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         actionExecutorValve.process(context);
-        mvcContext.setAction("DefaultAction");
+        mvcContext.setAction("foo.TestAction");
         actionExecutorValve.process(context);
         mvcContext.setAction("Foo");
         try
