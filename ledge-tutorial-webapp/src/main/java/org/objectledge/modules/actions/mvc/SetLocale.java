@@ -32,7 +32,9 @@ import java.util.Locale;
 
 import javax.servlet.http.Cookie;
 
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -47,7 +49,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetLocale.java,v 1.5 2004-01-27 12:43:11 fil Exp $
+ * @version $Id: SetLocale.java,v 1.6 2004-07-09 10:32:40 rafal Exp $
  */
 public class SetLocale 
     implements Valve, WebConstants
@@ -67,7 +69,8 @@ public class SetLocale
     public void process(Context context) throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         String localeString = parameters.get("locale", null);
         Locale locale = null;
@@ -81,7 +84,7 @@ public class SetLocale
         }
 
         String cookieKey = "";
-        Principal principal = mvcContext.getUserPrincipal();
+        Principal principal = authContext.getUserPrincipal();
         if (principal != null && principal.getName() != null)
         {
             cookieKey = cookieKey + "." + StringUtils.cookieNameSafeString(principal.getName());
@@ -98,7 +101,7 @@ public class SetLocale
                        httpContext.getRequest().getServletPath());
         httpContext.getResponse().addCookie(cookie);
         httpContext.getRequest().getSession().setAttribute(LOCALE_SESSION_KEY, locale);
-        mvcContext.setLocale(locale);
+        i18nContext.setLocale(locale);
         Cookie[] cookies = httpContext.getRequest().getCookies();
         if (cookies != null)
         {

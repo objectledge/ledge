@@ -30,6 +30,7 @@ package org.objectledge.modules.actions.authentication;
 import java.security.Principal;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
@@ -43,7 +44,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.5 2004-03-02 12:20:19 pablo Exp $ 
+ * @version $Id: Logout.java,v 1.6 2004-07-09 10:32:40 rafal Exp $ 
  */
 public class Logout 
     extends BaseAuthenticationAction
@@ -69,12 +70,12 @@ public class Logout
         throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
         clearSession(httpContext.getRequest().getSession());
         try
         {
             Principal anonymous = userManager.getAnonymousAccount();
-            mvcContext.setUserPrincipal(anonymous, false);
+            authContext.setUserPrincipal(anonymous, false);
         }
         catch(AuthenticationException e)
         {

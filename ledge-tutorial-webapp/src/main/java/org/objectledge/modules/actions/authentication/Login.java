@@ -30,6 +30,7 @@ package org.objectledge.modules.actions.authentication;
 import java.security.Principal;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.UserUnknownException;
@@ -39,7 +40,6 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Login action.
@@ -47,7 +47,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Login.java,v 1.7 2004-03-02 12:20:19 pablo Exp $
+ * @version $Id: Login.java,v 1.8 2004-07-09 10:32:40 rafal Exp $
  */
 public class Login 
     extends BaseAuthenticationAction
@@ -72,7 +72,7 @@ public class Login
     public void process(Context context) throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);
 
         String login = parameters.get(LOGIN_PARAM, null);
@@ -121,7 +121,7 @@ public class Login
             authenticated = true;
         }
 
-        mvcContext.setUserPrincipal(principal, authenticated);
+        authContext.setUserPrincipal(principal, authenticated);
         if (!authenticated)
         {
             throw new ProcessingException("Login failed");

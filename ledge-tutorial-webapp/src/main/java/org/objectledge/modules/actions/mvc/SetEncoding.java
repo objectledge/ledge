@@ -31,7 +31,9 @@ import java.security.Principal;
 
 import javax.servlet.http.Cookie;
 
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -39,14 +41,13 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Set encoding action.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.5 2004-01-27 12:43:11 fil Exp $
+ * @version $Id: SetEncoding.java,v 1.6 2004-07-09 10:32:40 rafal Exp $
  */
 public class SetEncoding 
     implements Valve, WebConstants
@@ -66,7 +67,8 @@ public class SetEncoding
     public void process(Context context) throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         String encoding = parameters.get("encoding",null);
         if(encoding == null)
@@ -83,7 +85,7 @@ public class SetEncoding
         }
             
         String cookieKey = "encoding";
-        Principal principal = mvcContext.getUserPrincipal();
+        Principal principal = authContext.getUserPrincipal();
         if(principal != null && principal.getName() != null)
         {
             cookieKey = cookieKey + "." + StringUtils.
@@ -93,7 +95,7 @@ public class SetEncoding
         {
             cookieKey = cookieKey + ".anonymous";
         }
-        cookieKey = cookieKey + "." + mvcContext.getLocale().toString();
+        cookieKey = cookieKey + "." + i18nContext.getLocale().toString();
         Cookie cookie = new Cookie(cookieKey, encoding);
         cookie.setMaxAge(3600*24*365);
         cookie.setPath(httpContext.getRequest().getContextPath()+
