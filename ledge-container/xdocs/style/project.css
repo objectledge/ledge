@@ -18,3 +18,7 @@ p.more {
 .navLink .navLink {
   margin-left: 10px;
 }
+
+ul {
+  padding-left: 0px;
+}
