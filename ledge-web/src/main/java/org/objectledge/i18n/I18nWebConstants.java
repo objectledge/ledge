@@ -31,12 +31,19 @@ package org.objectledge.i18n;
 /**
  * The constants used by i18n web components 
  */
-public interface I18nWebConstants
+public final class I18nWebConstants
 {
 	/** Session key for the current locale. */
 	public static final String LOCALE_SESSION_KEY = "org.objectledge.web.Locale";
     
     /** Session key for the current encoding. */ 
     public static final String ENCODING_SESSION_KEY = "org.objectledge.web.Encoding";
+    
+    /**
+     * A private constructor to prevent instantiation.
+     */
+    private I18nWebConstants()
+    {
+    }
 }
 

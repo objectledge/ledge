@@ -33,9 +33,9 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableConstants.java,v 1.3 2004-08-02 14:33:48 zwierzem Exp $
+ * @version $Id: TableConstants.java,v 1.4 2004-12-23 02:34:45 rafal Exp $
  */
-public interface TableConstants {
+public final class TableConstants {
 
     /** Table state id parameter key - <code>tableId</code>. */
     public static final String TABLE_ID_PARAM_KEY = "tableId";
@@ -51,4 +51,11 @@ public interface TableConstants {
 
     /** Sort column name parameter key - <code>sortColumn</code>. */
     public static final String SORT_COLUMN_PARAM_KEY = "sortColumn";
+
+    /**
+     * A private constructor to prevent instantiation.
+     */
+    private TableConstants()
+    {
+    }
 }

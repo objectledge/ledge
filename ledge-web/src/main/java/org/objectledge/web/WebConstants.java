@@ -31,9 +31,16 @@ package org.objectledge.web;
 /**
  * The constants used by web components 
  */
-public interface WebConstants
+public final class WebConstants
 {
 	/** Session key for the current user. */
 	public static final String PRINCIPAL_SESSION_KEY = "org.objectledge.web.Principal";
+    
+    /**
+     * A private constructor to prevent instantiation.
+     */
+    private WebConstants()
+    {
+    }
 }
 
