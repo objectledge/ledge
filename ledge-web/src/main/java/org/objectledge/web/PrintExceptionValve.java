@@ -40,7 +40,7 @@ import org.objectledge.utils.StringUtils;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintExceptionValve.java,v 1.2 2004-03-26 14:02:24 pablo Exp $
+ * @version $Id: PrintExceptionValve.java,v 1.3 2004-03-28 09:49:49 pablo Exp $
  */
 public class PrintExceptionValve 
     implements Valve
@@ -75,7 +75,17 @@ public class PrintExceptionValve
                 {
                     sb.append(tt.toString());
                     sb.append("<br/>\n");
+                    StackTraceElement[] el = tt.getStackTrace();
+                    sb.append("<ul>\n");
+                    for(int i = 0; i < el.length; i++)
+                    {
+                        sb.append("<li>");
+                        sb.append(el[i].toString());
+                        sb.append("</li>");
+                    }
+                    sb.append("</ul>\n");
                     tt = tt.getCause();
+                    sb.append("<br/>\n");
                 }
                 sb.append("end of stacktrace");
                  
