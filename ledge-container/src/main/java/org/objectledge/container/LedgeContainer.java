@@ -29,29 +29,42 @@
 package org.objectledge.container;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 
-import org.nanocontainer.NanoContainer;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
 import org.nanocontainer.integrationkit.ContainerBuilder;
 import org.nanocontainer.integrationkit.PicoCompositionException;
+import org.nanocontainer.reflection.StringToObjectConverter;
+import org.objectledge.configuration.ConfigurationFactory;
+import org.objectledge.configuration.CustomizedConfigurationProvider;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.pico.xml.LedgeXMLContainerBuilder;
+import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
+import org.objectledge.pico.LedgeStringToObjectConverter;
+import org.objectledge.pico.customization.CustomizedComponentAdapter;
+import org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory;
+import org.objectledge.pico.xml.LedgeContainerBuilder;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
+import org.picocontainer.ComponentAdapter;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.Parameter;
 import org.picocontainer.PicoContainer;
+import org.picocontainer.defaults.CachingComponentAdapterFactory;
+import org.picocontainer.defaults.ComponentAdapterFactory;
+import org.picocontainer.defaults.ComponentParameter;
+import org.picocontainer.defaults.ConstantParameter;
+import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.ObjectReference;
 import org.picocontainer.defaults.SimpleReference;
-import org.xml.sax.SAXParseException;
 
 /**
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.12 2004-12-23 07:16:00 rafal Exp $
+ * @version $Id: LedgeContainer.java,v 1.13 2005-02-04 02:29:46 rafal Exp $
  */
 public class LedgeContainer
 {
@@ -89,12 +102,11 @@ public class LedgeContainer
     public LedgeContainer(FileSystem fs, String configBase, ClassLoader classLoader)
         throws IOException, ClassNotFoundException, PicoCompositionException
     {
-        NanoContainer nano = new NanoContainer(getCompositionFile(fs, configBase), FRONT_END_CLASS,
+        containerBuilder = new LedgeContainerBuilder(getCompositionFile(fs, configBase), 
             classLoader);
-        containerBuilder = nano.getContainerBuilder();
         ObjectReference parentRef = new SimpleReference();
         parentRef.set(getBootContainer(fs, configBase, classLoader));
-        containerBuilder.buildContainer(containerRef, parentRef, null);
+        containerBuilder.buildContainer(containerRef, parentRef, null, true);
     }
 
     /**
@@ -125,28 +137,10 @@ public class LedgeContainer
      * @throws PicoCompositionException if the composition file is invalid, or could not be 
      *         verified due to system failure.
      */
-    protected static Reader getCompositionFile(FileSystem fs, String configBase)
+    protected static URL getCompositionFile(FileSystem fs, String configBase)
         throws IOException, PicoCompositionException
     {
-        URL compositionUrl = fs.getResource(configBase + COMPOSITION_FILE);
-        try
-        {
-            XMLValidator validator = new XMLValidator(new XMLGrammarCache());
-            validator.validate(compositionUrl, 
-                fs.getResource(LedgeXMLContainerBuilder.SCHEMA_PATH));
-        }
-        catch(SAXParseException e)
-        {
-            throw new PicoCompositionException("parse error "+e.getMessage()+" in "+
-                e.getSystemId()+" at line "+e.getLineNumber(), e);
-        }
-        catch(Exception e)
-        {
-            throw new PicoCompositionException("composition file "+compositionUrl+
-                "is missing or invalid", e);
-        }
-        
-        return new InputStreamReader(fs.getInputStream(configBase + COMPOSITION_FILE));        
+        return fs.getResource(configBase + COMPOSITION_FILE);        
     }
 
     /**
@@ -163,7 +157,51 @@ public class LedgeContainer
         MutablePicoContainer bootContainer = new DefaultPicoContainer();
         bootContainer.registerComponentInstance(FileSystem.class, fs);
         bootContainer.registerComponentInstance(ClassLoader.class, classLoader);
-        bootContainer.registerComponentInstance(CONFIG_BASE_KEY, configBase);
+        bootContainer.registerComponentImplementation(XMLGrammarCache.class);
+        bootContainer.registerComponentImplementation(XMLValidator.class);
+        bootContainer.registerComponentImplementation(StringToObjectConverter.class,
+            LedgeStringToObjectConverter.class);
+        // config
+        bootContainer.registerComponentImplementation(ConfigurationFactory.class,
+            ConfigurationFactory.class, params(COMPONENT, COMPONENT, constant(configBase)));
+        bootContainer.registerComponentImplementation(CustomizedConfigurationProvider.class);
+        ComponentAdapter adapter = new ConstructorInjectionComponentAdapter("anonymous", 
+            CustomizedComponentAdapter.class, params(constant(Configuration.class), 
+                component(CustomizedConfigurationProvider.class)));
+        adapter = (ComponentAdapter)adapter.getComponentInstance(bootContainer);
+        bootContainer.registerComponent(adapter);
+        // logging
+        bootContainer.registerComponentImplementation(LoggingConfigurator.class);
+        bootContainer.registerComponentImplementation(LoggerFactory.class);
+        adapter = new ConstructorInjectionComponentAdapter("anonymous", 
+            CustomizedComponentAdapter.class, params(constant(Logger.class), 
+                component(LoggerFactory.class)));
+        adapter = (ComponentAdapter)adapter.getComponentInstance(bootContainer);
+        bootContainer.registerComponent(adapter);
+        // factory
+        bootContainer.
+            registerComponentImplementation(CustomizingConstructorComponentAdapterFactory.class);
+        bootContainer.registerComponentImplementation(ComponentAdapterFactory.class,
+            CachingComponentAdapterFactory.class, 
+            params(component(CustomizingConstructorComponentAdapterFactory.class)));
         return bootContainer;
+    }
+
+    private static final Parameter COMPONENT = new ComponentParameter();
+    
+    
+    private static Parameter[] params(Parameter... parameters)
+    {
+        return parameters;
+    }
+    
+    private static Parameter constant(Object value)
+    {
+        return new ConstantParameter(value);
+    }
+    
+    private static Parameter component(Object key)
+    {
+        return new ComponentParameter(key);
     }
 }
