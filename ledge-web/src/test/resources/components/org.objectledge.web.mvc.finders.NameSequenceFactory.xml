@@ -29,7 +29,6 @@
 <config>
   <views separator="."/>
   <classes separator="." default-suffix="Default">
-    <prefix>org.objectledge.test</prefix>
     <prefix>org.objectledge.web.mvc</prefix>
   </classes>
   <templates separator="/" default-suffix="Default"/>
