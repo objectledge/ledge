@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-  <appender name="File" class="org.apache.log4j.FileAppender">
-    <param name="File" value="./src/test/resources/container1/logs/ledge.log"/>
-    <param name="Append" value="true"/>
+  <appender name="File" class="org.objectledge.logging.LedgeFileAppender">
+    <param name="File" value="logs/ledge.log"/>
+    <param name="Append" value="false"/>
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
     </layout>
