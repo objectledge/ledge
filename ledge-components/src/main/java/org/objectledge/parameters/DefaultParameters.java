@@ -35,6 +35,7 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -47,7 +48,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.16 2005-02-21 16:25:59 zwierzem Exp $
+ * @version $Id: DefaultParameters.java,v 1.17 2005-03-10 09:46:16 zwierzem Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -249,6 +250,38 @@ public class DefaultParameters implements Parameters
     /**
      * {@inheritDoc}
      */
+    public Date getDate(String name)
+    {
+        String value = get(name);
+        return new Date(Long.parseLong(value));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getDate(String name, Date defaultValue)
+    {
+        String value = get(name, Long.toString(defaultValue.getTime()));
+        return new Date(Long.parseLong(value));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date[] getDates(String name)
+    {
+        String[] values = getStrings(name);
+        Date[] target = new Date[values.length];
+        for (int i = 0; i < values.length; i++)
+        {
+            target[i] = new Date(Long.parseLong(values[i]));
+        }
+        return target;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public float getFloat(String name) throws NumberFormatException
     {
         return Float.parseFloat(get(name));
@@ -402,6 +435,14 @@ public class DefaultParameters implements Parameters
     /**
      * {@inheritDoc}
      */
+    public void remove(String name, Date value)
+    {
+        remove(name, Long.toString(value.getTime()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void remove(String name, float value)
     {
         remove(name, Float.toString(value));
@@ -492,6 +533,27 @@ public class DefaultParameters implements Parameters
         for (int i = 0; i < values.length; i++)
         {
             target[i] = Boolean.toString(values[i]);
+        }
+        map.put(name, target);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date value)
+    {
+        set(name, Long.toString(value.getTime()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date[] values)
+    {
+        String[] target = new String[values.length];
+        for (int i = 0; i < values.length; i++)
+        {
+            target[i] = Long.toString(values[i].getTime());
         }
         map.put(name, target);
     }
@@ -621,6 +683,28 @@ public class DefaultParameters implements Parameters
         add(name, target);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date value)
+    {
+        add(name, Long.toString(value.getTime()));
+        
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date[] values)
+    {
+        String[] target = new String[values.length];
+        for (int i = 0; i < values.length; i++)
+        {
+            target[i] = Long.toString(values[i].getTime());
+        }
+        add(name, target);
+    }
+    
     /**
      * {@inheritDoc}
      */

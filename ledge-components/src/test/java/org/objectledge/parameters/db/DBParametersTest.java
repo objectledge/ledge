@@ -28,6 +28,7 @@
 
 package org.objectledge.parameters.db;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,6 +64,8 @@ import org.objectledge.parameters.UndefinedParameterException;
 public class DBParametersTest extends TestCase
 {
     private DBParametersManager manager;
+    protected long anyTimeStamp = 123123132L;
+    protected long anyTimeStamp2 = 232342445L;
 
     private Persistence persistence;
 
@@ -222,6 +225,70 @@ public class DBParametersTest extends TestCase
         assertEquals(params.getBooleans("foo")[1], true);
     }
 
+    /**
+     * Test for boolean getDate(String)
+     */
+    public void testGetDateString() throws Exception
+    {
+        Parameters params = manager.createContainer();
+        try
+        {
+            assertEquals(params.getDate("foo"), new Date());
+            fail("Should throw UndefinedParameterException");
+        }
+        catch (UndefinedParameterException e)
+        {
+            // expected
+        }
+        params.add("foo", new Date(anyTimeStamp));
+        assertEquals(params.getDate("foo"), new Date(anyTimeStamp));
+        params.add("foo", new Date(anyTimeStamp2));
+        try
+        {
+            params.getDate("foo");
+            fail("Should throw AmbiguousParameterException");
+        }
+        catch (AmbiguousParameterException e)
+        {
+            // expected
+        }
+        params.set("foo", "bar");
+        try
+        {
+            params.getDate("foo");
+            fail("Should throw NumberFormatException");
+        }
+        catch (NumberFormatException e)
+        {
+            // expected
+        }
+    }
+
+    /**
+     * Test for boolean getDate(String, Date)
+     */
+    public void testGetDateStringDate() throws Exception
+    {
+        Parameters params = manager.createContainer();
+        assertEquals(params.getDate("foo", new Date(anyTimeStamp)), new Date(anyTimeStamp));
+        params.add("foo", new Date(anyTimeStamp2));
+        assertEquals(params.getDate("foo", new Date(anyTimeStamp)), new Date(anyTimeStamp2));
+    }
+
+    /**
+     * Test for boolean getDates(String)
+     */
+    public void testGetDates() throws Exception
+    {
+        Parameters params = manager.createContainer();
+        assertEquals(params.getDates("foo").length, 0);
+        params.add("foo", new Date(anyTimeStamp));
+        params.add("foo", new Date(anyTimeStamp2));
+        assertEquals(params.getDates("foo").length, 2);
+        assertEquals(params.getDates("foo")[0], new Date(anyTimeStamp));
+        assertEquals(params.getDates("foo")[1], new Date(anyTimeStamp2));
+    }
+    
     /**
      * Test for float getFloat(String)
      */

@@ -28,6 +28,7 @@
 
 package org.objectledge.parameters;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -35,7 +36,7 @@ import java.util.Set;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.11 2005-03-03 13:27:37 zwierzem Exp $
+ * @version $Id: Parameters.java,v 1.12 2005-03-10 09:46:16 zwierzem Exp $
  */
 public interface Parameters
 {
@@ -88,6 +89,35 @@ public interface Parameters
 	 * @return the array of the boolean values of the parameter.
 	*/
 	public boolean[] getBooleans(String name);
+
+    /**
+     * Return the parameter with specified name.
+     * The assumed String value of this parameter is a decimal representation of a Unix time-stamp.
+     * 
+     * @param name the name of the parameter.
+     * @return the date value of the parameter.
+     */
+    public Date getDate(String name);
+
+    /**
+     * Return the parameter with specified name. 
+     * The assumed String value of this parameter is a decimal representation of a Unix time-stamp.
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the date value of the parameter.
+     */
+    public Date getDate(String name, Date defaultValue);
+
+    /**
+     * Return all values of the parameter with specified name as an array. 
+     * The assumed String values of this parameter is are decimal representations of Unix
+     * time-stamps.
+     * 
+     * @param name the name of the parameters.
+     * @return the array of the date values of the parameter.
+    */
+    public Date[] getDates(String name);
 
     /**
      * Return the parameter with specified name. 
@@ -205,7 +235,15 @@ public interface Parameters
      */
     public void remove(String name, String value);
     
-	/**
+    /**
+     * Remove all parameters with a specified name and value.
+     *
+     * @param name the parameter name.
+     * @param value the parameter value.
+     */
+    public void remove(String name, Date value);
+
+    /**
 	 * Remove all parameters with a specified name and value.
 	 *
 	 * @param name the parameter name.
@@ -275,6 +313,23 @@ public interface Parameters
 	 */
 	public void set(String name, boolean[] values);
 
+
+    /**
+     * Set the parameter.
+     * 
+     * @param name the parameter name.
+     * @param value the parameter value.
+     */
+    public void set(String name, Date value);
+
+    /**
+     * Set the parameter.
+     * 
+     * @param name the parameter name.
+     * @param values the parameter values.
+     */
+    public void set(String name, Date[] values);
+    
     /**
      * Set the parameter.
      * 
@@ -354,6 +409,22 @@ public interface Parameters
 	 * @param values the parameter values.
 	 */
 	public void add(String name, boolean[] values);
+
+    /**
+     * Add the parameter.
+     *
+     * @param name the parameter name.
+     * @param value the parameter value.
+     */
+    public void add(String name, Date value);
+    
+    /**
+     * Add the parameter.
+     *
+     * @param name the parameter name.
+     * @param values the parameter values.
+     */
+    public void add(String name, Date[] values);
 
     /**
      * Add the parameter.

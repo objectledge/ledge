@@ -29,6 +29,7 @@
 package org.objectledge.parameters;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ import java.util.Set;
  * An implementation of parameters decorator class to scope parameters key names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ScopedParameters.java,v 1.3 2005-02-21 16:25:58 zwierzem Exp $
+ * @version $Id: ScopedParameters.java,v 1.4 2005-03-10 09:46:15 zwierzem Exp $
  */
 public class ScopedParameters implements Parameters
 {
@@ -100,6 +101,22 @@ public class ScopedParameters implements Parameters
      * {@inheritDoc}
      */
     public void add(String name, boolean[] values)
+    {
+        parameters.add(prefix+name, values);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date value)
+    {
+        parameters.add(prefix+name, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date[] values)
     {
         parameters.add(prefix+name, values);
     }
@@ -214,6 +231,30 @@ public class ScopedParameters implements Parameters
     public Parameters getChild(String prefix)
     {
         return new ScopedParameters(this, prefix);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Date getDate(String name)
+    {
+        return parameters.getDate(prefix+name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getDate(String name, Date defaultValue)
+    {
+        return parameters.getDate(prefix+name, defaultValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date[] getDates(String name)
+    {
+        return parameters.getDates(prefix+name);
     }
     
     /**
@@ -367,6 +408,14 @@ public class ScopedParameters implements Parameters
     /**
      * {@inheritDoc}
      */
+    public void remove(String name, Date value)
+    {
+        parameters.remove(prefix+name, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void remove(String name, float value)
     {
         parameters.remove(prefix+name, value);
@@ -441,7 +490,23 @@ public class ScopedParameters implements Parameters
     {
         parameters.set(prefix+name, values);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date value)
+    {
+        parameters.set(prefix+name, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date[] values)
+    {
+        parameters.set(prefix+name, values);
+    }
+
     /**
      * {@inheritDoc}
      */

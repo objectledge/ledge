@@ -33,6 +33,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -48,7 +49,7 @@ import org.objectledge.parameters.Parameters;
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.6 2004-03-16 11:06:37 fil Exp $
+ * @version $Id: DBParameters.java,v 1.7 2005-03-10 09:46:20 zwierzem Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -138,7 +139,32 @@ public class DBParameters implements Parameters
 		return container.getBooleans(name);
     }
 
-	/**
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getDate(String name)
+    {
+        return container.getDate(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getDate(String name, Date defaultValue)
+    {
+        return container.getDate(name, defaultValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date[] getDates(String name)
+    {
+        return container.getDates(name);
+    }
+    
+    /**
 	 * {@inheritDoc}
 	 */
     public float getFloat(String name) throws NumberFormatException
@@ -261,6 +287,16 @@ public class DBParameters implements Parameters
     /**
      * {@inheritDoc}
      */
+    public void remove(String name, Date value)
+    {
+        container.remove(name,value);
+        modified.add(name);
+        update();       
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void remove(String name, float value)
     {
         container.remove(name,value);
@@ -332,6 +368,26 @@ public class DBParameters implements Parameters
 		container.set(name, values);
 		modified.add(name);
 		update();    	
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date value)
+    {
+        container.set(name, value);
+        modified.add(name);
+        update();       
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date[] values)
+    {
+        container.set(name, values);
+        modified.add(name);
+        update();       
     }
 
 	/**
@@ -434,7 +490,27 @@ public class DBParameters implements Parameters
 		update();    	
 	}
 
-	/**
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date value)
+    {
+        container.add(name, value);
+        modified.add(name);
+        update();       
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date[] values)
+    {
+        container.add(name, values);
+        modified.add(name);
+        update();       
+    }
+
+    /**
 	 * {@inheritDoc}
 	 */
     public void add(String name, boolean value)

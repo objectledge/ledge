@@ -31,6 +31,7 @@ package org.objectledge.parameters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,7 @@ import java.util.TreeSet;
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.org">Rafal Krzewski</a>
- * @version $Id: CompoundParameters.java,v 1.2 2005-01-26 03:46:15 rafal Exp $
+ * @version $Id: CompoundParameters.java,v 1.3 2005-03-10 09:46:16 zwierzem Exp $
  */
 public class CompoundParameters implements Parameters
 {
@@ -69,7 +70,7 @@ public class CompoundParameters implements Parameters
     /**
      * Constructs a copound parameter container.
      *
-     * <p>The contatiners with greater indexes will have precenence over the
+     * <p>The contatiners with greater indexes will have precedence over the
      * conainer with lesser indexes.</p>
      *
      * @param array the containers.
@@ -240,6 +241,57 @@ public class CompoundParameters implements Parameters
         return new boolean[0];
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Date getDate(String name)
+    {
+        Iterator i = containers.iterator();
+        while(i.hasNext())
+        {
+            Parameters c = (Parameters)i.next();
+            if(c.isDefined(name))
+            {
+                return c.getDate(name);
+            }
+        }
+        throw new UndefinedParameterException("Parameter '" + name + "'is undefined");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getDate(String name, Date defaultValue)
+    {
+        Iterator i = containers.iterator();
+        while(i.hasNext())
+        {
+            Parameters c = (Parameters)i.next();
+            if(c.isDefined(name))
+            {
+                return c.getDate(name);
+            }
+        }
+        return defaultValue;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date[] getDates(String name)
+    {
+        Iterator i = containers.iterator();
+        while(i.hasNext())
+        {
+            Parameters c = (Parameters)i.next();
+            if(c.isDefined(name))
+            {
+                return c.getDates(name);
+            }
+        }
+        return new Date[0];
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -437,6 +489,14 @@ public class CompoundParameters implements Parameters
     /**
      * {@inheritDoc}
      */
+    public void remove(String name, Date value)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void remove(String name, float value)
     {
         throw new UnsupportedOperationException();
@@ -490,6 +550,22 @@ public class CompoundParameters implements Parameters
      * {@inheritDoc}
      */
     public void set(String name, String[] values)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date value)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String name, Date[] values)
     {
         throw new UnsupportedOperationException();
     }
@@ -574,6 +650,22 @@ public class CompoundParameters implements Parameters
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date value)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void add(String name, Date[] values)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * {@inheritDoc}
      */
