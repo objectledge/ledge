@@ -35,13 +35,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.objectledge.context.Context;
-
 /**
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.2 2004-01-30 19:03:05 zwierzem Exp $
+ * @version $Id: PageTool.java,v 1.3 2004-02-02 16:50:23 zwierzem Exp $
  */
 public class PageTool
 {

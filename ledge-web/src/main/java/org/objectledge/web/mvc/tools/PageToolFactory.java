@@ -28,16 +28,12 @@
 
 package org.objectledge.web.mvc.tools;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
-import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
-import org.objectledge.web.WebConfigurator;
 
 /**
  * Context tool factory component to build the link tool.
  * 
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  */
 public class PageToolFactory implements ContextToolFactory
 {
