@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.4 2004-09-03 13:01:41 pablo Exp $
+ * @version $Id: StringTool.java,v 1.5 2004-10-24 12:36:10 pablo Exp $
  */
 public class StringTool
 {
@@ -78,5 +78,27 @@ public class StringTool
     public String toOctalUnicode(String input)
     {
         return StringUtils.toOctalUnicode(input);
+    }
+    
+    /**
+	 * Convert int to long value.
+	 *
+	 * @param vaule the integer value.
+	 * @return the long wrapper.
+     */
+    public Long getLongValue(int value)
+    {
+    	return new Long(value);
+    }
+
+    /**
+	 * Convert string to long value.
+	 *
+	 * @param vaule the string value.
+	 * @return the long wrapper.
+     */
+    public Long getLongValue(String value)
+    {
+    	return new Long(value);
     }
 }
