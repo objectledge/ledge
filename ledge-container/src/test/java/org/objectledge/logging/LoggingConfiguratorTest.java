@@ -13,13 +13,14 @@ import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfiguratorTest.java,v 1.8 2004-01-16 08:53:15 fil Exp $
+ * @version $Id: LoggingConfiguratorTest.java,v 1.9 2004-06-01 15:34:49 fil Exp $
  */
 public class LoggingConfiguratorTest extends TestCase
 {
@@ -46,7 +47,7 @@ public class LoggingConfiguratorTest extends TestCase
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
-        XMLValidator xv = new XMLValidator();
+        XMLValidator xv = new XMLValidator(new XMLGrammarCache());
         ConfigurationFactory cf = new ConfigurationFactory(fs, xv, "config");
         new LoggingConfigurator(cf);    
         Logger logger = Logger.getLogger(LoggingConfiguratorTest.class);

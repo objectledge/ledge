@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.25 2004-06-01 09:05:57 fil Exp $ -->
+<!-- $Id: project.xml,v 1.26 2004-06-01 15:34:49 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -92,7 +92,25 @@
       <version>1.0</version>
       <url>http://jakarta.apache.org/commons/cli/</url>
     </dependency>
+    <dependency>
+      <groupId>msv</groupId>
+      <artifactId>msv</artifactId>
+      <version>20040506</version>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>isorelax</groupId>
+      <artifactId>isorelax</artifactId>
+      <version>20040506</version>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
     <!-- runtime -->
+    <dependency>
+      <groupId>xsdlib</groupId>
+      <artifactId>xsdlib</artifactId>
+      <version>20040506</version>
+      <url>https://msv.dev.java.net/</url>
+    </dependency>
   </dependencies>
   
 </project>

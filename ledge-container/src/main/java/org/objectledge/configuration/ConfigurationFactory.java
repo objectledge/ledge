@@ -31,6 +31,7 @@ package org.objectledge.configuration;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
@@ -52,14 +53,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-import com.thaiopensource.validate.IncorrectSchemaException;
-import com.thaiopensource.validate.Validator;
+import com.sun.msv.verifier.Verifier;
 
 /**
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.22 2004-03-24 12:30:22 pablo Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.23 2004-06-01 15:34:50 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -293,16 +293,15 @@ public class ConfigurationFactory
      * @param schemaPath the the schema file path.
      * @throws IOException if the configuration, or schema cannot be read.
      * @throws SAXException if the configuration, or schema cannot be parsed.
-     * @throws IncorrectSchemaException if the schema is malformed.
      */
     protected void checkSchema(Configuration configuration, String schemaPath)
-        throws SAXException, IOException, IncorrectSchemaException
+        throws SAXException, IOException, ParserConfigurationException
     {
         URL schemaUrl = fileSystem.getResource(schemaPath);
         xmlValidator.validate(schemaUrl, relaxngUrl);
-        Validator validator = xmlValidator.getValidator(schemaUrl);
+        Verifier verifier= xmlValidator.getVerifier(schemaUrl);
         SAXConfigurationSerializer serializer = new SAXConfigurationSerializer();
-        serializer.serialize(configuration, validator.getContentHandler());
+        serializer.serialize(configuration, verifier);
     }
 
     /**
@@ -315,7 +314,7 @@ public class ConfigurationFactory
      * @throws IncorrectSchemaException if the schema is malformed.
      */
     protected void checkSchema(String configuration, String schemaPath)
-        throws SAXException, IOException, IncorrectSchemaException
+        throws SAXException, IOException, ParserConfigurationException
     {
         URL schemaUrl = fileSystem.getResource(schemaPath);
         xmlValidator.validate(schemaUrl, relaxngUrl);

@@ -39,6 +39,7 @@ import org.apache.log4j.Logger;
 import org.nanocontainer.integrationkit.ContainerBuilder;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.FooComponent;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
@@ -51,7 +52,7 @@ import org.xml.sax.SAXParseException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEndTest.java,v 1.9 2004-04-01 08:54:21 fil Exp $
+ * @version $Id: LedgeXmlFrontEndTest.java,v 1.10 2004-06-01 15:34:50 fil Exp $
  */
 public class LedgeXmlFrontEndTest extends TestCase
 {
@@ -80,7 +81,7 @@ public class LedgeXmlFrontEndTest extends TestCase
                 "use -Dledge.root=.../ledge-container/src/test/resources");
         }
         fs = FileSystem.getStandardFileSystem(root);
-        validator = new XMLValidator();
+        validator = new XMLValidator(new XMLGrammarCache());
     }
 
     private Reader getReader(String path)

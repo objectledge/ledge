@@ -38,6 +38,7 @@ import org.nanocontainer.integrationkit.ContainerBuilder;
 import org.nanocontainer.integrationkit.PicoCompositionException;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.pico.xml.LedgeXMLContainerBuilder;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
@@ -50,7 +51,7 @@ import org.xml.sax.SAXParseException;
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.10 2004-02-20 08:40:34 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.11 2004-06-01 15:34:50 fil Exp $
  */
 public class LedgeContainer
 {
@@ -130,7 +131,7 @@ public class LedgeContainer
         URL compositionUrl = fs.getResource(configBase + COMPOSITION_FILE);
         try
         {
-            XMLValidator validator = new XMLValidator();
+            XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             validator.validate(compositionUrl, 
                 fs.getResource(LedgeXMLContainerBuilder.SCHEMA_PATH));
         }

@@ -36,13 +36,14 @@ import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
+import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactoryTest.java,v 1.12 2004-01-16 08:53:16 fil Exp $
+ * @version $Id: ConfigurationFactoryTest.java,v 1.13 2004-06-01 15:34:51 fil Exp $
  */
 public class ConfigurationFactoryTest 
     extends TestCase
@@ -72,7 +73,7 @@ public class ConfigurationFactoryTest
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
-        XMLValidator xv = new XMLValidator();
+        XMLValidator xv = new XMLValidator(new XMLGrammarCache());
         cf = new ConfigurationFactory(fs, xv, "config");
     }
 
