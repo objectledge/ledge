@@ -34,12 +34,12 @@ import org.jcontainer.dna.Configuration;
  * Configuration component - it provide the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: WebConfigurator.java,v 1.4 2004-08-20 15:59:38 zwierzem Exp $
+ * @version $Id: WebConfigurator.java,v 1.5 2004-08-20 16:08:17 zwierzem Exp $
  */
 public class WebConfigurator
 {
 	/** the default encoding */
-	public static final String DEFAULT_ENCODING = "ISO-8859-1";
+	public static final String DEFAULT_ENCODING = "UTF-8";
 	
 	/** the default view token */
 	public static final String DEFAULT_VIEW_TOKEN = "view";
