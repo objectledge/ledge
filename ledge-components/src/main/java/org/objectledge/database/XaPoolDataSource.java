@@ -38,30 +38,38 @@ import org.enhydra.jdbc.pool.StandardXAPoolDataSource;
 import org.enhydra.jdbc.standard.StandardXADataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.database.impl.DelegatingDataSource;
+import org.objectledge.logging.LoggingConfigurator;
 import org.picocontainer.Startable;
 
 /**
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSource.java,v 1.3 2004-02-17 15:48:45 fil Exp $
+ * @version $Id: XaPoolDataSource.java,v 1.4 2004-06-25 11:21:25 fil Exp $
  */
 public class XaPoolDataSource extends DelegatingDataSource
     implements XADataSource, Startable
 {
+    private Transaction transaction;
+    private Configuration config;
+    
     /**
      * Constructs a DataSource instance.
      * 
      * @param transaction transaction manager wrapper.
      * @param config the data source configuration.
+     * @param loggingConfguration enforces instantiation order on Pico, may be null.
      * @throws ConfigurationException if the configuration is invalid.
      * @throws SQLException if the pool could not be initialized.
      */
-    public XaPoolDataSource(Transaction transaction, Configuration config)
+    public XaPoolDataSource(Transaction transaction, Configuration config, LoggingConfigurator loggingConfigurator)
         throws ConfigurationException, SQLException
     {
-        super(getDataSource(transaction, config));
+        super(null);
+        this.transaction = transaction;
+        this.config = config;
     }
 
     /**
@@ -69,6 +77,14 @@ public class XaPoolDataSource extends DelegatingDataSource
      */
     public void start()
     {
+        try
+        {
+            setDelegate(getDataSource(transaction, config));
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("failed to initalize data source", e);
+        }
     }
 
     /**

@@ -32,7 +32,9 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectweb.jotm.Jotm;
 import org.objectweb.transaction.jta.TMService;
 import org.picocontainer.Startable;
@@ -40,7 +42,7 @@ import org.picocontainer.Startable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.4 2004-02-17 15:48:45 fil Exp $
+ * @version $Id: JotmTransaction.java,v 1.5 2004-06-25 11:21:25 fil Exp $
  */
 public class JotmTransaction
     extends Transaction
@@ -54,13 +56,14 @@ public class JotmTransaction
      * @param tracing tracing depth.
      * @param context the threads processing context.
      * @param log the logger to use.
+     * @param loggingConfguration enforces instantiation order on Pico, may be null.
      * @throws NamingException if the manager could not be initialized.
      */
-    public JotmTransaction(int tracing, Context context, Logger log)
+    public JotmTransaction(int tracing, Context context, Logger log, 
+        LoggingConfigurator loggingConfigurator)
         throws NamingException
     {
         super(tracing, context, log);
-        tmService = new Jotm(true, false);
     }
     
     /**
@@ -84,6 +87,14 @@ public class JotmTransaction
      */
     public void start()
     {
+        try
+        {
+	        tmService = new Jotm(true, false);
+	    }
+	    catch(Exception e)
+	    {
+	        throw new ComponentInitializationError("failed to initalize data source", e);
+	    }
     }
     
     /**

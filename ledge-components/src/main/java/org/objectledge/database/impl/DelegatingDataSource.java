@@ -37,7 +37,7 @@ import javax.sql.DataSource;
  * A delegation pattern wrapper for a DataSource interface.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DelegatingDataSource.java,v 1.2 2004-02-06 08:41:11 fil Exp $
+ * @version $Id: DelegatingDataSource.java,v 1.3 2004-06-25 11:21:25 fil Exp $
  */
 public abstract class DelegatingDataSource implements DataSource
 {
@@ -63,12 +63,23 @@ public abstract class DelegatingDataSource implements DataSource
     {
         return dataSource;
     }
+
+    /**
+     * Sets the underlying DataSource
+     * 
+     * @param dataSource the underlying DataSource.
+     */
+    protected void setDelegate(DataSource dataSource)
+    {
+        this.dataSource = dataSource;
+    }
     
     /**
      * {@inheritDoc}
      */
     public Connection getConnection() throws SQLException
     {
+        checkDelegate();
         return dataSource.getConnection();
     }
 
@@ -78,6 +89,7 @@ public abstract class DelegatingDataSource implements DataSource
      */
     public int getLoginTimeout() throws SQLException
     {
+        checkDelegate();
         return dataSource.getLoginTimeout();
     }
 
@@ -86,6 +98,7 @@ public abstract class DelegatingDataSource implements DataSource
      */
     public void setLoginTimeout(int seconds) throws SQLException
     {
+        checkDelegate();
         dataSource.setLoginTimeout(seconds);
     }
 
@@ -94,6 +107,7 @@ public abstract class DelegatingDataSource implements DataSource
      */
     public PrintWriter getLogWriter() throws SQLException
     {
+        checkDelegate();
         return dataSource.getLogWriter();
     }
 
@@ -102,6 +116,7 @@ public abstract class DelegatingDataSource implements DataSource
      */
     public void setLogWriter(PrintWriter out) throws SQLException
     {
+        checkDelegate();
         dataSource.setLogWriter(out);
     }
 
@@ -110,6 +125,16 @@ public abstract class DelegatingDataSource implements DataSource
      */
     public Connection getConnection(String username, String password) throws SQLException
     {
+        checkDelegate();
         return dataSource.getConnection(username, password);
     }
+    
+    private void checkDelegate()
+    	throws SQLException
+	{
+        if(dataSource == null)
+        {
+            throw new SQLException(getClass().getName()+" not initialized");
+        }
+	}
 }
