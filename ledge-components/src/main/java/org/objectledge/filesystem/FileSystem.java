@@ -50,7 +50,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.16 2004-01-13 14:02:21 fil Exp $
+ * @version $Id: FileSystem.java,v 1.17 2004-01-29 08:32:06 pablo Exp $
  */
 public class FileSystem
 {
@@ -528,6 +528,46 @@ public class FileSystem
         }
     }
 
+	/**
+	 * Deletes recursive a directory.
+	 * 
+	 * @param path the path of the directory.
+	 * @throws IOException if the operation fails.
+	 */        
+	public void deleteRecursive(String path) throws IOException
+	{
+		if (!exists(path))
+		{
+			throw new IOException(path + " does not exist");
+		}
+		String[] files = list(path);
+		for(int i = 0; i < files.length;i++)
+		{
+			if(isDirectory(path+"/"+files[i]))
+			{
+				deleteRecursive(path + "/" + files[i]);
+            }
+			else
+            {
+			    delete(path+"/"+files[i]);
+			}
+		}
+		String dir = directoryPath(path);
+		if (!canWrite(dir))
+		{
+			throw new IOException(dir + " : access denied");
+		}
+		for (Iterator i = providers.iterator(); i.hasNext();)
+		{
+			FileSystemProvider fp = (FileSystemProvider)i.next();
+			if (fp.exists(dir))
+			{
+				fp.delete(path);
+				return;
+			}
+		}
+	}
+
     /**
      * Atomically renames a file or directory.
      * 
@@ -703,7 +743,7 @@ public class FileSystem
     public String read(String path, String encoding)
         throws IOException
     {
-        if(exists(path))
+        if(!exists(path))
         {
             throw new IOException(path + " does not exist");
         }
