@@ -4,3 +4,4 @@ target
 *.lst
 *.log
 .clover
+build.properties
