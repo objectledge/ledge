@@ -36,11 +36,11 @@ import java.net.URLStreamHandler;
 import org.objectledge.filesystem.FileSystem;
 
 /**
- * A subclass of URLStreamHandler that handles labeo: protocol
- * using Labeo FileService.
+ * A subclass of URLStreamHandler that handles Ledge's "ledge:" protocol
+ * using FileSystem.
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: URLStreamHandlerImpl.java,v 1.2 2003-12-03 14:14:13 mover Exp $
+ *  @version $Id: URLStreamHandlerImpl.java,v 1.3 2003-12-05 18:46:20 pablo Exp $
  */
 public class URLStreamHandlerImpl extends URLStreamHandler
 {
