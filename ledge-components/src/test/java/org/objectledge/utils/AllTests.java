@@ -46,6 +46,7 @@ public class AllTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(StringUtilsTest.class));
         suite.addTest(new TestSuite(DateFormatterTest.class));
+        suite.addTest(new TestSuite(StackTraceTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -1,0 +1,193 @@
+// 
+// Copyright (c) 2003,2004 , Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// All rights reserved. 
+// 
+// Redistribution and use in source and binary forms, with or without modification,  
+// are permitted provided that the following conditions are met: 
+//  
+// * Redistributions of source code must retain the above copyright notice,  
+//	 this list of conditions and the following disclaimer. 
+// * Redistributions in binary form must reproduce the above copyright notice,  
+//	 this list of conditions and the following disclaimer in the documentation  
+//	 and/or other materials provided with the distribution. 
+// * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+//	 nor the names of its contributors may be used to endorse or promote products  
+//	 derived from this software without specific prior written permission. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+// IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+// OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+// POSSIBILITY OF SUCH DAMAGE. 
+// 
+package org.objectledge.utils;
+
+import java.util.StringTokenizer;
+
+/**
+ * 
+ *
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: StackTraceTest.java,v 1.1 2004-06-23 13:13:35 fil Exp $
+ */
+public class StackTraceTest extends LedgeTestCase
+{
+    private Thingy thingy = new Thingy();
+    
+    // enable trace output during the test
+    private boolean printTraces = false; 
+    
+    public void testTracingException()
+    {
+        String[] trace = split(new StackTrace(new TracingException(4)));
+        assertEquals(5, trace.length);
+    }
+
+    public void testOrdinaryTrace()
+    {
+        try
+        {
+            thingy.d();
+        }
+        catch(Exception e)
+        {
+            String[] trace = split(new StackTrace(e));
+            assertEquals(3, trace.length);
+        }
+    }
+    
+    public void testNestingTrace()
+    {
+        try
+        {
+            thingy.a();
+        }
+        catch(Exception e)
+        {
+            String[] trace = split(new StackTrace(e));
+            assertEquals(10, trace.length);
+        }        
+    }
+
+    public void testLegacyExceptions()
+    {
+        try
+        {
+            thingy.l();
+        }
+        catch(Exception e)
+        {
+            String[] trace = split(new StackTrace(e));
+            assertEquals(6, trace.length);
+        }        
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    
+    public static class Thingy
+    {
+        public void a()
+        	throws Exception
+        {
+            try
+            {
+                b();
+            }
+            catch(Exception e)
+            {
+                throw new Exception("exception in b", e);
+            }            
+        }
+        
+        public void b()
+        	throws Exception
+        {
+            try
+            {
+                c();
+            }
+            catch(Exception e)
+            {
+                throw new Exception("exception in c", e);
+            }
+        }
+        
+        public void c()
+        	throws Exception
+        {
+            d();
+        }
+        
+        public void d()
+        	throws Exception
+        {
+            throw new Exception("d failed");
+        }
+        
+        /////////////////////////////////////////////////////////////////////////////////////////
+        
+        public void l()
+        	throws Exception
+    	{
+            try
+            {
+                m();
+            }
+            catch(Exception e)
+            {
+                throw new LegacyException("exception in m", e);
+            }
+    	}
+        
+        public void m()
+        	throws Exception
+        {
+            throw new Exception("m failed");
+        }
+    }
+    
+    public static class LegacyException
+    	extends Exception
+    {
+        private Throwable cause;
+        
+        public LegacyException(String message, Throwable cause)
+        {
+            super(message);
+            this.cause = cause;
+        }
+        
+        public Throwable getRootCause()
+        {
+            return cause;
+        }
+    }
+    
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private String[] split(StackTrace st)
+    {
+        return split(st.toString());
+    }
+    
+    private String[] split(String str)
+    {
+        if(printTraces)
+        {
+            System.out.println(str);
+        }
+        StringTokenizer st = new StringTokenizer(str, System.getProperty("line.separator"));
+        String[] result = new String[st.countTokens()];
+        for(int i = 0; i < result.length; i++)
+        {
+            result[i] = st.nextToken();
+        }
+        return result;
+    }
+}
