@@ -39,7 +39,7 @@ import org.objectledge.context.Context;
 /**
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseAuthenticationAction.java,v 1.2 2004-01-22 15:15:13 fil Exp $
+ * @version $Id: BaseAuthenticationAction.java,v 1.3 2004-02-20 12:47:30 zwierzem Exp $
  */
 public class BaseAuthenticationAction
 {
@@ -70,7 +70,7 @@ public class BaseAuthenticationAction
     /**
      * Clear session to prevent the scenario that
      * one user uses the session of another.
-     * 
+     * <p>TODO: Isn't it enough to call <code>session.invalidate()</code>?
      * @param session the http session.
      */
     protected void clearSession(HttpSession session)
