@@ -28,6 +28,7 @@
     <component class="org.objectledge.web.WebConfigurator"/>
     <component class="org.objectledge.web.mvc.MVCContextInitializator"/>
     <component class="org.objectledge.web.parameters.RequestParametersLoaderValve"/>
+    <component class="org.objectledge.web.parameters.RequestParametersLoaderTestValve"/>
     <component class-key="org.objectledge.templating.Templating"
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
     <component class="org.objectledge.templating.TemplatingContextLoader"/>
@@ -51,7 +52,7 @@
         <component-parameter class-key="org.objectledge.web.mvc.MVCContextInitializator"/>
         <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
         <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
-        
+        <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderTestValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.ResponseWriterValve"/>
       </sequence-parameter>
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
