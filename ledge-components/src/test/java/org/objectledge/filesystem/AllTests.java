@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.2 2003-12-03 14:40:42 mover Exp $
+ * @version $Id: AllTests.java,v 1.3 2004-01-08 10:12:02 fil Exp $
  */
 public class AllTests
 {
@@ -44,9 +44,8 @@ public class AllTests
     {
         TestSuite suite = new TestSuite("Test for org.objectledge.filesystem");
         //$JUnit-BEGIN$
-
+        suite.addTest(new TestSuite(LocalFileSystemProviderTest.class));
         //$JUnit-END$
-        suite.addTest(org.objectledge.filesystem.impl.AllTests.suite());
         return suite;
     }
 }

@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-package org.objectledge.filesystem.impl;
+package org.objectledge.filesystem;
 
 import java.io.IOException;
 
@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.4 2003-12-05 08:27:02 fil Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.1 2004-01-08 10:12:02 fil Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {

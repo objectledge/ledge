@@ -16,9 +16,9 @@
       <subsection name="Browse">
         <p>
           <ul>
-            <li>ServletFileSystemProvider <a href="../apidocs/org/objectledge/filesystem/impl/ServletFileSystemProvider.html">JavaDoc</a></li>
-            <li>ServletFileSystemProvider <a href="../xref/org/objectledge/filesystem/impl/ServletFileSystemProvider.html">XRef</a></li>
-            <li>ServletFileSystemProvider <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/filesystem/impl/ServletFileSystemProvider.java">CVS log</a></li>
+            <li>ServletFileSystemProvider <a href="../apidocs/org/objectledge/filesystem/ServletFileSystemProvider.html">JavaDoc</a></li>
+            <li>ServletFileSystemProvider <a href="../xref/org/objectledge/filesystem/ServletFileSystemProvider.html">XRef</a></li>
+            <li>ServletFileSystemProvider <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/filesystem/ServletFileSystemProvider.java">CVS log</a></li>
           </ul>
         </p>
       </subsection>

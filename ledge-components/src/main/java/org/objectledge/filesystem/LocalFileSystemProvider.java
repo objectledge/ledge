@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE.
 //
 
-package org.objectledge.filesystem.impl;
+package org.objectledge.filesystem;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -39,8 +39,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.objectledge.ComponentInitializationError;
-import org.objectledge.filesystem.FileSystemProvider;
-import org.objectledge.filesystem.RandomAccessFile;
+import org.objectledge.filesystem.impl.LocalRandomAccessFile;
 
 /**
  * An implementaion of FileProvider that operates on the local filesystem. 
@@ -52,7 +51,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * considererd to be relative the the running user's current directory.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.5 2003-12-04 14:42:21 fil Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.1 2004-01-08 10:12:02 fil Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider

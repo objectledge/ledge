@@ -26,11 +26,13 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.filesystem.impl;
+package org.objectledge.filesystem;
 
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
+
+import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
 /**
  * An implementation of FileService provider that operates on the ServletContext.
@@ -39,7 +41,7 @@ import javax.servlet.ServletContext;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileSystemProvider.java,v 1.1 2003-12-29 12:35:49 fil Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.1 2004-01-08 10:12:00 fil Exp $
  */
 public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider

@@ -11,15 +11,15 @@ import org.apache.log4j.Logger;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
+import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
-import org.objectledge.filesystem.impl.LocalFileSystemProvider;
 import org.objectledge.xml.XMLValidator;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfiguratorTest.java,v 1.2 2003-12-05 08:27:03 fil Exp $
+ * @version $Id: LoggingConfiguratorTest.java,v 1.3 2004-01-08 10:11:59 fil Exp $
  */
 public class LoggingConfiguratorTest extends TestCase
 {

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <container>
   <component key="org.objectledge.filesystem.FileSystemProvider:local" 
-             class="org.objectledge.filesystem.impl.LocalFileSystemProvider">
+             class="org.objectledge.filesystem.LocalFileSystemProvider">
     <constant-parameter value="local"/>
     <component-parameter key="org.objectledge.filesystem.FileSystem:root"/>
   </component>

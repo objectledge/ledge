@@ -32,8 +32,8 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
-import org.objectledge.filesystem.impl.LocalFileSystemProvider;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.defaults.ComponentParameter;
@@ -44,7 +44,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameterTest.java,v 1.2 2003-12-22 08:59:59 fil Exp $
+ * @version $Id: SequenceParameterTest.java,v 1.3 2004-01-08 10:11:59 fil Exp $
  */
 public class SequenceParameterTest extends TestCase
 {

@@ -15,9 +15,9 @@
       <subsection name="Browse">
         <p>
           <ul>
-            <li>LocalFileSystemProvider <a href="../apidocs/org/objectledge/filesystem/impl/LocalFileSystemProvider.html">JavaDoc</a></li>
-            <li>LocalFileSystemProvider <a href="../xref/org/objectledge/filesystem/impl/LocalFileSystemProvider.html">XRef</a></li>
-            <li>LocalFileSystemProvider <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/filesystem/impl/LocalFileSystemProvider.java">CVS log</a></li>
+            <li>LocalFileSystemProvider <a href="../apidocs/org/objectledge/filesystem/LocalFileSystemProvider.html">JavaDoc</a></li>
+            <li>LocalFileSystemProvider <a href="../xref/org/objectledge/filesystem/LocalFileSystemProvider.html">XRef</a></li>
+            <li>LocalFileSystemProvider <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/filesystem/LocalFileSystemProvider.java">CVS log</a></li>
           </ul>
         </p>
       </subsection>

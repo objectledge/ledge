@@ -44,15 +44,15 @@ import org.nanocontainer.Log4JNanoContainerMonitor;
 import org.objectledge.container.LedgeContainer;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
+import org.objectledge.filesystem.LocalFileSystemProvider;
+import org.objectledge.filesystem.ServletFileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
-import org.objectledge.filesystem.impl.LocalFileSystemProvider;
-import org.objectledge.filesystem.impl.ServletFileSystemProvider;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.9 2003-12-29 12:35:49 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.10 2004-01-08 10:12:00 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
