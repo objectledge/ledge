@@ -39,9 +39,24 @@
                 <li><a href="../apidocs/org/objectledge/utils/StringUtils.html#expandUnicodeEscapes(java.lang.String)">expandUnicodeEscapes(java.lang.String)</a></li>
               </ul>
             </li>
+            <li>Non ascii escaping
+              <ul>
+                <li><a href="../apidocs/org/objectledge/utils/StringUtils.html#escapeNonAsciiCharacters(java.lang.String)">escapeNonAsciiCharacters(java.lang.String)</a></li>
+              </ul>
+            </li>
+            <li>Reserved characters backslash escaping
+              <ul>
+                <li><a href="../apidocs/org/objectledge/utils/StringUtils.html#backslashEscape(java.lang.String)">backslashEscape(java.lang.String)</a></li>
+              </ul>
+            </li>
             <li>Substring substitutions
               <ul>
                 <li><a href="../apidocs/org/objectledge/utils/StringUtils.html#substitute(java.lang.String,%20java.lang.String[])">substitute(java.lang.String,java.lang.String[])</a></li>
+              </ul>
+            </li>
+			<li>Length counter for byte representation of string
+              <ul>
+                <li><a href="../apidocs/org/objectledge/utils/StringUtils.html#getByteCount(java.lang.String,%20java.lang.String)">getByteCount(java.lang.String,java.lang.String)</a></li>
               </ul>
             </li>
           </ul>
