@@ -43,7 +43,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.19 2004-01-21 11:03:24 pablo Exp $
+ * @version $Id: MVCFinder.java,v 1.20 2004-01-21 13:22:54 pablo Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -163,7 +163,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 * {@inheritDoc}
 	 */
 	public Runnable getAction(String actionName)
-        throws ClassNotFoundException
+        throws IllegalArgumentException
 	{
 		Runnable action = (Runnable) findObject(ACTIONS, actionName, false, null,  "getAction");
 		if(action != null)

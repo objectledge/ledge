@@ -34,7 +34,7 @@ import org.objectledge.web.mvc.components.Component;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.7 2004-01-20 14:14:19 zwierzem Exp $
+ * @version $Id: MVCClassFinder.java,v 1.8 2004-01-21 13:22:54 pablo Exp $
  */
 public interface MVCClassFinder
 {
@@ -46,10 +46,10 @@ public interface MVCClassFinder
      * 
      * @param actionName name of an action class
      * @return found runnable action instance
-     * @throws ClassNotFoundException if action class is not available. 
+     * @throws IllegalArgumentException if action class is not available. 
      */
     public Runnable getAction(String actionName)
-        throws ClassNotFoundException;
+        throws IllegalArgumentException;
     
 	/**
 	 * Returns a default action instance.
