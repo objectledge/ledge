@@ -29,12 +29,14 @@ package org.objectledge.database.persistence;
 
 import java.util.List;
 
+import org.objectledge.database.Database;
+
 /**
  * Provides Object-Relational DB mapping.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.9 2004-02-24 09:13:44 fil Exp $
+ * @version $Id: Persistence.java,v 1.10 2004-02-27 12:23:23 pablo Exp $
  */
 public interface Persistence
 {
@@ -93,6 +95,15 @@ public interface Persistence
     public void delete(Persistent object) throws PersistenceException;
 
     /**
+     * Removes the objects from the database.
+     *
+     * @param where the where clause to be used in the query
+     * @param factory the object instance factory.
+     * @throws PersistenceException if any exception occured.
+     */
+    public void delete(String where, PersistentFactory factory) throws PersistenceException;
+
+    /**
      * An utility method for checking for existence of rows.
      *
      * @param table the table to be checked.
@@ -112,4 +123,10 @@ public interface Persistence
      * @throws PersistenceException if any exception occured.
      */
     public int count(String table, String where) throws PersistenceException;
+    
+    /**
+     * Get the database component used by persistence.
+     * @return the database.
+     */
+    public Database getDatabase();
 }

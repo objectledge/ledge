@@ -50,7 +50,14 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.objectledge.context.Context;
+import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
+import org.objectledge.database.DefaultDatabase;
+import org.objectledge.database.IdGenerator;
+import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.persistence.DefaultPersistence;
+import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
@@ -102,16 +109,17 @@ public class DirectoryParametersTest extends TestCase
             Document logConfig = builder.parse(source);
             DOMConfigurator.configure(logConfig.getDocumentElement());
 
-            Logger log = new Log4JLogger(org.apache.log4j.Logger.
+            Logger logger = new Log4JLogger(org.apache.log4j.Logger.
                 getLogger(ContextFactory.class));
             DataSource ds = getDataSource();
             DefaultPicoContainer container = new DefaultPicoContainer();
-            container.registerComponentInstance("TestDS", ds);
-            container.registerComponentInstance(DataSource.class, ds);
+            IdGenerator idGenerator = new IdGenerator(ds);
+            JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
+            Database database = new DefaultDatabase(ds, idGenerator, transaction);
+            Persistence persistence = new DefaultPersistence(database, logger);
+            container.registerComponentInstance(Persistence.class, persistence);            
             Configuration config = getConfig("naming/dbNaming.xml");
-            contextFactory = new ContextFactory(container, config, log);
-            contextFactory.getContext("byKey");
-            contextFactory.getContext("byClass");
+            contextFactory = new ContextFactory(container, config, logger);
         }
         catch (Exception e)
         {
@@ -125,7 +133,7 @@ public class DirectoryParametersTest extends TestCase
     public void testGetString()
         throws Exception
     {
-        DirContext ctx = contextFactory.getDirContext("foo");
+        DirContext ctx = contextFactory.getDirContext("people");
         assertNotNull(ctx);
         Attributes attrs = new BasicAttributes(true);
         ctx.createSubcontext("bar", attrs);
@@ -228,7 +236,7 @@ public class DirectoryParametersTest extends TestCase
         assertEquals(params.getParameterNames().length,0);
     }
 
-    
+
     /////////////// private 
     private DataSource getDataSource()
         throws Exception
@@ -237,13 +245,13 @@ public class DirectoryParametersTest extends TestCase
         ds.setDatabase("jdbc:hsqldb:.");
         ds.setUser("sa");
         ds.setPassword("");
-        DatabaseUtils.runScript(ds, getScript("dbcontext_cleanup.sql"));
+        DatabaseUtils.runScript(ds, getScript("naming_context_cleanup.sql"));
         DatabaseUtils.runScript(ds, getScript("dbcontext_id_generator.sql"));
-        DatabaseUtils.runScript(ds, getScript("dbcontext_hsqldb.sql"));
-        DatabaseUtils.runScript(ds, getScript("dbcontext_test.sql"));
+        DatabaseUtils.runScript(ds, getScript("naming_context_hsqldb.sql"));
+        DatabaseUtils.runScript(ds, getScript("naming_context_test.sql"));
         return ds;
     }
-    
+        
     private LineNumberReader getScript(String path)
         throws IOException
     {

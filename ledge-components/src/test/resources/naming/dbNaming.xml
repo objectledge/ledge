@@ -28,24 +28,29 @@
 --> 
 
 <config>
-  <context name="byKey" initial_factory="net.sourceforge.dbnaming.ldap.LdapDbInitialContextFactory">
-    <component-property name="net.sourceforge.dbnaming.dataSource" key="TestDS"/>
+  <context name="byKey" initial_factory="org.objectledge.naming.db.DatabaseInitialContextFactory">
+    <component-property name="org.objectledge.database.persistence.Persistence"
+    					class-key="org.objectledge.database.persistence.Persistence"/>
     <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
   </context>
-  <context name="byClass" initial_factory="net.sourceforge.dbnaming.ldap.LdapDbInitialContextFactory">
-    <component-property name="net.sourceforge.dbnaming.dataSource" class="javax.sql.DataSource"/>
+  <context name="byClass" initial_factory="org.objectledge.naming.db.DatabaseInitialContextFactory">
+    <component-property name="org.objectledge.database.persistence.Persistence"
+    					class-key="org.objectledge.database.persistence.Persistence"/>
     <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
   </context>
-  <context name="byClassKey" initial_factory="net.sourceforge.dbnaming.ldap.LdapDbInitialContextFactory">
-    <component-property name="net.sourceforge.dbnaming.dataSource" class-key="javax.sql.DataSource"/>
+  <context name="byClassKey" initial_factory="org.objectledge.naming.db.DatabaseInitialContextFactory">
+    <component-property name="org.objectledge.database.persistence.Persistence"
+    					class-key="org.objectledge.database.persistence.Persistence"/>
     <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
   </context>
-  <context name="foo" initial_factory="net.sourceforge.dbnaming.ldap.LdapDbInitialDirContextFactory">
-    <component-property name="net.sourceforge.dbnaming.dataSource" key="TestDS"/>
+  <context name="foo" initial_factory="org.objectledge.naming.db.DatabaseInitialContextFactory">
+    <component-property name="org.objectledge.database.persistence.Persistence"
+    					class-key="org.objectledge.database.persistence.Persistence"/>
     <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
   </context> 
-  <context name="people" initial_factory="net.sourceforge.dbnaming.ldap.LdapDbInitialDirContextFactory">
-    <component-property name="net.sourceforge.dbnaming.dataSource" key="TestDS"/>
+  <context name="people" initial_factory="org.objectledge.naming.db.DatabaseInitialDirContextFactory">
+    <component-property name="org.objectledge.database.persistence.Persistence"
+    					class-key="org.objectledge.database.persistence.Persistence"/>
     <property name="java.naming.provider.url" value="ou=people,dc=objectledge,dc=org"/>
   </context>    
 </config>

@@ -226,7 +226,7 @@ public class DirectoryUserManager extends UserManager
         try 
         {
             ctx = (DirContext)directory.getBaseContext().lookup("");
-            ctx.unbind(directory.getRelativeName(account.getName()));
+            ctx.destroySubcontext(directory.getRelativeName(account.getName()));
             nameByLogin.remove(login);
             loginByName.remove(account.getName());
             logger.info("User " + account.getName() + " deleted");
@@ -509,7 +509,7 @@ public class DirectoryUserManager extends UserManager
             String[] attrIDs = {};
             Attributes matchAttrs = new BasicAttributes(false);
             matchAttrs.put(new BasicAttribute(attribute, value));
-            NamingEnumeration answer = ctx.search("", matchAttrs, attrIDs);
+            NamingEnumeration answer = ctx.search("", matchAttrs, null);
             List results = new ArrayList();
             while(answer.hasMore())
             {

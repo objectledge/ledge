@@ -44,7 +44,7 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGeneratorTest.java,v 1.2 2004-02-23 14:25:30 fil Exp $
+ * @version $Id: IdGeneratorTest.java,v 1.3 2004-02-27 12:23:22 pablo Exp $
  */
 public class IdGeneratorTest extends DatabaseTestCase
 {
@@ -70,8 +70,8 @@ public class IdGeneratorTest extends DatabaseTestCase
         throws Exception
     {
         IdGenerator idGenerator = new IdGenerator(dataSource);
+        assertEquals(0, idGenerator.getNextId("test_table_one"));
         assertEquals(1, idGenerator.getNextId("test_table_one"));
-        assertEquals(2, idGenerator.getNextId("test_table_one"));
         assertEquals(0, idGenerator.getNextId("test_table_two"));
         assertEquals(1, idGenerator.getNextId("test_table_two"));
         idGenerator.stop();

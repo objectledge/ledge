@@ -49,7 +49,13 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
+import org.objectledge.database.DefaultDatabase;
+import org.objectledge.database.IdGenerator;
+import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.persistence.DefaultPersistence;
+import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
@@ -193,6 +199,13 @@ public class ContextFactoryTest extends TestCase
     {
         DataSource ds = getDataSource();
         DefaultPicoContainer container = new DefaultPicoContainer();
+        IdGenerator idGenerator = new IdGenerator(ds);
+        JotmTransaction transaction = new JotmTransaction(0, 
+            new org.objectledge.context.Context(), log);
+        Database database = new DefaultDatabase(ds, idGenerator, transaction);
+        Persistence persistence = new DefaultPersistence(database, log);
+        container.registerComponentInstance(Persistence.class, persistence);        
+        
         container.registerComponentInstance("TestDS", ds);
         container.registerComponentInstance(DataSource.class, ds);
         Configuration config = getConfig("naming/dbNaming.xml");

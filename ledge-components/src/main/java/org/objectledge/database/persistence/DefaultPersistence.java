@@ -44,7 +44,7 @@ import org.objectledge.database.DatabaseUtils;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DefaultPersistence.java,v 1.2 2004-02-24 11:37:48 fil Exp $
+ * @version $Id: DefaultPersistence.java,v 1.3 2004-02-27 12:23:23 pablo Exp $
  */
 public class DefaultPersistence implements Persistence
 {
@@ -274,6 +274,34 @@ public class DefaultPersistence implements Persistence
     }
 
     /**
+     * Removes the objects from the database.
+     *
+     * @param where the where clause to be used in the query
+     * @param factory the object instance factory.
+     * @throws PersistenceException if any exception occured.
+     */
+    public void delete(String where, PersistentFactory factory) throws PersistenceException
+    {
+        Connection conn = null;
+        try
+        {
+            conn = database.getConnection();
+            Persistent obj = factory.newInstance();
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM " + obj.getTable() + 
+                                                                " WHERE " + where);
+            statement.executeUpdate();
+        }
+        catch (Exception e)
+        {
+            throw new PersistenceException("Failed to retrieve object", e);
+        }
+        finally
+        {
+            DatabaseUtils.close(conn);
+        }        
+    }
+    
+    /**
      * An utility method for checking for existence of rows.
      *
      * @param table the table to be checked.
@@ -348,5 +376,13 @@ public class DefaultPersistence implements Persistence
         {
             DatabaseUtils.close(conn);
         }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Database getDatabase()
+    {
+        return database;
     }
 }
