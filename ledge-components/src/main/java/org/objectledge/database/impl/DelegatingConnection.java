@@ -41,7 +41,7 @@ import java.util.Map;
  * A delegation pattern wrapper for java.sql.Connection.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DelegatingConnection.java,v 1.1 2004-02-06 14:29:19 fil Exp $
+ * @version $Id: DelegatingConnection.java,v 1.2 2004-02-11 07:53:42 fil Exp $
  */
 public class DelegatingConnection
     implements Connection
@@ -70,7 +70,8 @@ public class DelegatingConnection
     }
     
     // Connection interface /////////////////////////////////////////////////////////////////////
-    
+    ///CLOVER:OFF
+
     /** 
      * {@inheritDoc}
      */
