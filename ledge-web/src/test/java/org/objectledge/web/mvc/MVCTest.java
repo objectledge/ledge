@@ -42,6 +42,7 @@ import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.PrintExceptionValve;
 import org.objectledge.web.TestHttpServletRequest;
 import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;

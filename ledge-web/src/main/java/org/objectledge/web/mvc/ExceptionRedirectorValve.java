@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web;
+package org.objectledge.web.mvc;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +40,6 @@ import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * The valve that in case of exception redirect to appropriate view.

@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web;
+package org.objectledge.web.mvc;
 
 import java.util.Vector;
 
@@ -46,8 +46,10 @@ import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.TemplatingContextLoaderValve;
 import org.objectledge.templating.velocity.VelocityTemplating;
-import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.mvc.MVCInitializerValve;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.TestHttpServletRequest;
+import org.objectledge.web.TestHttpServletResponse;
+import org.objectledge.web.WebConfigurator;
 import org.objectledge.xml.XMLValidator;
 
 /**
@@ -85,7 +87,7 @@ public class ExceptionRedirectorValveTest extends TestCase
                 throw new Error("system property ledge.root undefined. " + 
                                  "use -Dledge.root=.../ledge-container/src/test/resources");
             }
-            FileSystem fs = FileSystem.getStandardFileSystem(root + "/ex_redirector");
+            FileSystem fs = FileSystem.getStandardFileSystem(root + "/exception-redirector");
             XMLValidator validator = new XMLValidator();
             ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
             Configuration config = configFactory.getConfig(WebConfigurator.class, 

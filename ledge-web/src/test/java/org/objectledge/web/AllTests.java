@@ -28,6 +28,8 @@
 
 package org.objectledge.web;
 
+import org.objectledge.web.mvc.*;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -35,7 +37,7 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.3 2004-01-27 12:38:01 pablo Exp $
+ * @version $Id: AllTests.java,v 1.4 2004-01-29 10:40:45 fil Exp $
  */
 public class AllTests
 {
