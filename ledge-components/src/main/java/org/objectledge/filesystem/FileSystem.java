@@ -36,6 +36,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -50,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.19 2004-02-12 11:43:06 pablo Exp $
+ * @version $Id: FileSystem.java,v 1.20 2004-03-10 14:03:51 fil Exp $
  */
 public class FileSystem
 {
@@ -168,26 +169,27 @@ public class FileSystem
         }
         return null;
     }
-
+    
     /**
-     * Returns an OutputStream for writing the file.
-     *
+     * Returns a Reader for reading the file.
+     * 
      * @param path the abstract pathname.
-     * @return an OutputStream, or <code>null</code> if the operation is not
-     *         supported, or the file could not be opened for writing.
+     * @param encoding character encoding to use.
+     * @return a Reader, or <code>null if the file is not found.
+     * @throws UnsupportedEncodingException if the requested encoding is not supported.
      */
-    public OutputStream getOutputStream(String path)
+    public Reader getReader(String path, String encoding)
+        throws UnsupportedEncodingException
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        InputStream is = getInputStream(path);
+        if(is != null)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
-            OutputStream os = fp.getOutputStream(path, false);
-            if (os != null)
-            {
-                return os;
-            }
+            return new InputStreamReader(is, encoding);
         }
-        return null;
+        else
+        {
+            return null;
+        }
     }
 
     /**
@@ -212,7 +214,59 @@ public class FileSystem
         }
         return null;
     }
+    
+    /**
+     * Returns an OutputStream for writing the file.
+     *
+     * @param path the abstract pathname.
+     * @return an OutputStream, or <code>null</code> if the operation is not
+     *         supported, or the file could not be opened for writing.
+     */
+    public OutputStream getOutputStream(String path)
+    {
+        return getOutputStream(path, false);
+    }
 
+    /**
+     * Returns a Writer for writing the file, or appendig to it.
+     *
+     * @param path the abstract pathname.
+     * @param encoding the character encoding to use.
+     * @param append <code>false</code> to truncate the file,
+     *        <code>true</code> to append.  
+     * @return a Writer, or <code>null</code> if the operation is not
+     *         supported, or the file could not be opened for writing.
+     * @throws UnsupportedEncodingException if the requested encoding is not supported.
+     */
+    public Writer getWriter(String path, String encoding, boolean append)
+        throws UnsupportedEncodingException
+    {
+        OutputStream os = getOutputStream(path, append);
+        if(os != null)
+        {
+            return new OutputStreamWriter(os, encoding);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a Writer for writing the file, or appendig to it.
+     *
+     * @param path the abstract pathname.
+     * @param encoding the character encoding to use.
+     * @return a Writer, or <code>null</code> if the operation is not
+     *         supported, or the file could not be opened for writing.
+     * @throws UnsupportedEncodingException if the requested encoding is not supported.
+     */
+    public Writer getWriter(String path, String encoding)
+        throws UnsupportedEncodingException
+    {
+        return getWriter(path, encoding, false);
+    }
+    
     /**
      * Returns a <code>RandomAccess</code> interface implementation for accessing the file at
      * arbitrary positions.
