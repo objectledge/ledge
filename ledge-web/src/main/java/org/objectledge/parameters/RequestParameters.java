@@ -44,9 +44,17 @@ import org.objectledge.web.mvc.tools.LinkTool;
 /**
  * Request parameters contain parameters from the request sorted by their names.
  *
+ * <p>TODO: figure out a way to discover URL parameters encoding, now UTF-8 is used, but
+ * browsers encode GET form parameters using form page encoding thus rendering UTF-8 decoding
+ * useless. Problems:</p>
+ * <ul>
+ * <li>browsers encode URLs using UTF-8 by default (URLs typed in th location bar)</li>
+ * <li>browsers do not send any information on parameters encoding</li>
+ * </ul>
+ *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.12 2004-09-30 13:59:55 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.13 2004-10-08 07:16:44 zwierzem Exp $
  */
 public class RequestParameters extends SortedParameters
 {
@@ -113,7 +121,7 @@ public class RequestParameters extends SortedParameters
     private static final int SEPARATOR_AFTER_VALUE = 4;
     
     private void addURLParams(String urlPart, String separator)
-    {
+    {       
         if (urlPart == null)
         {
             return;
