@@ -78,7 +78,7 @@ public class PasswordDigester
                 byte[] hash = digest.digest(password.getBytes());
                 messageDigestPool.returnObject(digest);
                 BASE64Encoder enc = new BASE64Encoder();
-                StringBuffer encoded = new StringBuffer();
+                StringBuilder encoded = new StringBuilder();
                 encoded.append('{');
                 encoded.append(algorithm.toLowerCase());
                 encoded.append('}');

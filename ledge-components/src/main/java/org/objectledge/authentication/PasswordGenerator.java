@@ -77,7 +77,7 @@ public class PasswordGenerator
         {
             length = min;
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++)
         {
             sb.append(ALPHABET[randomGenerator.nextInt(ALPHABET.length)]);

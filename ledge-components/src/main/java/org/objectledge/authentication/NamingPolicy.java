@@ -44,7 +44,7 @@ import org.objectledge.parameters.Parameters;
  * Specifies a policy of naming accounts in the system.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NamingPolicy.java,v 1.3 2004-08-05 10:19:25 pablo Exp $
+ * @version $Id: NamingPolicy.java,v 1.4 2005-02-21 16:14:36 zwierzem Exp $
  */
 public class NamingPolicy
 {
@@ -122,7 +122,7 @@ public class NamingPolicy
      */    
     public String getDn(Parameters parameters)
     {
-        StringBuffer target = new StringBuffer();
+        StringBuilder target = new StringBuilder();
         String sep = (String)syntax.get("jndi.syntax.separator");
         for(int i=0; i<tokens.length; i++)
         {
@@ -174,7 +174,7 @@ public class NamingPolicy
      * Represents syntax of a compound disthinguished name element. 
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: NamingPolicy.java,v 1.3 2004-08-05 10:19:25 pablo Exp $
+     * @version $Id: NamingPolicy.java,v 1.4 2005-02-21 16:14:36 zwierzem Exp $
      */    
     public static class Token
     {
@@ -242,7 +242,7 @@ public class NamingPolicy
          * @param parameters the parameters to use for rendering.
          * @param target the output buffer.
          */
-        public void render(Parameters parameters, StringBuffer target)
+        public void render(Parameters parameters, StringBuilder target)
         {
             for(int i=0; i<strings.length + properties.length; i++)
             {
@@ -383,7 +383,7 @@ public class NamingPolicy
          */
         public String toString()
         {
-            StringBuffer target = new StringBuffer();
+            StringBuilder target = new StringBuilder();
             for(int i=0; i<strings.length + properties.length; i++)
             {
                 if(i%2 == 0)

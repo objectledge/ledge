@@ -64,7 +64,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.5 2005-02-09 22:02:27 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.6 2005-02-21 16:15:09 zwierzem Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -161,7 +161,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.5 2005-02-09 22:02:27 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.6 2005-02-21 16:15:09 zwierzem Exp $
      */
     public static class GuardValve
         implements Valve
@@ -193,10 +193,10 @@ public class ThreadDataSource
     {
         if(tracing > 0)
         {
-            StringBuffer trace = (StringBuffer)context.getAttribute(TRACE_BUFFER);
+            StringBuilder trace = (StringBuilder)context.getAttribute(TRACE_BUFFER);
             if(trace == null)
             {
-                trace = new StringBuffer();
+                trace = new StringBuilder();
                 context.setAttribute(TRACE_BUFFER, trace);
             }
             StringUtils.indent(trace, (refCount-1)*2).append("connection ");
@@ -275,7 +275,7 @@ public class ThreadDataSource
      */
     public static String getTrace(Context context)
     {
-        StringBuffer trace = (StringBuffer)context.getAttribute(TRACE_BUFFER);
+        StringBuilder trace = (StringBuilder)context.getAttribute(TRACE_BUFFER);
         if(trace != null)
         {
             return trace.toString();

@@ -269,7 +269,7 @@ public class DirectoryUserManager extends UserManager
             }
             if(list.size()>1)
             {
-                StringBuffer message = new StringBuffer();
+                StringBuilder message = new StringBuilder();
                 message.append("ambigous login, following dn's shares the same login '");
                 message.append(login);
                 message.append("':\n");

@@ -46,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * A set of utility functions for working with JDBC databases.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.19 2005-02-10 17:47:01 rafal Exp $
+ * @version $Id: DatabaseUtils.java,v 1.20 2005-02-21 16:15:09 zwierzem Exp $
  */
 public class DatabaseUtils
 {
@@ -216,7 +216,7 @@ public class DatabaseUtils
         try
         {
 	        LineNumberReader script = new LineNumberReader(reader);
-	        StringBuffer buff = new StringBuffer();
+	        StringBuilder buff = new StringBuilder();
 	        int start;
 	        
 	        while(script.ready())

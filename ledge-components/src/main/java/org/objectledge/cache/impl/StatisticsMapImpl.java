@@ -40,7 +40,7 @@ import org.objectledge.cache.spi.StatisticsMap;
  *
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsMapImpl.java,v 1.3 2004-12-23 07:16:50 rafal Exp $
+ * @version $Id: StatisticsMapImpl.java,v 1.4 2005-02-21 16:15:16 zwierzem Exp $
  */
 public class StatisticsMapImpl
     extends DelegateMap
@@ -153,7 +153,7 @@ public class StatisticsMapImpl
      */
     public String getStatistics()
     {
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         buff.append(name).append(": ");
         buff.append(delegate.size()).append(" items, ");
         buff.append(requests).append(" requests");

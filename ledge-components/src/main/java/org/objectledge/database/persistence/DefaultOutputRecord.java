@@ -398,7 +398,7 @@ public class DefaultOutputRecord implements OutputRecord
         throws PersistenceException
     {
         String[] keys = object.getKeyColumns();
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         for(int i=0; i<keys.length; i++)
         {
             buff.append(keys[i]);
@@ -430,8 +430,8 @@ public class DefaultOutputRecord implements OutputRecord
     public PreparedStatement getInsertStatement(Connection conn)
         throws PersistenceException, SQLException
     {
-        StringBuffer buff = new StringBuffer();
-        StringBuffer buff2 = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
+        StringBuilder buff2 = new StringBuilder();
         buff.append("INSERT INTO ");
         buff.append(object.getTable());
         buff.append(" (");
@@ -486,7 +486,7 @@ public class DefaultOutputRecord implements OutputRecord
         {
             keySet.add(keys[i]);
         }
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         buff.append("UPDATE ");
         buff.append(object.getTable());
         buff.append(" SET ");
@@ -538,7 +538,7 @@ public class DefaultOutputRecord implements OutputRecord
     public PreparedStatement getDeleteStatement(Connection conn)
         throws PersistenceException, SQLException
     {
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         buff.append("DELETE FROM ");
         buff.append(object.getTable());
         buff.append(" WHERE ");
