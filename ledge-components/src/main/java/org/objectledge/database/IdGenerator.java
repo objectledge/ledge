@@ -40,7 +40,7 @@ import org.picocontainer.Startable;
  * A component that generates unique, monotonous ids for table rows in a relational database. 
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGenerator.java,v 1.4 2004-02-17 15:48:45 fil Exp $
+ * @version $Id: IdGenerator.java,v 1.5 2004-02-23 14:23:43 fil Exp $
  */
 public class IdGenerator
     implements Startable
@@ -92,6 +92,11 @@ public class IdGenerator
         }
     }
 
+    /**
+     * Initializes the generator.
+     * 
+     * @throws SQLException if the connection could not be opened, or prepared statemets created.
+     */
     public void init()
         throws SQLException
     {
