@@ -39,6 +39,8 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.actions.foo.TestAction;
+import org.objectledge.web.mvc.builders.Builder;
+import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -47,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.2 2004-01-20 12:37:35 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.3 2004-01-20 13:05:55 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -134,12 +136,28 @@ public class MVCFinderTest extends TestCase
 
     public void testFindBuilder()
     {
-        //TODO Implement findBuilder().
+        Builder builder = finder.findBuilder("foo.Bar");
+        assertEquals(org.objectledge.test.views.foo.Bar.class, builder.getClass());
+        builder = finder.findBuilder(null);
+        assertEquals(DefaultBuilder.class, builder.getClass());
+        builder = finder.findBuilder("foo.NotExistentClass");
+        assertEquals(org.objectledge.test.views.foo.Default.class, builder.getClass());
+        builder = finder.findBuilder("NotExistentClass");
+        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
+        builder = finder.findBuilder("nonexistentpackage.NotExistentClass");
+        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
     }
 
     public void testFindEnclosingBuilder()
     {
-        //TODO Implement findEnclosingBuilder().
+        Builder builder = finder.findBuilder("foo.Bar");
+        assertEquals(org.objectledge.test.views.foo.Bar.class, builder.getClass());
+        builder = finder.findEnclosingBuilder(builder);        
+        assertEquals(org.objectledge.test.views.foo.Default.class, builder.getClass());
+        builder = finder.findEnclosingBuilder(builder);        
+        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
+        builder = finder.findEnclosingBuilder(builder);
+        assertEquals(DefaultBuilder.class, builder.getClass());        
     }
 
     /*
