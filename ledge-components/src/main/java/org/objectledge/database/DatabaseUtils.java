@@ -31,16 +31,24 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.objectledge.utils.StringUtils;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.2 2004-01-22 10:52:51 pablo Exp $
+ * @version $Id: DatabaseUtils.java,v 1.3 2004-01-22 15:53:14 pablo Exp $
  */
 public class DatabaseUtils
 {
+    /** date format for PLSQL92 databases */
+    private static SimpleDateFormat df = 
+        new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", new Locale("en","US"));
+    
     private DatabaseUtils()
     {
     }
@@ -101,5 +109,29 @@ public class DatabaseUtils
     public static String escapeSqlString(String input)
     {
         return StringUtils.backslashEscape(StringUtils.escapeNonASCIICharacters(input), "'\\");
+    }
+    
+    /**
+     * Formate date to string acceptable by sql.  
+     * 
+     * @param date the date.
+     * @return the string representation of date.
+     */
+    public static String format(Date date)
+    {
+        return df.format(date);
+    }
+    
+    /**
+     * Parse date from string.  
+     * 
+     * @param source the string representation of date.
+     * @return the string representation of date.
+     * @throws ParseException if invalid format.
+     */
+    public static Date parse(String source)
+        throws ParseException
+    {
+        return df.parse(source);
     }
 }

@@ -34,24 +34,62 @@ import javax.transaction.UserTransaction;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Database.java,v 1.1 2004-01-22 09:28:22 fil Exp $
+ * @version $Id: Database.java,v 1.2 2004-01-22 15:53:14 pablo Exp $
  */
 public abstract class Database
 {
+    /**
+     * Get the connection.
+     * 
+     * @return the connection.
+     */
     public abstract Connection getConnection();
 
     // next id //////////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Get the next identifier of the table.
+     * 
+     * @param table the table name.
+     * @return the identifier.
+     */
     public abstract long getNextId(String table);
+    
+    /**
+     * Release the id to let them recycle.
+     * 
+     * @param table the table name.
+     * @param id the identifier.
+     */
+    public abstract void releaseId(String table, long id);
     
     // transactions ////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Get the user transation.
+     * 
+     * @return the user transaction.
+     */
     public abstract UserTransaction getUserTransaction();
     
+    /**
+     * Begin the transaction.
+     * 
+     * @return <code>true</code> if the requestor become the controler.
+     */
     public abstract boolean beginTransaction();
     
+    /**
+     * Commit the transaction.
+     * 
+     * @param controler the controler.
+     */
     public abstract void commitTransaction(boolean controler);
     
+    /**
+     * Rollbact the transaction.
+     * 
+     * @param controler the controler.
+     */
     public abstract void rollbackTransaction(boolean controler);
-    
 }

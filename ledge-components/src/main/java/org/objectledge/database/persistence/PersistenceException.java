@@ -6,13 +6,13 @@
 // are permitted provided that the following conditions are met: 
 //  
 // * Redistributions of source code must retain the above copyright notice,  
-//	 this list of conditions and the following disclaimer. 
+//   this list of conditions and the following disclaimer. 
 // * Redistributions in binary form must reproduce the above copyright notice,  
-//	 this list of conditions and the following disclaimer in the documentation  
-//	 and/or other materials provided with the distribution. 
+//   this list of conditions and the following disclaimer in the documentation  
+//   and/or other materials provided with the distribution. 
 // * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-//	 nor the names of its contributors may be used to endorse or promote products  
-//	 derived from this software without specific prior written permission. 
+//   nor the names of its contributors may be used to endorse or promote products  
+//   derived from this software without specific prior written permission. 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
@@ -25,56 +25,37 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.threads;
-
-import org.picocontainer.lifecycle.Stoppable;
+package org.objectledge.database.persistence;
 
 /**
- * 
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.2 2004-01-22 15:53:14 pablo Exp $
+ * Thrown when an error occurs while accessing the database or other physical
+ * data store. 
+ *
+ * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a> 
+ * @version $Id: PersistenceException.java,v 1.1 2004-01-22 15:53:14 pablo Exp $
  */
-public class ThreadPool
-    implements Stoppable
+public class PersistenceException
+    extends Exception
 {
-    private Runnable[] cleanupHooks;
-    
     /**
-     * Component constructor.
-     * 
-     * @param cleanupHooks the hooks that should be run every time the thread finish his work.
+     * Constructs a new exception object with a specified detail message.
+     *
+     * @param msg the detail message.
      */
-    public ThreadPool(Runnable[] cleanupHooks)
+    public PersistenceException(String msg)
     {
-        this.cleanupHooks = cleanupHooks; 
+        super(msg);
     }
-    
+
     /**
-     * Run the worker task.
-     * 
-     * @param task the task to run.
-     * @return the thread thats run the task.
+     * Constructs a new exception object with a specified detail message and 
+     * root cause.
+     *
+     * @param msg the detail message.
+     * @param rootCause the root cause of this exception.
      */
-    public Thread runWorker(Task task)
+    public PersistenceException(String msg, Throwable rootCause)
     {
-        return null;
-    }
-    
-    /**
-     * Run the daemon task.
-     * 
-     * @param task the task to run.
-     * @return the thread thats run the task.
-     */
-    public Thread runDaemon(Task task)
-    {
-        return null;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
+        super(msg, rootCause);
     }
 }
