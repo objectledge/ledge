@@ -1,10 +1,10 @@
 // 
 // Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 // All rights reserved. 
-// 
+//   
 // Redistribution and use in source and binary forms, with or without modification,  
 // are permitted provided that the following conditions are met: 
-//  
+//   
 // * Redistributions of source code must retain the above copyright notice,  
 //   this list of conditions and the following disclaimer. 
 // * Redistributions in binary form must reproduce the above copyright notice,  
@@ -24,48 +24,36 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
-// 
+//
 
 package org.objectledge.web;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- *
+ * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.3 2003-12-22 15:16:25 fil Exp $
+ * @version $Id: HttpDispatcher.java,v 1.1 2003-12-22 15:16:25 fil Exp $
  */
-public class LedgeServlet extends HttpServlet
+public interface HttpDispatcher
 {
     /**
-     * The request dispatcher.
+     * Dispatches a HTTP request.
+     * 
+     * <p>It the mehtod return false, {@link LedgeServlet} will handle the request
+     * with superclass service() method.</p>
+     * 
+     * @param request the request.
+     * @param response the response.
+     * @return <code>true</code> if the dispatcher was able to dispatch the request.
+     * @throws ServletException if the reqest processing fails.
+     * @throws IOException if the communication with the client fails.
      */
-    protected HttpDispatcher dispatcher;
-    
-    /**
-     * {@inheritDoc}
-     */
-    protected void service(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
-        if(!dispatcher.dispatch(request, response))
-        {
-            super.service(request, response);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void init(ServletConfig arg0) throws ServletException
-    {
-        super.init(arg0);
-    }
+    public boolean dispatch(HttpServletRequest request, HttpServletResponse response)   
+        throws ServletException, IOException;
 }
