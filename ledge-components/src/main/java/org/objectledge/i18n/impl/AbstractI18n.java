@@ -44,7 +44,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.4 2004-06-17 11:59:25 zwierzem Exp $
+ * @version $Id: AbstractI18n.java,v 1.5 2004-08-19 15:19:28 zwierzem Exp $
  */
 public abstract class AbstractI18n implements I18n, ContextToolFactory
 {
@@ -189,7 +189,7 @@ public abstract class AbstractI18n implements I18n, ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		return new I18nTool(this, this, defaultLocale, null);
+		return new I18nTool(this, defaultLocale, null);
 	}
 	
 	/**
@@ -197,7 +197,7 @@ public abstract class AbstractI18n implements I18n, ContextToolFactory
 	 */
 	public void recycleTool(Object tool)
 	{
-		//TODO recycle object when pooling available
+        // these simple objects do not need recycling
 	}
 
 	/**

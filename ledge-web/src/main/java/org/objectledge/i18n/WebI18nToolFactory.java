@@ -62,7 +62,7 @@ public class WebI18nToolFactory implements ContextToolFactory
 	public Object getTool()
 	{
 		I18nContext i18nContext = I18nContext.getI18nContext(context);
-		return new I18nTool(i18n, this, i18nContext.getLocale(), null);
+		return new I18nTool(i18n, i18nContext.getLocale(), null);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class WebI18nToolFactory implements ContextToolFactory
 	 */
 	public void recycleTool(Object tool)
 	{
-		//TODO recycle object when pooling available.
+        // these simple objects do not need recycling
 	}
 
 	/**
