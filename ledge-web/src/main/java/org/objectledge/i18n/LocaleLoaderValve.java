@@ -45,7 +45,7 @@ import org.objectledge.web.HttpContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocaleLoaderValve.java,v 1.8 2004-08-20 15:58:58 zwierzem Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.9 2004-08-24 12:56:53 rafal Exp $
  */
 public class LocaleLoaderValve 
     extends AbstractI18nValve
@@ -139,47 +139,5 @@ public class LocaleLoaderValve
         
         I18nContext i18nContext = new I18nContext(locale);
         context.setAttribute(I18nContext.class, i18nContext);
-    }
-
-    protected String getCookieKeyBase(Context context)
-    {
-        AuthenticationContext authenticationContext =
-            AuthenticationContext.getAuthenticationContext(context);
-
-        // set up cookie keys - neccessary for browsers with multiple
-        // users on a single user system - for instance Win95/98
-        String cookieKey = ".anonymous";
-        Principal principal = authenticationContext.getUserPrincipal();
-        if (principal != null && principal.getName() != null)
-        {
-            cookieKey = "." + StringUtils.cookieNameSafeString(principal.getName());
-        }
-        return cookieKey;
-    }
-
-    protected Cookie getCookie(HttpContext httpContext, String cookieName)
-    {
-        String value = null;
-        Cookie[] cookies = httpContext.getRequest().getCookies();
-        if (cookies != null)
-        {
-            for (int i = 0; i < cookies.length; i++)
-            {
-                if (cookies[i].getName().equals(cookieName))
-                {
-                    return cookies[i];
-                }
-            }
-        }
-        return null;
-    }
-
-    protected void setCookie(HttpContext httpContext, String name, String value)
-    {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(3600 * 24 * 365);
-        cookie.setPath(httpContext.getRequest().getContextPath() + 
-                       httpContext.getRequest().getServletPath());
-        httpContext.getResponse().addCookie(cookie);
     }
 }
