@@ -35,11 +35,17 @@ import junit.framework.TestSuite;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ComponentsTests.java,v 1.4 2003-12-03 14:40:41 mover Exp $
+ * @version $Id: ComponentsTests.java,v 1.5 2003-12-05 23:12:05 pablo Exp $
  */
 public class ComponentsTests
 {
+	private ComponentsTests()
+	{
+	}
 
+	/**
+	 * @return the test.
+	 */
     public static Test suite()
     {
         TestSuite suite = new TestSuite("Test for org.objectledge");
@@ -49,7 +55,7 @@ public class ComponentsTests
         suite.addTest(org.objectledge.filesystem.AllTests.suite());
 		suite.addTest(org.objectledge.parameters.AllTests.suite());
 		suite.addTest(org.objectledge.pipeline.AllTests.suite());
-        suite.addTest(org.objectledge.xml.AllTests.suite());
+		suite.addTest(org.objectledge.xml.AllTests.suite());
         return suite;
     }
 }
