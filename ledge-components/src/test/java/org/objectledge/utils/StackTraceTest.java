@@ -33,7 +33,7 @@ import java.util.StringTokenizer;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTraceTest.java,v 1.1 2004-06-23 13:13:35 fil Exp $
+ * @version $Id: StackTraceTest.java,v 1.2 2004-06-24 12:43:19 fil Exp $
  */
 public class StackTraceTest extends LedgeTestCase
 {
@@ -44,7 +44,7 @@ public class StackTraceTest extends LedgeTestCase
     
     public void testTracingException()
     {
-        String[] trace = split(new StackTrace(new TracingException(4)));
+        String[] trace = new StackTrace(new TracingException(4)).toStringArray();
         assertEquals(5, trace.length);
     }
 
@@ -56,7 +56,7 @@ public class StackTraceTest extends LedgeTestCase
         }
         catch(Exception e)
         {
-            String[] trace = split(new StackTrace(e));
+            String[] trace = new StackTrace(e).toStringArray();
             assertEquals(3, trace.length);
         }
     }
@@ -69,7 +69,7 @@ public class StackTraceTest extends LedgeTestCase
         }
         catch(Exception e)
         {
-            String[] trace = split(new StackTrace(e));
+            String[] trace = new StackTrace(e).toStringArray();
             assertEquals(10, trace.length);
         }        
     }
@@ -82,7 +82,7 @@ public class StackTraceTest extends LedgeTestCase
         }
         catch(Exception e)
         {
-            String[] trace = split(new StackTrace(e));
+            String[] trace = new StackTrace(e).toStringArray();
             assertEquals(6, trace.length);
         }        
     }
@@ -166,28 +166,5 @@ public class StackTraceTest extends LedgeTestCase
         {
             return cause;
         }
-    }
-    
-    
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    
-    private String[] split(StackTrace st)
-    {
-        return split(st.toString());
-    }
-    
-    private String[] split(String str)
-    {
-        if(printTraces)
-        {
-            System.out.println(str);
-        }
-        StringTokenizer st = new StringTokenizer(str, System.getProperty("line.separator"));
-        String[] result = new String[st.countTokens()];
-        for(int i = 0; i < result.length; i++)
-        {
-            result[i] = st.nextToken();
-        }
-        return result;
-    }
+    }    
 }

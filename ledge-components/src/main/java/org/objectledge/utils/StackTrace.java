@@ -30,12 +30,13 @@ package org.objectledge.utils;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Captures a full stack trace in a multi-level <code>Throwable</code> sequence.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTrace.java,v 1.1 2004-06-23 13:13:34 fil Exp $
+ * @version $Id: StackTrace.java,v 1.2 2004-06-24 12:43:18 fil Exp $
  */
 public class StackTrace
 {    
@@ -50,9 +51,12 @@ public class StackTrace
 
     /** The exception that we crate trace for. */
     private Throwable exception;
+
+    /** Lazily created cached stack trace as an array lines. */
+    private String[] trace = null;
     
-    /** Lazily created cached stack trace. */
-    private String stackTrace = null;
+    /** Lazily created cached stack trace as a rendered string. */
+    private String traceString = null;
     
     /**
      * Creates a new StackTrace instance.
@@ -69,84 +73,115 @@ public class StackTrace
      * 
      * @return the rendered stack trace.
      */
-    public synchronized String toString()
+    public String toString()
     {
-        if(stackTrace == null)
+        if(traceString == null)
         {
-            stackTrace = fillInStackTrace();
+            StringBuffer buff = new StringBuffer();
+            appendTo(buff);
+            traceString = buff.toString();
         }
-        return stackTrace;
+        return traceString;
     }
     
-    private String fillInStackTrace()
+    /**
+     * Returns the stack trace as an array of lines.
+     * 
+     * @return the stack trace as an array of lines.
+     */
+    public String[] toStringArray()
     {
-        StringBuffer buff = new StringBuffer();
-        List messages = new ArrayList();
-        List traces = new ArrayList();
-        
-        boolean tracing = false;
-        int tracingDepth = 0;
-        if(exception.getCause() instanceof TracingException)
+        if(trace == null)
         {
-            tracing = true;
-            tracingDepth = ((TracingException)exception.getCause()).getDepth();
-        }
-        
-        Throwable ex = exception;
-        do
-        {
-            messages.add(ex.toString());
-            traces.add(ex.getStackTrace());
-            ex = getCause(ex);
-        }
-        while(ex != null);
-        int[] skip = new int[traces.size()];
-        for(int i = 1; i < traces.size(); i++)
-        {
-            StackTraceElement[] frames = (StackTraceElement[])traces.get(i);
-            StackTraceElement[] prevFrames = (StackTraceElement[])traces.get(i-1);
-            skip[i] = frames.length;
-            inner: for(int j = 0; j < frames.length; j++)
+            List messages = new ArrayList();
+            List traces = new ArrayList();
+
+            boolean tracing = false;
+            int tracingDepth = 0;
+            if(exception.getCause() instanceof TracingException)
             {
-                if(!frames[frames.length-j-1].equals(prevFrames[prevFrames.length-j-1]))
+                tracing = true;
+                tracingDepth = ((TracingException)exception.getCause()).getDepth();
+            }
+
+            Throwable ex = exception;
+            do
+            {
+                messages.add(ex.toString());
+                traces.add(ex.getStackTrace());
+                ex = getCause(ex);
+            }
+            while(ex != null);
+            int[] skip = new int[traces.size()];
+            for (int i = 1; i < traces.size(); i++)
+            {
+                StackTraceElement[] frames = (StackTraceElement[])traces.get(i);
+                StackTraceElement[] prevFrames = (StackTraceElement[])traces.get(i - 1);
+                skip[i] = frames.length;
+                inner: for (int j = 0; j < frames.length; j++)
                 {
-                    skip[i] = j;
-                    break inner;
+                    if(!frames[frames.length - j - 1].equals(prevFrames[prevFrames.length - j - 1]))
+                    {
+                        skip[i] = j;
+                        break inner;
+                    }
                 }
             }
+            if(tracing)
+            {
+                if(tracingDepth > 0)
+                {
+                    skip[1] = skip[1] - tracingDepth;
+                }
+                else
+                {
+                    skip[1] = 0;
+                }
+            }
+
+            List traceLines = new ArrayList();
+            StringBuffer buff = new StringBuffer();
+
+            for (int i = traces.size() - 1; i > 0; i--)
+            {
+                StackTraceElement[] frames = (StackTraceElement[])traces.get(i);
+                if(i < traces.size() - 1)
+                {
+                    buff.append("rethrown as ");
+                }
+                buff.append((String)messages.get(i));
+                traceLines.add(buff.toString());
+                buff.setLength(0);
+                for (int j = 0; j < frames.length - skip[i]; j++)
+                {
+                    buff.append("    ");
+                    buff.append(frames[j].toString());
+                    traceLines.add(buff.toString());
+                    buff.setLength(0);
+                }
+            }
+
+            trace = new String[traceLines.size()];
+            traceLines.toArray(trace);
         }
-        if(tracing)
-        {
-            if(tracingDepth > 0)
-            {
-                skip[1] = skip[1] - tracingDepth;
-            }
-            else
-            {
-                skip[1] = 0;
-            }
-        }
-        
-        for(int i = traces.size()-1; i > 0; i--)
-        {
-            StackTraceElement[] frames = (StackTraceElement[])traces.get(i);
-            if(i < traces.size()-1)
-            {
-                buff.append("rethrown as ");
-            }
-            buff.append((String)messages.get(i));
-            buff.append(EOL);
-            for(int j=0; j < frames.length - skip[i]; j++)
-            {
-                buff.append("    ");
-                buff.append(frames[j].toString());
-                buff.append(EOL);
-            }
-        }
-        
-        return buff.toString();
+        return trace;
     }
     
+    /**
+     * Appends the stack trace to the provided StringBuffer.
+     * 
+     * @param buff the buffer.
+     */
+    public StringBuffer appendTo(StringBuffer buff)
+    {
+        String[] trace = toStringArray();
+        for(int i = 0; i < trace.length; i++)
+        {
+            buff.append(trace[i]).append(EOL);
+        }
+        return buff;
+    }
+
     private Throwable getCause(Throwable t)
     {
         Throwable cause = t.getCause();
