@@ -61,7 +61,7 @@
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
     <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
     <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
-    <component class="org.objectledge.web.mvc.SimpleCatchProcessingExceptionValve"/>
+    <component class="org.objectledge.web.PrintExceptionValve"/>
     <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
     <component class="org.objectledge.i18n.WebI18nToolFactory"/>
     <component class="org.objectledge.web.mvc.tools.LinkToolFactory"/>
@@ -88,7 +88,7 @@
         <component-parameter class-key="org.objectledge.web.mvc.builders.BuilderExecutorValve"/>
       </sequence-parameter>
 	  <sequence-parameter>
-        <component-parameter class-key="org.objectledge.web.mvc.SimpleCatchProcessingExceptionValve"/>
+        <component-parameter class-key="org.objectledge.web.PrintExceptionValve"/>
       </sequence-parameter>
 	  <sequence-parameter>
 	    <component-parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>

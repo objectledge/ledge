@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 //
-package org.objectledge.web.mvc;
+package org.objectledge.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,21 +35,20 @@ import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
-import org.objectledge.web.HttpContext;
 
 /**
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SimpleCatchProcessingExceptionValve.java,v 1.5 2004-01-26 16:49:19 pablo Exp $
+ * @version $Id: PrintExceptionValve.java,v 1.1 2004-01-29 10:12:15 fil Exp $
  */
-public class SimpleCatchProcessingExceptionValve 
+public class PrintExceptionValve 
     implements Valve
 {
 	/**
 	 * Component constructor.
 	 */
-	public SimpleCatchProcessingExceptionValve()
+	public PrintExceptionValve()
 	{
 	}
 	

@@ -140,8 +140,8 @@ public class MVCTest extends TestCase
     {   
         HttpContext httpContext = HttpContext.getHttpContext(context);
             assertEquals(httpContext.getDirectResponse(),false);
-        SimpleCatchProcessingExceptionValve catchValve = 
-            new SimpleCatchProcessingExceptionValve();
+        PrintExceptionValve catchValve = 
+            new PrintExceptionValve();
         catchValve.process(context);
         assertEquals(httpContext.getDirectResponse(),false);
         context.setAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION,
