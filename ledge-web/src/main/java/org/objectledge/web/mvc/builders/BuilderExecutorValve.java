@@ -41,7 +41,7 @@ import org.objectledge.web.mvc.TemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.1 2004-01-12 15:57:08 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.2 2004-01-14 14:13:10 fil Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -81,9 +81,8 @@ public class BuilderExecutorValve implements Runnable
 	public void run()
 	{
 		// setup used contexts
-		MVCContext mvcContext = MVCContext.retrieve(context);
-		TemplatingContext templatingContext = (TemplatingContext)
-			context.getAttribute(TemplatingContext.CONTEXT_KEY);
+		MVCContext mvcContext = MVCContext.getMVCContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 	
 		// get initial builder, template and embedded result
 		String embeddedResult = null;

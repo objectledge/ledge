@@ -35,7 +35,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderValve.java,v 1.1 2004-01-12 14:28:08 fil Exp $
+ * @version $Id: RequestParametersLoaderValve.java,v 1.2 2004-01-14 14:13:10 fil Exp $
  */
 public class RequestParametersLoaderValve implements Runnable
 {
@@ -58,9 +58,8 @@ public class RequestParametersLoaderValve implements Runnable
     public void run()
     {
     	RequestParameters parameters = new RequestParameters();
-    	HttpContext webContext = (HttpContext)context.getAttribute(HttpContext.CONTEXT_KEY);
-    	// TODO set the encoding
-    	parameters.init(webContext.getRequest(), "ISO-8859-1");
-    	context.setAttribute(RequestParameters.CONTEXT_KEY,parameters);
+    	HttpContext httpContext = HttpContext.getHttpContext(context);
+    	parameters.init(httpContext.getRequest(), httpContext.getEncoding());
+    	context.setAttribute(RequestParameters.class, parameters);
     }
 }

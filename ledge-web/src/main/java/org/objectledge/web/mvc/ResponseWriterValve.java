@@ -39,7 +39,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResponseWriterValve.java,v 1.1 2004-01-14 12:42:23 fil Exp $
+ * @version $Id: ResponseWriterValve.java,v 1.2 2004-01-14 14:13:09 fil Exp $
  */
 public class ResponseWriterValve implements Runnable
 {
@@ -61,8 +61,8 @@ public class ResponseWriterValve implements Runnable
 	 */
 	public void run()
 	{
-		MVCContext mvcContext = MVCContext.retrieve(context);
-		HttpContext httpContext = HttpContext.retrieve(context);
+		MVCContext mvcContext = MVCContext.getMVCContext(context);
+		HttpContext httpContext = HttpContext.getHttpContext(context);
 		String result = mvcContext.getBuildResult();
 		if(!httpContext.getDirectResponse())
 		{

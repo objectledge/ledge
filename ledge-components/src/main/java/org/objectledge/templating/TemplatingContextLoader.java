@@ -61,6 +61,6 @@ public class TemplatingContextLoader implements Runnable
 	public void run()
 	{
 		TemplatingContext templatingContext = templating.createContext(); 
-		context.setAttribute(TemplatingContext.CONTEXT_KEY, templatingContext);
+		context.setAttribute(TemplatingContext.class, templatingContext);
 	}
 }

@@ -30,14 +30,14 @@ package org.objectledge.web.mvc.builders;
 import org.objectledge.context.Context;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.BuildException;
-import org.objectledge.web.mvc.MVCUtil;
 
 /**
  * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
+ * @version $Id: AbstractBuilder.java,v 1.2 2004-01-14 14:13:10 fil Exp $
  */
 public abstract class AbstractBuilder implements Builder
 {
@@ -72,7 +72,7 @@ public abstract class AbstractBuilder implements Builder
     {
     	try
     	{
-			return template.merge(MVCUtil.getTemplatingContext(context));
+			return template.merge(TemplatingContext.getTemplatingContext(context));
     	}
         catch(MergingException e)
         {

@@ -61,8 +61,7 @@ public class ContextToolPopulatorValve implements Runnable
 	 */
 	public void run()
 	{
-		TemplatingContext templatingContext = (TemplatingContext)context
-			.getAttribute(TemplatingContext.CONTEXT_KEY);
+		TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 		contextTools.populateTools(templatingContext);
 	}
 }

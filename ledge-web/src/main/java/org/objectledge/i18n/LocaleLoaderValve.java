@@ -46,7 +46,7 @@ import org.objectledge.web.mvc.MVCContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * 
- * @version $Id: LocaleLoaderValve.java,v 1.3 2004-01-13 15:48:39 pablo Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.4 2004-01-14 14:13:09 fil Exp $
  */
 public class LocaleLoaderValve implements Runnable, WebConstants
 {
@@ -77,8 +77,8 @@ public class LocaleLoaderValve implements Runnable, WebConstants
         Locale defaultLocale = StringUtils.getLocale("en_US");
 		String defaultEncoding = "ISO-8858-1";
 		
-        HttpContext httpContext = HttpContext.retrieve(context);
-        MVCContext mvcContext = MVCContext.retrieve(context);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        MVCContext mvcContext = MVCContext.getMVCContext(context);
 
         // set up cookie keys - neccessary for browsers with multiple
         // users on a single user system - for instance Win95/98

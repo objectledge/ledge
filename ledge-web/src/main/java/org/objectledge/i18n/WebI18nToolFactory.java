@@ -62,7 +62,7 @@ public class WebI18nToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		MVCContext pipelineContext = MVCContext.retrieve(context);
+		MVCContext pipelineContext = MVCContext.getMVCContext(context);
 		return new I18nTool(i18n, this, pipelineContext.getLocale(), null);
 	}
 	

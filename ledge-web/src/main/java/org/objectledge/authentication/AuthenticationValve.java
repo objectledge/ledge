@@ -39,7 +39,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.4 2004-01-12 15:52:12 fil Exp $
+ * @version $Id: AuthenticationValve.java,v 1.5 2004-01-14 14:13:10 fil Exp $
  */
 public class AuthenticationValve implements Runnable, WebConstants
 {
@@ -66,8 +66,8 @@ public class AuthenticationValve implements Runnable, WebConstants
      */
     public void run()
     {
-    	HttpContext httpContext = HttpContext.retrieve(context);
-		MVCContext mvcContext = MVCContext.retrieve(context);
+    	HttpContext httpContext = HttpContext.getHttpContext(context);
+		MVCContext mvcContext = MVCContext.getMVCContext(context);
     	Principal principal = (Principal)httpContext.getRequest().
 			getSession().getAttribute(PRINCIPAL_SESSION_KEY);
 		Principal anonymous = authentication.getAnonymousUser();

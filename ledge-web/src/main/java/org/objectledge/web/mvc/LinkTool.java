@@ -115,9 +115,9 @@ public class LinkTool
 		this.factory = factory;
 		this.context = context;
 		this.config = config;
-		mvcContext = MVCContext.retrieve(context);
-		httpContext = HttpContext.retrieve(context);
-		requestParameters = RequestParameters.retrieve(context);
+		mvcContext = MVCContext.getMVCContext(context);
+		httpContext = HttpContext.getHttpContext(context);
+		requestParameters = RequestParameters.getRequestParameters(context);
 		resourceLink = false;
 		includeSession = true;
 		showProtocolName = false;
