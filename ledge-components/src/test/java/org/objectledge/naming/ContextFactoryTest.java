@@ -28,25 +28,34 @@
 
 package org.objectledge.naming;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
+import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.hsqldb.jdbcDataSource;
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
-import org.objectledge.xml.XMLValidator;
+import org.picocontainer.PicoContainer;
+import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -57,6 +66,10 @@ import org.xml.sax.XMLReader;
  */
 public class ContextFactoryTest extends TestCase
 {
+    private FileSystem fs;
+    
+    private Logger log;
+    
     private ContextFactory contextFactory;
 
     /**
@@ -66,37 +79,53 @@ public class ContextFactoryTest extends TestCase
     public ContextFactoryTest(String arg0)
     {
         super(arg0);
+    }
+
+    public void setUp()
+        throws Exception
+    {
         String root = System.getProperty("ledge.root");
         if (root == null)
         {
-            throw new RuntimeException("system property ledge.root undefined." + " use -Dledge.root=.../ledge-container/src/test/resources");
+            throw new RuntimeException("system property ledge.root undefined." + 
+                " use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", getClass().getClassLoader());
-        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
+        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
+            getClass().getClassLoader());
+        fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         try
         {
-            InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+            InputSource source = new InputSource(fs.
+                getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             DOMConfigurator.configure(logConfig.getDocumentElement());
 
-            source = new InputSource(fs.getInputStream("config/org.objectledge.naming.ContextFactory.xml"));
-            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-            XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-            SAXConfigurationHandler handler = new SAXConfigurationHandler();
-            reader.setContentHandler(handler);
-            reader.setErrorHandler(handler);
-            reader.parse(source);
-            Configuration config = handler.getConfiguration();
-            Logger logger = Logger.getLogger(ContextFactory.class);
-            XMLValidator validator = new XMLValidator();
-            contextFactory = new ContextFactory(config, new Log4JLogger(logger));
+            log = new Log4JLogger(org.apache.log4j.Logger.
+                getLogger(ContextFactory.class));
+            PicoContainer container = new DefaultPicoContainer();
+            Configuration config = getConfig("naming/mock.xml"); 
+            contextFactory = new ContextFactory(container, config, log);
         }
         catch (Exception e)
         {
             throw new RuntimeException(e);
         }
+    }
+
+    private Configuration getConfig(String name)
+        throws Exception
+    {
+        InputSource source = new InputSource(fs.
+            getInputStream(name));
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+        SAXConfigurationHandler handler = new SAXConfigurationHandler();
+        reader.setContentHandler(handler);
+        reader.setErrorHandler(handler);
+        reader.parse(source);
+        return handler.getConfiguration();
     }
 
     public void testGetContext()
@@ -120,7 +149,7 @@ public class ContextFactoryTest extends TestCase
         }
         try
         {
-            Context context = contextFactory.getContext("unknown");
+            contextFactory.getContext("unknown");
             fail("shoud throw the exception");
         }
         catch (NamingException e)
@@ -150,7 +179,7 @@ public class ContextFactoryTest extends TestCase
         }
         try
         {
-            DirContext context = contextFactory.getDirContext("unknown");
+            contextFactory.getDirContext("unknown");
             fail("shoud throw the exception");
         }
         catch (NamingException e)
@@ -159,4 +188,37 @@ public class ContextFactoryTest extends TestCase
         }
     }
 
+    public void testDbNaming()
+        throws Exception
+    {
+        DataSource ds = getDataSource();
+        DefaultPicoContainer container = new DefaultPicoContainer();
+        container.registerComponentInstance("TestDS", ds);
+        Configuration config = getConfig("naming/dbNaming.xml");
+        contextFactory = new ContextFactory(container, config, log);
+        
+        contextFactory.getContext("byKey");
+        contextFactory.getContext("byClassKey");
+    }
+    
+    private DataSource getDataSource()
+        throws Exception
+    {
+        jdbcDataSource ds = new jdbcDataSource();
+        ds.setDatabase("jdbc:hsqldb:.");
+        ds.setUser("sa");
+        ds.setPassword("");
+        DatabaseUtils.runScript(ds, getScript("dbcontext_cleanup.sql"));
+        DatabaseUtils.runScript(ds, getScript("dbcontext_id_generator.sql"));
+        DatabaseUtils.runScript(ds, getScript("dbcontext_hsqldb.sql"));
+        DatabaseUtils.runScript(ds, getScript("dbcontext_test.sql"));
+        return ds;
+    }
+    
+    private LineNumberReader getScript(String path)
+        throws IOException
+    {
+        return new LineNumberReader(new InputStreamReader(
+            new FileInputStream("src/test/resources/naming/"+path), "ISO-8859-2"));
+    }
 }
