@@ -17,7 +17,7 @@ import org.objectledge.filesystem.impl.LocalFileSystemProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactoryTest.java,v 1.1 2003-11-28 11:15:39 fil Exp $
+ * @version $Id: ConfigurationFactoryTest.java,v 1.2 2003-11-28 15:53:42 fil Exp $
  */
 public class ConfigurationFactoryTest 
     extends TestCase
@@ -44,7 +44,7 @@ public class ConfigurationFactoryTest
         }
         FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs }, 4096, 4096);
-        cf = new ConfigurationFactory(fs, "config");
+        cf = new ConfigurationFactory(null, fs, "config");
     }
 
     public void testGetConfig()
