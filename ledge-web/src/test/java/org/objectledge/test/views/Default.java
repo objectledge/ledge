@@ -28,6 +28,7 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
+import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.ViewPair;
 
@@ -35,7 +36,7 @@ import org.objectledge.web.mvc.builders.ViewPair;
  * A test view.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Default.java,v 1.1 2004-01-20 13:05:55 fil Exp $
+ * @version $Id: Default.java,v 1.2 2004-01-22 09:40:12 pablo Exp $
  */
 public class Default extends DefaultBuilder
 {
@@ -43,15 +44,8 @@ public class Default extends DefaultBuilder
     {
         super(context);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void run()
-    {
-        // TODO Auto-generated method stub
-    }
-    
+
+
     /**
      * {@inheritDoc}
      */
