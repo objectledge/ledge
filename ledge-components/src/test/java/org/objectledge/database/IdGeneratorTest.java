@@ -28,8 +28,7 @@
 package org.objectledge.database;
 
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
+import java.io.Reader;
 
 import javax.sql.DataSource;
 
@@ -40,11 +39,12 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.jcontainer.dna.impl.DefaultConfiguration;
+import org.objectledge.filesystem.FileSystem;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGeneratorTest.java,v 1.3 2004-02-27 12:23:22 pablo Exp $
+ * @version $Id: IdGeneratorTest.java,v 1.4 2004-03-10 14:29:35 fil Exp $
  */
 public class IdGeneratorTest extends DatabaseTestCase
 {
@@ -59,10 +59,8 @@ public class IdGeneratorTest extends DatabaseTestCase
     {
         super(arg0);
         dataSource = getDataSource();
-        LineNumberReader script = new LineNumberReader(
-            new InputStreamReader(
-                new FileInputStream("src/main/sql/database/IdGenerator.sql"), 
-                "UTF-8"));
+        FileSystem fs = FileSystem.getStandardFileSystem(".");
+        Reader script = fs.getReader("src/main/sql/database/IdGenerator.sql", "UTF-8");
         DatabaseUtils.runScript(dataSource, script);
     }
     

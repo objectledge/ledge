@@ -30,7 +30,7 @@ package org.objectledge.database;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -44,7 +44,7 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtilsTest.java,v 1.3 2004-02-09 12:09:53 fil Exp $
+ * @version $Id: DatabaseUtilsTest.java,v 1.4 2004-03-10 14:29:35 fil Exp $
  */
 public class DatabaseUtilsTest extends TestCase
 {    
@@ -160,13 +160,11 @@ public class DatabaseUtilsTest extends TestCase
     
     /////////////////////////////////////////////////////////////////////////////////////////////
     
-    private LineNumberReader getScript(String name)
+    private Reader getScript(String name)
         throws IOException
     {
-        return new LineNumberReader(
-            new InputStreamReader(
-                new FileInputStream("src/test/resources/database/"+name), 
-                "UTF-8"));
+        return new InputStreamReader(
+            new FileInputStream("src/test/resources/database/"+name), "UTF-8");
     }
     
     private DataSource getDataSource()

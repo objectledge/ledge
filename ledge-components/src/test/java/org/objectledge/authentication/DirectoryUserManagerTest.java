@@ -28,10 +28,8 @@
 
 package org.objectledge.authentication;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
+import java.io.Reader;
 import java.security.Principal;
 
 import javax.naming.InvalidNameException;
@@ -378,11 +376,10 @@ public class DirectoryUserManagerTest extends TestCase
         return ds;
     }
     
-    private LineNumberReader getScript(String path)
+    private Reader getScript(String path)
         throws IOException
     {
-        return new LineNumberReader(new InputStreamReader(
-            new FileInputStream("src/test/resources/naming/"+path), "ISO-8859-2"));
+        return fs.getReader("naming/"+path, "ISO-8859-2");
     }    
 
     private Configuration getConfig(String name)
