@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Releases</title>
+  </properties>
+  
+  <body>
+    <section name="Releases">
+      <subsection name="0.1">
+        <table>
+          <tr>
+            <th>Date</th>
+            <td width="100%">January 7, 2004</td>
+          </tr>
+          <tr>
+            <th>Theme</th>
+            <td>Container, Configuration, Lifecycle</td>
+          </tr>
+          <tr>
+            <th>Documentation</th>
+            <td>can be found <a href="http://objectledge.org/releases/0.1/">here</a></td>
+          </tr>
+        </table>
+      </subsection>    
+    </section>
+    <section name="Binary distribution access">
+      <p>The most convinient way of using ObjectLedge for building your own programs is
+      through <a href="http://maven.apache.org">Maven</a> build system. Add the follwing
+      to your <code>project.properties</code> file to access ObjectLedge jars and their
+      dependencies:</p>
+      <source>maven.repo.remote=http://ibibilo.org/maven,http://dist.objectledge.org/</source>
+    </section>
+  </body>
+</document>
+  
