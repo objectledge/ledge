@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.5 2004-10-24 12:36:10 pablo Exp $
+ * @version $Id: StringTool.java,v 1.6 2004-12-20 16:08:41 pablo Exp $
  */
 public class StringTool
 {
@@ -101,4 +101,17 @@ public class StringTool
     {
     	return new Long(value);
     }
+    
+    /**
+	 * Convert int to string value.
+	 *
+	 * @param vaule the int value.
+	 * @return the string wrapper.
+     */
+    public String getString(int value)
+    {
+    	return String.valueOf(value);
+    }
+    
+    
 }
