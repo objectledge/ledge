@@ -28,13 +28,9 @@
 
 package org.objectledge.encodings;
 
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.encodings.encoders.CharEncoder;
 import org.objectledge.encodings.encoders.CharEncoderHTMLEntity;
 import org.objectledge.encodings.encoders.CharEncoderUTF;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.defaults.ConstructorInjectionComponentAdapterFactory;
-import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
  * Tool for encoding HTML text to a text which supports a chosen encoding using HTML entities.
@@ -42,35 +38,11 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.10 2004-06-30 14:00:41 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.11 2004-07-05 12:38:47 zwierzem Exp $
  */
-public class HTMLEntityEncoder
+public class HTMLEntityEncoder extends AbstractEncoder
 {
     private static final CharEncoderHTMLEntity HTML_ENTITY_ENCODER = new CharEncoderHTMLEntity();
-	private static final String ENCODER_CLASS_PREFIX = 
-        "org.objectledge.encodings.encoders.CharEncoder";
-	private MutablePicoContainer container;
-
-	/**
-	 * Constructs the entity encoder component.
-	 */
-	public HTMLEntityEncoder()
-	{
-        // non caching container
-        this.container =
-            new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory());
-		CharEncoder ref1 = getCharsetEncoder("UTF-16");
-		CharEncoder ref2 = getCharsetEncoder("UTF-16");
-		if(ref1 == null || ref2 == null)
-		{
-			throw new ComponentInitializationError("cannot get basic UTF-16 encoder");
-		}
-		if(ref1 == ref2)
-		{
-			throw new ComponentInitializationError(
-				"container configured for component instance caching");
-		}
-	}
 
     /**
      * Encodes a given text as an attribute with given encoding.
@@ -184,32 +156,6 @@ public class HTMLEntityEncoder
 
 	// implementation ----------------------------------------------------------------------------
 	
-    private CharEncoder getCharsetEncoder(String encodingName)
-    {
-    	if(encodingName == null)
-    	{
-    		return null;    		
-    	}
-    	
-		try
-		{
-			encodingName = EncodingMap.getIANA2JavaMapping(encodingName);
-			Object encoderInstance = container.getComponentInstance(encodingName); 
-			if(encoderInstance == null)
-			{
-				Class clazz = Class.forName(ENCODER_CLASS_PREFIX + encodingName);
-				container.registerComponentImplementation(encodingName, clazz);
-				encoderInstance = container.getComponentInstance(encodingName);
-			}
-			return (CharEncoder) encoderInstance;
-		}
-		catch (ClassNotFoundException e)
-		{
-			throw new IllegalArgumentException(
-				"unknown or unsupported encoding '"+encodingName+"'"); 
-		}
-    }
-
     private void encodeEntity(char c, StringBuffer buf)
     {
         // encode it using entity encoding
