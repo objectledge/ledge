@@ -5,15 +5,23 @@
     <title>Ledge Maven plugin Goals</title>
   </properties>
   <body>
-    <goals>
-      <goal>
-        <name>ledge:index-jar</name>
-        <description>Generates a jar index in maven.build.dest/META-INF/files.lst</description>
-      </goal>
-      <goal>
-        <name>ledge:index-war</name>
-        <description>Generates a war index in maven.war.webapp.dir/WEB-INF/files.lst</description>
-      </goal>
-    </goals>
+    <section name="Goals">
+      <p>
+        <table>
+          <tr>
+            <th>name</th>
+            <th>description</th>
+          </tr>
+          <tr>
+            <td>ledge:index-jar</td>
+            <td>Generates a jar index in ${maven.build.dest}/META-INF/files.lst</td>
+          </tr>
+          <tr>
+            <td>ledge:index-war</td>
+            <td>Generates a war index in ${maven.war.webapp.dir}/WEB-INF/files.lst</td>
+          </tr>
+        </table>
+      </p>
+    </section>
   </body>
 </document>

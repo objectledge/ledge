@@ -6,13 +6,15 @@
   </properties>
   <body>
     <section name="Ledge Maven plugin Settings">
-      <table>
-        <tr>
-          <th>Property</th>
-          <th>Optional?</th>
-          <th>Description</th>
-        </tr>
-      </table>
+      <p>
+        <table>
+          <tr>
+            <th>Property</th>
+            <th>Optional?</th>
+            <th>Description</th>
+          </tr>
+        </table>
+      </p>
     </section>
   </body>
 </document>
