@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.13 2004-03-17 13:33:45 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.14 2004-03-18 09:14:51 pablo Exp $
  */
 public class StringUtils
 {
@@ -178,7 +178,6 @@ public class StringUtils
                     String ucodeStr = s.substring(cur + 2, cur + 6);
                     try
                     {
-                        System.out.println("parsuje:"+ucodeStr);
                         int ucode = Integer.parseInt(ucodeStr, 16);
                         if (Character.isDefined((char)ucode))
                         {
