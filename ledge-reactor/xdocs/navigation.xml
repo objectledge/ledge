@@ -10,6 +10,7 @@
       <item name="ledge components" href="modules/ledge-components/index.html"/>
       <item name="ledge container" href="modules/ledge-container/index.html"/>
       <item name="ledge web" href="modules/ledge-web/index.html"/>
+      <item name="maven plugin" href="modules/ledge-maven-plugin/index.html"/>
     </links>
     <menu name="Overview">
       <item name="Featured technologies"            href="technologies.html"/>
