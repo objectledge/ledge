@@ -6,7 +6,7 @@
     <links>
       <item name="home" href="../../index.html"/>
       <item name="wiki" href="http://objectledge.org/confluence/display/LEDGE"/>
-      <item name="issues" href="http://objectledge.org/jira/secure/BrowseProject.jspa?id=10010"/>
+      <item name="issues" href="http://objectledge.org/jira/secure/BrowseProject.jspa?id=10000"/>
       <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-maven-plugin"/>
     </links>
     <menu name="Reference">
