@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
  * 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: FixedSequence.java,v 1.1 2004-01-19 16:04:54 fil Exp $
+ * @version $Id: FixedSequence.java,v 1.2 2004-01-20 09:17:32 fil Exp $
  */
 public class FixedSequence implements Sequence
 {
@@ -58,7 +58,7 @@ public class FixedSequence implements Sequence
      */
     public boolean hasNext()
     {
-        return queried;
+        return !queried;
     }
 
     /** 
@@ -73,6 +73,7 @@ public class FixedSequence implements Sequence
         }
         else
         {
+            queried = true;
             return value;
         }
     }
