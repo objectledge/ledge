@@ -1,4 +1,4 @@
-package org.objectledge.impl;
+package org.objectledge.filesystem.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ import org.objectledge.filesystem.FileSystem;
  * to the Labeo FileService.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: URLConnectionImpl.java,v 1.2 2003-11-24 15:55:44 fil Exp $
+ * @version $Id: URLConnectionImpl.java,v 1.1 2003-11-25 08:19:49 fil Exp $
  */
 public class URLConnectionImpl 
     extends URLConnection

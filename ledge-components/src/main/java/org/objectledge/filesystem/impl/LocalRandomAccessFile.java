@@ -1,4 +1,4 @@
-package org.objectledge.impl;
+package org.objectledge.filesystem.impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +11,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * <code>java.io.RandomAccessFile</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalRandomAccessFile.java,v 1.2 2003-11-24 15:55:44 fil Exp $
+ * @version $Id: LocalRandomAccessFile.java,v 1.1 2003-11-25 08:19:49 fil Exp $
  */
 public class LocalRandomAccessFile implements RandomAccessFile
 {
