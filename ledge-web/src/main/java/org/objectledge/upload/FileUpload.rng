@@ -28,26 +28,9 @@
 --> 
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <interleave>
-    <optional>
-      <element name="default_locale">
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="default_encoding">  
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="view_token">  
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="action_token">  
-        <text/>
-      </element>
-    </optional>    
-  </interleave>   
+  <optional>    
+    <element name="upload_limit">
+      <text/>
+    </element>
+  </optional>    
 </element>

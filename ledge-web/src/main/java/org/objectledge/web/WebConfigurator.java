@@ -37,7 +37,7 @@ import org.objectledge.utils.StringUtils;
  * Configuration component - it provide the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: WebConfigurator.java,v 1.2 2004-01-13 16:10:55 pablo Exp $
+ * @version $Id: WebConfigurator.java,v 1.3 2004-02-03 11:30:39 pablo Exp $
  */
 public class WebConfigurator
 {
@@ -53,9 +53,6 @@ public class WebConfigurator
 	/** the default action token */
 	public static final String DEFAULT_ACTION_TOKEN = "action";
 	
-	/** the default query separator */
-	public static final int DEFAULT_UPLOAD_LIMIT = 4194304;
-	
 	/** the default locale */
 	private Locale defaultLocale;
 	
@@ -67,9 +64,6 @@ public class WebConfigurator
 	
 	/** the action token */
 	private String actionToken;
-	
-	/** the upload size limit */
-	private int uploadLimit;
 	
 	/**
 	 * Constructor
@@ -83,7 +77,6 @@ public class WebConfigurator
 		defaultEncoding = config.getChild("default_encoding").getValue(DEFAULT_ENCODING);
 		viewToken = config.getChild("view_token").getValue(DEFAULT_VIEW_TOKEN);
 		actionToken = config.getChild("action_token").getValue(DEFAULT_ACTION_TOKEN);
-		uploadLimit = config.getChild("upload_limit").getValueAsInteger(DEFAULT_UPLOAD_LIMIT);
 	}
 	
     /**
@@ -125,15 +118,4 @@ public class WebConfigurator
 	{
 		return actionToken;
 	}
-
-	/**
-	 *  Get the upload size limit. 
-	 *
-	 * @return the upload limit. 
-	 */
-	public int getUploadLimit()
-	{
-		return uploadLimit;
-	}    
-     
 }

@@ -30,6 +30,7 @@ package org.objectledge.upload;
 
 import java.util.Map;
 
+import org.jcontainer.dna.Configuration;
 import org.objectledge.context.Context;
 
 /**
@@ -37,7 +38,7 @@ import org.objectledge.context.Context;
  *
  * <p>Created on Jan 14, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileUpload.java,v 1.4 2004-01-14 14:41:10 fil Exp $
+ * @version $Id: FileUpload.java,v 1.5 2004-02-03 11:30:39 pablo Exp $
  */
 public class FileUpload
 {
@@ -46,20 +47,28 @@ public class FileUpload
     /** context key to store the upload map */
     public static final String UPLOAD_CONTEXT_KEY = "org.objectledge.upload.FileUpload.uploadMap";
     
+    /** the default upload limit */
+    public static final int DEFAULT_UPLOAD_LIMIT = 4194304;
+
     // instance variables ///////////////////////////////////////////////////////////////////////
     
     /** the thread's processing context. */
     private Context context;
 
+    /** the upload size limit */
+    private int uploadLimit;
+
     // initialization ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a FileUpload component.
-     * 
+     *
+     * @param config the configuration. 
      * @param context the context.
      */
-    public FileUpload(Context context)
+    public FileUpload(Configuration config, Context context)
     {
+        uploadLimit = config.getChild("upload_limit").getValueAsInteger(DEFAULT_UPLOAD_LIMIT);
         this.context = context;
     }
     
@@ -83,4 +92,15 @@ public class FileUpload
             return (UploadContainer)map.get(name);
         }
     }
+    
+    /**
+     * Get the upload size limit. 
+     *
+     * @return the upload limit. 
+     */
+    public int getUploadLimit()
+    {
+        return uploadLimit;
+    }    
+
 }

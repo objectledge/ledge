@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--  
  Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
@@ -27,27 +27,5 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <interleave>
-    <optional>
-      <element name="default_locale">
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="default_encoding">  
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="view_token">  
-        <text/>
-      </element>
-    </optional>    
-    <optional>    
-      <element name="action_token">  
-        <text/>
-      </element>
-    </optional>    
-  </interleave>   
-</element>
+<config>
+</config>

@@ -108,11 +108,12 @@ public class UploadTest extends TestCase
             logger = loggerFactory.getLogger(MailSystem.class);
             MailSystem mailSystem = new MailSystem(config,logger,fs,templating,threadPool);
             
+            config = configFactory.getConfig(FileUpload.class,FileUpload.class);
+            fileUpload = new FileUpload(config, context);
+            
             //file upload valve
             logger = loggerFactory.getLogger(FileUploadValve.class);
-            uploadValve = new FileUploadValve(webConfigurator,logger,mailSystem);
-            fileUpload = new FileUpload(context);
-            
+            uploadValve = new FileUploadValve(webConfigurator,logger,fileUpload,mailSystem);
             TestHttpServletRequest request = new TestHttpServletRequest();
             TestHttpServletResponse response = new TestHttpServletResponse();
             //request.setupGetContentType("text/html");

@@ -30,32 +30,36 @@ import org.objectledge.web.WebConstants;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.7 2004-01-29 15:33:57 pablo Exp $
+ * @version $Id: FileUploadValve.java,v 1.8 2004-02-03 11:30:39 pablo Exp $
  */
 public class FileUploadValve 
     implements Valve, WebConstants
 {
-	/** web configurator */
-	private WebConfigurator config; 
-	
+    /** the web configurator */
+    private WebConfigurator webConfigurator;
+    
     /** the logger */
     private Logger logger;
     
     /** the mail system */
     private MailSystem mailSystem;
+
+    /** web configurator */
+    private FileUpload fileUpload; 
     
     /**
      * Constructs the component.
      * 
-     * @param config the config.
      * @param logger the logger.
+     * @param fileUpload the file upload component.
      * @param mailSystem the mailSystem.
      */
-    public FileUploadValve(WebConfigurator config, Logger logger,  
-     				    MailSystem mailSystem)
+    public FileUploadValve(WebConfigurator webConfigurator, Logger logger, 
+                           FileUpload fileUpload, MailSystem mailSystem)
     {
-    	this.config = config;
+        this.webConfigurator = webConfigurator;
     	this.logger = logger;
+        this.fileUpload = fileUpload;
     	this.mailSystem = mailSystem;
     }
     
@@ -70,7 +74,7 @@ public class FileUploadValve
     {
         Map uploadMap = new HashMap();
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        if(httpContext.getRequest().getContentLength() > config.getUploadLimit())
+        if(httpContext.getRequest().getContentLength() > fileUpload.getUploadLimit())
         {
             logger.debug("The request size exceeds upload limits");
             return;
@@ -189,7 +193,7 @@ public class FileUploadValve
                 getAttribute(ENCODING_SESSION_KEY);
             if(encoding == null)
             {
-                encoding = config.getDefaultEncoding();
+                encoding = webConfigurator.getDefaultEncoding();
             }
             String field = new String(contents, encoding);
             Parameters parameters = RequestParameters.getRequestParameters(context);
