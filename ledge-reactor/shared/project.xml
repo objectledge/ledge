@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.10 2004-01-05 10:57:45 fil Exp $ -->
+<!-- $Id: project.xml,v 1.11 2004-01-06 10:36:25 mover Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -40,14 +40,22 @@
 
   <mailingLists>
     <mailingList>
+      <name>ObjectLedge developers discussion</name>
+      <subscribe>objectledge-dev-subscribe@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-dev-unsubscribe@lists.objectledge.org</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-dev/</archive>
+    </mailingList>
+    <mailingList>
       <name>ObjectLedge commit messages</name>
-      <subscribe>objectledge-cvs-subscribe@lists.caltha.pl</subscribe>
-      <unsubscribe>objectledge-cvs-unsubscribe@lists.caltha.pl</unsubscribe>
+      <subscribe>objectledge-cvs-subscribe@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-cvs-unsubscribe@lists.objectledge.org</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-cvs/</archive>
     </mailingList>
     <mailingList>
       <name>ObjectLedge issue tracking</name>
-      <subscribe>objectledge-issues-subscribe@lists.caltha.pl</subscribe>
-      <unsubscribe>objectledge-issues-unsubscribe@lists.caltha.pl</unsubscribe>
+      <subscribe>objectledge-issues-subscribe@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-issues-unsubscribe@lists.objectledge.org</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-issues/</archive>
     </mailingList>
   </mailingLists>
 
