@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.13 2004-01-16 09:09:30 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.14 2004-01-16 13:08:26 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -156,8 +156,9 @@ public class LedgeXmlFrontEnd
         {
             tempContainer.registerComponentImplementation(anonymous, implementation);
         }
-        reflectionFrontEnd.getPicoContainer().
-            registerComponent((ComponentAdapter)tempContainer.getComponentInstance(anonymous));
+        ComponentAdapter adapter = (ComponentAdapter)tempContainer.getComponentInstance(anonymous); 
+        reflectionFrontEnd.getPicoContainer().registerComponent(adapter);
+        reflectionFrontEnd.getPicoContainer().removeChild(tempContainer);
     }
 
     private Parameter[] loadParameters(Element element)
