@@ -31,16 +31,7 @@
 # author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
 # version $Id$
 
-DROP TABLE test_object IF EXISTS;
-CREATE TABLE test_object ( 
-  id BIGINT NOT NULL,
-  value VARCHAR(255),
-  date DATE,
-  value_boolean BIT,
-  value_float FLOAT,
-  value_decimal DECIMAL,
-  value_time TIME,
-  value_timestamp TIMESTAMP,
-  value_byte TINYINT,
-  value_short SMALLINT
-);
+INSERT INTO ledge_parameters (parameters_id, name, value) VALUES (1000, '','');
+INSERT INTO ledge_parameters (parameters_id, name, value) VALUES (1000, 'foo','bar');
+INSERT INTO ledge_parameters (parameters_id, name, value) VALUES (1000, 'foo','bar2');
+INSERT INTO ledge_parameters (parameters_id, name, value) VALUES (1000, 'bar','bar3');

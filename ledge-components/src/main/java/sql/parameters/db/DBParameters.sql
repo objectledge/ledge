@@ -26,12 +26,13 @@
 # POSSIBILITY OF SUCH DAMAGE. 
 # 
 
-# test for DatabaseUtils.runScript(..)
+# Table schema for the DBParameters
 #
-# author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-# version $Id$
+# author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+# version $Id: Exp $
 
-INSERT INTO parameters (parameters_id, name, value) VALUES (1000, '','');
-INSERT INTO parameters (parameters_id, name, value) VALUES (1000, 'foo','bar');
-INSERT INTO parameters (parameters_id, name, value) VALUES (1000, 'foo','bar2');
-INSERT INTO parameters (parameters_id, name, value) VALUES (1000, 'bar','bar3');
+CREATE TABLE ledge_parameters (
+   parameters_id BIGINT NOT NULL,
+   name VARCHAR(255) NOT NULL,
+   value VARCHAR(255) NOT NULL
+);
