@@ -36,12 +36,13 @@ import org.objectledge.context.Context;
  * to a number of "Valves", and provides error handling along the lines of Java try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.11 2004-01-14 10:57:56 fil Exp $
+ * @version $Id: Pipeline.java,v 1.12 2004-01-21 13:22:02 pablo Exp $
  */
 public class Pipeline
     implements Runnable
 {
-    private static final String PIPELINE_EXCEPTION = "org.objectledge.pipeline.Pipeline.exception";
+    /** key to store the exception in the context */
+    public static final String PIPELINE_EXCEPTION = "org.objectledge.pipeline.Pipeline.exception";
     
     private Context context;
     
