@@ -5,7 +5,7 @@
   </properties>
   
   <body>
-    <section>
+    <section name="ObjectLedge Maven plugin">
     <subsection name="Introduction">
       <p>
          A few words about the plugin in general.

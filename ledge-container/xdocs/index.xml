@@ -5,7 +5,7 @@
   </properties>
   
   <body>
-    <section>
+    <section name="ObjectLedge container">
     <subsection name="Introduction">
       <p>
         A container a provides the environment in which components may operate. It instantiates the 

@@ -5,7 +5,7 @@
   </properties>
     
   <body>
-    <section>
+    <section name="ObjectLedge">
       <subsection name="Introduction">
        <p>
           Object Ledge is a platform for building applications in Java 2 Standard and Enterprise 
