@@ -28,4 +28,4 @@
 #DEFAULT	$CVSROOT/CVSROOT/log_accum.pl $USER %s
 #ALL	$CVSROOT/CVSROOT/collect_diffs.rb --from $USER --to objectledge-cvshtml@lists.caltha.pl %{sVv}
 
-ALL $CVSROOT/CVSROOT/logcheck.sh %s %V %v
+ALL $CVSROOT/CVSROOT/logcheck.sh %s %{sVv}
