@@ -39,7 +39,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.3 2004-01-28 14:15:25 pablo Exp $
+ * @version $Id: FileSystemTest.java,v 1.4 2004-01-29 08:32:45 pablo Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -293,7 +293,6 @@ public class FileSystemTest extends TestCase
         }        
     }    
     
-    
     public void testCopyDir()
         throws IOException
     {
@@ -302,10 +301,8 @@ public class FileSystemTest extends TestCase
         fs.copyDir("directory","directory2");
         assertEquals(fs.exists("directory2"),true);
         assertEquals(fs.list("directory2").length,size);
-        fs.delete("directory2/subdir");
-        fs.delete("directory2/file1");
-        fs.delete("directory2/file2");
-        fs.delete("directory2");
+        fs.deleteRecursive("directory2");
+        assertEquals(fs.exists("directory2"),false);
         try
         {
             fs.copyDir("foo","bar");
@@ -326,5 +323,36 @@ public class FileSystemTest extends TestCase
         }        
     }    
     
+    public void testReadStringOuputStream()
+        throws Exception
+    {
+        fs.createNewFile("foo");
+        assertEquals(fs.exists("foo"),true);
+        fs.write("foo","bar","ISO-8859-2");
+        assertEquals(fs.exists("foo"),true);
+        assertEquals(fs.read("foo","ISO-8859-2"),"bar");
+        assertEquals(fs.read("foo")[0],"bar".getBytes("ISO-8859-2")[0]);
+        assertEquals(fs.read("foo")[1],"bar".getBytes("ISO-8859-2")[1]);
+        assertEquals(fs.read("foo")[2],"bar".getBytes("ISO-8859-2")[2]);
+        //Str
+        //fs.read(String path, OutputStream out)    
+        fs.delete("foo");
+    }
+    
+    /*
+    
+    public byte[] read(String path) throws IOException
+    public String read(String path, String encoding)
+    public void write(String path, InputStream in) throws IOException
+    public void write(String path, byte[] bytes) throws IOException
+    public void write(String path, String string, String encoding)
+        throws IOException
+    public static String normalizedPath(String path)
+    public static String basePath(String path)
+    public static String directoryPath(String path)
+    public static String relativePath(String path, String base)
+        throws IllegalArgumentException
+    public static FileSystem getStandardFileSystem(String root)
+    */
 }
 
