@@ -27,13 +27,14 @@
 // 
 package org.objectledge.web.mvc.builders;
 
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 
 /**
  * Builder of a single view element.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.7 2005-02-21 16:48:28 rafal Exp $
+ * @version $Id: Builder.java,v 1.8 2005-03-11 09:37:33 pablo Exp $
  */
 ///CLOVER:OFF
 public interface Builder
@@ -48,7 +49,8 @@ public interface Builder
      * @return the name of the view which will be executed instead of current builder, or
      *  <code>null</code> to execute this builder.
      */
-    public String route(String thisViewName);
+    public String route(String thisViewName)
+        throws ProcessingException;
     
 	/**
 	 * Returns a manually chosen builder and template in which currently executed builder will be

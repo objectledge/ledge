@@ -28,6 +28,7 @@
 package org.objectledge.web.mvc.builders;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
@@ -36,7 +37,7 @@ import org.objectledge.templating.TemplatingContext;
  * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.9 2005-02-21 16:48:28 rafal Exp $
+ * @version $Id: AbstractBuilder.java,v 1.10 2005-03-11 09:37:33 pablo Exp $
  */
 public abstract class AbstractBuilder implements Builder
 {
@@ -57,6 +58,7 @@ public abstract class AbstractBuilder implements Builder
 	 * {@inheritDoc}
 	 */
     public String route(String thisViewName)
+        throws ProcessingException
     {
         return null;
     }
