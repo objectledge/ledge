@@ -35,6 +35,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.pipeline.PipelineProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityTemplating;
@@ -48,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.4 2004-01-21 14:48:18 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.5 2004-01-21 15:17:07 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -129,7 +130,7 @@ public class BuilderExecutorValveTest extends TestCase
         }
         catch(Exception e)
         {
-            // success
+            assertEquals(PipelineProcessingException.class, e.getClass());
         }
     }
     
@@ -146,7 +147,7 @@ public class BuilderExecutorValveTest extends TestCase
         }
         catch(Exception e)
         {
-            // success
+            assertEquals(PipelineProcessingException.class, e.getClass());
         }
     }
     
