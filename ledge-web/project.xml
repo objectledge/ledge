@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.7 2003-12-23 08:21:12 fil Exp $ -->
+<!-- $Id: project.xml,v 1.8 2003-12-23 16:26:54 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -47,6 +47,28 @@
 
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.rng</include>
+        </includes>
+      </resource>
+    </resources>
+    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+      <resources>
+        <resource>
+          <directory>src/test/java</directory>
+          <includes>
+            <include>**/*.rng</include>
+          </includes>
+        </resource>
+      </resources>
+    </unitTest>
   </build>
 
   <dependencies>
@@ -72,18 +94,78 @@
       <url>http://picocontainer.org/</url>
     </dependency>
     <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>nanocontainer</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://nanocontainer.org/</url>
+    </dependency>
+    <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-api</artifactId>
       <version>1.1-rc2</version>
       <url>http://dna.jcontainer.org</url>
     </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+      <url>http://jakarta.apache.org/log4j/docs/index.html</url>
+    </dependency>
     <!-- testing -->
+    <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picoextras-reflection</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://nanocontainer.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picoextras-script</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://nanocontainer.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>dna</groupId>
+      <artifactId>dna-impl</artifactId>
+      <version>1.1-rc2</version>
+      <url>http://dna.jcontainer.org</url>
+    </dependency>
+    <dependency>
+      <groupId>jing</groupId>
+      <artifactId>jing</artifactId>
+      <version>20030619</version>
+      <url>http://www.thaiopensource.com/relaxng/jing.html</url>
+    </dependency>
+    <dependency>
+      <groupId>saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <version>6.5.3</version>
+      <url>http://saxon.sourceforge.net/</url>
+    </dependency>
     <dependency>
       <groupId>httpunit</groupId>
       <artifactId>httpunit</artifactId>
       <version>1.5.4</version>
       <url>http://httpunit.sourceforge.net</url>
     </dependency>
+    <dependency>
+      <groupId>nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+      <version>0.8.1</version>
+      <url>http://www.apache.org/~andyc/neko/doc/html/</url>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.6.0</version>
+      <url>http://xml.apache.org/xerces2-j/index.html</url>
+    </dependency>    
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xmlParserAPIs</artifactId>
+      <version>2.6.0</version>
+      <url>http://xml.apache.org/xerces2-j/index.html</url>
+    </dependency>    
   </dependencies>
 
 </project>
