@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
@@ -60,6 +61,8 @@ public class EventSystemTest extends TestCase
     public EventSystemTest(String arg0)
     {
         super(arg0);
+        BasicConfigurator.resetConfiguration();
+        BasicConfigurator.configure();
         Context context = new Context();
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
