@@ -13,7 +13,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/commons-pool/jars/commons-pool-1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/hsqldb/jars/hsqldb-1.7.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/dbunit/jars/dbunit-2.0.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/jotm/jars/jotm-1.5.3.jar"/>
+	<classpathentry sourcepath="/MAVEN_REPO/jotm/sources/jotm-1.5.3-src.zip" kind="var" path="MAVEN_REPO/jotm/jars/jotm-1.5.3.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/carol/jars/carol-1.5.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.3.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/connector/jars/connector-1.5.jar"/>
