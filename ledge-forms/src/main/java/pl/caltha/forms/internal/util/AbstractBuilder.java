@@ -6,16 +6,19 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import pl.caltha.forms.ConstructionException;
+import pl.caltha.services.xml.XMLDataReader;
 
 /**
  * Base class for XML builders.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.1 2005-01-19 06:55:37 pablo Exp $
+ * @version $Id: AbstractBuilder.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
  */
-public abstract class AbstractBuilder extends org.xml.sax.helpers.DefaultHandler
+public abstract class AbstractBuilder 
+    extends DefaultHandler
 {
     /** Accepted namespace. */
     protected String acceptedNamespace;

@@ -2,7 +2,10 @@ package pl.caltha.forms.internal;
 
 import java.util.HashMap;
 
+import org.objectledge.parameters.Parameters;
+
 import pl.caltha.forms.ConstructionException;
+import pl.caltha.forms.Form;
 import pl.caltha.forms.FormsService;
 import pl.caltha.forms.internal.model.Bind;
 import pl.caltha.forms.internal.model.DefaultInstance;
@@ -10,17 +13,18 @@ import pl.caltha.forms.internal.model.InstanceImpl;
 import pl.caltha.forms.internal.model.SubmitInfo;
 import pl.caltha.forms.internal.ui.UI;
 import pl.caltha.forms.internal.ui.UIConstants;
+import pl.caltha.services.xml.XMLService;
 
 /**
  * Represents Form definition.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormImpl.java,v 1.1 2005-01-19 06:55:20 pablo Exp $
+ * @version $Id: FormImpl.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
  */
-public class FormImpl implements pl.caltha.forms.Form
+public class FormImpl implements Form
 {
     /** FormsService. */
-    private FormsServiceImpl formToolService;
+    private FormsService formToolService;
 
     /** XMLService is used to get validators. */
     private XMLService xmlService;
@@ -51,19 +55,17 @@ public class FormImpl implements pl.caltha.forms.Form
     protected String defaultInstanceURI;
     /** Keeps an object representing default Instance. */
     private DefaultInstance defaultInstance;
+    
+    //private Parameters parameters;
 
     /** Creates new Form */
-    public FormImpl(String definitionURI, String id)
+    public FormImpl(FormsService formToolService, XMLService xmlService,
+        String definitionURI, String id)
     {
         this.definitionURI = definitionURI;
         this.id = id;
-
-        ServiceBroker broker = Labeo.getBroker();
-        formToolService = (FormsServiceImpl)broker.getService(FormsService.SERVICE_NAME);
-        xmlService = (XMLService)broker.getService(XMLService.SERVICE_NAME);
-        //i18nService = (I18nService)broker.getService(I18nService.SERVICE_NAME);
-        // get a localisation bundle for this form
-        //i18nService =  i18nService.useCommon(definitionURI);
+        this.formToolService = formToolService;
+        this.xmlService = xmlService;
     }
 
     //------------------------------------------------------------------------
@@ -113,7 +115,7 @@ public class FormImpl implements pl.caltha.forms.Form
      *  </li>
      * </ol>
      */
-    public void process(pl.caltha.forms.Instance inst, net.labeo.webcore.RunData data)
+    public void process(pl.caltha.forms.Instance inst, Parameters parameters)
     throws Exception
     {
         InstanceImpl instance = (InstanceImpl)inst;
@@ -134,8 +136,7 @@ public class FormImpl implements pl.caltha.forms.Form
         // SetValues and dispatchEvents is not being called
         // for the first time instance processing.
         // This avoids Select fields clearing.
-        ParameterContainer parameters = data.getParameters();
-        String instanceId = parameters.get(UIConstants.INSTANCE_ID_NAME).asString(null);
+        String instanceId = parameters.get(UIConstants.INSTANCE_ID_NAME,null);
         if(instanceId != null && instanceId.equals(instance.getId()))
         {
             ui.setValues(instance, parameters);
@@ -224,7 +225,7 @@ public class FormImpl implements pl.caltha.forms.Form
         return ui;
     }
 
-    public FormsServiceImpl getFormToolService()
+    public FormsService getFormToolService()
     {
         return formToolService;
     }

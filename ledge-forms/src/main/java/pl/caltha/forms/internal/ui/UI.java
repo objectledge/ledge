@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.objectledge.parameters.Parameters;
+
 import pl.caltha.forms.ConstructionException;
 import pl.caltha.forms.internal.FormImpl;
 import pl.caltha.forms.internal.model.Bind;
@@ -13,7 +15,7 @@ import pl.caltha.forms.internal.util.Util;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UI.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: UI.java,v 1.2 2005-01-20 16:44:52 pablo Exp $
  */
 public class UI
 {
@@ -161,12 +163,12 @@ public class UI
      * This method is recursive, but traverses only the user visible part
      * of the tree - this avoids clearing unvisible select fields.
      */
-    public void setValues(InstanceImpl instance, ParameterContainer parameters)
+    public void setValues(InstanceImpl instance, Parameters parameters)
     {
         setValues(instance, parameters, ((NodeForm)uiTree).getPage(instance));
     }
 
-    private void setValues(InstanceImpl instance, ParameterContainer parameters, Node node)
+    private void setValues(InstanceImpl instance, Parameters parameters, Node node)
     {
         // check if a node can have a value and set it
         if(node instanceof NodeControl)
@@ -239,7 +241,7 @@ public class UI
     /** Dispatches events upon incoming parameters. Parameters are taken
      * from current request's {@link net.labeo.webcore.RunData}.
      */
-    public void dispatchEvents(InstanceImpl instance, ParameterContainer parameters)
+    public void dispatchEvents(InstanceImpl instance, Parameters parameters)
     {
         String[] strings = parameters.getStrings(UIConstants.DISPATCH_CONTROL_NAME);
         if(strings.length > 0)

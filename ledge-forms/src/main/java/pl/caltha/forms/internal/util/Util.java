@@ -2,19 +2,19 @@ package pl.caltha.forms.internal.util;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import pl.caltha.forms.ConstructionException;
-import net.labeo.util.URI;
-
 import org.xml.sax.Attributes;
+
+import pl.caltha.forms.ConstructionException;
 
 /** Utility class for form-tool.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Util.java,v 1.1 2005-01-19 06:55:37 pablo Exp $
+ * @version $Id: Util.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
  */
 public class Util
 {
@@ -168,7 +168,7 @@ public class Util
             new URI(resourceURI);
             return resourceURI;
         }
-        catch (URI.MalformedURIException e) {
+        catch (Exception e) {
             // continue on...
         }
 
@@ -181,7 +181,10 @@ public class Util
         try
         {
             base = new URI(baseURI);
-            uri = new URI(base, resourceURI);
+            // adapt to URI changes...
+            //TODO see if its ok! 
+            //uri = new URI(base, resourceURI);
+            uri = base.resolve(resourceURI);
         }
         catch (Exception e)
         {

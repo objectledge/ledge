@@ -1,5 +1,9 @@
 package pl.caltha.forms;
 
+import java.util.Properties;
+
+import org.objectledge.web.HttpContext;
+
 
 /**
  * FormTool service is used to generate and validate interactive HTML forms.
@@ -61,7 +65,7 @@ public interface FormsService
      * @throws FormsException  thrown when a found Instance is not an
      *      instance for a given Form definition.
      */
-    public Instance getInstance( String formName, RunData data )
+    public Instance getInstance( String formName,HttpContext httpContext )
         throws FormsException;
 
 
@@ -76,7 +80,7 @@ public interface FormsService
      * @return            Deserialized Instance object.
      * @throws Exception  thrown on problems with deserialization.
      */
-    public Instance getInstance( String formName, RunData data, byte[] savedState )
+    public Instance getInstance( String formName, HttpContext httpContext, byte[] savedState )
         throws Exception;
 
 
@@ -88,6 +92,9 @@ public interface FormsService
      * @param data      Description of Parameter
      * @param instance  Description of Parameter
      */
-    public void removeInstance( RunData data, Instance instance );
+    public void removeInstance(HttpContext httpContext, Instance instance);
+    
+    
+    public Properties getTidyConfiguration();
 }
 

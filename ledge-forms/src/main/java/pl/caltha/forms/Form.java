@@ -1,5 +1,7 @@
 package pl.caltha.forms;
 
+import org.objectledge.parameters.Parameters;
+
 
 /**
  * Represents a form definition. Objects of this class are built upon an
@@ -29,7 +31,7 @@ package pl.caltha.forms;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Form.java,v 1.1 2005-01-19 06:55:23 pablo Exp $
+ * @version $Id: Form.java,v 1.2 2005-01-20 16:44:50 pablo Exp $
  */
 public interface Form
 {
@@ -71,7 +73,7 @@ public interface Form
      *  </li>
      * </ol>
      */
-    public void process(Instance instance, net.labeo.webcore.RunData data)
+    public void process(Instance instance, Parameters parameters)
     throws Exception;
 
     /** Returns ID for this form's definition file. This is a form definition URI

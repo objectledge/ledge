@@ -5,10 +5,9 @@ import org.w3c.tidy.Tidy;
 /** Wrapper for jTidy objects that allows pooling of those.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: TidyWrapper.java,v 1.1 2005-01-19 06:55:37 pablo Exp $
+ * @version $Id: TidyWrapper.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
  */
 public class TidyWrapper
-extends net.labeo.services.pool.RecyclableObject
 {
     private Tidy tidy;
     
@@ -16,12 +15,6 @@ extends net.labeo.services.pool.RecyclableObject
     public TidyWrapper()
     {
         tidy = new org.w3c.tidy.Tidy();
-    }
-    
-    public void reset()
-    {
-        tidy.setErrout(null);
-        tidy.setErrfile(null);
     }
     
     /** Getter for property tidy.

@@ -9,15 +9,17 @@ import org.dom4j.Node;
 
 import pl.caltha.forms.Instance;
 import pl.caltha.forms.internal.FormImpl;
+import pl.caltha.services.xml.validation.DOM4JValidationErrorCollector;
+import pl.caltha.services.xml.validation.DOM4JValidator;
 
 /**
  * Container for user form data.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: InstanceImpl.java,v 1.1 2005-01-19 06:55:35 pablo Exp $
+ * @version $Id: InstanceImpl.java,v 1.2 2005-01-20 16:44:56 pablo Exp $
  */
 public class InstanceImpl extends AbstractInstance
-implements Instance, java.io.Serializable
+    implements Instance, java.io.Serializable
 {
     //-----------------------------------------------------------------------
     // Parent form definition connection
@@ -134,7 +136,7 @@ implements Instance, java.io.Serializable
         this.submitRequested = true;
     }
 
-    public boolean validate(net.labeo.services.xml.validation.DOM4JValidator validator)
+    public boolean validate(DOM4JValidator validator)
     throws Exception
     {
         return validator.validate(instanceDocument, schemaURI, errorCollector);

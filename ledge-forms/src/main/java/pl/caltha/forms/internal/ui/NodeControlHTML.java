@@ -10,7 +10,7 @@ import org.w3c.tidy.Tidy;
 import org.xml.sax.Attributes;
 
 import pl.caltha.forms.ConstructionException;
-import pl.caltha.forms.internal.FormsServiceImpl;
+import pl.caltha.forms.FormsService;
 import pl.caltha.forms.internal.model.InstanceImpl;
 import pl.caltha.forms.internal.util.TidyWrapper;
 
@@ -21,7 +21,7 @@ import pl.caltha.forms.internal.util.TidyWrapper;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NodeControlHTML.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: NodeControlHTML.java,v 1.2 2005-01-20 16:44:52 pablo Exp $
  */
 public class NodeControlHTML extends NodeControl
 {
@@ -34,7 +34,6 @@ public class NodeControlHTML extends NodeControl
     /** Tidy configuration. */
     private static Properties tidyConfiguration;
     /** PoolService is used to pool jTidy objects. */
-    private PoolService poolService;
 
     //------------------------------------------------------------------------
     // Control methods
@@ -51,7 +50,7 @@ public class NodeControlHTML extends NodeControl
         // do HTML processing
         // 1. clean up the value using jTidy
         // 1.1. get tidy
-        TidyWrapper tidyWrap = (TidyWrapper)(poolService.getInstance(TidyWrapper.class));
+        TidyWrapper tidyWrap = new TidyWrapper();
 
         try
         {
@@ -97,7 +96,7 @@ public class NodeControlHTML extends NodeControl
         }
         
         // return tidy wrapper to the pool
-        tidyWrap.recycle();
+        
     }
 
     /** Removes everything but <code>&lt;body&gt;</code> tag contents. */
@@ -146,11 +145,10 @@ public class NodeControlHTML extends NodeControl
     throws ConstructionException
     {
         super.init(ui);
-        FormsServiceImpl formToolService = ui.getForm().getFormToolService();
+        FormsService formToolService = ui.getForm().getFormToolService();
         if(tidyConfiguration == null)
         {
-            tidyConfiguration = formToolService.getConfiguration().getSubset("tidy.").toProperties(false);
+            tidyConfiguration = formToolService.getTidyConfiguration();
         }
-        poolService = (PoolService)(formToolService.getBroker().getService(PoolService.SERVICE_NAME));
     }
 }

@@ -1,8 +1,13 @@
 package pl.caltha.forms.internal;
 
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.dom4j.Document;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
+import org.objectledge.web.HttpContext;
 import org.xml.sax.InputSource;
 
 import pl.caltha.forms.ConstructionException;
@@ -13,20 +18,24 @@ import pl.caltha.forms.Instance;
 import pl.caltha.forms.internal.model.InstanceImpl;
 import pl.caltha.forms.internal.ui.UI;
 import pl.caltha.forms.internal.ui.UIBuilder;
+import pl.caltha.services.xml.LoggingErrorHandler;
+import pl.caltha.services.xml.XMLDataReader;
+import pl.caltha.services.xml.XMLService;
 
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsServiceImpl.java,v 1.1 2005-01-19 06:55:20 pablo Exp $
+ * @version $Id: FormsServiceImpl.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
  */
-public class FormsServiceImpl extends net.labeo.services.BaseService
+public class FormsServiceImpl 
 implements FormsService
 {
     public static final String LOGGING_FACILITY = "FormsService";
-    private LoggingFacility log;
+
+    private Logger log;
 
     private XMLService xmlService;
-
+    
     /** Form definition objects keyed by their Id's. */
     private HashMap formsById = new HashMap();
 
@@ -52,21 +61,14 @@ implements FormsService
 
     /** Called when the broker is starting.
      */
-    public void start()
+    public FormsServiceImpl(Configuration config, Logger logger, XMLService xmlService
+        )
     {
-        LoggingService logService = (LoggingService)(broker.getService(LoggingService.SERVICE_NAME));
-        log = logService.getFacility(LOGGING_FACILITY);
-
-        xmlService = (XMLService)(broker.getService(XMLService.SERVICE_NAME));
-    }
-
-    public void init()
-    {
-        reloadFormDefinitions = config.get("form.definition.reload").asBoolean(false);
-
-        formSchemaURI = config.get("uri.schema.form").asString("classpath:pl/caltha/forms/internal/formtool-form.xsd");
-        uiSchemaURI   = config.get("uri.schema.ui").asString("classpath:pl/caltha/forms/internal/formtool-ui.xsd");
-
+        this.log = logger;
+        this.xmlService = xmlService;
+        reloadFormDefinitions = config.getChild("form.definition.reload").getValueAsBoolean(false);
+        formSchemaURI = config.getChild("uri.schema.form").getValue("classpath:pl/caltha/forms/internal/formtool-form.xsd");
+        uiSchemaURI   = config.getChild("uri.schema.ui").getValue("classpath:pl/caltha/forms/internal/formtool-ui.xsd");
         log.info("Preloading schemas for 'formtool' service");
         preloadSchema(formSchemaURI);
         preloadSchema(uiSchemaURI);
@@ -81,7 +83,7 @@ implements FormsService
         }
         catch(Exception e)
         {
-            throw new net.labeo.services.ConfigurationError("Cannot load schema with URI '"+uri+"'");
+            throw new ComponentInitializationError("Cannot load schema with URI '"+uri+"'");
         }
     }
 
@@ -166,7 +168,7 @@ implements FormsService
         XMLDataReader reader = getXMLDataReader();
         org.xml.sax.InputSource is = getInputSource(formDefinitionURI);
         FormBuilder formBuilder = new FormBuilder(FormsService.ACCEPTED_NS_FORM, formSchemaURI);
-        FormImpl form =  new FormImpl(formDefinitionURI, formId);
+        FormImpl form =  new FormImpl(this, xmlService, formDefinitionURI, formId);
         formBuilder.build(form, reader, is, errorHandler);
 
         // Build DefaultInstance
@@ -251,7 +253,7 @@ implements FormsService
      *      for a given Form definition.
      * @return found or newly created Instance object
      */
-    public Instance getInstance(String formName, RunData data)
+    public Instance getInstance(String formName, HttpContext httpContext)
     throws FormsException
     {
         // guard from null formNames
@@ -264,7 +266,7 @@ implements FormsService
 
         FormImpl form = (FormImpl)(formsByName.get(formName));
 
-        FormData formData = getFormData(data);
+        FormData formData = getFormData(httpContext);
         InstanceImpl instance = (InstanceImpl)(formData.get(formName));
 
         if(instance == null)
@@ -296,7 +298,7 @@ implements FormsService
      * @throws Exception thrown on problems with deserialization.
      * @return Deserialized Instance object.
      */
-    public Instance getInstance(String formName, RunData data, byte[] savedState)
+    public Instance getInstance(String formName, HttpContext httpContext, byte[] savedState)
     throws Exception
     {
         if(!formsByName.containsKey(formName))
@@ -305,7 +307,7 @@ implements FormsService
         }
 
         FormImpl form = (FormImpl)(formsByName.get(formName));
-        FormData formData = getFormData(data);
+        FormData formData = getFormData(httpContext);
 
         // create new Instance
         InstanceImpl instance = ((FormImpl)form).createInstance(formName, savedState);
@@ -318,23 +320,22 @@ implements FormsService
     /** Removes an instance from users session - it should be used after instance
      * processing is finished.
      * Otherwise heavy instance data will be kept during whole user session. */
-    public void removeInstance(RunData data, Instance instance)
+    public void removeInstance(HttpContext httpContext, Instance instance)
     {
-        FormData formData = getFormData(data);
+        FormData formData = getFormData(httpContext);
         formData.remove(instance);
     }
 
     /** Key for FormData session object. */
     public static final String FORMDATA_NAME = "formtool.formdata";
 
-    private FormData getFormData(RunData data)
+    private FormData getFormData(HttpContext httpContext)
     {
-        net.labeo.webcore.SessionContext sessionCtx = data.getGlobalContext();
-        FormData formData = (FormData)(sessionCtx.getAttribute(FORMDATA_NAME));
+        FormData formData = (FormData)(httpContext.getSessionAttribute(FORMDATA_NAME));
         if(formData == null)
         {
             formData = new FormData();
-            sessionCtx.setAttribute(FORMDATA_NAME, formData);
+            httpContext.setSessionAttribute(FORMDATA_NAME, formData);
         }
         return formData;
     }
@@ -343,16 +344,22 @@ implements FormsService
     //------------------------------------------------------------------------
     // Other methods
 
-    public LoggingFacility getLogFacility()
+    public Logger getLogFacility()
     {
         return log;
     }
 
+    public Properties getTidyConfiguration()
+    {
+        //TODO implement it!
+        throw new UnsupportedOperationException("not implemented yet!");
+    }
+    
     /** FormData is a container for storing form Instances in users session.
      *
      * @see net.labeo.webcore.SessionContext
      * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-     * @version $Id: FormsServiceImpl.java,v 1.1 2005-01-19 06:55:20 pablo Exp $
+     * @version $Id: FormsServiceImpl.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
      */
     public class FormData
     {

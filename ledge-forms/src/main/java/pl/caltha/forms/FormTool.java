@@ -1,12 +1,16 @@
 package pl.caltha.forms;
 
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.web.mvc.tools.LinkTool;
+
 
 /** This a Context tool used to generate Form interfaces.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormTool.java,v 1.1 2005-01-19 06:55:23 pablo Exp $
+ * @version $Id: FormTool.java,v 1.2 2005-01-20 16:44:50 pablo Exp $
  */
-public interface FormTool extends ContextTool
+public interface FormTool
 {
     /** Generates form UI.
      * @param instance form User data which is used to generate the UI.

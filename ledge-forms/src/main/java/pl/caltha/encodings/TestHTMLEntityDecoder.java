@@ -14,6 +14,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.objectledge.encodings.HTMLEntityDecoder;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
