@@ -1,1 +1,4 @@
 bin
+.clover
+target
+velocity.log
