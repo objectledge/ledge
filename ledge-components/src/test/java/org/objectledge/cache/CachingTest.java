@@ -49,6 +49,7 @@ import org.objectledge.cache.spi.LRUMap;
 import org.objectledge.cache.spi.StatisticsMap;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
+import org.objectledge.database.DefaultDatabase;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
@@ -91,7 +92,7 @@ public class CachingTest extends TestCase
         DataSource dataSource = getDataSource();
         IdGenerator idGenerator = new IdGenerator(dataSource);
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
-        Database database = new Database(dataSource, idGenerator, transaction);
+        Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
         notification = new Notification();
 

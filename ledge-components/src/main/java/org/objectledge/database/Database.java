@@ -30,8 +30,6 @@ package org.objectledge.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
 /**
  * A convenience wrapper around database related components.
  * 
@@ -40,45 +38,18 @@ import javax.sql.DataSource;
  * the ThreadDataSource decorator.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Database.java,v 1.5 2004-02-10 10:13:23 fil Exp $
+ * @version $Id: Database.java,v 1.6 2004-02-26 11:51:20 fil Exp $
  */
-public class Database
+public interface Database
 {
-    /** the source of database connections. */
-    private DataSource dataSource;
-    
-    /** the generator of per-table unique ids. */
-    private IdGenerator idGenerator;
-    
-    /** the global transaction management helper object. */
-    private Transaction transaction;
-    
-    /**
-     * Creates a Database instance.
-     * 
-     * @param dataSource the source of database connections. 
-     * @param idGenerator the generator of per-table unique ids.
-     * @param transaction the global transaction management helper object.
-     */
-    public Database(DataSource dataSource, IdGenerator idGenerator, Transaction transaction)
-    {
-        this.dataSource = dataSource;
-        this.idGenerator = idGenerator;
-        this.transaction = transaction;
-    }
-
     /**
      * Returns a database Connection produced by the DataSource.
      * 
      * @return a database Connection.
      * @throws SQLException if the conneciton could not be obtained.
-     */ 
-    public Connection getConnection()
-        throws SQLException
-    {
-        return dataSource.getConnection();
-    }
-    
+     */
+    public abstract Connection getConnection() throws SQLException;
+
     /**
      * Returns a database Connection produced by the DataSource.
      * 
@@ -86,12 +57,8 @@ public class Database
      * @param password the user's password.
      * @return a database Connection.
      * @throws SQLException if the conneciton could not be obtained.
-     */ 
-    public Connection getConnection(String user, String password)
-        throws SQLException
-    {
-        return dataSource.getConnection(user, password);
-    }
+     */
+    public abstract Connection getConnection(String user, String password) throws SQLException;
 
     /**
      * Get the next row identifier for the table.
@@ -100,45 +67,29 @@ public class Database
      * @return the identifier.
      * @throws SQLException if the id could not be generated.
      */
-    public long getNextId(String table)
-        throws SQLException
-    {
-        return idGenerator.getNextId(table);
-    }
-    
+    public abstract long getNextId(String table) throws SQLException;
+
     /**
      * Begin the transaction, if there is none active.
      * 
      * @return <code>true</code> if the requestor become the controler.
      * @throws SQLException if the operation fails.
      */
-    public boolean beginTransaction()
-        throws SQLException
-    {
-        return transaction.begin();
-    }
-    
+    public abstract boolean beginTransaction() throws SQLException;
+
     /**
      * Commit the transaction, if the caller is the controller.
      * 
      * @param controller <code>true</code> if the caller is the controler.
      * @throws SQLException if the commit fails.
      */
-    public void commitTransaction(boolean controller)
-        throws SQLException
-    {
-        transaction.commit(controller);
-    }
-    
+    public abstract void commitTransaction(boolean controller) throws SQLException;
+
     /**
      * Rollback the transaction, if the caller is the controller.
      * 
      * @param controller <code>true</code> if the caller is the controler.
      * @throws SQLException if the rollback fails.
      */
-    public void rollbackTransaction(boolean controller)
-        throws SQLException
-    {
-        transaction.rollback(controller);
-    }
+    public abstract void rollbackTransaction(boolean controller) throws SQLException;
 }

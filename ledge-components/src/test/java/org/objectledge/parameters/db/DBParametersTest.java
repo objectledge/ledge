@@ -43,6 +43,7 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
+import org.objectledge.database.DefaultDatabase;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
@@ -88,7 +89,7 @@ public class DBParametersTest extends TestCase
         IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
-        Database database = new Database(dataSource, idGenerator, transaction);
+        Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         persistence = new DefaultPersistence(database, logger);
         manager = new DBParametersManager(database, logger);
     }
