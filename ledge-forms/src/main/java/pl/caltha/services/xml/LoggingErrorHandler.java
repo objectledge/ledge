@@ -10,7 +10,7 @@ import com.sun.msv.relaxns.grammar.relax.Localizer;
  * Error handler that logs all errors and warnings.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: LoggingErrorHandler.java,v 1.1 2005-01-20 16:44:54 pablo Exp $
+ * @version $Id: LoggingErrorHandler.java,v 1.2 2005-02-10 17:50:27 rafal Exp $
  */
 public class LoggingErrorHandler extends BaseErrorHandler
 {
@@ -23,17 +23,15 @@ public class LoggingErrorHandler extends BaseErrorHandler
 
     //-----------------------------------------------------------------------
     // BaseErrorHandler methods
-    protected void onToManyErrors(SAXParseException e)
+    protected void onTooManyErrors(SAXParseException e)
     throws SAXException, SAXParseException
     {
-        super.onToManyErrors(e);
         log.error(Localizer.localize(MSG_TOO_MANY_ERRORS));
     }
 
     public void onFatalError( SAXParseException e )
     throws SAXException
     {
-        super.onFatalError(e);
         log.error(getSAXParseException( e, MSG_FATAL ));
     }
 

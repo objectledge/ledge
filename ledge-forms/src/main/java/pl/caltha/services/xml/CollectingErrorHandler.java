@@ -11,7 +11,7 @@ import org.xml.sax.SAXParseException;
  * after calling {@link #init()}.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CollectingErrorHandler.java,v 1.1 2005-01-20 16:44:54 pablo Exp $
+ * @version $Id: CollectingErrorHandler.java,v 1.2 2005-02-10 17:50:27 rafal Exp $
  */
 public class CollectingErrorHandler extends BaseErrorHandler
 {
@@ -36,6 +36,12 @@ public class CollectingErrorHandler extends BaseErrorHandler
     throws SAXException
     {
         saveError(e);
+    }
+    
+    protected void onTooManyErrors(SAXParseException e)
+        throws SAXException
+    {
+        // ignored
     }
 
     //-----------------------------------------------------------------------

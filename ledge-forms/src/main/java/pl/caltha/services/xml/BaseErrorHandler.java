@@ -9,7 +9,7 @@ import com.sun.msv.verifier.ValidationUnrecoverableException;
  * Base ErrorHandler class.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseErrorHandler.java,v 1.1 2005-01-20 16:44:54 pablo Exp $
+ * @version $Id: BaseErrorHandler.java,v 1.2 2005-02-10 17:50:27 rafal Exp $
  */
 public abstract class BaseErrorHandler implements org.xml.sax.ErrorHandler
 {
@@ -48,25 +48,22 @@ public abstract class BaseErrorHandler implements org.xml.sax.ErrorHandler
     /** <code>org.xml.sax.ErrorHandler</code> method, You can override this one. */
     public void warning( SAXParseException e )
     {
+        // ignored
     }
-
+    
     //-----------------------------------------------------------------------
     // BaseErrorHandler methods
     /** Override this method to add functionality on
      * {@link #fatalError(SAXParseException)} call.
      */
-    protected void onFatalError(SAXParseException e)
-    throws SAXException
-    {
-    }
+    protected abstract void onFatalError(SAXParseException e)
+        throws SAXException;
 
     /** Override this method to add functionality when there is more than 20
      * errors.
      */
-    protected void onToManyErrors(SAXParseException e)
-    throws SAXException
-    {
-    }
+    protected abstract void onTooManyErrors(SAXParseException e)
+        throws SAXException;
 
     /** Call this method to check if there were errors. */
     public boolean hadErrors()
@@ -81,7 +78,7 @@ public abstract class BaseErrorHandler implements org.xml.sax.ErrorHandler
         {
             return;
         }
-        onToManyErrors(e);
+        onTooManyErrors(e);
         throw new ValidationUnrecoverableException(e);
     }
 }
