@@ -33,7 +33,7 @@ import java.util.Map;
  * A simple implementation of Variables interface using explicit name to value mapping.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MapVariables.java,v 1.1 2004-01-22 11:28:01 fil Exp $
+ * @version $Id: MapVariables.java,v 1.2 2004-01-23 13:36:17 fil Exp $
  */
 public class MapVariables implements Variables
 {
@@ -69,7 +69,7 @@ public class MapVariables implements Variables
          }
          else
          {
-             throw new UndefinedVariableException("undefined variable "+name);
+             throw new UndefinedVariableException(name);
          }
     }
 }
