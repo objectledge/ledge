@@ -27,14 +27,11 @@
 // 
 package org.objectledge.web.mvc;
 
-import org.objectledge.context.Context;
-import org.objectledge.templating.TemplatingContext;
-
 /**
  * Utitlity methods for MVC components. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCUtil.java,v 1.3 2004-01-14 14:09:48 fil Exp $
+ * @version $Id: MVCUtil.java,v 1.4 2004-01-15 09:05:50 fil Exp $
  */
 public class MVCUtil
 {

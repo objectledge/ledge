@@ -30,8 +30,6 @@ package org.objectledge.web.parameters;
 
 import java.io.PrintWriter;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.PipelineProcessingException;
@@ -41,7 +39,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderTestValve.java,v 1.5 2004-01-14 15:18:56 pablo Exp $
+ * @version $Id: RequestParametersLoaderTestValve.java,v 1.6 2004-01-15 09:05:51 fil Exp $
  */
 public class RequestParametersLoaderTestValve implements Runnable
 {
