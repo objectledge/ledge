@@ -28,6 +28,8 @@
 
 package org.objectledge.templating.tools;
 
+import org.objectledge.pipeline.ProcessingException;
+
 /**
  * Context tool factory interface.
  * 
@@ -39,15 +41,19 @@ public interface ContextToolFactory
 	 * Get the tool instance.
 	 * 
 	 * @return the tool instance.
+     * @throws ProcessingException if anything goes wrong.
 	 */
-	Object getTool();
+	Object getTool()
+        throws ProcessingException;
 	
 	/**
 	 * Return the tool instance to the object pool.
 	 * 
 	 * @param tool the tool instance.
+     * @throws ProcessingException if anything goes wrong.
 	 */
-	void recycleTool(Object tool);
+	void recycleTool(Object tool)
+        throws ProcessingException;
 
 	/**	
  	 * Get the key of the tool.

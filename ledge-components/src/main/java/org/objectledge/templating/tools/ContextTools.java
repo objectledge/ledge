@@ -28,6 +28,7 @@
 
 package org.objectledge.templating.tools;
 
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
 /**
@@ -56,6 +57,7 @@ public class ContextTools
 	 * @param templatingContext the templating context.
 	 */
 	public void populateTools(TemplatingContext templatingContext)
+        throws ProcessingException
 	{
 		for(int i = 0; i < toolFactories.length; i++)
 		{
@@ -70,6 +72,7 @@ public class ContextTools
 	 * @param templatingContext the templating context.
 	 */
 	public void recycleTools(TemplatingContext templatingContext)
+        throws ProcessingException
 	{
 		for(int i = 0; i < toolFactories.length; i++)
 		{

@@ -29,6 +29,7 @@
 package org.objectledge.templating.tools;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
 
@@ -59,6 +60,7 @@ public class ContextToolPopulatorValve
      * @param context the thread's processing context.
 	 */
 	public void process(Context context)
+        throws ProcessingException
 	{
 		TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 		contextTools.populateTools(templatingContext);

@@ -28,6 +28,7 @@
 
 package org.objectledge.web.mvc.tools;
 
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.HttpContext;
@@ -59,6 +60,7 @@ public class PageToolFactory implements ContextToolFactory
 	 * {@inheritDoc}
 	 */
 	public Object getTool()
+        throws ProcessingException
 	{
 		return new PageTool((LinkTool) linkToolFactory.getTool(), 
             HttpContext.getHttpContext(context));
@@ -68,6 +70,7 @@ public class PageToolFactory implements ContextToolFactory
 	 * {@inheritDoc}
 	 */
 	public void recycleTool(Object tool)
+        throws ProcessingException
 	{
 		linkToolFactory.recycleTool( ((PageTool) tool).getLinkTool() );
 	}

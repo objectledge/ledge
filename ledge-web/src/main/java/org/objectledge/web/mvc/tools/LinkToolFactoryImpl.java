@@ -32,6 +32,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
@@ -40,7 +41,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Context tool factory component to build the link tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinkToolFactoryImpl.java,v 1.2 2005-01-13 15:10:56 rafal Exp $
+ * @version $Id: LinkToolFactoryImpl.java,v 1.3 2005-03-31 10:05:57 pablo Exp $
  */
 public class LinkToolFactoryImpl implements LinkToolFactory
 {
@@ -74,6 +75,7 @@ public class LinkToolFactoryImpl implements LinkToolFactory
 	 * {@inheritDoc}
 	 */
 	public Object getTool()
+        throws ProcessingException
 	{
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);
@@ -85,6 +87,7 @@ public class LinkToolFactoryImpl implements LinkToolFactory
 	 * {@inheritDoc}
 	 */
 	public void recycleTool(Object tool)
+        throws ProcessingException
 	{
         // these simple objects do not need recycling
 	}

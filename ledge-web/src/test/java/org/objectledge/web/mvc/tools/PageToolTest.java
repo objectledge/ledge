@@ -54,7 +54,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.12 2005-03-30 13:23:53 rafal Exp $
+ * @version $Id: PageToolTest.java,v 1.13 2005-03-31 10:05:58 pablo Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -112,6 +112,7 @@ public class PageToolTest extends LedgeTestCase
 	}
 
 	public void testFactory()
+        throws Exception
 	{
 		PageToolFactory pageToolFactory = new PageToolFactory(linkToolFactory, context);
 		PageTool pageTool1 = (PageTool) pageToolFactory.getTool();
@@ -125,6 +126,7 @@ public class PageToolTest extends LedgeTestCase
 	}
 
     public void testSetTitle()
+        throws Exception    
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
     	PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -133,6 +135,7 @@ public class PageToolTest extends LedgeTestCase
     }
 
     public void testAppendTitleSuffix()
+        throws Exception
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -142,6 +145,7 @@ public class PageToolTest extends LedgeTestCase
     }
 
     public void testInsertTitlePrefix()
+        throws Exception
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -151,6 +155,7 @@ public class PageToolTest extends LedgeTestCase
     }
 
     public void testGetTitle()
+        throws Exception
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -161,6 +166,7 @@ public class PageToolTest extends LedgeTestCase
     }
 
 	public void testAddStyleLink()
+        throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -179,6 +185,7 @@ public class PageToolTest extends LedgeTestCase
 	}
 
 	public void testAddScriptLink()
+        throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -197,6 +204,7 @@ public class PageToolTest extends LedgeTestCase
 	}
 
 	public void testAddNameMeta()
+        throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -221,6 +229,7 @@ public class PageToolTest extends LedgeTestCase
 	}
 
 	public void testAddHttpEquivMeta()
+        throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -240,6 +249,7 @@ public class PageToolTest extends LedgeTestCase
 	}
 
 	public void testGetLinkTool()
+        throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
@@ -247,6 +257,7 @@ public class PageToolTest extends LedgeTestCase
 	}
 
 	public void testReset()
+        throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
 		PageTool pageTool = new PageTool(linkTool, httpContext);
