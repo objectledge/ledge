@@ -34,7 +34,7 @@
             <tr>
               <th>required libraries</th>
               <td>
-                Jing (jing), Saxon (saxon)
+                Jing (jing)
               </td>
             </tr>
           </table>
@@ -42,20 +42,7 @@
       </subsection>      
 
       <subsection name="Constructor parameters">
-        <p>
-          <table>
-            <tr>
-              <th>position</th>
-	          <th>type</th>
-	          <th widht="100%">descritpion</th>
- 	        </tr>
-	        <tr>
-  	          <td>1</td>
-	          <td><code>org.objectledge.filesystem.FileSystem</code></td>
-	          <td>The file system to load data from.</td>
-	        </tr>
-          </table>
-        </p>        
+        <p>none</p>        
       </subsection>
     </section>
   </body>
