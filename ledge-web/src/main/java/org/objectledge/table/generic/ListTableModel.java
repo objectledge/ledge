@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableRowSet;
 import org.objectledge.table.TableState;
 
@@ -42,7 +43,7 @@ import org.objectledge.table.TableState;
  * <p>Item indices are used as ids.</p>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListTableModel.java,v 1.4 2004-06-14 13:54:58 fil Exp $
+ * @version $Id: ListTableModel.java,v 1.5 2004-07-01 11:40:06 zwierzem Exp $
  */
 public class ListTableModel
     implements ExtendedTableModel
@@ -84,21 +85,17 @@ public class ListTableModel
     }
 
     /**
-     * Returns a {@link TableRowSet} object initialised by this model
-     * and a given {@link TableState}.
-     *
-     * @param state the parent
-     * @return table of children
+     * @inheritDoc
      */
-    public TableRowSet getRowSet(TableState state)
+    public TableRowSet getRowSet(TableState state, TableFilter[] filters)
     {
         if(state.getTreeView())
         {
-			return new GenericTreeRowSet(state, this);
+			return new GenericTreeRowSet(state, filters, this);
         }
         else
         {
-			return new GenericListRowSet(state, this);
+			return new GenericListRowSet(state, filters, this);
         }
     }
 

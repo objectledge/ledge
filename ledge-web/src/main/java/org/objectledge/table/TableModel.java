@@ -37,7 +37,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableModel.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableModel.java,v 1.2 2004-07-01 11:39:56 zwierzem Exp $
  */
 public interface TableModel
 {
@@ -46,12 +46,13 @@ public interface TableModel
      * and a given {@link TableState}.
      *
      * @param state the parent
+     * @param filters a list of filters to be used while creating the rows set
      * @return table of children
      */
-    public TableRowSet getRowSet(TableState state);
+    public TableRowSet getRowSet(TableState state, TableFilter[] filters);
 
     /**
-     * Returns array of column deinitions.
+     * Returns array of column definitions.
      *
      * @return array of <code>TableColumn</code> objects
      */

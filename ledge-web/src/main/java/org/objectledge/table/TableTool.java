@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.6 2004-06-11 10:38:26 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.7 2004-07-01 11:39:56 zwierzem Exp $
  */
 public class TableTool
 {
@@ -58,14 +58,21 @@ public class TableTool
      * Constructor for basic implementation of TableRowSet.
      *
      * @param state the state of the table instance
+     * @param filters a list of filters to be used while creating the rows set
      * @param model the table model
      * @throws TableException on construction errors
      */
-    public TableTool(TableState state, TableModel model)
+    public TableTool(TableState state, List filters, TableModel model)
     throws TableException
     {
         this.state = state;
-        this.rowSet = model.getRowSet(state);
+        TableFilter[] filtersArray = null;
+        if(filters != null)
+        {
+            filtersArray = new TableFilter[filters.size()];
+            filters.toArray(filtersArray);
+        }
+        this.rowSet = model.getRowSet(state, filtersArray);
 
         // prepare the column map
         TableColumn[] columns = model.getColumns();

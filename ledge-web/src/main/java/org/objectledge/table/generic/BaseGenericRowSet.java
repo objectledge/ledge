@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 
@@ -43,7 +44,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.8 2004-06-15 14:16:52 zwierzem Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.9 2004-07-01 11:40:06 zwierzem Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -68,14 +69,15 @@ public abstract class BaseGenericRowSet extends BaseRowSet
     protected HashMap rowsByChild = new HashMap();
 
     /**
-     * Construct the object.
+     * construct the object
      *
      * @param state the state of the table instance
+     * @param filters a list of filters to be used while creating the rows set
      * @param model the table model
      */
-    public BaseGenericRowSet(TableState state, ExtendedTableModel model)
+    public BaseGenericRowSet(TableState state, TableFilter[] filters, ExtendedTableModel model)
     {
-        super(state);
+        super(state, filters);
         this.model = model;
     }
 

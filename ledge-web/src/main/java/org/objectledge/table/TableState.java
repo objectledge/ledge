@@ -28,11 +28,8 @@
 
 package org.objectledge.table;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,7 +45,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.4 2004-03-16 15:35:51 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.5 2004-07-01 11:39:56 zwierzem Exp $
  */
 public class TableState
 {
@@ -72,9 +69,6 @@ public class TableState
 
     /** Sorting comparators by tree level map. */
     private Map sorting = new HashMap();
-
-    /** Filters for this table view. */
-    private TableFilter[] filters = new TableFilter[0];
 
     /** Current table page, default: <code>1</code>. */
     private int currentPage = 1;
@@ -297,58 +291,6 @@ public class TableState
 	{
 		this.ascendingSort = ascendingSort;
 	}
-
-    /**
-     * Returns the filters defined for this.
-     *
-     * @return the array of filters
-     */
-    public TableFilter[] getFilters()
-    {
-        return filters;
-    }
-
-    /**
-     * Sets a filter for this table view.
-     *
-     * @param filter a new filter
-     */
-    public void addFilter(TableFilter filter)
-    {
-        List filtersList = new ArrayList(Arrays.asList(filters));
-        int i = filtersList.indexOf(filter);
-        if(i == -1)
-        {
-            filtersList.add(filter);
-        }
-        filters = new TableFilter[filtersList.size()];
-        filters = (TableFilter[])(filtersList.toArray(filters));
-    }
-
-    /**
-     * Removes a filter from this table view.
-     *
-     * @param filter a removed filter
-     */
-    public void removeFilter(TableFilter filter)
-    {
-        List filtersList = new ArrayList(Arrays.asList(filters));
-        int i = filtersList.indexOf(filter);
-        if(i != -1)
-        {
-            filtersList.remove(filter);
-        }
-        filters = new TableFilter[filtersList.size()];
-        filters = (TableFilter[])(filtersList.toArray(filters));
-    }
-
-    /**
-     * Removes all filters from this table view.
-     */
-    public void clearFilters()
-    {
-        filters = new TableFilter[0];
-    }
 
     /**
      * Returns the current page

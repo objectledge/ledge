@@ -29,6 +29,7 @@
 package org.objectledge.table.generic;
 
 import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableRowSet;
@@ -41,14 +42,14 @@ import org.objectledge.table.TableState;
  * is not available.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EmptyTableModel.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: EmptyTableModel.java,v 1.2 2004-07-01 11:40:06 zwierzem Exp $
  */
 public class EmptyTableModel implements TableModel
 {
 	/** 
 	 * {@inheritDoc}
 	 */
-    public TableRowSet getRowSet(TableState state)
+    public TableRowSet getRowSet(TableState state, TableFilter[] filters)
     {
         return new EmptyRowSet(state);
     }
