@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.14 2004-09-30 14:03:40 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.15 2004-10-07 10:55:51 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -114,12 +114,15 @@ public class LinkTool
 	/** the content path */
 	private String path;
 	
-	/** the fragment part of the url */
+    /** the special path info suffix */
+    private String pathInfoSuffix;
+
+    /** the fragment part of the url */
 	private String fragment;
 	
 	/** the parameters */
 	private Parameters parameters;
-	
+    
 	/** the string buffer */
 	private StringBuffer sb;
 	
@@ -146,14 +149,17 @@ public class LinkTool
         // this means no override for view
         view = null;
 		action = "";
-		parameters = new SortedParameters();
+        pathInfoSuffix = null;
 		fragment = null;
 		if(config.stickyParameterNames.size() > 0)
 		{
 			parameters = new SortedParameters(requestParameters);
 		    parameters.removeExcept(config.stickyParameterNames);
 		}
-		sb = new StringBuffer();
+        else
+        {
+            parameters = new SortedParameters();
+        }
 	}
 	
 	/**
@@ -246,12 +252,12 @@ public class LinkTool
     }
 
     /**
-     * Set link to point to the content.
+     * Set link to point to the content stored in <code>/</code> directory of servlet context.
      *
      * @param path the path to content.
      * @return the link tool.
      */
-    public LinkTool content(String path)
+    public LinkTool rootContent(String path)
     {
         LinkTool target = getLinkTool(this);
         target.contentLink = true;
@@ -261,6 +267,32 @@ public class LinkTool
     }
 
     /**
+     * Set link to point to the content stored in <code>/content</code> directory of servlet
+     * context.
+     *
+     * @param path the path to content.
+     * @return the link tool.
+     */
+    public LinkTool content(String path)
+    {
+        if (path.length() == 0)
+        {
+            path = config.baseContentPath;
+        }
+        else if (path.charAt(0) != '/')
+        {
+            path = config.baseContentPath + '/' + path;
+        }
+        else
+        {
+            path = config.baseContentPath + path;
+        }
+        return rootContent(path);
+    }
+
+    // parameter set methods ---------------------------------------------------------------------- 
+    
+    /**
      * Sets a request parameter.
      *
      * @param name the name of the parameter.
@@ -269,8 +301,7 @@ public class LinkTool
      */
     public LinkTool set(String name, String value)
     {
-		checkSetParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getSetTargetLinkTool(name);
 		target.parameters.set(name, value);
         return target;
     }
@@ -284,8 +315,7 @@ public class LinkTool
      */
     public LinkTool set(String name, int value)
     {
-		checkSetParamName(name);
-		LinkTool target = getLinkTool(this);
+        LinkTool target = getSetTargetLinkTool(name);
 		target.parameters.set(name, value);
 		return target;
     }
@@ -299,8 +329,7 @@ public class LinkTool
      */
     public LinkTool set(String name, long value)
     {
-		checkSetParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getSetTargetLinkTool(name);
         target.parameters.set(name, value);
         return target;
     }
@@ -314,8 +343,7 @@ public class LinkTool
      */
     public LinkTool set(String name, float value)
     {
-		checkSetParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getSetTargetLinkTool(name);
         target.parameters.set(name, value);
         return target;
     }
@@ -329,8 +357,7 @@ public class LinkTool
      */
     public LinkTool set(String name, boolean value)
     {
-		checkSetParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getSetTargetLinkTool(name);
         target.parameters.set(name, value);
         return target;
     }
@@ -356,6 +383,44 @@ public class LinkTool
         LinkTool target = getLinkTool(this);
         target.parameters = new SortedParameters(parameters);
         return target;
+    }
+
+    /**
+     * Checks the name of the set parameter and returns target link tool.
+     * Method created for code reuse.
+     *  
+     * @param paramName checked name of the set parameter.
+     * @return target link tool
+     */
+    private LinkTool getSetTargetLinkTool(String paramName)
+    {
+        checkSetParamName(paramName);
+        return getLinkTool(this);
+    }
+    
+    // --------------------------------------------------------------------------------------------
+    
+    /**
+     * Sets the path info suffix for this link.
+     * 
+     * @param pathInfoSuffix the path info suffix.
+     * @return the link tool.
+     */
+    public LinkTool pathInfoSuffix(String pathInfoSuffix)
+    {
+        LinkTool target = getLinkTool(this);
+        target.pathInfoSuffix = pathInfoSuffix;
+        return target;
+    }
+
+    /**
+     * Returns the path info suffix for this link.
+     * 
+     * @return the path info suffx in the current link
+     */
+    public String pathInfoSuffix()
+    {
+        return pathInfoSuffix;
     }
 
     /**
@@ -386,6 +451,9 @@ public class LinkTool
      * Sets the parameters to be equal to the paremeters of the
      * current request.
      * 
+     * <p>TODO: This method creates links different from the request URI if some of the parameters
+     * were passed as path info parameters and not configured as such.</p>  
+     * 
      * @return the link tool.
      */
     public LinkTool self()
@@ -403,6 +471,8 @@ public class LinkTool
         return target;
     }
 
+    // parameter add methods ---------------------------------------------------------------------- 
+    
     /**
      * Adds a request parameter.
      *
@@ -412,8 +482,7 @@ public class LinkTool
      */
     public LinkTool add(String name, String value)
     {
-		checkAddParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getAddTargetLinkTool(name);
         target.parameters.add(name, value);
         return target;
     }
@@ -427,8 +496,7 @@ public class LinkTool
      */
     public LinkTool add(String name, int value)
     {
-		checkAddParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getAddTargetLinkTool(name);
         target.parameters.add(name, value);
         return target;
     }
@@ -442,8 +510,7 @@ public class LinkTool
      */
     public LinkTool add(String name, long value)
     {
-		checkAddParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getAddTargetLinkTool(name);
         target.parameters.add(name, value);
         return target;
     }
@@ -457,8 +524,7 @@ public class LinkTool
      */
     public LinkTool add(String name, float value)
     {
-		checkAddParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getAddTargetLinkTool(name);
         target.parameters.add(name, value);
         return target;
     }
@@ -472,8 +538,7 @@ public class LinkTool
      */
     public LinkTool add(String name, boolean value)
     {
-		checkAddParamName(name);
-        LinkTool target = getLinkTool(this);
+        LinkTool target = getAddTargetLinkTool(name);
         target.parameters.add(name, value);
         return target;
     }
@@ -500,6 +565,21 @@ public class LinkTool
         return target;
     }
 
+    /**
+     * Checks the name of the set parameter and returns target link tool.
+     * Method created for code reuse.
+     *  
+     * @param paramName checked name of the set parameter.
+     * @return target link tool
+     */
+    private LinkTool getAddTargetLinkTool(String paramName)
+    {
+        checkAddParamName(paramName);
+        return getLinkTool(this);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    
     /**
      * Removes a request parameter.
      *
@@ -582,10 +662,18 @@ public class LinkTool
      */
     public String toString()
     {
+        if(sb != null)
+        {
+            sb.setLength(0);
+        }
+        else
+        {
+            sb = new StringBuffer();
+        }
+
         try
         {
             // prepare server part if needed
-            sb.setLength(0);
             appendServerPart(sb);
 
             // prepare address part
@@ -601,6 +689,10 @@ public class LinkTool
 
                 String[] keys = parameters.getParameterNames();
                 appendPathInfo(sb, keys);
+                if(pathInfoSuffix != null)
+                {
+                    sb.append('/').append(URLEncoder.encode(pathInfoSuffix, PARAMETER_ENCODING));
+                }
                 appendQueryString(sb, keys);
             }
             
@@ -645,7 +737,6 @@ public class LinkTool
     private void appendContentLink(StringBuffer sb)
         throws UnsupportedEncodingException
     {
-        sb.append(config.baseContentPath);
         if (path.length() > 0)
         {
             if (path.charAt(0) != '/')
@@ -735,6 +826,7 @@ public class LinkTool
 		target.protocolName = source.protocolName;
 		target.port = source.port;
 		target.path = source.path;
+        target.pathInfoSuffix = source.pathInfoSuffix;
 		target.fragment = source.fragment;
 	    target.parameters = new SortedParameters(source.parameters);
 		return target;		
