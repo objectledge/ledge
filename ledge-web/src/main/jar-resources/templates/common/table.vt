@@ -30,7 +30,7 @@
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
- * @version $Id: table.vt,v 1.2 2004-02-18 14:58:48 zwierzem Exp $
+ * @version $Id: table.vt,v 1.3 2004-03-05 12:10:12 zwierzem Exp $
 *###
 #**
  * Displays a single header cell contents.
@@ -154,8 +154,7 @@ $i18n.get('table.page.size')
  *
  * @param $table the table tool.
  * @param $row the row to displays tree images for.
- * @parmm $toggleExpandLink LinkTool with preconfigured action for toggling.
- *        row selection
+ * @param $toggleExpandLink LinkTool with preconfigured action for toggling row expansion
  *#
 #macro(tableView_linesAndFoldersBase $table $row $toggleExpandLink)
 #if($table.viewAsTree)
@@ -239,11 +238,7 @@ $i18n.get('table.page.size')
       ## compute even/odd table row
       #set($odd = $velocityCount%2)
       <div class="row$odd tree-lines-and-folders">#tableView_linesAndFolders($table $row $tableLink)
-      #if($table.isSelected($row))
-        <b><a href="$rowLink.set($rowIdParameterName,$row.id)">$row.object.name</a></b>
-      #else
         <a href="$rowLink.set($rowIdParameterName,$row.id)">$row.object.name</a>
-      #end
       </div>
     #end
   #end
