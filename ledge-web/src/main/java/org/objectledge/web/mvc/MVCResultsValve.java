@@ -42,7 +42,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.7 2005-02-14 18:12:24 pablo Exp $
+ * @version $Id: MVCResultsValve.java,v 1.8 2005-03-08 13:08:00 zwierzem Exp $
  */
 public class MVCResultsValve 
     implements Valve
@@ -63,7 +63,6 @@ public class MVCResultsValve
             String result = mvcContext.getBuildResult();
 			try
 			{
-				httpContext.setContentType("text/html");
 				if(result == null)
 				{
                     Exception e = (Exception)context.
