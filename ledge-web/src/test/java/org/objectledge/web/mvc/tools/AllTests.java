@@ -45,6 +45,7 @@ public class AllTests
         TestSuite suite = new TestSuite("Test for org.objectledge.web.mvc.tools");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(LinkToolTest.class));
+        suite.addTest(new TestSuite(PageToolTest.class));
         //$JUnit-END$
         return suite;
     }

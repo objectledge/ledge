@@ -43,8 +43,9 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
-import org.objectledge.web.*;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.TestHttpServletRequest;
+import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCInitializerValve;
 import org.objectledge.xml.XMLValidator;
@@ -183,7 +184,8 @@ public class LinkToolTest extends TestCase
         // test add methods
 
         assertEquals(linkTool.add("foo", "bar").toString(), "/test/ledge?foo=bar");
-        assertEquals(linkTool.add("foo","bar").add("foo","foo").toString(), "/test/ledge?foo=bar&foo=foo");
+        assertEquals(linkTool.add("foo","bar").add("foo","foo").toString(),
+			"/test/ledge?foo=bar&foo=foo");
         assertEquals(linkTool.add("foo", 1).toString(), "/test/ledge?foo=1");
         assertEquals(linkTool.add("foo", 1L).toString(), "/test/ledge?foo=1");
         assertEquals(linkTool.add("foo", 1.6F).toString(), "/test/ledge?foo=1.6");
