@@ -35,7 +35,7 @@ import junit.framework.TestCase;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IntrospectionVariablesTest.java,v 1.1 2004-01-23 13:58:26 fil Exp $
+ * @version $Id: IntrospectionVariablesTest.java,v 1.2 2004-01-26 09:32:42 fil Exp $
  */
 public class IntrospectionVariablesTest extends TestCase
 {
@@ -129,6 +129,45 @@ public class IntrospectionVariablesTest extends TestCase
         }
     }
     
+    public void testExceptions()
+    {
+        Variables variables;
+        variables = new IntrospectionVariables(new PlainObject());
+        try
+        {
+            variables.get("failing");
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            assertEquals(EvaluationException.class, e.getClass());
+            assertEquals(IllegalStateException.class, e.getCause().getClass());
+        }
+        variables = new IntrospectionVariables(new StringGetObject());
+        try
+        {
+            variables.get("failing");
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            assertEquals(EvaluationException.class, e.getClass());
+            assertEquals(IllegalStateException.class, e.getCause().getClass());
+        }
+
+        variables = new IntrospectionVariables(new FailingObjectGetObject());
+        try
+        {
+            variables.get("failing");
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            assertEquals(EvaluationException.class, e.getClass());
+            assertEquals(IllegalStateException.class, e.getCause().getClass());
+        }
+    }
+    
     private static class PlainObject
     {
         public String publicField = "publicField";
@@ -161,20 +200,37 @@ public class IntrospectionVariablesTest extends TestCase
         {
             return this;
         }
+        
+        public Object getFailing()
+        {
+            throw new IllegalStateException("failed");
+        }
     }
     
     private static class StringGetObject
     {
         public String get(String name)
         {
-            if(name == "defined")
+            if(name.equals("defined"))
             {
                 return "defined";
+            }
+            else if(name.equals("failing"))
+            {
+                throw new IllegalStateException("failed");
             }
             else
             {
                 return null;
             }
+        }
+    }
+    
+    private static class FailingObjectGetObject
+    {
+        public Object get(Object param)
+        {
+            throw new IllegalStateException("failed");
         }
     }
 }
