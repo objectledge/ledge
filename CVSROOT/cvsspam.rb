@@ -9,7 +9,7 @@
 
 # TODO: exemplify syntax for 'cvs admin -m' when log message is missing
 # TODO: make max-line limit on diff output configurable
-# TODO: put max size limit on whole email
+# TODO: put more exact max size limit on whole email
 # TODO: support non-html mail too (text/plain, multipart/alternative)
 
 # If you want another 'todo keyword' (TODO & FIXME are highlighted by default)
@@ -18,13 +18,14 @@
 # to your cvssppam.conf
 
 
-$version = "0.2.8"
+$version = "0.2.10"
 
 
 $maxSubjectLength = 200
 $maxLinesPerDiff = 1000
+$maxDiffLineLength = 1000	# may be set to nil for no limit
 $charset = nil			# nil implies 'don't specify a charset'
-$mailSubject = nil
+$mailSubject = ''
 
 def blah(text)
   $stderr.puts("cvsspam.rb: #{text}") if $debug
@@ -34,6 +35,9 @@ def min(a, b)
   a<b ? a : b
 end
 
+# NB must ensure the time is UTC
+# (the Ruby Time object's strftime() doesn't supply a numeric timezone)
+DATE_HEADER_FORMAT = "%a, %d %b %Y %H:%M:%S +0000"
 
 # the regexps given as keys must not use capturing subexpressions '(...)'
 class MultiSub
@@ -307,6 +311,7 @@ class FileEntry
     @repository = Repository.get(path)
     @repository.merge_common_prefix(basedir())
     @isEmpty = @isBinary = false
+    @has_diff = nil
   end
 
   attr_accessor :path, :type, :lineAdditions, :lineRemovals, :isBinary, :isEmpty, :fromVer, :toVer
@@ -348,6 +353,14 @@ class FileEntry
 
   def modification?
     @type == "M"
+  end
+
+  def has_diff=(diff)
+    @has_diff = diff if @has_diff.nil?
+  end
+
+  def has_diff?
+    @has_diff
   end
 end
 
@@ -421,7 +434,7 @@ class CommentHandler < LineConsumer
         @comment += "\n"
         @haveBlank = false
       end
-      $mailSubject = line if $mailSubject == nil
+      $mailSubject = line unless $mailSubject.length > 0
       @comment += line += "\n"
     end
   end
@@ -476,6 +489,9 @@ class FileHandler < LineConsumer
 
   def consume(line)
     $file = FileEntry.new(line)
+    if $diff_output_limiter.choose_to_limit?
+      $file.has_diff = false
+    end
     $fileEntries << $file
     $file.tag = getTag
     handleFile($file)
@@ -539,6 +555,19 @@ class WebFrontend < NoFrontend
   def diff(file)
     "<a href=\"#{diff_url(file)}\">#{super(file)}</a>"
   end
+
+ protected
+  def add_repo(url)
+    if @repository_name
+      if url =~ /\?/
+        "#{url}&amp;cvsroot=#{urlEncode(@repository_name)}"
+      else
+        "#{url}?cvsroot=#{urlEncode(@repository_name)}"
+      end
+    else
+      url
+    end
+  end
 end
 
 # Link to ViewCVS
@@ -566,19 +595,6 @@ class ViewCVSFrontend < WebFrontend
   def diff_url(file)
     add_repo("#{@base_url}#{urlEncode(file.path)}.diff?r1=#{file.fromVer}&amp;r2=#{file.toVer}")
   end
-
- private
-  def add_repo(url)
-    if @repository_name
-      if url =~ /\?/
-        "#{url}&amp;cvsroot=#{urlEncode(@repository_name)}"
-      else
-        "#{url}?cvsroot=#{urlEncode(@repository_name)}"
-      end
-    else
-      url
-    end
-  end
 end
 
 # Link to Chora, from the Horde framework
@@ -601,18 +617,18 @@ end
 class CVSwebFrontend < WebFrontend
   def path_url(path, tag)
     if tag == nil
-      @base_url + urlEncode(path)
+      add_repo(@base_url + urlEncode(path))
     else
-      "#{@base_url}#{urlEncode(path)}?only_with_tag=#{urlEncode(tag)}"
+      add_repo("#{@base_url}#{urlEncode(path)}?only_with_tag=#{urlEncode(tag)}")
     end
   end
 
   def version_url(path, version)
-    "#{@base_url}#{urlEncode(path)}?rev=#{version}&amp;content-type=text/x-cvsweb-markup"
+    add_repo("#{@base_url}#{urlEncode(path)}?rev=#{version}&amp;content-type=text/x-cvsweb-markup")
   end
 
   def diff_url(file)
-    "#{@base_url}#{urlEncode(file.path)}.diff?r1=text&amp;tr1=#{file.fromVer}&amp;r2=text&amp;tr2=#{file.toVer}&amp;f=h"
+    add_repo("#{@base_url}#{urlEncode(file.path)}.diff?r1=text&amp;tr1=#{file.fromVer}&amp;r2=text&amp;tr2=#{file.toVer}&amp;f=h")
   end
 end
 
@@ -681,6 +697,8 @@ class UnifiedDiffColouriser < LineConsumer
     @currentState = "@"
     @currentStyle = "info"
     @lineJustDeleted = nil
+    @lineJustDeletedSuperlong = false
+    @truncatedLineCount = 0
   end
 
   def output=(io)
@@ -689,6 +707,12 @@ class UnifiedDiffColouriser < LineConsumer
 
   def consume(line)
     initial = line[0,1]
+    superlong_line = false
+    if $maxDiffLineLength && line.length > $maxDiffLineLength+1
+      line = line[0, $maxDiffLineLength+1]
+      superlong_line = true
+      @truncatedLineCount += 1
+    end
     if initial != @currentState
       prefixLen = 1
       suffixLen = 0
@@ -705,23 +729,34 @@ class UnifiedDiffColouriser < LineConsumer
         oversize_change = deleteInfixSize*100/@lineJustDeleted.length>33 || addInfixSize*100/line.length>33
 
         if prefixLen==1 && suffixLen==0 || deleteInfixSize<=0 || oversize_change
-          println(htmlEncode(@lineJustDeleted))
+          print(htmlEncode(@lineJustDeleted))
         else
           print(htmlEncode(@lineJustDeleted[0,prefixLen]))
           print("<span id=\"removedchars\">")
           print(formatChange(@lineJustDeleted[prefixLen,deleteInfixSize]))
           print("</span>")
-          println(htmlEncode(@lineJustDeleted[@lineJustDeleted.length-suffixLen,suffixLen]))
+          print(htmlEncode(@lineJustDeleted[@lineJustDeleted.length-suffixLen,suffixLen]))
+        end
+        if superlong_line
+          println("<strong class=\"error\">[...]</strong>")
+        else
+          println("")
         end
         @lineJustDeleted = nil
       end
       if initial=="-"
         @lineJustDeleted=line
+        @lineJustDeletedSuperlong = superlong_line
         shift(initial)
         # we'll print it next time (fingers crossed)
         return
       elsif @lineJustDeleted!=nil
-        println(htmlEncode(@lineJustDeleted))
+        print(htmlEncode(@lineJustDeleted))
+        if @lineJustDeletedSuperlong
+          println("<strong class=\"error\">[...]</strong>")
+        else
+          println("")
+        end
         @lineJustDeleted = nil
       end
       shift(initial)
@@ -739,7 +774,12 @@ class UnifiedDiffColouriser < LineConsumer
     end
     if initial=="-"
       unless @lineJustDeleted==nil
-        println(htmlEncode(@lineJustDeleted))
+        print(htmlEncode(@lineJustDeleted))
+        if @lineJustDeletedSuperlong
+          println("<strong class=\"error\">[...]</strong>")
+        else
+          println("")
+        end
         @lineJustDeleted=nil
       end
     end
@@ -753,15 +793,36 @@ class UnifiedDiffColouriser < LineConsumer
         end
       end
     end
-    println(encoded)
+    print(encoded)
+    if superlong_line
+      println("<strong class=\"error\">[...]</strong>")
+    else
+      println("")
+    end
   end
 
   def teardown
     unless @lineJustDeleted==nil
-      println(htmlEncode(@lineJustDeleted))
+      print(htmlEncode(@lineJustDeleted))
+      if @lineJustDeletedSuperlong
+        println("<strong class=\"error\">[...]</strong>")
+      else
+        println("")
+      end
       @lineJustDeleted = nil
     end
     shift(nil)
+    if @truncatedLineCount>0
+      println("<strong class=\"error\" title=\"#{@truncatedLineCount} lines truncated at column #{$maxDiffLineLength}\">[Note: Some over-long lines of diff output only partialy shown]</strong>")
+    end
+  end
+
+  # start the diff output, using the given lines as the 'preamble' bit
+  def start_output(*lines)
+    print("<pre class=\"diff\"><small id=\"info\">")
+    lines.each do |line|
+      println(htmlEncode(line))
+    end
   end
 
  private
@@ -823,11 +884,7 @@ class UnifiedDiffHandler < LineConsumer
       @lookahead = line
      when 3
       println($fileHeaderHtml)
-      # TODO: move to UnifiedDiffColouriser
-      print("<pre class=\"diff\"><small id=\"info\">")
-      println(htmlEncode(@diffline))  # 'diff ...'
-      println(htmlEncode(@lookahead)) # '--- ...'
-      println(htmlEncode(line))      # '+++ ...'
+      @colour.start_output(@diffline, @lookahead, line)
      else
       unless $file.removal? && $no_removed_file_diff
         @stats.consume(line)
@@ -855,20 +912,111 @@ class UnifiedDiffHandler < LineConsumer
           @colour.teardown
         end
         println("</div>") # end of "file" div
+	$file.has_diff = true
       end
     end
   end
 end
 
 
+# a filter that counts the number of characters output to the underlying object
+class OutputCounter
+  # TODO: This should probably be a subclass of IO
+  # TODO: assumes unix end-of-line convention
+
+  def initialize(io)
+    @io = io
+    # TODO: use real number of chars representing end of line (for platform)
+    @eol_size = 1
+    @count = 0;
+  end
+
+  def puts(text)
+    @count += text.length
+    @count += @eol_size unless text =~ /\n$/
+    @io.puts(text)
+  end
+
+  def print(text)
+    @count += text.length
+    @io.print(text)
+  end
+
+  attr_reader :count
+end
 
 
+# a filter that can be told to stop outputing data to the underlying object
+class OutputDropper
+  def initialize(io)
+    @io = io
+    @drop = false
+  end
+
+  def puts(text)
+    @io.puts(text) unless @drop
+  end
+
+  def print(text)
+    @io.print(text) unless @drop
+  end
+
+  attr_accessor :drop
+end
 
 
+# TODO: the current implementation of the size-limit continues to generate
+# HTML-ified diff output, but doesn't add it to the email.  This means we
+# can report 'what you would have won', but is less efficient than turning
+# of the diff highlighting code.  Does this matter?
+
+# Counts the amount of data written, and when choose_to_limit? is called,
+# checks this count against the configured limit, discarding any further
+# output if the limit is exceeded.  We aren't strict about the limit becase
+# we don't want to chop-off the end of a tag and produce invalid HTML, etc.
+class OutputSizeLimiter
+  def initialize(io, limit)
+    @dropper = OutputDropper.new(io)
+    @counter = OutputCounter.new(@dropper)
+    @limit = limit
+    @written_count = nil
+  end
+
+  def puts(text)
+    @counter.puts(text)
+  end
+
+  def print(text)
+    @counter.print(text)
+  end
+
+  def choose_to_limit?
+    return true if @dropper.drop
+    if @counter.count >= @limit
+      @dropper.drop = true
+      @written_count = @counter.count
+      return true
+    end
+    return false
+  end
+
+  def total_count
+    @counter.count
+  end
+
+  def written_count
+    if @written_count.nil?
+      total_count
+    else
+      @written_count
+    end
+  end
+end
 
 
-
-$config = "#{ENV['CVSROOT']}/CVSROOT/cvsspam.conf"
+cvsroot_dir = "#{ENV['CVSROOT']}/CVSROOT"
+$config = "#{cvsroot_dir}/cvsspam.conf"
+$users_file = "#{cvsroot_dir}/users"
 
 $debug = false
 $recipients = Array.new
@@ -886,6 +1034,8 @@ $subjectPrefix = nil
 $files_in_subject = false;
 $smtp_host = nil
 $repository_name = nil
+# 2MiB limit on attached diffs,
+$mail_size_limit = 1024 * 1024 * 2
 
 require 'getoptlong'
 
@@ -948,12 +1098,6 @@ end
 if $viewcvsURL != nil
   $viewcvsURL << "/" unless $viewcvsURL =~ /\/$/
   $frontend = ViewCVSFrontend.new($viewcvsURL)
-  if $repository_name == GUESS
-    ENV['CVSROOT'] =~ /([^\/]+$)/
-    $frontend.repository_name = $1
-  elsif $repository_name != nil
-    $frontend.repository_name = $repository_name
-  end
 elsif $choraURL !=nil
   $frontend = ChoraFrontend.new($choraURL)
 elsif $cvswebURL !=nil
@@ -962,6 +1106,17 @@ elsif $cvswebURL !=nil
 else
   $frontend = NoFrontend.new
 end
+
+if $viewcvsURL != nil || $cvswebURL !=nil
+  if $repository_name == GUESS
+    # use the last component of the repository path as the name
+    ENV['CVSROOT'] =~ /([^\/]+$)/
+    $frontend.repository_name = $1
+  elsif $repository_name != nil
+    $frontend.repository_name = $repository_name
+  end
+end
+
 
 if $bugzillaURL != nil
   commentSubstitutions['\b[Bb][Uu][Gg]\s*#?[0-9]+'] = bugzillaSub
@@ -995,6 +1150,8 @@ $allTags = Hash.new
 
 File.open("#{$logfile}.emailtmp", File::RDWR|File::CREAT|File::TRUNC) do |mail|
 
+  $diff_output_limiter = OutputSizeLimiter.new(mail, $mail_size_limit)
+
   File.open($logfile) do |log|
     reader = LogReader.new(log)
 
@@ -1003,9 +1160,10 @@ File.open("#{$logfile}.emailtmp", File::RDWR|File::CREAT|File::TRUNC) do |mail|
       if handler == nil
         raise "No handler file lines marked '##{reader.currentLineCode}'"
       end
-      handler.handleLines(reader.getLines, mail)
+      handler.handleLines(reader.getLines, $diff_output_limiter)
     end
   end
+
 end
 
 if $subjectPrefix == nil
@@ -1148,10 +1306,10 @@ HEAD
     elsif file.removal?
       name = "<span id=\"removed\">#{name}</span>"
     end
-    if file.isEmpty || file.isBinary || (file.removal? && $no_removed_file_diff)
-      mail.print("<td><tt>#{prefix}#{name}</tt></td>")
-    else
+    if file.has_diff?
       mail.print("<td><tt>#{prefix}<a href=\"#file#{file_count}\">#{name}</a></tt></td>")
+    else
+      mail.print("<td><tt>#{prefix}#{name}</tt></td>")
     end
     if file.isEmpty
       mail.print("<td colspan=\"2\" align=\"center\"><small id=\"info\">[empty]</small></td>")
@@ -1248,6 +1406,11 @@ HEAD
       mail.puts(line.chomp)
     end
   end
+  if $diff_output_limiter.choose_to_limit?
+    mail.puts("<p><strong class=\"error\">[Reached #{$diff_output_limiter.written_count} bytes of diffs.")
+    mail.puts("Since the limit is about #{$mail_size_limit} bytes,")
+    mail.puts("a further #{$diff_output_limiter.total_count-$diff_output_limiter.written_count} were skipped.]</strong></p>")
+  end
   if $debug
     blah("leaving file #{$logfile}.emailtmp")
   else
@@ -1260,6 +1423,20 @@ HEAD
 
 end
 
+def sender_alias(address)
+  if File.exists?($users_file)
+    File.open($users_file) do |io|
+      io.each_line do |line|
+        if line =~ /^([^:]+)\s*:\s*([^\n\r]+)/
+          if address == $1
+            return $2
+          end
+        end
+      end
+    end
+  end
+  address
+end
 
 class MailContext
   def initialize(io)
@@ -1327,6 +1504,7 @@ class SMTPMailer
       ctx = MailContext.new(IOAdapter.new(mail))
       ctx.header("To", recipients.join(','))
       ctx.header("From", from) if from
+      ctx.header("Date", Time.now.utc.strftime(DATE_HEADER_FORMAT))
       yield ctx
     end
   end
@@ -1339,6 +1517,7 @@ else
   mailer = SendmailMailer.new
 end
 
+$from_address = sender_alias($from_address) unless $from_address.nil?
 
 mailer.send($from_address, $recipients) do |mail|
   mail.header("Subject", mailSubject)

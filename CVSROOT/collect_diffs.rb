@@ -92,29 +92,12 @@ def get_commitinfo_tag(filename)
   return $commitinfo_tags[filename]
 end
 
-def process_log(cvs_info)
-  cvsroot = ENV['CVSROOT']
 
-  $datadir = find_data_dir()
-
-  raise "missing data dir (#{$tmpdir}/#{$dirtemplate}-XXXXXX)" if $datadir==nil
-
-  line = $stdin.gets
-  unless line =~ /^Update of (.+)/
-    fail "Log preamble looks suspect (doesn't start 'Update of ...')"
-  end
-
-  # cvs_info comes from the command line, ultimately as the expansion of the
-  # %{sVv} in $CVSROOT/loginfo.  It isn't possible to parse this value
-  # unambiguously, but we make an effort to get it right in as many cases as
-  # possible.
-
-  $path = $1
-  unless $path.slice(0,cvsroot.length) == cvsroot
-    fail "CVSROOT ('#{cvsroot}') doesn't match log preamble ('#{$path}')"
-  end
-
-  $repository_path = $path.slice(cvsroot.length+1, $path.length-cvsroot.length-1)
+# cvs_info comes from the command line, ultimately as the expansion of the
+# %{sVv} in $CVSROOT/loginfo.  It isn't possible to parse this value
+# unambiguously, but we make an effort to get it right in as many cases as
+# possible.
+def collect_antique_style_args(cvs_info)
   unless cvs_info.slice(0, $repository_path.length+1) == "#{$repository_path} "
     fail "calculated repository path ('#{$repository_path}') doesn't match start of command line arg ('#{cvs_info}')"
   end
@@ -129,6 +112,49 @@ def process_log(cvs_info)
       fail "'#{version_info}' doesn't match ' <name>,<ver>,<ver> ...'"
     end
     changes << ChangeInfo.new($1, $2, $3)
+  end
+
+  return changes
+end
+
+
+def collect_modern_style_args(cvs_info)
+#  unless cvs_info[0] == $repository_path
+#    fail "calculated repository path ('#{$repository_path}') doesn't match first command line arg ('#{cvs_info[0]}')"
+#  end
+  changes = Array.new
+  i = 0
+  while i < cvs_info.length
+    changes << ChangeInfo.new(cvs_info[i], cvs_info[i+=1], cvs_info[i+=1])
+    i+=1
+  end
+  return changes
+end
+
+
+def process_log(cvs_info)
+  cvsroot = ENV['CVSROOT']
+
+  $datadir = find_data_dir()
+
+  raise "missing data dir (#{$tmpdir}/#{$dirtemplate}-XXXXXX)" if $datadir==nil
+
+  line = $stdin.gets
+  unless line =~ /^Update of (.+)/
+    fail "Log preamble looks suspect (doesn't start 'Update of ...')"
+  end
+
+  $path = $1
+  unless $path.slice(0,cvsroot.length) == cvsroot
+    fail "CVSROOT ('#{cvsroot}') doesn't match log preamble ('#{$path}')"
+  end
+
+  $repository_path = $path.slice(cvsroot.length+1, $path.length-cvsroot.length-1)
+
+  if $use_modern_argument_list
+    changes = collect_modern_style_args(cvs_info)
+  else
+    changes = collect_antique_style_args(cvs_info)
   end
 
   # look for the start of the user's comment
@@ -159,7 +185,7 @@ def process_log(cvs_info)
         safer_popen($cvs_prog, "-nq", "status", change.file) do |io|
           status = io.read
         end
-        fail "couldn't get cvs status: #{$!}" unless ($?>>8)==0
+        fail "couldn't get cvs status: #{$!} (exited with #{$?})" unless ($?>>8)==0
 
 	if status =~ /^\s*Sticky Tag:\s*(.+) \(branch: +/m
 	  tag = $1
@@ -206,11 +232,28 @@ def process_log(cvs_info)
 end
 
 
+# sometimes, CVS would exit with an error like,
+# 
+#   cvs [server aborted]: received broken pipe signal
+# 
+# consuming all the data on our standard input seems to stop this error
+# happening.  (This problem may have been fixed in CVS 1.12.6, looking at
+# a message in the NEWS file.)
+def consume_stdin()
+  $stdin.read()
+end
+
+
 def choose_operation(op)
-  if op =~ / - New directory$/
+  # in the CVS 1.12.x series, new directory notifications include versions
+  # 'NONE' and 'NONE', whereas older versions of CVS didn't include any version
+  # info here.  The string ',NONE,NONE' is therefore optional in the regexp,
+  if op =~ / - New directory(?:,NONE,NONE)?$/
     blah("No action taken on directory creation")
+    consume_stdin()
   elsif op =~ / - Imported sources$/
     blah("Imported not handled")
+    consume_stdin()
   else
     process_log(op)
     mailtest
@@ -226,7 +269,7 @@ def mailtest
     blah("sending spam.  (I am #{$0})")
     # REVISIT: $0 will not contain the path to this script on all systems
     cmd = File.dirname($0) + "/cvsspam.rb"
-    unless system(cmd, "#{$datadir}/logfile", *$passthoughArgs)
+    unless system(cmd, "#{$datadir}/logfile", *$passthroughArgs)
       fail "problem running '#{cmd}'"
     end
     if $debug
@@ -239,6 +282,34 @@ def mailtest
     Dir.rmdir($datadir) unless $debug
   else
     blah("not spam time yet, #{$path}!=#{lastdir}")
+  end
+end
+
+
+class CVSConfig
+  def initialize(filename)
+    @data = Hash.new
+    File.open(filename) do |io|
+      read(io)
+    end
+  end
+
+  def read(io)
+    io.each do |line|
+      parse_line(line)
+    end
+  end
+
+  def parse_line(line)
+    # strip any comment (assumes values can't contain '#')
+    line.sub!(/#.*$/, "")
+    if line =~ /^\s*(.*?)\s*=\s*(.*?)\s*$/
+      @data[$1] = $2
+    end
+  end
+
+  def [](key)
+    @data[key]
   end
 end
 
@@ -263,31 +334,44 @@ opts = GetoptLong.new(
 )
 
 # arguments to pass though to 'cvsspam.rb'
-$passthoughArgs = Array.new
+$passthroughArgs = Array.new
 opts.each do |opt, arg|
   if ["--to", "--config", "--from"].include?(opt)
-    $passthoughArgs << opt << arg
+    $passthroughArgs << opt << arg
   end
   if ["--debug"].include?(opt)
-    $passthoughArgs << opt
+    $passthroughArgs << opt
   end
   $config = arg if opt=="--config"
   $debug = true if opt == "--debug"
 end
 
 blah("CVSROOT is #{ENV['CVSROOT']}")
-blah("ARGV is '#{ARGV.join(', ')}'")
+blah("ARGV is <#{ARGV.join('>, <')}>")
+
+cvsroot_dir = "#{ENV['CVSROOT']}/CVSROOT"
 
 if $config == nil
-  if FileTest.exists?("#{ENV['CVSROOT']}/CVSROOT/cvsspam.conf")
-    $config = "#{ENV['CVSROOT']}/CVSROOT/cvsspam.conf"
+  if FileTest.exists?("#{cvsroot_dir}/cvsspam.conf")
+    $config = "#{cvsroot_dir}/cvsspam.conf"
   elsif FileTest.exists?("/etc/cvsspam/cvsspam.conf")
     $config = "/etc/cvsspam/cvsspam.conf"
   end
 
   if $config != nil
-    $passthoughArgs << "--config" << $config
+    $passthroughArgs << "--config" << $config
   end
+end
+
+
+$use_modern_argument_list = false
+
+cvs_config_filename = "#{cvsroot_dir}/config"
+
+if FileTest.exists?(cvs_config_filename)
+  cvs_config = CVSConfig.new(cvs_config_filename)
+
+  $use_modern_argument_list = cvs_config["UseNewInfoFmtStrings"] == "yes"
 end
 
 if $config != nil
@@ -304,11 +388,18 @@ if $config != nil
   end
 end
 
-if ARGV.length != 1
-  $stderr.puts "Expected arguments missing"
-  $stderr.puts "* You shouldn't run collect_diffs by hand, but from a CVSROOT/loginfo entry *"
-  $stderr.puts "Usage: collect_diffs.rb [ --to <email> ] [ --config <file> ] %{sVv}"
-  $stderr.puts "       (the sequence '%{sVv}' is expanded by CVS, when found in CVSROOT/loginfo)"
-  exit
+if $use_modern_argument_list
+  if ARGV.length % 3 != 0
+    $stderr.puts "Expected 3 arguments for each file"
+  end
+  choose_operation(ARGV)
+else
+  if ARGV.length != 1
+    $stderr.puts "Expected arguments missing"
+    $stderr.puts "* You shouldn't run collect_diffs by hand, but from a CVSROOT/loginfo entry *"
+    $stderr.puts "Usage: collect_diffs.rb [ --to <email> ] [ --config <file> ] %{sVv}"
+    $stderr.puts "       (the sequence '%{sVv}' is expanded by CVS, when found in CVSROOT/loginfo)"
+    exit
+  end
+  choose_operation(ARGV[0])
 end
-choose_operation(ARGV[0])
