@@ -31,7 +31,10 @@
 -- author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
 -- version $Id$
 
-CREATE TABLE ledge_id_table (
+CREATE TABLE ledge_id_table 
+(
    next_id BIGINT NOT NULL,
-   table_name VARCHAR(255) NOT NULL
+   table_name VARCHAR(255) NOT NULL,
+   PRIMARY KEY(table_name)
 );
+
