@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DateFormatTool.java,v 1.6 2005-02-06 23:01:32 pablo Exp $
+ * @version $Id: DateFormatTool.java,v 1.7 2005-02-07 01:29:04 rafal Exp $
  */
 public class DateFormatTool
 {
@@ -77,6 +77,7 @@ public class DateFormatTool
      *
      * @param patternAlias the pattern name.
      * @return new DateFormatTool instance.
+     * @throws Exception if the specified pattern alias is not configured for this tool.
      */
     public DateFormatTool style(String patternAlias)
         throws Exception

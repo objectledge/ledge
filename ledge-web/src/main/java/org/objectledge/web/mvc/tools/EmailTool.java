@@ -33,10 +33,16 @@ package org.objectledge.web.mvc.tools;
  * prevents e-mail harvesting by spammers.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EmailTool.java,v 1.1 2005-02-01 06:02:50 zwierzem Exp $
+ * @version $Id: EmailTool.java,v 1.2 2005-02-07 01:28:41 rafal Exp $
  */
 public class EmailTool
 {
+    /**
+     * Encode the given email address as html/javascript. 
+     * 
+     * @param eMail the address to encode.
+     * @return encoded representation.
+     */
     public String encode(String eMail)
     {
         StringBuilder jSEncode = new StringBuilder();

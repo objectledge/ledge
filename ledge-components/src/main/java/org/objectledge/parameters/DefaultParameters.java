@@ -47,7 +47,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.14 2005-02-06 23:00:09 pablo Exp $
+ * @version $Id: DefaultParameters.java,v 1.15 2005-02-07 01:29:03 rafal Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -55,10 +55,12 @@ public class DefaultParameters implements Parameters
     public static final String TRUE = "true";
 
     /** 
-     * Get string representation of parameter values.
+     * Create a string represenation of value array.
+     * 
+     * <p>Values will be emmited comma separated, with any contained commas backslash-escaped.</p>
      *  
-     * @param name the name of the parameters.
-     * @return the string representation of the parameter value(s). 
+     * @param values value arrary.
+     * @return the string representation of the values. 
      */
     public static String toString(String[] values)
     {

@@ -36,7 +36,7 @@ import java.util.Set;
  * An implementation of parameters decorator class to scope parameters key names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ScopedParameters.java,v 1.1 2005-02-06 23:00:08 pablo Exp $
+ * @version $Id: ScopedParameters.java,v 1.2 2005-02-07 01:29:03 rafal Exp $
  */
 public class ScopedParameters implements Parameters
 {
@@ -49,7 +49,8 @@ public class ScopedParameters implements Parameters
     /**
      * Create the container scoped decorator. 
      * 
-     * @param configuration the string representation of the container. 
+     * @param parameters the container to decorate.
+     * @param prefix the scope prefix.
      */
     public ScopedParameters(Parameters parameters, String prefix)
     {
