@@ -37,8 +37,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.sql.DataSource;
+
 import org.jcontainer.dna.Logger;
-import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -47,7 +48,7 @@ import org.objectledge.parameters.Parameters;
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.2 2004-01-22 10:53:48 pablo Exp $
+ * @version $Id: DBParameters.java,v 1.3 2004-02-03 14:43:52 fil Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -55,7 +56,7 @@ public class DBParameters implements Parameters
 	private Logger logger;
 
 	/** db access component */
-	private Database dbc;
+	private DataSource dataSource;
 	
 	/** container id */
 	private long id;
@@ -70,15 +71,15 @@ public class DBParameters implements Parameters
     /**
      * Create the container.
      * 
-     * @param logger the logger.
-     * @param dbc the db access component
      * @param parameters the initial parameters.
      * @param id the database identifier.
+     * @param dataSource the db access component
+     * @param logger the logger.
      */
-    public DBParameters(Logger logger, Database dbc, Parameters parameters, long id)
+    public DBParameters(Parameters parameters, long id, DataSource dataSource, Logger logger)
     {
     	this.logger = logger;
-    	this.dbc = dbc;
+    	this.dataSource = dataSource;
     	if(parameters != null)
     	{
     	   	container = new DefaultParameters(parameters);
@@ -548,7 +549,7 @@ public class DBParameters implements Parameters
 		Connection conn = null;
 		try
 		{
-			conn = dbc.getConnection();
+			conn = dataSource.getConnection();
 			Iterator iterator = modified.iterator();
 			PreparedStatement deleteStmt = conn.prepareStatement(
 				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = "+id+
