@@ -44,7 +44,7 @@ import java.util.Set;
  * General purpose visitor that is capable of traversing arbitrary object graphs.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Visitor.java,v 1.1 2005-03-18 10:26:48 rafal Exp $
+ * @version $Id: Visitor.java,v 1.2 2005-03-18 12:06:35 rafal Exp $
  */
 public abstract class Visitor<T>
 {
@@ -101,9 +101,9 @@ public abstract class Visitor<T>
      * @param o traversal origin.
      * @param v the visitor.
      */
-    public static <T, OT extends T> void traverseDepthFirst(OT o, Visitor<T> v)
+    public void traverseDepthFirst(T o)
     {
-        traverseDepthFirst(o, v, new HashSet());
+        traverseDepthFirst(o, new HashSet());
     }
     
     /**
@@ -113,9 +113,9 @@ public abstract class Visitor<T>
      * @param o traversal origin.
      * @param v the visitor.
      */
-    public static <T, OT extends T> void traverseBreadthFirst(OT o, Visitor<T> v)
+    public void traverseBreadthFirst(T o)
     {
-        traverseBreadthFirst(o, v, new HashSet());        
+        traverseBreadthFirst(o, new HashSet());        
     }
     
     /**
@@ -125,17 +125,17 @@ public abstract class Visitor<T>
      * @param v the visitor.
      * @param s seen objects set.
      */
-    private static <T, OT extends T> void traverseDepthFirst(OT o, Visitor<T> v, Set s)
+    private void traverseDepthFirst(T o, Set s)
     {
         if(!s.contains(o))
         {
             s.add(o);
-            Iterator<T> i = v.successors(o);
+            Iterator<T> i = successors(o);
             while(i.hasNext())
             {
-                traverseDepthFirst(i.next(), v, s);
+                traverseDepthFirst(i.next(), s);
             }
-            v.visit(o);
+            visit(o);
         }
     }
     
@@ -147,16 +147,16 @@ public abstract class Visitor<T>
      * @param v the visitor.
      * @param s seen objects set.
      */
-    private static <T, OT extends T> void traverseBreadthFirst(OT o, Visitor<T> v, Set s)
+    private void traverseBreadthFirst(T o, Set s)
     {
         if(!s.contains(o))
         {
             s.add(o);
-            v.visit(o);
-            Iterator<T> i = v.successors(o);
+            visit(o);
+            Iterator<T> i = successors(o);
             while(i.hasNext())
             {
-                traverseBreadthFirst(i.next(), v, s);
+                traverseBreadthFirst(i.next(), s);
             }
         }
     }

@@ -27,7 +27,6 @@
 // 
 package org.objectledge.visitor;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -40,7 +39,7 @@ import junit.framework.TestCase;
  * Tests for the general-purpose visitor.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VisitorTest.java,v 1.2 2005-03-18 11:53:24 rafal Exp $
+ * @version $Id: VisitorTest.java,v 1.3 2005-03-18 12:06:36 rafal Exp $
  */
 public class VisitorTest
     extends TestCase
@@ -56,7 +55,7 @@ public class VisitorTest
     {
         Item g = new Item("a", new Item("b", new Item("c", null)));
         ItemVisitor iv = new ItemRecorderVisitor();
-        Visitor.traverseBreadthFirst(g, iv);
+        iv.traverseBreadthFirst(g);
         assertEquals("[a, b, c]", recorder.toString());
     }
 
@@ -64,7 +63,7 @@ public class VisitorTest
     {
         Item g = new Item("a", new Item("b", new Item("c", null)));
         ItemVisitor iv = new ItemRecorderVisitor();
-        Visitor.traverseDepthFirst(g, iv);
+        iv.traverseDepthFirst(g);
         assertEquals("[c, b, a]", recorder.toString());
     }
     
@@ -72,7 +71,7 @@ public class VisitorTest
     {
         Item g = new Item("a", new SubItem("b", new Item("c", null)));
         ItemVisitor iv = new SubItemOnlyRecorderVisitor();
-        Visitor.traverseBreadthFirst(g, iv);
+        iv.traverseBreadthFirst(g);
         assertEquals("[b]", recorder.toString());        
     }
     
@@ -80,7 +79,7 @@ public class VisitorTest
     {
         Item g = new Item("a", new SubItem("b", new Item("c", null)));
         ItemVisitor iv = new PolymorphicRecorderVisitor();
-        Visitor.traverseBreadthFirst(g, iv);
+        iv.traverseBreadthFirst(g);
         assertEquals("[a, B, c]", recorder.toString());                
     }
 
@@ -88,7 +87,7 @@ public class VisitorTest
     {
         Item g = new Item("a", new SubItem("b", new SubSubItem("c", null)));
         ItemVisitor iv = new InexactPolymorphicRecorderVisitor();
-        Visitor.traverseBreadthFirst(g, iv);
+        iv.traverseBreadthFirst(g);
         assertEquals("[a, B, c]", recorder.toString());
     }   
     
@@ -103,7 +102,7 @@ public class VisitorTest
                 localRecorder.add(i.value());
             }
         };
-        Visitor.traverseBreadthFirst(g, iv);
+        iv.traverseBreadthFirst(g);
         assertEquals("[a, b, c]", localRecorder.toString());
     }
     
