@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.9 2004-09-03 13:34:13 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.10 2004-09-07 10:33:24 rafal Exp $ -->
 
 <project>
   <extend>../ledge-common/project.xml</extend>
@@ -35,7 +35,7 @@
 
   <groupId>objectledge</groupId>
   <id>ledge-maven-plugin</id>
-  <currentVersion>0.3</currentVersion>
+  <currentVersion>0.4-dev</currentVersion>
   <name>Ledge Maven plugin</name>
   <shortDescription>A plugin for the Maven build tool useful in development of Ledge based applications.</shortDescription>
   <!-- dependencies -->

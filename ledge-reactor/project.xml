@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.10 2004-09-03 13:34:47 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.11 2004-09-07 10:33:21 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -9,7 +9,7 @@
 
   <groupId>objectledge</groupId>
   <id>ledge-reactor</id>
-  <currentVersion>0.3</currentVersion>
+  <currentVersion>0.4-dev</currentVersion>
   <name>ObjectLedge</name>
   <shortDescription>Object Ledge - documentation package.</shortDescription>
   <description>Object Ledge is a platform for building applications in Java 2 Standard and Enterprise Edition environments. ObjectLedge follows component / container and Inversion Of Control design paradigms implemented with the excelent
