@@ -33,6 +33,8 @@ import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -437,5 +439,63 @@ public class InputRecord
             throw new PersistenceException("Failed to read field "+field, e);
         }
     }
+    
+    // statements ///////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Creates a select statement for fetching an object from the database.
+     * 
+     * @param object Persistent object.
+     * @param conn the connection to use.
+     * @return a prepared statement.
+     * @throws PersistenceException if there is a problem retrieving key values from the object.
+     * @throws SQLException if there is a problem creating the statement.
+     */
+    public static PreparedStatement getSelectStatements(Persistent object, Connection conn)
+        throws PersistenceException, SQLException
+    {
+        OutputRecord out = new OutputRecord(object);
+        object.getData(out);
+        return conn.prepareStatement("SELECT * FROM " + object.getTable() + 
+            " WHERE " + out.getWhereClause());
+    }
+    
+    /**
+     * Creates a select statement for fetching an object from the database.
+     * 
+     * @param key the key value.
+     * @param object Persistent object.
+     * @param conn the connection to use.
+     * @return a prepared statement.
+     * @throws SQLException if there is a problem creating the statement.
+     */
+    public static PreparedStatement getSelectStatement(long key, Persistent object, Connection conn)
+        throws SQLException
+    {
+        return conn.prepareStatement("SELECT * FROM " + object.getTable() + " WHERE " +
+            object.getKeyColumns()[0] + " = " + key);
+    }
+    
+    /**
+     * Creates a select statement for fetching an object from the database.
+     * 
+     * @param where where clause, or <code>null</code> to fetch all objects.
+     * @param object Persistent object.
+     * @param conn the connection to use.
+     * @return a prepared statement.
+     * @throws SQLException if there is a problem creating the statement.
+     */
+    public static PreparedStatement getSelectStatement(String where, Persistent object, 
+        Connection conn)
+        throws SQLException
+    {
+        if (where != null)
+        {
+            return conn.prepareStatement("SELECT * FROM " + object.getTable() + " WHERE " + where);
+        }
+        else
+        {
+            return conn.prepareStatement("SELECT * FROM " + object.getTable());
+        }
+    }
 }
-
