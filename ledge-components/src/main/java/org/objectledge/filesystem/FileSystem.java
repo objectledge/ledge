@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.7 2003-12-04 14:42:21 fil Exp $
+ * @version $Id: FileSystem.java,v 1.8 2003-12-04 14:55:56 fil Exp $
  */
 public class FileSystem
 {
@@ -713,8 +713,7 @@ public class FileSystem
     public String read(String path, String encoding)
         throws IOException
     {
-        InputStream ins = getInputStream(path);
-        if (ins == null)
+        if(exists(path))
         {
             throw new IOException(path + " does not exist");
         }
@@ -727,10 +726,12 @@ public class FileSystem
         {
             throw new IOException(path + " is too large (" + length + "b)");
         }
-        Reader in = new InputStreamReader(ins, encoding);
-        StringWriter out = new StringWriter((int)length);
+        Reader in = null;
         try
         {
+            InputStream ins = getInputStream(path);
+            in = new InputStreamReader(ins, encoding);
+            StringWriter out = new StringWriter((int)length);
             char[] buffer = new char[bufferSize];
             int count = 0;
             do
@@ -746,7 +747,10 @@ public class FileSystem
         }
         finally
         {
-            in.close();
+            if(in != null)
+            {
+                in.close();
+            }
         }
     }
 
