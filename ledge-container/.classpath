@@ -6,7 +6,6 @@
     <classpathentry kind="lib" path="/usr/local/eclipse-2.1.2/plugins/org.aspectj.ajde_1.1.4/aspectjrt.jar"/>
     <classpathentry kind="src" path="/pico"/>
     <classpathentry kind="src" path="/dna"/>
-    <classpathentry kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.0-SNAPSHOT.jar"/>
     <classpathentry kind="src" path="/ledge-components"/>
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
     <classpathentry kind="output" path="target/classes"/>
