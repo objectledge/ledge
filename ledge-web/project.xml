@@ -27,11 +27,11 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.39 2004-09-07 10:33:20 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.40 2004-10-12 14:27:57 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
-  <extend>../ledge-common/project.xml</extend>
+  <extend>${ledgeCommon}/project.xml</extend>
   <!-- project info -->
 
   <groupId>objectledge</groupId>
