@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.15 2004-04-01 08:54:25 fil Exp $
+ * @version $Id: StringUtils.java,v 1.16 2004-08-04 12:29:19 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -424,4 +424,24 @@ public class StringUtils
         return buffer;
     }
 
+    /**
+     * Fill the string to the expected length with the specified filling character.
+     * Filling charaters will be added at the beginning of this input string.
+     * 
+     * @param input the input string.
+     * @param total the expected length of result string.
+     * @param filling the filling character.
+     * @return the result string.
+     */
+    public static String fillString(String input,int total,char filling)
+    {
+        StringBuffer sb = new StringBuffer();
+        int missing = total-input.length();
+        for(int i=0; i<missing; i++)
+        {
+            sb.append(filling);
+        }
+        sb.append(input);
+        return sb.toString();
+    }
 }
