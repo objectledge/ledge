@@ -1,0 +1,7 @@
+#
+# project wide cvsignore file
+#
+
+ALL     *.class
+ALL	*.log
+ALL	.clover
