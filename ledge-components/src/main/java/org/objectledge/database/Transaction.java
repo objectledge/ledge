@@ -38,19 +38,31 @@ import org.jcontainer.dna.Logger;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.1 2004-02-03 12:34:28 fil Exp $
+ * @version $Id: Transaction.java,v 1.2 2004-02-03 14:38:08 fil Exp $
  */
 public abstract class Transaction
 {
     /** the logger. */
     protected Logger log;
+
+    /**
+     * Constructs a Transaction component.
+     * 
+     * @param log the logger to use for error reporting.
+     */
+    protected Transaction(Logger log)
+    {
+        this.log = log;
+    }
     
     /**
      * Returns the UserTransaction object.
      * 
      * @return the UserTransaction object.
+     * @throws SQLException if the UserTransaction object is not accessible.
      */
-    public abstract UserTransaction getUserTransaction();
+    public abstract UserTransaction getUserTransaction()
+        throws SQLException;
     
     /**
      * Begin the transaction, if there is none active.
