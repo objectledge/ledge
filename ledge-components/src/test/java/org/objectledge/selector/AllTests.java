@@ -50,6 +50,7 @@ public class AllTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(MapVariablesTest.class));
         suite.addTest(new TestSuite(IntrospectionVariablesTest.class));
+        suite.addTest(new TestSuite(RuleTest.class));
         //$JUnit-END$
         return suite;
     }
