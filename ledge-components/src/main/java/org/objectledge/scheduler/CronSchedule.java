@@ -419,13 +419,16 @@ public class CronSchedule
         Token tok = ex.currentToken.next;
         for (int i = 0; i < maxSize; i++) 
         {
-            if (i != 0) encountered += " ";
+            if (i != 0)
+            {
+                encountered += " "; 
+            } 
             if (tok.kind == 0) 
             {
                 encountered += ex.tokenImage[0];
                 break;
             }
-            encountered += add_escapes(tok.image);
+            encountered += addEscapes(tok.image);
             tok = tok.next; 
         }
 
@@ -472,8 +475,10 @@ public class CronSchedule
      * <p>This method was copied from JavaCC generated code.</p>
      *
      * @author JavaCC team
+     * @param str input string.
+     * @return string with escaped sepcial characters.
      */
-    protected String add_escapes(String str) 
+    protected String addEscapes(String str) 
     {
         StringBuffer retval = new StringBuffer();
         char ch;
