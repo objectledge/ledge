@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.45 2004-05-27 10:36:22 fil Exp $ -->
+<!-- $Id: project.xml,v 1.46 2004-05-27 11:40:06 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -168,8 +168,8 @@
     <!-- runtime -->
     <dependency>
       <groupId>javamail</groupId>
-      <artifactId>javamail</artifactId>
-      <version>1.2</version>
+      <artifactId>mailapi</artifactId>
+      <version>1.3.1</version>
       <url>http://java.sun.com/products/javamail/index.jsp</url>
     </dependency>
     <dependency>
