@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequenceTest.java,v 1.2 2004-01-16 14:38:34 fil Exp $
+ * @version $Id: ViewFallbackSequenceTest.java,v 1.3 2004-01-19 11:43:40 fil Exp $
  */
 public class ViewFallbackSequenceTest extends TestCase
 {
@@ -47,7 +47,7 @@ public class ViewFallbackSequenceTest extends TestCase
 
     public void testFallback()
     {
-        ViewFallbackSequence sequence = new ViewFallbackSequence("a.b.c", ".", "/", "Default");
+        ViewFallbackSequence sequence = new ViewFallbackSequence("a.b.c", '.', '/', "Default");
         assertEquals("a/b/c/Default", sequence.next());
         assertEquals("a/b/Default", sequence.next());
         assertEquals("a/Default", sequence.next());
@@ -56,7 +56,7 @@ public class ViewFallbackSequenceTest extends TestCase
         sequence.reset();
         assertEquals(true, sequence.hasNext());
 
-        sequence = new ViewFallbackSequence("a.b.C", ".", "/", "Default");
+        sequence = new ViewFallbackSequence("a.b.C", '.', '/', "Default");
         assertEquals("a/b/C", sequence.next());
         assertEquals("a/b/Default", sequence.next());
         assertEquals("a/Default", sequence.next());

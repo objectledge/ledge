@@ -87,9 +87,10 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequence.java,v 1.2 2004-01-16 14:38:35 fil Exp $
+ * @version $Id: ViewFallbackSequence.java,v 1.3 2004-01-19 11:42:56 fil Exp $
  */
 public class ViewFallbackSequence
+    implements Sequence
 {
     private String[] tokens;
     
@@ -97,7 +98,7 @@ public class ViewFallbackSequence
     
     private StringBuffer buff = new StringBuffer();
     
-    private String outSeparator;
+    private char outSeparator;
     
     private String defaultSuffix;
     
@@ -109,10 +110,10 @@ public class ViewFallbackSequence
      * @param outSeparator separator to be used in generated paths.
      * @param defaultSuffix the suffix to append.
      */
-    public ViewFallbackSequence(String path, String inSeparator, 
-        String outSeparator, String defaultSuffix)
+    public ViewFallbackSequence(String path, char inSeparator, 
+        char outSeparator, String defaultSuffix)
     {
-        StringTokenizer tokenizer = new StringTokenizer(path, inSeparator);
+        StringTokenizer tokenizer = new StringTokenizer(path, ""+inSeparator);
         tokens = new String[tokenizer.countTokens()];
         for(int i=0; i<tokens.length; i++)
         {

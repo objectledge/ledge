@@ -32,78 +32,28 @@ import java.util.NoSuchElementException;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequence.java,v 1.2 2004-01-19 11:42:56 fil Exp $
+ * @version $Id: Sequence.java,v 1.1 2004-01-19 11:42:56 fil Exp $
  */
-public class ViewLookupSequence
-    implements Sequence
+public interface Sequence
 {
-    private char outSeparator;
-
-    private String[] prefices;
-    
-    private Sequence viewFallbackSequence;
-    
-    private int position = 0;
-    
-    private StringBuffer buff = new StringBuffer();
-
     /**
-     * Constructs a view lookup sequence.
-     * 
-     * @param prefices the path prefices.
-     * @param viewFallbackSequence the fallback sequence.
-     * @param outSeparator separator to use in generated paths.
-     */
-    public ViewLookupSequence(String[] prefices, char outSeparator, 
-        Sequence viewFallbackSequence)
-    {
-        this.prefices = prefices;
-        this.viewFallbackSequence = viewFallbackSequence;
-        this.outSeparator = outSeparator;
-    }
-
+    * Checks if there are more elements in the sequence.
+    * 
+    * @return <code>true</code> if there are more elements in the sequence.
+    */
+    public boolean hasNext();
+    
     /**
-     * Checks if there are more elements in the sequence.
+     * Returns the next element in the sequence.
      * 
-     * @return <code>true</code> if there are more elements in the sequence.
+     * @return the next element in the sequence.
+     * @throws NoSuchElementException if there are no more elements in sequence.
      */
-    public boolean hasNext()
-    {
-        return position < prefices.length-1 || viewFallbackSequence.hasNext();
-    }
+    public String next() 
+        throws NoSuchElementException;
     
     /**
      * Reset the sequence to the beginning.
      */
-    public void reset()
-    {
-        position = 0;
-        viewFallbackSequence.reset();
-    }
-    
-    /**
-     * Returns the next path in the sequence.
-     * 
-     * @return the next path in the sequence.
-     */
-    public String next()
-    {
-        if(!viewFallbackSequence.hasNext())
-        {
-            if(position < prefices.length)
-            {
-                viewFallbackSequence.reset();
-                position++;
-            }
-            else
-            {
-                throw new NoSuchElementException("no more paths");
-            }
-        }
-        buff.setLength(0);
-        buff.append(prefices[position]);
-        buff.append(outSeparator);
-        buff.append(viewFallbackSequence.next());
-        return buff.toString();
-    }
+    public void reset();
 }
