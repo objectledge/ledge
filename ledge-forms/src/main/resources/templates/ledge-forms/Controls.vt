@@ -5,7 +5,7 @@
   because it is unique in case of use of 'repeat' control.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: Controls.vt,v 1.1 2005-03-22 06:28:11 zwierzem Exp $
+  @version $Id: Controls.vt,v 1.2 2005-03-23 05:37:13 zwierzem Exp $
 *#
 #**
  TODO: Implement a hidden control:
@@ -101,15 +101,13 @@
 #if($field.ref.bind.getRelevant($instance, $field))
 #set($dateValue = $field.getValue($instance))
 #if($field.ref.bind.getReadOnly($instance, $field))
- $!dateValue.value
+ $format_date.format($dateValue.value)
 #else
  #if($field.optionalSelection)
-  #date_selector_optional_base($field.name $!dateValue.value true 2000 2020 $dateValue.enabled $i18n.useCommon().get('labeo-forms.date.optional.undefined') true)
-  ##date_selector_optional_base($field.name $!dateValue.value $showTimeControls $startYear $endYear $enabled $disabledLabel true)
-  ## TODO: $showTimeControls $startYear $endYear
+  #dateSelectorOptionalMain($field.name $dateValue.value true [2000..2020] [0..23] [0..59] $dateValue.enabled true $i18n.get('ledge-forms.date.optional.undefined'))
+  ## TODO: $showTimeControls $years
  #else
-  #date_selector_base_1($field.name $!dateValue.value true 2000 2020 $dateValue.enabled)
-  ##date_selector_base_1($field.name $!dateValue.value $showTimeControls $startYear $endYear $enabled)
+  #dateSelectorMain($field.name $dateValue.value true [2000..2020] [0..23] [0..59] $dateValue.enabled true)
  #end
 #end
 #end
