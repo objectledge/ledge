@@ -30,6 +30,7 @@ package org.objectledge.web.mvc.tools;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.web.HttpContext;
 
 /**
@@ -37,41 +38,42 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.1 2004-01-30 18:06:28 zwierzem Exp $
+ * @version $Id: UserAgentTool.java,v 1.2 2004-02-02 16:51:10 zwierzem Exp $
  */
 public class UserAgentTool
 {
+    private Logger logger;
+    
     /** http request UA header */
     private String ua;
-    
     /** UA platform */
     private String platform = "";
-
     /** UA family */
     private String family = "";
-
     /** UA org */
     private String org = "";
-
     /** UA version */
     private String version = "";
-
     /** UA major version */
     private int majorVersion;
-    
     /** UA minor version */
     private int minorVersion;
-    
     /** UA micro version */
     private int microVersion;
-    
     /** UA extra version */
     private String extraVersion = null;
     
     // public interface ///////////////////////////////////////////////////////
 
-    public void prepare(HttpContext httpContext)
-    {
+	/**
+	 * Constructs a UserAgentTool for a given http context.
+	 * 
+	 * @param httpContext context for a current request
+	 */
+	public UserAgentTool(HttpContext httpContext, Logger logger)
+	{
+		this.logger = logger;
+		
         prepareUAInfo(httpContext);
     }
     
@@ -367,7 +369,7 @@ public class UserAgentTool
             }
             catch(Exception e)
             {
-                // TODO: log.error("Couldn't parse detailed Version info", e);
+                logger.error("Couldn't parse detailed Version info", e);
             }
             if(extraVersion == null)
             {
