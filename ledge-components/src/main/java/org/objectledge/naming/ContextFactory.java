@@ -20,7 +20,7 @@ import org.objectledge.ComponentInitializationError;
  *
  * @author <a href="mail:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mail:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ContextFactory.java,v 1.1 2004-01-20 11:01:23 pablo Exp $
+ * @version $Id: ContextFactory.java,v 1.2 2004-01-24 13:13:59 pablo Exp $
  */
 public class ContextFactory
 {
@@ -54,7 +54,7 @@ public class ContextFactory
 				String name = contexts[i].getAttribute("name");
 				// initial factory is required.
 				String initialFactory = contexts[i].getAttribute("initial_factory");
-				env.put("java.naming.initial.factory", initialFactory);
+				env.put("java.naming.factory.initial", initialFactory);
 				Configuration[] properties = contexts[i].getChildren("property");
 				for (int j = 0; i < properties.length; j++)
 				{

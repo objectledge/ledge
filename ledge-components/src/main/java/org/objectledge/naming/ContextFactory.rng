@@ -31,9 +31,7 @@
   <zeroOrMore>
     <element name="context">
       <attribute name="name"/>
- 	  <element name="initial_factory">
- 	    <text/>
- 	  </element>
+ 	  <attribute name="initial_factory"/>
  	  <zeroOrMore>
  	    <element name="property">
           <attribute name="name"/>
