@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.3 2004-03-05 12:11:41 zwierzem Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.4 2004-06-11 10:38:28 zwierzem Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -66,9 +66,6 @@ public abstract class BaseGenericRowSet extends BaseRowSet
     /** This map allows quick parent row lookup.
      * Used in {@link #hasMoreChildren(TableRow,TableRow)} and {@link #getParentRow(TableRow)}. */
     protected HashMap rowsByChild = new HashMap();
-
-    /** This map allows quick row lookup by it's id. May be useful in some subclasses. */
-    protected HashMap rowsById = new HashMap();
 
     /**
      * Construct the object.
@@ -176,21 +173,6 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         return totalRowCount;
     }
 
-	// other methods ------------------------------------------------------------------------------
-	
-	/**
-	 * Returns the row by it's id.
-	 *
-	 * @param id id of the row
-	 * @return the row
-	 */
-	public TableRow getRowById(String id)
-	{
-		// in case rows were not drawn from the model
-		getRows();
-		return (TableRow)rowsById.get(id);
-	}
-
     // implementation -----------------------------------------------------------------------------
 
     /**
@@ -243,7 +225,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         this.rootRow = getSubTree(state.getRootId(), 0, rowList); // depth = 0
 
         // sort rows collection for list view
-        sortRows(rowList);
+        sortAllRows(rowList);
 
         // WARN: initialise total row count
         this.totalRowCount = rowList.size();
@@ -299,9 +281,6 @@ public abstract class BaseGenericRowSet extends BaseRowSet
             }
         }
 
-        // 2.3. map root row by it's id
-        rowsById.put(rootId, localRootRow);
-
         // -------------------
 
         if(continueRecursion)
@@ -355,7 +334,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      *
      * @param rowsList list of table rows for current view.
      */
-    protected abstract void sortRows(List rowsList);
+    protected abstract void sortAllRows(List rowsList);
 
     /**
      * Sorts children collection for tree or forest view

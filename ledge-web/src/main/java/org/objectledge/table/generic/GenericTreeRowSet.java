@@ -41,7 +41,7 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as tree.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericTreeRowSet.java,v 1.2 2004-03-05 12:12:32 zwierzem Exp $
+ * @version $Id: GenericTreeRowSet.java,v 1.3 2004-06-11 10:38:28 zwierzem Exp $
  */
 public class GenericTreeRowSet extends BaseGenericRowSet
 {
@@ -75,7 +75,7 @@ public class GenericTreeRowSet extends BaseGenericRowSet
      *
      * @param rowsList list of table rows for current view.
      */
-    protected void sortRows(List rowsList)
+    protected void sortAllRows(List rowsList)
     {
         // WARN: must not sort a final list for tree view
     }

@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.5 2004-03-16 15:36:42 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.6 2004-06-11 10:38:26 zwierzem Exp $
  */
 public class TableTool
 {
@@ -345,15 +345,15 @@ public class TableTool
 			// -- list view
 			if (row.getChildCount() == 0) 
 			{
-				linesAndFolders.add(laFfile);
+				linesAndFolders.add(LF_FILE);
 			}
 			else if(row.getVisibleChildCount() > 0)
 			{
-				linesAndFolders.add(laFfolderopen);
+				linesAndFolders.add(LF_FOLDEROPEN);
 			}
 			else
 			{
-				linesAndFolders.add(laFfolder);
+				linesAndFolders.add(LF_FOLDER);
 			}
 			return linesAndFolders;
 		}
@@ -363,7 +363,7 @@ public class TableTool
 		// only root
 		if(getRootRow() == row)
 		{
-			linesAndFolders.add(laFfolderopen);
+			linesAndFolders.add(LF_FOLDEROPEN);
 			return linesAndFolders;
 		}
 
@@ -377,11 +377,11 @@ public class TableTool
 			{
 				if(hasMoreChildren(ancestor, row))
 				{
-					linesAndFolders.add(laFI);
+					linesAndFolders.add(LF_I);
 				}
 				else
 				{
-					linesAndFolders.add(laFblank);
+					linesAndFolders.add(LF_BLANK);
 				}
 			}
         }
@@ -391,13 +391,13 @@ public class TableTool
 		{
             if (hasMoreChildren(parent, row))
             {
-                linesAndFolders.add(laFT);
+                linesAndFolders.add(LF_T);
             }
             else
             {
-                linesAndFolders.add(laFL);
+                linesAndFolders.add(LF_L);
             }
-            linesAndFolders.add(laFfile);
+            linesAndFolders.add(LF_FILE);
         }
         else // getChildCount() > 0
         {
@@ -406,26 +406,26 @@ public class TableTool
             {
                 if (row.getVisibleChildCount() > 0)
                 {
-                    linesAndFolders.add(laFTminus); // link on this element
-                    linesAndFolders.add(laFfolderopen);
+                    linesAndFolders.add(LF_T_MINUS); // link on this element
+                    linesAndFolders.add(LF_FOLDEROPEN);
                 }
                 else
                 {
-                    linesAndFolders.add(laFTplus); // link on this element
-                    linesAndFolders.add(laFfolder);
+                    linesAndFolders.add(LF_T_PLUS); // link on this element
+                    linesAndFolders.add(LF_FOLDER);
                 }
             }
             else
             {
                 if (row.getVisibleChildCount() > 0)
                 {
-                    linesAndFolders.add(laFLminus); // link on this element
-                    linesAndFolders.add(laFfolderopen);
+                    linesAndFolders.add(LF_L_MINUS); // link on this element
+                    linesAndFolders.add(LF_FOLDEROPEN);
                 }
                 else
                 {
-                    linesAndFolders.add(laFLplus); // link on this element
-                    linesAndFolders.add(laFfolder);
+                    linesAndFolders.add(LF_L_PLUS); // link on this element
+                    linesAndFolders.add(LF_FOLDER);
                 }
             }
         }
@@ -433,17 +433,21 @@ public class TableTool
 		return linesAndFolders;
     }
 
-	private static LinesAndFoldersBox laFI = new LinesAndFoldersBox("I");
-	private static LinesAndFoldersBox laFL = new LinesAndFoldersBox("L");
-	private static LinesAndFoldersBox laFT = new LinesAndFoldersBox("T");
-	private static LinesAndFoldersBox laFblank = new LinesAndFoldersBox("blank");
-	private static LinesAndFoldersBox laFLplus = new LinesAndFoldersBox("Lplus", "toggle-expand");
-	private static LinesAndFoldersBox laFLminus = new LinesAndFoldersBox("Lminus", "toggle-expand");
-	private static LinesAndFoldersBox laFTplus = new LinesAndFoldersBox("Tplus", "toggle-expand");
-	private static LinesAndFoldersBox laFTminus = new LinesAndFoldersBox("Tminus", "toggle-expand");
-	private static LinesAndFoldersBox laFfolder = new LinesAndFoldersBox("folder");
-	private static LinesAndFoldersBox laFfile = new LinesAndFoldersBox("file");
-	private static LinesAndFoldersBox laFfolderopen = new LinesAndFoldersBox("folderopen");
+	private static final LinesAndFoldersBox LF_I = new LinesAndFoldersBox("I");
+	private static final LinesAndFoldersBox LF_L = new LinesAndFoldersBox("L");
+	private static final LinesAndFoldersBox LF_T = new LinesAndFoldersBox("T");
+	private static final LinesAndFoldersBox LF_BLANK = new LinesAndFoldersBox("blank");
+	private static final LinesAndFoldersBox LF_L_PLUS = 
+		new LinesAndFoldersBox("Lplus", "toggle-expand");
+	private static final LinesAndFoldersBox LF_L_MINUS = 
+		new LinesAndFoldersBox("Lminus", "toggle-expand");
+	private static final LinesAndFoldersBox LF_T_PLUS = 
+		new LinesAndFoldersBox("Tplus", "toggle-expand");
+	private static final LinesAndFoldersBox LF_T_MINUS = 
+		new LinesAndFoldersBox("Tminus", "toggle-expand");
+	private static final LinesAndFoldersBox LF_FOLDER = new LinesAndFoldersBox("folder");
+	private static final LinesAndFoldersBox LF_FILE = new LinesAndFoldersBox("file");
+	private static final LinesAndFoldersBox LF_FOLDEROPEN = new LinesAndFoldersBox("folderopen");
 
 	/** 
 	 * Represents an element of "lines and folders" line generated for a tree row.
