@@ -27,6 +27,11 @@
 // 
 package org.objectledge.threads.impl;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
+
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
@@ -34,11 +39,13 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.Task;
+import org.picocontainer.lifecycle.Stoppable;
 
 /**
- * 
+ * Manages a pool of worker threads.
+ *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerPool.java,v 1.2 2004-02-02 09:21:35 fil Exp $
+ * @version $Id: WorkerPool.java,v 1.3 2004-02-02 13:51:23 fil Exp $
  */
 public class WorkerPool
 {
@@ -55,17 +62,22 @@ public class WorkerPool
     private int priority;
     
     private int counter = 1;
+    
+    private LinkedList queue = new LinkedList();
+    
+    private Set workerSet = new HashSet();
 
     /**
      * Creates a daemon thread.
      * 
+     * @param capacity the maximum number of simultaneously active workers.
      * @param priority the task's priority (see {@link java.lang.Thread} description).
      * @param threadGroup the thread group where the thread should belong.
      * @param log the logger to use.
      * @param context thread's processing context.
      * @param cleanup cleanup valve to invoke, should the task terminate.
      */
-    public WorkerPool(int priority, ThreadGroup threadGroup, 
+    public WorkerPool(int capacity, int priority, ThreadGroup threadGroup, 
         Logger log, Context context, Valve cleanup)
     {
         this.priority = priority;
@@ -73,34 +85,38 @@ public class WorkerPool
         this.log = log;
         this.context = context;
         this.cleanup = cleanup;
-        this.pool = new GenericObjectPool(new ObjectFactory());
+        this.pool = new GenericObjectPool(new WorkerFactory(), capacity, 
+            GenericObjectPool.WHEN_EXHAUSTED_BLOCK, -1);
     }
 
     /**
      * Dispatches a Task using a Worker
      * 
      * @param task the task to dispatch.
-     * @return the Worker running the task.
      */
-    public Worker dispatch(Task task)
+    public void dispatch(Task task)
     {
-        try
+        synchronized(queue)
         {
-            Worker worker = (Worker)pool.borrowObject();
-            worker.dispatch(task);
-            return worker;
-        }
-        catch(Exception e)
-        {
-            log.error("failed to dispatch task", e);
-            return null;
+            queue.addLast(task);
+            queue.notify();       
         }
     }
+
+    /**
+     * Returns an instance of {@link SchedulingTask} for this pool.
+     *  
+     * @return an instance of {@link SchedulingTask} for this pool.
+     */
+    public Task getSchedulingTask()
+    {
+        return new SchedulingTask();
+    }    
     
     /**
      * Interface to commons-pool package. 
      */    
-    private class ObjectFactory
+    private class WorkerFactory
         extends BasePoolableObjectFactory
     {
         /**
@@ -110,6 +126,95 @@ public class WorkerPool
         {
             return new Worker("worker #"+(counter++), priority, pool, threadGroup, 
                 log, context, cleanup);
+        }
+    }
+    
+    private Worker getWorker()
+        throws Exception
+    {
+        synchronized(workerSet)
+        {
+            Worker worker = (Worker)pool.borrowObject();
+            workerSet.add(worker);
+            return worker;
+        }
+    }
+    
+    /**
+     * Stops the worker threads.
+     */    
+    private void stop()
+    {
+        synchronized(workerSet)
+        {
+            Iterator i = workerSet.iterator();
+            while(i.hasNext())
+            {
+                Stoppable thread = (Stoppable)i.next();
+                thread.stop();
+                i.remove();
+            }
+        }
+    }
+
+    /**
+     * Scheduler Task picks up tasks from the task queue and dispatches them using worker threads.
+     */    
+    private class SchedulingTask
+        extends Task
+    {
+        /**
+         * {@inheritDoc}
+         */
+        public String getName()
+        {
+            return "Worker Scheduler";
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public void process(Context context)
+        {
+            loop: while(!Thread.interrupted())
+            {
+                Task task = null;
+                Worker worker = null;
+                synchronized(queue)
+                {
+                    if(queue.isEmpty())
+                    {
+                        try
+                        {
+                            queue.wait();
+                        }
+                        catch(InterruptedException e)
+                        {
+                            break loop;
+                        }
+                    }
+                    task = (Task)queue.removeFirst();
+                }
+                try
+                {
+                    worker = (Worker)pool.borrowObject();
+                }
+                catch(Exception e)
+                {
+                    log.error("failed to acquire worker for "+task.getName(), e);
+                    continue loop;
+                }
+                worker.dispatch(task);
+            }
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public void terminate(Thread thread)
+        {
+            super.terminate(thread);
+            WorkerPool.this.stop();
         }
     }
 }
