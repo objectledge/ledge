@@ -36,7 +36,7 @@ import org.picocontainer.Startable;
  * A simple test component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FooComponent.java,v 1.7 2004-02-17 15:50:31 fil Exp $
+ * @version $Id: FooComponent.java,v 1.1 2004-06-25 11:01:01 fil Exp $
  */
 public class FooComponent
     implements Startable

@@ -39,15 +39,7 @@ import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.jcontainer.dna.impl.SAXConfigurationSerializer;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.pico.customization.CustomizedComponentProvider;
-import org.objectledge.pico.customization.UnsupportedKeyTypeException;
 import org.objectledge.xml.XMLValidator;
-import org.picocontainer.ComponentAdapter;
-import org.picocontainer.PicoContainer;
-import org.picocontainer.PicoInitializationException;
-import org.picocontainer.PicoIntrospectionException;
-import org.picocontainer.PicoVerificationException;
-import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -59,10 +51,9 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.24 2004-06-11 10:36:32 zwierzem Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.3 2004-06-25 11:01:01 fil Exp $
  */
 public class ConfigurationFactory
-    implements CustomizedComponentProvider
 {
     private FileSystem fileSystem;
     
@@ -71,8 +62,6 @@ public class ConfigurationFactory
     private XMLValidator xmlValidator;
     
     private URL relaxngUrl;
-    
-    private PicoContainer container;
     
     /**
      * Creates a new instance of ConfigurationFactory.
@@ -92,42 +81,25 @@ public class ConfigurationFactory
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void setContainer(PicoContainer container)
-    {
-        this.container = container;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public PicoContainer getContainer()
-    {
-        return container;
-    }
-
-    /**
      * Returns the configuration of the specific compoenent in the system.
      * 
-     * @param key the key of the component in the system.
-     * @param implemenatation the implementation class of the component.
+     * @param componentName the name of the component
+     * @param componentClass the implementation class of the component.
      * @return the configuration.
      */
-    public Configuration getConfig(Object key, Class implemenatation)
+    public Configuration getConfig(String componentName, Class componentClass)
     {
-        String name = getComponentName(key);
-        String path = getComponentConfigurationPath(key);
-        String schema = getComponentConfigurationSchemaPath(implemenatation);
+        String path = getComponentConfigurationPath(componentName);
+        String schema = getComponentConfigurationSchemaPath(componentClass);
         if(!fileSystem.exists(path))
         {
             throw new ComponentInitializationError("configuration file "+path+" for component "+
-                name+" not found");
+                componentName+" not found");
         }
         if(!fileSystem.exists(schema))
         {
             throw new ComponentInitializationError("schema file "+schema+" for component "+
-                name+" not found");
+                componentName+" not found");
         }
         Configuration configuration;
         try
@@ -145,36 +117,48 @@ public class ConfigurationFactory
         catch(SAXParseException e)
         {
             throw new ComponentInitializationError("parse error in configuration of component "+
-                name+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+                componentName+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
         }
         catch(Exception e)
         {
             throw new ComponentInitializationError("configuration file "+
-                path+" for component "+name+" is malformed", e);
+                path+" for component "+componentName+" is malformed", e);
         }
         return configuration;
     }
     
     /**
+     * Returns the configuration of the specific compoenent in the system.
+     * 
+     * @param componentRole the role of the component.
+     * @param componentClass the implementation class of the component.
+     * @return the configuration.
+     */
+    public Configuration getConfig(Class componentRole, Class componentImplementation)
+    {
+        return getConfig(componentRole.getName(), componentImplementation);
+    }
+    
+    /**
      * Returns an input source for reading in the configuration file.
      * 
-     * @param key the component key.
+     * @param componentName the name of the component
+     * @param componentClass the implementation class of the component.
      * @return the input source.
      */
-    public InputSource getConfigurationSource(Object key)
+    public InputSource getConfigurationSource(String componentName, Class componentClass)
     {
-        String name = getComponentName(key);
-        String path = getComponentConfigurationPath(key);
-        String schema = getComponentConfigurationSchemaPath((Class)key);
+        String path = getComponentConfigurationPath(componentName);
+        String schema = getComponentConfigurationSchemaPath(componentClass);
         if(!fileSystem.exists(path))
         {
             throw new ComponentInitializationError("configuration file "+path+" for component "+
-                name+" not found");
+                componentName+" not found");
         }
         if(!fileSystem.exists(schema))
         {
             throw new ComponentInitializationError("schema file "+schema+" for component "+
-                name+" not found");
+                componentName+" not found");
         }
         try
         {
@@ -183,94 +167,41 @@ public class ConfigurationFactory
         catch(SAXParseException e)
         {
             throw new ComponentInitializationError("parse error in configuration of component "+
-                name+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+                componentName+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
         }
         catch(Exception e)
         {
             throw new ComponentInitializationError("configuration file "+
-                path+" for component "+name+" is malformed", e);
+                path+" for component "+componentName+" is malformed", e);
         }
         return new InputSource(fileSystem.getInputStream(path));
     }
-    
-    // CustomizedComponentProvider interface //////////////////////////////////////////////////////
-    
-    /**
-     * {@inheritDoc}
-     */
-    public ComponentAdapter getCustomizedAdapter(Object componentKey, Class componentImplementation)
-        throws PicoInitializationException, PicoIntrospectionException
-    {
-        return new InstanceComponentAdapter(getComponentName(componentKey), 
-            getConfig(componentKey, componentImplementation));
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public Class getCustomizedComponentImplementation()
-    {
-        return Configuration.class;
-    }
 
     /**
-     * {@inheritDoc}
+     * Returns an input source for reading in the configuration file.
+     * 
+     * @param componentRole the role of the component
+     * @param componentClass the implementation class of the component.
+     * @return the input source.
      */
-    public void verify() throws PicoVerificationException
+    public InputSource getConfigurationSource(Class componentRole, Class componentClass)
     {
-        // no dependencies
+        return getConfigurationSource(componentRole.getName(), componentClass);
     }
+    
     
     // implemnetation /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returns human readable name of the component.
-     * 
-     * @param componentKey the component key.
-     * @return human readable name of the component.
-     * @throws UnsupportedKeyTypeException if the component key is of unsupported type.
-     */
-    protected String getComponentName(Object componentKey)
-        throws UnsupportedKeyTypeException
-    {
-        if(componentKey instanceof Class)
-        {
-            return ((Class)componentKey).getName();
-        }
-        else if(componentKey instanceof String)
-        {
-            return componentKey.toString();
-        }
-        else
-        {
-            throw new UnsupportedKeyTypeException("unsupported component key type "+
-                componentKey.getClass().getName());
-        }
-    }
-
-    /**
      * Returns the path of the configuration file for the specified key.
      * 
-     * @param componentKey the key.
+     * @param component name the name of the component.
      * @return path the configuration file path.
      * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
-    protected String getComponentConfigurationPath(Object componentKey)
-        throws UnsupportedKeyTypeException
+    protected String getComponentConfigurationPath(String componentName)
     {
-        if(componentKey instanceof Class)
-        {
-            return directory+"/"+((Class)componentKey).getName()+".xml";
-        }
-        else if(componentKey instanceof String)
-        {
-            return directory+"/"+((String)componentKey).replace(':','-')+".xml";
-        }
-        else
-        {
-            throw new UnsupportedKeyTypeException("unsupported component key type "+
-                componentKey.getClass().getName());
-        }
+        return directory+"/"+componentName+".xml";
     }
 
     /**
@@ -281,7 +212,6 @@ public class ConfigurationFactory
      * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
     protected String getComponentConfigurationSchemaPath(Class componentImplementation)
-        throws UnsupportedKeyTypeException
     {
         return ((Class)componentImplementation).getName().replace('.','/')+".rng";
     }
