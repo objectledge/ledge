@@ -42,9 +42,9 @@ import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.TestHttpServletRequest;
+import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.web.mvc.tools.TestHttpServletRequest;
-import org.objectledge.web.mvc.tools.TestHttpServletResponse;
 import org.objectledge.xml.XMLValidator;
 
 /**

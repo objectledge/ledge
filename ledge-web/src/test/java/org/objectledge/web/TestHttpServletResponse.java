@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web.mvc.tools;
+package org.objectledge.web;
 
 import javax.servlet.http.HttpServletResponse;
 

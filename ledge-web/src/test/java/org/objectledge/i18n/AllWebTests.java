@@ -26,40 +26,24 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web.mvc.tools;
+package org.objectledge.i18n;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.mockobjects.servlet.MockHttpServletRequest;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class TestHttpServletRequest
-    extends MockHttpServletRequest implements HttpServletRequest
+public class AllWebTests
 {
-    private boolean isSecure = false;
-    
-    private int serverPort = 80;
-    
-    public int getServerPort()
+
+    public static Test suite()
     {
-        return serverPort;
-    }
-    
-    public boolean isSecure()
-    {
-        return isSecure;
-    }
-    
-    public void setupIsSecure(boolean isSecure)
-    {
-        this.isSecure = isSecure;
-    }
-    
-    public void setupGetServerPort(int serverPort)
-    {
-        this.serverPort = serverPort;
+        TestSuite suite = new TestSuite("Test for org.objectledge.i18n");
+        //$JUnit-BEGIN$
+        suite.addTest(new TestSuite(WebI18nTest.class));
+        //$JUnit-END$
+        return suite;
     }
 }

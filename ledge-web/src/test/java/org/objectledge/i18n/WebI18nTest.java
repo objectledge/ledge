@@ -26,47 +26,47 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.parameters;
+package org.objectledge.i18n;
 
 import java.util.Vector;
 
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.logging.LoggerFactory;
+import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.TestHttpServletRequest;
 import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
+import org.objectledge.web.mvc.MVCInitializerValve;
 import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class RequestParametersTest extends TestCase
+public class WebI18nTest extends TestCase
 {
     private Context context;
 
+    private LocaleLoaderValve localeLoaderValve;
+    
+    
     /**
-     * Constructor for RequestParametersTest.
+     * Constructor for MVCInitializerValveTest.
      * @param arg0
      */
-    public RequestParametersTest(String arg0)
+    public WebI18nTest(String arg0)
     {
         super(arg0);
     }
-
-    /*
-     * @see TestCase#setUp()
-     */
-    protected void setUp() throws Exception
+    
+    public void setUp()
     {
-        super.setUp();
         try
         {
             context = new Context();
@@ -74,21 +74,19 @@ public class RequestParametersTest extends TestCase
             String root = System.getProperty("ledge.root");
             if (root == null)
             {
-                throw new Error("system property ledge.root undefined. " + 
-                "use -Dledge.root=.../ledge-container/src/test/resources");
+                throw new Error("system property ledge.root undefined. " +
+                 "use -Dledge.root=.../ledge-container/src/test/resources");
             }
             FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
             XMLValidator validator = new XMLValidator();
             ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
-            Configuration config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
+            Configuration config = configFactory.getConfig(WebConfigurator.class,
+                  WebConfigurator.class);
             WebConfigurator webConfigurator = new WebConfigurator(config);
             TestHttpServletRequest request = new TestHttpServletRequest();
             TestHttpServletResponse response = new TestHttpServletResponse();
             request.setupGetContentType("text/html");
-            Vector parameterNames = new Vector();
-            parameterNames.add("foo");
-            request.setupGetParameterNames(parameterNames.elements());
-            request.setupAddParameter("foo","bar");
+            request.setupGetParameterNames((new Vector()).elements());
             request.setupPathInfo("view/Default");
             request.setupGetContextPath("/test");
             request.setupGetServletPath("ledge");
@@ -99,6 +97,11 @@ public class RequestParametersTest extends TestCase
             context.setAttribute(HttpContext.class, httpContext);
             RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
             paramsLoader.process(context);
+            MVCInitializerValve mvcInitializer = new MVCInitializerValve(webConfigurator);
+            mvcInitializer.process(context);
+            LoggerFactory loggerFactory = new LoggerFactory();
+            Logger logger = loggerFactory.getLogger(LocaleLoaderValve.class);
+            localeLoaderValve = new LocaleLoaderValve(logger);    
         }
         catch (Exception e)
         {
@@ -106,11 +109,11 @@ public class RequestParametersTest extends TestCase
         }
     }
 
-    public void testInit()
+    public void testLocaleLoaderTest() throws Exception
     {
-        Parameters parameters = RequestParameters.getRequestParameters(context);
-        assertNotNull(parameters);
-        
+      // localeLoaderValve.process(context);
     }
+    
+    
 
 }
