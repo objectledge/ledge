@@ -40,7 +40,7 @@ import com.meterware.httpunit.parsing.HTMLParserFactory;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.1 2005-03-17 08:14:37 rafal Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.2 2005-03-17 10:52:43 rafal Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -105,14 +105,5 @@ public class LedgeWebTestCase
         {
             Assert.fail("exected no result but action reported "+actionResult);
         }
-    }   
-    
-    // -- jWebUnit extensions -------------------------------------------------------------------
-    
-    public void clickLinkWithId(String id)
-        throws SAXException
-    {
-        WebLink link[] = tester.getDialog().getResponse().getMatchingLinks(WebLink.MATCH_ID, id);
-        // tester.getDialog().submitRequest(link[0]);
-    }
+    }       
 }
