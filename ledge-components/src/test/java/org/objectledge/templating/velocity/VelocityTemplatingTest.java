@@ -31,22 +31,28 @@ package org.objectledge.templating.velocity;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParserFactory;
+
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.jcontainer.dna.Configuration;
-import org.objectledge.configuration.ConfigurationFactory;
+import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.impl.LocalFileSystemProvider;
-import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.xml.XMLValidator;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * Velocity Templating test.
@@ -75,10 +81,20 @@ public class VelocityTemplatingTest extends TestCase
 		FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
 		try
 		{
-			XMLValidator xv = new XMLValidator(fs);
-			ConfigurationFactory cf = new ConfigurationFactory(null, fs, xv, "config");
-			Configuration config = cf.getConfig(VelocityTemplating.class);
-			new LoggingConfigurator(cf);    
+            InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document logConfig = builder.parse(source);
+            DOMConfigurator.configure(logConfig.getDocumentElement());
+
+            source = new InputSource(fs.getInputStream("config/org.objectledge.templating.velocity.VelocityTemplating.xml"));
+            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+            XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+            SAXConfigurationHandler handler = new SAXConfigurationHandler();
+            reader.setContentHandler(handler);
+            reader.setErrorHandler(handler);
+            reader.parse(source);
+            Configuration config = handler.getConfiguration();
+                
 			Logger logger = Logger.getLogger(VelocityTemplating.class);
 			templating = new VelocityTemplating(config, logger, fs);
 		}
