@@ -31,13 +31,13 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.objectledge.database.impl.*;
+import org.objectledge.database.impl.DelegatingDataSource;
 
 /**
  * A wrapper for the DataSources made available the application by the container through JNDI.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JndiDataSource.java,v 1.2 2004-02-04 14:42:31 fil Exp $
+ * @version $Id: JndiDataSource.java,v 1.3 2004-02-04 16:09:11 fil Exp $
  */
 public class JndiDataSource extends DelegatingDataSource
 {
