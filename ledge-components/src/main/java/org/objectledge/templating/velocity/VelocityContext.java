@@ -35,10 +35,10 @@ import org.objectledge.templating.TemplatingContext;
  * templating engine.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: VelocityContext.java,v 1.1 2003-12-05 18:34:29 pablo Exp $
+ * @version $Id: VelocityContext.java,v 1.2 2004-01-14 14:08:28 fil Exp $
  */
 public class VelocityContext
-    implements TemplatingContext
+    extends TemplatingContext
 {
     /** velocity context */ 
     private org.apache.velocity.context.Context context;

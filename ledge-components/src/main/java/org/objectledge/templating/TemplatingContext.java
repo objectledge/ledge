@@ -28,18 +28,24 @@
 
 package org.objectledge.templating;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.objectledge.context.Context;
+
 
 /**
  * Interface for all templating contexts.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: TemplatingContext.java,v 1.4 2003-12-29 13:32:06 fil Exp $
+ * @version $Id: TemplatingContext.java,v 1.5 2004-01-14 14:08:28 fil Exp $
  */
 ///CLOVER:OFF
-public interface TemplatingContext
+public abstract class TemplatingContext
 {
-	/** key to store this context in thread context */
-	public static final String CONTEXT_KEY = "objectledge.templating.context";
+    /** data storage */
+    private Map data = new HashMap();
 		
 	/**
 	 * Gets an object from the Context.
@@ -47,7 +53,10 @@ public interface TemplatingContext
 	 * @param key the object's key.
 	 * @return the object
 	 */
-	public Object get(String key);
+	public Object get(String key)
+    {
+        return data.get(key);
+    }
 		
 	/**
 	 * Puts an object into the context.
@@ -56,7 +65,10 @@ public interface TemplatingContext
 	 * @param value the object
 	 * @return the previous object with that key.
 	 */
-	public Object put(String key, Object value);
+	public Object put(String key, Object value)
+    {
+        return data.put(key, value);
+    }
 		
 	/**
 	 * Removes an object from the context.
@@ -64,7 +76,10 @@ public interface TemplatingContext
 	 * @param key the object's key.
 	 * @return the object in the context.
 	 */
-	public Object remove(String key);
+	public Object remove(String key)
+    {
+        return data.remove(key);
+    }
 		
 	/**
 	 * Checks if the context contains an object.
@@ -72,12 +87,34 @@ public interface TemplatingContext
 	 * @param key the object's key.
 	 * @return <code>true</code> if object is stored in the context.
 	 */
-	public boolean containsKey(String key);
+	public boolean containsKey(String key)
+    {
+        return data.containsKey(key);
+    }
 	
 	/**
 	 * Returns keys of all objects.
 	 *
 	 * @return keys of all objects.
 	 */
-	public String[] getKeys();
+	public String[] getKeys()
+    {
+        Set keys = data.keySet();
+        String[] result = new String[keys.size()];
+        keys.toArray(result);
+        return result;
+    }
+    
+    // static access ////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Retrieves the TemplatingContext from the thread's processing context.
+     *
+     * @param context the thread's processing context.
+     * @return TemplatingContext the templating context.
+     */
+    public static TemplatingContext getTemplatingContext(Context context)
+    {
+        return (TemplatingContext)context.getAttribute(TemplatingContext.class);
+    }
 }
