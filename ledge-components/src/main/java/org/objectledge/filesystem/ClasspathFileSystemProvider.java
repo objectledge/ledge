@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE.
 //
 
-package org.objectledge.filesystem.impl;
+package org.objectledge.filesystem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,12 +34,13 @@ import java.net.URL;
 import java.util.Enumeration;
 
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
 /**
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.3 2004-01-13 12:46:12 fil Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.1 2004-01-13 12:52:29 fil Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider

@@ -42,17 +42,17 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.nanocontainer.Log4JNanoContainerMonitor;
 import org.objectledge.container.LedgeContainer;
+import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.filesystem.ServletFileSystemProvider;
-import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.11 2004-01-08 12:50:51 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.12 2004-01-13 12:54:33 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {

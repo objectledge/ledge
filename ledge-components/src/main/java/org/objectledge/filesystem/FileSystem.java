@@ -54,7 +54,7 @@ import org.picocontainer.lifecycle.Stoppable;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.14 2004-01-13 12:46:12 fil Exp $
+ * @version $Id: FileSystem.java,v 1.15 2004-01-13 12:52:29 fil Exp $
  */
 public class FileSystem
     implements Startable, Stoppable
@@ -988,7 +988,7 @@ public class FileSystem
     {
         FileSystemProvider lfs = new org.objectledge.filesystem.
             LocalFileSystemProvider("local", root);
-        FileSystemProvider cfs = new org.objectledge.filesystem.impl.
+        FileSystemProvider cfs = new org.objectledge.filesystem.
             ClasspathFileSystemProvider("classpath", 
             FileSystem.class.getClassLoader());
         return new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);

@@ -9,17 +9,17 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.objectledge.configuration.ConfigurationFactory;
+import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
-import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.xml.XMLValidator;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfiguratorTest.java,v 1.4 2004-01-08 12:50:50 fil Exp $
+ * @version $Id: LoggingConfiguratorTest.java,v 1.5 2004-01-13 12:53:00 fil Exp $
  */
 public class LoggingConfiguratorTest extends TestCase
 {

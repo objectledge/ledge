@@ -31,10 +31,10 @@ package org.objectledge.pico.customization;
 import junit.framework.TestCase;
 
 import org.objectledge.configuration.ConfigurationFactory;
+import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
-import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.logging.LoggerFactory;
 import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.test.FooComponent;
@@ -51,7 +51,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.8 2004-01-08 12:50:50 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.9 2004-01-13 12:53:00 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {

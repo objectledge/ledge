@@ -32,17 +32,17 @@ import junit.framework.TestCase;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
-import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.xml.XMLValidator;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactoryTest.java,v 1.8 2004-01-08 12:50:50 fil Exp $
+ * @version $Id: ConfigurationFactoryTest.java,v 1.9 2004-01-13 12:53:00 fil Exp $
  */
 public class ConfigurationFactoryTest 
     extends TestCase

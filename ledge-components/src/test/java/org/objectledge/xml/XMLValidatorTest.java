@@ -7,15 +7,15 @@ package org.objectledge.xml;
 
 import junit.framework.TestCase;
 
+import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
-import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidatorTest.java,v 1.2 2004-01-08 12:50:52 fil Exp $
+ * @version $Id: XMLValidatorTest.java,v 1.3 2004-01-13 12:52:29 fil Exp $
  */
 public class XMLValidatorTest extends TestCase
 {
