@@ -26,13 +26,10 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.encodings.encoders;
+package org.objectledge.scheduler;
 
-import junit.framework.TestCase;
-
-import org.objectledge.encodings.HTMLEntityEncoder;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.defaults.DefaultPicoContainer;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -40,48 +37,15 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class HTMLEntityEncoderTest extends TestCase
+public class AllTests
 {
-    private HTMLEntityEncoder encoder;
 
-    /**
-     * Constructor for HTMLEntityEncoderTest.
-     * @param arg0
-     */
-    public HTMLEntityEncoderTest(String arg0)
+    public static Test suite()
     {
-        super(arg0);
-    }
-
-    public void setUp()
-    {
-        MutablePicoContainer container = new DefaultPicoContainer();
-        encoder = new HTMLEntityEncoder(container);
-    }
-
-    public void testHTMLEntityEncoder()
-    {
-        assertNotNull(encoder);
-    }
-
-    /*
-     * Test for String encodeAttribute(String, String, boolean)
-     */
-    public void testEncodeAttributeStringStringboolean()
-    {
-        
-    }
-
-    /*
-     * Test for String encodeAttribute(String, String)
-     */
-    public void testEncodeAttributeStringString()
-    {
-        
-    }
-
-    public void testEncodeHTML()
-    {
-        
+        TestSuite suite = new TestSuite("Test for org.objectledge.scheduler");
+        //$JUnit-BEGIN$
+        suite.addTest(new TestSuite(TransientSchedulerTest.class));
+        //$JUnit-END$
+        return suite;
     }
 }
