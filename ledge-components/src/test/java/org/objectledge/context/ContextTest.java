@@ -55,7 +55,7 @@ public class ContextTest extends TestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		context = Context.getContext();
+		context = new Context();
 	}
 
 	protected void tearDown() throws Exception
@@ -82,10 +82,4 @@ public class ContextTest extends TestCase
 		context.clearAttributes();
 		assertNull(context.getAttribute("foo"));
     }
-
-    public void testGetContext()
-    {
-    	assertNotNull(Context.getContext());
-    }
-
 }

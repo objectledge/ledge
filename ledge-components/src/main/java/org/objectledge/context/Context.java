@@ -45,15 +45,12 @@ import java.util.Map;
  * being otherwise being eligible to collection.</p>  
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Context.java,v 1.2 2003-12-03 14:13:47 mover Exp $
+ * @version $Id: Context.java,v 1.3 2004-01-08 10:20:49 fil Exp $
  */
 public class Context
 {
     /** storage of the context attributes, specific to a thread. */
     private static InheritableThreadLocal threadAttributes = new InheritableThreadLocal();
-
-    /** singleton instance used by the {@link #getContext()} static method. */
-    private static Context staticContext = new Context();
 
     /**
      * Return the value of a context attribute.
@@ -95,23 +92,6 @@ public class Context
     public void clearAttributes()
     {
         getAttributes().clear();
-    }
-    
-    // - static access ------------------------------------------------------
-    
-    /**
-     * Returns an instance of the Context.
-     * 
-     * <p>It is recommended that components are passed an instance of the
-     * context class by their instantiators. In the places where this is
-     * not apropriate this static method may be used to access the context
-     * attributes.</p>
-     * 
-     * @return an instance of the Context.
-     */
-    public static Context getContext()
-    {
-        return staticContext;
     }
     
     // - implementation -----------------------------------------------------

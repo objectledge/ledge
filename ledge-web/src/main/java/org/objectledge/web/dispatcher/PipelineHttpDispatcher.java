@@ -45,7 +45,7 @@ import org.objectledge.web.HttpDispatcher;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.1 2003-12-23 17:14:28 pablo Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.2 2004-01-08 10:20:48 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
@@ -53,16 +53,21 @@ public class PipelineHttpDispatcher
 	/** the pipeline */
     private Pipeline pipeline;
     
+    /** thead context. */
+    private Context context;
+    
     /**
      * Creates a new pipeline dipspatcher.
      * 
      * @param pipeline the pipeline
+     * @param context the thread context
      * @throws ConfigurationException if the configuration is malformed.
      */
-    public PipelineHttpDispatcher(Pipeline pipeline)
+    public PipelineHttpDispatcher(Pipeline pipeline, Context context)
         throws ConfigurationException
     {
         this.pipeline = pipeline;
+        this.context = context;
     }
     
     /**
@@ -71,7 +76,6 @@ public class PipelineHttpDispatcher
     public boolean dispatch(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        Context context = Context.getContext();
         HttpContext httpContext = new HttpContextImpl(request,response);
         context.setAttribute(HttpContext.CONTEXT_KEY, httpContext);
         pipeline.run();

@@ -228,7 +228,7 @@ public class VelocityTemplatingTest extends TestCase
 	{
 		try
 		{
-		    Context context = Context.getContext();
+		    Context context = new Context();
 	    	Runnable[] runnable = new Runnable[0];
 	    	Runnable[] tryValves = new Runnable[3];
 	    	ContextTools contextTools = new ContextTools(new ContextToolFactory[0]);
