@@ -38,14 +38,13 @@ import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Pipeline;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.HttpContext;
 import org.objectledge.web.HttpDispatcher;
 
 /**
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.3 2004-01-12 14:37:11 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.4 2004-01-12 14:46:20 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher

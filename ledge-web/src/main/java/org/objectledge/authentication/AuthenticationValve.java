@@ -32,7 +32,6 @@ import java.security.Principal;
 
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.MVCContextImpl;
@@ -41,7 +40,7 @@ import org.objectledge.web.mvc.MVCContextImpl;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.2 2004-01-12 14:37:12 fil Exp $
+ * @version $Id: AuthenticationValve.java,v 1.3 2004-01-12 14:45:46 fil Exp $
  */
 public class AuthenticationValve implements Runnable, WebConstants
 {

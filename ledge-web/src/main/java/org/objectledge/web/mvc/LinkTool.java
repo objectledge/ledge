@@ -39,7 +39,6 @@ import org.objectledge.context.Context;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.HttpContext;
 import org.objectledge.web.parameters.RequestParameters;
 
 /**
