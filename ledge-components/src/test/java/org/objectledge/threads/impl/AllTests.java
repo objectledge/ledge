@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AllTests.java,v 1.2 2004-02-02 13:07:07 fil Exp $
+ * @version $Id: AllTests.java,v 1.3 2004-02-02 14:24:44 fil Exp $
  */
 public class AllTests
 {
@@ -44,6 +44,7 @@ public class AllTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(DaemonTest.class));
         suite.addTest(new TestSuite(WorkerTest.class));
+        suite.addTest(new TestSuite(WorkerPoolTest.class));
         //$JUnit-END$
         return suite;
     }
