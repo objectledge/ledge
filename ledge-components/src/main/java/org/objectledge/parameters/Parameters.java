@@ -35,7 +35,7 @@ import java.util.Set;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.8 2004-01-12 12:14:57 pablo Exp $
+ * @version $Id: Parameters.java,v 1.9 2005-02-06 23:00:09 pablo Exp $
  */
 public interface Parameters
 {
@@ -234,7 +234,7 @@ public interface Parameters
 	 *
 	 * @param keys the set of keys.
 	 */
-	public void remove(Set keys);
+	public void remove(Set<String> keys);
 	
 	/**
 	 * Remove all except those with a keys specified in the set.
@@ -429,4 +429,5 @@ public interface Parameters
      * @return the nested parameters object.
      */
     public Parameters getChild(String prefix);
+
 }

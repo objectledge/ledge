@@ -501,7 +501,8 @@ public class DirectoryParameters extends DefaultParameters
             String name = keys[i];
             sb.append(name);
             sb.append('=');
-            sb.append(toString(name));
+            String[] values = getStrings(keys[i]);
+            sb.append(toString(values));
             sb.append('\n');
         }
         return sb.toString();

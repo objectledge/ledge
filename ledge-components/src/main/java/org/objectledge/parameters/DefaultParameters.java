@@ -47,13 +47,46 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.13 2004-12-23 07:17:05 rafal Exp $
+ * @version $Id: DefaultParameters.java,v 1.14 2005-02-06 23:00:09 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {
     /** string representation for boolean <code>true</code> value. */
     public static final String TRUE = "true";
 
+    /** 
+     * Get string representation of parameter values.
+     *  
+     * @param name the name of the parameters.
+     * @return the string representation of the parameter value(s). 
+     */
+    public static String toString(String[] values)
+    {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < values.length; i++)
+        {
+            String value = values[i];
+            int index = value.indexOf(',');
+            int start = 0;
+            while (index >= 0)
+            {
+                sb.append(value.substring(start, index));
+                sb.append("\\,");
+                start = index + 1;
+                index = value.indexOf(',', start);
+            }
+            if (start < value.length())
+            {
+                sb.append(value.substring(start));
+            }
+            if (i < (values.length - 1))
+            {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+    
     /** The main parameters map. */
     protected Map map;
 
@@ -684,7 +717,8 @@ public class DefaultParameters implements Parameters
             String name = (String)it.next();
             sb.append(name);
             sb.append('=');
-            sb.append(toString(name));
+            String[] values = getStrings(name);
+            sb.append(toString(values));
             sb.append('\n');
         }
         return sb.toString();
@@ -695,6 +729,8 @@ public class DefaultParameters implements Parameters
      */
     public Parameters getChild(String prefix)
     {
+        return new ScopedParameters(this, prefix);
+        /**
         Parameters target = new DefaultParameters();
         Iterator it = map.keySet().iterator();
         while (it.hasNext())
@@ -706,6 +742,7 @@ public class DefaultParameters implements Parameters
             }
         }
         return target;
+        */
     }
 
     private void loadParameters(LineNumberReader reader) throws IOException
@@ -787,39 +824,4 @@ public class DefaultParameters implements Parameters
         }
         while (reader.ready() && line != null);
     }
-
-    /** 
-     * Get string representation of parameter values.
-     *  
-     * @param name the name of the parameters.
-     * @return the string representation of the parameter value(s). 
-     */
-    protected String toString(String name)
-    {
-        StringBuffer sb = new StringBuffer();
-        String[] values = getStrings(name);
-        for (int i = 0; i < values.length; i++)
-        {
-            String value = values[i];
-            int index = value.indexOf(',');
-            int start = 0;
-            while (index >= 0)
-            {
-                sb.append(value.substring(start, index));
-                sb.append("\\,");
-                start = index + 1;
-                index = value.indexOf(',', start);
-            }
-            if (start < value.length())
-            {
-                sb.append(value.substring(start));
-            }
-            if (i < (values.length - 1))
-            {
-                sb.append(",");
-            }
-        }
-        return sb.toString();
-    }
-
 }
