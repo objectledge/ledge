@@ -48,7 +48,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: ParametersImpl.java,v 1.5 2003-12-03 14:39:27 mover Exp $
+ * @version $Id: ParametersImpl.java,v 1.6 2003-12-09 14:29:09 pablo Exp $
  */
 public class ParametersImpl implements Parameters
 {
@@ -731,7 +731,7 @@ public class ParametersImpl implements Parameters
 			// process the value
 			if(value.indexOf(',') == -1)
 			{
-				add(name, value);
+				add(StringUtils.expandUnicodeEscapes(name), StringUtils.expandUnicodeEscapes(value));
 				continue;
 			}
 			StringTokenizer st = new StringTokenizer(value,",");
