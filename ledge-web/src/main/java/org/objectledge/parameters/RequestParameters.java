@@ -46,7 +46,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.11 2004-08-10 10:17:31 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.12 2004-09-30 13:59:55 zwierzem Exp $
  */
 public class RequestParameters extends SortedParameters
 {
@@ -106,28 +106,64 @@ public class RequestParameters extends SortedParameters
         map = tmp;
     }
     
+    private static final int START = 0;
+    private static final int NAME = 1;
+    private static final int SEPARATOR_AFTER_NAME = 2;
+    private static final int VALUE = 3;
+    private static final int SEPARATOR_AFTER_VALUE = 4;
+    
     private void addURLParams(String urlPart, String separator)
     {
+        if (urlPart == null)
+        {
+            return;
+        }
+        
         try
         {
-            if (urlPart != null)
+            StringTokenizer st = new StringTokenizer(urlPart, separator, true);
+            int state = START;
+            String name = null;
+            while (st.hasMoreTokens())
             {
-                StringTokenizer st = new StringTokenizer(urlPart, separator);
-                boolean isName = true;
-                String name = null;
-                String value = null;
-                while (st.hasMoreTokens())
+                String token = st.nextToken();
+                if(token.length() == 1 && separator.indexOf(token.charAt(0)) > -1 )
                 {
-                    if (isName)
+                    switch(state)
                     {
-                        name = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
+                        case START:
+                            state = NAME;
+                            break;
+                        case SEPARATOR_AFTER_NAME:
+                            state = VALUE;
+                            break;
+                        case SEPARATOR_AFTER_VALUE:
+                            state = NAME;
+                            break;
+                        case VALUE:
+                            add(name, "");
+                            name = null;
+                            state = NAME;
+                            break;
+                        case NAME:
+                            throw new IllegalStateException("empty parameter name");
+                        default:
+                            throw new IllegalStateException(
+                                "illegal state while parsing params");
                     }
-                    else
-                    {
-                        value = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
-                        add(name, value);
-                    }
-                    isName = !isName;
+                }
+                else switch(state)
+                {
+                    case START:
+                    case NAME:
+                        name = URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING);
+                        state = SEPARATOR_AFTER_NAME;
+                    break;
+                    case VALUE:
+                        add(name, URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING));
+                        name = null;
+                        state = SEPARATOR_AFTER_VALUE;
+                    break;
                 }
             }
         }
