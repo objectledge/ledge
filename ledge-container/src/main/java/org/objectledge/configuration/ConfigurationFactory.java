@@ -11,7 +11,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.pico.customization.CustomizationProvider;
+import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.CustomizedComponentAdapter;
 import org.picocontainer.ComponentAdapter;
 import org.picocontainer.MutablePicoContainer;
@@ -27,10 +27,10 @@ import org.xml.sax.XMLReader;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.3 2003-12-01 09:18:33 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.4 2003-12-01 10:14:48 fil Exp $
  */
 public class ConfigurationFactory
-    implements CustomizationProvider
+    implements CustomizedComponentProvider
 {
     private FileSystem fileSystem;
     

@@ -16,7 +16,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.2 2003-12-01 09:18:32 fil Exp $
+ * @version $Id: CustomizedComponentAdapter.java,v 1.3 2003-12-01 10:14:47 fil Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
@@ -25,7 +25,7 @@ public class CustomizedComponentAdapter
 
     private MutablePicoContainer customizedInstanceContainer;
     
-    private CustomizationProvider customizationProvider;
+    private CustomizedComponentProvider customizationProvider;
     
     /**
      * 
@@ -33,7 +33,7 @@ public class CustomizedComponentAdapter
     public CustomizedComponentAdapter(
         Object componentKey,
         MutablePicoContainer customizedInstanceContainer,
-        CustomizationProvider customizationProvider)
+        CustomizedComponentProvider customizationProvider)
     {
         this.componentKey = componentKey;
         this.customizedInstanceContainer = customizedInstanceContainer;
