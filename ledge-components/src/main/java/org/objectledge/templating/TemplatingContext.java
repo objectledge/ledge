@@ -28,13 +28,17 @@
 
 package org.objectledge.templating;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.objectledge.context.Context;
 
 /**
  * Interface for all templating contexts.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: TemplatingContext.java,v 1.6 2004-01-14 14:36:39 fil Exp $
+ * @version $Id: TemplatingContext.java,v 1.7 2005-02-02 22:18:16 pablo Exp $
  */
 ///CLOVER:OFF
 public abstract class TemplatingContext
@@ -78,6 +82,23 @@ public abstract class TemplatingContext
 	 * @return keys of all objects.
 	 */
 	public abstract String[] getKeys();
+    
+    /**
+     * Get keys in alpha order.
+     * 
+     * @return keys of all objects.
+     */
+    public List getSortedKeys()
+    {
+        ArrayList list = new ArrayList();
+        String[] keys = getKeys();
+        for(String key: keys)
+        {
+            list.add(key);
+        }
+        Collections.sort(list);
+        return list;
+    }
     
     // static access ////////////////////////////////////////////////////////////////////////////
     
