@@ -8,8 +8,7 @@
     <section name="ServletFileSystemProvider">
       <subsection name="Description">
         <p>HttpMethodDispatcher is a directs the requests to other dispatchers, depending on 
-        HTTP method used in the request.
-        </p>
+        HTTP method used in the request.</p>
       </subsection>
     
       <subsection name="Browse">
