@@ -35,13 +35,12 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.8 2004-05-27 16:36:53 pablo Exp $
+ * @version $Id: AuthenticationValve.java,v 1.9 2004-06-29 13:40:13 zwierzem Exp $
  */
 public class AuthenticationValve 
     implements Valve, WebConstants
@@ -69,7 +68,6 @@ public class AuthenticationValve
         throws ProcessingException
     {
     	HttpContext httpContext = HttpContext.getHttpContext(context);
-		MVCContext mvcContext = MVCContext.getMVCContext(context);
     	Principal principal = (Principal)httpContext.getRequest().
 			getSession().getAttribute(PRINCIPAL_SESSION_KEY);
 		Principal anonymous = null;
@@ -79,7 +77,7 @@ public class AuthenticationValve
         }
         catch(AuthenticationException e)
         {
-            throw new ProcessingException("Failed to retrive anonymous account");
+            throw new ProcessingException("Failed to retrieve anonymous account");
         }
 		boolean authenticated = false;
 		if(principal == null)
@@ -90,7 +88,10 @@ public class AuthenticationValve
 		{
 			authenticated = !principal.equals(anonymous);
 		}
-		mvcContext.setUserPrincipal(principal, authenticated);
+        AuthenticationContext authenticationContext = new AuthenticationContext();
+        authenticationContext.setUserPrincipal(principal, authenticated);
+        context.setAttribute(AuthenticationContext.class, authenticationContext);
+        
     	httpContext.getRequest().getSession().setAttribute(PRINCIPAL_SESSION_KEY, principal);
     }
 }

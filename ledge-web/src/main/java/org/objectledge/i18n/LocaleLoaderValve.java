@@ -34,13 +34,13 @@ import java.util.Locale;
 import javax.servlet.http.Cookie;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.WebConstants;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Pipeline processing valve that sets the locale.
@@ -48,7 +48,7 @@ import org.objectledge.web.mvc.MVCContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * 
- * @version $Id: LocaleLoaderValve.java,v 1.6 2004-01-27 10:03:17 pablo Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.7 2004-06-29 13:40:12 zwierzem Exp $
  */
 public class LocaleLoaderValve 
     implements Valve, WebConstants
@@ -81,13 +81,17 @@ public class LocaleLoaderValve
         Locale defaultLocale = webConfigurator.getDefaultLocale();
 		String defaultEncoding = webConfigurator.getDefaultEncoding();
 		
+        AuthenticationContext authenticationContext =
+            AuthenticationContext.getAuthenticationContext(context);
+
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        I18nContext i18nContext = new I18nContext();
+        context.setAttribute(I18nContext.class, i18nContext);
 
         // set up cookie keys - neccessary for browsers with multiple
         // users on a single user system - for instance Win95/98
         String cookieKey = ".anonymous";
-        Principal principal = mvcContext.getUserPrincipal();
+        Principal principal = authenticationContext.getUserPrincipal();
         if (principal != null && principal.getName() != null)
         {
             cookieKey = "." + StringUtils.cookieNameSafeString(principal.getName());
@@ -127,7 +131,7 @@ public class LocaleLoaderValve
         						getSession().getAttribute(LOCALE_SESSION_KEY);
         if (locale != null)
         {
-            mvcContext.setLocale(locale);
+            i18nContext.setLocale(locale);
         }
         else
         {
@@ -137,7 +141,7 @@ public class LocaleLoaderValve
                 {
                     locale = StringUtils.getLocale(localeString);
                     httpContext.getRequest().getSession().setAttribute(LOCALE_SESSION_KEY, locale);
-                    mvcContext.setLocale(locale);
+                    i18nContext.setLocale(locale);
                 }
                 catch (IllegalArgumentException e)
                 {

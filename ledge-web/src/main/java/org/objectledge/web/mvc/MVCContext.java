@@ -28,9 +28,6 @@
 
 package org.objectledge.web.mvc;
 
-import java.security.Principal;
-import java.util.Locale;
-
 import org.objectledge.context.Context;
 
 /**
@@ -38,7 +35,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.8 2004-03-17 14:51:38 pablo Exp $
+ * @version $Id: MVCContext.java,v 1.9 2004-06-29 13:40:13 zwierzem Exp $
  */
 public class MVCContext
 {
@@ -59,18 +56,6 @@ public class MVCContext
 	/** the view parameter. */
 	private String view;
 
-	/** the locale */
-	private Locale locale;
-
-	/** the media */
-	private String media;
-
-    /** the user. */
-	private Principal user;
-
-    /** is the user authenticated */
-	private boolean authenticated;
-
 	/** the view build result */
 	private String buildResult;
 
@@ -80,9 +65,6 @@ public class MVCContext
 	 */
 	public MVCContext()
 	{
-		user = null;
-		authenticated = false;
-		locale = null;
 	}
 	
     /**
@@ -125,78 +107,6 @@ public class MVCContext
 		this.view = view;
 	}
 	
-    /**
-     * Returns the locale.
-     *
-     * @return the locale
-     */
-	public Locale getLocale()
-	{
-		return locale;
-	}
-
-    /**
-     * Sets the locale.
-     *
-     * @param locale the locale.
-     */
-    public void setLocale(Locale locale)
-    {
-    	this.locale = locale;
-    }
-
-    /**
-     * Returns the media.
-     *
-     * @return the media.
-     */
-    public String getMedia()
-    {
-    	return media;
-    }
-
-    /**
-     * Sets the media.
-     *
-     * @param media the media.
-     */
-    public void setMedia(String media)
-    {
-    	this.media = media;
-    }
-
-    /**
-     * Returns the user performing the request.
-     *
-     * @return the user.
-     */
-    public Principal getUserPrincipal()
-    {
-    	return user;
-    }
-
-    /**
-     * Checks whether user is authenticated by system. 
-     * 
-     * @return <code>true</code> if the current user is not an anounymous.
-     */
-    public boolean isUserAuthenticated()
-    {
-    	return authenticated;
-    }
-
-    /**
-     * Sets the current authenticated user.
-     *
-     * @param user the current authenticated user.
-     * @param authenticated <code>true</code> if named user is authenticated.
-     */
-    public void setUserPrincipal(Principal user, boolean authenticated)
-    {
-    	this.user = user;
-    	this.authenticated = authenticated;
-    }
-
     /**
      * Gets the result of building the view part of MVC pipeline.
      * 

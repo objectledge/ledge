@@ -26,47 +26,60 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web.mvc;
+package org.objectledge.i18n;
+
+import java.util.Locale;
 
 import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.Valve;
-import org.objectledge.web.WebConfigurator;
 
 /**
- * Pipeline processing valve that initialize pipeline context.
+ * The web context contains all needed information about mvc processing parameters.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.5 2004-06-29 13:40:13 zwierzem Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: I18nContext.java,v 1.1 2004-06-29 13:40:12 zwierzem Exp $
  */
-public class MVCInitializerValve 
-    implements Valve
+public class I18nContext
 {
-	/** the web configuration component */
-	private WebConfigurator webConfigurator;
-	
 	/**
-	 * Constructor
-	 * 
-	 * @param webConfigurator the web configuration component.
+	 *  Usefull method to retrieve http context from context.
+	 *
+	 * @param context the context.
+	 * @return the http context.
 	 */
-	public MVCInitializerValve(WebConfigurator webConfigurator)
+	public static I18nContext getI18nContext(Context context)
 	{
-		this.webConfigurator = webConfigurator;
+		return (I18nContext)context.getAttribute(I18nContext.class);
+	}
+
+	/** the locale */
+	private Locale locale;
+
+	/**
+	 * Construct new pipeline context.
+	 */
+	public I18nContext()
+	{
+		locale = null;
 	}
 	
     /**
-     * Run the pipeline valve - initialize and store the pipeline context.
-     * 
-     * @param context the context.
+     * Returns the locale.
+     *
+     * @return the locale
      */
-    public void process(Context context)
+	public Locale getLocale()
+	{
+		return locale;
+	}
+
+    /**
+     * Sets the locale.
+     *
+     * @param locale the locale.
+     */
+    public void setLocale(Locale locale)
     {
-    	MVCContext mvcContext = new MVCContext();
-        Parameters requestParamters = RequestParameters.getRequestParameters(context);
-        mvcContext.setAction(requestParamters.get(webConfigurator.getActionToken(), null));
-        mvcContext.setView(requestParamters.get(webConfigurator.getViewToken(), null));
-    	context.setAttribute(MVCContext.class, mvcContext);
+    	this.locale = locale;
     }
 }

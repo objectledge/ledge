@@ -26,47 +26,76 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web.mvc;
+package org.objectledge.authentication;
+
+import java.security.Principal;
 
 import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.Valve;
-import org.objectledge.web.WebConfigurator;
 
 /**
- * Pipeline processing valve that initialize pipeline context.
+ * The authentication context contains all information about web application user.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.5 2004-06-29 13:40:13 zwierzem Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: AuthenticationContext.java,v 1.1 2004-06-29 13:40:13 zwierzem Exp $
  */
-public class MVCInitializerValve 
-    implements Valve
+public class AuthenticationContext
 {
-	/** the web configuration component */
-	private WebConfigurator webConfigurator;
-	
 	/**
-	 * Constructor
-	 * 
-	 * @param webConfigurator the web configuration component.
+	 *  Useful method to retrieve authentication context from context.
+	 *
+	 * @param context the context.
+	 * @return the authentication context.
 	 */
-	public MVCInitializerValve(WebConfigurator webConfigurator)
+	public static AuthenticationContext getAuthenticationContext(Context context)
 	{
-		this.webConfigurator = webConfigurator;
+		return (AuthenticationContext)context.getAttribute(AuthenticationContext.class);
+	}
+
+	/** the user. */
+	private Principal user;
+
+    /** is the user authenticated */
+	private boolean authenticated;
+
+	/**
+	 * Construct new authentication context.
+     */
+	public AuthenticationContext()
+	{
+        this.user = null;
+        this.authenticated = false;
 	}
 	
     /**
-     * Run the pipeline valve - initialize and store the pipeline context.
-     * 
-     * @param context the context.
+     * Returns the user performing the request.
+     *
+     * @return the user.
      */
-    public void process(Context context)
+    public Principal getUserPrincipal()
     {
-    	MVCContext mvcContext = new MVCContext();
-        Parameters requestParamters = RequestParameters.getRequestParameters(context);
-        mvcContext.setAction(requestParamters.get(webConfigurator.getActionToken(), null));
-        mvcContext.setView(requestParamters.get(webConfigurator.getViewToken(), null));
-    	context.setAttribute(MVCContext.class, mvcContext);
+    	return user;
+    }
+
+    /**
+     * Checks whether user is authenticated by system. 
+     * 
+     * @return <code>true</code> if the current user is not an anounymous.
+     */
+    public boolean isUserAuthenticated()
+    {
+    	return authenticated;
+    }
+
+    /**
+     * Sets the user principal.
+     * 
+     * @param user the current authenticated user.
+     * @param authenticated <code>true</code> if named user is authenticated.
+     */
+    public void setUserPrincipal(Principal user, boolean authenticated)
+    {
+        this.user = user;
+        this.authenticated = authenticated;
     }
 }
