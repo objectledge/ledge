@@ -38,21 +38,26 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.FooComponent;
+import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picoextras.script.xml.XmlFrontEnd;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 
 /**
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEndTest.java,v 1.2 2003-12-15 15:34:10 fil Exp $
+ * @version $Id: LedgeXmlFrontEndTest.java,v 1.3 2003-12-17 10:03:15 fil Exp $
  */
 public class LedgeXmlFrontEndTest extends TestCase
 {
+    private FileSystem fs;
+    
+    private XMLValidator validator;
 
     /**
      * Constructor for LedgeXmlFrontEnd.
@@ -63,10 +68,34 @@ public class LedgeXmlFrontEndTest extends TestCase
         super(arg0);
     }
 
+    public void setUp()
+        throws Exception
+    {
+        super.setUp();
+        
+        String root = System.getProperty("ledge.root");
+        if(root == null)
+        {
+            throw new Exception("system property ledge.root undefined. "+
+                "use -Dledge.root=.../ledge-container/src/test/resources");
+        }
+        fs = FileSystem.getStandardFileSystem(root);
+        validator = new XMLValidator(fs);
+    }
+
     public void testLedgeXmlFrontEnd() 
         throws Exception
     {
-        InputSource source = new InputSource("composition/simple.xml");
+        try
+        {
+            validator.validate("composition/simple.xml", LedgeXmlFrontEnd.SCHEMA_PATH);
+        }
+        catch(SAXParseException e)
+        {
+            throw new Exception("parse error "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+        }
+        
+        InputSource source = new InputSource(fs.getInputStream("composition/simple.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document config = builder.parse(source);
         
@@ -82,13 +111,24 @@ public class LedgeXmlFrontEndTest extends TestCase
     public void testAdapterFactory() 
         throws Exception
     {
-        InputSource source = new InputSource("composition/adapter.xml");
+        try
+        {
+            validator.validate("composition/adapter.xml", LedgeXmlFrontEnd.SCHEMA_PATH);
+        }
+        catch(SAXParseException e)
+        {
+            throw new Exception("parse error "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+        }
+        
+        InputSource source = new InputSource(fs.getInputStream("composition/adapter.xml"));
+
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document config = builder.parse(source);
         
         MutablePicoContainer rootContainer = new DefaultPicoContainer();
         rootContainer.registerComponentInstance(ClassLoader.class, getClass().getClassLoader());
-        rootContainer.registerComponentInstance("org.objectledge.filesystem.FileSystem:root", ".");
+        rootContainer.registerComponentInstance("org.objectledge.filesystem.FileSystem:root", 
+            "src/test/resources");
         XmlFrontEnd xmlFrontEnd = new LedgeXmlFrontEnd();
         PicoContainer container = xmlFrontEnd.createPicoContainer(config.getDocumentElement(), 
             rootContainer);
