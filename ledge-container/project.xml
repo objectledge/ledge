@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.31 2004-10-12 14:14:02 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.32 2004-10-12 14:22:06 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
-  <extend>${ledgeCommon}.project.xml</extend>
+  <extend>${ledgeCommon}/project.xml</extend>
   <!-- project info -->
 
   <groupId>objectledge</groupId>
