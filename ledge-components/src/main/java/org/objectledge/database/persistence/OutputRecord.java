@@ -29,6 +29,9 @@
 package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -276,11 +279,13 @@ public class OutputRecord
      * Builds an insert statement with contained data.
      *
      * @param table the table name.
-     * @return the statement body.
+     * @param conn database connection.
+     * @return the statement.
      * @throws PersistenceException if the statement could not be built.
+     * @throws SQLException if the statement could not be created.
      */
-    public String getInsertStatement(String table)
-        throws PersistenceException
+    public PreparedStatement getInsertStatement(String table, Connection conn)
+        throws PersistenceException, SQLException
     {
         StringBuffer buff = new StringBuffer();
         StringBuffer buff2 = new StringBuffer();
@@ -310,7 +315,7 @@ public class OutputRecord
         buff.append(") VALUES (");
         buff.append(buff2.toString());
         buff.append(")");
-        return buff.toString();
+        return conn.prepareStatement(buff.toString());
     }
 
     /**
@@ -318,11 +323,13 @@ public class OutputRecord
      *
      * @param table the table name.
      * @param keys the names of colums to appear in the where clause.
-     * @return the statement body.
+     * @param conn database connection.
+     * @return the statement.
      * @throws PersistenceException if the statement could not be built.
+     * @throws SQLException if the statement could not be created.
      */
-    public String getUpdateStatement(String table, String[] keys)
-        throws PersistenceException
+    public PreparedStatement getUpdateStatement(String table, String[] keys, Connection conn)
+        throws PersistenceException, SQLException
     {
         HashSet keySet = new HashSet();
         for(int i=0; i<keys.length; i++)
@@ -357,7 +364,7 @@ public class OutputRecord
         buff.setLength(buff.length() - 2);
         buff.append(" WHERE ");
         buff.append(getWhereClause(keys));
-        return buff.toString();
+        return conn.prepareStatement(buff.toString());
     }
 
     /**
@@ -366,18 +373,20 @@ public class OutputRecord
      *
      * @param table the table name.
      * @param keys the names of colums to appear in the where clause.
-     * @return the statement body.
+     * @param conn database connection.
+     * @return the statement.
      * @throws PersistenceException if the statement could not be built.
+     * @throws SQLException if the statement could not be created.
      */
-    public String getDeleteStatement(String table, String[] keys)
-        throws PersistenceException
+    public PreparedStatement getDeleteStatement(String table, String[] keys, Connection conn)
+        throws PersistenceException, SQLException
     {
         StringBuffer buff = new StringBuffer();
         buff.append("DELETE FROM ");
         buff.append(table);
         buff.append(" WHERE ");
         buff.append(getWhereClause(keys));
-        return buff.toString();
+        return conn.prepareStatement(buff.toString());
     }
 
     /**

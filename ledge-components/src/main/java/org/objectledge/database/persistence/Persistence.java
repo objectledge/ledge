@@ -29,6 +29,7 @@
 package org.objectledge.database.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ import org.objectledge.database.IdGenerator;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.2 2004-02-03 14:43:52 fil Exp $
+ * @version $Id: Persistence.java,v 1.3 2004-02-09 09:47:50 fil Exp $
  */
 public class Persistence
 {
@@ -180,10 +181,11 @@ public class Persistence
             try
             {
                 conn = dataSource.getConnection();
-                Statement statement = conn.createStatement();
+                PreparedStatement statement;
                 if (object.getSaved())
                 {
-                    statement.execute(record.getUpdateStatement(table, keys));
+                    statement = record.getUpdateStatement(table, keys, conn);
+                    statement.execute();
                 }
                 else
                 {
@@ -197,7 +199,8 @@ public class Persistence
                     {
                         id = -1;
                     }
-                    statement.execute(record.getInsertStatement(table));
+                    statement = record.getInsertStatement(table, conn);
+                    statement.execute();
                     object.setSaved(id);
                 }
             }
@@ -269,11 +272,11 @@ public class Persistence
             try
             {
                 conn = dataSource.getConnection();
-                Statement statement = conn.createStatement();
                 OutputRecord record = new OutputRecord();
                 object.getData(record);
-                statement.execute(record.getDeleteStatement(object.getTable(),
-                                                            object.getKeyColumns()));
+                PreparedStatement statement = record.getDeleteStatement(object.getTable(),
+                    object.getKeyColumns(), conn); 
+                statement.execute();
             }
             catch (Exception e)
             {
