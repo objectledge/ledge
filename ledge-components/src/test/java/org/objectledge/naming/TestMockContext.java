@@ -109,7 +109,7 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public void modifyAttributes(Name name, int mod_op, Attributes attrs) throws NamingException
+    public void modifyAttributes(Name name, int modOp, Attributes attrs) throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -127,7 +127,7 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public void modifyAttributes(String name, int mod_op, Attributes attrs) throws NamingException
+    public void modifyAttributes(String name, int modOp, Attributes attrs) throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -217,7 +217,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, Attributes matchingAttributes, String[] attributesToReturn) throws NamingException
+    public NamingEnumeration search(Name name, Attributes matchingAttributes, 
+        String[] attributesToReturn) throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -226,7 +227,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, Attributes matchingAttributes) throws NamingException
+    public NamingEnumeration search(Name name, Attributes matchingAttributes) 
+        throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -235,7 +237,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, String filterExpr, Object[] filterArgs, SearchControls cons) throws NamingException
+    public NamingEnumeration search(Name name, String filterExpr, Object[] filterArgs, 
+        SearchControls cons) throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -244,7 +247,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, String filter, SearchControls cons) throws NamingException
+    public NamingEnumeration search(Name name, String filter, SearchControls cons) 
+        throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -253,7 +257,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, Attributes matchingAttributes, String[] attributesToReturn) throws NamingException
+    public NamingEnumeration search(String name, Attributes matchingAttributes, 
+        String[] attributesToReturn) throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -262,7 +267,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, Attributes matchingAttributes) throws NamingException
+    public NamingEnumeration search(String name, Attributes matchingAttributes) 
+        throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -271,7 +277,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, String filterExpr, Object[] filterArgs, SearchControls cons) throws NamingException
+    public NamingEnumeration search(String name, String filterExpr, Object[] filterArgs,
+        SearchControls cons) throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
@@ -280,7 +287,8 @@ public class TestMockContext extends MockContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, String filter, SearchControls cons) throws NamingException
+    public NamingEnumeration search(String name, String filter, SearchControls cons) 
+        throws NamingException
     {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("not implemented yet");
