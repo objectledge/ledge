@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.6 2004-02-09 09:01:59 fil Exp $
+ * @version $Id: Transaction.java,v 1.7 2004-02-10 10:06:46 fil Exp $
  */
 public abstract class Transaction
 {
@@ -141,9 +141,9 @@ public abstract class Transaction
     }
     
     /**
-     * Commit the transaction.
+     * Commit the transaction, if the caller is the controller.
      * 
-     * @param controler the controler.
+     * @param controler <code>true</code> if the caller is the controler.
      * @throws SQLException if the commit fails.
      */
     public void commit(boolean controler)
@@ -165,9 +165,9 @@ public abstract class Transaction
     }
     
     /**
-     * Rollback the transaction.
+     * Rollback the transaction, if the caller is the controller.
      * 
-     * @param controler the controler.
+     * @param controler <code>true</code> if the caller is the controler.
      * @throws SQLException if the rollback fails.
      */
     public void rollback(boolean controler)

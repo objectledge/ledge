@@ -40,7 +40,7 @@ import org.picocontainer.lifecycle.Stoppable;
  * A component that generates unique, monotonous ids for table rows in a relational database. 
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGenerator.java,v 1.2 2004-02-04 12:17:49 fil Exp $
+ * @version $Id: IdGenerator.java,v 1.3 2004-02-10 10:05:13 fil Exp $
  */
 public class IdGenerator
     implements Stoppable
@@ -66,7 +66,7 @@ public class IdGenerator
     }
     
     /**
-     * Get the next identifier of the table.
+     * Get the next row identifier for the table.
      * 
      * @param table the table name.
      * @return the identifier.
