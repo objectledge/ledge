@@ -27,6 +27,7 @@
 // 
 package org.objectledge.modules.actions.i18n;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
 import javax.servlet.http.Cookie;
@@ -47,7 +48,7 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.2 2004-12-22 08:58:27 rafal Exp $
+ * @version $Id: SetEncoding.java,v 1.3 2004-12-23 01:57:05 rafal Exp $
  */
 public class SetEncoding 
     implements Valve
@@ -81,9 +82,9 @@ public class SetEncoding
         }
         try
         {
-            sun.io.CharToByteConverter.getConverter(encoding);
+            "".getBytes(encoding);
         }
-        catch(java.io.UnsupportedEncodingException e)
+        catch(UnsupportedEncodingException e)
         {
             throw new ProcessingException("Unsupported encoding "+encoding);
         }
