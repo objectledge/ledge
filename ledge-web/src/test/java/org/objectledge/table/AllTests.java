@@ -6,14 +6,14 @@
 // are permitted provided that the following conditions are met: 
 //   
 // * Redistributions of source code must retain the above copyright notice,  
-//   this list of conditions and the following disclaimer. 
+// this list of conditions and the following disclaimer. 
 // * Redistributions in binary form must reproduce the above copyright notice,  
-//   this list of conditions and the following disclaimer in the documentation  
-//   and/or other materials provided with the distribution. 
+// this list of conditions and the following disclaimer in the documentation  
+// and/or other materials provided with the distribution. 
 // * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-//   nor the names of its contributors may be used to endorse or promote products  
-//   derived from this software without specific prior written permission. 
-// 
+// nor the names of its contributors may be used to endorse or promote products  
+// derived from this software without specific prior written permission. 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
@@ -25,34 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 //
-
-package org.objectledge;
+package org.objectledge.table;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- *
- * <p>Created on Dec 23, 2003</p>
- * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: WebTests.java,v 1.6 2004-02-12 10:10:12 zwierzem Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: AllTests.java,v 1.1 2004-02-12 10:10:11 zwierzem Exp $
  */
-public class WebTests
+public class AllTests
 {
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge");
+        TestSuite suite = new TestSuite("Test for org.objectledge.table");
         //$JUnit-BEGIN$
-
+        suite.addTest(new TestSuite(TableColumnTest.class));
         //$JUnit-END$
-        suite.addTest(org.objectledge.filesystem.AllTests.suite());
-        suite.addTest(org.objectledge.i18n.AllWebTests.suite());
-        suite.addTest(org.objectledge.parameters.AllWebTests.suite());
-        suite.addTest(org.objectledge.policy.AllTests.suite());
-        suite.addTest(org.objectledge.upload.AllWebTests.suite());
-        suite.addTest(org.objectledge.web.AllTests.suite());
-		suite.addTest(org.objectledge.table.AllTests.suite());
         return suite;
     }
 }
