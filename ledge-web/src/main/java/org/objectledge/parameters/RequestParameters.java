@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,9 +46,9 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.9 2004-07-02 14:37:47 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.10 2004-07-05 13:51:16 zwierzem Exp $
  */
-public class RequestParameters extends DefaultParameters
+public class RequestParameters extends SortedParameters
 {
 	/**
 	 * Usefull method to retrieve parameters from context.
@@ -71,8 +70,7 @@ public class RequestParameters extends DefaultParameters
     public RequestParameters(HttpServletRequest request)
     	throws IllegalArgumentException
     {
-        // make parameters sort by their name
-        map = new TreeMap();
+        super();
         
         // get query string parameters 
         addURLParams(request.getQueryString(), "&=");
