@@ -27,14 +27,14 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 <strings>
+  <prefix name="empty"><value>Brak elementów</value></prefix>
   <prefix name="page">
-    <item name="first">Pierwsza strona</item>
-    <item name="last">Ostatnia strona</item>
-    <item name="next">Nastêpna strona</item>
-    <item name="previous">Poprzednia strona</item>
-    <item name="of">z</item>
-    <item name="size">na stronie</item>
-    <item name="all">wszystkie</item>
+    <prefix name="first"><value>Pierwsza strona</value></prefix>
+    <prefix name="last"><value>Ostatnia strona</value></prefix>
+    <prefix name="next"><value>Nastêpna strona</value></prefix>
+    <prefix name="previous"><value>Poprzednia strona</value></prefix>
+    <prefix name="of"><value>z</value></prefix>
+    <prefix name="size"><value>na stronie</value></prefix>
+    <prefix name="all"><value>wszystkie</value></prefix>
   </prefix>
-  <item name="empty">Brak elementów</item>
 </strings>

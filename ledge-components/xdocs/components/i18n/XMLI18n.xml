@@ -90,15 +90,18 @@
           <source>foo.bar_pl_PL.xml</source> containing the following XML markup:
 <source><![CDATA[<strings>
   <prefix name="foo2">
+    <value>first_value</value>
     <prefix name="bar2">
-      <item name="baz">my_value</item>
+      <prefix name="baz"><value>second_value</value></prefix>
     </prefix>
   </prefix>
 </strings>]]></source>
          The prefixes from file name and internal xml structure 
          are composed into single namespace. Following the example, if you want to 
-         obtain the item value <code>my_value</code> you should use the following key: 
-         <source>foo.bar.foo2.bar2.baz</source>
+         obtain the prefix value <code>second_value</code> you should use the following key: 
+         <source>foo.bar.foo2.bar2.baz</source>. If you want to 
+         obtain the prefix value <code>first_value</code> you should use the following key: 
+         <source>foo.bar.foo2</source>.
    	    </p>
 	  </subsection>
     </section>

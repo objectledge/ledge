@@ -1,6 +1,6 @@
 <strings>
 <prefix name="bar">
-  <item name="foo">bar</item>
+  <prefix name="foo"><value>bar</value></prefix>
 </prefix>
-<item name="foobar">foo&amp;bar</item>
+<prefix name="foobar"><value>foo&amp;bar</value></prefix>
 </strings>

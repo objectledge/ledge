@@ -1,7 +1,7 @@
 <strings>
   <prefix name="foo">
     <prefix name="bar">
-      <item name="foo">bar</item>
+      <prefix name="foo"><value>bar</value></prefix>
     </prefix>
   </prefix>
 </strings>
