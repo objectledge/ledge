@@ -52,7 +52,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.19 2005-02-10 17:46:54 rafal Exp $
+ * @version $Id: VelocityTemplating.java,v 1.20 2005-02-21 22:59:04 zwierzem Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -199,11 +199,12 @@ public class VelocityTemplating implements Templating, LogSystem
     public Template getTemplate(String name) throws TemplateNotFoundException
     {
         VelocityTemplate template = null;
+        String path = null;
         try
         {
             for (int i = 0; i < paths.length; i++)
             {
-                String path = paths[i] + name + extension;
+                path = paths[i] + name + extension;
                 if (engine.templateExists(path))
                 {
                     template = new VelocityTemplate(this, name, engine.getTemplate(path));
@@ -213,7 +214,7 @@ public class VelocityTemplating implements Templating, LogSystem
 		///CLOVER:OFF
         catch (Exception e)
         {
-            throw new RuntimeException("Velocity internal error", e);
+            throw new RuntimeException("Velocity internal error, template path: '"+path+"'", e);
         }
 		///CLOVER:ON
         if (template != null)
