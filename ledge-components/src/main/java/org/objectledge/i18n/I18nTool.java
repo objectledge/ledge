@@ -38,7 +38,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.12 2004-12-23 07:16:19 rafal Exp $
+ * @version $Id: I18nTool.java,v 1.13 2005-02-21 16:27:54 zwierzem Exp $
  */
 public class I18nTool
 {
@@ -46,7 +46,7 @@ public class I18nTool
     protected I18n i18n;
 
     /** buffer used keep the tools prefix and to build absolute keys. */
-    protected StringBuffer prefixBuf = new StringBuffer();
+    protected StringBuilder prefixBuf = new StringBuilder();
 	
 	/** current locale. */
 	protected Locale locale;

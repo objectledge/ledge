@@ -215,7 +215,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                 case REPLACE_ATTRIBUTE:
                     try
                     {
-                        StringBuffer sb = new StringBuffer();
+                        StringBuilder sb = new StringBuilder();
                         sb.append("context_id = ");
                         sb.append(ctx.getDelegate().getContextId());
                         sb.append(" and name = '");
@@ -239,7 +239,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                 case REMOVE_ATTRIBUTE:
                     try
                     {
-                        StringBuffer sb = new StringBuffer();
+                        StringBuilder sb = new StringBuilder();
                         sb.append("context_id = ");
                         sb.append(ctx.getDelegate().getContextId());
                         sb.append(" and name = '");

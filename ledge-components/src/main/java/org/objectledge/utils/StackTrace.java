@@ -35,7 +35,7 @@ import java.util.List;
  * Captures a full stack trace in a multi-level <code>Throwable</code> sequence.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTrace.java,v 1.6 2005-02-15 20:49:51 rafal Exp $
+ * @version $Id: StackTrace.java,v 1.7 2005-02-21 16:27:24 zwierzem Exp $
  */
 public class StackTrace
 {    
@@ -76,7 +76,7 @@ public class StackTrace
     {
         if(traceString == null)
         {
-            StringBuffer buff = new StringBuffer();
+            StringBuilder buff = new StringBuilder();
             appendTo(buff);
             traceString = buff.toString();
         }
@@ -139,7 +139,7 @@ public class StackTrace
             }
 
             List traceLines = new ArrayList();
-            StringBuffer buff = new StringBuffer();
+            StringBuilder buff = new StringBuilder();
 
             for (int i = traces.size() - 1; i > 0; i--)
             {
@@ -167,12 +167,12 @@ public class StackTrace
     }
     
     /**
-     * Appends the stack trace to the provided StringBuffer.
+     * Appends the stack trace to the provided StringBuilder.
      * 
      * @param buff the buffer.
-     * @return the StringBuffer passed in, for chaining.
+     * @return the StringBuilder passed in, for chaining.
      */
-    public StringBuffer appendTo(StringBuffer buff)
+    public StringBuilder appendTo(StringBuilder buff)
     {
         String[] traceArray = toStringArray();
         for(int i = 0; i < traceArray.length; i++)

@@ -202,7 +202,7 @@ public class XMLI18n extends AbstractI18n
 		private LinkedList prefix = new LinkedList();
 
 		/** string buffer */
-		private StringBuffer sb = new StringBuffer();
+		private StringBuilder sb = new StringBuilder();
 		
 		/** map to load the mappings */
 		private Map map;
@@ -211,7 +211,7 @@ public class XMLI18n extends AbstractI18n
 		private String basePrefix;
 		
         /** characters buffer */
-        private StringBuffer currentChars = new StringBuffer(256);
+        private StringBuilder currentChars = new StringBuilder(256);
         
 		/**
 		 * Initializes the hadler before parsing a new file.

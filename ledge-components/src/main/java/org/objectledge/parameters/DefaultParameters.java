@@ -47,7 +47,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.15 2005-02-07 01:29:03 rafal Exp $
+ * @version $Id: DefaultParameters.java,v 1.16 2005-02-21 16:25:59 zwierzem Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -64,7 +64,7 @@ public class DefaultParameters implements Parameters
      */
     public static String toString(String[] values)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < values.length; i++)
         {
             String value = values[i];
@@ -712,7 +712,7 @@ public class DefaultParameters implements Parameters
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Iterator it = map.keySet().iterator();
         while (it.hasNext())
         {
@@ -757,7 +757,7 @@ public class DefaultParameters implements Parameters
         do
         {
             // merge broken lines
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             boolean breakAtEnd = false;
             int lastBrokenLine = 0;
             do

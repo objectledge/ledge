@@ -38,7 +38,7 @@ import com.sun.msv.reader.GrammarReaderController;
  * GrammarReaderController that logs all warnings and throws exceptions on errors.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGrammarReaderController.java,v 1.2 2005-02-10 17:46:57 rafal Exp $
+ * @version $Id: BaseGrammarReaderController.java,v 1.3 2005-02-21 16:27:51 zwierzem Exp $
  */
 public abstract class BaseGrammarReaderController implements GrammarReaderController
 {
@@ -49,7 +49,7 @@ public abstract class BaseGrammarReaderController implements GrammarReaderContro
     private EntityResolver entityResolver;
 
     /** Used to compose information of location of errors and warnings. */
-    private StringBuffer locationMessage = new StringBuffer(64);
+    private StringBuilder locationMessage = new StringBuilder(64);
 
 	/**
 	 * Creates a grammar reader controller.

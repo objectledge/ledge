@@ -43,7 +43,7 @@ import org.objectledge.encodings.encoders.CharEncoderHTMLEntity;
  * <p>This tool is completely thread safe and does not keep any internal state.</p> 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityDecoder.java,v 1.3 2005-02-08 00:35:34 rafal Exp $
+ * @version $Id: HTMLEntityDecoder.java,v 1.4 2005-02-21 16:26:33 zwierzem Exp $
  */
 public class HTMLEntityDecoder
 {
@@ -154,7 +154,7 @@ public class HTMLEntityDecoder
 	private void decode(Reader inputReader, Writer outputWriter, boolean keepXmlEntities)
 		throws IOException 
 	{
-		StringBuffer entity = new StringBuffer(16); // sufficient for all entities
+		StringBuilder entity = new StringBuilder(16); // sufficient for all entities
         
 		PushbackReader reader = new PushbackReader(inputReader);
 		int state = DEFAULT;
@@ -253,17 +253,17 @@ public class HTMLEntityDecoder
 		inputReader.close(); // TODO should we do it?
 	}
 
-	private int notAnEntity(PushbackReader reader, char c, StringBuffer entity, Writer writer)
+	private int notAnEntity(PushbackReader reader, char c, StringBuilder entity, Writer writer)
 		throws IOException
 	{
 		reader.unread(c);
 		entity.setLength(entity.length()-1);
-		writer.write(entity.toString());
+		writer.append(entity);
 		entity.setLength(0);  // clear out entity buffer
 		return DEFAULT;
 	}
 
-	private int dumpEntity(PushbackReader reader, char c, StringBuffer entity, Writer writer,
+	private int dumpEntity(PushbackReader reader, char c, StringBuilder entity, Writer writer,
 		boolean keepXmlEntities)
 		throws IOException
 	{

@@ -140,7 +140,7 @@ public class StringUtilsTest extends TestCase
         {
             //ok!
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < 4000; i++)
         {
             sb.append("www.objectledge.org ");
@@ -165,7 +165,7 @@ public class StringUtilsTest extends TestCase
     public void testIndent()
         throws Exception
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         StringUtils.indent(sb, 4);
         assertEquals("    ", sb.toString());        
     }

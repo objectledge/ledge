@@ -494,7 +494,7 @@ public class DirectoryParameters extends DefaultParameters
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String[] keys = getParameterNames();
         for(int i = 0; i < keys.length; i++)
         {

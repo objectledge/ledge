@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.28 2005-02-10 17:47:04 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.29 2005-02-21 16:28:04 zwierzem Exp $
  */
 public class FileSystem
 {
@@ -540,7 +540,7 @@ public class FileSystem
     {
         path = normalizedPath(path);
         StringTokenizer st = new StringTokenizer(path, "/");
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String parent = "/";
         while (st.hasMoreTokens())
         {
@@ -993,7 +993,7 @@ public class FileSystem
                 temp.add(t);
             }
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i=0; i<temp.size(); i++)
         {
             sb.append('/').append((String)temp.get(i));

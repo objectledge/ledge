@@ -36,7 +36,7 @@ import java.util.Set;
  * An implementation of parameters decorator class to scope parameters key names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ScopedParameters.java,v 1.2 2005-02-07 01:29:03 rafal Exp $
+ * @version $Id: ScopedParameters.java,v 1.3 2005-02-21 16:25:58 zwierzem Exp $
  */
 public class ScopedParameters implements Parameters
 {
@@ -511,7 +511,7 @@ public class ScopedParameters implements Parameters
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String[] keys = getParameterNames();
         for (String name: keys)
         {

@@ -38,7 +38,7 @@ import org.objectledge.encodings.encoders.CharEncoderUTF;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.12 2004-08-18 09:21:32 pablo Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.13 2005-02-21 16:26:34 zwierzem Exp $
  */
 public class HTMLEntityEncoder extends AbstractEncoder
 {
@@ -64,7 +64,7 @@ public class HTMLEntityEncoder extends AbstractEncoder
 		CharEncoder charsetEncoder = getCharsetEncoder(encodingName);
 
         // START: convert string
-        StringBuffer buf = new StringBuffer(text.length());
+        StringBuilder buf = new StringBuilder(text.length());
         for (int i=0, s=text.length(); i < s; i++)
         {
             // get a character from input String
@@ -132,7 +132,7 @@ public class HTMLEntityEncoder extends AbstractEncoder
         }
 
         // START: convert string
-        StringBuffer buf = new StringBuffer(htmlText.length());
+        StringBuilder buf = new StringBuilder(htmlText.length());
         for (int i=0, s=htmlText.length(); i < s; i++)
         {
             // get a character from input String
@@ -156,7 +156,7 @@ public class HTMLEntityEncoder extends AbstractEncoder
 
 	// implementation ----------------------------------------------------------------------------
 	
-    private void encodeEntity(char c, StringBuffer buf)
+    private void encodeEntity(char c, StringBuilder buf)
     {
         // encode it using entity encoding
         char[] encodedChar = HTML_ENTITY_ENCODER.encode(c);

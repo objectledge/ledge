@@ -44,7 +44,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.25 2005-02-10 17:48:35 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.26 2005-02-21 16:27:24 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -93,7 +93,7 @@ public class StringUtils
 
         if (input != null)
         {
-            StringBuffer sb = new StringBuffer(input);
+            StringBuilder sb = new StringBuilder(input);
             int length = sb.length();
 
             for (int i = 0; i < length; i++)
@@ -119,7 +119,7 @@ public class StringUtils
 	 */
 	public static String backslashEscape(String in, String reserved)
 	{
-		StringBuffer out = new StringBuffer();
+		StringBuilder out = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(in,reserved,true);
 		while(st.hasMoreTokens())
 		{
@@ -142,7 +142,7 @@ public class StringUtils
 	 */
 	public static String escapeNonASCIICharacters(String s)
 	{
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		char[] chars = s.toCharArray();
 		for(int i=0; i<chars.length; i++)
 		{
@@ -174,7 +174,7 @@ public class StringUtils
      */
     public static String expandUnicodeEscapes(String s) throws IllegalArgumentException
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         int last = 0;
         int cur = s.indexOf("\\u", last);
         if (cur >= 0)
@@ -247,7 +247,7 @@ public class StringUtils
      */
     public static String substitute(String template, String[] values)
     {
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         int maxUsed = 0;
         char[] t = template.toCharArray();
         for (int i = 0; i < t.length; i++)
@@ -418,7 +418,7 @@ public class StringUtils
      * @param d number of spaces.
      * @return the buffer.
      */
-    public static StringBuffer indent(StringBuffer buffer, int d)
+    public static StringBuilder indent(StringBuilder buffer, int d)
     {
         for(int i=0; i<d; i++)
         {
@@ -438,7 +438,7 @@ public class StringUtils
      */
     public static String fillString(String input,int total,char filling)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int missing = total-input.length();
         for(int i=0; i<missing; i++)
         {
@@ -461,7 +461,7 @@ public class StringUtils
      */
     public static String toOctalUnicode(String input)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < input.length(); i++)
         {
             int value = (int)input.charAt(i);
@@ -499,8 +499,8 @@ public class StringUtils
             return in;
         }
         StringTokenizer st = new StringTokenizer(in, "\n");
-        StringBuffer out = new StringBuffer();
-        StringBuffer lineOut = new StringBuffer();
+        StringBuilder out = new StringBuilder();
+        StringBuilder lineOut = new StringBuilder();
         String line;
         int a,b;
         while(st.hasMoreTokens())
@@ -579,7 +579,7 @@ public class StringUtils
                 temp.add(t);
             }
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i=0; i<temp.size(); i++)
         {
             sb.append('/').append((String)temp.get(i));
@@ -659,7 +659,7 @@ public class StringUtils
         {
             return s;
         }
-        StringBuffer buff = new StringBuffer(s.length());
+        StringBuilder buff = new StringBuilder(s.length());
         Iterator keys = t.keySet().iterator();
         int pos, lastpos;
         String k, v;
@@ -695,7 +695,7 @@ public class StringUtils
      */
     public static String escapeXMLCharacters(String string)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < string.length(); i++)
         {
             char c = string.charAt(i);
@@ -725,7 +725,7 @@ public class StringUtils
      */
     public static String htmlLineBreaks(String s)
     {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         char[] chars = s.toCharArray();
         for(int i=0; i<chars.length; i++)
         {
