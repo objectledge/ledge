@@ -52,6 +52,9 @@ public class LinkTool
 	/** utf encoding */
 	public static final String UTF_8 = "UTF-8";
 	
+	/** link tool factory */
+	private LinkToolFactory factory;
+	
 	/** the thread context */
 	private Context context;
 	
@@ -103,11 +106,13 @@ public class LinkTool
 	/** 
 	 * Component constructor.
 	 * 
+	 * @param factory the link tool factory.
 	 * @param context the thread context.
 	 * @param config the configurator.
 	 */
-	public LinkTool(Context context, WebConfigurator config)
+	public LinkTool(LinkToolFactory factory, Context context, WebConfigurator config)
 	{
+		this.factory = factory;
 		this.context = context;
 		this.config = config;
 		mvcContext = MVCContext.retrieve(context);
@@ -121,7 +126,7 @@ public class LinkTool
 		action = "";
 		parameters = new DefaultParameters();
 		fragment = null;
-		Set sticky = config.getStickyKeys();
+		Set sticky = factory.getStickyKeys();
 		if(sticky != null)
 		{
 			parameters = new DefaultParameters(requestParameters);
@@ -369,7 +374,7 @@ public class LinkTool
     public LinkTool self()
     {
         LinkTool target = (LinkTool)clone();
-        target.parameters.remove(config.getStickyKeys());
+        target.parameters.remove(factory.getStickyKeys());
         target.parameters.add(requestParameters, true);
         target.parameters.remove(config.getViewToken());
         target.parameters.remove(config.getActionToken());
@@ -594,7 +599,7 @@ public class LinkTool
                 }
 
                 String[] keys = parameters.getParameterNames();
-                Set pathinfoSet = config.getPathInfoKeys();
+                Set pathinfoSet = factory.getPathInfoKeys();
                 List pathinfoParameterKeys = new ArrayList();
                 List queryParameterKeys;
                 if (pathinfoSet.size() > 0)
@@ -638,7 +643,7 @@ public class LinkTool
                         sb.append(action);
                         if (queryParameterKeys.size() > 0)
                         {
-                            sb.append(config.getQuerySeparator());
+                            sb.append(factory.getQuerySeparator());
                         }
                     }
                     for (int i = 0; i < queryParameterKeys.size(); i++)
@@ -652,12 +657,12 @@ public class LinkTool
                             sb.append(URLEncoder.encode(values[j], UTF_8));
                             if (j < values.length - 1)
                             {
-                                sb.append(config.getQuerySeparator());
+                                sb.append(factory.getQuerySeparator());
                             }
                         }
                         if (i < queryParameterKeys.size() - 1)
                         {
-                            sb.append(config.getQuerySeparator());
+                            sb.append(factory.getQuerySeparator());
                         }
                     }
                 }
@@ -696,7 +701,7 @@ public class LinkTool
 	 */
 	public Object clone()
 	{
-		LinkTool target = new LinkTool(context, config);
+		LinkTool target = new LinkTool(factory, context, config);
 		target.view = view;
 		target.action = action;
 		target.resourceLink = resourceLink;

@@ -28,20 +28,16 @@
 
 package org.objectledge.web;
 
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.utils.StringUtils;
 
 /**
  * Configuration component - it provide the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: WebConfigurator.java,v 1.1 2004-01-13 13:06:39 pablo Exp $
+ * @version $Id: WebConfigurator.java,v 1.2 2004-01-13 16:10:55 pablo Exp $
  */
 public class WebConfigurator
 {
@@ -58,9 +54,6 @@ public class WebConfigurator
 	public static final String DEFAULT_ACTION_TOKEN = "action";
 	
 	/** the default query separator */
-	public static final String DEFAULT_QUERY_SEPARATOR = "&";
-	
-	/** the default query separator */
 	public static final int DEFAULT_UPLOAD_LIMIT = 4194304;
 	
 	/** the default locale */
@@ -74,15 +67,6 @@ public class WebConfigurator
 	
 	/** the action token */
 	private String actionToken;
-	
-	/** the sticky parameters keys */
-	private Set stickyKeys;
-	
-	/** the pathinfo parameters keys */
-	private Set pathinfoKeys;
-	
-	/** the queryt separator */
-	private String querySeparator;
 	
 	/** the upload size limit */
 	private int uploadLimit;
@@ -99,26 +83,6 @@ public class WebConfigurator
 		defaultEncoding = config.getChild("default_encoding").getValue(DEFAULT_ENCODING);
 		viewToken = config.getChild("view_token").getValue(DEFAULT_VIEW_TOKEN);
 		actionToken = config.getChild("action_token").getValue(DEFAULT_ACTION_TOKEN);
-		stickyKeys = new HashSet();
-		pathinfoKeys = new HashSet();
-		try
-		{
-			Configuration[] keys = config.getChild("sticky").getChildren("key");
-			for (int i = 0; i < keys.length; i++)
-			{
-				stickyKeys.add(keys[i].getValue());
-			}
-			keys = config.getChild("pathinfo").getChildren("key");
-			for (int i = 0; i < keys.length; i++)
-			{
-				pathinfoKeys.add(keys[i].getValue());
-			}
-		}
-		catch (ConfigurationException e)
-		{
-			throw new ComponentInitializationError("failed to configure the component", e);
-		}
-		querySeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
 		uploadLimit = config.getChild("upload_limit").getValueAsInteger(DEFAULT_UPLOAD_LIMIT);
 	}
 	
@@ -162,36 +126,6 @@ public class WebConfigurator
 		return actionToken;
 	}
 
-	/**
-	 * Get the sticky parameters keys set.
-	 * 
-	 * @return the sticky keys.
-	 */
-	public Set getStickyKeys()
-	{
-		return stickyKeys;
-	}
-
-	/**
-	 * Get the path info parameters keys.
-	 * 
-	 * @return the default encoding.
-	 */
-	public Set getPathInfoKeys()
-	{
-		return pathinfoKeys;
-	}
-	
-    /**
-     *  Get the query string separator. 
-     *
-     * @return the query separator. 
-     */
-    public String getQuerySeparator()
-    {
-    	return querySeparator;
-    }
-    
 	/**
 	 *  Get the upload size limit. 
 	 *
