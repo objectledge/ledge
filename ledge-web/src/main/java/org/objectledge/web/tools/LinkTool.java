@@ -46,7 +46,6 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.parameters.RequestParameters;
-import org.objectledge.web.tools.*;
 
 /**
  * Context tool used to build web application links.
@@ -130,10 +129,10 @@ public class LinkTool
 		action = "";
 		parameters = new DefaultParameters();
 		fragment = null;
-		if(config.hasStickyParamters())
+		if(config.hasStickyParameters())
 		{
 			parameters = new DefaultParameters(requestParameters);
-		    parameters.removeExcept(config.getStickyParametres());
+		    parameters.removeExcept(config.getStickyParameters());
 		}
 		sb = new StringBuffer();
 	}
@@ -365,7 +364,7 @@ public class LinkTool
     public LinkTool self()
     {
         LinkTool target = getLinkTool(this);
-        target.parameters.remove(config.getStickyParametres());
+        target.parameters.remove(config.getStickyParameters());
         target.parameters.add(requestParameters, true);
         target.parameters.remove(config.getViewToken());
         target.parameters.remove(config.getActionToken());
@@ -817,17 +816,17 @@ public class LinkTool
          * 
          * @return the set of sticky parameter names.
          */
-        public Set getStickyParametres()
+        public Set getStickyParameters()
         {
             return stickyKeys;
         }
         
         /**
-         * Checks if there are any sticky paramerers.
+         * Checks if there are any sticky parameters.
          * 
-         * @return <code>true</code> if there are any sticky paramerers.
+         * @return <code>true</code> if there are any sticky parameters.
          */
-        public boolean hasStickyParamters()
+        public boolean hasStickyParameters()
         {
             return !stickyKeys.isEmpty();
         }
