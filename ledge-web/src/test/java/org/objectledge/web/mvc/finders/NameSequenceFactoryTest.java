@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.5 2004-01-19 15:03:16 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.6 2004-01-20 08:28:13 fil Exp $
  */
 public class NameSequenceFactoryTest extends TestCase
 {
@@ -73,12 +73,12 @@ public class NameSequenceFactoryTest extends TestCase
         throws Exception
     {
         NameSequenceFactory factory = getNameSequenceFactory("standard");
-        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar");
+        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar", true);
         assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
         assertEquals("org.objectledge.test.views.foo.Default", classSequence.next());
         assertEquals("org.objectledge.test.views.Default", classSequence.next());
         assertEquals(false, classSequence.hasNext());
-        Sequence templateSequence = factory.getTemplateNameSequence("views", "foo.Bar");
+        Sequence templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", true);
         assertEquals("views/foo/Bar", templateSequence.next());
         assertEquals("views/foo/Default", templateSequence.next());
         assertEquals("views/Default", templateSequence.next());
@@ -89,7 +89,7 @@ public class NameSequenceFactoryTest extends TestCase
         throws Exception
     {
         NameSequenceFactory factory = getNameSequenceFactory("dots");
-        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar");
+        Sequence classSequence = factory.getClassNameSequence("views", "foo.Bar", true);
         assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
         assertEquals("org.objectledge.test.views.foo.Default", classSequence.next());
         assertEquals("org.objectledge.test.views.Default", classSequence.next());
