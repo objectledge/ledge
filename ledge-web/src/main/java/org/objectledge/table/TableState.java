@@ -48,10 +48,9 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.3 2004-03-05 12:13:46 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.4 2004-03-16 15:35:51 zwierzem Exp $
  */
 public class TableState
-implements Cloneable
 {
     /** Id under which this table state is mapped in TableService. */
     private int id;
