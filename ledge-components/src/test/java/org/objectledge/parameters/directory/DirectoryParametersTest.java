@@ -40,7 +40,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.log4j.LogManager;
 import org.hsqldb.jdbc.jdbcDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -55,6 +55,7 @@ import org.objectledge.database.JotmTransaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.logging.LedgeDOMConfigurator;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
@@ -84,33 +85,32 @@ public class DirectoryParametersTest extends TestCase
     public DirectoryParametersTest(String arg0)
     {
         super(arg0);
-        try
-        {
-            fs = FileSystem.getStandardFileSystem(".");
-            InputSource source = new InputSource(fs.getInputStream(
-                "src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document logConfig = builder.parse(source);
-            DOMConfigurator.configure(logConfig.getDocumentElement());
-
-            Logger logger = new Log4JLogger(org.apache.log4j.Logger.
-                getLogger(ContextFactory.class));
-            DataSource ds = getDataSource();
-            DefaultPicoContainer container = new DefaultPicoContainer();
-            IdGenerator idGenerator = new IdGenerator(ds);
-            JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
-            Database database = new DefaultDatabase(ds, idGenerator, transaction);
-            Persistence persistence = new DefaultPersistence(database, logger);
-            container.registerComponentInstance(Persistence.class, persistence);            
-            Configuration config = getConfig("naming/dbNaming.xml");
-            contextFactory = new ContextFactory(container, config, logger);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }        
     }
 
+    public void setUp()
+    	throws Exception
+	{
+        fs = FileSystem.getStandardFileSystem("src/test/resources");
+        InputSource source = new InputSource(fs.getInputStream(
+            "config/org.objectledge.logging.LoggingConfigurator.xml"));
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document logConfig = builder.parse(source);
+        LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
+        configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
+
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.
+            getLogger(ContextFactory.class));
+        DataSource ds = getDataSource();
+        DefaultPicoContainer container = new DefaultPicoContainer();
+        IdGenerator idGenerator = new IdGenerator(ds);
+        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
+        Database database = new DefaultDatabase(ds, idGenerator, transaction);
+        Persistence persistence = new DefaultPersistence(database, logger);
+        container.registerComponentInstance(Persistence.class, persistence);            
+        Configuration config = getConfig("naming/dbNaming.xml");
+            contextFactory = new ContextFactory(container, config, logger);    
+	}
+    
     /*
      * Test for String get(String)
      */
@@ -244,8 +244,7 @@ public class DirectoryParametersTest extends TestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        InputSource source = new InputSource(fs.
-            getInputStream("src/test/resources/"+name));
+        InputSource source = new InputSource(fs.getInputStream(name));
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         XMLReader reader = parserFactory.newSAXParser().getXMLReader();
         SAXConfigurationHandler handler = new SAXConfigurationHandler();

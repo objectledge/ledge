@@ -37,8 +37,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
@@ -47,6 +47,7 @@ import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
+import org.objectledge.logging.LedgeDOMConfigurator;
 import org.objectledge.pipeline.SimplePipeline;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.MergingException;
@@ -94,7 +95,8 @@ public class VelocityTemplatingTest extends TestCase
                 "config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
-            DOMConfigurator.configure(logConfig.getDocumentElement());
+            LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
+            configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
 
             source = new InputSource(fs.getInputStream(
                 "config/org.objectledge.templating.velocity.VelocityTemplating.xml"));

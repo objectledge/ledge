@@ -38,7 +38,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.log4j.LogManager;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
@@ -54,6 +54,7 @@ import org.objectledge.database.JotmTransaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.logging.LedgeDOMConfigurator;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.scheduler.AbstractJobDescriptor;
 import org.objectledge.scheduler.AbstractScheduler;
@@ -92,7 +93,8 @@ public class DBSchedulerTest extends TestCase
             "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document logConfig = builder.parse(source);
-        DOMConfigurator.configure(logConfig.getDocumentElement());
+        LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
+        configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(MailSystem.class));
         Configuration config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
         Context context = new Context();
