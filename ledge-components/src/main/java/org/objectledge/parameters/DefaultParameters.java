@@ -46,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.3 2004-01-12 12:14:57 pablo Exp $
+ * @version $Id: DefaultParameters.java,v 1.4 2004-01-24 13:13:14 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -553,7 +553,7 @@ public class DefaultParameters implements Parameters
 		else
 		{
 			String[] target = new String[prevValues.length + values.length];
-			System.arraycopy(prevValues, 0, target, 0, values.length);
+			System.arraycopy(prevValues, 0, target, 0, prevValues.length);
 			System.arraycopy(values, 0, target, prevValues.length, values.length);
 			map.put(name,target);   
 		}
@@ -810,7 +810,7 @@ public class DefaultParameters implements Parameters
 	    	{
 	    		sb.append(value.substring(start));
 	    	}
-			if(i == (values.length - 1))
+			if(i < (values.length - 1))
 			{
 				sb.append(",");			
 			}
