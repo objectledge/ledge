@@ -48,7 +48,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.5 2003-12-03 14:14:13 mover Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.6 2003-12-04 14:27:39 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -256,6 +256,17 @@ public abstract class ReadOnlyFileSystemProvider
 		{
 			throw new ComponentInitializationError("failed to load index "+location, e);
 		}
+        finally
+        {
+            try
+            {
+                is.close();
+            }
+            catch(IOException e)
+            {
+                // ignore
+            }
+        }
 	}
 
 	// FileProvider interface ////////////////////////////////////////

@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.5 2003-12-03 14:14:13 mover Exp $
+ * @version $Id: FileSystem.java,v 1.6 2003-12-04 14:27:39 fil Exp $
  */
 public class FileSystem
 {
@@ -711,7 +711,6 @@ public class FileSystem
         {
             throw new IOException(path + " does not exist");
         }
-        Reader in = new InputStreamReader(ins, encoding);
         long length = length(path);
         if (length < 0)
         {
@@ -721,20 +720,27 @@ public class FileSystem
         {
             throw new IOException(path + " is too large (" + length + "b)");
         }
+        Reader in = new InputStreamReader(ins, encoding);
         StringWriter out = new StringWriter((int)length);
-        char[] buffer = new char[bufferSize];
-        int count = 0;
-        do
+        try
         {
-            count = in.read(buffer, 0, bufferSize);
-            if (count > 0)
+            char[] buffer = new char[bufferSize];
+            int count = 0;
+            do
             {
-                out.write(buffer, 0, count);
+                count = in.read(buffer, 0, bufferSize);
+                if (count > 0)
+                {
+                    out.write(buffer, 0, count);
+                }
             }
+            while (count > 0);
+            return out.toString();
         }
-        while (count > 0);
-
-        return out.toString();
+        finally
+        {
+            in.close();
+        }
     }
 
     /**
@@ -751,18 +757,24 @@ public class FileSystem
         {
             throw new IOException("failed to open output file " + path);
         }
-        byte[] buffer = new byte[bufferSize];
-        int count = 0;
-        do
+        try
         {
-            count = in.read(buffer, 0, bufferSize);
-            if (count > 0)
+            byte[] buffer = new byte[bufferSize];
+            int count = 0;
+            do
             {
-                out.write(buffer, 0, count);
+                count = in.read(buffer, 0, bufferSize);
+                if (count > 0)
+                {
+                    out.write(buffer, 0, count);
+                }
             }
+            while (count > 0);
         }
-        while (count > 0);
-        out.close();
+        finally
+        {
+            out.close();
+        }
     }
 
     /**
@@ -779,8 +791,14 @@ public class FileSystem
         {
             throw new IOException("failed to open output file " + path);
         }
-        out.write(bytes);
-        out.close();
+        try
+        {
+            out.write(bytes);
+        }
+        finally
+        {
+            out.close();
+        }
     }
 
     /**
@@ -802,8 +820,14 @@ public class FileSystem
             throw new IOException("failed to open output file " + path);
         }
         Writer out = new OutputStreamWriter(outs, encoding);
-        out.write(string);
-        out.close();
+        try
+        {
+            out.write(string);
+        }
+        finally
+        {
+            out.close();
+        }
     }
     
     // pathnames ////////////////////////////////////////////////////////////
