@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.21 2004-03-31 10:02:17 fil Exp $
+ * @version $Id: FileSystem.java,v 1.22 2004-04-22 13:22:03 fil Exp $
  */
 public class FileSystem
 {
@@ -1064,5 +1064,18 @@ public class FileSystem
             ClasspathFileSystemProvider("classpath", 
             FileSystem.class.getClassLoader());
         return new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 65536);
+    }
+    
+    /**
+     * Creates a classpath file system.
+     * 
+     * @return a classpath file system.
+     */
+    public static FileSystem getClasspathFileSystem()
+    {
+        FileSystemProvider cfs = new org.objectledge.filesystem.
+            ClasspathFileSystemProvider("classpath", 
+            FileSystem.class.getClassLoader());
+        return new FileSystem(new FileSystemProvider[] { cfs }, 4096, 65536);
     }
 }
