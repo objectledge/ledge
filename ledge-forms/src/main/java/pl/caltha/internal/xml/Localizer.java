@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 /** Localizer class for XMLService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Localizer.java,v 1.1 2005-01-20 16:44:47 pablo Exp $
+ * @version $Id: Localizer.java,v 1.2 2005-01-21 14:00:05 pablo Exp $
  */
 public class Localizer
 {
@@ -15,7 +15,7 @@ public class Localizer
     
     public static void init()
     {
-        addBundle("net.labeo.internal.xml.Messages");
+        addBundle("pl.caltha.internal.xml.Messages");
     }
     
     /** Adds a new bundle to this localizer. */

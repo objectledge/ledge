@@ -25,7 +25,7 @@ import pl.caltha.services.xml.XMLService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsServiceImpl.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
+ * @version $Id: FormsServiceImpl.java,v 1.3 2005-01-21 14:00:06 pablo Exp $
  */
 public class FormsServiceImpl 
 implements FormsService
@@ -69,6 +69,9 @@ implements FormsService
         reloadFormDefinitions = config.getChild("form.definition.reload").getValueAsBoolean(false);
         formSchemaURI = config.getChild("uri.schema.form").getValue("classpath:pl/caltha/forms/internal/formtool-form.xsd");
         uiSchemaURI   = config.getChild("uri.schema.ui").getValue("classpath:pl/caltha/forms/internal/formtool-ui.xsd");
+        //formSchemaURI = config.getChild("uri.schema.form").getValue("pl/caltha/forms/internal/formtool-form.xsd");
+        //uiSchemaURI   = config.getChild("uri.schema.ui").getValue("pl/caltha/forms/internal/formtool-ui.xsd");
+        
         log.info("Preloading schemas for 'formtool' service");
         preloadSchema(formSchemaURI);
         preloadSchema(uiSchemaURI);
@@ -352,14 +355,15 @@ implements FormsService
     public Properties getTidyConfiguration()
     {
         //TODO implement it!
-        throw new UnsupportedOperationException("not implemented yet!");
+        return new Properties();
+        //throw new UnsupportedOperationException("not implemented yet!");
     }
     
     /** FormData is a container for storing form Instances in users session.
      *
      * @see net.labeo.webcore.SessionContext
      * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-     * @version $Id: FormsServiceImpl.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
+     * @version $Id: FormsServiceImpl.java,v 1.3 2005-01-21 14:00:06 pablo Exp $
      */
     public class FormData
     {

@@ -12,7 +12,7 @@ import org.xml.sax.SAXException;
 
 /** EntityResolver for Labeo applications.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CalthaEntityResolver.java,v 1.1 2005-01-20 16:44:47 pablo Exp $
+ * @version $Id: CalthaEntityResolver.java,v 1.2 2005-01-21 14:00:05 pablo Exp $
  */
 public class CalthaEntityResolver 
     implements EntityResolver
@@ -88,7 +88,8 @@ public class CalthaEntityResolver
         // TODO: Make it network and distributed labeo aware
         if(scheme.equals("labeo"))
         {
-            String path = uri.getPath();
+            //TODO should be get path...
+            String path = uri.getSchemeSpecificPart();
             is = new InputSource(fileSystem.getInputStream(path));
         }
         else if(scheme.equals("file"))
@@ -97,7 +98,8 @@ public class CalthaEntityResolver
         }
         else if(scheme.equals("classpath"))
         {
-            String path = uri.getPath();
+            //TODO should be get path...
+            String path = uri.getSchemeSpecificPart();
             is = new InputSource(getClass().getClassLoader().getResourceAsStream(path));
         }
         else
