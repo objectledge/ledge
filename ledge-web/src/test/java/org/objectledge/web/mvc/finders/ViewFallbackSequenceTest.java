@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequenceTest.java,v 1.4 2004-01-19 13:29:28 fil Exp $
+ * @version $Id: ViewFallbackSequenceTest.java,v 1.5 2004-01-20 11:23:52 fil Exp $
  */
 public class ViewFallbackSequenceTest extends TestCase
 {
@@ -45,9 +45,9 @@ public class ViewFallbackSequenceTest extends TestCase
         super(arg0);
     }
 
-    public void testFallback()
+    public void testPackage()
     {
-        ViewFallbackSequence sequence = new ViewFallbackSequence("a.b.c", '.', '/', "Default");
+        Sequence sequence = new ViewFallbackSequence("a.b.c", '.', '/', "Default");
         assertEquals("a/b/c/Default", sequence.next());
         assertEquals("a/b/Default", sequence.next());
         assertEquals("a/Default", sequence.next());
@@ -64,9 +64,32 @@ public class ViewFallbackSequenceTest extends TestCase
         }
         sequence.reset();
         assertEquals(true, sequence.hasNext());
+    }
 
-        sequence = new ViewFallbackSequence("a.b.C", '.', '/', "Default");
+    public void testClass()
+    {
+        Sequence sequence = new ViewFallbackSequence("a.b.C", '.', '/', "Default");
         assertEquals("a/b/C", sequence.next());
+        assertEquals("a/b/Default", sequence.next());
+        assertEquals("a/Default", sequence.next());
+        assertEquals("Default", sequence.next());
+        assertEquals(false, sequence.hasNext());
+        try
+        {
+            sequence.next();
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            // success
+        }
+        sequence.reset();
+        assertEquals(true, sequence.hasNext());
+    }
+
+    public void testDefault()
+    {
+        Sequence sequence = new ViewFallbackSequence("a.b.Default", '.', '/', "Default");
         assertEquals("a/b/Default", sequence.next());
         assertEquals("a/Default", sequence.next());
         assertEquals("Default", sequence.next());

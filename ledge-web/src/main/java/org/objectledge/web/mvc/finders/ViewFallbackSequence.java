@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
 /**
  * Generates view falback sequence for templates and classes.
  * 
- * <p> For constructor arguments ("a.b.c", ".", "/") the following is generated: </p>
+ * <p> For constructor arguments ("a.b.c", ".", "/", "Default") the following is generated: </p>
  * <p>
  *   <table>
  *     <tr>
@@ -60,7 +60,7 @@ import java.util.StringTokenizer;
  *   </table>
  * </p>
  * 
- * <p> For constructor arguments ("a.b.C", ".", "/") the following is generated: </p>
+ * <p> For constructor arguments ("a.b.C", ".", "/", "Default") the following is generated: </p>
  * <p>
  *   <table>
  *     <tr>
@@ -86,8 +86,31 @@ import java.util.StringTokenizer;
  *   </table>
  * </p>
  * 
+ * <p> For constructor arguments ("a.b.Default", ".", "/", "Default") the following is 
+ *     generated: </p>
+ * <p>
+ *   <table>
+ *     <tr>
+ *       <th>iteration</th>
+ *       <th>next()</th>
+ *     </tr>
+ *     <tr>
+ *       <td>1</td>
+ *       <td>a/b/Default</td>
+ *     </tr>
+ *     <tr>
+ *       <td>2</td>
+ *       <td>a/Default</td>
+ *     </tr>
+ *     <tr>
+ *       <td>3</td>
+ *       <td>Default</td>
+ *     </tr>
+ *   </table>
+ * </p>
+ *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequence.java,v 1.3 2004-01-19 11:42:56 fil Exp $
+ * @version $Id: ViewFallbackSequence.java,v 1.4 2004-01-20 11:23:52 fil Exp $
  */
 public class ViewFallbackSequence
     implements Sequence
@@ -114,7 +137,14 @@ public class ViewFallbackSequence
         char outSeparator, String defaultSuffix)
     {
         StringTokenizer tokenizer = new StringTokenizer(path, ""+inSeparator);
-        tokens = new String[tokenizer.countTokens()];
+        if(!path.endsWith(inSeparator+defaultSuffix))
+        {
+            tokens = new String[tokenizer.countTokens()];
+        }
+        else
+        {
+            tokens = new String[tokenizer.countTokens()-1];
+        }
         for(int i=0; i<tokens.length; i++)
         {
             tokens[i] = tokenizer.nextToken();
