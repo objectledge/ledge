@@ -28,26 +28,38 @@
 
 package org.objectledge.web;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jcontainer.dna.impl.Log4JLogger;
+import org.nanocontainer.Log4JNanoContainerMonitor;
+import org.objectledge.container.LedgeContainer;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.filesystem.FileSystemProvider;
+import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
+import org.objectledge.filesystem.impl.LocalFileSystemProvider;
+import org.objectledge.filesystem.impl.ServletFileProvider;
+
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.3 2003-12-22 15:16:25 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.4 2003-12-22 16:05:19 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
-    /**
-     * The request dispatcher.
-     */
+    /** The request dispatcher. */
     protected HttpDispatcher dispatcher;
+    
+    /** The container */
+    protected LedgeContainer container;
     
     /**
      * {@inheritDoc}
@@ -64,8 +76,56 @@ public class LedgeServlet extends HttpServlet
     /**
      * {@inheritDoc}
      */
-    public void init(ServletConfig arg0) throws ServletException
+    public void init(ServletConfig servletConfig) throws ServletException
     {
-        super.init(arg0);
+        String rootParam = servletConfig.getServletName()+".root";
+        String configParam = servletConfig.getServletName()+".config";
+        String root = servletConfig.getInitParameter(rootParam);
+        if(root == null)
+        {
+            root = (String)servletConfig.getServletContext().getAttribute(rootParam);
+        }
+        if(root == null)
+        {
+            File tempDir = (File)servletConfig.getServletContext().
+                getAttribute("javax.servlet.context.tempdir");
+            if(tempDir == null)
+            {
+                root = System.getProperty("java.io.tmpdir");
+            }
+            else
+            {
+                root = tempDir.getAbsolutePath(); 
+            }
+        }
+        String config = servletConfig.getInitParameter(configParam);
+        if(config == null)
+        {
+            config = (String)servletConfig.getServletContext().getAttribute(configParam);
+        }
+        if(config == null)
+        {
+            config = "/config";
+        }
+        LocalFileSystemProvider lfs = new LocalFileSystemProvider("local", root);
+        ServletFileProvider sfs = new ServletFileProvider("servlet", 
+            servletConfig.getServletContext());
+        ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
+            getClass().getClassLoader());
+        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4096);
+        try
+        {
+            container = new LedgeContainer(fs, config, new Log4JNanoContainerMonitor());    
+        }
+        catch(Exception e)
+        {
+            throw new ServletException("failed to initialize container", e);
+        }
+        dispatcher = (HttpDispatcher)container.getRootContainer().
+            getComponentInstance(HttpDispatcher.class);
+        if(dispatcher == null)
+        {
+            throw new ServletException("dispatcher component is missing");
+        }
     }
 }
