@@ -44,7 +44,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.6 2004-01-14 14:12:04 fil Exp $
+ * @version $Id: HttpContext.java,v 1.7 2004-05-25 09:41:17 pablo Exp $
  */
 public class HttpContext
 {
@@ -221,4 +221,36 @@ public class HttpContext
 	{
 		this.encoding = encoding;
 	}
+
+    /**
+     * Set the session attribute.
+     * 
+     * @param key the key of attribute.
+     * @param value the attribute value.
+     */    
+    public void setSessionAttribute(String key, Object value)
+    {
+        request.getSession().setAttribute(key, value);
+    }
+    
+    /**
+     * Get the session attribute.
+     * 
+     * @param key the attribute key.
+     * @return the session attribute value of <code>null</code> if not defined.
+     */
+    public Object getSessionAttribute(String key)
+    {
+        return request.getSession().getAttribute(key);
+    }
+    
+    /**
+     * Remove the session attribute.
+     * 
+     * @param key the attribute key.
+     */
+    public void removeSessionAttribute(String key)
+    {
+        request.getSession().setAttribute(key, null);
+    }
 }
