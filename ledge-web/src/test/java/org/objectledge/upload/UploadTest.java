@@ -50,7 +50,6 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.threads.ThreadPool;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.WebConfigurator;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -74,15 +73,13 @@ public class UploadTest extends LedgeTestCase
     {
         context = new Context();
         FileSystem fs = getFileSystem();
-        Configuration config = getConfig(fs,"config/org.objectledge.web.WebConfigurator.xml");
-        WebConfigurator webConfigurator = new WebConfigurator(config);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(FileUploadValve.class));
         
         // thread pool
         ThreadPool threadPool = new ThreadPool(null, context, null, logger);
 
         // templating
-        config = getConfig(fs,"config/org.objectledge.templating.Templating.xml");
+        Configuration config = getConfig(fs,"config/org.objectledge.templating.Templating.xml");
         Templating templating = new VelocityTemplating(config, logger, fs);
 
         // mailsystem
@@ -93,7 +90,7 @@ public class UploadTest extends LedgeTestCase
         fileUpload = new FileUpload(config, context);
 
         //file upload valve
-        uploadValve = new FileUploadValve(webConfigurator, logger, fileUpload, mailSystem);
+        uploadValve = new FileUploadValve(logger, fileUpload, mailSystem);
 
         String contentType = fs.read("up_ct.txt", "ISO-8859-2");
         final InputStream is = fs.getInputStream("up.txt");

@@ -44,6 +44,7 @@ import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.web.ContentTypeInitializerValve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.PrintExceptionValve;
 import org.objectledge.web.WebConfigurator;
@@ -57,6 +58,7 @@ public class MVCTest extends LedgeTestCase
 {
     private Context context;
 
+    private ContentTypeInitializerValve contentTypeInitializerValve;
     private MVCInitializerValve mvcInitializer;
     
 	private Mock mockHttpServletRequest;
@@ -110,6 +112,10 @@ public class MVCTest extends LedgeTestCase
 
             RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
             paramsLoader.process(context);
+
+            contentTypeInitializerValve = new ContentTypeInitializerValve(webConfigurator);
+            contentTypeInitializerValve.process(context);    
+            
             mvcInitializer = new MVCInitializerValve(webConfigurator);
             mvcInitializer.process(context);    
         }
