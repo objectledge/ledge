@@ -12,7 +12,7 @@ import junit.framework.TestSuite;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ContainerTests.java,v 1.1 2003-11-28 11:15:39 fil Exp $
+ * @version $Id: ContainerTests.java,v 1.2 2003-11-28 15:53:25 fil Exp $
  */
 public class ContainerTests
 {
@@ -24,6 +24,7 @@ public class ContainerTests
 
         //$JUnit-END$
         suite.addTest(org.objectledge.configuration.AllTests.suite());
+        suite.addTest(org.objectledge.pico.AllTests.suite());
         return suite;
     }
 }
