@@ -33,6 +33,7 @@ import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,10 +41,11 @@ import org.objectledge.context.Context;
 import org.objectledge.web.mvc.tools.LinkTool;
 
 /**
+ * Request parameters contain parameters from the request sorted by their names.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.7 2004-06-30 11:10:23 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.8 2004-07-02 10:45:44 zwierzem Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -60,14 +62,17 @@ public class RequestParameters extends DefaultParameters
 	
     /**
      * Create the parameter container with parameters found in http request.
-     *
+     * 
      * @param request the request
      * @throws IllegalArgumentException if illegal escape sequences appears.
      */
     public RequestParameters(HttpServletRequest request)
     	throws IllegalArgumentException
     {
-        // get query string parameters
+        // make parameters sort by their name
+        map = new TreeMap();
+        
+        // get query string parameters 
         addURLParams(request.getQueryString(), "&=");
 
         // copy querystring params to extract only post params from request params parsed by the
