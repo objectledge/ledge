@@ -33,7 +33,7 @@ import java.util.NoSuchElementException;
  * Sequence of view names conforming to the predefined settings.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequence.java,v 1.9 2004-12-27 05:18:14 rafal Exp $
+ * @version $Id: ViewLookupSequence.java,v 1.10 2005-02-16 18:39:32 rafal Exp $
  */
 public class ViewLookupSequence
     implements Sequence
@@ -115,5 +115,13 @@ public class ViewLookupSequence
         buff.append(infix).append(outSeparator);
         buff.append(viewFallbackSequence.next());
         return buff.toString();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String currentView()
+    {
+        return viewFallbackSequence.currentView();
     }
 }

@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequenceTest.java,v 1.7 2004-06-16 08:34:03 fil Exp $
+ * @version $Id: ViewFallbackSequenceTest.java,v 1.8 2005-02-16 18:39:34 rafal Exp $
  */
 public class ViewFallbackSequenceTest extends TestCase
 {
@@ -49,9 +49,13 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a.b.c", '.', '/', "Default", false);
         assertEquals("a/b/c/Default", sequence.next());
+        assertEquals("a.b.c.Default", sequence.currentView());
         assertEquals("a/b/Default", sequence.next());
+        assertEquals("a.b.Default", sequence.currentView());
         assertEquals("a/Default", sequence.next());
+        assertEquals("a.Default", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         try
         {
@@ -70,9 +74,13 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a.b.C", '.', '/', "Default", false);
         assertEquals("a/b/C", sequence.next());
+        assertEquals("a.b.C", sequence.currentView());
         assertEquals("a/b/Default", sequence.next());
+        assertEquals("a.b.Default", sequence.currentView());
         assertEquals("a/Default", sequence.next());
+        assertEquals("a.Default", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         try
         {
@@ -91,8 +99,11 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a.b.Default", '.', '/', "Default", false);
         assertEquals("a/b/Default", sequence.next());
+        assertEquals("a.b.Default", sequence.currentView());
         assertEquals("a/Default", sequence.next());
+        assertEquals("a.Default", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         try
         {
@@ -111,14 +122,19 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a", '.', '/', "Default", false);
         assertEquals("a/Default", sequence.next());
+        assertEquals("a.Default", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         sequence = new ViewFallbackSequence("A", '.', '/', "Default", false);
         assertEquals("A", sequence.next());
+        assertEquals("A", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         sequence = new ViewFallbackSequence("Default", '.', '/', "Default", false);
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
     }
 
@@ -126,8 +142,11 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a.b.c", '.', '/', "Default", true);
         assertEquals("a/b/Default", sequence.next());
+        assertEquals("a.b.Default", sequence.currentView());
         assertEquals("a/Default", sequence.next());
+        assertEquals("a.Default", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         try
         {
@@ -146,8 +165,11 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a.b.C", '.', '/', "Default", true);
         assertEquals("a/b/Default", sequence.next());
+        assertEquals("a.b.Default", sequence.currentView());
         assertEquals("a/Default", sequence.next());
+        assertEquals("a.Default", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         try
         {
@@ -166,7 +188,9 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a.b.Default", '.', '/', "Default", true);
         assertEquals("a/Default", sequence.next());
+        assertEquals("a.Default", sequence.currentView());
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         try
         {
@@ -185,9 +209,11 @@ public class ViewFallbackSequenceTest extends TestCase
     {
         Sequence sequence = new ViewFallbackSequence("a", '.', '/', "Default", true);
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         sequence = new ViewFallbackSequence("A", '.', '/', "Default", true);
         assertEquals("Default", sequence.next());
+        assertEquals("Default", sequence.currentView());
         assertEquals(false, sequence.hasNext());
         sequence = new ViewFallbackSequence("Default", '.', '/', "Default", true);
         assertEquals(false, sequence.hasNext());

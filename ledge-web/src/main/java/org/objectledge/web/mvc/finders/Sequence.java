@@ -33,7 +33,7 @@ import java.util.NoSuchElementException;
  * Ordered collection of Strings that can be iterated over multiple times.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Sequence.java,v 1.2 2004-12-27 05:18:14 rafal Exp $
+ * @version $Id: Sequence.java,v 1.3 2005-02-16 18:39:32 rafal Exp $
  */
 public interface Sequence
 {
@@ -57,4 +57,11 @@ public interface Sequence
      * Reset the sequence to the beginning.
      */
     public void reset();
+    
+    /**
+     * Returns the name of the view that corresponds to the last generated item.
+     * 
+     * @return the name of the view that corresponds to the last generated item.
+     */
+    public String currentView();
 }

@@ -110,7 +110,7 @@ import java.util.StringTokenizer;
  * </p>
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequence.java,v 1.6 2004-06-16 08:34:05 fil Exp $
+ * @version $Id: ViewFallbackSequence.java,v 1.7 2005-02-16 18:39:32 rafal Exp $
  */
 public class ViewFallbackSequence
     implements Sequence
@@ -123,9 +123,15 @@ public class ViewFallbackSequence
     
     private StringBuffer buff = new StringBuffer();
     
+    private StringBuffer buff2 = new StringBuffer();
+    
+    private char inSeparator;
+    
     private char outSeparator;
     
     private String defaultSuffix;
+    
+    private String currentView;
     
     /**
      * Constructs a view fallback sequence.
@@ -153,6 +159,7 @@ public class ViewFallbackSequence
         }
         startPosition = skipFirst ? 1 : 0;
         position = startPosition;
+        this.inSeparator = inSeparator;
         this.outSeparator = outSeparator;
         this.defaultSuffix = defaultSuffix;
     }
@@ -187,12 +194,15 @@ public class ViewFallbackSequence
             throw new NoSuchElementException((position+1)+" > "+(tokens.length+1));
         }
         buff.setLength(0);
+        buff2.setLength(0);
         for(int i=0; i<tokens.length - position; i++)
         {
             buff.append(tokens[i]);
+            buff2.append(tokens[i]);
             if(i < tokens.length - position -1)
             {
                 buff.append(outSeparator);
+                buff2.append(inSeparator);
             }
         }
         if(tokens.length != 0)
@@ -202,15 +212,27 @@ public class ViewFallbackSequence
                 if(position < tokens.length)
                 {
                     buff.append(outSeparator);
+                    buff2.append(inSeparator);
                 }
                 buff.append(defaultSuffix);
+                buff2.append(defaultSuffix);
             }
         }
         else
         {
             buff.append(defaultSuffix);
+            buff2.append(defaultSuffix);
         }
         position++;
+        currentView = buff2.toString();
         return buff.toString();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String currentView()
+    {
+        return currentView;
     }
 }
