@@ -67,12 +67,10 @@ import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
  * 
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.6 2004-01-13 12:57:07 fil Exp $
+ * @version $Id: XMLValidator.java,v 1.7 2004-01-13 13:26:39 fil Exp $
  */
 public class XMLValidator
 {
-    private FileSystem fileSystem;
-    
     private SchemaReader schemaReader;
     
     private SAXParser saxParser;
@@ -93,10 +91,9 @@ public class XMLValidator
      * @throws ParserConfigurationException if the JAXP parser factory is misconfigured.
      * @throws SAXException if the JAXP parser factory is misconfigured.
      */
-    public XMLValidator(FileSystem fileSystem) 
+    public XMLValidator() 
         throws ParserConfigurationException, SAXException
     {
-        this.fileSystem = fileSystem;
         schemaReader = new AutoSchemaReader();
         PropertyMapBuilder propertyMapBuilder = new PropertyMapBuilder();
         ErrorHandler eh = new DraconianErrorHandler();
@@ -112,26 +109,21 @@ public class XMLValidator
     /**
      * Validates given XML file using specified schema.
      * 
-     * @param path the path of the file to be validated.
-     * @param schemaPath the path of the schema to be used.
+     * @param fileUrl the URL of the file to be validated.
+     * @param schemaUrl the URL of the schema to be used.
      * @throws IOException if any of the files cannot be read.
      * @throws SAXException if any of the files are malformed.
      * @throws IncorrectSchemaException if the schema is invalid.
      */
-    public void validate(String path, String schemaPath)
+    public void validate(URL fileUrl, URL schemaUrl)
         throws IOException, SAXException, IncorrectSchemaException
     {
         Validator validator = null;
         try
         {
-            validator = getValidator(schemaPath);
+            validator = getValidator(schemaUrl);
             XMLReader reader = saxParser.getXMLReader();
-            URL url = fileSystem.getResource(path);
-            if(url == null)
-            {
-                throw new IOException(path+" does not exist");
-            }
-            InputSource source = new InputSource(url.toString());
+            InputSource source = new InputSource(fileUrl.toString());
             reader.setContentHandler(validator.getContentHandler());
             reader.setDTDHandler(validator.getDTDHandler());
             reader.parse(source);
@@ -140,7 +132,7 @@ public class XMLValidator
         {
             if(validator != null)
             {
-                releaseValidator(validator, schemaPath);
+                releaseValidator(validator, schemaUrl);
             }
         }
     }
@@ -148,38 +140,33 @@ public class XMLValidator
     /**
      * Returns a thread-exclusive validator instance.
      * 
-     * @param schemaPath the path of the schema to be used.
+     * @param schemaUrl the URL of the schema to be used.
      * @return a thread-exclusive validator instance.
      * @throws IOException if the schema does not exist.
      * @throws SAXException if the schema is malformed.
      * @throws IncorrectSchemaException if the schema is invalid.
      */
-    public synchronized Validator getValidator(String schemaPath)
+    public synchronized Validator getValidator(URL schemaUrl)
         throws IOException, SAXException, IncorrectSchemaException
     {
         Schema schema;
-        if(validators.containsKey(schemaPath))
+        if(validators.containsKey(schemaUrl))
         {
-            List list = (List)validators.get(schemaPath);
+            List list = (List)validators.get(schemaUrl);
             if(!list.isEmpty())
             {
                 return (Validator)list.remove(0);
             }
             else
             {
-                schema = (Schema)schemas.get(schemaPath);
+                schema = (Schema)schemas.get(schemaUrl);
             }
         }
         else
         {
-            URL url = fileSystem.getResource(schemaPath);
-            if(url == null)
-            {
-                throw new IOException(schemaPath+" does not exist");
-            }
-            schema = schemaReader.createSchema(new InputSource(url.toString()), properties);
-            schemas.put(schemaPath, schema);
-            validators.put(schemaPath, new ArrayList());
+            schema = schemaReader.createSchema(new InputSource(schemaUrl.toString()), properties);
+            schemas.put(schemaUrl, schema);
+            validators.put(schemaUrl, new ArrayList());
         }
         return schema.createValidator(properties);        
     }
@@ -188,12 +175,12 @@ public class XMLValidator
      * Returns a validator to the pool.
      * 
      * @param validator the validator instance.
-     * @param schemaPath the path of the assoicated schema.
+     * @param schemaUrl the path of the assoicated schema.
      */
-    public synchronized void releaseValidator(Validator validator, String schemaPath)
+    public synchronized void releaseValidator(Validator validator, URL schemaUrl)
     {
         validator.reset();
-        List list = (List)validators.get(schemaPath);
+        List list = (List)validators.get(schemaUrl);
         list.add(validator);
     }
 }

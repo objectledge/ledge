@@ -29,6 +29,8 @@
 package org.objectledge.configuration;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.xml.parsers.SAXParserFactory;
 
@@ -61,7 +63,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.15 2003-12-23 15:47:16 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.16 2004-01-13 13:26:37 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -72,6 +74,8 @@ public class ConfigurationFactory
     
     private XMLValidator xmlValidator;
     
+    private URL relaxngUrl;
+    
     /**
      * Creates a new instance of ConfigurationFactory.
      * 
@@ -79,13 +83,16 @@ public class ConfigurationFactory
      * @param fileSystem the file system to read configurations from.
      * @param xmlValidator the validator for configuration files.
      * @param directory the name of the directory where configurations reside.
+     * @throws IOException if the RelaxNG schema cannot be found in classpath.
      */
     public ConfigurationFactory(MutablePicoContainer container, FileSystem fileSystem, 
         XMLValidator xmlValidator, String directory)
+        throws IOException
     {
         this.fileSystem = fileSystem;
         this.xmlValidator = xmlValidator;
         this.directory = directory;
+        this.relaxngUrl = fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA);
         if(container != null)
         {
             registerAdapter(container);
@@ -284,15 +291,16 @@ public class ConfigurationFactory
     protected void checkSchema(Configuration configuration, String schemaPath)
         throws SAXException, IOException, IncorrectSchemaException
     {
+        URL schemaUrl = fileSystem.getResource(schemaPath);
         try
         {
-            xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+            xmlValidator.validate(schemaUrl, fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA));
         }
         catch(Exception e)
         {
             throw new SAXException("malformed schema "+schemaPath, e);
         }
-        Validator validator = xmlValidator.getValidator(schemaPath);
+        Validator validator = xmlValidator.getValidator(schemaUrl);
         SAXConfigurationSerializer serializer = new SAXConfigurationSerializer();
         serializer.serialize(configuration, validator.getContentHandler());
     }
@@ -309,15 +317,16 @@ public class ConfigurationFactory
     protected void checkSchema(String configuration, String schemaPath)
         throws SAXException, IOException, IncorrectSchemaException
     {
+        URL schemaUrl = fileSystem.getResource(schemaPath);
         try
         {
-            xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+            xmlValidator.validate(schemaUrl, fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA));
         }
         catch(Exception e)
         {
             throw new SAXException("malformed schema "+schemaPath, e);
         }
-        xmlValidator.validate(configuration, schemaPath);
+        xmlValidator.validate(fileSystem.getResource(configuration), schemaUrl);
     }
 
     /**

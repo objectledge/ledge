@@ -19,7 +19,7 @@ import org.objectledge.xml.XMLValidator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfiguratorTest.java,v 1.5 2004-01-13 12:53:00 fil Exp $
+ * @version $Id: LoggingConfiguratorTest.java,v 1.6 2004-01-13 13:26:37 fil Exp $
  */
 public class LoggingConfiguratorTest extends TestCase
 {
@@ -47,7 +47,7 @@ public class LoggingConfiguratorTest extends TestCase
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         fs.start();
-        XMLValidator xv = new XMLValidator(fs);
+        XMLValidator xv = new XMLValidator();
         ConfigurationFactory cf = new ConfigurationFactory(null, fs, xv, "config");
         new LoggingConfigurator(cf);    
         Logger logger = Logger.getLogger(LoggingConfiguratorTest.class);

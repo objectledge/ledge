@@ -159,7 +159,8 @@ public class XMLI18n extends AbstractI18n
 	private void loadFile(String file, Map map, String prefix)
 		throws IOException, SAXException, IncorrectSchemaException
 	{
-        xmlValidator.validate(localeDir+file, LOCALIZATION_SCHEMA);
+        xmlValidator.validate(fileSystem.getResource(localeDir+file), 
+            fileSystem.getResource(LOCALIZATION_SCHEMA));
 		try
 		{
 			InputStream is = fileSystem.getInputStream(localeDir+file);
