@@ -28,6 +28,9 @@
 
 package org.objectledge.container;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,7 +54,7 @@ import org.xml.sax.InputSource;
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.5 2003-12-22 12:58:53 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.6 2004-01-13 13:27:38 fil Exp $
  */
 public class LedgeContainer
     extends NanoContainer
@@ -138,10 +141,12 @@ public class LedgeContainer
     protected PicoContainer createPicoContainer()
         throws PicoCompositionException
     {
+        URL compositionUrl = null;
         Element composition;
         try
         {
-            composition = getComposition();
+            compositionUrl = getCompositionUrl();
+            composition = getComposition(compositionUrl);
         }
         catch(Exception e)
         {
@@ -168,19 +173,25 @@ public class LedgeContainer
         }
         catch(Exception e)
         {
-            throw new PicoCompositionException("failed to compose container", e);
+            throw new PicoCompositionException("failed to compose container from "+compositionUrl,
+                e);
         }
     }
 
-    private Element getComposition() 
+    private Element getComposition(URL compositionUrl) 
         throws Exception 
     {
-        String compositionPath = configBase + COMPOSITION_FILE;
-        XMLValidator validator = new XMLValidator(fs);
-        validator.validate(compositionPath, LedgeXmlFrontEnd.SCHEMA_PATH);
-        InputSource inputSource = new InputSource(fs.getInputStream(compositionPath));
+        XMLValidator validator = new XMLValidator();
+        validator.validate(compositionUrl, fs.getResource(LedgeXmlFrontEnd.SCHEMA_PATH));
+        InputSource inputSource = new InputSource(compositionUrl.toString());
         Document document = documentBuilder.parse(inputSource);
         return document.getDocumentElement();
+    }
+    
+    private URL getCompositionUrl()
+        throws MalformedURLException
+    {
+        return fs.getResource(configBase + COMPOSITION_FILE);
     }
     
     private XmlFrontEnd getFrontEnd(Element element)
