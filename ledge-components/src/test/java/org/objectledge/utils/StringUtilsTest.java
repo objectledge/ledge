@@ -133,7 +133,7 @@ public class StringUtilsTest extends TestCase
         assertEquals(StringUtils.getByteCount("abc","UTF-8"),3);
         try
         {
-            assertEquals(StringUtils.getByteCount("abc³","TEST"),6);
+            assertEquals(StringUtils.getByteCount("abc","UNSUPPORTED"),6);
             fail("should throw the exception");
         }
         catch(UnsupportedEncodingException e)
