@@ -35,9 +35,9 @@ import org.objectledge.web.mvc.*;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineContextInitializator.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: MVCContextInitializator.java,v 1.1 2003-12-30 14:18:55 zwierzem Exp $
  */
-public class PipelineContextInitializator implements Runnable
+public class MVCContextInitializator implements Runnable
 {
 	/** the context */
 	private Context context;
@@ -47,7 +47,7 @@ public class PipelineContextInitializator implements Runnable
 	 * 
 	 * @param context the context.
 	 */
-	public PipelineContextInitializator(Context context)
+	public MVCContextInitializator(Context context)
 	{
 		this.context = context;		
 	}
@@ -57,7 +57,7 @@ public class PipelineContextInitializator implements Runnable
      */
     public void run()
     {
-    	MVCContext pipelineContext = new MVCContextImpl();
-    	context.setAttribute(MVCContext.CONTEXT_KEY, pipelineContext);
+    	MVCContext mvcContext = new MVCContextImpl();
+    	context.setAttribute(MVCContext.CONTEXT_KEY, mvcContext);
     }
 }
