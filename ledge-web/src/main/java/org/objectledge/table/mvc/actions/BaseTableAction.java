@@ -36,13 +36,12 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.web.HttpContext;
 
 /**
  * Base class for all table actions.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseTableAction.java,v 1.1 2004-02-10 17:25:10 zwierzem Exp $
+ * @version $Id: BaseTableAction.java,v 1.2 2004-03-23 12:10:37 pablo Exp $
  */
 public abstract class BaseTableAction
 	implements Valve
@@ -70,13 +69,12 @@ public abstract class BaseTableAction
     	throws ProcessingException
     {
     	Parameters requestParameters = RequestParameters.getRequestParameters(context);
-    	HttpContext httpContext = HttpContext.getHttpContext(context);
         int id = requestParameters.getInt(TableConstants.TABLE_ID_PARAM_KEY, -1);
         if(id == -1)
         {
             throw new ProcessingException("'"+TableConstants.TABLE_ID_PARAM_KEY+
             	"' parameter, not found");
         }
-        return tableStateManager.getState(httpContext, new Integer(id));
+        return tableStateManager.getState(context, new Integer(id));
     }
 }

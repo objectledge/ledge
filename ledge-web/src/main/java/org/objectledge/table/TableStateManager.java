@@ -28,7 +28,7 @@
 
 package org.objectledge.table;
 
-import org.objectledge.web.HttpContext;
+import org.objectledge.context.Context;
 
 /**
  * Table state manager manages the instances of the table states in the system.
@@ -37,25 +37,25 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManager.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableStateManager.java,v 1.2 2004-03-23 12:10:37 pablo Exp $
  */
 public interface TableStateManager
 {
     /**
      * Returns the state of the table instance - it is stored in session's context.
      *
-     * @param httpContext the http context
+     * @param context the thread context
      * @param name the unique identifier of the state in the session
      * @return the state of component
      */
-    public TableState getState(HttpContext httpContext, String name);
+    public TableState getState(Context httpContext, String name);
 
     /**
      * Returns the state of the table instance - it is used by Table toolkit companion actions.
      *
-     * @param httpContext the http context
+     * @param context the thread context
      * @param id the id of the state in the session
      * @return the state of component
      */
-    public TableState getState(HttpContext httpContext, Integer id);
+    public TableState getState(Context httpContext, Integer id);
 }

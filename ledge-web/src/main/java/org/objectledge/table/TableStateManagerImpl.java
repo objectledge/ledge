@@ -33,6 +33,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
 
 /**
@@ -40,7 +41,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.5 2004-03-17 15:35:57 zwierzem Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.6 2004-03-23 12:10:37 pablo Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager
@@ -69,9 +70,10 @@ public class TableStateManagerImpl
 	/** 
 	 * {@inheritDoc}
 	 */
-    public TableState getState(HttpContext httpContext, String name)
+    public TableState getState(Context context, String name)
     {
         Integer id = getId(name);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         TableData tableData = getTableData(httpContext);
         TableState state = getTableState(tableData, id);
         if(state == null)
@@ -110,13 +112,13 @@ public class TableStateManagerImpl
 	/** 
 	 * {@inheritDoc}
 	 */
-    public TableState getState(HttpContext httpContext, Integer id)
+    public TableState getState(Context context, Integer id)
     {
         if(byIdMapping.get(id) == null)
         {
             return null;
         }
-
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         TableData tableData = getTableData(httpContext);
         TableState state = getTableState(tableData, id);
         return state;
