@@ -29,12 +29,13 @@ package org.objectledge.web.mvc.components;
 
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.1 2004-01-20 11:59:38 zwierzem Exp $
+ * @version $Id: ComponentTool.java,v 1.2 2004-01-20 14:13:37 zwierzem Exp $
  */
 public class ComponentTool
 {
@@ -65,11 +66,29 @@ public class ComponentTool
 	public String embed(String componentName) throws BuildException
 	{
 		Component component = classFinder.getComponent(componentName);
-		Template template = component.getTemplate();
-		if(template == null)
+		Template template = templateFinder.getComponentTemplate(componentName);
+		if(component != null)
 		{
-			template = templateFinder.getComponentTemplate(componentName);
+			Template newTemplate = component.getTemplate();
+			if(newTemplate != null)
+			{
+				template = newTemplate;
+			}
+			if(template == null)
+			{
+				template = templateFinder.getDefaultTemplate();
+			}
 		}
+		else
+		{
+			if(template == null)
+			{
+				throw new IllegalArgumentException("No component nor template with name "
+					+ componentName);			
+			}
+			component = classFinder.getDefaultComponent();
+		}		
+
 		// TODO: Add security check
 		return component.build(template);
 	}
