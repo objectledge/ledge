@@ -28,6 +28,10 @@
 
 package org.objectledge.i18n;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.Cookie;
 
 import org.jcontainer.dna.Logger;
@@ -41,7 +45,7 @@ import org.objectledge.web.WebConfigurator;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EncodingLoaderValve.java,v 1.1 2004-08-20 15:58:58 zwierzem Exp $
+ * @version $Id: EncodingLoaderValve.java,v 1.2 2004-08-24 12:58:03 rafal Exp $
  */
 public class EncodingLoaderValve 
     extends AbstractI18nValve
@@ -103,9 +107,10 @@ public class EncodingLoaderValve
                 {
                     try
                     {
+                        new OutputStreamWriter(new ByteArrayOutputStream(), encodingString);
                         encoding = encodingString;
                     }
-                    catch (IllegalArgumentException e)
+                    catch (UnsupportedEncodingException e)
                     {
                         setInCookie = true;
                         logger.error("malformed " + encodingCookieKey + " cookie '" + 
