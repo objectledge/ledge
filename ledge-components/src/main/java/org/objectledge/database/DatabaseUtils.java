@@ -33,17 +33,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.pool.BasePoolableObjectFactory;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.utils.StringUtils;
@@ -51,7 +43,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.7 2004-02-04 14:07:02 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.8 2004-02-09 12:09:53 fil Exp $
  */
 public class DatabaseUtils
 {
@@ -247,96 +239,6 @@ public class DatabaseUtils
         {
             close(stmt);
             close(conn);
-        }
-    }
-
-    // this should be moved to a database wrapper, to make the format configurable //////////////
-
-    /**
-     * Formate date to string acceptable by sql.  
-     * 
-     * @param date the date.
-     * @return the string representation of date.
-     */
-    public static String format(Date date)
-    {
-        DateFormat df = getDateFormat();
-        try
-        { 
-            return df.format(date);
-        }
-        finally
-        {
-            releaseDateForamt(df);
-        }
-    }
-    
-    /**
-     * Parse date from string.  
-     * 
-     * @param source the string representation of date.
-     * @return the string representation of date.
-     * @throws ParseException if invalid format.
-     */
-    public static Date parse(String source)
-        throws ParseException
-    {
-        DateFormat df = getDateFormat();
-        try
-        { 
-            return df.parse(source);
-        }
-        finally
-        {
-            releaseDateForamt(df);
-        }
-     }    
-
-    private static final String DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss Z";
-    
-    private static final Locale DATE_LOCALE = new Locale("en","US");    
-    
-    private static ObjectPool dateFormatPool = new GenericObjectPool(new DateFormatFactory());    
-    
-    private static DateFormat getDateFormat()
-    {
-        try
-        {
-            return (DateFormat)dateFormatPool.borrowObject();
-        }
-        ///CLOVER:OFF
-        catch(Exception e)
-        {
-            throw (RuntimeException)new IllegalStateException("unexpected object pool failure").
-                initCause(e);
-        }
-        ///CLOVER:ON
-    }
-    
-    private static void releaseDateForamt(DateFormat format)
-    {
-        try
-        {
-            dateFormatPool.returnObject(format);        
-        }
-        ///CLOVER:OFF
-        catch(Exception e)
-        {   
-            throw (RuntimeException)new IllegalStateException("unexpected object pool failure").
-                initCause(e);
-        }
-        ///CLOVER:ON
-    }
-    
-    /**
-     * A factory of DateFormat objects.
-     */
-    private static class DateFormatFactory
-        extends BasePoolableObjectFactory
-    {
-        public Object makeObject() throws Exception
-        {
-            return new SimpleDateFormat(DATE_FORMAT, DATE_LOCALE);
         }
     }
 }

@@ -45,6 +45,7 @@ public class AllTests
         TestSuite suite = new TestSuite("Test for org.objectledge.utils");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(StringUtilsTest.class));
+        suite.addTest(new TestSuite(DateFormatterTest.class));
         //$JUnit-END$
         return suite;
     }
