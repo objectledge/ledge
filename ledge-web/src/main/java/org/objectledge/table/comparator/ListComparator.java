@@ -26,52 +26,52 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.table.generic;
+package org.objectledge.table.comparator;
 
 import java.util.Comparator;
-import java.util.Map;
+import java.util.List;
 
 /**
- * An implementation of <code>Comparator</code> interface for using maps as
+ * An implementation of <code>Comparator</code> interface for using lists as
  * data objects.
  *
  * <p>You can use this class to add sorting support to your table when
- * idividual rows of your data are represented as Java Maps. You can create
+ * idividual rows of your data are represented as Java Lists. You can create
  * an instance of this class and pass it to TableColumn constructor,
- * specifying the key of the column. You can also specify a custom
+ * specifying the index of the column. You can also specify a custom
  * comparator for you column values if you need one (you do need it when the
- * colum is not of a  basic type like String or Integer and does not implement
+ * colum is not of a  basic type like String or Integer and does not implent
  * Comparable interface itself)</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MapComparator.java,v 1.2 2004-03-16 15:35:08 zwierzem Exp $
+ * @version $Id: ListComparator.java,v 1.1 2005-02-07 21:05:13 zwierzem Exp $
  */
-public class MapComparator
+public class ListComparator
     implements Comparator
 {
-    private Object key;
+    private int index;
 
     private Comparator comparator;
 
 	/**
-	 * Creates a map comparator which compares maps by using <code>Comparable</code> objects
-	 * stored in maps under a given key.
-	 * @param key key which maps to compared objects.
+	 * Creates a list comparator which compares lists by using <code>Comparable</code> objects
+	 * stored in lists at a given index.
+	 * @param index index which points to compared objects.
 	 */
-    public MapComparator(Object key)
+    public ListComparator(int index)
     {
-        this.key = key;
+        this.index = index;
     }
 
 	/**
-	 * Creates a map comparator which compares maps by using objects stored in maps under a given
-	 * key and a provided comparator.
-	 * @param key key which maps to compared objects.
+	 * Creates a list comparator which compares lists by using objects stored in lists at a given
+	 * index and a provided comparator.
+	 * @param index index which points to compared objects.
 	 * @param comparator comparator to be used in comparisons.
 	 */
-    public MapComparator(Object key, Comparator comparator)
+    public ListComparator(int index, Comparator comparator)
     {
-        this(key);
+        this(index);
         this.comparator = comparator;
     }
 
@@ -80,32 +80,16 @@ public class MapComparator
 	 */
     public int compare(Object o1, Object o2)
     {
-        Map l1 = (Map)o1;
-        Map l2 = (Map)o2;
-        o1 = l1.get(key);
-        o2 = l2.get(key);
+        List l1 = (List)o1;
+        List l2 = (List)o2;
+        o1 = l1.get(index);
+        o2 = l2.get(index);
         if(comparator != null)
         {
             return comparator.compare(o1, o2);
         }
         else
         {
-            if(o1 instanceof Boolean)
-            {
-                if(o2 != null && o2 instanceof Boolean )
-                {
-                    if(((Boolean)o1).booleanValue() == ((Boolean)o2).booleanValue())
-                    {
-                        return 0;
-                    }
-                    if(((Boolean)o1).booleanValue())
-                    {
-                        return 1;
-                    }
-                    return -1;
-                }
-                return 1;
-            }
             return ((Comparable)o1).compareTo(o2);
         }
     }
