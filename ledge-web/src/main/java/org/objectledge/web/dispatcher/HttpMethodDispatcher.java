@@ -40,14 +40,14 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.web.HttpDispatcher;
-import org.picocontainer.PicoContainer;
+import org.picocontainer.MutablePicoContainer;
 
 /**
  * A dispatcher that delegates to other dispatchers, selected with HTTP method names.
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: HttpMethodDispatcher.java,v 1.2 2003-12-23 16:55:36 fil Exp $
+ * @version $Id: HttpMethodDispatcher.java,v 1.3 2004-01-15 15:40:14 fil Exp $
  */
 public class HttpMethodDispatcher
     implements HttpDispatcher
@@ -62,7 +62,7 @@ public class HttpMethodDispatcher
      * @param container the container to resolve dispatcher components.
      * @throws ConfigurationException if the configuration file is malformed.
      */
-    public HttpMethodDispatcher(Configuration config, PicoContainer container)
+    public HttpMethodDispatcher(Configuration config, MutablePicoContainer container)
         throws ConfigurationException
     {
         Configuration[] elems = config.getChildren();
