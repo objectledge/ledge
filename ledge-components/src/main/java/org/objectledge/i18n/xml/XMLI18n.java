@@ -44,7 +44,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.i18n.impl.I18nBase;
+import org.objectledge.i18n.impl.AbstractI18n;
 import org.objectledge.xml.XMLValidator;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
@@ -59,7 +59,7 @@ import com.thaiopensource.validate.IncorrectSchemaException;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class XMLI18n extends I18nBase
+public class XMLI18n extends AbstractI18n
 {
     /** localization file schema path */
     private static final String LOCALIZATION_SCHEMA = "org/objectledge/i18n/xml/localization.rng";

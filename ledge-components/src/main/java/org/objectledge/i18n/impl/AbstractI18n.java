@@ -44,7 +44,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class I18nBase implements I18n, ContextToolFactory
+public abstract class AbstractI18n implements I18n, ContextToolFactory
 {
 	/** default context tool key */
 	public static final String DEFAULT_CONTEXT_TOOL_KEY = "i18n";
@@ -88,7 +88,7 @@ public class I18nBase implements I18n, ContextToolFactory
 	 * @param config the configuration.
 	 * @param logger the logger. 
 	 */
-	public I18nBase(Configuration config, Logger logger)
+	public AbstractI18n(Configuration config, Logger logger)
 	{
 		this.logger = logger;
 		contextToolKey = config.getChild("context_tool_key").getValue(DEFAULT_CONTEXT_TOOL_KEY);
@@ -146,11 +146,7 @@ public class I18nBase implements I18n, ContextToolFactory
 	/**
 	 * {@inheritDoc}
 	 */
-	public void reload()
-	{
-		//empty loader should be overriden
-	}
-		
+	public abstract void reload();
     
     // context tool factory methods
 	/**

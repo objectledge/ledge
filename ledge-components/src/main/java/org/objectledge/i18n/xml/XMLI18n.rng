@@ -30,7 +30,7 @@
 
 <!-- Relax NG schema for XMLI18n component configuration -->
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
-  <include href="../impl/I18nBase.rng">
+  <include href="../impl/AbstractI18n.rng">
     <start>
 	  <element name="config">
 	    <interleave>
