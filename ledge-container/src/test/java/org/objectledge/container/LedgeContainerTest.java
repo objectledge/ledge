@@ -39,7 +39,7 @@ import org.objectledge.test.FooComponent;
  *
  * <p>Created on Dec 16, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainerTest.java,v 1.3 2004-01-08 12:50:50 fil Exp $
+ * @version $Id: LedgeContainerTest.java,v 1.4 2004-01-13 14:02:16 fil Exp $
  */
 public class LedgeContainerTest extends TestCase
 {
@@ -63,7 +63,6 @@ public class LedgeContainerTest extends TestCase
         }
         root = root+"/container1";
         FileSystem fs = FileSystem.getStandardFileSystem(root);
-        fs.start();
         
         NanoContainer container = new LedgeContainer(fs, "/config", 
             new Log4JNanoContainerMonitor());

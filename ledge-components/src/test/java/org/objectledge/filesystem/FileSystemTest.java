@@ -37,7 +37,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.1 2004-01-08 12:50:52 fil Exp $
+ * @version $Id: FileSystemTest.java,v 1.2 2004-01-13 14:02:21 fil Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -62,10 +62,8 @@ public class FileSystemTest extends TestCase
         }
         FileSystemProvider provider = new LocalFileSystemProvider("local", root);
         FileSystem fs = new FileSystem(new FileSystemProvider[] { provider }, 4096, 4096);
-        fs.start();
-        URL url = new URL("ledge:///file");
+        URL url = fs.getResource("/file");
         InputStream is = url.openStream();
         is.read();  
-        fs.stop();           
     }
 }

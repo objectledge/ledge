@@ -17,7 +17,7 @@ import org.objectledge.filesystem.FileSystemProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidatorTest.java,v 1.4 2004-01-13 13:26:39 fil Exp $
+ * @version $Id: XMLValidatorTest.java,v 1.5 2004-01-13 14:02:20 fil Exp $
  */
 public class XMLValidatorTest extends TestCase
 {
@@ -36,7 +36,6 @@ public class XMLValidatorTest extends TestCase
         ClasspathFileSystemProvider cps = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fileSystem = new FileSystem(new FileSystemProvider[] { cps }, 4096, 4096);
-        fileSystem.start();
         XMLValidator xmlValidator = new XMLValidator();
         URL relaxng = fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA);
         xmlValidator.validate(relaxng, relaxng);

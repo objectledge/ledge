@@ -77,7 +77,6 @@ public class XMLI18nTest extends TestCase
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath",
         										 getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
-        fs.start();
         try
         {
             InputSource source = new InputSource(

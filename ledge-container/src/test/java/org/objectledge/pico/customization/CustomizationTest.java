@@ -51,7 +51,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.9 2004-01-13 12:53:00 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.10 2004-01-13 14:02:18 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -77,7 +77,6 @@ public class CustomizationTest extends TestCase
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
-        fs.start();
 
         ComponentAdapterFactory factory = new CustomizingConstructorComponentAdapterFactory();
         factory = new CachingComponentAdapterFactory(factory);

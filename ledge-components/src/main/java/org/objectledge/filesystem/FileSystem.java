@@ -45,27 +45,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.objectledge.filesystem.impl.URLStreamHandlerImpl;
-import org.picocontainer.lifecycle.Startable;
-import org.picocontainer.lifecycle.Stoppable;
-
 /**
  * Provides an abstration of files available in the local file system, in the ClassLoader, web 
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.15 2004-01-13 12:52:29 fil Exp $
+ * @version $Id: FileSystem.java,v 1.16 2004-01-13 14:02:21 fil Exp $
  */
 public class FileSystem
-    implements Startable, Stoppable
 {
     private String protocol = "ledge";
 
     /** The providers. */
     private List providers = new ArrayList();
-
-    /** URL stream handler. */
-    private URLStreamHandlerImpl urlStreamHandler;
 
     /** The size of the buffer. */
     private int bufferSize;
@@ -86,32 +78,6 @@ public class FileSystem
         this.providers = Arrays.asList(providers);
         this.bufferSize = bufferSize;
         this.maxReadSize = maxReadSize;
-        this.urlStreamHandler = new URLStreamHandlerImpl(this);
-    }
-    
-    // startup & shutdown ///////////////////////////////////////////////////
-    
-    /**
-     * Initializes the filesystem.
-     * 
-     * <p>This method associates the URL handler for the ledge: schema with
-     * this file system instance. Note that only one handler may be associated
-     * with a perfix at a time per class loader.</p>
-     */
-    public void start()
-    {
-        org.objectledge.filesystem.protocol.ledge.Handler.init(urlStreamHandler);
-    }
-    
-    /**
-     * Shuts down the filesystem.
-     * 
-     * <p>This method unassociates the URL handler for the ledge: schema from
-     * this file system instance.</p>
-     */
-    public void stop()
-    {
-        org.objectledge.filesystem.protocol.ledge.Handler.shutdown();
     }
 
     // FileService interface ////////////////////////////////////////////////

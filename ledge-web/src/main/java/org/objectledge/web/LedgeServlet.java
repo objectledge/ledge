@@ -52,7 +52,7 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.12 2004-01-13 12:54:33 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.13 2004-01-13 14:02:19 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -121,7 +121,6 @@ public class LedgeServlet extends HttpServlet
         ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4096);
-        fs.start();
         try
         {
             container = new LedgeContainer(fs, config, new Log4JNanoContainerMonitor());    
