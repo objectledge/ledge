@@ -31,12 +31,12 @@ package org.objectledge.templating.velocity;
 import java.io.Reader;
 import java.io.Writer;
 
-import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogSystem;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.MergingException;
@@ -50,7 +50,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.4 2003-12-17 10:51:39 fil Exp $
+ * @version $Id: VelocityTemplating.java,v 1.5 2003-12-30 14:35:42 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -99,6 +99,8 @@ public class VelocityTemplating implements Templating, LogSystem
                 paths[i] = path[i].getValue();
             }
         }
+        //lalala
+        //bbb
         catch (ConfigurationException e)
         {
             throw new ComponentInitializationError("failed to initialze Velocity", e);
