@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
+  <element name="a">
+    <text/>
+  </element>
+  <optional>
+    <element name="b">
+      <attribute name="attr"/>
+    </element>
+  </optional>
+  <element name="c">
+    <zeroOrMore>
+      <element name="d">
+        <text/>
+      </element>       
+    </zeroOrMore>
+  </element>
+</element>
