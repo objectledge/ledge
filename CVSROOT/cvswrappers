@@ -21,3 +21,29 @@
 #  and value is a single-quote delimited value.
 # For example:
 #*.gif -k 'b'
+
+*.doc -k 'b' -m COPY	# MS Word
+*.xls -k 'b' -m COPY	# MS Excel
+*.vsd -k 'b' -m COPY	# MS Visio
+*.ppt -k 'b' -m COPY	# MS PowerPoint
+*.mpp -k 'b' -m COPY	# MS Project
+
+*.swx -k 'b' -m COPY	# OpenOffice Writer
+*.sxc -k 'b' -m COPY	# OpenOffice Calc
+*.sxd -k 'b' -m COPY	# OpenOffice Draw
+*.sxi -k 'b' -m COPY	# OpenOffice Impress
+*.sxm -k 'b' -m COPY	# OpenOffice Formula
+
+*.gif -k 'b' -m COPY	# comon graphics formats
+*.jpg -k 'b' -m COPY
+*.jpeg -k 'b' -m COPY
+*.png -k 'b' -m COPY
+*.psd -k 'b' -m COPY
+
+*.jar -k 'b' -m COPY	# archives
+*.zip -k 'b' -m COPY
+*.tar -k 'b' -m COPY
+*.gz -k 'b' -m COPY
+
+*.pdf -k 'b' -m COPY	# PostScript documents
+*.ps -k 'b' -m COPY
