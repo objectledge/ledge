@@ -44,9 +44,8 @@ public class AllTests
     {
         TestSuite suite = new TestSuite("Test for org.objectledge.parameters");
         //$JUnit-BEGIN$
-
+        suite.addTest(new TestSuite(DefaultParametersTest.class));
         //$JUnit-END$
-		suite.addTest(org.objectledge.parameters.impl.AllTests.suite());
         return suite;
     }
 }

@@ -26,21 +26,22 @@
 //POSSIBILITY OF SUCH DAMAGE.
 //
 
-package org.objectledge.parameters.impl;
+package org.objectledge.parameters;
 
 import junit.framework.TestCase;
 
 import org.objectledge.parameters.AmbiguousParameterException;
+import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.UndefinedParameterException;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class ParametersImplTest extends TestCase
+public class DefaultParametersTest extends TestCase
 {
 	/** parameter container */
-    protected ParametersImpl params;
+    protected DefaultParameters params;
 
     /**
      * @see TestCase#setUp()
@@ -48,7 +49,7 @@ public class ParametersImplTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        params = new ParametersImpl();
+        params = new DefaultParameters();
     }
 
     /**
@@ -56,7 +57,7 @@ public class ParametersImplTest extends TestCase
      * 
      * @param arg0 default arg.
      */
-    public ParametersImplTest(String arg0)
+    public DefaultParametersTest(String arg0)
     {
         super(arg0);
     }
@@ -74,16 +75,16 @@ public class ParametersImplTest extends TestCase
      */
     public void testParametersImplString()
     {
-        params = new ParametersImpl("foo=bar\n");
+        params = new DefaultParameters("foo=bar\n");
         assertEquals(params.get("foo"),"bar");
-		params = new ParametersImpl("foo=bar,buzz,foo\nbar=foo");
+		params = new DefaultParameters("foo=bar,buzz,foo\nbar=foo");
 		assertEquals(params.getStrings("foo").length,3);
 		assertEquals(params.get("bar"),"foo");
-		params = new ParametersImpl("");
+		params = new DefaultParameters("");
 		assertEquals(params.get("foo","bar"),"bar");
 		try
 		{
-			params = new ParametersImpl("foo");
+			params = new DefaultParameters("foo");
 			fail("Should throw IllegalArgumentException");
 		}
 		catch(IllegalArgumentException e)

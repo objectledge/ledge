@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE.
 //
 
-package org.objectledge.parameters.impl;
+package org.objectledge.parameters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,18 +39,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import org.objectledge.parameters.AmbiguousParameterException;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.UndefinedParameterException;
 import org.objectledge.utils.StringUtils;
 
 /**
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: ParametersImpl.java,v 1.7 2003-12-17 10:52:00 fil Exp $
+ * @version $Id: DefaultParameters.java,v 1.1 2004-01-08 15:37:14 fil Exp $
  */
-public class ParametersImpl implements Parameters
+public class DefaultParameters implements Parameters
 {
 	/** string representation for boolean <code>true</code> value. */
 	public static final String TRUE = "true";
@@ -61,7 +58,7 @@ public class ParametersImpl implements Parameters
     /**
      * Create the empty container.
      */
-    public ParametersImpl()
+    public DefaultParameters()
     {
     }
 
@@ -70,7 +67,7 @@ public class ParametersImpl implements Parameters
      * 
      * @param configuration the string representation of the container. 
      */
-    public ParametersImpl(String configuration)
+    public DefaultParameters(String configuration)
     {
         LineNumberReader reader = new LineNumberReader(new StringReader(configuration));
         try
@@ -89,7 +86,7 @@ public class ParametersImpl implements Parameters
      * @param is the stream with byte representation of the container.
      * @param encoding the encoding of the source.
      */
-    public ParametersImpl(InputStream is, String encoding)
+    public DefaultParameters(InputStream is, String encoding)
     {
     	try
     	{
@@ -111,7 +108,7 @@ public class ParametersImpl implements Parameters
 	 * 
 	 * @param source the source container.
 	 */
-	public ParametersImpl(Parameters source)
+	public DefaultParameters(Parameters source)
 	{
 		String[] names = source.getParameterNames();
 		for(int i=0; i<names.length; i++)
@@ -659,7 +656,7 @@ public class ParametersImpl implements Parameters
 	 */
     public Parameters getChild(String prefix)
     {
-    	Parameters target = new ParametersImpl();
+    	Parameters target = new DefaultParameters();
 		Iterator it = map.keySet().iterator();
 		while(it.hasNext())
 		{
