@@ -19,7 +19,7 @@ import org.objectledge.xml.XMLValidator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfiguratorTest.java,v 1.1 2003-12-03 15:38:36 fil Exp $
+ * @version $Id: LoggingConfiguratorTest.java,v 1.2 2003-12-05 08:27:03 fil Exp $
  */
 public class LoggingConfiguratorTest extends TestCase
 {
@@ -39,7 +39,8 @@ public class LoggingConfiguratorTest extends TestCase
         String root = System.getProperty("ledge.root");
         if(root == null)
         {
-            throw new Exception("system property ledge.root undefined. use -Dledge.root=.../ledge-container/src/test/resources");
+            throw new Exception("system property ledge.root undefined. "+
+                "use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 

@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.3 2003-12-04 13:00:24 mover Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.4 2003-12-05 08:27:02 fil Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {
@@ -60,7 +60,8 @@ public class LocalFileSystemProviderTest extends TestCase
         String root = System.getProperty("ledge.root");
         if(root == null)
         {
-            throw new Exception("system property ledge.root undefined. use -Dledge.root=.../ledge-components/src/test/resources");
+            throw new Exception("system property ledge.root undefined. "+
+                "use -Dledge.root=.../ledge-components/src/test/resources");
         }
         provider = new LocalFileSystemProvider("local", root);
     }

@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactoryTest.java,v 1.4 2003-12-03 15:15:23 mover Exp $
+ * @version $Id: ConfigurationFactoryTest.java,v 1.5 2003-12-05 08:27:03 fil Exp $
  */
 public class ConfigurationFactoryTest 
     extends TestCase
@@ -65,7 +65,8 @@ public class ConfigurationFactoryTest
         String root = System.getProperty("ledge.root");
         if(root == null)
         {
-            throw new Exception("system property ledge.root undefined. use -Dledge.root=.../ledge-container/src/test/resources");
+            throw new Exception("system property ledge.root undefined. "+
+                "use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
@@ -83,7 +84,7 @@ public class ConfigurationFactoryTest
         assertEquals(a.getValue(), "a");
         Configuration b = config.getChild("b");
         assertEquals(b.getAttribute("attr"), "b");
-        Configuration d[] = config.getChild("c").getChildren("d");
+        Configuration[] d = config.getChild("c").getChildren("d");
         assertEquals(d[0].getValue(), "d1");
         assertEquals(d[1].getValue(), "d2");
     }
