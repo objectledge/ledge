@@ -15,7 +15,7 @@ import pl.caltha.forms.internal.ui.UIConstants;
 /** This a form tool context tool implementation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormToolImpl.java,v 1.6 2005-03-23 12:37:17 zwierzem Exp $
+ * @version $Id: FormToolImpl.java,v 1.7 2005-03-23 13:42:23 zwierzem Exp $
  */
 public class FormToolImpl 
 implements FormTool
@@ -53,6 +53,6 @@ implements FormTool
     public String generateUI(Instance instance, LinkTool formLink)
     throws MergingException, TemplateNotFoundException
     {
-        return generateUI(instance, formLink, "default");
+        return generateUI(instance, formLink, "Default");
     }
 }
