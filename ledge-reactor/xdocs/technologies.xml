@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>ObjectLedge : Featured Technologies </title>
+  </properties>
+    
+  <body>
+    <section name="Featured technologies">
+      <p>
+        ObjectLedge is Open Source software, and it is based on numerous Open Source libraries
+        and tools.
+      </p>
+      <subsection name="Core dependencies">
+        <p>Those are the runtime dependencies of the core components, that are needed to run
+        any ObjectLedge application.</p>
+        
+        <p>PicoContainer</p>
+
+        <p>DNA</p>
+        
+        <p>Jing</p>
+        
+      </subsection>
+      <subsection name="Optional dependencies">
+        <p>Those are the runtime dependencies of non-core components. They are needed to
+        run the application only if it uses the mentioned components. However they are
+        required to compile ObjectLedge codebase.</p>
+        
+        <p>Velocity</p>
+        
+      </subsection>
+      <subsection name="Tools">
+        <p>We use many excelent Open Source tools for developing ObjectLedge.</p>
+        
+        <p>Eclipse</p>
+        
+        <p>Maven</p>
+        
+        <p>JUnit</p>
+        
+      </subsection>
+    </section>
+    </body>
+</document>
+      

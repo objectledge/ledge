@@ -4,7 +4,11 @@
   <title>ObjectLedge</title>
 
   <body>
-    <menu name="Projects">
+    <menu name="Overview">
+      <item name="Featured technologies"            href="technologies.html"/>
+    </menu>
+<!--
+    <menu name="Modules">
     #if ($createOverviewPage == "true" )
       <item name="${overviewPageLinkTitle}"
 href="${overviewPageLink}.html"/>
@@ -14,11 +18,9 @@ href="${overviewPageLink}.html"/>
 href="/${aggregateDir}${reactorProject.artifactId}/index.html"/>
     #end
     </menu>
-    <menu name="Overview">
-      <item name="Goals"                   href="goals.html"/>
-      <item name="Features"                href="features.html"/>
-      <item name="FAQ"                     href="faq.html"/>
-      <item name="Powered By"              href="powered.html"/>
-    </menu>
+-->
+<!--
+    <search/>
+-->
   </body>
 </project>
