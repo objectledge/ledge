@@ -29,12 +29,10 @@ package org.objectledge.database;
 
 import java.sql.Connection;
 
-import javax.transaction.UserTransaction;
-
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Database.java,v 1.2 2004-01-22 15:53:14 pablo Exp $
+ * @version $Id: Database.java,v 1.3 2004-02-03 12:34:28 fil Exp $
  */
 public abstract class Database
 {
@@ -62,34 +60,4 @@ public abstract class Database
      * @param id the identifier.
      */
     public abstract void releaseId(String table, long id);
-    
-    // transactions ////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Get the user transation.
-     * 
-     * @return the user transaction.
-     */
-    public abstract UserTransaction getUserTransaction();
-    
-    /**
-     * Begin the transaction.
-     * 
-     * @return <code>true</code> if the requestor become the controler.
-     */
-    public abstract boolean beginTransaction();
-    
-    /**
-     * Commit the transaction.
-     * 
-     * @param controler the controler.
-     */
-    public abstract void commitTransaction(boolean controler);
-    
-    /**
-     * Rollbact the transaction.
-     * 
-     * @param controler the controler.
-     */
-    public abstract void rollbackTransaction(boolean controler);
 }
