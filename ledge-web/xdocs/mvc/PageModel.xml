@@ -46,6 +46,13 @@
       </p>
 
       <p><img src="../images/mvc-page-tree.gif" alt="The ObjectLedge MVC page tree" /></p>
+
+      <p>
+      Builders create a trunk of the tree, while components are it's leaves and possibly branches
+      (for components embedded in components). The tree grows from it's top (the selected Builder)
+      to it's bottom (the outermost Builder, which most of the time will be a packaging for HTML
+      body content).
+      </p>
     </section>
   </body>
 </document>
