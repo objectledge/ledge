@@ -41,7 +41,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.5 2004-01-15 16:37:03 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.6 2004-01-19 11:43:24 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -68,13 +68,18 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     /** The Templating component. */
     private Templating templating;
 	
+    /** The name sequence factory. */
+    private NameSequenceFactory nameSequenceFactory;
+    
     /**
      * Creates a MVCFinder component.
      * 
      * @param container the container to store loaded classes.
      * @param templating the templating component.
+     * @param nameSequenceFactory the name sequence factory component.
      */
-	public MVCFinder(MutablePicoContainer container, Templating templating)
+	public MVCFinder(MutablePicoContainer container, Templating templating, 
+        NameSequenceFactory nameSequenceFactory)
 	{
 		this.container = container;
         this.templating = templating;
