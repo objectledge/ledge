@@ -45,7 +45,7 @@ import org.picocontainer.lifecycle.Stoppable;
  * Manages a pool of worker threads.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerPool.java,v 1.3 2004-02-02 13:51:23 fil Exp $
+ * @version $Id: WorkerPool.java,v 1.4 2004-02-02 14:24:24 fil Exp $
  */
 public class WorkerPool
 {
@@ -190,20 +190,22 @@ public class WorkerPool
                         }
                         catch(InterruptedException e)
                         {
-                            break loop;
+                            continue loop;
                         }
                     }
                     task = (Task)queue.removeFirst();
                 }
                 try
                 {
-                    worker = (Worker)pool.borrowObject();
+                    worker = getWorker();
                 }
+                ///CLOVER:OFF
                 catch(Exception e)
                 {
                     log.error("failed to acquire worker for "+task.getName(), e);
                     continue loop;
                 }
+                ///CLOVER:ON
                 worker.dispatch(task);
             }
         }
