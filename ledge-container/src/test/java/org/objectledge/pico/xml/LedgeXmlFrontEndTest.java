@@ -51,7 +51,7 @@ import org.xml.sax.SAXParseException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEndTest.java,v 1.3 2003-12-17 10:03:15 fil Exp $
+ * @version $Id: LedgeXmlFrontEndTest.java,v 1.4 2003-12-22 09:00:34 fil Exp $
  */
 public class LedgeXmlFrontEndTest extends TestCase
 {
@@ -92,7 +92,8 @@ public class LedgeXmlFrontEndTest extends TestCase
         }
         catch(SAXParseException e)
         {
-            throw new Exception("parse error "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+            throw new Exception("parse error "+e.getMessage()+" in "+e.getSystemId()+
+                " at line "+e.getLineNumber(), e);
         }
         
         InputSource source = new InputSource(fs.getInputStream("composition/simple.xml"));
@@ -117,7 +118,8 @@ public class LedgeXmlFrontEndTest extends TestCase
         }
         catch(SAXParseException e)
         {
-            throw new Exception("parse error "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+            throw new Exception("parse error "+e.getMessage()+" in "+e.getSystemId()+
+                " at line "+e.getLineNumber(), e);
         }
         
         InputSource source = new InputSource(fs.getInputStream("composition/adapter.xml"));

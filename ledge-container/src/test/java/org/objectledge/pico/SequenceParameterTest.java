@@ -44,7 +44,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameterTest.java,v 1.1 2003-12-08 12:35:26 fil Exp $
+ * @version $Id: SequenceParameterTest.java,v 1.2 2003-12-22 08:59:59 fil Exp $
  */
 public class SequenceParameterTest extends TestCase
 {
@@ -64,14 +64,16 @@ public class SequenceParameterTest extends TestCase
     {
        MutablePicoContainer picoContainer = new DefaultPicoContainer();
        picoContainer.registerComponentInstance(ClassLoader.class, getClass().getClassLoader());
-       picoContainer.registerComponentInstance("org.objectledge.filesystem.impl.LocalFileSystemProvider.root", ".");
+       picoContainer.registerComponentInstance(
+            "org.objectledge.filesystem.impl.LocalFileSystemProvider.root", ".");
         
        picoContainer.registerComponentImplementation(
            "org.objectledge.filesystem.FileSystemProvider:local",
            LocalFileSystemProvider.class, 
            new Parameter[] {
                new ConstantParameter("local"),
-               new ComponentParameter("org.objectledge.filesystem.impl.LocalFileSystemProvider.root")
+               new ComponentParameter(
+                    "org.objectledge.filesystem.impl.LocalFileSystemProvider.root")
            }
        );
        picoContainer.registerComponentImplementation(
@@ -88,8 +90,10 @@ public class SequenceParameterTest extends TestCase
             new Parameter[] {
                 new SequenceParameter(
                     new Parameter[] {
-                        new ComponentParameter("org.objectledge.filesystem.FileSystemProvider:local"),
-                        new ComponentParameter("org.objectledge.filesystem.FileSystemProvider:classpath"),
+                        new ComponentParameter(
+                            "org.objectledge.filesystem.FileSystemProvider:local"),
+                        new ComponentParameter(
+                            "org.objectledge.filesystem.FileSystemProvider:classpath"),
                     },
                     Class.forName("[Lorg.objectledge.filesystem.FileSystemProvider;")
                 ),
