@@ -32,7 +32,7 @@ import java.util.NoSuchElementException;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequence.java,v 1.2 2004-01-19 11:42:56 fil Exp $
+ * @version $Id: ViewLookupSequence.java,v 1.3 2004-01-19 13:03:18 fil Exp $
  */
 public class ViewLookupSequence
     implements Sequence
@@ -69,7 +69,8 @@ public class ViewLookupSequence
      */
     public boolean hasNext()
     {
-        return position < prefices.length-1 || viewFallbackSequence.hasNext();
+        return (prefices.length > 0 && position < prefices.length-1) 
+            || viewFallbackSequence.hasNext();
     }
     
     /**
@@ -101,8 +102,11 @@ public class ViewLookupSequence
             }
         }
         buff.setLength(0);
-        buff.append(prefices[position]);
-        buff.append(outSeparator);
+        if(prefices.length > 0)
+        {
+            buff.append(prefices[position]);
+            buff.append(outSeparator);
+        }
         buff.append(viewFallbackSequence.next());
         return buff.toString();
     }
