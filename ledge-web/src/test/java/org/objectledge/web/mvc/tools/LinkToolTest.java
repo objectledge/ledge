@@ -289,7 +289,7 @@ public class LinkToolTest extends LedgeTestCase
         assertEquals(linkTool.absolute().toString(), "https://www.objectledge.org/test/ledge");
         assertEquals(linkTool.self().toString(),"/test/ledge#bar");
         assertEquals(linkTool.set("foo","bar").set("bar","foo").toString(),
-                    "/test/ledge?foo=bar&bar=foo");
+                    "/test/ledge?bar=foo&foo=bar");
     }
 
 }
