@@ -10,7 +10,6 @@
       <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-web"/>
     </links>
     <menu name="Reference">
-      <item name="Components" href="components.html" collapse="true"/>
     </menu>
   </body>
 </project>
