@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.6 2004-01-14 10:47:50 fil Exp $
+ * @version $Id: StringUtils.java,v 1.7 2004-01-14 10:59:25 fil Exp $
  */
 public class StringUtils
 {
@@ -300,6 +300,7 @@ public class StringUtils
 			CountOutputStream counter = new CountOutputStream();
 			OutputStreamWriter writer = new OutputStreamWriter(counter, encoding);
 			writer.write(string);
+            writer.close();
 			return counter.getCount();
 		}
 	}
