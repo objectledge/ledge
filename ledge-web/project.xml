@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.9 2003-12-29 11:53:01 fil Exp $ -->
+<!-- $Id: project.xml,v 1.10 2003-12-29 14:06:30 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -40,10 +40,10 @@
   <currentVersion>0.1-dev</currentVersion>
   
   <name>Ledge Web</name>
-  <shortDescription>Object Ledge - web package.</shortDescription>
-  <description>
-    This module contains a set of components for developing J2EE web applications.
-  </description>
+  <shortDescription>
+    Servlet environment bootstraper for the ObjectLedge container and a number of reusable
+    components for building J2EE servlet environment applications.
+  </shortDescription>
 
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
