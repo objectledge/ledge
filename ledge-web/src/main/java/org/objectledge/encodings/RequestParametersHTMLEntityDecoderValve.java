@@ -38,7 +38,7 @@ import org.objectledge.pipeline.Valve;
  * values. This is very important for applications saving data into datatbases etc.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: RequestParametersHTMLEntityDecoderValve.java,v 1.1 2004-06-30 12:28:09 zwierzem Exp $
+ * @version $Revision: 1.2 $ $Date: 2005-01-07 07:11:44 $
  */
 public class RequestParametersHTMLEntityDecoderValve
     implements Valve
