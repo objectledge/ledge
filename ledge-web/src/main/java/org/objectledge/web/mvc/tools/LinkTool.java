@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.13 2004-08-19 15:21:24 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.14 2004-09-30 14:03:40 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -72,7 +72,7 @@ public class LinkTool
 	public static final String PARAMETER_ENCODING = "UTF-8";
 	
     /** query string parameter values encoder */
-    private static final org.objectledge.encodings.URLEncoder queryStringEncoder =
+    private static final org.objectledge.encodings.URLEncoder QUERY_STRING_ENCODER =
         new org.objectledge.encodings.URLEncoder();
     
 	/** link tool factory */
@@ -643,6 +643,7 @@ public class LinkTool
     }
 
     private void appendContentLink(StringBuffer sb)
+        throws UnsupportedEncodingException
     {
         sb.append(config.baseContentPath);
         if (path.length() > 0)
@@ -651,7 +652,7 @@ public class LinkTool
             {
                 sb.append('/');
             }
-            sb.append(path);
+            sb.append(QUERY_STRING_ENCODER.encodeQueryStringValue(path, PARAMETER_ENCODING));
         }
     }
 
@@ -708,7 +709,7 @@ public class LinkTool
                     
                     sb.append(URLEncoder.encode(key, PARAMETER_ENCODING));
                     sb.append('=');
-                    sb.append(queryStringEncoder
+                    sb.append(QUERY_STRING_ENCODER
                         .encodeQueryStringValue(values[j], PARAMETER_ENCODING));
 
                     querySeparator = querySeparator2;
