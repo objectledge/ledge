@@ -33,8 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
-import org.jcontainer.dna.Logger;
 import org.objectledge.datatype.xml.XMLSchemaDatatypeSetFactory;
 import org.objectledge.xml.XMLGrammarCache;
 
@@ -42,13 +40,10 @@ import org.objectledge.xml.XMLGrammarCache;
  * The Datatype set manager component. 
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DatatypeSetManager.java,v 1.3 2004-12-27 04:43:22 rafal Exp $
+ * @version $Id: DatatypeSetManager.java,v 1.4 2004-12-27 05:20:56 zwierzem Exp $
  */
 public class DatatypeSetManager
 {
-	/** the logger. */
-	protected Logger logger; 
-	
 	/** the provided datatype sets. */
 	protected Map datatypeSets = new Hashtable();
 
@@ -57,12 +52,11 @@ public class DatatypeSetManager
 	
 	/**
 	 * Creates an abstract datatype set manager.
-	 * @param logger the logger
+     * 
 	 * @param grammarCache XML grammar cache for retrieval of XML schema datatypes
 	 */
-	public DatatypeSetManager(Logger logger, XMLGrammarCache grammarCache)
+	public DatatypeSetManager(XMLGrammarCache grammarCache)
 	{
-		this.logger = logger;
 		// TODO Register factories in a "dynamic" or configurable way using PicoContainer
 		factories.add(new XMLSchemaDatatypeSetFactory(grammarCache));
 	}
