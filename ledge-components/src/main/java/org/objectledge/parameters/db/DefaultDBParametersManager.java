@@ -17,7 +17,7 @@ import org.objectledge.parameters.Parameters;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultDBParametersManager.java,v 1.2 2004-12-23 07:16:22 rafal Exp $
+ * @version $Id: DefaultDBParametersManager.java,v 1.3 2005-01-26 08:06:25 rafal Exp $
  */
 public class DefaultDBParametersManager implements DBParametersManager
 {
@@ -160,4 +160,50 @@ public class DefaultDBParametersManager implements DBParametersManager
             DatabaseUtils.close(conn);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void preloadContainers()
+        throws DBParametersException
+    {
+        Connection conn = null;
+        try
+        {
+            conn = database.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet result = statement.executeQuery("SELECT parameters_id, name, value FROM "+
+                TABLE_NAME+" ORDER BY parameters_id");
+            if(result.next())
+            {
+                long lastId;
+                Parameters temp = new DefaultParameters(); 
+                do
+                {
+                    do
+                    {
+                        lastId = result.getLong(1);
+                        if(result.getString(2).length() > 0)
+                        {
+                            temp.add(DatabaseUtils.unescapeSqlString(result.getString(2)),
+                                DatabaseUtils.unescapeSqlString(result.getString(3)));
+                        }
+                    }
+                    while(result.next() && result.getLong(1) == lastId);
+                    Parameters pc = new DBParameters(temp, lastId, database, logger);
+                    temp.remove();
+                    localCache.put(new Long(lastId), pc);
+                }
+                while(!result.isAfterLast());
+            }
+        }
+        catch(SQLException e)
+        {
+            throw new DBParametersException("failed to preload parameters", e);
+        }
+        finally
+        {
+            DatabaseUtils.close(conn);
+        }
+    }    
 }

@@ -33,7 +33,7 @@ import org.objectledge.parameters.Parameters;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DBParametersManager.java,v 1.10 2004-12-23 07:16:22 rafal Exp $
+ * @version $Id: DBParametersManager.java,v 1.11 2005-01-26 08:06:26 rafal Exp $
  */
 public interface DBParametersManager
 {
@@ -64,4 +64,13 @@ public interface DBParametersManager
      * @throws DBParametersException thrown if failed to delete.
      */
     public abstract void deleteParameters(long id) throws DBParametersException;
+    
+    /**
+     * Attemps to load all the containers' data into memory in a single haul.
+     * 
+     * <p>A hint from the users that they prefer preformance over footprint.</p>
+     * @throws DBParametersException if preloading fails.
+     */
+    public void preloadContainers()
+        throws DBParametersException;
 }
