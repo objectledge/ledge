@@ -40,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * A derivate of log4j.RollingFileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeRollingFileAppender.java,v 1.2 2004-07-22 16:39:42 zwierzem Exp $
+ * @version $Id: LedgeRollingFileAppender.java,v 1.3 2004-09-24 11:25:24 zwierzem Exp $
  */
 public class LedgeRollingFileAppender
 	extends RollingFileAppender
@@ -150,7 +150,7 @@ public class LedgeRollingFileAppender
                 fileSystem.rename(file, target);
             }
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             LogLog.error("rollover operations failed", e);
         }

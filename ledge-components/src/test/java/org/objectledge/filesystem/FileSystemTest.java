@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.7 2004-06-28 10:08:46 fil Exp $
+ * @version $Id: FileSystemTest.java,v 1.8 2004-09-24 11:25:37 zwierzem Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -255,7 +255,14 @@ public class FileSystemTest extends TestCase
         throws IOException
     {
         assertEquals(fs.exists("foo"),false);
-        fs.mkdirs("foo");
+        try
+        {
+            fs.mkdirs("foo");
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            fail("simple ascii characters should be supported: "+e.getMessage());
+        }
         assertEquals(fs.exists("foo"),true);
         assertEquals(fs.isDirectory("foo"),true);
         fs.delete("foo");
@@ -287,10 +294,24 @@ public class FileSystemTest extends TestCase
     public void testRename()
         throws IOException
     {
-        fs.mkdirs("foo");
+        try
+        {
+            fs.mkdirs("foo");
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            fail("simple ascii characters should be supported: "+e.getMessage());
+        }
         assertEquals(fs.exists("foo"),true);
         assertEquals(fs.exists("bar"),false);
-        fs.rename("foo","bar");
+        try
+        {
+            fs.rename("foo","bar");
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            fail("simple ascii characters should be supported: "+e.getMessage());
+        }
         assertEquals(fs.exists("foo"),false);
         assertEquals(fs.exists("bar"),true);
         fs.delete("bar");
@@ -309,7 +330,14 @@ public class FileSystemTest extends TestCase
         throws IOException
     {
         assertEquals(fs.exists("foo"),false);
-        fs.copyFile("filex","foo");
+        try
+        {
+            fs.copyFile("filex","foo");
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            fail("simple ascii characters should be supported: "+e.getMessage());
+        }
         assertEquals(fs.exists("foo"),true);
         fs.delete("foo");
         try
@@ -337,7 +365,14 @@ public class FileSystemTest extends TestCase
     {
         assertEquals(fs.exists("directory"),true);
         int size = fs.list("directory").length;
-        fs.copyDir("directory","directory2");
+        try
+        {
+            fs.copyDir("directory","directory2");
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            fail("simple ascii characters should be supported: "+e.getMessage());
+        }
         assertEquals(fs.exists("directory2"),true);
         assertEquals(fs.list("directory2").length,size);
         fs.deleteRecursive("directory2");

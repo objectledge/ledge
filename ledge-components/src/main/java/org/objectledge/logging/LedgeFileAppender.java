@@ -34,12 +34,13 @@ import java.io.Writer;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.helpers.LogLog;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
 /**
  * A derivate of log4j.FileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeFileAppender.java,v 1.2 2004-07-22 16:39:42 zwierzem Exp $
+ * @version $Id: LedgeFileAppender.java,v 1.3 2004-09-24 11:25:24 zwierzem Exp $
  */
 public class LedgeFileAppender extends FileAppender
 {
@@ -79,7 +80,14 @@ public class LedgeFileAppender extends FileAppender
         }
 
         reset();
-        fileSystem.mkdirs(FileSystem.directoryPath(fileName));
+        try
+        {
+            fileSystem.mkdirs(FileSystem.directoryPath(fileName));
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            throw (IOException) (new IOException().initCause(e));
+        }
         Writer fw = createWriter(fileSystem.getOutputStream(fileName, append));
         if(bufferedIO)
         {

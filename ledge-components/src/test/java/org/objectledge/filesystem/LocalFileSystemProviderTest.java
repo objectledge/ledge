@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.2 2004-06-28 10:08:46 fil Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.3 2004-09-24 11:25:37 zwierzem Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {
@@ -156,9 +156,16 @@ public class LocalFileSystemProviderTest extends TestCase
     public void testMkdirs()
     throws IOException
     {
-		provider.mkdirs("var/new.directory2");
-		assertTrue("The directory should just have been created!", 
-		provider.exists("var/new.directory2"));
+		try
+        {
+            provider.mkdirs("var/new.directory2");
+            assertTrue("The directory should just have been created!", 
+                provider.exists("var/new.directory2"));
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            fail("simple ascii characters should be supported: "+e.getMessage());
+        }
     }
 
     public void testDelete()
