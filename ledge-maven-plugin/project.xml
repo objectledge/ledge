@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.6 2004-05-25 13:40:34 fil Exp $ -->
+<!-- $Id: project.xml,v 1.7 2004-09-01 09:24:51 rafal Exp $ -->
 <project>
 
   <extend>../ledge-common/project.xml</extend>
@@ -56,7 +56,6 @@
 
   <!-- build -->
   <build>
-    <sourceDirectory>src/java</sourceDirectory>
     <resources>
       <resource>
         <directory>src/plugin-resources</directory>
