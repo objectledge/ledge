@@ -8,7 +8,7 @@ import org.objectledge.encodings.MappingEntry;
  * HTMLEntity encoder.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CharEncoderHTMLEntity.java,v 1.3 2004-02-12 10:09:36 zwierzem Exp $
+ * @version $Id: CharEncoderHTMLEntity.java,v 1.4 2004-03-12 15:47:42 zwierzem Exp $
  */
 public class CharEncoderHTMLEntity
          extends CharEncoder
@@ -20,10 +20,13 @@ public class CharEncoderHTMLEntity
 
     private static final MappingEntry[] ENTITIES =
             {
+            	// XML entities
             new MappingEntry(34, "quot"),
             new MappingEntry(38, "amp"),
+			new MappingEntry(39, "apos"), // NOT in HTML 4.0 specification
             new MappingEntry(60, "lt"),
             new MappingEntry(62, "gt"),
+            	// SGML/HTML entities
             new MappingEntry(160, "nbsp"),
             new MappingEntry(161, "iexcl"),
             new MappingEntry(162, "cent"),
@@ -692,49 +695,49 @@ null,null,null,null,null,null,null,null
      * Entity names may be in string or numerical form.
      *
      * @param name  Name of an entity with &amp; or &amp;# at the begining and ; at the end
-     * @return      Returns entity unicode code or zero on error
+     * @return      Returns entity unicode code or -1 on error
      */
-    public short entityCode(String name)
+    public int entityCode(String name)
     {
-        int c;
+		int length = name.length(); 
 
-        if(name.length() <= 1)
-        {
-            return 0;
-        }
+		if(length <= 2)
+		{
+			return -1;
+		}
 
-        /* numeric entitity: name = "&#" followed by number */
-        if(name.charAt(1) == '#')
-        {
-            /* zero on missing/bad number */
-            /* 'x' prefix denotes hexadecimal number format */
-            try
-            {
-            	c = 0;
-                if(name.length() >= 4 && name.charAt(2) == 'x')
-                {
-                    c = Integer.parseInt(name.substring(3), 16);
-                }
-                else if(name.length() >= 3)
-                {
-                    c = Integer.parseInt(name.substring(2));
-                }
-				return (short)c;
-            }
-            catch(NumberFormatException e)
-            {
-            	return 0;
-            }
-        }
+		// numeric entitity: name = "&#" followed by number
+		if(name.charAt(1) == '#')
+		{
+			try
+			{
+				int c = -1; // -1 on missing/bad number
+				// 'x' prefix denotes hexadecimal number format
+				if(name.charAt(2) == 'x' && length >= 4 && length <= 8)
+				{
+					c = Integer.parseInt(name.substring(3, length-1), 16);
+				}
+				else if(length >= 3  && length <= 8)
+				{
+					c = Integer.parseInt(name.substring(2, length-1));
+				}
+				return c;
+			}
+			catch(NumberFormatException e)
+			{
+				return -1;
+			}
+		}
 
-        /* Named entity: name ="&" followed by a name */
-        MappingEntry ent = (MappingEntry)ENTITIES_BY_NAME.get(name.substring(1));
-        if(ent != null)
-        {
-            return ent.getUnicodeCode();
-        }
+		// Named entity: name ="&" followed by a name
+		String key = name.substring(1, length-1);
+		MappingEntry ent = (MappingEntry)ENTITIES_BY_NAME.get(key);
+		if(ent != null)
+		{
+			return ent.getUnicodeCode();
+		}
 
-        return 0; /* zero signifies unknown entity name */
+		return -1; // -1 signifies unknown entity name
     }
 }
 
