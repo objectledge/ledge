@@ -514,7 +514,7 @@ public class DirectoryUserManager extends UserManager
             while(answer.hasMore())
             {
                 SearchResult result = (SearchResult)answer.next();
-                results.add(result.getName());
+                results.add(result.getNameInNamespace());
             }
             return results;
         } 
@@ -544,7 +544,7 @@ public class DirectoryUserManager extends UserManager
             while(answer.hasMore())
             {
                 SearchResult result = (SearchResult)answer.next();
-                results.add(result.getName());
+                results.add(result.getNameInNamespace());
             }
             return results;
         } 
