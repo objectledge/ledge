@@ -33,13 +33,11 @@ import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.HttpContext;
 
-import sun.net.www.http.HttpClient;
-
 /**
  * Context tool factory component for html entity encoder tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoderToolFactory.java,v 1.1 2004-02-03 13:51:42 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoderToolFactory.java,v 1.2 2004-02-03 13:53:40 zwierzem Exp $
  */
 public class HTMLEntityEncoderToolFactory implements ContextToolFactory
 {
