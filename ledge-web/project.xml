@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.5 2003-12-22 15:15:02 fil Exp $ -->
+<!-- $Id: project.xml,v 1.6 2003-12-22 15:42:05 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -61,10 +61,23 @@
       <version>2.3</version>
     </dependency>
     <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picocontainer-1.0</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://picocontainer.org/</url>
+    </dependency>
+    <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-api</artifactId>
       <version>1.1-rc2</version>
       <url>http://dna.jcontainer.org</url>
+    </dependency>
+    <!-- testing -->
+    <dependency>
+      <groupId>httpunit</groupId>
+      <artifactId>httpunit</artifactId>
+      <version>1.5.4</version>
+      <url>http://httpunit.sourceforge.net</url>
     </dependency>
   </dependencies>
 

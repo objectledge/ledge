@@ -8,5 +8,6 @@
     <classpathentry kind="src" path="/ledge-components"/>
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
     <classpathentry kind="src" path="/dna"/>
+    <classpathentry kind="var" path="MAVEN_REPO/httpunit/jars/httpunit-1.5.3.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
