@@ -46,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.5 2004-01-26 09:09:34 pablo Exp $
+ * @version $Id: DefaultParameters.java,v 1.6 2004-01-27 16:47:25 fil Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -86,22 +86,14 @@ public class DefaultParameters implements Parameters
      * 
      * @param is the stream with byte representation of the container.
      * @param encoding the encoding of the source.
+     * @throws UnsupportedEncodingException if the specified encoding is not supported by the JVM.
+     * @throws IOException if there is an error reading data from the stream.
      */
     public DefaultParameters(InputStream is, String encoding)
+        throws IOException, UnsupportedEncodingException
     {
-        try
-        {
-            LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, encoding));
-            loadParameters(reader);
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new IllegalArgumentException("Unknown Character Exception");
-        }
-        catch (IOException e)
-        {
-            throw new IllegalArgumentException("IOException occurred" + e.getMessage());
-        }
+        LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, encoding));
+        loadParameters(reader);
     }
 
     /**

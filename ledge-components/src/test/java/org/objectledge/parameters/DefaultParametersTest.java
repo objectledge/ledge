@@ -120,6 +120,7 @@ public class DefaultParametersTest extends TestCase
      * 
      */
     public void testParametersImplInputStreamString()
+        throws Exception
     {
         InputStream is = new ByteArrayInputStream("foo=bar\n".getBytes());
         params = new DefaultParameters(is, "ISO-8859-1");
