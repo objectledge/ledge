@@ -5,15 +5,19 @@
  */
 package org.objectledge.configuration;
 
+import java.io.IOException;
+
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.jcontainer.dna.impl.SAXConfigurationSerializer;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.pico.customization.CustomizedComponentAdapter;
 import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.UnsupportedKeyTypeException;
+import org.objectledge.xml.XMLValidator;
 import org.picocontainer.ComponentAdapter;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
@@ -23,13 +27,17 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+
+import com.thaiopensource.validate.IncorrectSchemaException;
+import com.thaiopensource.validate.Validator;
 
 /**
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.5 2003-12-01 15:59:23 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.6 2003-12-02 13:19:14 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -37,6 +45,8 @@ public class ConfigurationFactory
     private FileSystem fileSystem;
     
     private String directory;
+    
+    private XMLValidator xmlValidator;
     
     /**
      * Creates a new instance of ConfigurationFactory.
@@ -46,9 +56,10 @@ public class ConfigurationFactory
      * @param directory the name of the directory where configurations reside.
      */
     public ConfigurationFactory(MutablePicoContainer container, FileSystem fileSystem, 
-        String directory)
+        XMLValidator xmlValidator, String directory)
     {
         this.fileSystem = fileSystem;
+        this.xmlValidator = xmlValidator;
         this.directory = directory;
         if(container != null)
         {
@@ -66,9 +77,15 @@ public class ConfigurationFactory
     {
         String name = getComponentName(key);
         String path = getComponentConfigurationPath(key);
+        String schema = getComponentConfigurationSchemaPath(key);
         if(!fileSystem.exists(path))
         {
             throw new ComponentInitializationError("configuration file "+path+" for component "+
+                name+" not found");
+        }
+        if(!fileSystem.exists(schema))
+        {
+            throw new ComponentInitializationError("schema file "+schema+" for component "+
                 name+" not found");
         }
         Configuration configuration;
@@ -82,17 +99,15 @@ public class ConfigurationFactory
             InputSource source = new InputSource(fileSystem.getInputStream(path));
             reader.parse(source);
             configuration = handler.getConfiguration();
+            //checkSchema(configuration, schema);
+            checkSchema(path, schema);
+        }
+        catch(SAXParseException e)
+        {
+            throw new ComponentInitializationError("parser error "+e.getMessage()+" in "+
+                e.getSystemId()+" at line "+e.getLineNumber()+" column "+e.getColumnNumber(), e);
         }
         catch(Exception e)
-        {
-            throw new ComponentInitializationError("failed to parse configuration file "+
-                path+" for compoenent "+name, e);
-        }
-        try
-        {
-            checkSchema(configuration, getComponentConfigurationSchemaPath(key));
-        }
-        catch(SAXException e)
         {
             throw new ComponentInitializationError("configuration file "+
                 path+" for compoenent "+name+" does not fullfill schema constraints", e);
@@ -158,11 +173,11 @@ public class ConfigurationFactory
     {
         if(componentKey instanceof Class)
         {
-            return directory+((Class)componentKey).getName()+".xml";
+            return directory+"/"+((Class)componentKey).getName()+".xml";
         }
         else if(componentKey instanceof String)
         {
-            return directory+((String)componentKey).replace(':','-')+".xml";
+            return directory+"/"+((String)componentKey).replace(':','-')+".xml";
         }
         else
         {
@@ -183,7 +198,7 @@ public class ConfigurationFactory
     {
         if(componentKey instanceof Class)
         {
-            return ((Class)componentKey).getName().replace('.','/')+".schema";
+            return ((Class)componentKey).getName().replace('.','/')+".rng";
         }
         else if(componentKey instanceof String)
         {
@@ -192,7 +207,7 @@ public class ConfigurationFactory
             {
                 key = key.substring(0, key.indexOf(':')); 
             }
-            return key.replace('.','/')+".schema";
+            return key.replace('.','/')+".rng";
         }
         else
         {
@@ -209,9 +224,26 @@ public class ConfigurationFactory
      * @throws Exception if a schema violation is detected.
      */
     protected void checkSchema(Configuration configuration, String schemaPath)
-        throws SAXException
+        throws SAXException, IOException, IncorrectSchemaException
     {
-        // TODO implement schema checking
+        xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+        Validator validator = xmlValidator.getValidator(schemaPath);
+        SAXConfigurationSerializer serializer = new SAXConfigurationSerializer();
+        serializer.serialize(configuration, validator.getContentHandler());
+    }
+
+    /**
+     * Checks if an xml file fulfills it's associated schema.
+     * 
+     * @param configuration the configuration file path.
+     * @param schemaPath the the schema file path.
+     * @throws Exception if a schema violation is detected.
+     */
+    protected void checkSchema(String configuration, String schemaPath)
+        throws SAXException, IOException, IncorrectSchemaException
+    {
+        xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+        xmlValidator.validate(configuration, schemaPath);
     }
 
     /**
