@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 //
-package org.objectledge.web;
+package org.objectledge.web.mvc;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,13 +33,13 @@ import java.io.PrintWriter;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.PipelineProcessingException;
 import org.objectledge.utils.StringUtils;
-import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.HttpContext;
 
 /**
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResponseWriterValve.java,v 1.2 2004-01-13 15:48:39 pablo Exp $
+ * @version $Id: ResponseWriterValve.java,v 1.1 2004-01-14 12:42:23 fil Exp $
  */
 public class ResponseWriterValve implements Runnable
 {
