@@ -140,8 +140,15 @@ public class XMLI18nTest extends TestCase
 		String[] values = new String[]{"foo","bar"};
 		assertEquals("foo_foo_bar_bar", tool.get(key, values));
     	assertEquals("bar", tool.get("foo.bar.foo"));
-    	tool = tool.usePrefix("foo.bar");
-    	assertEquals("bar", tool.get("foo"));
+    	tool = tool.usePrefix("foo");
+    	assertEquals("bar", tool.get("bar.foo"));
+		tool = tool.usePrefix("bar");
+		assertEquals("bar", tool.get("foo"));
+		tool = tool.useLocale("en_EN");
+		assertEquals("bar", tool.get("foo"));
+		String output = tool.get(key, values);
+		assertEquals("foo.bar.foo_foo_bar_bar", output);
+		tool = tool.usePrefix("");
     }
 
     public void testGetKey()
