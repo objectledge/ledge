@@ -45,7 +45,7 @@ import java.util.Map;
  * being otherwise being eligible to collection.</p>  
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Context.java,v 1.4 2004-01-14 13:37:50 fil Exp $
+ * @version $Id: Context.java,v 1.5 2004-01-14 14:04:43 fil Exp $
  */
 public class Context
 {
@@ -111,6 +111,19 @@ public class Context
     public Object removeAttribute(String name)
     {
         return getAttributes().remove(name);
+    }
+
+    /**
+     * Removes a context attribute.
+     * 
+     * <p>Class object and the class name String are considered to be equivalent keys.</p>
+     *       
+     * @param key Class key of the attribute.
+     * @return the old value of the attribute.
+     */
+    public Object removeAttribute(Class key)
+    {
+        return getAttributes().remove(key.getName());
     }
     
     /**
