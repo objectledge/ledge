@@ -9,17 +9,13 @@ import com.steadystate.css.ParseException;
 /**
  * Reads in a style string.
  *
- * $Id: CSSParser.java,v 1.1 2005-01-19 06:55:37 pablo Exp $
+ * $Id: CSSParser.java,v 1.2 2005-02-10 17:49:15 rafal Exp $
  * @author <a href="mailto:zwierzem@ngo.pl>Damian Gajda</a>
  */
 public class CSSParser
 {
     /** Parser. */
     private CSS2Parser fParser = null;
-
-    public CSSParser()
-    {
-    }
 
     /** Method for parsing short style declarations embedded in a XML document. */
     public CSSStyle parse(String s)

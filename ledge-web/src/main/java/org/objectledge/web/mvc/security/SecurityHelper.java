@@ -38,18 +38,10 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SecurityHelper.java,v 1.8 2004-12-22 08:58:35 rafal Exp $
+ * @version $Id: SecurityHelper.java,v 1.9 2005-02-10 17:49:11 rafal Exp $
  */
 public class SecurityHelper
 {
-    /**
-     * The constructor.
-     */
-    public SecurityHelper()
-    {
-        
-    }
-
     /**
      * Check the security on object.
      * 

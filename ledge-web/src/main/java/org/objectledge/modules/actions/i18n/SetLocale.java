@@ -48,20 +48,11 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetLocale.java,v 1.2 2004-12-22 08:58:27 rafal Exp $
+ * @version $Id: SetLocale.java,v 1.3 2005-02-10 17:49:10 rafal Exp $
  */
 public class SetLocale 
     implements Valve
 {
-    /**
-     * Action constructor.
-     * 
-     * @param context the context.
-     */
-    public SetLocale(Context context)
-    {
-    }
-
     /**
      * Run the valve.
      * 

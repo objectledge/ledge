@@ -7,14 +7,10 @@ import pl.caltha.forms.ConstructionException;
  *
  * @see pl.caltha.forms.internal.ui.Control
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DescriptionCaption.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: DescriptionCaption.java,v 1.2 2005-02-10 17:49:14 rafal Exp $
  */
 public class DescriptionCaption extends Parent
 {
-    public DescriptionCaption()
-    {
-    }
-
     //------------------------------------------------------------------------
     // associations
     /** Object containing caption text for this control. */

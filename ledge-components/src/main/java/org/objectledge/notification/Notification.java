@@ -36,15 +36,6 @@ package org.objectledge.notification;
 public class Notification
 {
     /**
-     * Component constructor.
-     *
-     */
-    public Notification()
-    {
-        
-    }
-    
-    /**
      * Registers a notification receiver for a specified channel.
      *
      * @param channel the chnnel name.

@@ -40,18 +40,11 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.5 2004-10-04 14:25:22 zwierzem Exp $
+ * @version $Id: MVCResultsValve.java,v 1.6 2005-02-10 17:49:04 rafal Exp $
  */
 public class MVCResultsValve 
     implements Valve
 {
-	/**
-	 * Component constructor.
-	 */
-	public MVCResultsValve()
-	{
-	}
-	
 	/**
 	 * Run view building starting from a view builder chosen in request parameters.
      * 

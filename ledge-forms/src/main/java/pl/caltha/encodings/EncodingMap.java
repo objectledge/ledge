@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Data derived from Xerces-J 2 <code>org.apache.xerces.util.EncodingMap</code> class.
  *
  * @author    <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version   $Id: EncodingMap.java,v 1.1 2005-01-19 06:55:41 pablo Exp $
+ * @version   $Id: EncodingMap.java,v 1.2 2005-02-10 17:49:13 rafal Exp $
  */
 public class EncodingMap
 {
@@ -300,12 +300,6 @@ public class EncodingMap
         fJava2IANAMap.put("JIS0212",  "ISO-IR-159");
 
     } // <clinit>()
-
-    /** Default constructor. */
-    public EncodingMap()
-    {
-    }
-
 
     /**
      * Returns the Java encoding name for the specified IANA encoding name.

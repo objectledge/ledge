@@ -34,17 +34,10 @@ import org.objectledge.templating.tools.ContextToolFactory;
  * Context tool factory component to build the user agent tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringToolFactory.java,v 1.2 2004-08-02 13:17:51 zwierzem Exp $
+ * @version $Id: StringToolFactory.java,v 1.3 2005-02-10 17:49:06 rafal Exp $
  */
 public class StringToolFactory implements ContextToolFactory
 {
-	/**
-	 * Component constructor.
- 	 */
-	public StringToolFactory()
-	{
-	}
-	
     /**
 	 * {@inheritDoc}
 	 */

@@ -40,7 +40,7 @@ import org.objectledge.database.persistence.PersistentFactory;
  * An implementation of ValueFactory interface that uses the persistency.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PersistenceValueFactory.java,v 1.4 2004-02-26 11:34:25 fil Exp $
+ * @version $Id: PersistenceValueFactory.java,v 1.5 2005-02-10 17:49:17 rafal Exp $
  */
 public class PersistenceValueFactory
     implements ConfigurableValueFactory
@@ -54,13 +54,6 @@ public class PersistenceValueFactory
      * The persistence.
      */
     private Persistence persistence;
-
-    /**
-     * The constructor.
-     */
-    public PersistenceValueFactory()
-    {
-    }
 
     /**
      * Initializes the factory.

@@ -48,20 +48,11 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.3 2004-12-23 01:57:05 rafal Exp $
+ * @version $Id: SetEncoding.java,v 1.4 2005-02-10 17:49:10 rafal Exp $
  */
 public class SetEncoding 
     implements Valve
 {
-    /**
-     * Action constructor.
-     * 
-     * @param context the context.
-     */
-    public SetEncoding(Context context)
-    {
-    }
-
     /**
      * Run the valve.
      * 

@@ -39,20 +39,12 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AlternateComponentAdapterFactory.java,v 1.1 2005-02-04 02:29:26 rafal Exp $
+ * @version $Id: AlternateComponentAdapterFactory.java,v 1.2 2005-02-10 17:49:00 rafal Exp $
  */
 public class AlternateComponentAdapterFactory
     implements ComponentAdapterFactory
 {
     private final ComponentAdapterFactory factory = new DefaultComponentAdapterFactory();
-    
-    /**
-     * Creates new AlternateComponentAdapterFactory instance.
-     */
-    public AlternateComponentAdapterFactory()
-    {
-        
-    }
     
     /**
      * {@inheritDoc}

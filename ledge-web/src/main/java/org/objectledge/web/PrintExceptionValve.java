@@ -41,18 +41,11 @@ import org.objectledge.utils.StringUtils;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintExceptionValve.java,v 1.4 2004-06-23 15:00:34 fil Exp $
+ * @version $Id: PrintExceptionValve.java,v 1.5 2005-02-10 17:49:09 rafal Exp $
  */
 public class PrintExceptionValve 
     implements Valve
 {
-	/**
-	 * Component constructor.
-	 */
-	public PrintExceptionValve()
-	{
-	}
-	
 	/**
 	 * Run view building starting from a view builder chosen in request parameters.
      * 

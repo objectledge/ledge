@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.6 2004-03-23 12:10:37 pablo Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.7 2005-02-10 17:49:05 rafal Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager
@@ -57,13 +57,6 @@ public class TableStateManagerImpl
 
     /** name/id mapping */
     private Map byIdMapping = new HashMap();
-
-    /**
-     * Component constructor.
-     */
-    public TableStateManagerImpl()
-    {
-    }
 
     // user access methods /////////////////////////////////////////////////////////////////////////
 
@@ -154,10 +147,6 @@ public class TableStateManagerImpl
     private class TableData
     {
         private Map map = new HashMap();
-
-        TableData()
-        {
-        }
 
         Object get(Object key)
         {

@@ -36,13 +36,6 @@ package org.objectledge.scheduler;
 public class AtScheduleFactory implements ScheduleFactory
 {
     /**
-     * Component constructor.
-     */
-    public AtScheduleFactory()
-    {
-    }
-
-    /**
      * {@inheritDoc}
      */
     public Schedule getInstance()

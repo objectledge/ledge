@@ -34,17 +34,10 @@ import org.objectledge.templating.tools.ContextToolFactory;
  * Context tool factory component to build the email tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EmailToolFactory.java,v 1.1 2005-02-01 06:02:50 zwierzem Exp $
+ * @version $Id: EmailToolFactory.java,v 1.2 2005-02-10 17:49:06 rafal Exp $
  */
 public class EmailToolFactory implements ContextToolFactory
 {
-	/**
-	 * Component constructor.
- 	 */
-	public EmailToolFactory()
-	{
-	}
-	
     /**
 	 * {@inheritDoc}
 	 */
