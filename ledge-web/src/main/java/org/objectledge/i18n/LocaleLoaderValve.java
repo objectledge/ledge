@@ -39,7 +39,6 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.mvc.MVCContextImpl;
 
 /**
  * Pipeline processing valve that sets the locale.
@@ -47,7 +46,7 @@ import org.objectledge.web.mvc.MVCContextImpl;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * 
- * @version $Id: LocaleLoaderValve.java,v 1.1 2004-01-12 14:42:16 fil Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.2 2004-01-12 15:52:11 fil Exp $
  */
 public class LocaleLoaderValve implements Runnable, WebConstants
 {
@@ -79,7 +78,7 @@ public class LocaleLoaderValve implements Runnable, WebConstants
 		String defaultEncoding = "ISO-8858-1";
 		
         HttpContext httpContext = HttpContext.retrieve(context);
-        MVCContext mvcContext = MVCContextImpl.retrieve(context);
+        MVCContext mvcContext = MVCContext.retrieve(context);
 
         // set up cookie keys - neccessary for browsers with multiple
         // users on a single user system - for instance Win95/98

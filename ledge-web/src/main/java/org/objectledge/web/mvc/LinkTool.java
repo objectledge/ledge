@@ -109,7 +109,7 @@ public class LinkTool
 	{
 		this.context = context;
 		this.config = config;
-		mvcContext = MVCContextImpl.retrieve(context);
+		mvcContext = MVCContext.retrieve(context);
 		httpContext = HttpContext.retrieve(context);
 		requestParameters = RequestParameters.retrieve(context);
 		resourceLink = false;

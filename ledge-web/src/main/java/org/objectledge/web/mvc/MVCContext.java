@@ -31,121 +31,217 @@ package org.objectledge.web.mvc;
 import java.security.Principal;
 import java.util.Locale;
 
+import org.objectledge.context.Context;
+
 /**
- * The pieline context contains all needed information for pipeline processing.
+ * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.2 2003-12-30 17:26:25 zwierzem Exp $
+ * @version $Id: MVCContext.java,v 1.3 2004-01-12 15:52:12 fil Exp $
  */
-public interface MVCContext
+public class MVCContext
 {
-	/** key to store this context in thread context */
-	public static final String CONTEXT_KEY = "objectledge.web.pipeline_context";
+    /** key to store this context in thread context */
+    public static final String CONTEXT_KEY = "objectledge.web.pipeline_context";
+    
+	/**
+	 *  Usefull method to retrieve http context from context.
+	 *
+	 * @param context the context.
+	 * @return the http context.
+	 */
+	public static MVCContext retrieve(Context context)
+	{
+		return (MVCContext)context.getAttribute(CONTEXT_KEY);
+	}
+
+	/** the action parameter. */
+	protected String action;
+
+	/** the view parameter. */
+	private String view;
+
+	/** the locale */
+	private Locale locale;
+
+	/** the encoding */
+	private String encoding;
+
+	/** the media */
+	private String media;
+
+    /** the user. */
+	private Principal user;
+
+    /** is the user authenticated */
+	private boolean authenticated;
+
+	/** the view build result */
+	private String buildResult;
+
+
+	/**
+	 * Construct new pipeline context.
+	 */
+	public MVCContext()
+	{
+		user = null;
+		authenticated = false;
+		// TODO load some default values - but from?
+		locale = new Locale("pl","PL");
+		encoding = "ISO-8859-2";
+	}
 	
-	/**
-	 * Returns the action paremeter.
-	 * 
-	 * @return the value of action parameter.
-	 */
-	public String getAction();
+    /**
+     * Returns the action paremeter.
+     * 
+     * @return the value of action parameter.
+     */
+	public String getAction()
+	{
+		return view;
+	}
 
-	/**
-	 * Sets the action parameter.
-	 *
-	 * @param action the action parameter.
-	 */
-	public void setAction(String action);
+    /**
+     * Sets the action parameter.
+     *
+     * @param action the action parameter.
+     */
+	public void setAction(String action)
+	{
+		this.action = action;
+	}
 
-	/**
-	 * Returns the view paremeter.
-	 *
-	 * @return the value of view parameter.
-	 */
-	public String getView();
+    /**
+     * Returns the view paremeter.
+     *
+     * @return the value of view parameter.
+     */
+	public String getView()
+	{
+		return view;
+	}
+
+    /**
+     * Sets the view parameter.
+     *
+     * @param view the view parameter.
+     */
+	public void setView(String view)
+	{
+		this.view = view;
+	}
 	
-	/**
-	 * Sets the view parameter.
-	 *
-	 * @param view the view parameter.
-	 */
-	public void setView(String view);
+    /**
+     * Returns the locale.
+     *
+     * @return the locale
+     */
+	public Locale getLocale()
+	{
+		return locale;
+	}
+
+    /**
+     * Sets the locale.
+     *
+     * @param locale the locale.
+     */
+    public void setLocale(Locale locale)
+    {
+    	this.locale = locale;
+    }
+
+    /**
+     * Returns the encoding.
+     *
+     * @return the encoding.
+     */
+    public String getEncoding()
+	{
+		return encoding;
+	}
+
+    /**
+     * Sets the encoding.
+     *
+     * @param encoding the encoding.
+     */
+    public void setEncoding(String encoding)
+    {
+    	this.encoding = encoding;
+    }
 	
-	/**
-	 * Returns the locale.
-	 *
-	 * @return the locale
-	 */
-	public Locale getLocale();
+    /**
+     * Returns the media.
+     *
+     * @return the media.
+     */
+    public String getMedia()
+    {
+    	return media;
+    }
 
-	/**
-	 * Sets the locale.
-	 *
-	 * @param locale the locale.
-	 */
-	public void setLocale(Locale locale);
+    /**
+     * Sets the media.
+     *
+     * @param media the media.
+     */
+    public void setMedia(String media)
+    {
+    	this.media = media;
+    }
 
-	/**
-	 * Returns the encoding.
-	 *
-	 * @return the encoding.
-	 */
-	public String getEncoding();
+    /**
+     * Returns the user performing the request.
+     *
+     * @return the user.
+     */
+    public Principal getUserPrincipal()
+    {
+    	return user;
+    }
 
-	/**
-	 * Sets the encoding.
-	 *
-	 * @param encoding the encoding.
-	 */
-	public void setEncoding(String encoding);
-	
-	/**
-	 * Returns the media.
-	 *
-	 * @return the media.
-	 */
-	public String getMedia();
+    /**
+     * Checks whether user is authenticated by system. 
+     * 
+     * @return <code>true</code> if the current user is not an anounymous.
+     */
+    public boolean isUserAuthenticated()
+    {
+    	return authenticated;
+    }
 
-	/**
-	 * Sets the media.
-	 *
-	 * @param media the media.
-	 */
-	public void setMedia(String media);
+    /**
+     * Sets the current authenticated user.
+     *
+     * @param user the current authenticated user.
+     * @param authenticated <code>true</code> if named user is authenticated.
+     */
+    public void setUserPrincipal(Principal user, boolean authenticated)
+    {
+    	this.user = user;
+    	this.authenticated = authenticated;
+    }
 
-	/**
-	 * Returns the user performing the request.
-	 *
-	 * @return the user.
-	 */
-	public Principal getUserPrincipal();
-
-	/**
-	 * Checks whether user is authenticated by system. 
-	 * 
-	 * @return <code>true</code> if the current user is not an anounymous.
-	 */
-	public boolean isUserAuthenticated();
-
-	/**
-	 * Sets the current authenticated user.
-	 *
-	 * @param user the current authenticated user.
-	 * @param authenticated <code>true</code> if named user is authenticated.
-	 */
-	public void setUserPrincipal(Principal user, boolean authenticated);
-
-	/**
-	 * Gets the result of building the view part of MVC pipeline.
-	 * 
-	 * @return the result of building the MVC view
-	 */
-	public String getBuildResult();
+    /**
+     * Gets the result of building the view part of MVC pipeline.
+     * 
+     * @return the result of building the MVC view
+     */
+    public String getBuildResult()
+    {
+        return buildResult;
+    }
 
     /**
      * Sets the result of building the view part of MVC pipeline.
      * 
      * @param buildResult a string representing built view which should be sent to the browser
      */
-    public void setBuildResult(String buildResult);
+    public void setBuildResult(String buildResult)
+    {
+    	this.buildResult = buildResult;
+    }
 }

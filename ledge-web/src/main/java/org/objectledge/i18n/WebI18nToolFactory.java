@@ -31,7 +31,6 @@ package org.objectledge.i18n;
 import org.objectledge.context.Context;
 import org.objectledge.templating.ContextToolFactory;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.mvc.MVCContextImpl;
 
 /**
  * Base implementation of I18n component.
@@ -63,7 +62,7 @@ public class WebI18nToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		MVCContext pipelineContext = MVCContextImpl.retrieve(context);
+		MVCContext pipelineContext = MVCContext.retrieve(context);
 		return new I18nTool(i18n, this, pipelineContext.getLocale(), null);
 	}
 	

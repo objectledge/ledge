@@ -30,13 +30,12 @@ package org.objectledge.web.mvc.actions;
 import org.objectledge.context.Context;
 import org.objectledge.web.mvc.MVCClassFinder;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.mvc.MVCContextImpl;
 
 /**
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutor.java,v 1.1 2003-12-30 17:26:25 zwierzem Exp $
+ * @version $Id: ActionExecutor.java,v 1.2 2004-01-12 15:52:11 fil Exp $
  */
 public class ActionExecutor implements Runnable
 {
@@ -63,7 +62,7 @@ public class ActionExecutor implements Runnable
     public void run()
     {
 		// setup used contexts
-		MVCContext mvcContext = MVCContextImpl.retrieve(context);
+		MVCContext mvcContext = MVCContext.retrieve(context);
 		// get and execute action
 		Runnable action = classFinder.findAction(mvcContext.getAction());
 		action.run();
