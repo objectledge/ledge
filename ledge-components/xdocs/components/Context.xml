@@ -6,30 +6,43 @@
 
   <body>
     <section name="Context">
-      <p>Dependencies:
-        <table>
-          <tr>
-            <th>required components</th>
-            <td width="100%">none</td>
-          </tr>
-          <tr>
-            <th>required libraries</th>
-            <td>none</td>
-          </tr>
-        </table>
-      </p>
+      <subsection name="Description">
+        <p>Provides dependant components with a nontion of <em>thread context</em>, that is a set
+        of name - value pairs (boths elements are arbitrary Java objectss) that is specific
+	    to the currently executing thread. This allows passing information across the method
+	    call stack without actually pushing it through formal arguments. Servlet Request and
+  	    Response objects, authentication and transactiotion managment objects are conveniently
+   	    passed around using thread context.</p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>Context <a href="../apidocs/org/objectledge/context/Context.html">JavaDoc</a></li>
+            <li>Context <a href="../xref/org/objectledge/context/Context.html">JavaDoc</a></li>
+            <li>Context <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/context/Context.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">none</td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>  
 
-      <p>Provides dependant components with a nontion of <em>thread context</em>, that is a set
-      of name - value pairs (boths elements are arbitrary Java objectss) that is specific
-	  to the currently executing thread. This allows passing information across the method
-	  call stack without actually pushing it through formal arguments. Servlet Request and
-	  Response objects, authentication and transactiotion managment objects are conveniently
-	  passed around using thread context.</p>
-
-	  <p><a href="../apidocs/org/objectledge/context/Context.html">View JavaDoc</a></p>
-
-      <p>Constructor parameters:<br/>
-	  none</p>
+      <subsection name="Constructor parameters">
+  	    <p>none</p>
+  	  </subsection>
     </section>
   </body>
 </document>  

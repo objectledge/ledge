@@ -6,25 +6,33 @@
   
   <body>
     <section name="Ledge XmlFrontEnd">
-	
-      <p>Ledge XmlFrontEnd has the same functionality as the Nano-provided one but with a few 
-      changes and additions.
-      </p>
-      <ul>
-        <li>ComponentAdapterFactory may be declared for the top level container</li>
-        <li>ComponentAdapterFactory may be declared using tags, with nesting 
-          (DecoratingComponentAdapterFactoryPatern)</li>
-        <li>for both components and component-parameters, both string and class keys may be used</li>
-        <li><a href="SequenceParameter.html">SeuqenceParameters</a> are supported</li>
-        <li>The composition is checked against a RelaxNG schema.</li>
-      </ul>
-
-      <p><a href="../apidocs/org/objectledge/container/LedgeContainer.html">View JavaDoc</a></p>
+      <subsection name="Description">
+        <p>Ledge XmlFrontEnd has the same functionality as the Nano-provided one but with a few 
+        changes and additions.
+        </p>
+        <p>
+          <ul>
+            <li>ComponentAdapterFactory may be declared for the top level container</li>
+            <li>ComponentAdapterFactory may be declared using tags, with nesting 
+              (DecoratingComponentAdapterFactoryPatern)</li>
+            <li>for both components and component-parameters, both string and class keys may be used</li>
+            <li><a href="SequenceParameter.html">SeuqenceParameters</a> are supported</li>
+            <li>The composition is checked against a RelaxNG schema.</li>
+          </ul>
+        </p>
+      </subsection>
       
-      <p>View composition <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/pico/xml/container.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a>.</p>
-      
-      <p>View example compositinon <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/test/resources/container1/config/container.xml?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">file</a>.</p>
-		
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>LedgeXmlFrontEnd <a href="../apidocs/org/objectledge/pico/xml/LedgeXmlFrontEnd.html">JavaDoc</a></li>
+            <li>LedgeXmlFrontEnd <a href="../xref/org/objectledge/pico/xml/LedgeXmlFrontEnd.html">XRef</a></li>
+            <li>LedgeXmlFrontEnd <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/container/LedgeXmlFrontEnd.java">CVS log</a></li>
+            <li>Composition file <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/pico/xml/container.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
+            <li>Composition file <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/test/resources/container1/config/container.xml?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">file</a></li>
+          </ul>
+        </p>
+      </subsection>
     </section>
   </body>
 </document>  

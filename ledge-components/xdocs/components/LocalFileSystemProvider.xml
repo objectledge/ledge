@@ -6,51 +6,65 @@
 
   <body>
     <section name="LocalFileSystemProvider">
-      <p>Dependencies:
-        <table>
-          <tr>
-            <th>required components</th>
-            <td width="100%">none</td>
-          </tr>
-          <tr>
-            <th>required libraries</th>
-            <td>none</td>
-          </tr>
-        </table>
-      </p>
+      <subsection name="Description">
+        <p>This is the basic implementation of the <code>FileSystemProvider</code> interaface 
+        operating over local file system. It supports read and write operations. Stat operations
+        (size, modification time) and directory listings are reported from actual data.</p>
+      </subsection>
+	    
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>LocalFileSystemProvider <a href="../apidocs/org/objectledge/filesystem/impl/LocalFileSystemProvider.html">JavaDoc</a></li>
+            <li>LocalFileSystemProvider <a href="../xref/org/objectledge/filesystem/impl/LocalFileSystemProvider.html">XRef</a></li>
+            <li>LocalFileSystemProvider <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/filesystem/impl/LocalFileSystemProvider.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+    
+      <subsection name="Dependencies">
+		<p> 
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">none</td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
 
-      <p>This is the basic implementation of the <code>FileSystemProvider</code> interaface 
-      operating over local file system. It supports read and write operations. Stat operations
-      (size, modification time) and directory listings are reported from actual data.</p>
-
-	  <p><a href="../apidocs/org/objectledge/filesystem/impl/LocalFileSystemProvider.html">View JavaDoc</a></p>
-
-	  <p>Constructor parameters:
-		<table>
-		  <tr>
-		    <th>position</th>
-		    <th>type</th>
-		    <th widht="100%">descritpion</th>
-		  </tr>
-		  <tr>
-		    <td>1</td>
-  	        <td>String</td>
-	        <td>name of the provider, used in <code>FileSystem.getProvider(String)</code> calls, 
-	        and returned from <code>FileSystemProvider.getName()</code> calls on providers returned 
-	        from <code>FileSystem.getProviders()</code> method.</td>
-	      </tr>
-	      <tr>
-	        <td>2</td>
-	        <td>String</td>
-	        <td>pathname of a directory on the local filesystem. May be either absolute (starting 
-	        with platform's directory separator character or &lt;drive-letter&gt;:\ token), 
-	        relative to the  user's home directory, as defined by <code>user.home</code> (starting
-	        with ~&lt;directory-separator&gt; token), or relative to the application's working 
-	        directory, as defined by <code>user.dir</code> system property. <br/>
-	        The pathname must point to a valid readable directory.</td>
-	      </tr>
-	    </table>
-	  </p>      
+      <subsection name="Constructor parameters">
+  	    <p>
+		  <table>
+		    <tr>
+		      <th>position</th>
+		      <th>type</th>
+		      <th widht="100%">descritpion</th>
+  		    </tr>
+		    <tr>
+		      <td>1</td>
+  	          <td>String</td>
+	          <td>name of the provider, used in <code>FileSystem.getProvider(String)</code> calls, 
+	            and returned from <code>FileSystemProvider.getName()</code> calls on providers returned 
+	            from <code>FileSystem.getProviders()</code> method.</td>
+	        </tr>
+	        <tr>
+	          <td>2</td>
+	          <td>String</td>
+	          <td>pathname of a directory on the local filesystem. May be either absolute (starting 
+	            with platform's directory separator character or &lt;drive-letter&gt;:\ token), 
+	            relative to the  user's home directory, as defined by <code>user.home</code> (starting
+	            with ~&lt;directory-separator&gt; token), or relative to the application's working 
+	            directory, as defined by <code>user.dir</code> system property. <br/>
+	            The pathname must point to a valid readable directory.</td>
+	        </tr>
+	      </table>
+	    </p>      
+	  </subsection>
     </section>
   </body>
 </document>  

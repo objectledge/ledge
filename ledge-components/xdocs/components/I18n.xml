@@ -6,99 +6,97 @@
 
   <body>
     <section name="I18n">
-      <p>Dependencies:
-        <table>
-          <tr>
-            <th>required components</th>
-            <td width="100%">
-              <a href="FileSystem.html">FileSystem</a>, 
-              <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>, 
-              <a href="../../ledge-container/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>
-            </td>
-          </tr>
-          <tr>
-            <th>required libraries</th>
-            <td>DNA API (dna:dna-api)</td>
-          </tr>
-        </table>
-      </p>
+      <subsection name="Description">
+        <p>I18n component provide the access to the locale sensitive <code>String</code> resources.</p>
+      </subsection>
+    
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="FileSystem.html">FileSystem</a>, 
+                <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>, 
+                <a href="../../ledge-container/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>DNA API (dna:dna-api)</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+      
+      <subsection name="Browse">
+	    <p>
+	      <ul>
+	        <li>I18n <a href="../apidocs/org/objectledge/i18n/I18n.html">JavaDoc</a></li>
+	        <li>I18n <a href="../xref/org/objectledge/i18n/I18n.html">XRef</a></li>
+	        <li>I18n <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/i18n/I18n.java">CVS log</a></li>
+	        <!-- these are XMLI18n specific -->
+	        <li>XMLI18n configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/i18n/impl/XMLI18n.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
+	      </ul>
+	    </p>
+      </subsection>
 
-      <p>I18n component provide the access to the locale sensitive <code>String</code> resources.</p>
-
-	  <p><a href="../apidocs/org/objectledge/i18n/I18n.html">View JavaDoc</a></p>
-
-      <p>Constructor parameters<br/>
-      The default implementation based on XML requires following parameters:<br/>
-	    <table>
-	      <tr>
-	        <th>position</th>
-	        <th>type</th>
-	        <th widht="100%">descritpion</th>
-	      </tr>
-	      <tr>
-	        <td>1</td>
-	        <td><code>org.jcontainer.dna.Configuration</code></td>
-	        <td>the configuration</td>
-	      </tr>
-		  <tr>
-		    <td>2</td>
-		    <td><code>import org.jcontainer.dna.Logger</code></td>
-		    <td>the logger</td>
-		  </tr>
-		  <tr>
-		    <td>3</td>
-		    <td><code>org.objectledge.filesystem.FileSystem</code></td>
-		    <td>the file system to access the templates</td>
-		  </tr>
-		  <tr>
-		    <td>4</td>
-		    <td><code>java.lang.String</code></td>
-		    <td>the file system path to the directory that contatins localization files.</td>
-		  </tr>
-		</table>
-	  </p>
-	  <p>To configure the XMLI18n component see the rng schema
-	  <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/i18n/impl/XMLI18n.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">
-	  view schema</a></p>
-	  <subsection name="I18n files format">
-	  <p>The name of the file is being checked for validity based on following regular expression: <br/> 
-	    <pre>
-[a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.xml
-	    </pre>
-	    Be sure your files conform to this magical string. :-) 
-
-       </p>
-       <p>
-	    First part of the file name represents the namespace, 
-		second part is locale marker. Namespace elements are separated with dots, 
-		locale is composed of "language" and "country" (capitalized) parts.
+	  <!-- this should go into XMLI18n -->
+	  <subsection name="Constructor parameters">
+        <p>
+	      <table>
+	        <tr>
+  	          <th>position</th>
+	          <th>type</th>
+	          <th widht="100%">descritpion</th>
+	        </tr>
+	        <tr>
+	          <td>1</td>
+	          <td><code>org.jcontainer.dna.Configuration</code></td>
+	          <td>the configuration</td>
+	        </tr>
+		    <tr>
+		      <td>2</td>
+		      <td><code>org.jcontainer.dna.Logger</code></td>
+		      <td>the logger</td>
+		    </tr>
+		    <tr>
+		      <td>3</td>
+		      <td><code>org.objectledge.filesystem.FileSystem</code></td>
+		      <td>the file system to access the templates</td>
+		    </tr>
+		    <tr>
+		      <td>4</td>
+		      <td><code>java.lang.String</code></td>
+		      <td>the file system path to the directory that contatins localization files.</td>
+		    </tr>
+		  </table>
+ 	    </p>
+ 	  </subsection>  
+ 	  
+	  <subsection name="I18n localization files">
+  	    <p>The name of the localization files must conform to the following regular expression:
+	      <source>[a-zA-Z0-9]*(\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\.xml</source>
+        </p>
+        <p>
+	      First part of the file name represents the namespace, second part, separated by the first
+	      underscore character is locale marker. Namespace elements are separated with dots, 
+		  locale is composed of ISO language code and ISO country code. Language variants are not 
+		  supported at this time.
 		</p>
-		<p>
-		Language variants are not supported.
-
-        Here's an example of i18n usage:
-
-        We have a file in proper directory named as following:
-        <pre>
-foo.bar_pl_PL.xml
-        </pre>
-		
-	  </p>
-	  <p>File contains following XML code:<br/>
-      <pre>
-&lt;prefix name="foo2"&gt;
-  ...
-    &lt;prefix name=""bar2"&gt;
-      &lt;item name="baz"&gt;my_value&lt;/item&gt;
-    &lt;/prefix&gt;
-  ...
-&lt;/prefix&gt;
-      </pre>
-      The prefixes from file name and internal xml structure 
-      are joined into one namespace. Following the example, if you want to 
-      obtain the item value ('my_value') you should use: 
-      <code>foo.bar.foo2.&lt;...&gt;.bar2.baz</code> key.
-	  </p>
+		<p>Here's an example of namespace compositioning:
+          Consider a file in the localization data directory named:
+          <source>foo.bar_pl_PL.xml</source> containing the following XML markup:
+<source><![CDATA[<prefix name="foo2">
+  <prefix name="bar2">
+    <item name="baz">my_value</item>
+  </prefix>
+</prefix>]]></source>
+         The prefixes from file name and internal xml structure 
+         are composed into single namespace. Following the example, if you want to 
+         obtain the item value <code>my_value</code> you should use the following key: 
+         <source>foo.bar.foo2.bar2.baz</source>
+   	    </p>
 	  </subsection>
     </section>
   </body>

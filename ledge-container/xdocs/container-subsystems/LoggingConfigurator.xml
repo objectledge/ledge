@@ -6,64 +6,75 @@
 
   <body>
     <section name="Logging configurator">
-      <p>Dependencies:
-        <table>
-          <tr>
-            <th>required components</th>
-            <td width="100%"><a href="ConfigurationFactory.html">ConfigurationFactory</a></td>
-          </tr>
-          <tr>
-            <th>required libraries</th>
-            <td>Log4j (log4j)<br/></td>
-          </tr>
-        </table>
-      </p>
+      <subsection name="Description">
+        <p>LoggingConfigurator resposibility is setting up the Log4j. It was introduced so that
+        log system configufration were preformed in a way uniform with oterh parts of the system.
+        </p>
       
-      <p>LoggingConfigurator resposibility is setting up the Log4j. It was introduced so that
-      log system configufration were preformed in a way uniform with oterh parts of the system.
-      </p>
+        <p>At this point the configurator retrievs a configuration InputSource from the configuration
+        factory (it will get validated agains apropriate schema), parses it and passes on to Log4j  
+        DomConfigurator. In the future we may want to iterate over the configuration ourselves and
+        instantiate the needed objects (appenders etc. The Pico Way). This will allow a number of
+        neat things, including Appenders wrinting to Ledge FileSystem. Until then paths in the 
+        conifguration files need to be either absolute in the machine's FS, or relative to the
+        container's working directory.</p>
+      </subsection>
+
+	  <subsection name="Functionality anticipated in the future">
+        <p>
+          <ul>
+            <li>runtime modification of logging configuration, most notably logger verbosities</li>
+            <li>management of loggers through textual interaction, and possibly JMX</li>
+            <li>customized log4j file appenders working over Ledge FileSystem</li>
+          </ul>
+        </p>
+      </subsection>
       
-      <p>At this point the configurator retrievs a configuration InputSource from the configuration
-      factory (it will get validated agains apropriate schema), parses it and passes on to Log4j
-      DomConfigurator. In the future we may want to iterate over the configuration ourselves and
-      instantiate the needed objects (appenders etc. The Pico Way). This will allow a number of
-      neat things, including Appenders wrinting to Ledge FileSystem. Until then paths in the 
-      conifguration files need to be either absolute in the machine's FS, or relative to the
-      container's working directory.</p>
-      
-      <p>Log4j <a href="http://logging.apache.org/log4j">documentation</a>.</p>
-      
-      <p>Configuration file <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a>
-      generated from Log4j provided DTD.</p>
-      
-      <p>The above is rather complex, you may prefer to look at a configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/test/resources/container1/config/LoggingConfigurator.xml?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">example</a>.</p>
-      
-      <p>Functionality anticipated in the future:
-        <ul>
-          <li>runtime modification of logging configuration, most notably logger verbosities</li>
-          <li>management of loggers through textual interaction, and possibly JMX</li>
-          <li>customized log4j file appenders working over Ledge FileSystem</li>
-        </ul>
-      </p>
-      
-      <p><a href="../apidocs/org/objectledge/logging/LoggingConfigurator.html">View JavaDoc</a></p>
-		
-	  <p>Constructor parameters:
-	    <table>
-	      <tr>
-	        <th>position</th>
-	        <th>type</th>
-	        <th widht="100%">descritpion</th>
-	      </tr>
-	      <tr>
-	        <td>1</td>
-	        <td><code>org.objectledge.configuration.ConfigurationFactory</code></td>
-	        <td>
-	          The configuration factory to load configuration from.
-	        </td>
-	      </tr>
-		</table>
-	  </p>
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>LoggingConfiguator <a href="../apidocs/org/objectledge/logging/LoggingConfigurator.html">JavaDoc</a></li>
+            <li>LoggingConfiguator <a href="../apidocs/org/objectledge/logging/LoggingConfigurator.html">XRef</a></li>
+            <li>LoggingConfiguator <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.java">CVS log</a></li>
+			<li>Log4j <a href="http://logging.apache.org/log4j">documentation</a></li>
+			<li>LoggingConfiguator configuration file <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a>
+              generated from DTD provided with Log4j</li>
+            <li>LoggingConfiguator configuration file <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/test/resources/container1/config/org.objectledge.logging.LoggingConfigurator.xml?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">example</a></li>
+          </ul>
+        </p>
+      </subsection>
+
+      <subsection name="Dependencies">       
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%"><a href="ConfigurationFactory.html">ConfigurationFactory</a></td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>Log4j (log4j)<br/></td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+	  <subsection name="Constructor parameters">
+  	    <p>
+	      <table>
+	        <tr>
+	          <th>position</th>
+	          <th>type</th>
+	          <th widht="100%">descritpion</th>
+	        </tr>
+	        <tr>
+	          <td>1</td>
+	          <td><code>org.objectledge.configuration.ConfigurationFactory</code></td>
+	          <td>The configuration factory to load configuration from.</td>
+	        </tr>
+		  </table>
+	    </p>
+	  </subsection>
     </section>
   </body>
 </document>  
