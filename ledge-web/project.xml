@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.6 2003-12-22 15:42:05 fil Exp $ -->
+<!-- $Id: project.xml,v 1.7 2003-12-23 08:21:12 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -53,6 +53,11 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>objectledge</groupId>
+      <artifactId>ledge-container</artifactId>
       <version>SNAPSHOT</version>
     </dependency>
     <dependency>
