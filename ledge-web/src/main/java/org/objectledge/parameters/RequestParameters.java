@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.5 2004-06-29 16:58:53 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.6 2004-06-30 10:07:37 zwierzem Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -69,36 +69,10 @@ public class RequestParameters extends DefaultParameters
     	throws IllegalArgumentException
     {
         // get query string parameters
-        String queryString = request.getQueryString();
-        try
-        {
-            if (queryString != null)
-            {
-                StringTokenizer st = new StringTokenizer(queryString, "&=");
-                boolean isName = true;
-                String name = null;
-                String value = null;
-                while (st.hasMoreTokens())
-                {
-                    if (isName)
-                    {
-                        name = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
-                    }
-                    else
-                    {
-                        value = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
-                        add(name, value);
-                    }
-                    isName = !isName;
-                }
-            }
-        }
-        ///CLOVER:OFF
-        catch (UnsupportedEncodingException e)
-        {
-            throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
-        }
-        ///CLOVER:ON
+        addURLParams(request.getQueryString(), "&=");
+
+        // copy querystring params to extract only post params from request params parsed by the
+        // servlet container
         HashMap queryStringParams = new HashMap();
         queryStringParams.putAll(this.map);
         
@@ -120,11 +94,17 @@ public class RequestParameters extends DefaultParameters
             }
         }
 
+        // get path info parameters
+        addURLParams(request.getPathInfo(), "/");
+    }
+    
+    private void addURLParams(String urlPart, String separator)
+    {
         try
         {
-            if (request.getPathInfo() != null)
+            if (urlPart != null)
             {
-                StringTokenizer st = new StringTokenizer(request.getPathInfo(), "/");
+                StringTokenizer st = new StringTokenizer(urlPart, separator);
                 boolean isName = true;
                 String name = null;
                 String value = null;
