@@ -46,7 +46,7 @@ import org.picocontainer.Startable;
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSource.java,v 1.6 2004-07-22 16:39:41 zwierzem Exp $
+ * @version $Id: XaPoolDataSource.java,v 1.1 2004-09-03 12:08:16 rafal Exp $
  */
 public class XaPoolDataSource extends DelegatingDataSource
     implements XADataSource, Startable

@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.54 2004-08-20 09:05:01 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.55 2004-09-03 12:08:18 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -181,12 +181,6 @@
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.3</version>
-    </dependency>
-    <dependency>
-      <groupId>xapool</groupId>
-      <artifactId>xapool</artifactId>
-      <version>1.3.3</version>
-      <url>http://xapool.experlog.com/</url>
     </dependency>
     <dependency>
       <groupId>isorelax</groupId>
