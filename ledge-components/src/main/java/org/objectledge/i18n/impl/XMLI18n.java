@@ -90,7 +90,7 @@ public class XMLI18n extends I18nBase
 		this.fileSystem = fileSystem;
 		this.localeDir = localeDir;
 		localeFilePattern = Pattern.
-			compile("[a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.properties");
+			compile("[a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.xml");
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		parser = factory.newSAXParser();
 		handler = new SAXEventHandler();
