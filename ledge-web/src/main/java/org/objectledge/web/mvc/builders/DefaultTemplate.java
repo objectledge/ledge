@@ -36,7 +36,7 @@ import org.objectledge.web.mvc.MVCConstants;
  * A default template which behaves as if it only contained <code>$embeddedPlaceholder</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultTemplate.java,v 1.6 2004-08-02 13:59:03 zwierzem Exp $
+ * @version $Id: DefaultTemplate.java,v 1.7 2004-08-09 19:48:43 pablo Exp $
  */
 public class DefaultTemplate implements Template
 {    
@@ -46,7 +46,7 @@ public class DefaultTemplate implements Template
     ///CLOVER:OFF
     public String getName()
     {
-        throw new IllegalStateException("should never be called");
+        throw new IllegalStateException("template missing");
     }
     ///CLOVER:ON
 
