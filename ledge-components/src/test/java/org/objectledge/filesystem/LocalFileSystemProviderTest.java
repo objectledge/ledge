@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.4 2004-09-27 13:30:56 zwierzem Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.5 2004-09-27 19:11:04 zwierzem Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {
@@ -87,6 +87,8 @@ public class LocalFileSystemProviderTest extends TestCase
     public void testCheckPathChars()
     {
         assertTrue(provider.checkPathChars("asciiChars"));
+        assertFalse(provider.checkPathChars(""));
+        assertFalse(provider.checkPathChars(null));
     }
     
     public void testExists()
