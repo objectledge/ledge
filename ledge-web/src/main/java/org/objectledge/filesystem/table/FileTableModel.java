@@ -48,39 +48,21 @@ import org.objectledge.table.generic.GenericTreeRowSet;
  * Implementation of Table service based on file service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileTableModel.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
+ * @version $Id: FileTableModel.java,v 1.3 2005-02-14 17:25:34 zwierzem Exp $
  */
 public class FileTableModel implements ExtendedTableModel
 {
     private final FileSystem fileSystem;
-	
-	private final String basePath;
-
-    private final Map<String, Comparator> comparatorByColumnName = 
+    private final Map<String, Comparator> comparatorByColumnName =
         new HashMap<String, Comparator>();
 
     /**
      * Creates new FileTableModel instance.
-     * 
      * @param fileSystem file system component.
      * @param locale locale to use.
      */
-    public FileTableModel(FileSystem fileSystem, Locale locale)
-    {
-		this(fileSystem, null, locale);
-    }
-
-    /**
-     * Creates new FileTableModel instance.
-     * 
-     * @param fileSystem file system component.
-     * @param basePath base path within FS.
-     * @param locale locale to use.
-     */
-	public FileTableModel(FileSystem fileSystem, String basePath, Locale locale)
+	public FileTableModel(FileSystem fileSystem, Locale locale)
 	{
-		this.basePath = normalizeDirPath(basePath);
-		
 		this.fileSystem = fileSystem;
 
 		comparatorByColumnName.put("name", new NameComparator(locale));
@@ -152,7 +134,7 @@ public class FileTableModel implements ExtendedTableModel
         String[] fileNames;
         try
         {
-            fileNames = fileSystem.list(getFullPath(parentPath));
+            fileNames = fileSystem.list(parentPath);
         }
         catch(IOException e)
         {
@@ -167,7 +149,7 @@ public class FileTableModel implements ExtendedTableModel
         for(int i=0; i<fileNames.length; i++)
         {
         	String filePath = parentPath+'/'+fileNames[i];
-        	files[i] = new FileObject(getFullPath(filePath), filePath, fileSystem);
+        	files[i] = new FileObject(fileSystem, filePath);
         }
         return files;
     }
@@ -180,9 +162,9 @@ public class FileTableModel implements ExtendedTableModel
      */
     public Object getObject(String id)
     {
-        if(fileSystem.exists(getFullPath(id)))
+        if(fileSystem.exists(id))
         {
-        	return new FileObject(getFullPath(id), id, fileSystem);
+        	return new FileObject(fileSystem, id);
         }
         else
         {
@@ -193,16 +175,16 @@ public class FileTableModel implements ExtendedTableModel
     /**
      * Returns the id of the object.
      * 
-     * @param parent id of the parent model object
+     * @param parentId id of the parent model object
      * @param child model object.
      *
      * @return the id of the object.
      */
-    public String getId(String parent, Object child)
+    public String getId(String parentId, Object child)
     {
         if(child == null)
         {
-            return "";
+            return parentId;    // TODO ???
         }
         return ((FileObject)child).getPath();
     }
@@ -217,13 +199,4 @@ public class FileTableModel implements ExtendedTableModel
 		}
 		return path;
 	}
-	
-	private String getFullPath(String path)
-	{
-		if(this.basePath != null)
-		{
-			path = this.basePath+'/'+path;
-		}
-		return path;
-	} 
 }

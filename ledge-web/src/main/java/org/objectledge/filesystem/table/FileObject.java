@@ -35,11 +35,11 @@ import org.objectledge.filesystem.FileSystem;
  * Simple object representing file.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileObject.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
+ * @version $Id: FileObject.java,v 1.3 2005-02-14 17:25:34 zwierzem Exp $
  */
 public class FileObject
 {
-	private final String path;
+    private final String path;
 	private final String name;
 	private final Date lastModified;
 	private final long length;
@@ -47,24 +47,22 @@ public class FileObject
 
     /**
      * Creates new FileObject instance.
-     * 
-     * @param fullPath the full path of the file.
-     * @param path the path of the file.
      * @param fileSystem Ledge file system.
+     * @param fullPath the full path of the file.
      */
-	public FileObject(final String fullPath, final String path, final FileSystem fileSystem)
+	public FileObject(final FileSystem fileSystem, final String fullPath)
 	{
-		this.path = path;
-		this.name = path.substring(path.lastIndexOf('/')+1);
+        this.path = fullPath;
+		this.name = fullPath.substring(fullPath.lastIndexOf('/')+1);
 		this.lastModified = new Date(fileSystem.lastModified(fullPath));
 		this.length = fileSystem.length(fullPath);
 		this.isDirectory = fileSystem.isDirectory(fullPath);
 	}
 
     /**
-     * Returns the path of the file.
+     * Returns the full path of the file.
      * 
-     * @return the path of the file.
+     * @return the full path of the file.
      */
     public String getPath()
     {
