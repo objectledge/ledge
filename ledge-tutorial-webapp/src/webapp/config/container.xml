@@ -33,16 +33,16 @@
 
 <!--
 
-    <component class-key="org.objectledge.web.mvc.MVCClassFinder"
+    <component class-key="org.objectledge.web.mvc.finders.MVCClassFinder"
   		       class=""/>
     
-    <component class-key="org.objectledge.web.mvc.TemplateFinder"
+    <component class-key="org.objectledge.web.mvc.finders.TemplateFinder"
     		   class=""/>
     
     <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
       <component-parameter class-key="org.objectledge.context.Context"/>               
-      <component-parameter class-key="org.objectledge.web.mvc.MVCClassFinder"/>               
-      <component-parameter class-key="org.objectledge.web.mvc.TemplateFinder"/>
+      <component-parameter class-key="org.objectledge.web.mvc.finders.MVCClassFinder"/>               
+      <component-parameter class-key="org.objectledge.web.mvc.finders.TemplateFinder"/>
 	  <constant-parameter value="10"/>
 	  <constant-parameter value="10"/>
     </component>

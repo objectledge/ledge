@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 //
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.finders;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.3 2004-01-14 14:21:36 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.1 2004-01-15 09:27:05 fil Exp $
  */
 public class MVCFinder implements TemplateFinder, MVCClassFinder
 {

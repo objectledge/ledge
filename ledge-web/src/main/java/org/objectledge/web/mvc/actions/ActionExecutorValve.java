@@ -28,14 +28,14 @@
 package org.objectledge.web.mvc.actions;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.MVCClassFinder;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCClassFinder;
 
 /**
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.2 2004-01-14 14:13:10 fil Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.3 2004-01-15 09:27:05 fil Exp $
  */
 public class ActionExecutorValve implements Runnable
 {

@@ -25,50 +25,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.finders;
 
-import org.objectledge.web.mvc.builders.Builder;
+import org.objectledge.templating.Template;
 
 /**
- * A class finder for finding MVC model classes.
+ * Finds templates that should be used for rendering specific views
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.3 2003-12-30 17:26:25 zwierzem Exp $
+ * @version $Id: TemplateFinder.java,v 1.1 2004-01-15 09:27:05 fil Exp $
  */
-public interface MVCClassFinder
+public interface TemplateFinder
 {
-    /**
-     * Returns a builder instance based on a given name. If no builder is found, a
-     * {@link org.objectledge.web.mvc.builders.DefaultBuilder} is returned.
-     * 
-     * @param builderName part of a name of a builder class to be found/instantiated
-     * @return found builder instance
+	/**
+	 * Returns an builder template for a given builder name. If no template is found, a
+	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
+	 * 
+     * @param name name of a builder for which a template must be found
+	 * @return found template
      */
-    public Builder findBuilder(String builderName);
+    public Template findBuilderTemplate(String name);
 
 	/**
-	 * Returns an enclosing builder for a given builder. If no builder is found, a
-	 * {@link org.objectledge.web.mvc.builders.DefaultBuilder} is returned.
+	 * Returns an enclosing builder template for a given builder. If no template is found, a
+	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
 	 * 
-	 * @param builder a builder for which an eclosing builder must be found 
-     * @return found builder instance
+	 * @param builder a builder for which an eclosing builder template must be found 
+	 * @return found template
 	 */
-	public Builder findEnclosingBuilder(Builder builder);
-
-    /**
-     * Returns a runnable action instance based on a given name. If no runnable is found, a
-     * {@link org.objectledge.web.mvc.actions.DefaultAction} is returned.
-     * 
-     * @param actionName name of an action class
-     * @return found runnable action instance 
-     */
-    public Runnable findAction(String actionName);
-
-	/**
-	 * Creates an MVC compoment name for a given class object.
-	 * 
-	 * @param clazz class to find MVC component name for
-	 * @return finder usable MVC compoment name
-	 */
-	public String findName(Class clazz);
+	public Template findEnclosingBuilderTemplate(Template builder);
 }

@@ -26,9 +26,10 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.finders;
 
 import org.objectledge.web.mvc.builders.Builder;
+import org.objectledge.web.mvc.finders.*;
 
 /**
  * Default implementationof MVCClassFinder.
