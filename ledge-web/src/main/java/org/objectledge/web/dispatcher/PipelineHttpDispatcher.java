@@ -46,7 +46,7 @@ import org.objectledge.web.HttpDispatcher;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.11 2004-01-27 15:22:24 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.12 2004-06-15 14:53:51 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
@@ -89,7 +89,7 @@ public class PipelineHttpDispatcher
         }
         finally
         {
-            context.removeAttribute(HttpContext.class);
+            context.clearAttributes();
         }
         return httpContext.getDirectResponse();
     }
