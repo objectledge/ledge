@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.10 2003-12-17 09:58:54 fil Exp $
+ * @version $Id: FileSystem.java,v 1.11 2003-12-17 10:51:18 fil Exp $
  */
 public class FileSystem
 {
@@ -951,6 +951,15 @@ public class FileSystem
     
     // standard filesystems /////////////////////////////////////////////////
     
+    /**
+     * Creates a standard file system.
+     * 
+     * <p>The file system is composed of a local file system, with the specified root, augmented
+     * with a classpath file system.</p>
+     * 
+     * @param root the local filesystem root.
+     * @return a standard file system.
+     */
     public static FileSystem getStandardFileSystem(String root)
     {
         FileSystemProvider lfs = new org.objectledge.filesystem.impl.
