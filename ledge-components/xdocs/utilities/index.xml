@@ -12,6 +12,8 @@
 		<p class="more"><a href="Parameters.html">more</a></p>
       </subsection>
       <subsection name="StringUtils">
+        <p><code>StringUtils</code> contains a number of <code>static</code> utility methods for
+          manipulating Strings.</p>
 		<p class="more"><a href="StringUtils.html">more</a></p>
       </subsection>
     </section>
