@@ -79,6 +79,6 @@ public class UserAgentToolFactory implements ContextToolFactory
 	 */
 	public String getKey()
 	{
-		return "user_agent_tool";
+		return "userAgentTool";
 	}    
 }

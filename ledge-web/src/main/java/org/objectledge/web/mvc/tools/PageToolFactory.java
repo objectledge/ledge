@@ -70,6 +70,6 @@ public class PageToolFactory implements ContextToolFactory
 	 */
 	public String getKey()
 	{
-		return "page_tool";
+		return "pageTool";
 	}    
 }
