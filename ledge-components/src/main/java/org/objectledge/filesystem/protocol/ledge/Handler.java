@@ -40,7 +40,7 @@ import org.objectledge.filesystem.impl.URLStreamHandlerImpl;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Handler.java,v 1.3 2004-11-04 11:09:13 rafal Exp $
+ * @version $Id: Handler.java,v 1.4 2004-11-04 11:12:55 rafal Exp $
  */
 public class Handler extends URLStreamHandler
 {
@@ -58,7 +58,15 @@ public class Handler extends URLStreamHandler
      */
     public static synchronized void init(URLStreamHandlerImpl h)
     {
-        handler = h;
+        if(handler != null)
+        {
+            handler = h;
+        }
+        else
+        {
+            throw new IllegalStateException("URL handler for ledge protocol already registered " +
+            		"in the VM.");
+        }
         
         String pkgs = System.getProperty(HANDLER_PROPERTY);
         if(pkgs == null)
