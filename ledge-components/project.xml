@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.44 2004-05-27 10:10:14 fil Exp $ -->
+<!-- $Id: project.xml,v 1.45 2004-05-27 10:36:22 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -141,7 +141,7 @@
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>1.7.2-rc1-jdk1.4</version>
+      <version>1.7.2-rc6a-jdk1.4</version>
     </dependency>
     <dependency>
       <groupId>dbunit</groupId>
