@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.13 2004-01-21 15:16:49 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.14 2004-01-21 15:36:14 fil Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -152,33 +152,35 @@ public class BuilderExecutorValve implements Runnable
 	            throw new PipelineProcessingException(e);
 	        }
 
-			// get next view build level
-	        ViewPair pair = builder.getEnclosingViewPair();
-			if(pair != null)
-			{
-				// get enclosing builder
-				Builder enclosingBuilder = pair.getBuilder();
-				if(enclosingBuilder == null && builder != null)
-				{
-					// shorten the builder path name, find new builder	
-					enclosingBuilder = classFinder.findEnclosingBuilder(builder);
-				}
-				builder = enclosingBuilder;
+            // get next view build level
+            Builder enclosingBuilder = null;
+            Template enclosingTemplate = null;
+            if(builder != null)
+            {
+                ViewPair pair = builder.getEnclosingViewPair();
+                if(pair == null)
+                {
+                    break;
+                }
+                enclosingBuilder = pair.getBuilder();
+                enclosingTemplate = pair.getTemplate();
+            }
 
-				Template enclosingTemplate = pair.getTemplate();
-				if(enclosingTemplate == null && template != null)
-				{
-					// shorten the builder path name, find new template	
-					enclosingTemplate = templateFinder.findEnclosingBuilderTemplate(template);
-				}
-				template = enclosingTemplate;
-				
-				if(template == null && builder == null)
-				{
-					break;
-				}
+			if(enclosingBuilder == null && builder != null)
+			{
+				// shorten the builder path name, find new builder	
+				enclosingBuilder = classFinder.findEnclosingBuilder(builder);
 			}
-			else
+			builder = enclosingBuilder;
+
+			if(enclosingTemplate == null && template != null)
+			{
+				// shorten the builder path name, find new template	
+				enclosingTemplate = templateFinder.findEnclosingBuilderTemplate(template);
+			}
+			template = enclosingTemplate;
+			
+			if(template == null && builder == null)
 			{
 				break;
 			}
