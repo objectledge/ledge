@@ -285,7 +285,7 @@ public class DefaultInputRecord implements InputRecord
     {
         try
         {
-            return rs.getTimestamp(field);
+            return new Date(rs.getTimestamp(field).getTime());
         }
         catch(SQLException e)
         {
