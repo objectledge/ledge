@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.7 2003-12-04 08:41:20 fil Exp $ -->
+<!-- $Id: project.xml,v 1.8 2003-12-09 12:40:52 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -63,6 +63,16 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer-1.0</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picoextras-reflection</artifactId>
+      <version>SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picoextras-script</artifactId>
       <version>SNAPSHOT</version>
     </dependency>
     <dependency>
