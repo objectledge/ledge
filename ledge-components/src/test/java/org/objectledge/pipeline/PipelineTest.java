@@ -30,11 +30,11 @@ package org.objectledge.pipeline;
 
 import junit.framework.TestCase;
 
+import org.objectledge.context.Context;
+
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class PipelineTest extends TestCase
 {
@@ -50,6 +50,12 @@ public class PipelineTest extends TestCase
 
     public void testRun()
     {
+    	Context context = Context.getContext();
+		Pipeline pipe = new Pipeline(context, new Runnable[0], new Runnable[0] , new Runnable[0]);
+		pipe.run();
+		assertEquals(new Runnable[0], pipe.getCatchValves());
+		assertEquals(new Runnable[0], pipe.getTryValves());
+		assertEquals(new Runnable[0], pipe.getFinallyValves());
     }
 
 }
