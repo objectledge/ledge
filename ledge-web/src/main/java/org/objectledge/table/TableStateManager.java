@@ -37,14 +37,14 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManager.java,v 1.2 2004-03-23 12:10:37 pablo Exp $
+ * @version $Id: TableStateManager.java,v 1.3 2004-05-06 13:00:59 pablo Exp $
  */
 public interface TableStateManager
 {
     /**
      * Returns the state of the table instance - it is stored in session's context.
      *
-     * @param context the thread context
+     * @param httpContext the thread http context
      * @param name the unique identifier of the state in the session
      * @return the state of component
      */
@@ -53,7 +53,7 @@ public interface TableStateManager
     /**
      * Returns the state of the table instance - it is used by Table toolkit companion actions.
      *
-     * @param context the thread context
+     * @param httpContext the thread http context
      * @param id the id of the state in the session
      * @return the state of component
      */
