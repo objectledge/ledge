@@ -48,7 +48,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.10 2004-10-25 14:15:28 rafal Exp $
+ * @version $Id: DefaultParameters.java,v 1.11 2004-10-26 13:33:14 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -416,7 +416,7 @@ public class DefaultParameters implements Parameters
             String key = (String)it.next();
             if (!keys.contains(key))
             {
-                map.remove(key);
+                it.remove();
             }
         }
     }
