@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.42 2005-02-04 02:30:38 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.43 2005-02-25 11:38:11 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -109,6 +109,17 @@
     </dependency>
     <!-- testing -->
 
+    <dependency>
+      <groupId>jmock</groupId>
+      <artifactId>jmock-cglib</artifactId>
+      <version>1.0.0.RC1</version>
+    </dependency>
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib-full</artifactId>
+      <version>2.0.2</version>
+      <url>http://cglib.sourceforge.net/</url>
+    </dependency>
     <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-impl</artifactId>
