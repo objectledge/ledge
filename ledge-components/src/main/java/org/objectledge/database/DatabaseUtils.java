@@ -47,7 +47,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.5 2004-02-04 12:18:13 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.6 2004-02-04 13:19:16 fil Exp $
  */
 public class DatabaseUtils
 {
@@ -59,9 +59,14 @@ public class DatabaseUtils
     private static SimpleDateFormat df = 
         new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", new Locale("en","US"));
     
+    ///CLOVER:OFF
+    /**
+     * Private constructor to prevent subclassing and enforce static access.
+     */
     private DatabaseUtils()
     {
     }
+    ///CLOVER:ON
 
     // utilities //////////////////////////////////////////////////////////////////////////////
 
@@ -234,10 +239,18 @@ public class DatabaseUtils
                     line = script.readLine();
                     if(line.trim().length() == 0 || line.charAt(0) == '#')
                     {
-                        continue;
+                        if(script.ready())
+                        {
+                            line = script.readLine();
+                            continue;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
-                if(line.charAt(line.length()-1) != ';')
+                if(line.length() == 0 || line.charAt(line.length()-1) != ';')
                 {
                     throw new SQLException("unterminated statement at line "+start);
                 }
