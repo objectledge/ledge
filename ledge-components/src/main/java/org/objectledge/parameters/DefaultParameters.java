@@ -37,6 +37,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -46,7 +47,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.7 2004-02-20 13:51:31 pablo Exp $
+ * @version $Id: DefaultParameters.java,v 1.8 2004-07-02 10:45:03 zwierzem Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -54,13 +55,14 @@ public class DefaultParameters implements Parameters
     public static final String TRUE = "true";
 
     /** The main parameters map */
-    protected HashMap map = new HashMap();
+    protected Map map;
 
     /**
      * Create the empty container.
      */
     public DefaultParameters()
     {
+        map = new HashMap();
     }
 
     /**
@@ -70,6 +72,7 @@ public class DefaultParameters implements Parameters
      */
     public DefaultParameters(String configuration)
     {
+        this();
         try
         {
             LineNumberReader reader = new LineNumberReader(new StringReader(configuration));
@@ -92,6 +95,7 @@ public class DefaultParameters implements Parameters
     public DefaultParameters(InputStream is, String encoding)
         throws IOException, UnsupportedEncodingException
     {
+        this();
         LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, encoding));
         loadParameters(reader);
     }
@@ -103,6 +107,7 @@ public class DefaultParameters implements Parameters
      */
     public DefaultParameters(Parameters source)
     {
+        this();
         String[] names = source.getParameterNames();
         for (int i = 0; i < names.length; i++)
         {
