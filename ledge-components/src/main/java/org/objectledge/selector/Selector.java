@@ -34,7 +34,7 @@ import org.jcontainer.dna.ConfigurationException;
  * Selects one of the preconfigured components evaluating rules against provided set of variables.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Selector.java,v 1.3 2004-01-26 09:44:42 fil Exp $
+ * @version $Id: Selector.java,v 1.4 2004-01-27 13:26:24 fil Exp $
  */
 public class Selector
 {
@@ -58,7 +58,7 @@ public class Selector
         this.objects = objects;
         if(rulesConfig.length != objects.length)
         {
-            throw new ConfigurationException(objects.length+" components, but "+rules.length+
+            throw new ConfigurationException(objects.length+" components, but "+rulesConfig.length+
                 " rules defined ", config.getPath(), config.getLocation());
         }
         rules = new Rule[rulesConfig.length];
