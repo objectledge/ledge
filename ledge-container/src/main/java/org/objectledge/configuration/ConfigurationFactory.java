@@ -61,7 +61,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.10 2003-12-03 15:13:15 mover Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.11 2003-12-03 15:35:03 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -127,8 +127,8 @@ public class ConfigurationFactory
         }
         catch(SAXParseException e)
         {
-            throw new ComponentInitializationError("configuration file "+path+" for compoenent "+
-                name+" parse error "+e.getMessage()+" at line "+e.getLineNumber(), e);
+            throw new ComponentInitializationError("parse error in configuration of component "+
+                name+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
         }
         catch(Exception e)
         {
@@ -165,8 +165,8 @@ public class ConfigurationFactory
         }
         catch(SAXParseException e)
         {
-            throw new ComponentInitializationError("configuration file "+path+" for compoenent "+
-                name+" parse error "+e.getMessage()+" at line "+e.getLineNumber(), e);
+            throw new ComponentInitializationError("parse error in configuration of component "+
+                name+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
         }
         catch(Exception e)
         {
