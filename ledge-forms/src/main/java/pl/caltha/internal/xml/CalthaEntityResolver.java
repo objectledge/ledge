@@ -12,7 +12,7 @@ import org.xml.sax.SAXException;
 
 /** EntityResolver for Ledge applications.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CalthaEntityResolver.java,v 1.3 2005-03-23 07:52:14 zwierzem Exp $
+ * @version $Id: CalthaEntityResolver.java,v 1.4 2005-03-23 14:22:57 zwierzem Exp $
  */
 public class CalthaEntityResolver 
     implements EntityResolver
@@ -94,7 +94,7 @@ public class CalthaEntityResolver
         }
         else if(scheme.equals("file"))
         {
-            throw new SecurityException("Direct file system access not allowed, use FileService");
+            throw new SecurityException("Direct file system access not allowed, use FileSystem");
         }
         else if(scheme.equals("classpath"))
         {
