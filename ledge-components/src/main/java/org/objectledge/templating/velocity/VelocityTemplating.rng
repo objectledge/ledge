@@ -32,14 +32,31 @@
     <element name="extension">
       <text/>
     </element>
+  </optional>    
+  <optional>    
     <element name="encoding">  
       <text/>
     </element>
+  </optional>    
+  <optional>
     <element name="paths">
       <zeroOrMore>
 	    <element name="path">
           <text/>
         </element>       
+      </zeroOrMore>
+    </element>
+  </optional>    
+  <optional>
+    <element name="properties">
+      <zeroOrMore>
+        <element name="property">
+          <attribute name="name">
+          <choice>
+            <attribute name="value"/>
+            <text/>
+          </choice>
+        </element>
       </zeroOrMore>
     </element>
   </optional>

@@ -50,7 +50,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.5 2003-12-30 14:35:42 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.6 2004-01-05 15:54:12 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -98,9 +98,22 @@ public class VelocityTemplating implements Templating, LogSystem
             {
                 paths[i] = path[i].getValue();
             }
+            Configuration node = config.getChild("properties");
+            if(node != null)
+	        {
+	        	Configuration[] properties = node.getChildren("property");
+				for (int i = 0; i < properties.length; i++)
+				{
+					String name = properties[i].getAttribute("name");
+					String value = properties[i].getAttribute("value", null);
+					if(value == null)
+					{
+						value = properties[i].getValue();
+					}
+					engine.setProperty(name, value);
+				}
+            }
         }
-        //lalala
-        //bbb
         catch (ConfigurationException e)
         {
             throw new ComponentInitializationError("failed to initialze Velocity", e);
@@ -117,6 +130,7 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             engine.init();
         }
+		///CLOVER:OFF
         catch (VirtualMachineError e)
         {
             throw e;
@@ -129,6 +143,7 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             throw new ComponentInitializationError("failed to initialze Velocity", t);
         }
+		///CLOVER:ON
     }
 
     /**
@@ -157,10 +172,12 @@ public class VelocityTemplating implements Templating, LogSystem
             }
             return false;
         }
+        ///CLOVER OFF
         catch (Exception e)
         {
             throw new RuntimeException("Velocity internal error", e);
         }
+		///CLOVER ON
     }
 
     /**
@@ -180,10 +197,12 @@ public class VelocityTemplating implements Templating, LogSystem
                 }
             }
         }
+		///CLOVER:OFF
         catch (Exception e)
         {
             throw new RuntimeException("Velocity internal error", e);
         }
+		///CLOVER:ON
         if (template != null)
         {
             return template;
