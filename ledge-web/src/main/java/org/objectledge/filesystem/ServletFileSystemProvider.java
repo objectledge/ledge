@@ -28,12 +28,14 @@
 
 package org.objectledge.filesystem;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
 
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
 /**
@@ -43,7 +45,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileSystemProvider.java,v 1.2 2004-01-13 12:46:10 fil Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.3 2004-01-14 11:29:39 fil Exp $
  */
 public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider
@@ -65,7 +67,14 @@ public class ServletFileSystemProvider
     {
         super(name);
         this.context = context;
-        processListings();
+        try
+        {
+            processListings();
+        }
+        catch(IOException e)
+        {
+            throw new ComponentInitializationError("failed to parse listings", e);
+        }
     }
     
     // public interface ///////////////////////////////////////////////////////////////////////////
