@@ -44,7 +44,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.22 2005-01-27 00:56:42 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.23 2005-01-28 01:34:01 rafal Exp $
  */
 public class StringUtils
 {
@@ -735,7 +735,7 @@ public class StringUtils
             }
             else if(chars[i] == '\r')
             {
-                if(i<chars.length-1 && chars[i+1] == '\n');
+                if(i<chars.length-1 && chars[i+1] == '\n')
                 {
                     i++;
                 }
