@@ -44,7 +44,7 @@ public class PersistentContext implements Persistent
     // constants /////////////////////////////////////////////////////////////
 
     /** The table name. */
-    public static final String TABLE_NAME = "naming_context";
+    public static final String TABLE_NAME = "ledge_naming_context";
 
     /** The key columns. */
     public static final String[] KEY_COLUMNS = new String[] { "context_id" };

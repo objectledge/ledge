@@ -44,7 +44,7 @@ public class PersistentAttribute implements Persistent
     // constants /////////////////////////////////////////////////////////////
 
     /** The table name. */
-    public static final String TABLE_NAME = "naming_attribute";
+    public static final String TABLE_NAME = "ledge_naming_attribute";
 
     /** The key columns. */
     public static final String[] KEY_COLUMNS = new String[] { "context_id", "name", "value" };

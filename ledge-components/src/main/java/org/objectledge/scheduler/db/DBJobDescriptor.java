@@ -50,7 +50,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
     // constants /////////////////////////////////////////////////////////////
 
     /** The table name. */
-    public static final String TABLE_NAME = "scheduler";
+    public static final String TABLE_NAME = "ledge_scheduler";
 
     /** The key columns. */
     public static final String[] KEY_COLUMNS = new String[] { "job_id" };

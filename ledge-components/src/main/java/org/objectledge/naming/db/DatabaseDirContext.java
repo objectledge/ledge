@@ -625,8 +625,8 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
             conn = persistence.getDatabase().getConnection();
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(
-                "SELECT dn, name, value FROM naming_context,naming_attribute " +
-                "WHERE naming_context.context_id = naming_attribute.context_id" +                " and naming_context.parent=" + parentId);            
+                "SELECT dn, name, value FROM ledge_naming_context, ledge_naming_attribute " +
+                "WHERE ledge_naming_context.context_id = ledge_naming_attribute.context_id" +                " and ledge_naming_context.parent=" + parentId);            
             while(rs.next())
             {
                 String dn = rs.getString("dn");

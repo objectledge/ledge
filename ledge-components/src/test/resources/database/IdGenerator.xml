@@ -29,9 +29,9 @@
 -->
 
 <dataset>
-  <table name="id_table">
+  <table name="ledge_id_table">
     <column>next_id</column>
-    <column>table</column>
+    <column>table_name</column>
     <row>
       <value>1</value>
       <value>test_table_one</value>
