@@ -45,6 +45,7 @@
       <zeroOrMore>
         <choice>
           <ref name="component"/>
+          <ref name="component-adapter"/>
           <ref name="pseudo-component"/>
           <ref name="container"/>
         </choice>
@@ -112,6 +113,19 @@
         </choice>
       </attribute>
     </optional>  
+  </define>
+
+  <define name="component-adapter">
+    <element name="component-adapter">
+       <ref name="attlist.component-adapter"/>
+       <zeroOrMore>
+         <ref name="parameter"/>
+       </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="attlist.component-adapter" combine="interleave">
+    <attribute name="class"/>
   </define>
 
   <define name="parameter">

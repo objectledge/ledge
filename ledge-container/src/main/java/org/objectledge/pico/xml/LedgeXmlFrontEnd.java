@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import org.objectledge.pico.SequenceParameter;
 import org.objectledge.pico.StringParameter;
+import org.picocontainer.ComponentAdapter;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.PicoContainer;
@@ -57,7 +58,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.11 2004-01-15 15:38:59 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.12 2004-01-16 08:52:06 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -128,6 +129,41 @@ public class LedgeXmlFrontEnd
             reflectionFrontEnd.getPicoContainer().getComponentInstance(key);
         }
     }
+    
+    /**
+     * Registers a component adapter using information from an DOM element.
+     *  
+     * @param reflectionFrontEnd the ReflectionFrontEnd to use.
+     * @param adapterElement the element,
+     * @throws ClassNotFoundException if the DOM model references a nonexistent class.
+     * @throws PicoCompositionException if the DOM model contains invalid data.
+     */
+    protected void loadComponentAdapter(ReflectionFrontEnd reflectionFrontEnd, 
+        Element adapterElement)
+        throws ClassNotFoundException, PicoCompositionException
+    {
+        String className = adapterElement.getAttribute("class");
+        Parameter[] parameters = loadParameters(adapterElement);
+        Class implementation = loadClass(className);
+        if(!ComponentAdapter.class.isAssignableFrom(implementation))
+        {
+            throw new PicoCompositionException(implementation.getName()+
+                " is not a ComponentAdapter");
+        }
+        DefaultPicoContainer tempContainer = new DefaultPicoContainer();
+        tempContainer.addParent(reflectionFrontEnd.getPicoContainer());
+        Object anonymous = new Object();
+        if(parameters.length > 0)
+        {
+            tempContainer.registerComponentImplementation(anonymous, implementation, parameters);
+        }
+        else
+        {
+            tempContainer.registerComponentImplementation(anonymous, implementation);
+        }
+        reflectionFrontEnd.getPicoContainer().
+            registerComponent((ComponentAdapter)tempContainer.getComponentInstance(anonymous));
+    }
 
     private Parameter[] loadParameters(Element element)
         throws ClassNotFoundException, PicoCompositionException
@@ -184,6 +220,12 @@ public class LedgeXmlFrontEnd
         throws ClassNotFoundException, PicoCompositionException
     {
         String stringValue = element.getAttribute("value");
+        String parameterClassName = element.getAttribute("class");
+        if(parameterClassName != null && !parameterClassName.equals(""))
+        {
+            Class parameterClass = loadClass(parameterClassName);
+            return new StringParameter(stringValue, parameterClass);
+        }
         return new StringParameter(stringValue);
     }
     
@@ -310,11 +352,15 @@ public class LedgeXmlFrontEnd
                     loadPseudoComponent(reflectionFrontEnd, (Element) child);
                     componentCount++;
                 } 
-                if (name.equals("component")) 
+                else if (name.equals("component")) 
                 {
                     loadComponent(reflectionFrontEnd, (Element) child);
                     componentCount++;
                 } 
+                else if (name.equals("component-adapter"))
+                {
+                    loadComponentAdapter(reflectionFrontEnd, (Element) child);
+                }
                 else if (name.equals("container")) 
                 {
                     MutablePicoContainer childContainer =  loadContainer((Element)child);
