@@ -6,12 +6,29 @@
   
   <body>
     <section name="ObjectLedge components">
-    <subsection name="Introduction">
-      <p>
-        A collection of reusable components for building applications for
-        both command line and J2EE servlet environments.
-      </p>
-    </subsection>
+      <subsection name="Introduction">
+        <p>
+	      This module contains a library of reusable IoC type-3 components. Some of them are used
+	      by ObjectLedge basic and optional modules, others were designed for application use.
+        </p>
+      </subsection>
+      <subsection name="Scope">
+        <p>
+          Components in this module are environment agonstic - they can be used in command line,
+          servlet or embedded environment without any modifictations, and they are configured
+          in each of these in the same fashion. They may interact with different other components
+          depending on the environment - but this is outside component's field of view.
+        </p>
+      </subsection>
+      <subsection name="Compatibility">
+        <p>
+          You integrate any Pico-compatible components into your ObjectLedge application out of the
+          box. Integrating ObjectLedge components into other Pico-compatible containers is also
+          possible but reqires slightly bigger effort: You need to use some of the pico extensions
+          we have developed to instatiate them (see 
+          <a href="../ledge-container/pico-extensions/ComponentCustomization.html">component customization</a>).
+         </p>        
+      </subsection>
     </section>
   </body>
 </document>

@@ -24,7 +24,8 @@
 
       <subsection name="Project scope">
         <p>
-          Here's a simple label for this project, taking pattern from SourceForge Trove. Hope it will give you a point on what Object Ledge is.
+          Here's a project categorization entry along the lines of SourceForge's Trove. It provides
+          give some basic informations about ObjectLedge in condensed form.
           <ul>
             <li>Development Status: <b>Alpha</b></li>
             <li>Environment: <b>Web Environment, Console (Text Based), No Input/Output (Daemon), Other Environment</b></li>
