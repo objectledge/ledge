@@ -2,5 +2,9 @@
 <classpath>
     <classpathentry kind="src" path="src/main/java"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="src" path="/ledge-web"/>
+    <classpathentry kind="src" path="/ledge-components"/>
+    <classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.3.jar"/>
+    <classpathentry kind="src" path="/dna"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
