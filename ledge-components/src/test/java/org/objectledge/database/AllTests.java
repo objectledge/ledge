@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AllTests.java,v 1.1 2004-02-04 09:39:08 fil Exp $
+ * @version $Id: AllTests.java,v 1.2 2004-02-04 12:22:57 fil Exp $
  */
 public class AllTests
 {
@@ -43,6 +43,7 @@ public class AllTests
         TestSuite suite = new TestSuite("Test for org.objectledge.database");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(HsqldbDataSourceTest.class));
+        suite.addTest(new TestSuite(IdGeneratorTest.class));
         //$JUnit-END$
         return suite;
     }
