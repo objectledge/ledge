@@ -31,6 +31,10 @@
         </item>        
         <item name="MailSystem"			   href="/components/MailSystem.html"/>
         <item name="ContextFactory"		   href="/components/ContextFactory.html"/>        
+        <item name="Scheduler"			   href="/components/Scheduler.html" collapse="true">
+          <item name="DB Scheduler"        href="/components/scheduler/DBScheduler.html"/>
+          <item name="Transient Scheduler" href="/components/scheduler/TransientScheduler.html"/>
+        </item>
       </item>
 
       <item name="Utilities"             href="/utilities/index.html" collapse="true">

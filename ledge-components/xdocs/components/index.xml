@@ -63,6 +63,12 @@
         <p>This component provides a registry of JNDI naming and directory context.</p>
 		<p class="more"><a href="ContextFactory.html">more</a></p>
       </subsection>
+
+      <subsection name="Scheduler">
+        <p>The scheduler component manages the jobs that starts at specified points of time.</p>
+		<p class="more"><a href="Scheduler.html">more</a></p>
+      </subsection>      
+
     </section>
   </body>
 </document>

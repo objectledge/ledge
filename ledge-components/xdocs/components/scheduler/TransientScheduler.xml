@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>TransientScheduler</title>
+  </properties>
+
+  <body>
+    <section name="TransientScheduler">
+      <subsection name="Description">
+        <p>An implementation of the scheduler that loads immutable jobs from component configuration.</p>
+      </subsection>
+    
+      <subsection name="Browse">
+	    <p>
+	      <ul>
+	        <li>TransientScheduler <a href="../apidocs/org/objectledge/scheduler/TransientScheduler.html">JavaDoc</a></li>
+	        <li>TransientScheduler <a href="../../xref/org/objectledge/scheduler/TransientScheduler.html">XRef</a></li>
+	        <li>TransientScheduler <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/scheduler/TransientScheduler.html">CVS log</a></li>
+	        <li>TransientScheduler configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/scheduler/TransientScheduler.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
+	      </ul>
+	    </p>
+      </subsection>
+
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="../ThreadsPool.html">ThreadsPool</a>,
+                <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>, 
+                <a href="../../ledge-container/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>DNA API (dna:dna-api)</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+	  <subsection name="Constructor parameters">
+        <p>
+	      <table>
+	        <tr>
+  	          <th>position</th>
+	          <th>type</th>
+	          <th widht="100%">descritpion</th>
+	        </tr>
+	        <tr>
+	          <td>1</td>
+	          <td><code>org.picocontainer.MutablePicoContainer</code></td>
+	          <td>the component container</td>
+	        </tr>
+	        <tr>
+	          <td>2</td>
+	          <td><code>org.jcontainer.dna.Configuration</code></td>
+	          <td>the configuration</td>
+	        </tr>
+		    <tr>
+		      <td>3</td>
+		      <td><code>org.jcontainer.dna.Logger</code></td>
+		      <td>the logger</td>
+		    </tr>
+		    <tr>
+		      <td>4</td>
+		      <td><code>org.objectledge.threads.ThreadPool</code></td>
+		      <td>the threads pool</td>
+		    </tr>
+		    <tr>
+		      <td>5</td>
+		      <td><code>org.objectledge.scheduler.ScheduleFactory[]</code></td>
+		      <td>the table of schedule factories</td>
+		    </tr>
+		  </table>
+ 	    </p>
+ 	  </subsection>  
+ 	  
+    </section>
+  </body>
+</document>  
+  
