@@ -48,7 +48,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.1 2004-01-20 15:01:41 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.2 2004-01-20 15:26:52 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -88,14 +88,15 @@ public class BuilderExecutorValveTest extends TestCase
         templating = new VelocityTemplating(config, logger, fs);
         logger = loggerFactory.getLogger(MVCFinder.class);
         MutablePicoContainer container = new DefaultPicoContainer();
-        container.registerComponentImplementation(Context.class); 
+        container.registerComponentImplementation(Context.class);
         MVCFinder finder = new MVCFinder(container, logger, templating, nameSequenceFactory);
+        container.registerComponentInstance(MVCFinder.class, finder);
         context = new Context();
         context.clearAttributes();
         executor = new BuilderExecutorValve(context, finder, finder, 8, 8);
     }
     
-    public void testSimple()
+    public void testEnclosure()
     {
         MVCContext mvcContext = new MVCContext();
         mvcContext.setView("foo.Bar");
@@ -103,5 +104,15 @@ public class BuilderExecutorValveTest extends TestCase
         context.setAttribute(TemplatingContext.class, templating.createContext());
         executor.run();
         assertEquals("Default(foo/Default(foo/Bar()))", mvcContext.getBuildResult());
+    }
+    
+    public void testRoute()
+    {
+        MVCContext mvcContext = new MVCContext();
+        mvcContext.setView("Router");
+        context.setAttribute(MVCContext.class, mvcContext);
+        context.setAttribute(TemplatingContext.class, templating.createContext());
+        executor.run();
+        assertEquals("Default(RoutedTo())", mvcContext.getBuildResult());
     }
 }
