@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.9 2004-01-20 17:20:03 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.10 2004-01-20 17:26:55 pablo Exp $
  */
 public class StringUtils
 {
@@ -108,6 +108,7 @@ public class StringUtils
 	 * Backslash escape reserved characters in a string.
 	 *
 	 * @param in the string to process.
+	 * @param reserved the reserved characters.
 	 * @return the string reserved characters escaped.
 	 */
 	public static String backslashEscape(String in, String reserved)
