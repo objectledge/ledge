@@ -38,6 +38,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.templating.TemplatingContextLoaderValve;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.BuildException;
@@ -73,7 +74,7 @@ public class ComponentsTest extends TestCase
         try
         {
             context = new Context();
-            
+            context.clearAttributes();
             //prepare test
             String root = System.getProperty("ledge.root");
             if (root == null)
@@ -101,6 +102,8 @@ public class ComponentsTest extends TestCase
             MVCContext mvcContext = new MVCContext();
             mvcContext.setAction(null);
             context.setAttribute(MVCContext.class, mvcContext);
+            TemplatingContextLoaderValve tclv = new TemplatingContextLoaderValve(templating);
+            tclv.process(context);
         }
         catch (Exception e)
         {
