@@ -30,7 +30,6 @@ package org.objectledge.i18n;
 
 import java.util.Locale;
 
-import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.utils.StringUtils;
 
 /**
@@ -38,43 +37,34 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.5 2004-08-19 13:43:30 zwierzem Exp $
+ * @version $Id: I18nTool.java,v 1.6 2004-08-19 15:19:10 zwierzem Exp $
  */
 public class I18nTool
 {
     private I18n i18n;
 
-    /** buffer used to build keys. */
-    protected StringBuffer b;
-    protected int prefixLength;
-	
-	/** i18n tool factory - for recycling */
-	private ContextToolFactory factory;
+    /** buffer used keep the tools prefix and to build absolute keys. */
+    protected StringBuffer prefixBuf = new StringBuffer();
 	
 	/** current locale */
 	private Locale locale;
 	
 	/**
 	 * Default constructor.
-	 * 
 	 * @param i18n the i18n component.
-	 * @param factory the factory.
 	 * @param locale the locale.
 	 * @param prefix the prefix.	 
 	 */
-	public I18nTool(I18n i18n, ContextToolFactory factory, Locale locale, String prefix)
+	public I18nTool(I18n i18n, Locale locale, String prefix)
 	{
 		this.i18n = i18n;
-		this.factory = factory;
 		this.locale = locale;
 
-        if(prefix == null)
+        prefixBuf.setLength(0);
+        if(prefix != null)
         {
-            prefix = "";
+            prefixBuf.append(prefix);
         }
-        b = new StringBuffer();
-        b.append(prefix);
-        prefixLength = prefix.length();
 	}
 	
 	/**
@@ -86,17 +76,18 @@ public class I18nTool
 	 */
 	public I18nTool usePrefix(String prefix)
 	{
+        int prefixLength = prefixBuf.length();        
 		if(prefix.length() > 0)
 		{
 			if(prefixLength > 0)
 			{
-				b.append('.');
+				prefixBuf.append('.');
 			}
-			b.append(prefix);
+			prefixBuf.append(prefix);
 		}
-		I18nTool child = new I18nTool(i18n, factory, locale, b.toString());
-        b.setLength(prefixLength);
-        return child;
+        I18nTool target = createInstance(this); // the prefix buffer is extended
+        prefixBuf.setLength(prefixLength); // get back to previous prefix
+        return target;
 	}
 	
 	/**
@@ -107,7 +98,9 @@ public class I18nTool
 	 */
 	public I18nTool useLocale(String locale)
 	{
-		return new I18nTool(i18n, factory, StringUtils.getLocale(locale), b.toString()); 
+        I18nTool target = createInstance(this);
+        target.locale = StringUtils.getLocale(locale);
+		return target; 
 	}
 	
 	/** 
@@ -118,13 +111,7 @@ public class I18nTool
 	 */
 	public String get(String key)
 	{
-		if(prefixLength == 0)
-		{
-			return i18n.get(locale, key);
-		}
-        String newKey = b.append('.').append(key).toString();
-        b.setLength(prefixLength);
-		return i18n.get(locale, newKey);
+		return i18n.get(locale, getKey(key));
 	}
 
     /** 
@@ -137,13 +124,7 @@ public class I18nTool
      */
     public String get(String key, String defaultValue)
     {
-        if(prefixLength == 0)
-        {
-            return i18n.get(locale, key, defaultValue);
-        }
-        String newKey = b.append('.').append(key).toString();
-        b.setLength(prefixLength);
-        return i18n.get(locale, newKey, defaultValue);
+        return i18n.get(locale, getKey(key), defaultValue);
     }
 
     /**
@@ -155,12 +136,37 @@ public class I18nTool
 	 */
 	public String get(String key, String[] values)
 	{
-		if(prefixLength == 0)
-		{
-			return i18n.get(locale, key, values);
-		}
-        String newKey = b.append('.').append(key).toString();
-        b.setLength(prefixLength);
-		return i18n.get(locale, newKey, values);
+		return i18n.get(locale, getKey(key), values);
 	}
+    
+    // implementation ------------------------------------------------------------------------------
+
+    /**
+     * Creates the I18nTool instance for copying. This method is intended to be overriden by
+     * extending classes in order to provide LinkTool instances of proper class.
+     * 
+     * @param source copied object
+     * @return created instance of the linktool.
+     */
+    protected I18nTool createInstance(I18nTool source)
+    {
+        return new I18nTool(source.i18n, source.locale, source.prefixBuf.toString());
+    }
+
+    /**
+     * Creates an absolute key suitable for direct use with I18n component.
+     * 
+     * @param key key relative to this tool's set prefix.
+     */
+    protected String getKey(String key)
+    {
+        int bLength = prefixBuf.length();        
+        if(bLength == 0)
+        {
+            return key;
+        }
+        String newKey = prefixBuf.append('.').append(key).toString();
+        prefixBuf.setLength(bLength);
+        return newKey;
+    }
 }
