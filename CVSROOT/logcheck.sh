@@ -9,15 +9,15 @@ cat > $TEMPFILE
 #
 # Invoke spackle
 #
-$CVSROOT/CVSROOT/log_accum.pl $USER ${1} < $TEMPFILE
+$CVSROOT/CVSROOT/log_accum.pl $USER `echo ${1} | cut -d , -f 1` < $TEMPFILE
 
 #
 # Invoke cvsspam
 #
-$CVSROOT/CVSROOT/collect_diffs.rb --from $USER --to objectledge-cvshtml@lists.caltha.pl ${@} < $TEMPFILE
+$CVSROOT/CVSROOT/collect_diffs.rb --from $USER --to objectledge-cvshtml@lists.caltha.pl ${1} < $TEMPFILE
 
 #
 # clean up
 #
-echo ${1} ${2}
-#rm $TEMPFILE
+
+rm $TEMPFILE
