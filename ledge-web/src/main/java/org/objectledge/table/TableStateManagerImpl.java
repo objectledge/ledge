@@ -40,7 +40,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.4 2004-03-16 15:36:00 zwierzem Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.5 2004-03-17 15:35:57 zwierzem Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager
@@ -149,7 +149,7 @@ public class TableStateManagerImpl
     /**
      * A container class for {@link TableState} instances kept in user's session.
      */
-    public class TableData
+    private class TableData
     {
         private Map map = new HashMap();
 
