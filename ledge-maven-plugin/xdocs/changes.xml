@@ -4,7 +4,9 @@
     <title>Changes</title>
   </properties>
   <body>
-    <release version="0.1" date="CVS HEAD">
+    <release version="0.1" date="Janary 7 2004">
+    </release>
+    <release version="0.2" date="CVS HEAD">
     </release>
   </body>
 </document>
