@@ -42,10 +42,11 @@ import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.web.HttpDispatcher;
 
 /**
+ * Returns pre-configured static strings as http responses.
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: StaticHttpDispatcher.java,v 1.1 2003-12-29 12:57:38 fil Exp $
+ * @version $Id: StaticHttpDispatcher.java,v 1.2 2004-01-14 14:47:18 fil Exp $
  */
 public class StaticHttpDispatcher 
     implements HttpDispatcher

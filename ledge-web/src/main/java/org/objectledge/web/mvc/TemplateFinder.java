@@ -30,16 +30,16 @@ package org.objectledge.web.mvc;
 import org.objectledge.templating.Template;
 
 /**
- *
+ * Finds templates that should be used for rendering specific views
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TemplateFinder.java,v 1.2 2003-12-30 14:41:37 zwierzem Exp $
+ * @version $Id: TemplateFinder.java,v 1.3 2004-01-14 14:47:19 fil Exp $
  */
 public interface TemplateFinder
 {
 	/**
 	 * Returns an builder template for a given builder name. If no template is found, a
-	 * {@link org.objectledge.web.mvc.DefaultTemplate} is returned.
+	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
 	 * 
      * @param name name of a builder for which a template must be found
 	 * @return found template
@@ -48,7 +48,7 @@ public interface TemplateFinder
 
 	/**
 	 * Returns an enclosing builder template for a given builder. If no template is found, a
-	 * {@link org.objectledge.web.mvc.DefaultTemplate} is returned.
+	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
 	 * 
 	 * @param builder a builder for which an eclosing builder template must be found 
 	 * @return found template

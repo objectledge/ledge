@@ -42,10 +42,11 @@ import org.objectledge.web.HttpDispatcher;
 import org.objectledge.web.WebConfigurator;
 
 /**
+ * Processes http requests using a Pipeline.
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.7 2004-01-14 14:13:09 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.8 2004-01-14 14:47:18 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
