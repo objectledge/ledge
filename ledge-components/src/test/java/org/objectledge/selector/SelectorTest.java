@@ -36,6 +36,7 @@ import javax.xml.parsers.SAXParserFactory;
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLValidator;
@@ -46,7 +47,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SelectorTest.java,v 1.1 2004-01-26 15:30:09 fil Exp $
+ * @version $Id: SelectorTest.java,v 1.2 2004-01-27 13:26:40 fil Exp $
  */
 public class SelectorTest extends TestCase
 {
@@ -60,8 +61,7 @@ public class SelectorTest extends TestCase
         super(arg0);
     }
 
-
-    public void testSelector()
+    public Configuration getSelectorConfig(String name)
         throws Exception
     {
         String root = System.getProperty("ledge.root");
@@ -71,7 +71,7 @@ public class SelectorTest extends TestCase
             "use -Dledge.root=.../ledge-container/src/test/resources");
         }
         FileSystem fs = FileSystem.getStandardFileSystem(root+"/selector");
-        URL configUrl = fs.getResource("Selector.xml");
+        URL configUrl = fs.getResource(name);
         URL schemaUrl = fs.getResource("org/objectledge/selector/Selector.rng");
         if(configUrl == null || schemaUrl == null)
         {
@@ -94,7 +94,13 @@ public class SelectorTest extends TestCase
         reader.setContentHandler(handler);
         reader.setErrorHandler(handler);
         reader.parse(source);
-        Configuration config = handler.getConfiguration();
+        return handler.getConfiguration();
+    }
+
+    public void testSelector()
+        throws Exception
+    {
+        Configuration config = getSelectorConfig("Selector.xml");
         Object[] objects = new Object[3];
         objects[0] = new Integer(0);
         objects[1] = new Integer(1);
@@ -111,5 +117,44 @@ public class SelectorTest extends TestCase
         values.put("number", new Integer(99));
         i = (Integer)selector.select(vars);
         assertEquals(2, i.intValue());
+    }
+    
+    public void testFallthrough()
+        throws Exception
+    {
+        Configuration config = getSelectorConfig("Fallthrough.xml");
+        Object[] objects = new Object[2];
+        objects[0] = new Integer(0);
+        objects[1] = new Integer(1);
+        Selector selector = new Selector(config, objects);
+        Map values = new HashMap();
+        Variables vars = new IntrospectionVariables(values);
+        values.put("number", new Integer(0));
+        Integer i = (Integer)selector.select(vars);
+        assertEquals(0, i.intValue());
+        values.put("number", new Integer(1));
+        i = (Integer)selector.select(vars);
+        assertEquals(1, i.intValue());
+        values.put("number", new Integer(99));
+        i = (Integer)selector.select(vars);
+        assertNull(i);                
+    }
+    
+    public void testUnmatched()
+        throws Exception
+    {
+        Configuration config = getSelectorConfig("Selector.xml");
+        Object[] objects = new Object[2];
+        objects[0] = new Integer(0);
+        objects[1] = new Integer(1);
+        try
+        {
+            new Selector(config, objects);
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            assertEquals(ConfigurationException.class, e.getClass());
+        }
     }
 }
