@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.1 2004-01-19 13:04:05 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.2 2004-01-19 13:29:20 fil Exp $
  */
 public class NameSequenceFactoryTest extends TestCase
 {
@@ -95,6 +95,19 @@ public class NameSequenceFactoryTest extends TestCase
         Templating templating = getTemplating();
         Template barTemplate = templating.getTemplate("views/foo/Bar");
         assertEquals("views.foo.Bar", factory.getView(barTemplate));
+    }
+
+    public void testOverlap()
+    {
+        try
+        {
+            getNameSequenceFactory("overlap");
+            fail("exception should have been thrown");
+        }
+        catch(Exception e)
+        {
+            // success        
+        }
     }
     
     public NameSequenceFactory getNameSequenceFactory(String configVariant)
