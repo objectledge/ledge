@@ -38,14 +38,14 @@ import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Pipeline;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.HttpContextImpl;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.HttpDispatcher;
 
 /**
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.2 2004-01-08 10:20:48 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.3 2004-01-12 14:37:11 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
@@ -76,7 +76,7 @@ public class PipelineHttpDispatcher
     public boolean dispatch(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        HttpContext httpContext = new HttpContextImpl(request,response);
+        HttpContext httpContext = new HttpContext(request,response);
         context.setAttribute(HttpContext.CONTEXT_KEY, httpContext);
         pipeline.run();
         // TODO decide what to return...

@@ -39,7 +39,7 @@ import org.objectledge.context.Context;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.HttpContextImpl;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.parameters.RequestParameters;
 
 /**
@@ -111,7 +111,7 @@ public class LinkTool
 		this.context = context;
 		this.config = config;
 		mvcContext = MVCContextImpl.retrieve(context);
-		httpContext = HttpContextImpl.retrieve(context);
+		httpContext = HttpContext.retrieve(context);
 		requestParameters = RequestParameters.retrieve(context);
 		resourceLink = false;
 		includeSession = true;

@@ -34,73 +34,139 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.objectledge.context.Context;
+
 
 /**
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.2 2003-12-23 23:40:23 pablo Exp $
+ * @version $Id: HttpContext.java,v 1.3 2004-01-12 14:37:12 fil Exp $
  */
-public interface HttpContext
+public class HttpContext
 {
-	/** the key that points the http context is thread context. */ 
-	public static final String CONTEXT_KEY = "objectledge.web.http_context";
+    /** the key that points the http context is thread context. */ 
+    public static final String CONTEXT_KEY = "objectledge.web.http_context";
+
+	/**
+	 *  Usefull method to retrieve http context from context.
+	 *
+	 * @param context the context.
+	 * @return the http context.
+	 */
+	public static HttpContext retrieve(Context context)
+	{
+		return (HttpContext)context.getAttribute(CONTEXT_KEY);
+	}
+	
+	/** http request */
+	private HttpServletRequest request;
+	
+	/** http response */
+	private HttpServletResponse response;
+	
+	/** direct response flag */
+	private boolean directResponse;
+	
+	/** response content type */
+	private String contentType;
 	
 	/**
+	 * Construct new http context.
+	 * 
+	 * @param request the http request.
+	 * @param response the http response.
+	 */
+	public HttpContext(HttpServletRequest request, HttpServletResponse response)
+	{
+		this.request = request;
+		this.response = response;
+		directResponse = false;
+		contentType = request.getContentType();
+	}
+	
+    /**
      * Get the servlet request.
      * 
      * @return the http request
      */
-    public HttpServletRequest getRequest();
+    public HttpServletRequest getRequest()
+    {
+    	return request;
+    }
     
-	/**
-	 * Get the servlet response.
-	 *
-	 * @return the http response.
-	 */
-	public HttpServletResponse getResponse();
+    /**
+     * Get the servlet response.
+     *
+     * @return the http response.
+     */
+	public HttpServletResponse getResponse()
+	{
+		return response;
+	}
 	
-	/**
-	 * Sends a temporary redirect response to new location
-	 *
-	 * @param location the redirect location URL.
-	 * @throws java.io.IOException If an input or output exception occurs.
-	 */
+    /**
+     * Sends a temporary redirect response to new location
+     *
+     * @param location the redirect location URL.
+     * @throws java.io.IOException If an input or output exception occurs.
+     */
 	public void sendRedirect(String location)
-		throws IOException;
-		
-	/**
-	 * Wrapping method for writing some data to response output stream.
-	 *  
-	 * @return an OutputStream.
-	 * @throws IOException if happens.
-	 */
-	public OutputStream getOutputStream()
-		throws IOException;
-
-	/**
-	 * Sets the direct response flag.
-	 */
-	public void setDirectResponse();
-
-	/**
-	 * Returns the direct response flag.
-	 *
-	 * @return the direct response flag.
-	 */
-	public boolean getDirectResponse();
+		throws IOException
+	{
+		directResponse = true;
+		response.sendRedirect(location);
+	}
 	
-	/**
-	 * Returns the content type.
-	 *
-	 * @return the content type.
-	 */
-	public String getContentType();
+    /**
+     * Wrapping method for writing some data to response output stream.
+     *  
+     * @return an OutputStream.
+     * @throws IOException if happens.
+     */
+	public OutputStream getOutputStream()
+		throws IOException
+	{
+		directResponse = true;
+		response.setContentType(getContentType());
+		return response.getOutputStream();
+	}
 
-	/**
-	 * Sets the content type.
-	 *
-	 * @param type the content type.
-	 */
-	public void setContentType(String type);
+    /**
+     * Sets the direct response flag.
+     */
+	public void setDirectResponse()
+	{
+		directResponse = true;
+	}
+
+    /**
+     * Returns the direct response flag.
+     *
+     * @return the direct response flag.
+     */
+	public boolean getDirectResponse()
+	{
+		return directResponse;
+	}
+	
+    /**
+     * Returns the content type.
+     *
+     * @return the content type.
+     */
+	public String getContentType()
+	{
+		return contentType;
+	}
+
+    /**
+     * Sets the content type.
+     *
+     * @param type the content type.
+     */
+	public void setContentType(String type)
+	{
+		contentType = type;
+	}
 }
