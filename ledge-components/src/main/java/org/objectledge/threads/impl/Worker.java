@@ -37,7 +37,7 @@ import org.picocontainer.lifecycle.Stoppable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Worker.java,v 1.2 2004-02-02 09:54:23 fil Exp $
+ * @version $Id: Worker.java,v 1.3 2004-02-02 13:06:49 fil Exp $
  */
 public class Worker 
     implements Runnable, Stoppable
@@ -111,71 +111,82 @@ public class Worker
                     {
                         this.wait();
                     }
-                    catch(InterruptedException e)
-                    {
-                        if(!shutdown)
-                        {
-                            log.warn(name+" was interrupted while waiting for tasks");
-                        }
-                        break loop;
-                    }
-                }
-            }
-            if(!shutdown)
-            {
-                thread.setName(task.getName());
-                
-                try
-                {
-                    log.debug(name+" starting "+task.getName());
-                    task.process(context);
-                    log.debug(name+" done "+task.getName());
-                }
-                catch(VirtualMachineError e)
-                {
-                    throw e;
-                }
-                catch(ThreadDeath e)
-                {
-                    log.warn(name+" was forcibly stopped while running "+task.getName());
-                    throw e;
-                }
-                catch(Throwable e)
-                {
-                    log.error(name+": uncaught exception in "+task.getName(), e);
-                }
-                
-                if(cleanup != null)
-                {
-                    try
-                    {
-                        cleanup.process(context);
-                    }
+                    ///CLOVER:OFF
                     catch(VirtualMachineError e)
                     {
                         throw e;
                     }
                     catch(ThreadDeath e)
                     {
-                        log.warn(name+" was forcibly stopped while performing cleanup", e);
                         throw e;
                     }
-                    catch(Throwable e)
+                    ///CLOVER:ON
+                    catch(InterruptedException e)
                     {
-                        log.error(name+": uncaught exception in cleanup", e);
+                        break loop;
                     }
                 }
-                
-                thread.setName(name);
-                task = null;
+            }
+            
+            thread.setName(task.getName());
+            try
+            {
+                log.debug(name+" starting "+task.getName());
+                task.process(context);
+                log.debug(name+" done "+task.getName());
+            }
+            ///CLOVER:OFF
+            catch(VirtualMachineError e)
+            {
+                throw e;
+            }
+            ///CLOVER:ON
+            catch(ThreadDeath e)
+            {
+                log.warn(name+" was forcibly stopped while running "+task.getName());
+                throw e;
+            }
+            catch(Throwable e)
+            {
+                log.error(name+": uncaught exception in "+task.getName(), e);
+            }
+            
+            if(cleanup != null)
+            {
+                try
+                {
+                    cleanup.process(context);
+                }
+                ///CLOVER:OFF
+                catch(VirtualMachineError e)
+                {
+                    throw e;
+                }
+                catch(ThreadDeath e)
+                {
+                    throw e;
+                }
+                ///CLOVER:ON
+                catch(Throwable e)
+                {
+                    log.error(name+": uncaught exception in cleanup", e);
+                }
+            }
+            
+            thread.setName(name);
+            task = null;
+            if(pool != null)
+            {
                 try
                 {
                     pool.returnObject(this);
                 }
+                ///CLOVER:OFF
                 catch(Exception e)
                 {
                     log.error("failed to return worker to the pool", e);
                 }
+                ///CLOVER:ON
             }
         }
         log.info("finished "+name);
@@ -198,7 +209,7 @@ public class Worker
     {
         shutdown = true;
         log.info(name+" shutting down");
-        if(task == null)
+        if(task != null)
         {
             try
             {
