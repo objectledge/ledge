@@ -37,9 +37,9 @@ import org.jcontainer.dna.Configurable;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
-import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
+import org.objectledge.parameters.SortedParameters;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 
@@ -64,13 +64,17 @@ import org.objectledge.web.WebConfigurator;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.9 2004-07-02 14:33:17 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.10 2004-07-05 13:52:12 zwierzem Exp $
  */
 public class LinkTool
 {
 	/** utf encoding */
 	public static final String PARAMETER_ENCODING = "UTF-8";
 	
+    /** query string parameter values encoder */
+    private static final org.objectledge.encodings.URLEncoder queryStringEncoder =
+        new org.objectledge.encodings.URLEncoder();
+    
 	/** link tool factory */
 	private LinkToolFactory factory;
 	
@@ -138,11 +142,11 @@ public class LinkTool
         port = 0;
 		view = requestParameters.get(config.viewToken, "");
 		action = "";
-		parameters = new DefaultParameters();
+		parameters = new SortedParameters();
 		fragment = null;
 		if(config.stickyParameterNames.size() > 0)
 		{
-			parameters = new DefaultParameters(requestParameters);
+			parameters = new SortedParameters(requestParameters);
 		    parameters.removeExcept(config.stickyParameterNames);
 		}
 		sb = new StringBuffer();
@@ -346,7 +350,7 @@ public class LinkTool
 		}
 		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
-        target.parameters = new DefaultParameters(parameters);
+        target.parameters = new SortedParameters(parameters);
         return target;
     }
 
@@ -695,7 +699,8 @@ public class LinkTool
                     
                     sb.append(URLEncoder.encode(key, PARAMETER_ENCODING));
                     sb.append('=');
-                    sb.append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
+                    sb.append(queryStringEncoder
+                        .encodeQueryStringValue(values[j], PARAMETER_ENCODING));
 
                     querySeparator = querySeparator2;
                 }
@@ -721,7 +726,7 @@ public class LinkTool
 		target.port = source.port;
 		target.path = source.path;
 		target.fragment = source.fragment;
-	    target.parameters = new DefaultParameters(source.parameters);
+	    target.parameters = new SortedParameters(source.parameters);
 		return target;		
 	}
     
