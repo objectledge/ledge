@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.17 2004-09-03 09:45:31 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.18 2004-12-21 10:43:31 rafal Exp $
  */
 public class StringUtils
 {
@@ -471,4 +471,67 @@ public class StringUtils
         }
         return sb.toString();
     }    
+
+    /**
+     * Wrap the text to the specified number of columns.
+     *
+     * <p>The input string is expected to be a series of lines of text
+     * delimeted by \n characters. The output string contains the text
+     * reformatted in such way that each line is at most <code>width</code>
+     * characters wide. For each line of input text that is longer than the
+     * limit, last whitespace character before the limit is searched, and is
+     * replaced by a newline. Any whitespace characters immediately following
+     * that character are discarded. If the input text contains a sequence of 
+     * non-whitespace characters longer than the specified limit, the sequence
+     * will be broken by newlines to fit in the limit.</p>
+     * 
+     * @param in the text to format.
+     * @param width the width of the output text.
+     * @return wrapped text.
+     */
+    public static String wrap(String in, int width)
+    {
+        if(in.length() <= width)
+        {
+            return in;
+        }
+        StringTokenizer st = new StringTokenizer(in, "\n");
+        StringBuffer out = new StringBuffer();
+        StringBuffer lineOut = new StringBuffer();
+        String line;
+        int a,b;
+        while(st.hasMoreTokens())
+        {
+            line = st.nextToken();
+            if(line.length() <= width)
+            {
+                out.append(line).append('\n');
+                continue;
+            }
+            lineOut.setLength(0);
+            a = 0;
+            b = width;
+            while(b < line.length())
+            {
+                while(b > a && !Character.isWhitespace(line.charAt(b)))
+                {
+                    b--;
+                }
+                if(b == a)
+                {
+                    b = a + width;
+                }
+                lineOut.append(line.substring(a,b)).append('\n') ;
+                a = b;
+                while(a < line.length() && Character.isWhitespace(line.charAt(a)))
+                {
+                    a++;
+                }
+                b = a + width;
+            }
+            lineOut.append(line.substring(a));
+            out.append(lineOut);
+        }
+        return out.toString();
+    }
 }

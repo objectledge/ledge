@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.6 2004-12-20 16:08:41 pablo Exp $
+ * @version $Id: StringTool.java,v 1.7 2004-12-21 10:47:52 rafal Exp $
  */
 public class StringTool
 {
@@ -113,5 +113,25 @@ public class StringTool
     	return String.valueOf(value);
     }
     
-    
+    /**
+     * Wrap the text to the specified number of columns.
+     *
+     * <p>The input string is expected to be a series of lines of text
+     * delimeted by \n characters. The output string contains the text
+     * reformatted in such way that each line is at most <code>width</code>
+     * characters wide. For each line of input text that is longer than the
+     * limit, last whitespace character before the limit is searched, and is
+     * replaced by a newline. Any whitespace characters immediately following
+     * that character are discarded. If the input text contains a sequence of 
+     * non-whitespace characters longer than the specified limit, the sequence
+     * will be broken by newlines to fit in the limit.</p>
+     * 
+     * @param in the text to format.
+     * @param width the width of the output text.
+     * @return wrapped text.
+     */
+    public String wrap(String in, int width)
+    {
+        return StringUtils.wrap(in, width); 
+    }
 }
