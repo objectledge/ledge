@@ -29,7 +29,6 @@
 package org.objectledge.pico.customization;
 
 import org.picocontainer.ComponentAdapter;
-import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
@@ -40,15 +39,13 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * class.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentProvider.java,v 1.6 2003-12-15 09:42:32 fil Exp $
+ * @version $Id: CustomizedComponentProvider.java,v 1.7 2004-01-16 10:21:53 fil Exp $
  */
 public interface CustomizedComponentProvider
 {
     /**
      * Returns a customized component instance.
      * 
-     * @param dependenciesContainer container where the customized component dependencies should be
-     *        resolved.
      * @param componentKey requesting component's key.
      * @param componentImplementaion requesting component's implmenetation class.
      * @return customized adapter of the component.
@@ -56,8 +53,7 @@ public interface CustomizedComponentProvider
      * @throws PicoIntrospectionException if the customized component cannot be initialized.
      * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
-    public ComponentAdapter getCustomizedAdapter(MutablePicoContainer dependenciesContainer, 
-        Object componentKey, Class componentImplementaion)
+    public ComponentAdapter getCustomizedAdapter(Object componentKey, Class componentImplementaion)
         throws PicoInitializationException, PicoIntrospectionException,
             UnsupportedKeyTypeException;
     
