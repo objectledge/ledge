@@ -29,10 +29,10 @@
 package org.objectledge.parameters;
 
 /**
- * 
+ * Thrown when an undefined parameter is evaluated.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UndefinedParameterException.java,v 1.4 2004-02-20 13:51:31 pablo Exp $
+ * @version $Id: UndefinedParameterException.java,v 1.5 2004-12-27 05:17:35 rafal Exp $
  */
 ///CLOVER:OFF
 public class UndefinedParameterException

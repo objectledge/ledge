@@ -29,10 +29,10 @@
 package org.objectledge.parameters;
 
 /**
- * 
+ * Thrown when multi-valued parameter is evalueted in a single-valued context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AmbiguousParameterException.java,v 1.3 2003-12-29 13:32:06 fil Exp $
+ * @version $Id: AmbiguousParameterException.java,v 1.4 2004-12-27 05:17:35 rafal Exp $
  */
 ///CLOVER:OFF
 public class AmbiguousParameterException

@@ -43,10 +43,10 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 
 /**
- *
+ * Provides Logger objects to the components being initialized using Log4J.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.14 2004-12-22 08:02:09 rafal Exp $
+ * @version $Id: LoggerFactory.java,v 1.15 2004-12-27 05:18:09 rafal Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider

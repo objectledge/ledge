@@ -31,8 +31,10 @@ import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.BuildException;
 
 /**
+ * A generic building block for the application's UI.
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Component.java,v 1.1 2004-01-20 11:59:38 zwierzem Exp $
+ * @version $Id: Component.java,v 1.2 2004-12-27 05:18:22 rafal Exp $
  */
 public interface Component
 {

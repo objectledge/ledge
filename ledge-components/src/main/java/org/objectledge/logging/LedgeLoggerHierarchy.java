@@ -32,10 +32,10 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 
 /**
- * 
+ * Logger Hierarchy implementation using LedgeLoggerFactory.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeLoggerHierarchy.java,v 1.2 2004-12-22 08:34:55 rafal Exp $
+ * @version $Id: LedgeLoggerHierarchy.java,v 1.3 2004-12-27 05:17:38 rafal Exp $
  */
 public class LedgeLoggerHierarchy extends Hierarchy
 {

@@ -38,9 +38,10 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 /**
+ * Date formatter component.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DateFormatter.java,v 1.1 2004-02-09 12:09:54 fil Exp $
+ * @version $Id: DateFormatter.java,v 1.2 2004-12-27 05:17:43 rafal Exp $
  */
 public class DateFormatter
 {

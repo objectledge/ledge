@@ -37,10 +37,10 @@ import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 import org.picocontainer.defaults.NotConcreteRegistrationException;
 
 /**
- *
+ * An implementation of CDI ComponentAdapter aware of dependencies using CustomizedComponentAdapter.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.7 2004-03-11 14:13:36 fil Exp $
+ * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.8 2004-12-27 05:18:05 rafal Exp $
  */
 public class CustomizingConstructorComponentAdapter extends ConstructorInjectionComponentAdapter
 {

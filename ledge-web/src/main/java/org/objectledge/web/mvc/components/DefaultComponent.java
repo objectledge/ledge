@@ -34,8 +34,10 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.builders.BuildException;
 
 /**
+ * Base class of Component interface implementations.
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultComponent.java,v 1.2 2004-01-20 13:32:24 zwierzem Exp $
+ * @version $Id: DefaultComponent.java,v 1.3 2004-12-27 05:18:22 rafal Exp $
  */
 public class DefaultComponent implements Component
 {

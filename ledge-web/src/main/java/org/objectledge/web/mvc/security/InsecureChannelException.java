@@ -31,8 +31,10 @@ package org.objectledge.web.mvc.security;
 import org.objectledge.pipeline.ProcessingException;
 
 /**
+ * Thrown when the integrity or confidentiality characteristics of transport channel do not 
+ * meet the requiremnts defined for the requested data. 
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
  */
 public class InsecureChannelException extends ProcessingException
 {

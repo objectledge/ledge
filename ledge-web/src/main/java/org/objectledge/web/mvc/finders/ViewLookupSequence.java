@@ -30,9 +30,10 @@ package org.objectledge.web.mvc.finders;
 import java.util.NoSuchElementException;
 
 /**
+ * Sequence of view names conforming to the predefined settings.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequence.java,v 1.8 2004-08-18 09:38:16 pablo Exp $
+ * @version $Id: ViewLookupSequence.java,v 1.9 2004-12-27 05:18:14 rafal Exp $
  */
 public class ViewLookupSequence
     implements Sequence

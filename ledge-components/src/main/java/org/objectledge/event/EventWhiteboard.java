@@ -36,7 +36,7 @@ import java.rmi.Remote;
  * and private event forwarding objects.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventWhiteboard.java,v 1.1 2004-03-01 13:33:45 fil Exp $
+ * @version $Id: EventWhiteboard.java,v 1.2 2004-12-27 05:17:55 rafal Exp $
  */
 public interface EventWhiteboard
 {
@@ -79,7 +79,7 @@ public interface EventWhiteboard
      * need to implement the interface <code>iface</code>, but they need to
      * implementa a <i>similar</i> interface, that has methods of the same
      * names, same return values, same argument count and types, and same
-     * thrown exceptions - plus the methods in the </code>Remote</code>
+     * thrown exceptions - plus the methods in the <code>Remote</code>
      * derived may (and per RMI contract - must) throw
      * <code>RemoteExceptions</code>. A special proxy object will be
      * registered as the listener, that will forward method calls to the

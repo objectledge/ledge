@@ -40,9 +40,10 @@ import org.objectledge.threads.impl.WorkerPool;
 import org.picocontainer.Startable;
 
 /**
+ * Thread pool component.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.8 2004-02-17 15:48:46 fil Exp $
+ * @version $Id: ThreadPool.java,v 1.9 2004-12-27 05:17:58 rafal Exp $
  */
 public class ThreadPool
     implements Startable

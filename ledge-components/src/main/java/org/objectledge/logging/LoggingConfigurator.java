@@ -47,10 +47,14 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * A component that initializes Log4J using a configuration file.
+ * 
+ * <p>The configuration file conforms to the Log4J DOMConfigurator schema. This package provides
+ * specialized Log4J objects, aware of ObjectLedge features that can be used in the configuration.
+ * </p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.4 2004-12-21 06:24:27 rafal Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.5 2004-12-27 05:17:38 rafal Exp $
  */
 public class LoggingConfigurator
 {

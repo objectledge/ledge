@@ -36,9 +36,10 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 
 /**
+ * Base class for the Login/Logout actions.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseAuthenticationAction.java,v 1.2 2004-12-23 07:18:09 rafal Exp $
+ * @version $Id: BaseAuthenticationAction.java,v 1.3 2004-12-27 05:18:30 rafal Exp $
  */
 public class BaseAuthenticationAction
 {

@@ -41,10 +41,10 @@ import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.components.DefaultComponent;
 
 /**
- * 
+ * A component that displays available Locales.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Locales.java,v 1.2 2004-12-22 08:58:51 rafal Exp $
+ * @version $Id: Locales.java,v 1.3 2004-12-27 05:18:25 rafal Exp $
  */
 public class Locales extends DefaultComponent
 {

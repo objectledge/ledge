@@ -35,6 +35,8 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 
 /**
+ * Delegating NamingEnumeration wrapper.
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class DefaultEnumeration implements NamingEnumeration

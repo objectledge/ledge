@@ -48,10 +48,11 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.filesystem.ServletFileSystemProvider;
 
 /**
- *
+ * The entry point to ObjectLedge web application, that initializes the container, and uses 
+ * HttpDispatcher component to handle requests.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.15 2004-12-23 07:17:51 rafal Exp $
+ * @version $Id: LedgeServlet.java,v 1.16 2004-12-27 05:18:28 rafal Exp $
  */
 public class LedgeServlet extends HttpServlet
 {

@@ -48,6 +48,8 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 /**
+ * Ledge testcases base class.
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public abstract class LedgeTestCase extends MockObjectTestCase

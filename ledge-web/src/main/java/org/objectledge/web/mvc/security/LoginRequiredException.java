@@ -31,6 +31,9 @@ package org.objectledge.web.mvc.security;
 import org.objectledge.pipeline.ProcessingException;
 
 /**
+ * Thrown when anonymous user attemps to access data, or perform an operation that requires 
+ * authentication.
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class LoginRequiredException extends ProcessingException

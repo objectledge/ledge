@@ -31,13 +31,13 @@ package org.objectledge.web.mvc.builders;
  * Thrown when a builder encunters a problem in rendering.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildException.java,v 1.2 2004-01-15 10:30:31 fil Exp $
+ * @version $Id: BuildException.java,v 1.3 2004-12-27 05:18:20 rafal Exp $
  */
 ///CLOVER:OFF
 public class BuildException extends Exception
 {
     /**
-     * 
+     * Creates new BuildException instance.
      */
     public BuildException()
     {
@@ -45,7 +45,9 @@ public class BuildException extends Exception
     }
 
     /**
-     * @param message message for this exception
+     * Creates new BuildException instance.
+     * 
+     * @param message the detail message.
      */
     public BuildException(String message)
     {
@@ -53,7 +55,9 @@ public class BuildException extends Exception
     }
 
     /**
-     * @param cause of this exception
+     * Creates new BuildException instance.
+     * 
+     * @param cause the root cause.
      */
     public BuildException(Throwable cause)
     {
@@ -61,8 +65,10 @@ public class BuildException extends Exception
     }
 
     /**
-     * @param message for this exception
-     * @param cause of this exception
+     * Creates new BuildException instance.
+     * 
+     * @param message the detail message.
+     * @param cause the root cause.
      */
     public BuildException(String message, Throwable cause)
     {

@@ -31,10 +31,10 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 
 /**
- * 
+ * LoggerFactory implemenation using LedgeLogger.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeLoggerFactory.java,v 1.1 2004-06-24 14:00:50 fil Exp $
+ * @version $Id: LedgeLoggerFactory.java,v 1.2 2004-12-27 05:17:38 rafal Exp $
  */
 public class LedgeLoggerFactory 
 	implements LoggerFactory

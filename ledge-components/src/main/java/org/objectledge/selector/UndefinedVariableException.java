@@ -28,9 +28,10 @@
 package org.objectledge.selector;
 
 /**
+ * Thrown when an undefined variable is evaluated.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UndefinedVariableException.java,v 1.4 2004-01-23 13:58:11 fil Exp $
+ * @version $Id: UndefinedVariableException.java,v 1.5 2004-12-27 05:17:40 rafal Exp $
  */
 public class UndefinedVariableException 
     extends EvaluationException

@@ -29,7 +29,7 @@
 package org.objectledge.notification;
 
 /**
- * 
+ * Implemented by the object recieving notifications.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */

@@ -32,11 +32,10 @@ import java.io.Reader;
 import java.io.Writer;
 
 /**
- *
- *
+ * Templating component.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Templating.java,v 1.5 2004-01-15 11:45:20 fil Exp $
+ * @version $Id: Templating.java,v 1.6 2004-12-27 05:17:49 rafal Exp $
  */
 ///CLOVER:OFF
 public interface Templating

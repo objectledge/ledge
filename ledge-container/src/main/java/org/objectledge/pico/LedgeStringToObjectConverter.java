@@ -37,12 +37,12 @@ import org.nanocontainer.reflection.StringToObjectConverter;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeStringToObjectConverter.java,v 1.3 2004-02-17 15:50:29 fil Exp $
+ * @version $Id: LedgeStringToObjectConverter.java,v 1.4 2004-12-27 05:18:03 rafal Exp $
  */
 public class LedgeStringToObjectConverter extends StringToObjectConverter
 {
     /**
-     * 
+     * Creates a new converter instance.
      */
     public LedgeStringToObjectConverter()
     {

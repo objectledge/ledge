@@ -31,9 +31,11 @@ package org.objectledge.web.mvc.security;
 import org.objectledge.pipeline.ProcessingException;
 
 /**
+ * Thrown when the logged in user is not authorized to view requested data, or perform requested
+ * operation.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AccessDeniedException.java,v 1.2 2004-06-24 15:20:02 pablo Exp $
+ * @version $Id: AccessDeniedException.java,v 1.3 2004-12-27 05:18:16 rafal Exp $
  */
 public class AccessDeniedException extends ProcessingException
 {

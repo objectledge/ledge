@@ -35,8 +35,11 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
+ * BuilderExecutorValve implementation that uses I18nAwareTemplateResolver to render builders
+ * using templates apropriate for the selected locale.
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.10 2004-12-22 08:58:47 rafal Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.11 2004-12-27 05:18:20 rafal Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {

@@ -29,7 +29,7 @@
 package org.objectledge.notification;
 
 /**
- * 
+ * Notification component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */

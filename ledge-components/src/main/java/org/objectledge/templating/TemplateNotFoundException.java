@@ -46,6 +46,8 @@ public class TemplateNotFoundException extends Exception
     }
 
     /**
+     * Creates new TemplateNotFoundException with the specified detail message.
+     * 
      * @param message the message.
      */
     public TemplateNotFoundException(String message)
@@ -54,6 +56,9 @@ public class TemplateNotFoundException extends Exception
     }
 
     /**
+     * Creates new TemplateNotFoundException with the specified detail message and root cause
+     * exception.
+     * 
      * @param message the message.
      * @param cause the root cause.
      */
@@ -63,6 +68,7 @@ public class TemplateNotFoundException extends Exception
     }
 
     /**
+     * Creates new TemplateNotFoundException with the specified root cause exception.
      * 
      * @param cause the root couse.
      */

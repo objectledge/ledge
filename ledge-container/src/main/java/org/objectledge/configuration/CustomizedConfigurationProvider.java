@@ -38,10 +38,10 @@ import org.picocontainer.PicoVerificationException;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 
 /**
- * 
+ * Provides Configuration objects to the components being initialized using ConfigurationFactory.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CustomizedConfigurationProvider.java,v 1.2 2004-07-22 16:40:02 zwierzem Exp $
+ * @version $Id: CustomizedConfigurationProvider.java,v 1.3 2004-12-27 05:18:08 rafal Exp $
  */
 public class CustomizedConfigurationProvider
 	implements CustomizedComponentProvider

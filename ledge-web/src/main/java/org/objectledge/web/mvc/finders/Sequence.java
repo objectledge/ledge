@@ -30,9 +30,10 @@ package org.objectledge.web.mvc.finders;
 import java.util.NoSuchElementException;
 
 /**
+ * Ordered collection of Strings that can be iterated over multiple times.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Sequence.java,v 1.1 2004-01-19 11:42:56 fil Exp $
+ * @version $Id: Sequence.java,v 1.2 2004-12-27 05:18:14 rafal Exp $
  */
 public interface Sequence
 {

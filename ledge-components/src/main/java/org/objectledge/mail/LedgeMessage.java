@@ -31,7 +31,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.4 2004-12-23 07:16:28 rafal Exp $
+ * @version $Id: LedgeMessage.java,v 1.5 2004-12-27 05:17:32 rafal Exp $
  */
 public class LedgeMessage
 {
@@ -132,7 +132,7 @@ public class LedgeMessage
      *
      * <p>The media identifier will be used for building full template
      * pathname, and setting message content type. Valid media types are HTML
-     * and PLAIN.</code>
+     * and PLAIN.</p>
      *
      * @param locale the locale.
      * @param media the media type.

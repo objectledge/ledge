@@ -35,8 +35,12 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
+ * ComponentTool implementation that uses I18nAwareTemplateResolver to render components
+ * using templates apropriate for the selected locale.
+ * 
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareComponentTool.java,v 1.3 2004-12-23 07:18:02 rafal Exp $
+ * @version $Id: I18nAwareComponentTool.java,v 1.4 2004-12-27 05:18:22 rafal Exp $
  */
 public class I18nAwareComponentTool
 	extends ComponentTool

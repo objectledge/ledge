@@ -35,9 +35,10 @@ import org.objectledge.threads.Task;
 import org.picocontainer.Startable;
 
 /**
+ * A worker thread helper object.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Worker.java,v 1.4 2004-02-17 15:48:42 fil Exp $
+ * @version $Id: Worker.java,v 1.5 2004-12-27 05:17:30 rafal Exp $
  */
 public class Worker 
     implements Runnable, Startable
