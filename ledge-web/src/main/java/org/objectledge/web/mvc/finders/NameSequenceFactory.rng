@@ -59,20 +59,20 @@
   
   <define name="classes">
     <element name="classes">
-      <ref name="lookp-config"/>
+      <ref name="lookup-config"/>
     </element>
   </define>
   
   <define name="templates">
     <element name="templates">
-      <ref name="lookp-config"/>
-    </elements>
+      <ref name="lookup-config"/>
+    </element>
   </define>
   
   <define name="lookup-config">
     <attribute name="separator"/>
     <optional>
-      <atrribute name="default-suffix"/>
+      <attribute name="default-suffix"/>
     </optional>
     <ref name="prefix-config"/>
   </define>
