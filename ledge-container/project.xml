@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.23 2004-05-14 11:38:43 fil Exp $ -->
+<!-- $Id: project.xml,v 1.24 2004-05-27 15:55:51 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -65,13 +65,13 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-RC-1-SNAPSHOT</version>
+      <version>1.0-RC-1</version>
       <url>http://picocontainer.org/</url>
     </dependency>
     <dependency>
       <groupId>nanocontainer</groupId>
       <artifactId>nanocontainer</artifactId>
-      <version>1.0-beta-1-SNAPSHOT</version>
+      <version>cheddar</version>
       <url>http://nanocontainer.org/</url>
     </dependency>
     <dependency>

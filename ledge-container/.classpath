@@ -9,9 +9,9 @@
 	<classpathentry sourcepath="MAVEN_REPO/log4j/sources/log4j-1.2.8-source.zip" kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/spice/jars/spice-cli-1.0.jar"/>
-	<classpathentry sourcepath="MAVEN_REPO/nanocontainer/sources/nanocontainer-1.0-beta-1-SNAPSHOT-src.zip" kind="var" path="MAVEN_REPO/nanocontainer/jars/nanocontainer-1.0-beta-1-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/nanocontainer/jars/nanocontainer-cheddar.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/dna/sources/dna-api-1.1-rc2-src.zip" kind="var" path="MAVEN_REPO/dna/jars/dna-api-1.1-rc2.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/dna/sources/dna-impl-1.1-rc2-src.zip" kind="var" path="MAVEN_REPO/dna/jars/dna-impl-1.1-rc2.jar"/>
-	<classpathentry sourcepath="MAVEN_REPO/picocontainer/sources/picocontainer-1.0-RC-1-SNAPSHOT-src.zip" kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.0-RC-1-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.0-RC-1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

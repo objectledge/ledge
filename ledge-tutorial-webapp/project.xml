@@ -81,7 +81,7 @@
     <dependency>
       <groupId>nanocontainer</groupId>
       <artifactId>nanocontainer</artifactId>
-      <version>1.0-beta-1-SNAPSHOT</version>
+      <version>cheddar</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -90,7 +90,7 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-RC-1-SNAPSHOT</version>
+      <version>1.0-RC-1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
