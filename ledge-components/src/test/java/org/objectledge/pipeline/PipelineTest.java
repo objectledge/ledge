@@ -30,6 +30,8 @@ package org.objectledge.pipeline;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
+import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.context.Context;
 
 /**
@@ -52,11 +54,12 @@ public class PipelineTest extends TestCase
     {
     	Context context = Context.getContext();
     	Runnable[] runnable = new Runnable[0];
-    	Pipeline pipe = new Pipeline(context, runnable, runnable, runnable);
+    	Logger logger = Logger.getLogger(Pipeline.class);
+    	Pipeline pipe = new Pipeline(context, new Log4JLogger(logger), 
+    								 runnable, runnable, runnable);
 		pipe.run();
 		assertEquals(runnable, pipe.getCatchValves());
 		assertEquals(runnable, pipe.getTryValves());
 		assertEquals(runnable, pipe.getFinallyValves());
     }
-
 }

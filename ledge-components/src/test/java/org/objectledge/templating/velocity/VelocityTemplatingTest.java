@@ -40,6 +40,7 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
@@ -98,7 +99,7 @@ public class VelocityTemplatingTest extends TestCase
             Configuration config = handler.getConfiguration();
                 
 			Logger logger = Logger.getLogger(VelocityTemplating.class);
-			templating = new VelocityTemplating(config, logger, fs);
+			templating = new VelocityTemplating(config, new Log4JLogger(logger), fs);
 		}
 		catch(Exception e)
 		{

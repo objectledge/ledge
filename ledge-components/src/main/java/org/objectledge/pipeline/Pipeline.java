@@ -28,13 +28,14 @@
 
 package org.objectledge.pipeline;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.6 2003-12-23 17:06:38 pablo Exp $
+ * @version $Id: Pipeline.java,v 1.7 2003-12-30 14:59:39 pablo Exp $
  */
 public class Pipeline
     implements Runnable
@@ -42,6 +43,8 @@ public class Pipeline
     private static final String CONTEXT_EXCEPTIONS = "org.objectledge.pipeline.Pipeline.exceptions";
     
     private Context context;
+    
+    private Logger logger;
     
     private Runnable[] tryValves;
     
@@ -53,14 +56,16 @@ public class Pipeline
      * Constructs a new instance of the pipeline.
      * 
      * @param context the context.
+     * @param logger the logger.
      * @param tryValves the valves to be used in the try stage.
      * @param catchValves the valves to be used in the catch stage.
      * @param finallyValves the valves to be used in the finaly stage.
      */
-    public Pipeline(Context context, Runnable[] tryValves, Runnable[] catchValves, 
+    public Pipeline(Context context, Logger logger, Runnable[] tryValves, Runnable[] catchValves, 
         Runnable[] finallyValves)
     {
         this.context = context;
+        this.logger = logger;
         this.tryValves = tryValves;
         this.catchValves = catchValves;
         this.finallyValves = finallyValves;
@@ -71,16 +76,18 @@ public class Pipeline
      */    
     public void run()
     {
-        try
+    	try
         {
         	for(int i = 0; i < tryValves.length; i++)
         	{
-        		tryValves[i].run();
+		   		tryValves[i].run();
         	}
         }
         catch(Exception e)
         {
-			for(int i = 0; i < catchValves.length; i++)
+        	// TODO - remove this exception and log and handle it.
+        	logger.error("Exception occured",e);
+        	for(int i = 0; i < catchValves.length; i++)
 		    {
 				catchValves[i].run();
 		    }
