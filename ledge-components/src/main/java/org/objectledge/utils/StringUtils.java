@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.10 2004-01-20 17:26:55 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.11 2004-01-27 16:59:31 pablo Exp $
  */
 public class StringUtils
 {
@@ -377,6 +377,7 @@ public class StringUtils
 	{
 		private int count;
 
+        ///CLOVER:OFF
 		/* overriden */
 		public void write(int b) throws IOException
 		{
@@ -388,6 +389,7 @@ public class StringUtils
 		{
 			count += b.length;
 		}
+        ///CLOVER:ON
 
 		/* overiden */
 		public void write(byte[] b, int offset, int length) throws IOException
