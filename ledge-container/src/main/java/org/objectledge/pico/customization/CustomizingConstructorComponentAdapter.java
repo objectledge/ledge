@@ -39,7 +39,7 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.4 2003-12-03 15:13:14 mover Exp $
+ * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.5 2004-01-27 16:54:49 fil Exp $
  */
 public class CustomizingConstructorComponentAdapter extends ConstructorComponentAdapter
 {
@@ -62,24 +62,6 @@ public class CustomizingConstructorComponentAdapter extends ConstructorComponent
         throws AssignabilityRegistrationException, NotConcreteRegistrationException
     {
         super(componentKey, componentImplementation, parameters);
-    }
-
-    /**
-     * Constructs a new instnace of the adapter.
-     * 
-     * @param componentKey the component's key.
-     * @param componentImplementation the component implementation class.
-     * @throws AssignabilityRegistrationException if the componentKey is a class not assignable to
-     *         componentImplementation class.
-     * @throws NotConcreteRegistrationException if the componentImplementation type is  an abstract
-     *         class or interface.
-     */
-    public CustomizingConstructorComponentAdapter(
-        Object componentKey,
-        Class componentImplementation)
-        throws AssignabilityRegistrationException, NotConcreteRegistrationException
-    {
-        super(componentKey, componentImplementation);
     }
 
     /**
