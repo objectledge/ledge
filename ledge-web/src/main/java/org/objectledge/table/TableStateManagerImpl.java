@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.2 2004-02-12 13:50:28 zwierzem Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager
@@ -167,37 +167,6 @@ public class TableStateManagerImpl
         void put(Object key, Object value)
         {
             map.put(key,value);
-        }
-
-		/**
-		 * This may be useful if session cloning occured.
-		 * @return cloned object 
-		 */
-        public Object clone()
-        {
-            TableData next = null;
-            // 1. Bitwise object copy
-            try
-            {
-                next = (TableData)(super.clone());
-            }
-            catch(CloneNotSupportedException e)
-            {
-                // this should never happen
-            }
-
-            // 2. copy referenced objects
-            next.map = new HashMap();
-
-            Iterator it = map.keySet().iterator();
-            while(it.hasNext())
-            {
-                Object key = it.next();
-                TableState value = (TableState)map.get(key);
-                next.put(key,value.clone());
-            }
-
-            return next;
         }
     }
 }
