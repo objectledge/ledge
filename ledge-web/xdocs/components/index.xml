@@ -23,13 +23,29 @@
         </p>
         <p class="more"><a href="UploadValve.html">more</a></p>
       </subsection>
-      
+      <subsection name="Web configurator">
+        <p>The simple component providing common configuration for many web components i.e.
+         the default locale, default encoding, mvc path info tokens...
+        </p>
+        <p class="more"><a href="WebConfigurator.html">more</a></p>
+      </subsection>
       <subsection name="Request parameters loader valve">
         <p>The pipeline processing valve that read the parameters from request parameters and 
         from parsed url path and store it as a parameters container in thread context.
         </p>
         <p class="more"><a href="RequestParameters.html">more</a></p>
       </subsection>
+      <subsection name="Locale loader valve">
+        <p>The pipeline processing valve responsible for loading the user prefered locale and encoding.
+        </p>
+        <p class="more"><a href="LocaleLoaderValve.html">more</a></p>
+      </subsection>
+      <subsection name="Web I18n tool factory">
+        <p>The pipeline processing valve responsible for loading the user prefered locale and encoding.
+        </p>
+        <p class="more"><a href="WebI18nToolFactory.html">more</a></p>
+      </subsection>
+      
     </section>
   </body>
 </document>

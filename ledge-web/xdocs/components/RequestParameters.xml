@@ -34,9 +34,7 @@
             <tr>
               <th>required components</th>
               <td width="100%">
-                <a href="Context.html">Context</a>,
-                <a href="MVCContext.html">Context</a>,
-                <a href="HttpContext.html">Context</a>,
+                <a href="Context.html">Context</a>
               </td>
             </tr>
             <tr>

@@ -31,8 +31,8 @@
               <th>required components</th>
               <td width="100%">
                 <a href="Context.html">Context</a>,
-                <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>,
-                <a href="../../ledge-components/MailSystem.html">MailSystem</a>,
+                <a href="../../../ledge-container/docs/container-subsystems/LoggerFactory.html">LoggerFactory</a>,
+                <a href="../../../ledge-components/docs/components/MailSystem.html">MailSystem</a>,
                 <a href="WebConfigurator.html">WebConfigurator</a>
               </td>
             </tr>

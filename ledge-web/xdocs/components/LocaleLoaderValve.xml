@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Locale loader valve</title>
+  </properties>
+
+  <body>
+    <section name="LocaleLoaderValve">
+      <subsection name="Description">
+        <p>
+        The pipeline processing valve responsible for loading the user prefered locale and encoding.
+        </p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>LocaleLoaderValve <a href="../apidocs/org/objectledge/i18n/LocaleLoaderValve.html">JavaDoc</a></li>
+            <li>LocaleLoaderValve <a href="../xref/org/objectledge/i18n/LocaleLoaderValve.html">XRef</a></li>
+            <li>LocaleLoaderValve <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/i18n/LocaleLoaderValve.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="../../../ledge-components/docs/components/Context.html">Context</a>,
+                <a href="../../../ledge-container/docs/container-subsystems/LoggerFactory.html">LoggerFactory</a>,
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">        
+        <p>
+          <table>
+	        <tr>
+	   	      <th>position</th>
+		      <th>type</th>
+		      <th widht="100%">descritpion</th>
+		    </tr>
+		    <tr>
+		      <td>1</td>
+		      <td>org.jcontainer.dna.Logger</td>
+		      <td>The logger.</td>
+		    </tr>
+          </table>
+        </p>        
+      </subsection>
+    </section>
+  </body>
+</document>

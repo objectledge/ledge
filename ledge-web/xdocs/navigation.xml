@@ -21,6 +21,9 @@
         <item name="Servlet FS provider" href="/components/ServletFileSystemProvider.html"/>
         <item name="Upload valve" href="/components/UploadValve.html"/>
         <item name="Request Parameters Loader valve" href="/components/RequestParameters.html"/>
+        <item name="Locale loader valve" href="/components/LocaleLoaderValve.html"/>
+        <item name="Web i18n tool factory" href="/components/WebI18nToolFactory.html"/>
+        <item name="Web configurator" href="/components/WebConfigurator.html"/>
       </item>
     </menu>
   </body>

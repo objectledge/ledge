@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Web configurator</title>
+  </properties>
+
+  <body>
+    <section name="WebConfigurator">
+      <subsection name="Description">
+        <p>
+		The simple component providing common configuration for many web components i.e.
+        the default locale, default encoding, mvc path info tokens...
+        </p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>WebConfigurator <a href="../apidocs/org/objectledge/web/WebConfigurator.html">JavaDoc</a></li>
+            <li>WebConfigurator <a href="../xref/org/objectledge/web/WebConfigurator.html">XRef</a></li>
+            <li>WebConfigurator <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/WebConfigurator.java">CVS log</a></li>
+	        <li>WebConfigurator configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/WebConfiguration.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>                        
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="../../../ledge-container/docs/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">        
+        <p>
+          <table>
+	        <tr>
+	   	      <th>position</th>
+		      <th>type</th>
+		      <th widht="100%">descritpion</th>
+		    </tr>
+            <tr>
+	          <td>1</td>
+	          <td><code>org.jcontainer.dna.Configuration</code></td>
+	          <td>the configuration</td>
+	        </tr>
+          </table>
+        </p>        
+      </subsection>
+    </section>
+  </body>
+</document>
