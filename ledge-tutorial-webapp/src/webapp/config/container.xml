@@ -45,6 +45,7 @@
       <component-parameter key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
       <component-parameter/>
       <component-parameter/>
+      <component-parameter/>
     </component>
     <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
     <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
