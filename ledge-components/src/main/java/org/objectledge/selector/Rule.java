@@ -68,12 +68,35 @@ class Rule
     public boolean evaluate(Variables varaibles)
         throws EvaluationException
     {
-        return evaluate(rootNode, varaibles);
+        return evaluateRule(rootNode, varaibles);
     }
     
     // expressions //////////////////////////////////////////////////////////////////////////
     
-    protected boolean evaluate(Configuration node, Variables variables)
+    protected boolean evaluateRule(Configuration node, Variables variables)
+        throws EvaluationException
+    {
+        if("rule".equals(node.getName()))
+        {
+            Configuration[] children = node.getChildren(); 
+            if(children.length > 1)
+            {
+                throw new EvaluationException("only one child node expected at "+
+                    node.getLocation());
+            }
+            else
+            {
+                return evaluateExpression(children[0], variables);
+            }
+        }
+        else
+        {
+            throw new EvaluationException("unrecognized element "+node.getName()+" at "+
+                node.getLocation());
+        }
+    }
+    
+    protected boolean evaluateExpression(Configuration node, Variables variables)
         throws EvaluationException
     {
         if("or".equals(node.getName()))
@@ -101,7 +124,7 @@ class Rule
         boolean gotTrue = false;
         for (int i = 0; i < children.length && !gotTrue; i++)
         {
-            gotTrue = evaluate(children[i], variables);
+            gotTrue = evaluateExpression(children[i], variables);
         }
         return gotTrue;
     }
@@ -113,7 +136,7 @@ class Rule
         boolean gotFalse = false;
         for (int i = 0; i < children.length && !gotFalse; i++)
         {
-            gotFalse = !evaluate(children[i], variables);
+            gotFalse = !evaluateExpression(children[i], variables);
         }
         return !gotFalse;
     }
@@ -127,7 +150,7 @@ class Rule
             throw new EvaluationException("not must have only one argument at "+
                 node.getLocation());
         }
-        return !evaluate(children[0], variables);
+        return !evaluateExpression(children[0], variables);
     }
     
     // conditions ///////////////////////////////////////////////////////////////////////////
@@ -147,7 +170,7 @@ class Rule
         {
             return evaluateSame(node, variables);
         }
-        else if("equals".equals(node.getName()))
+        else if("equal".equals(node.getName()))
         {
             return evaluateEquals(node, variables);
         }
@@ -155,7 +178,7 @@ class Rule
         {
             return evaluateLesser(node, variables);
         }
-        else if("lesser-or-equals".equals(node.getName()))
+        else if("lesser-or-equal".equals(node.getName()))
         {
             return evaluateLesserEquals(node, variables);
         }
@@ -163,7 +186,7 @@ class Rule
         {
             return evaluateGreater(node, variables);
         }
-        else if("greater-or-equals".equals(node.getName()))
+        else if("greater-or-equal".equals(node.getName()))
         {
             return evaluateGreaterEquals(node, variables);
         }
