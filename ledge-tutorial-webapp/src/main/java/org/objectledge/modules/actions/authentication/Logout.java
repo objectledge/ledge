@@ -28,10 +28,6 @@
 package org.objectledge.modules.actions.authentication;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.Authentication;
@@ -42,8 +38,9 @@ import org.objectledge.web.mvc.MVCContext;
 /**
  * Logout action.
  * 
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.1 2004-01-21 13:25:23 pablo Exp $ 
+ * @version $Id: Logout.java,v 1.2 2004-01-22 10:54:51 pablo Exp $ 
  */
 public class Logout 
     extends BaseAuthenticationAction

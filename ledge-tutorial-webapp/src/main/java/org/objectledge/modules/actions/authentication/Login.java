@@ -40,9 +40,11 @@ import org.objectledge.web.parameters.RequestParameters;
 
 /**
  * Login action.
+ *
  * 
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Login.java,v 1.1 2004-01-21 13:25:23 pablo Exp $
+ * @version $Id: Login.java,v 1.2 2004-01-22 10:54:51 pablo Exp $
  */
 public class Login 
     extends BaseAuthenticationAction
@@ -81,13 +83,11 @@ public class Login
                                                    ", " + PASSWORD_PARAM + ") not found");
         }
         Principal principal = null;
-        //TODO uncomment this when authentication appears.
-        /*
         try
         {
-            if (authentication.authenticateUser(login, password))
+            if (authentication.checkPassword(login, password))
             {
-                principal = authentication.getUserByLogin(login);
+                principal = authentication.getUser(authentication.getUserName(login));
                 clearSession(httpContext.getRequest().getSession());
             }
             else
@@ -101,7 +101,6 @@ public class Login
             logger.debug("unknown username " + login);
             principal = null;
         }
-        */
         boolean authenticated;
         if (principal == null)
         {
@@ -116,7 +115,7 @@ public class Login
         mvcContext.setUserPrincipal(principal, authenticated);
         if (!authenticated)
         {
-            //throw new Exception("Login failed");
+            throw new PipelineProcessingException("Login failed");
         }
     }
 }
