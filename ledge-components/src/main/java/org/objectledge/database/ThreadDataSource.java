@@ -41,6 +41,7 @@ import org.objectledge.database.impl.DelegatingConnection;
 import org.objectledge.database.impl.DelegatingDataSource;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.utils.StringUtils;
 
 /**
  * A decorator for javax.sql.DataSource interface that makes sure a Thread uses only one physical
@@ -63,7 +64,7 @@ import org.objectledge.pipeline.Valve;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.1 2004-02-06 14:29:19 fil Exp $
+ * @version $Id: ThreadDataSource.java,v 1.2 2004-02-06 15:37:18 fil Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -151,29 +152,26 @@ public class ThreadDataSource
      * of HTTP processing pipelines to prevent database connection pool depletion in case of
      * incorrectly written code.</p>
      * 
-     * <p>Only one instance of this valve is necessary, it takes an array of all configured 
-     * ThreadDataSource instances into it's constructors.</p>
      * <p>When the valve is invoked, the thread is verified against all the data sources, to check
      * that has released the connection properly. If not, error messge is written to the log, 
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.1 2004-02-06 14:29:19 fil Exp $
+     * @version $Id: ThreadDataSource.java,v 1.2 2004-02-06 15:37:18 fil Exp $
      */
     public static class GuardValve
         implements Valve
     {
-        /** the thread data sources to guard. */
-        private ThreadDataSource[] threadDataSources;
-        
+        private Logger log;
+                
         /**
          * Constructs a GuardValve instance.
          * 
-         * @param threadDataSources the threadDataSources to guard.
+         * @param log the logger.
          */
-        public GuardValve(ThreadDataSource[] threadDataSources)
+        public GuardValve(Logger log)
         {
-            this.threadDataSources = threadDataSources;
+            this.log = log;
         }
         
         /** 
@@ -181,10 +179,7 @@ public class ThreadDataSource
          */
         public void process(Context context) throws ProcessingException
         {
-            for(int i=0; i<threadDataSources.length; i++)
-            {
-                threadDataSources[i].cleanupState();
-            }
+            cleanupState(context, log);
         }
     }
 
@@ -200,7 +195,7 @@ public class ThreadDataSource
                 trace = new StringBuffer();
                 context.setAttribute(TRACE_BUFFER, trace);
             }
-            indent(trace, (refCount-1)*2).append("connection ");
+            StringUtils.indent(trace, (refCount-1)*2).append("connection ");
             if(user != null)
             {
                 trace.append("for user ").append(user).append(' ');
@@ -218,20 +213,11 @@ public class ThreadDataSource
             }
             for(int i=start+1; i<frames.length && i<=start+tracing; i++)
             {
-                indent(trace, (refCount-1)*2).append(frames[i].toString()).append('\n');
+                StringUtils.indent(trace, (refCount-1)*2).append(frames[i].toString()).append('\n');
             }
         }
     }
     
-    private StringBuffer indent(StringBuffer buffer, int d)
-    {
-        for(int i=0; i<d; i++)
-        {
-            buffer.append(' ');
-        }
-        return buffer;
-    }
-
     /**
      * @param conn a new connection for the thread.
      */
@@ -260,7 +246,7 @@ public class ThreadDataSource
     }
 
     /**
-     * @return
+     * @return the cached connection.
      */
     private Connection getCachedConnection(String user)
     {
@@ -276,9 +262,10 @@ public class ThreadDataSource
     /**
      * Returns the connection openning/closing trace.
      *  
+     * @param context thread's processing context.
      * @return connection trace, or <code>null</code> if tracing is disabled.
      */
-    private String getTrace()
+    public static String getTrace(Context context)
     {
         StringBuffer trace = (StringBuffer)context.getAttribute(TRACE_BUFFER);
         if(trace != null)
@@ -287,42 +274,69 @@ public class ThreadDataSource
         }
         else
         {
-            return null;
+            return "Set tracing parameter to 1 or more to see the places "+
+                "where connections were opened and closed.\n";
         }
     }
-
+    
     /**
-     * Close the connection if the thread has one, and report the error condition.
+     * Checks if the calling thread has opened any database connections.
+     *
+     * @param context thread's processing context.
+     * @return <code>true</code> if the calling thread has opened any database connections.
      */
-    private void cleanupState()
+    public static boolean hasOpenConnections(Context context)
     {
         Map threadMap = (Map)context.getAttribute(THREAD_MAP);
         if(threadMap != null)
         {
-            Map userMap = (Map)threadMap.get(this);
-            if(userMap != null && !userMap.isEmpty())
+            Iterator i = threadMap.values().iterator();
+            while(i.hasNext())
             {
-                String trace = getTrace();
-                if(trace == null)
+                Map userMap = (Map)i.next();
+                if(!userMap.isEmpty())
                 {
-                    trace = "Set tracing parameter to 1 or more"+
-                    " to see the places where connections were opened and closed.\n";
+                    return true;
                 }
-                log.error("Thread owns an open connection.\n"+trace+
-                    "Attempting cleanup now.");
-                Iterator i = userMap.values().iterator();
-                while(i.hasNext())
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Close the connection if the thread has one, and report the error condition.
+     *
+     * @param context thread's processing context.
+     */
+    private static void cleanupState(Context context, Logger log)
+    {
+        Map threadMap = (Map)context.getAttribute(THREAD_MAP);
+        if(threadMap != null)
+        {
+            Iterator i = threadMap.values().iterator();
+            while(i.hasNext())
+            {
+                Map userMap = (Map)i.next();
+                if(userMap != null && !userMap.isEmpty())
                 {
-                    ThreadConnection conn = (ThreadConnection)i.next();
-                    try
+                    log.error("Thread owns an open connection.\n"+
+                        getTrace(context)+
+                        "Attempting cleanup now.");
+                    Iterator j = userMap.values().iterator();
+                    while(j.hasNext())
                     {
-                        conn.closeConnection();
-                    }
-                    catch(SQLException e)
-                    {
-                        log.error("failed to close connection", e);
+                        ThreadConnection conn = (ThreadConnection)j.next();
+                        try
+                        {
+                            conn.closeConnection();
+                        }
+                        catch(SQLException e)
+                        {
+                            log.error("failed to close connection", e);
+                        }
                     }
                 }
+                
             }
         }
     }
