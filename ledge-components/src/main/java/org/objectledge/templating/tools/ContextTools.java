@@ -77,14 +77,4 @@ public class ContextTools
 			toolFactories[i].recycleTool(tool);
 		}
 	}
-	
-	/**
-	 * Get the factories.
-	 * 
-	 * @return the registered factories.
-	 */
-	public ContextToolFactory[] getToolFactories()
-	{
-		return toolFactories;
-	}
 }
