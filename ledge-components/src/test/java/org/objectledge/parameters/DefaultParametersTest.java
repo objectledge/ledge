@@ -302,6 +302,18 @@ public class DefaultParametersTest extends TestCase
         assertEquals(params.getDate("foo", new Date(anyTimeStamp)), new Date(anyTimeStamp));
         params.add("foo", new Date(anyTimeStamp2));
         assertEquals(params.getDate("foo", new Date(anyTimeStamp)), new Date(anyTimeStamp2));
+        params.add("boo", "");
+        assertEquals(params.getDate("boo", new Date(anyTimeStamp)), new Date(anyTimeStamp));
+        try
+        {
+            params.add("doo", "adasda");
+            params.getDate("doo", new Date(anyTimeStamp2));
+            fail("Should throw NumberFormatException");
+        }
+        catch (NumberFormatException e)
+        {
+            // expected
+        }
     }
 
     /**

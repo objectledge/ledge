@@ -48,7 +48,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.18 2005-03-10 13:35:57 pablo Exp $
+ * @version $Id: DefaultParameters.java,v 1.19 2005-03-15 11:44:28 zwierzem Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -183,6 +183,25 @@ public class DefaultParameters implements Parameters
         return values[0];
     }
 
+    protected String getDataType(String name)
+    {
+        String[] values = (String[])map.get(name);
+        if (values == null || values.length == 0)
+        {
+            return null;
+        }
+        if (values.length > 1)
+        {
+            throw new AmbiguousParameterException("Parameter '" + name + "'has multiple values");
+        }
+        String value = values[0];
+        if(value != null && value.equals(""))
+        {
+            return null;
+        }
+        return value;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -229,8 +248,8 @@ public class DefaultParameters implements Parameters
      */
     public boolean getBoolean(String name, boolean defaultValue)
     {
-        String value = get(name, Boolean.toString(defaultValue));
-        return value.equals(TRUE);
+        String value = getDataType(name);
+        return value != null ? value.equals(TRUE) : defaultValue;
     }
 
     /**
@@ -261,15 +280,8 @@ public class DefaultParameters implements Parameters
      */
     public Date getDate(String name, Date defaultValue)
     {
-        String value = get(name, Long.toString(defaultValue.getTime()));
-        try
-        {
-            return new Date(Long.parseLong(value));
-        }
-        catch(NumberFormatException e)
-        {
-            return defaultValue;
-        }
+        String value = getDataType(name);
+        return value != null ? new Date(Long.parseLong(value)) : defaultValue;
     }
 
     /**
@@ -299,14 +311,8 @@ public class DefaultParameters implements Parameters
      */
     public float getFloat(String name, float defaultValue)
     {
-        try
-        {
-            return Float.parseFloat(get(name, Float.toString(defaultValue)));
-        }
-        catch(NumberFormatException e)
-        {
-            return defaultValue;
-        }
+        String value = getDataType(name);
+        return value != null ? Float.parseFloat(value) : defaultValue;
     }
 
     /**
@@ -336,14 +342,8 @@ public class DefaultParameters implements Parameters
      */
     public int getInt(String name, int defaultValue)
     {
-        try
-        {
-            return Integer.parseInt(get(name, Integer.toString(defaultValue)));
-        }
-        catch(NumberFormatException e)
-        {
-            return defaultValue;
-        }
+        String value = getDataType(name);
+        return value != null ? Integer.parseInt(value) : defaultValue;
     }
 
     /**
@@ -373,14 +373,8 @@ public class DefaultParameters implements Parameters
      */
     public long getLong(String name, long defaultValue)
     {
-        try
-        {
-            return Long.parseLong(get(name, Long.toString(defaultValue)));
-        }
-        catch(NumberFormatException e)
-        {
-            return defaultValue;
-        }
+        String value = getDataType(name);
+        return value != null ? Long.parseLong(value) : defaultValue;
     }
 
     /**
@@ -844,19 +838,6 @@ public class DefaultParameters implements Parameters
     public Parameters getChild(String prefix)
     {
         return new ScopedParameters(this, prefix);
-        /**
-        Parameters target = new DefaultParameters();
-        Iterator it = map.keySet().iterator();
-        while (it.hasNext())
-        {
-            String name = (String)it.next();
-            if (name.startsWith(prefix) && name.length() > prefix.length())
-            {
-                target.set(name.substring(prefix.length()), getStrings(name));
-            }
-        }
-        return target;
-        */
     }
 
     private void loadParameters(LineNumberReader reader) throws IOException
