@@ -41,13 +41,12 @@ import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.PicoVerificationException;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.InstanceComponentAdapter;
-import org.picocontainer.defaults.Swappable;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.12 2004-06-25 12:55:37 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.13 2004-08-18 13:53:01 rafal Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -118,8 +117,8 @@ public class LoggerFactory
         }
         else
         {   
-            Swappable proxy = (Swappable)loggerContainer.getComponentInstance(marker);
-            proxy.hotswap(logger);             
+            // Swappable proxy = (Swappable)loggerContainer.getComponentInstance(marker);
+            // proxy.hotswap(logger);             
         }
     }
 
