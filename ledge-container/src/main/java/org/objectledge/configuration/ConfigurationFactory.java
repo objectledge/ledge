@@ -61,7 +61,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.13 2003-12-15 09:43:11 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.14 2003-12-23 15:16:45 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -300,7 +300,14 @@ public class ConfigurationFactory
     protected void checkSchema(Configuration configuration, String schemaPath)
         throws SAXException, IOException, IncorrectSchemaException
     {
-        xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+        try
+        {
+            xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+        }
+        catch(Exception e)
+        {
+            throw new SAXException("malformed schema "+schemaPath, e);
+        }
         Validator validator = xmlValidator.getValidator(schemaPath);
         SAXConfigurationSerializer serializer = new SAXConfigurationSerializer();
         serializer.serialize(configuration, validator.getContentHandler());
@@ -318,7 +325,14 @@ public class ConfigurationFactory
     protected void checkSchema(String configuration, String schemaPath)
         throws SAXException, IOException, IncorrectSchemaException
     {
-        xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+        try
+        {
+            xmlValidator.validate(schemaPath, XMLValidator.RELAXNG_SCHEMA);
+        }
+        catch(Exception e)
+        {
+            throw new SAXException("malformed schema "+schemaPath, e);
+        }
         xmlValidator.validate(configuration, schemaPath);
     }
 
