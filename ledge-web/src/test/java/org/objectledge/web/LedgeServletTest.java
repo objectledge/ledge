@@ -44,7 +44,7 @@ import com.meterware.servletunit.ServletUnitClient;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServletTest.java,v 1.3 2003-12-23 15:51:57 fil Exp $
+ * @version $Id: LedgeServletTest.java,v 1.4 2003-12-23 17:14:28 pablo Exp $
  */
 public class LedgeServletTest extends TestCase
 {
@@ -82,4 +82,29 @@ public class LedgeServletTest extends TestCase
         assertEquals(200, response.getResponseCode());
         assertEquals("Hello world!", response.getText());
     }
+    
+	public void testLedgeServlet2()
+			throws Exception
+	{
+		String root = System.getProperty("ledge.root");
+		if(root == null)
+		{
+			throw new Exception("system property ledge.root undefined. "+
+			"use -Dledge.root=.../ledge-container/src/test/resources");
+		}
+		root = root+"/container2";
+		FileSystem fs = FileSystem.getStandardFileSystem(root);
+		InputStream webXml = fs.getInputStream("/WEB-INF/web.xml");
+		if(webXml == null)
+		{
+			throw new Exception(root+"/WEB-INF/web.xml not found");
+		}
+		ServletRunner runner = new ServletRunner(webXml);
+		ServletUnitClient client = runner.newClient();
+		WebRequest request = new GetMethodWebRequest("http://localhost/ledge");
+		WebResponse response = client.getResponse(request);
+		assertNotNull(response);
+		assertEquals(200, response.getResponseCode());
+		assertEquals("Hello world!", response.getText());
+	}
 }

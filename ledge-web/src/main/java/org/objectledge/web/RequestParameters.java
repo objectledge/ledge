@@ -40,10 +40,12 @@ import org.objectledge.parameters.impl.ParametersImpl;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.2 2003-12-03 15:24:25 mover Exp $
+ * @version $Id: RequestParameters.java,v 1.3 2003-12-23 17:14:28 pablo Exp $
  */
 public class RequestParameters extends ParametersImpl
 {
+	public static final String CONTEXT_KEY = "objectledge.web.parameters";
+	
     /**
      * Load the parameter container with parameters found in http request.
      *
