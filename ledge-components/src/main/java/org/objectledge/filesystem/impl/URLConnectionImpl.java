@@ -37,11 +37,11 @@ import java.net.URLConnection;
 import org.objectledge.filesystem.FileSystem;
 
 /**
- * An implementation of URLConnection that delegates it's functionality
- * to the Labeo FileService.
+ * An implementation of URLConnection delegating functionality
+ * to Object Ledge FileSystem.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: URLConnectionImpl.java,v 1.2 2003-12-03 14:14:13 mover Exp $
+ * @version $Id: URLConnectionImpl.java,v 1.3 2003-12-05 18:46:48 pablo Exp $
  */
 public class URLConnectionImpl 
     extends URLConnection
