@@ -30,10 +30,7 @@ package org.objectledge.web.mvc.tools;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Configurable;
@@ -67,7 +64,7 @@ import org.objectledge.web.WebConfigurator;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.7 2004-07-02 10:46:41 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.8 2004-07-02 11:49:46 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -594,38 +591,11 @@ public class LinkTool
             {
                 sb.append(httpContext.getRequest().getServletPath());
 
-                if (view != null && view.length() > 0)
-                {
-                    sb.append('/').append(config.viewToken).append('/').append(view);
-                }
-
                 String[] keys = parameters.getParameterNames();
-                List pathinfoParameterKeys = new ArrayList();
-                List queryStringParameterKeys;
-                if (config.pathinfoParameterNames.size() == 0)
-                {
-                    queryStringParameterKeys = Arrays.asList(keys);
-                }
-                else
-                {
-                    queryStringParameterKeys = new ArrayList(keys.length);
-                    for (int i = 0; i < keys.length; i++)
-                    {
-                        String key = keys[i];
-                        if (config.pathinfoParameterNames.contains(key))
-                        {
-                            pathinfoParameterKeys.add(key);
-                        }
-                        else
-                        {
-                            queryStringParameterKeys.add(key);
-                        }
-                    }
-                }
 
-                appendPathInfo(sb, pathinfoParameterKeys);
+                appendPathInfo(sb, keys);
 
-                appendQueryString(sb, queryStringParameterKeys);
+                appendQueryString(sb, keys);
             }
             
             if (fragment != null)
@@ -692,54 +662,57 @@ public class LinkTool
         }
     }
 
-    private void appendPathInfo(StringBuffer sb, List pathinfoParameterKeys)
+    private void appendPathInfo(StringBuffer sb, String[] keys)
         throws UnsupportedEncodingException
     {
-        for (int i = 0; i < pathinfoParameterKeys.size(); i++)
+        if (view != null && view.length() > 0)
         {
-            String key = (String)pathinfoParameterKeys.get(i);
-            String[] values = parameters.getStrings(key);
-            for (int j = 0; j < values.length; j++)
+            sb.append('/').append(config.viewToken).append('/').append(view);
+        }
+
+        for (int i = 0; i < keys.length; i++)
+        {
+            String key = keys[i];
+            if (config.pathinfoParameterNames.contains(key))
             {
-                sb.append('/').append(URLEncoder.encode(key, PARAMETER_ENCODING));
-                sb.append('/').append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
+                String[] values = parameters.getStrings(key);
+                for (int j = 0; j < values.length; j++)
+                {
+                    sb.append('/').append(URLEncoder.encode(key, PARAMETER_ENCODING));
+                    sb.append('/').append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
+                }
             }
         }
     }
     
-    private void appendQueryString(StringBuffer sb, List queryStringParameterKeys)
+    private void appendQueryString(StringBuffer sb, String[] keys)
         throws UnsupportedEncodingException
     {
-        if (!action.equals("") || queryStringParameterKeys.size() > 0)
+        String querySeparator = "?";
+        String querySeparator2 = config.queryStringSeparator;
+
+        if (!action.equals(""))
         {
-            String querySeparator = config.queryStringSeparator;
-            
-            sb.append('?');
-            if (!action.equals(""))
+            sb.append(querySeparator);
+            sb.append(config.actionToken).append('=').append(action);
+            querySeparator = querySeparator2;
+        }
+        
+        for (int i = 0; i < keys.length; i++)
+        {
+            String key = keys[i];
+            if (!config.pathinfoParameterNames.contains(key))
             {
-                sb.append(config.actionToken).append('=').append(action);
-                if (queryStringParameterKeys.size() > 0)
-                {
-                    sb.append(querySeparator);
-                }
-            }
-            for (int i = 0; i < queryStringParameterKeys.size(); i++)
-            {
-                String key = (String)queryStringParameterKeys.get(i);
                 String[] values = parameters.getStrings(key);
                 for (int j = 0; j < values.length; j++)
                 {
+                    sb.append(querySeparator);
+                    
                     sb.append(URLEncoder.encode(key, PARAMETER_ENCODING));
                     sb.append('=');
                     sb.append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
-                    if (j < values.length - 1)
-                    {
-                        sb.append(querySeparator);
-                    }
-                }
-                if (i < queryStringParameterKeys.size() - 1)
-                {
-                    sb.append(querySeparator);
+
+                    querySeparator = querySeparator2;
                 }
             }
         }
