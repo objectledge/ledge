@@ -5,6 +5,8 @@
 	<projects>
 		<project>dna</project>
 		<project>ledge-components</project>
+		<project>nano-reflection</project>
+		<project>nano-script</project>
 		<project>pico</project>
 	</projects>
 	<buildSpec>
