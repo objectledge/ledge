@@ -40,7 +40,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.3 2004-01-23 08:17:06 fil Exp $
+ * @version $Id: MVCResultsValve.java,v 1.4 2004-01-26 16:49:19 pablo Exp $
  */
 public class MVCResultsValve 
     implements Valve
@@ -79,10 +79,12 @@ public class MVCResultsValve
 				out.write(result);
 				out.flush();
 			}
+            ///CLOVER:OFF
 			catch(IOException e)
 			{
 				throw new ProcessingException("Cannot write the response",e);
 			}
+            ///CLOVER:ON
 		}
 	}
 }

@@ -26,21 +26,16 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web.mvc;
+package org.objectledge.parameters;
 
-import java.security.Principal;
 import java.util.Vector;
 
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Configuration;
-import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.parameters.RequestParametersLoaderValve;
-import org.objectledge.pipeline.ErrorHandlingPipeline;
-import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.tools.TestHttpServletRequest;
@@ -49,25 +44,29 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ *
+ * To change the template for this generated type comment go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class MVCTest extends TestCase
+public class RequestParametersTest extends TestCase
 {
     private Context context;
 
-    private MVCInitializerValve mvcInitializer;
-    
-    
     /**
-     * Constructor for MVCInitializerValveTest.
+     * Constructor for RequestParametersTest.
      * @param arg0
      */
-    public MVCTest(String arg0)
+    public RequestParametersTest(String arg0)
     {
         super(arg0);
     }
-    
-    public void setUp()
+
+    /*
+     * @see TestCase#setUp()
+     */
+    protected void setUp() throws Exception
     {
+        super.setUp();
         try
         {
             context = new Context();
@@ -75,19 +74,21 @@ public class MVCTest extends TestCase
             String root = System.getProperty("ledge.root");
             if (root == null)
             {
-                throw new Error("system property ledge.root undefined. " +
-                 "use -Dledge.root=.../ledge-container/src/test/resources");
+                throw new Error("system property ledge.root undefined. " + 
+                "use -Dledge.root=.../ledge-container/src/test/resources");
             }
             FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
             XMLValidator validator = new XMLValidator();
             ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
-            Configuration config = configFactory.getConfig(WebConfigurator.class,
-                  WebConfigurator.class);
+            Configuration config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
             WebConfigurator webConfigurator = new WebConfigurator(config);
             TestHttpServletRequest request = new TestHttpServletRequest();
             TestHttpServletResponse response = new TestHttpServletResponse();
             request.setupGetContentType("text/html");
-            request.setupGetParameterNames((new Vector()).elements());
+            Vector parameterNames = new Vector();
+            parameterNames.add("foo");
+            request.setupGetParameterNames(parameterNames.elements());
+            request.setupAddParameter("foo","bar");
             request.setupPathInfo("view/Default");
             request.setupGetContextPath("/test");
             request.setupGetServletPath("ledge");
@@ -98,8 +99,6 @@ public class MVCTest extends TestCase
             context.setAttribute(HttpContext.class, httpContext);
             RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
             paramsLoader.process(context);
-            mvcInitializer = new MVCInitializerValve(webConfigurator);
-            mvcInitializer.process(context);    
         }
         catch (Exception e)
         {
@@ -107,48 +106,11 @@ public class MVCTest extends TestCase
         }
     }
 
-    public void testMVCInitializerValveTest() throws Exception
+    public void testInit()
     {
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
-        assertNotNull(mvcContext);
-        assertNull(mvcContext.getAction());
-        Principal userPrincipal = new DefaultPrincipal("user");
-        mvcContext.setUserPrincipal(userPrincipal, true);
-        assertEquals(mvcContext.getUserPrincipal(),userPrincipal);
-        assertEquals(mvcContext.isUserAuthenticated(),true);
-        mvcContext.setMedia("PLAIN");
-        assertEquals(mvcContext.getMedia(),"PLAIN");
-        MVCResultsValve mvcResult = new MVCResultsValve();
-        mvcResult.process(context);
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        assertEquals(httpContext.getDirectResponse(),true);
-    }
-    
-    public void testResultValve()
-        throws Exception
-    {
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
-        mvcContext.setBuildResult("TEST");
-        MVCResultsValve mvcResult = new MVCResultsValve();
-        mvcResult.process(context);
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        assertEquals(httpContext.getDirectResponse(),true);
-    }
-    
-    public void testSimpleCatchProcessingExceptionTest()
-        throws Exception
-    {   
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-            assertEquals(httpContext.getDirectResponse(),false);
-        SimpleCatchProcessingExceptionValve catchValve = 
-            new SimpleCatchProcessingExceptionValve();
-        catchValve.process(context);
-        assertEquals(httpContext.getDirectResponse(),false);
-        context.setAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION,
-            new ProcessingException("TEST"));
-        catchValve.process(context);
-        httpContext = HttpContext.getHttpContext(context);
-        assertEquals(httpContext.getDirectResponse(),true);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        assertNotNull(parameters);
+        
     }
 
 }

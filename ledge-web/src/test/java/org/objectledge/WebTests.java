@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: WebTests.java,v 1.1 2003-12-23 16:38:37 fil Exp $
+ * @version $Id: WebTests.java,v 1.2 2004-01-26 16:49:19 pablo Exp $
  */
 public class WebTests
 {
@@ -47,6 +47,7 @@ public class WebTests
 
         //$JUnit-END$
         suite.addTest(org.objectledge.filesystem.AllTests.suite());
+        suite.addTest(org.objectledge.parameters.AllWebTests.suite());
         suite.addTest(org.objectledge.web.AllTests.suite());
         return suite;
     }

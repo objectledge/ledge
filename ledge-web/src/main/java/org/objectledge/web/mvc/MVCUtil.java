@@ -31,12 +31,14 @@ package org.objectledge.web.mvc;
  * Utitlity methods for MVC components. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCUtil.java,v 1.4 2004-01-15 09:05:50 fil Exp $
+ * @version $Id: MVCUtil.java,v 1.5 2004-01-26 16:49:19 pablo Exp $
  */
 public class MVCUtil
 {
 	/** private constructor */
+    ///CLOVER:OFF
 	private MVCUtil()
 	{
 	}
+    ///CLOVER:ON
 }

@@ -40,7 +40,7 @@ import org.objectledge.context.Context;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.1 2004-01-23 11:22:45 pablo Exp $
+ * @version $Id: RequestParameters.java,v 1.2 2004-01-26 16:49:19 pablo Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -101,10 +101,12 @@ public class RequestParameters extends DefaultParameters
                 }
             }
         }
+        ///CLOVER:OFF
         catch (UnsupportedEncodingException e)
         {
             throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
         }
+        ///CLOVER:ON
     }
 
     /**
