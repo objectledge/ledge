@@ -28,6 +28,9 @@
 
 package org.objectledge.parameters;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import junit.framework.TestCase;
 
 /**
@@ -36,7 +39,7 @@ import junit.framework.TestCase;
  */
 public class DefaultParametersTest extends TestCase
 {
-	/** parameter container */
+    /** parameter container */
     protected DefaultParameters params;
 
     /**
@@ -72,21 +75,21 @@ public class DefaultParametersTest extends TestCase
     public void testParametersImplString()
     {
         params = new DefaultParameters("foo=bar\n");
-        assertEquals(params.get("foo"),"bar");
-		params = new DefaultParameters("foo=bar,buzz,foo\nbar=foo");
-		assertEquals(params.getStrings("foo").length,3);
-		assertEquals(params.get("bar"),"foo");
-		params = new DefaultParameters("");
-		assertEquals(params.get("foo","bar"),"bar");
-		try
-		{
-			params = new DefaultParameters("foo");
-			fail("Should throw IllegalArgumentException");
-		}
-		catch(IllegalArgumentException e)
-		{
-			//expected
-		}
+        assertEquals(params.get("foo"), "bar");
+        params = new DefaultParameters("foo=bar,buzz,foo\nbar=foo");
+        assertEquals(params.getStrings("foo").length, 3);
+        assertEquals(params.get("bar"), "foo");
+        params = new DefaultParameters("");
+        assertEquals(params.get("foo", "bar"), "bar");
+        try
+        {
+            params = new DefaultParameters("foo");
+            fail("Should throw IllegalArgumentException");
+        }
+        catch (IllegalArgumentException e)
+        {
+            //expected
+        }
     }
 
     /**
@@ -95,7 +98,14 @@ public class DefaultParametersTest extends TestCase
      */
     public void testParametersImplInputStreamString()
     {
-        //Tested well by testParametersImplString
+        InputStream is = new ByteArrayInputStream("foo=bar\n".getBytes());
+        params = new DefaultParameters(is, "ISO-8859-1");
+        assertEquals(params.get("foo"), "bar");
+        params = new DefaultParameters("foo=bar,buzz,foo\nbar=foo");
+        assertEquals(params.getStrings("foo").length, 3);
+        assertEquals(params.get("bar"), "foo");
+        params = new DefaultParameters("");
+        assertEquals(params.get("foo", "bar"), "bar");
     }
 
     /**
@@ -103,7 +113,12 @@ public class DefaultParametersTest extends TestCase
      */
     public void testParametersImplParameters()
     {
-        //TODO Implement ParametersImpl().
+        params = new DefaultParameters();
+        params.add("foo", "bar");
+        params.add("foo", "buz");
+        params.add("bar", "foo");
+        params = new DefaultParameters(params);
+        assertEquals(params.getParameterNames().length, 2);
     }
 
     /**
@@ -111,27 +126,27 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGet()
     {
-		try
-		{
-			assertEquals(params.get("foo"), "bar");
-			fail("Should throw UndefinedParameterException");
-		}
-		catch(UndefinedParameterException e)
-		{
-			// expected
-		}
-		params.add("foo","bar");
-		assertEquals(params.get("foo"), "bar");
-		params.add("foo","true");
-		try
-		{
-			assertEquals(params.get("foo"), "bar");
-			fail("Should throw AmbiguousParameterException");
-		}
-		catch(AmbiguousParameterException e)
-		{
-			// expected
-		}
+        try
+        {
+            assertEquals(params.get("foo"), "bar");
+            fail("Should throw UndefinedParameterException");
+        }
+        catch (UndefinedParameterException e)
+        {
+            // expected
+        }
+        params.add("foo", "bar");
+        assertEquals(params.get("foo"), "bar");
+        params.add("foo", "true");
+        try
+        {
+            assertEquals(params.get("foo"), "bar");
+            fail("Should throw AmbiguousParameterException");
+        }
+        catch (AmbiguousParameterException e)
+        {
+            // expected
+        }
     }
 
     /**
@@ -139,32 +154,32 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetStringString()
     {
-		assertEquals(params.get("foo","bar"), "bar");
-		params.add("foo","bar");
-		assertEquals(params.get("foo","buzz"), "bar");
-		params.add("foo","buzz");
-		try
-		{
-			assertEquals(params.get("foo","buzz"), "bar");
-			fail("Should throw AmbiguousParameterException");
-		}
-		catch(AmbiguousParameterException e)
-		{
-			//expected
-		}
+        assertEquals(params.get("foo", "bar"), "bar");
+        params.add("foo", "bar");
+        assertEquals(params.get("foo", "buzz"), "bar");
+        params.add("foo", "buzz");
+        try
+        {
+            assertEquals(params.get("foo", "buzz"), "bar");
+            fail("Should throw AmbiguousParameterException");
+        }
+        catch (AmbiguousParameterException e)
+        {
+            //expected
+        }
     }
 
-	/**
-	 * Test for String getStrings(String)
-	 */
+    /**
+     * Test for String getStrings(String)
+     */
     public void testGetStrings()
     {
-		assertEquals(params.getStrings("foo").length, 0);
-		params.add("foo","bar");
-		params.add("foo","true");
-		assertEquals(params.getStrings("foo").length, 2);
-		assertEquals(params.getStrings("foo")[0], "bar");
-		assertEquals(params.getStrings("foo")[1], "true");
+        assertEquals(params.getStrings("foo").length, 0);
+        params.add("foo", "bar");
+        params.add("foo", "true");
+        assertEquals(params.getStrings("foo").length, 2);
+        assertEquals(params.getStrings("foo")[0], "bar");
+        assertEquals(params.getStrings("foo")[1], "true");
     }
 
     /**
@@ -172,19 +187,19 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetBooleanString()
     {
-		try
-		{
-			assertEquals(params.getBoolean("foo"), false);
-			fail("Should throw UndefinedParameterException");
-		}
-		catch(UndefinedParameterException e)
-		{
-			// expected
-		}
-		params.add("foo","bar");
-		assertEquals(params.getBoolean("foo"), false);
-		params.set("foo","true");
-		assertEquals(params.getBoolean("foo"), true);
+        try
+        {
+            assertEquals(params.getBoolean("foo"), false);
+            fail("Should throw UndefinedParameterException");
+        }
+        catch (UndefinedParameterException e)
+        {
+            // expected
+        }
+        params.add("foo", "bar");
+        assertEquals(params.getBoolean("foo"), false);
+        params.set("foo", "true");
+        assertEquals(params.getBoolean("foo"), true);
     }
 
     /**
@@ -192,24 +207,26 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetBooleanStringboolean()
     {
-		assertEquals(params.getBoolean("foo",false), false);
-		params.add("foo","bar");
-		assertEquals(params.getBoolean("foo"), false);
-		params.set("foo","true");
-		assertEquals(params.getBoolean("foo"), true);
+        assertEquals(params.getBoolean("foo", false), false);
+        params.add("foo", "bar");
+        assertEquals(params.getBoolean("foo"), false);
+        params.set("foo", "true");
+        assertEquals(params.getBoolean("foo", false), true);
+        params.set("foo", true);
+        assertEquals(params.getBoolean("foo", false), true);
     }
 
-	/**
-	 * Test for boolean getBooleans(String)
-	 */
+    /**
+     * Test for boolean getBooleans(String)
+     */
     public void testGetBooleans()
     {
-		assertEquals(params.getBooleans("foo").length, 0);
-		params.add("foo","bar");
-		params.add("foo","true");
-		assertEquals(params.getBooleans("foo").length, 2);
-		assertEquals(params.getBooleans("foo")[0], false);
-		assertEquals(params.getBooleans("foo")[1], true);
+        assertEquals(params.getBooleans("foo").length, 0);
+        params.add("foo", "bar");
+        params.add("foo", "true");
+        assertEquals(params.getBooleans("foo").length, 2);
+        assertEquals(params.getBooleans("foo")[0], false);
+        assertEquals(params.getBooleans("foo")[1], true);
     }
 
     /**
@@ -217,37 +234,37 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetFloatString()
     {
-    	try
-    	{
-    		assertEquals(params.getFloat("foo"),1,1);
-			fail("Should throw UndefinedParameterException");
-		}
-		catch(UndefinedParameterException e)
-		{
-			// expected
-		}
-        params.add("foo",1);
-        assertEquals(params.getFloat("foo"),1,1);
-		params.add("foo",2);
-		try
-		{
-			params.getFloat("foo");
-			fail("Should throw AmbiguousParameterException");
-		}
-		catch(AmbiguousParameterException e)
-		{
-			// expected
-		}
-		params.set("foo","bar");
-		try
-		{
-			params.getFloat("foo");
-			fail("Should throw NumberFormatException");
-		}
-		catch(NumberFormatException e)
-		{
-			// expected
-		}
+        try
+        {
+            assertEquals(params.getFloat("foo"), 1, 1);
+            fail("Should throw UndefinedParameterException");
+        }
+        catch (UndefinedParameterException e)
+        {
+            // expected
+        }
+        params.add("foo", 1);
+        assertEquals(params.getFloat("foo"), 1, 1);
+        params.add("foo", 2);
+        try
+        {
+            params.getFloat("foo");
+            fail("Should throw AmbiguousParameterException");
+        }
+        catch (AmbiguousParameterException e)
+        {
+            // expected
+        }
+        params.set("foo", "bar");
+        try
+        {
+            params.getFloat("foo");
+            fail("Should throw NumberFormatException");
+        }
+        catch (NumberFormatException e)
+        {
+            // expected
+        }
     }
 
     /**
@@ -255,15 +272,20 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetFloatStringfloat()
     {
-        //TODO Implement getFloat().
+        assertEquals(params.getFloat("foo", 1.5F), 1.5F, 1.5F);
+        params.add("foo", 2.5F);
+        assertEquals(params.getFloat("foo", 1.5F), 2.5F, 2.5F);
     }
 
-	/**
-	 * Test for float getFloats(String)
-	 */
+    /**
+     * Test for float getFloats(String)
+     */
     public void testGetFloats()
     {
-        //TODO Implement getFloats().
+        params.add("foo", 2.5F);
+        assertEquals(params.getFloats("foo")[0], 2.5F, 3.5F);
+        params.add("foo", 2.5F);
+        assertEquals(params.getFloats("foo")[1], 2.5F, 2.5F);
     }
 
     /**
@@ -271,7 +293,38 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetIntString()
     {
-        //TODO Implement getInt().
+        try
+        {
+            assertEquals(params.getInt("foo"), 1, 1);
+            fail("Should throw UndefinedParameterException");
+        }
+        catch (UndefinedParameterException e)
+        {
+            // expected
+        }
+        params.add("foo", 1);
+        assertEquals(params.getInt("foo"), 1, 1);
+        params.add("foo", 2);
+        try
+        {
+            params.getInt("foo");
+            fail("Should throw AmbiguousParameterException");
+        }
+        catch (AmbiguousParameterException e)
+        {
+            // expected
+        }
+        params.set("foo", "bar");
+        try
+        {
+            params.getInt("foo");
+            fail("Should throw NumberFormatException");
+        }
+        catch (NumberFormatException e)
+        {
+            // expected
+        }
+
     }
 
     /**
@@ -279,15 +332,20 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetIntStringint()
     {
-        //TODO Implement getInt().
+        assertEquals(params.getInt("foo", 1), 1, 1);
+        params.add("foo", 1);
+        assertEquals(params.getInt("foo", 1), 1, 1);
     }
 
-	/**
-	 * Test for get ints.
-	 */
+    /**
+     * Test for get ints.
+     */
     public void testGetInts()
     {
-        //TODO Implement getInts().
+        params.add("foo", 2);
+        assertEquals(params.getInts("foo")[0], 2, 2);
+        params.add("foo", 2);
+        assertEquals(params.getInts("foo")[1], 2, 2);
     }
 
     /**
@@ -295,7 +353,37 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetLongString()
     {
-        //TODO Implement getLong().
+        try
+        {
+            assertEquals(params.getLong("foo"), 1, 1);
+            fail("Should throw UndefinedParameterException");
+        }
+        catch (UndefinedParameterException e)
+        {
+            // expected
+        }
+        params.add("foo", 1);
+        assertEquals(params.getLong("foo"), 1, 1);
+        params.add("foo", 2);
+        try
+        {
+            params.getLong("foo");
+            fail("Should throw AmbiguousParameterException");
+        }
+        catch (AmbiguousParameterException e)
+        {
+            // expected
+        }
+        params.set("foo", "bar");
+        try
+        {
+            params.getLong("foo");
+            fail("Should throw NumberFormatException");
+        }
+        catch (NumberFormatException e)
+        {
+            // expected
+        }
     }
 
     /**
@@ -303,39 +391,44 @@ public class DefaultParametersTest extends TestCase
      */
     public void testGetLongStringlong()
     {
-        //TODO Implement getLong().
+        assertEquals(params.getLong("foo", 1), 1, 1);
+        params.add("foo", 1);
+        assertEquals(params.getLong("foo", 1), 1, 1);
     }
 
-	/**
-	 * Test for long getLongs()
-	 */
+    /**
+     * Test for long getLongs()
+     */
     public void testGetLongs()
     {
-        //TODO Implement getLongs().
+        params.add("foo", 2);
+        assertEquals(params.getLongs("foo")[0], 2, 2);
+        params.add("foo", 2);
+        assertEquals(params.getLongs("foo")[1], 2, 2);
     }
 
-	/**
-	 * Test for getParameterNames()
-	 */
+    /**
+     * Test for getParameterNames()
+     */
     public void testGetParameterNames()
     {
-    	params.set("foo","bar");
-    	params.set("foo","buzz");
-		params.set("bar","buzz");
-		params.set("buzz","bar");
-		assertEquals(params.getParameterNames().length, 3);
+        params.set("foo", "bar");
+        params.set("foo", "buzz");
+        params.set("bar", "buzz");
+        params.set("buzz", "bar");
+        assertEquals(params.getParameterNames().length, 3);
     }
 
-	/**
-	 * Test for boolean isDefined()
-	 */
+    /**
+     * Test for boolean isDefined()
+     */
     public void testIsDefined()
     {
-		assertEquals(params.isDefined("foo"),false);
-    	params.set("foo","bar");
-		assertEquals(params.isDefined("foo"),true);
-		params.remove("foo");
-		assertEquals(params.isDefined("foo"),false);
+        assertEquals(params.isDefined("foo"), false);
+        params.set("foo", "bar");
+        assertEquals(params.isDefined("foo"), true);
+        params.remove("foo");
+        assertEquals(params.isDefined("foo"), false);
     }
 
     /**
@@ -343,7 +436,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testRemove()
     {
-        //TODO Implement remove().
+        params.set("foo", "bar");
+        params.set("bar", "foo");
+        params.remove();
+        assertEquals(params.isDefined("foo"), false);
+        assertEquals(params.isDefined("foo"), false);
     }
 
     /**
@@ -351,7 +448,7 @@ public class DefaultParametersTest extends TestCase
      */
     public void testRemoveString()
     {
-        //TODO Implement remove().
+        //already tested
     }
 
     /**
@@ -359,7 +456,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testRemoveStringString()
     {
-        //TODO Implement remove().
+        params.set("foo", "bar");
+        params.set("foo", "foo");
+        params.remove("foo", "bar");
+        assertEquals(params.isDefined("foo"), true);
+        assertEquals(params.get("foo", "bar"), "foo");
     }
 
     /**
@@ -367,7 +468,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testRemoveStringfloat()
     {
-        //TODO Implement remove().
+        params.set("foo", 1F);
+        params.set("foo", 2F);
+        params.remove("foo", 1F);
+        assertEquals(params.isDefined("foo"), true);
+        assertEquals(params.getFloat("foo", 1F), 2F, 2F);
     }
 
     /**
@@ -375,7 +480,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testRemoveStringint()
     {
-        //TODO Implement remove().
+        params.set("foo", 1);
+        params.set("foo", 2);
+        params.remove("foo", 1);
+        assertEquals(params.isDefined("foo"), true);
+        assertEquals(params.getFloat("foo", 1), 2, 2);
     }
 
     /**
@@ -383,7 +492,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testRemoveStringlong()
     {
-        //TODO Implement remove().
+        params.set("foo", 1L);
+        params.set("foo", 2L);
+        params.remove("foo", 1L);
+        assertEquals(params.isDefined("foo"), true);
+        assertEquals(params.getFloat("foo", 1L), 2L, 2L);
     }
 
     /**
@@ -412,7 +525,17 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringStringArray()
     {
-        //TODO Implement set().
+        params.set("foo", new String[] { "foo", "bar" });
+        String[] result = params.getStrings("foo");
+        if (result[0].equals("foo"))
+        {
+            assertEquals(result[1], "bar");
+        }
+        else
+        {
+            assertEquals(result[0], "bar");
+            assertEquals(result[1], "foo");
+        }
     }
 
     /**
@@ -420,7 +543,10 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringboolean()
     {
-        //TODO Implement set().
+        params.set("foo", true);
+        assertEquals(params.getBoolean("foo", false), true);
+        params.set("foo", false);
+        assertEquals(params.getBoolean("foo", true), false);
     }
 
     /**
@@ -428,7 +554,9 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringbooleanArray()
     {
-        //TODO Implement set().
+        params.set("foo", new boolean[] { true, false, true });
+        boolean[] result = params.getBooleans("foo");
+        assertEquals(result.length, 3);
     }
 
     /**
@@ -436,7 +564,8 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringfloat()
     {
-        //TODO Implement set().
+        params.set("foo", 1F);
+        assertEquals(params.getFloat("foo", 2F), 1F, 1F);
     }
 
     /**
@@ -444,7 +573,8 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringfloatArray()
     {
-        //TODO Implement set().
+        params.set("foo", new float[] { 1, 2, 3 });
+        assertEquals(params.getFloats("foo").length, 3);
     }
 
     /**
@@ -452,7 +582,8 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringint()
     {
-        //TODO Implement set().
+        params.set("foo", 1);
+        assertEquals(params.getInt("foo", 2), 1);
     }
 
     /**
@@ -460,7 +591,8 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringintArray()
     {
-        //TODO Implement set().
+        params.set("foo", new int[] { 1, 2, 3 });
+        assertEquals(params.getInts("foo").length, 3);
     }
 
     /**
@@ -468,7 +600,8 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringlong()
     {
-        //TODO Implement set().
+        params.set("foo", 1L);
+        assertEquals(params.getLong("foo", 2L), 1L, 1L);
     }
 
     /**
@@ -476,7 +609,8 @@ public class DefaultParametersTest extends TestCase
      */
     public void testSetStringlongArray()
     {
-        //TODO Implement set().
+        params.set("foo", new long[] { 1, 2, 3 });
+        assertEquals(params.getInts("foo").length, 3);
     }
 
     /**
@@ -484,7 +618,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringString()
     {
-        //TODO Implement add().
+        params.add("foo", "bar");
+        params.add("foo", "bar");
+        params.add("bar", "foo");
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getStrings("foo").length, 2);
     }
 
     /**
@@ -492,7 +630,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringStringArray()
     {
-        //TODO Implement add().
+        params.add("foo", new String[] { "bar" });
+        params.add("foo", new String[] { "foo", "buz" });
+        params.add("bar", new String[] { "foo" });
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getStrings("foo").length, 3);
     }
 
     /**
@@ -500,7 +642,12 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringboolean()
     {
-        //TODO Implement add().
+        params.add("foo", true);
+        params.add("foo", false);
+        params.add("bar", true);
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getBooleans("foo").length, 2);
+        assertEquals(params.getBoolean("bar",false),true);
     }
 
     /**
@@ -508,7 +655,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringbooleanArray()
     {
-        //TODO Implement add().
+        params.add("foo", new boolean[] { true });
+        params.add("foo", new boolean[] { false, true });
+        params.add("bar", new boolean[] { true });
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getBooleans("foo").length, 3);
     }
 
     /**
@@ -516,7 +667,12 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringfloat()
     {
-        //TODO Implement add().
+        params.add("foo", 1F);
+        params.add("foo", 2F);
+        params.add("bar", 1F);
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getFloats("foo").length, 2);
+        assertEquals(params.getFloat("bar",2F),1F,1F);
     }
 
     /**
@@ -524,7 +680,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringfloatArray()
     {
-        //TODO Implement add().
+        params.add("foo", new float[] { 1 });
+        params.add("foo", new float[] { 2, 3 });
+        params.add("bar", new float[] { 1 });
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getFloats("foo").length, 3);
     }
 
     /**
@@ -532,7 +692,12 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringint()
     {
-        //TODO Implement add().
+        params.add("foo", 1);
+        params.add("foo", 2);
+        params.add("bar", 1);
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getInts("foo").length, 2);
+        assertEquals(params.getInt("bar",2),1);
     }
 
     /**
@@ -540,7 +705,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringintArray()
     {
-        //TODO Implement add().
+        params.add("foo", new int[] { 1 });
+        params.add("foo", new int[] { 2, 3 });
+        params.add("bar", new int[] { 1 });
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getInts("foo").length, 3);
     }
 
     /**
@@ -548,7 +717,12 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringlong()
     {
-        //TODO Implement add().
+        params.add("foo", 1L);
+        params.add("foo", 2L);
+        params.add("bar", 1L);
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getLongs("foo").length, 2);
+        assertEquals(params.getLong("bar",2L),1L,1L);
     }
 
     /**
@@ -556,7 +730,11 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddStringlongArray()
     {
-        //TODO Implement add().
+        params.add("foo", new long[] { 1 });
+        params.add("foo", new long[] { 2, 3 });
+        params.add("bar", new long[] { 1 });
+        assertEquals(params.getParameterNames().length, 2);
+        assertEquals(params.getLongs("foo").length, 3);
     }
 
     /**
@@ -564,22 +742,43 @@ public class DefaultParametersTest extends TestCase
      */
     public void testAddParametersboolean()
     {
-        //TODO Implement add().
+        Parameters temp = new DefaultParameters();
+        temp.add("foo",2);
+        temp.add("bar",2);
+        params.add("foo",1);
+        params.add("bar",1);
+        params.add(temp,false);
+        assertEquals(params.getInts("foo").length,2);
+        assertEquals(params.getInts("bar").length,2);
+        params = new DefaultParameters();
+        params.add("foo",1);
+        params.add("bar",1);
+        params.add(temp,true);
+        assertEquals(params.getInts("foo").length,1);
+        assertEquals(params.getInts("bar").length,1);
+        assertEquals(params.getInt("foo"),2);
+        assertEquals(params.getInt("bar"),2);
     }
 
-	/**
-	 * Test for void toString()
-	 */
+    /**
+     * Test for void toString()
+     */
     public void testToString()
     {
-        //TODO Implement getString().
+        String source = "foo=bar,foo=foo,bar=foo\n";
+        params = new DefaultParameters(source);
+        System.out.println("TEST:"+params.toString());
+        assertEquals(params.toString(),source);
     }
 
-	/**
-	 * Test for void getChild(String)
-	 */
+    /**
+     * Test for void getChild(String)
+     */
     public void testGetChild()
     {
-        //TODO Implement getChild().
+        params.add("foo.bar","foo");
+        params.add("foo.buz","bar");
+        Parameters children = params.getChild("foo.");
+        assertEquals(children.get("bar"),"foo");
     }
 }
