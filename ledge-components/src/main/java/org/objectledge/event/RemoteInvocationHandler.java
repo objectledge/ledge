@@ -46,7 +46,7 @@ import java.util.Map;
  * <code>RemoteException</code>.</p>  
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RemoteInvocationHandler.java,v 1.1 2004-02-02 09:41:04 pablo Exp $
+ * @version $Id: RemoteInvocationHandler.java,v 1.2 2004-12-23 02:15:02 rafal Exp $
  */
 public class RemoteInvocationHandler implements InvocationHandler
 {
@@ -78,7 +78,7 @@ public class RemoteInvocationHandler implements InvocationHandler
             try
             {
                 Method remoteMethod = remoteClass.
-                    getMethod(methods[i].getName(), methods[i].getParameterTypes());
+                    getMethod(methods[i].getName(), (Class[])methods[i].getParameterTypes());
 
                 if(!methods[i].getReturnType().equals(remoteMethod.getParameterTypes()))
                 {
