@@ -44,7 +44,6 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picoextras.reflection.DefaultReflectionFrontEnd;
 import org.picoextras.reflection.ReflectionFrontEnd;
 import org.picoextras.script.PicoCompositionException;
-import org.picoextras.script.xml.EmptyCompositionException;
 import org.picoextras.script.xml.XmlFrontEnd;
 import org.picoextras.script.xml.XmlPseudoComponentFactory;
 import org.w3c.dom.Element;
@@ -58,7 +57,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.10 2004-01-15 13:29:05 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.11 2004-01-15 15:38:59 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -109,29 +108,12 @@ public class LedgeXmlFrontEnd
         throws ClassNotFoundException, PicoCompositionException
     {
         String className = componentElement.getAttribute("class");
-        String stringKey = componentElement.getAttribute("key");
-        String classKey = componentElement.getAttribute("class-key");
         String preload = componentElement.getAttribute("preload");
 
         Parameter[] parameters = loadParameters(componentElement);
 
         Class implementation = loadClass(className);
-        Object key;
-        if (stringKey != null && !stringKey.equals("")) 
-        {
-            key = stringKey;    
-        }
-        else
-        {
-            if(classKey != null && !classKey.equals(""))
-            {
-                key = loadClass(classKey);
-            }
-            else
-            {
-                key = implementation;
-            }
-        }
+        Object key = getKey(componentElement, implementation);
         if(parameters.length != 0)
         {
             reflectionFrontEnd.getPicoContainer().
@@ -212,18 +194,7 @@ public class LedgeXmlFrontEnd
     private Parameter loadComponentParameter(Element element)
         throws ClassNotFoundException, PicoCompositionException
     {
-        String componentClass = element.getAttribute("class-key");
-        String componentName = element.getAttribute("key");
-        Object key = null;
-        if(componentClass != null && !componentClass.equals(""))
-        {
-            key = loadClass(componentClass);
-        }
-        else if(componentName != null && !componentName.equals(""))
-        {
-            key = componentName;
-        }
-        return new ComponentParameter(key);
+        return new ComponentParameter(getKey(element, null));
     }
     
     /**
@@ -285,6 +256,33 @@ public class LedgeXmlFrontEnd
     }
 
     /**
+     * Returns a key for a component based on element's attributes.
+     * 
+     * @param elm the DOM Element.
+     * @param key the default key.
+     * @return a component key.
+     * @throws ClassNotFoundException if class-key is specified, and the value does not denote an
+     *         existing class.
+     * @throws PicoCompositionException if key nor class-key are not defined, and default key is 
+     *         <code>null</code>.
+     */
+    private Object getKey(Element elm, Object key) 
+        throws ClassNotFoundException
+    {
+        String stringKey = elm.getAttribute("key");
+        String classKey = elm.getAttribute("class-key");
+        if(classKey != null && !classKey.equals(""))
+        {
+            return loadClass(classKey);
+        } 
+        else if(stringKey != null && !stringKey.equals(""))
+        {
+            return stringKey;
+        }
+        return key;
+    }
+
+    /**
      * Loads the contents of a container.
      * 
      * @param reflectionFrontEnd the reflection front end.
@@ -319,30 +317,25 @@ public class LedgeXmlFrontEnd
                 } 
                 else if (name.equals("container")) 
                 {
-                    MutablePicoContainer mutablePicoContainer = 
-                        loadContainer(child);
-                    ReflectionFrontEnd childFrontEnd = 
-                        createReflectionFrontEnd(reflectionFrontEnd, mutablePicoContainer);
-                    loadContainerContents(childFrontEnd, (Element) child);
+                    MutablePicoContainer childContainer =  loadContainer((Element)child);
+                    ReflectionFrontEnd childFrontEnd = createReflectionFrontEnd(reflectionFrontEnd, 
+                        childContainer);
+                    loadContainerContents(childFrontEnd, (Element)child);
+                    Object key = getKey((Element)child, null);
+                    if(key != null)
+                    {
+                        reflectionFrontEnd.getPicoContainer().registerComponentInstance(key, 
+                            childContainer);
+                    }
                     String replace = ((Element)child).getAttribute("replace");
                     if(replace != null && replace.equals("true"))
                     {
-                        String stringKey = ((Element)child).getAttribute("key");
-                        Class classKey = MutablePicoContainer.class;
-                        if(stringKey != null && !stringKey.equals(""))
-                        {
-                            classKey = loadClass(stringKey);
-                        }
                         reflectionFrontEnd = createReflectionFrontEnd((MutablePicoContainer)
-                            childFrontEnd.getPicoContainer().getComponentInstance(classKey));
+                            childContainer);
                     }
                     componentCount++;
                 }
             }
-        }
-        if (componentCount == 0) 
-        {
-            throw new EmptyCompositionException();
         }
         return reflectionFrontEnd;
     }
@@ -350,21 +343,15 @@ public class LedgeXmlFrontEnd
     /**
      * Loads a container.
      * 
-     * @param node composition element.
+     * @param element composition element.
      * @return a pico container.
      * @throws ClassNotFoundException if a missing class is referenced.
      */
-    protected MutablePicoContainer loadContainer(Node node)
+    protected MutablePicoContainer loadContainer(Element element)
         throws ClassNotFoundException
     {
-        Element element = (Element)node;
+        Object key = getKey(element, MutablePicoContainer.class);
         String picoContainerClassName = element.getAttribute("class");
-        String stringKey = element.getAttribute("key");
-        Class classKey = MutablePicoContainer.class;
-        if(stringKey != null && !stringKey.equals(""))
-        {
-            classKey = loadClass(stringKey);
-        } 
         String adapterFactoryClass = element.getAttribute("adapter-factory");
 
         ReflectionFrontEnd tempContainer = new DefaultReflectionFrontEnd();
@@ -393,21 +380,18 @@ public class LedgeXmlFrontEnd
         }
         if (picoContainerClassName == null || picoContainerClassName.equals("")) 
         {
-            tempContainer.registerComponentImplementation(classKey, 
+            tempContainer.registerComponentImplementation(key, 
                 DefaultPicoContainer.class.getName());
         } 
         else 
         {
-            tempContainer.registerComponentImplementation(classKey, picoContainerClassName); 
+            tempContainer.registerComponentImplementation(key, picoContainerClassName); 
         }
         MutablePicoContainer container = (MutablePicoContainer) tempContainer.getPicoContainer().
-            getComponentInstance(classKey);
-        if(stringKey != null && !stringKey.equals(""))
-        {
-            container.registerComponentInstance(classKey, container);
-        }
+            getComponentInstance(key);
+        container.registerComponentInstance(key, container);
         return (MutablePicoContainer) tempContainer.getPicoContainer().
-            getComponentInstance(classKey);
+            getComponentInstance(key);
     }
 
     /**
