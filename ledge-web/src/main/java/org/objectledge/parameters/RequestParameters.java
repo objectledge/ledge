@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// Copyright (c) 2003, 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 // All rights reserved. 
 // 
 // Redistribution and use in source and binary forms, with or without modification,  
@@ -31,16 +31,19 @@ package org.objectledge.parameters;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.objectledge.context.Context;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 /**
  *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.4 2004-06-29 13:40:51 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.5 2004-06-29 16:58:53 zwierzem Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -62,15 +65,56 @@ public class RequestParameters extends DefaultParameters
      * @param encoding the encoding
      * @throws IllegalArgumentException if illegal escape sequences appears.
      */
-    public RequestParameters(HttpServletRequest request, String encoding)
+    public RequestParameters(HttpServletRequest request)
     	throws IllegalArgumentException
     {
+        // get query string parameters
+        String queryString = request.getQueryString();
+        try
+        {
+            if (queryString != null)
+            {
+                StringTokenizer st = new StringTokenizer(queryString, "&=");
+                boolean isName = true;
+                String name = null;
+                String value = null;
+                while (st.hasMoreTokens())
+                {
+                    if (isName)
+                    {
+                        name = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
+                    }
+                    else
+                    {
+                        value = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
+                        add(name, value);
+                    }
+                    isName = !isName;
+                }
+            }
+        }
+        ///CLOVER:OFF
+        catch (UnsupportedEncodingException e)
+        {
+            throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
+        }
+        ///CLOVER:ON
+        HashMap queryStringParams = new HashMap();
+        queryStringParams.putAll(this.map);
+        
+        // post parameters
         Enumeration names = request.getParameterNames();
         while (names.hasMoreElements())
         {
             String name = (String)names.nextElement();
             String[] values = request.getParameterValues(name);
-            for (int i = 0; i < values.length; i++)
+            // avoid duplicate parameters from queryString
+            int start = 0;
+            if(queryStringParams.containsKey(name))
+            {
+                start = ((String[])(queryStringParams.get(name))).length;
+            }
+            for (int i = start; i < values.length; i++)
             {
                 add(name, values[i]);
             }
@@ -88,11 +132,11 @@ public class RequestParameters extends DefaultParameters
                 {
                     if (isName)
                     {
-                        name = URLDecoder.decode(st.nextToken(), encoding);
+                        name = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
                     }
                     else
                     {
-                        value = URLDecoder.decode(st.nextToken(), encoding);
+                        value = URLDecoder.decode(st.nextToken(), LinkTool.PARAMETER_ENCODING);
                         add(name, value);
                     }
                     isName = !isName;
