@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.19 2004-01-22 11:47:54 fil Exp $ -->
+<!-- $Id: project.xml,v 1.20 2004-01-24 13:12:39 pablo Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -66,6 +66,21 @@
   </build>
   
   <dependencies>
+
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-core</artifactId>
+      <version>0.09</version>
+      <url>http://www.mockobjects.com</url>
+    </dependency>
+
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-jdk1.4-j2ee1.3</artifactId>
+      <version>0.09</version>
+      <url>http://www.mockobjects.com</url>
+    </dependency>
+
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
