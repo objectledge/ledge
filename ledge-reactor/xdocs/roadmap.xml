@@ -5,7 +5,7 @@
   </properties>
   
   <body>
-    <section>
+    <section name="Completed releases">
     <subsection name="0.1 release">
       <p>Planned release: December 16, 2003</p>
       <p>Actual release: January 7, 2004 </p>
@@ -51,62 +51,65 @@
         <li>HTTP pipeline Valves utilizing MVC</li>
         <li>Pull model support - Templating context populating Valve</li>
       </ul>      
+      <p><a href="changes-report.html#0_2">Changes</a></p>
     </subsection>
     
     <subsection name="0.3 release">
       <p>Planned release: January 16, 2004</p>
-      <p>Actual release: - </p>
-      <p>Components</p>
-      <ul>
-        <li>Internationalization (i18n) component</li>
-        <li>Database access (connections,transacitons)</li>
-        <li>Directory service access</li>
-        <li>Parameters persistent in JNDI DirectoryContext</li>
-        <li>Authentication &amp; user information storage</li>
-        <li>Web console access</li>
-        <li>Event Whiteboard component</li>
-        <li>Declarative View/Action authentications</li>
-        <li>XML handling utilities</li>
-        <li>Tabular data presentation</li>
-        <li>Caching services</li>
-        <li>Mail handling component</li>
-        <li>HTML forms File Upload</li>
-        <li>Simple Object Persistence to DB</li>
-        <li>Scheduled jobs</li>
-        <li>Page tool (html &lt;head&gt; manipulation) for templating</li>
-        <li>String tool for templating</li>
-        <li>User agent tool for templating</li>
-      </ul>      
+      <p>Actual release: September 3, 2004 </p>
+      <p><b>Goal</b></p>
+      <p>Releasing the changes accumulated over past 7 months of development.</p>
+      <p><a href="changes-report.html#0_3">Changes</a></p>
     </subsection>
-    
+  </section>
+  <section name="Planned releases">     
     <subsection name="0.4 release">
-      <p>Planned release: March 5, 2004</p>
+      <p>Planned release: September 10, 2004</p>
       <p>Actual release: - </p>
-      <p>Components</p>
-      <ul>
-        <li>Parameters persistent in DB</li>
-        <li>Full-fledged O-R mapping support</li>
-        <li>MTA (mail server) interface</li>
-        <li>Unicode -&gt; HTML entities transcoder</li>
-      </ul>      
+      <p><b>Goal</b></p>
+      <p>Reconciling existing documentaion with changes done in the course of development.
+      Documenting components and utility classes added in 0.3 release. Creating a HOWTO
+      document about setting up development environment and building Ledge from source.</p>
+      <!-- <p><a href="changes-report.html#0_4">Changes</a></p> -->
     </subsection>    
 
     <subsection name="0.5 release">
-      <p>Planned release: March 19, 2004</p>
+      <p>Planned release: TBD</p>
       <p>Actual release: - </p>
-      <p>Components</p>
-      <ul>
-        <li>RMI-IIOP notification service</li>
-        <li>Distributed operation of O-R mapping layer</li>
-      </ul>
-      <p>All modules</p>
-      <ul>
-        <li>Object pooling where apropriate</li>
-        <li>Speed optimizations</li>
-        <li>Wrap up for 1.0 release</li>
-      </ul>
-    </subsection>
+      <p><b>Goal</b></p>
+      <p>Creating comprehensive documentation explaining key concepts and solutions, and
+      providing guidance to application authors.</p>
+      <!-- <p><a href="changes-report.html#0_5">Changes</a></p> -->
+    </subsection>    
     
+    <subsection name="0.6 release">
+      <p>Planned release: TBD</p>
+      <p>Actual release: - </p>
+      <p><b>Goal</b></p>
+      <p>Introducing runtime monitoring and management capabilities. Logging and configuration 
+      infrastructure enhancements.</p>
+      <!-- <p><a href="changes-report.html#0_6">Changes</a></p> -->
+    </subsection>    
+
+    <subsection name="0.7 release">
+      <p>Planned release: TBD</p>
+      <p>Actual release: - </p>
+      <p><b>Goal</b></p>
+      <p>Code Quality Assurance. Reducing code checkers warning counts including javadocs.
+      Increasing test coverage. Reducing code duplication in tests.
+      </p>
+      <!-- <p><a href="changes-report.html#0_7">Changes</a></p> -->
+    </subsection>    
+
+    <subsection name="0.8 release">
+      <p>Planned release: TBD</p>
+      <p>Actual release: - </p>
+      <p><b>Goal</b></p>
+      <p>Catching up with Pico development. Contributing extensions created during ObjectLedge
+      development to Picocontainer project. Simplifying and improving compositioning code.</p>
+      <!-- <p><a href="changes-report.html#0_8">Changes</a></p> -->
+    </subsection>    
+
     </section>
   </body>
 </document>
