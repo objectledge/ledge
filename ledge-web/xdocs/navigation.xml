@@ -13,6 +13,7 @@
       <item name="Servlet integration" href="/servlet-integration/index.html" collapse="true">
         <item name="Ledge Servlet" href="/servlet-integration/LedgeServlet.html"/>
         <item name="Http Dispatcher" href="/servlet-integration/HttpDispatcher.html" collapse="true">
+          <item name="HTTP Method Dispatcher" href="/servlet-integration/dispatcher/HttpMethodDispatcher.html"/>
           <item name="Static Dispatcher" href="/servlet-integration/dispatcher/StaticHttpDispatcher.html"/>
         </item>
       </item>
