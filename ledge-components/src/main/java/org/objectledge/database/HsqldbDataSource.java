@@ -32,12 +32,13 @@ import javax.sql.DataSource;
 import org.hsqldb.jdbcDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.database.impl.*;
 
 /**
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: HsqldbDataSource.java,v 1.2 2004-02-04 14:38:13 fil Exp $
+ * @version $Id: HsqldbDataSource.java,v 1.3 2004-02-04 14:42:31 fil Exp $
  */
 public class HsqldbDataSource extends DelegatingDataSource
 {
