@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
  * Objects of this type are reusable, but not thread safe.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: XMLDataReader.java,v 1.1 2005-01-20 16:44:54 pablo Exp $
+ * @version $Id: XMLDataReader.java,v 1.2 2005-03-23 07:52:15 zwierzem Exp $
  */
 public interface XMLDataReader
 {
@@ -52,7 +52,7 @@ public interface XMLDataReader
     throws SAXException, ParserConfigurationException, Exception;
 
     /** Returns EntityResolver used during XML data reading
-     * - default one is <code>net.labeo.internal.xml.LabeoEntityResolver</code>
+     * - default one is <code>pl.caltha.internal.xml.CalthaEntityResolver</code>
      * @return The EntityResolver.
      */
     public EntityResolver getEntityResolver();

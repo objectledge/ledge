@@ -10,11 +10,11 @@ import org.xml.sax.SAXException;
 
 import pl.caltha.services.xml.validation.DOM4JValidator;
 
-/** Labeo XMLService. It can be used to read and validate XML data from
+/** XMLService. It can be used to read and validate XML data from
  * different sources.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: XMLService.java,v 1.1 2005-01-20 16:44:54 pablo Exp $
+ * @version $Id: XMLService.java,v 1.2 2005-03-23 07:52:15 zwierzem Exp $
  */
 public interface XMLService 
 {
@@ -76,13 +76,13 @@ public interface XMLService
     throws SAXException;
     
     /** Returns an InputSource for a given URI - it uses
-     * <code>LabeoEntityResolver</code> internally 
+     * <code>CalthaEntityResolver</code> internally 
      * - look at {@link #getEntityResolver()}. */
     public InputSource getInputSource(String uri)
     throws SAXException, java.io.IOException;
 
     /** Returns a default EntityResolver used by XMLService -
-     * in this case <code>LabeoEntityResolver</code> which implements <code>EntityResolver</code>'s
+     * in this case <code>CalthaEntityResolver</code> which implements <code>EntityResolver</code>'s
      * only method {@link org.xml.sax.EntityResolver#resolveEntity(String,String)}
      * in a following way:
      *
@@ -92,8 +92,8 @@ public interface XMLService
      *
      * <p><b>Supported URI schemes:</b>
      * <ul>
-     * <li><code>labeo:</code> - scheme used to access resources via
-     * Labeo <code>FileService</code></li>
+     * <li><code>ledge:</code> - scheme used to access resources via
+     * Ledge <code>FileSystem</code></li>
      * <li><code>classpath:</code> - scheme used to access resources via
      * <code>ClassLoader</code>'s <code>getResourceAsStream(String)</code></li>
      * <li>Schemes supported by java.net.URL (except from <code>file:</code> scheme)
@@ -105,7 +105,7 @@ public interface XMLService
      * <br />
      * Because of application portability issues, URIs with <code>file:</code>
      * scheme are not supported, and are considered harmful (SecurityException
-     * is thrown). Labeo aplications should use <code>labeo:</code> scheme instead.
+     * is thrown). Ledge aplications should use <code>ledge:</code> scheme instead.
      * </p>
      */
     public org.xml.sax.EntityResolver getEntityResolver();

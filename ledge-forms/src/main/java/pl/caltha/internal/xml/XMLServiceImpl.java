@@ -21,10 +21,10 @@ import pl.caltha.services.xml.validation.DOM4JValidator;
 //import com.sun.resolver.tools.CatalogResolver;
 
 /**
- * Implementation of Labeo XMLService.
+ * Implementation of Ledge XMLService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: XMLServiceImpl.java,v 1.1 2005-01-20 16:44:47 pablo Exp $
+ * @version $Id: XMLServiceImpl.java,v 1.2 2005-03-23 07:52:14 zwierzem Exp $
  */
 public class XMLServiceImpl 
     implements XMLService

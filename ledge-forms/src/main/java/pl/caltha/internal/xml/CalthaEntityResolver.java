@@ -10,9 +10,9 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-/** EntityResolver for Labeo applications.
+/** EntityResolver for Ledge applications.
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CalthaEntityResolver.java,v 1.2 2005-01-21 14:00:05 pablo Exp $
+ * @version $Id: CalthaEntityResolver.java,v 1.3 2005-03-23 07:52:14 zwierzem Exp $
  */
 public class CalthaEntityResolver 
     implements EntityResolver
@@ -21,7 +21,7 @@ public class CalthaEntityResolver
     private Logger log;
     //CatalogResolver catalogResolver;
     
-    /** Creates a new instance of LabeoEntityResolver */
+    /** Creates a new instance of CalthaEntityResolver */
     public CalthaEntityResolver(XMLServiceImpl xmlService, FileSystem fileSystem, Logger logger)
     {
         this.fileSystem = fileSystem;
@@ -44,8 +44,8 @@ public class CalthaEntityResolver
      *
      * <p><b>Supported URI schemes:</b>
      * <ul>
-     * <li><code>labeo:</code> - scheme used to access resources via
-     * Labeo <code>FileService</code></li>
+     * <li><code>ledge:</code> - scheme used to access resources via
+     * ObjectLedge <code>FileSystem</code></li>
      * <li><code>classpath:</code> - scheme used to access resources via
      * <code>ClassLoader</code>'s <code>getResourceAsStream(String)</code></li>
      * <li>Schemes supported by java.net.URL (except from <code>file:</code> scheme)
@@ -57,7 +57,7 @@ public class CalthaEntityResolver
      * <br />
      * Because of application portability issues, URIs with <code>file:</code>
      * scheme are not supported, and are considered harmful (SecurityException
-     * is thrown). Labeo aplications should use <code>labeo:</code> scheme instead.
+     * is thrown). Ledge aplications should use <code>ledge:</code> scheme instead.
      * </p>
      *
      */
@@ -84,9 +84,9 @@ public class CalthaEntityResolver
         
         InputSource is;
         String scheme = uri.getScheme();
-        // try it is as labeo:// resource
-        // TODO: Make it network and distributed labeo aware
-        if(scheme.equals("labeo"))
+        // try it is as ledge:// resource
+        // TODO: Make it network and distributed ledge aware
+        if(scheme.equals("ledge"))
         {
             //TODO should be get path...
             String path = uri.getSchemeSpecificPart();

@@ -25,7 +25,7 @@ import pl.caltha.services.xml.XMLService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsServiceImpl.java,v 1.4 2005-02-08 20:33:27 rafal Exp $
+ * @version $Id: FormsServiceImpl.java,v 1.5 2005-03-23 07:52:16 zwierzem Exp $
  */
 public class FormsServiceImpl 
 implements FormsService
@@ -57,7 +57,6 @@ implements FormsService
      private boolean reloadFormDefinitions = false;
 
     //------------------------------------------------------------------------
-    // net.labeo.services.Service methods
 
     /** Called when the broker is starting.
      */
@@ -113,7 +112,7 @@ implements FormsService
         // guard from null formNames
         checkInputValue("Form name", formName);
 
-        //TODO: if debug set - check for timestamp on form definitionURI - is it possible with Labeo
+        //TODO: if debug set - check for timestamp on form definitionURI - is it possible with Ledge
 
         Form form = null;
 
@@ -360,7 +359,7 @@ implements FormsService
     /** FormData is a container for storing form Instances in users session.
      *
      * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-     * @version $Id: FormsServiceImpl.java,v 1.4 2005-02-08 20:33:27 rafal Exp $
+     * @version $Id: FormsServiceImpl.java,v 1.5 2005-03-23 07:52:16 zwierzem Exp $
      */
     public class FormData
     {

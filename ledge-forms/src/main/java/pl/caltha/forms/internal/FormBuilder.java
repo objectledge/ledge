@@ -9,7 +9,7 @@ import pl.caltha.forms.internal.util.Util;
  * Builds form-tool Form objects based on SAX events.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormBuilder.java,v 1.2 2005-02-10 17:49:43 rafal Exp $
+ * @version $Id: FormBuilder.java,v 1.3 2005-03-23 07:52:16 zwierzem Exp $
  */
 public class FormBuilder
 extends pl.caltha.forms.internal.util.AbstractBuilder
@@ -25,14 +25,12 @@ extends pl.caltha.forms.internal.util.AbstractBuilder
     public void startBuild(Object builtObject)
     throws ConstructionException
     {
-        //Log.info(MSG_PREFIX+"Start building Form.");
         buildForm = (FormImpl)builtObject;
     }
     
     public void endBuild(Object builtObject)
     throws ConstructionException
     {
-        //Log.info(MSG_PREFIX+"End building Form.");
     }
 
     protected void startElement(String elementName, org.xml.sax.Attributes atts) throws SAXException

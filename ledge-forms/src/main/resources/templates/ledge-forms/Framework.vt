@@ -2,13 +2,13 @@
   Core set of macros.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: Framework.vt,v 1.1 2005-03-22 06:28:11 zwierzem Exp $
+  @version $Id: Framework.vt,v 1.2 2005-03-23 07:52:17 zwierzem Exp $
 *#
 #**
   Starts form processing.
   @param instance - current form instance.
   @param form     - UI root node.
-  @param action   - labeo action for form's action attribute.
+  @param action   - ledge action for form's action attribute.
 *#
 #macro (formtool_form $inputInstance $form)
 ##
