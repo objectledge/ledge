@@ -30,8 +30,10 @@ package org.objectledge.modules.actions.authentication;
 import java.security.Principal;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.Authentication;
+import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
@@ -41,7 +43,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.4 2004-01-27 12:43:11 fil Exp $ 
+ * @version $Id: Logout.java,v 1.5 2004-03-02 12:20:19 pablo Exp $ 
  */
 public class Logout 
     extends BaseAuthenticationAction
@@ -53,9 +55,9 @@ public class Logout
      * @param logger the logger.
      * @param authentication the authentication.
      */
-    public Logout(Logger logger, Authentication authentication)
+    public Logout(Logger logger, UserManager userManager)
     {
-        super(logger, authentication);
+        super(logger, userManager);
     }
 
     /**
@@ -64,11 +66,19 @@ public class Logout
      * @param context the context.
      */
     public void process(Context context)
+        throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         clearSession(httpContext.getRequest().getSession());
-        Principal anonymous = authentication.getAnonymousUser();
-        mvcContext.setUserPrincipal(anonymous, false);
+        try
+        {
+            Principal anonymous = userManager.getAnonymousAccount();
+            mvcContext.setUserPrincipal(anonymous, false);
+        }
+        catch(AuthenticationException e)
+        {
+            throw new ProcessingException("failed to retrieve anonymous account",e);
+        }
     }
 }

@@ -33,13 +33,12 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.Authentication;
-import org.objectledge.context.Context;
+import org.objectledge.authentication.UserManager;
 
 /**
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseAuthenticationAction.java,v 1.3 2004-02-20 12:47:30 zwierzem Exp $
+ * @version $Id: BaseAuthenticationAction.java,v 1.4 2004-03-02 12:20:19 pablo Exp $
  */
 public class BaseAuthenticationAction
 {
@@ -53,7 +52,7 @@ public class BaseAuthenticationAction
     protected Logger logger;
 
     /** the authentication component */
-    protected Authentication authentication;
+    protected UserManager userManager;
 
     /**
      * Action constructor.
@@ -61,10 +60,10 @@ public class BaseAuthenticationAction
      * @param logger the logger.
      * @param authentication the authentication.
      */
-    public BaseAuthenticationAction(Logger logger, Authentication authentication)
+    public BaseAuthenticationAction(Logger logger, UserManager userManager)
     {
         this.logger = logger;
-        this.authentication = authentication;
+        this.userManager = userManager;
     }
 
     /**

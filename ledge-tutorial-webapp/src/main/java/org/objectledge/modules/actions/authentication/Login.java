@@ -30,7 +30,9 @@ package org.objectledge.modules.actions.authentication;
 import java.security.Principal;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.Authentication;
+import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
@@ -45,7 +47,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Login.java,v 1.6 2004-01-27 12:43:11 fil Exp $
+ * @version $Id: Login.java,v 1.7 2004-03-02 12:20:19 pablo Exp $
  */
 public class Login 
     extends BaseAuthenticationAction
@@ -55,11 +57,11 @@ public class Login
      * Action constructor.
      * 
      * @param logger the logger.
-     * @param authentication the authentication.
+     * @param userManager the userManager.
      */
-    public Login(Logger logger, Authentication authentication)
+    public Login(Logger logger, UserManager userManager)
     {
-        super(logger, authentication);
+        super(logger, userManager);
     }
 
     /**
@@ -77,19 +79,20 @@ public class Login
         String password = parameters.get(PASSWORD_PARAM, null);
         parameters.remove(LOGIN_PARAM);
         parameters.remove(PASSWORD_PARAM);        
-
-        Principal anonymous = authentication.getAnonymousUser();
-        if (login == null || password == null)
-        {
-            throw new ProcessingException("Required parameters (" + LOGIN_PARAM +
-                                                   ", " + PASSWORD_PARAM + ") not found");
-        }
         Principal principal = null;
+        Principal anonymous = null;
         try
         {
-            if (authentication.checkPassword(login, password))
+            anonymous = userManager.getAnonymousAccount();
+            if (login == null || password == null)
             {
-                principal = authentication.getUser(authentication.getUserName(login));
+                throw new ProcessingException("Required parameters (" + LOGIN_PARAM +
+                                                               ", " + PASSWORD_PARAM + ") not found");
+            }
+            Principal temp = userManager.getUserByLogin(login);
+            if (userManager.checkUserPassword(temp, password))
+            {
+                principal = temp;
                 clearSession(httpContext.getRequest().getSession());
             }
             else
@@ -98,10 +101,14 @@ public class Login
                 principal = null;
             }
         }
-        catch (Exception e)
+        catch (UserUnknownException e)
         {
             logger.debug("unknown username " + login);
             principal = null;
+        }
+        catch (AuthenticationException e)
+        {
+            throw new ProcessingException("Failed to login user",e);   
         }
         boolean authenticated;
         if (principal == null)
