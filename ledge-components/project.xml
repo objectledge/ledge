@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.21 2004-01-26 14:53:47 fil Exp $ -->
+<!-- $Id: project.xml,v 1.22 2004-01-26 15:01:36 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -63,7 +63,7 @@
       </includes>
       <resources>
         <resource>
-          <directory>src/main/java</directory>
+          <directory>src/test/java</directory>
           <includes>
             <include>**/*.rng</include>
           </includes>
