@@ -96,7 +96,7 @@ public class UploadTest extends TestCase
             Logger logger = loggerFactory.getLogger(FileUploadValve.class);
             
             // thread pool
-            ThreadPool threadPool = new ThreadPool(context, null, logger);
+            ThreadPool threadPool = new ThreadPool(null, context, null, logger);
             
             // templating
             config = configFactory.getConfig(Templating.class,VelocityTemplating.class);
