@@ -43,9 +43,10 @@ import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.utils.StringUtils;
 
 /**
+ * A set of utility functions for working with JDBC databases.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.16 2004-12-23 07:17:18 rafal Exp $
+ * @version $Id: DatabaseUtils.java,v 1.17 2004-12-27 03:05:47 rafal Exp $
  */
 public class DatabaseUtils
 {

@@ -33,8 +33,10 @@ import org.objectledge.database.persistence.Persistence;
 import org.objectledge.notification.Notification;
 
 /**
+ * Features of the CacheFactory exposed to the cache implementation objects.
+ * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CacheFactorySPI.java,v 1.1 2004-02-26 11:34:28 fil Exp $
+ * @version $Id: CacheFactorySPI.java,v 1.2 2004-12-27 03:05:49 rafal Exp $
  */
 public interface CacheFactorySPI
     extends CacheFactory

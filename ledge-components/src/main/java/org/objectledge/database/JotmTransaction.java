@@ -39,9 +39,10 @@ import org.objectweb.transaction.jta.TMService;
 import org.picocontainer.Startable;
 
 /**
+ * An implementation of the Transaction interface using JOTM.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.8 2004-12-22 08:35:11 rafal Exp $
+ * @version $Id: JotmTransaction.java,v 1.9 2004-12-27 03:05:47 rafal Exp $
  */
 public class JotmTransaction
     extends Transaction

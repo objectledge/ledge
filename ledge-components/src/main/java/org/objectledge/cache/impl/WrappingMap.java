@@ -40,7 +40,7 @@ import java.util.Set;
  * and mapping access tracking.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WrappingMap.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: WrappingMap.java,v 1.2 2004-12-27 03:05:48 rafal Exp $
  */
 public abstract class WrappingMap 
     extends DelegateMap
@@ -275,7 +275,7 @@ public abstract class WrappingMap
         private Object value;
         
         /**
-         * 
+         * Creates a new WrappingEntry instance.
          * 
          * @param value the value.
          */
@@ -285,6 +285,7 @@ public abstract class WrappingMap
         }
         
         /**
+         * Returns the entry's value.
          * 
          * @return the object
          */
@@ -294,8 +295,7 @@ public abstract class WrappingMap
         }
         
         /**
-         * 
-         *
+         * Updates the entry's timestamp.
          */
         public void touch()
         {
@@ -303,8 +303,7 @@ public abstract class WrappingMap
     }
     
     /**
-     * 
-     * 
+     * Customized Iterator implementation for the WrappingMap.
      */
     protected abstract class WrappingMapIterator
         implements Iterator
@@ -312,8 +311,7 @@ public abstract class WrappingMap
         private Iterator i;
        
         /**
-         * 
-         *
+         * Creates a new WrappingMapIterator instance. 
          */ 
         public WrappingMapIterator()
         {
@@ -339,6 +337,7 @@ public abstract class WrappingMap
         }
         
         /**
+         * Returns the next Map entry.
          * 
          * @return the map entry.
          */

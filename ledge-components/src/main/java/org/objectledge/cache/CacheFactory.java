@@ -33,9 +33,10 @@ import java.util.Map;
 import org.jcontainer.dna.ConfigurationException;
 
 /**
+ * A factory of cache objects, which are variants of java.util.Map with additional functionality.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CacheFactory.java,v 1.2 2004-05-06 13:48:16 pablo Exp $
+ * @version $Id: CacheFactory.java,v 1.3 2004-12-27 03:05:51 rafal Exp $
  */
 public interface CacheFactory
 {

@@ -29,8 +29,9 @@
 package org.objectledge.cache;
 
 /**
+ * An exception thrown when an update request is received for an expired cache item.
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
  */
 public class NoLongerValidException extends Exception
 {

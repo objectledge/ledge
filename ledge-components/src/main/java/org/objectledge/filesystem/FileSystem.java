@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.26 2004-12-23 07:17:13 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.27 2004-12-27 03:05:53 rafal Exp $
  */
 public class FileSystem
 {
@@ -183,7 +183,7 @@ public class FileSystem
      * 
      * @param path the abstract pathname.
      * @param encoding character encoding to use.
-     * @return a Reader, or <code>null if the file is not found.
+     * @return a Reader, or <code>null</code> if the file is not found.
      * @throws UnsupportedEncodingException if the requested encoding is not supported.
      */
     public Reader getReader(String path, String encoding)
