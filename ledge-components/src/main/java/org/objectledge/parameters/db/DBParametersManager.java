@@ -16,12 +16,12 @@ import org.objectledge.utils.StringUtils;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParametersManager.java,v 1.1 2004-01-20 17:19:35 pablo Exp $
+ * @version $Id: DBParametersManager.java,v 1.2 2004-01-20 17:21:25 pablo Exp $
  */
 public class DBParametersManager
 {
 	/** the table name */
-	public static final String TABLE = "ledge_parameters";
+	public static final String TABLE_NAME = "ledge_parameters";
 
 	/** the logger */
 	private Logger logger;
@@ -63,7 +63,7 @@ public class DBParametersManager
             //conn = dbc.getConnection();
             Statement statement = conn.createStatement();
             //id = dbc.getNextId(TABLE, conn);
-            statement.execute("INSERT INTO "+TABLE+" values ("+id+",'','')");
+            statement.execute("INSERT INTO "+TABLE_NAME+" values ("+id+",'','')");
         }
         catch(SQLException e)
         {
@@ -101,7 +101,7 @@ public class DBParametersManager
             //TODO uncomment this when possible
             //conn = dbc.getConnection( );
             Statement statement = conn.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * from " + TABLE +
+            ResultSet result = statement.executeQuery("SELECT * from " + TABLE_NAME +
              										  " where parameters_id = " + id);
             boolean exist = false;
             while (result.next())
@@ -147,7 +147,7 @@ public class DBParametersManager
         	//TODO uncomment it when possible
             //conn = dbc.getConnection();
             Statement statement = conn.createStatement();
-            statement.execute("DELETE FROM "+TABLE+" where parameters_id = "+id);
+            statement.execute("DELETE FROM "+TABLE_NAME+" where parameters_id = "+id);
             localCache.remove(key);
         }
         catch(SQLException e)
