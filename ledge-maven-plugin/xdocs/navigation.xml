@@ -12,7 +12,8 @@
       <item name="ledge web" href="../../modules/ledge-web/index.html"/>
     </links>
     <menu name="Reference">
-      <item name="Components" href="components.html" collapse="true"/>
+      <item name="Goals" href="goals.html" collapse="true"/>
+      <item name="Properties" href="properties.html" collapse="true"/>
     </menu>
   </body>
 </project>
