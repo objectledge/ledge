@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.9 2004-01-14 11:52:53 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.10 2004-01-15 13:29:05 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -214,12 +214,12 @@ public class LedgeXmlFrontEnd
     {
         String componentClass = element.getAttribute("class-key");
         String componentName = element.getAttribute("key");
-        Object key;
+        Object key = null;
         if(componentClass != null && !componentClass.equals(""))
         {
             key = loadClass(componentClass);
         }
-        else
+        else if(componentName != null && !componentName.equals(""))
         {
             key = componentName;
         }
