@@ -37,6 +37,7 @@ import org.objectledge.templating.tools.ContextToolFactory;
  */
 public class PageToolFactory implements ContextToolFactory
 {
+    /** The linktool factory. */
 	protected LinkToolFactory linkToolFactory;
 	
 	/**
