@@ -30,13 +30,14 @@ package org.objectledge.web.mvc.security;
 
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
 /**
  * Util class used to check components security.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SecurityHelper.java,v 1.5 2004-06-29 13:42:45 zwierzem Exp $
+ * @version $Id: SecurityHelper.java,v 1.6 2004-08-03 09:47:18 pablo Exp $
  */
 public abstract class SecurityHelper
 {
@@ -58,12 +59,22 @@ public abstract class SecurityHelper
      * @throws AccessDeniedException if user has no rights to access the object.
      */
     public static void checkSecurity(Object obj, Context context)
-        throws InsecureChannelException, LoginRequiredException, AccessDeniedException
+        throws InsecureChannelException, LoginRequiredException, 
+        	   AccessDeniedException, ProcessingException
     {
+        boolean condition = false;
         if(obj instanceof SecurityChecking)
         {
             SecurityChecking scObj = (SecurityChecking)obj;
-            if(scObj.requiresSecureChannel(context))
+            try
+            {
+                condition = scObj.requiresSecureChannel(context);
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException("exception occured during security checking", e);
+            }
+            if(condition)
             {
                 HttpContext httpContext = HttpContext.getHttpContext(context);
                 if(httpContext == null)
@@ -77,7 +88,15 @@ public abstract class SecurityHelper
                                                         obj.getClass().getName());
                 }
             }
-            if(scObj.requiresAuthenticatedUser(context))
+            try
+            {
+                condition = scObj.requiresAuthenticatedUser(context);
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException("exception occured during security checking", e);
+            }                
+            if(condition)
             {
                 AuthenticationContext authenticationContext = 
                     AuthenticationContext.getAuthenticationContext(context);
@@ -92,7 +111,15 @@ public abstract class SecurityHelper
                                                        obj.getClass().getName());
                 }
             }
-            if(!scObj.checkAccessRights(context))
+            try
+            {
+                condition = !scObj.checkAccessRights(context);
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException("exception occured during security checking", e);
+            }                
+            if(condition)
             {
                 throw new AccessDeniedException("The authenticated user has no right to access "+
                                                   obj.getClass().getName());
