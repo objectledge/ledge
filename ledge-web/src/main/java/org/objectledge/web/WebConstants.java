@@ -34,15 +34,6 @@ package org.objectledge.web;
 public interface WebConstants
 {
 	/** Session key for the current user. */
-	public static final String PRINCIPAL_SESSION_KEY =
-		"org.objectledge.web.Principal";
-
-	/** Session key for the current locale. */
-	public static final String LOCALE_SESSION_KEY = 
-		"org.objectledge.web.Locale";
-    
-	/** Session key for the current encoding. */ 
-	public static final String ENCODING_SESSION_KEY =
-		"org.objectledge.web.Encoding";
+	public static final String PRINCIPAL_SESSION_KEY = "org.objectledge.web.Principal";
 }
 

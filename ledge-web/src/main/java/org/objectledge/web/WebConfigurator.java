@@ -28,22 +28,16 @@
 
 package org.objectledge.web;
 
-import java.util.Locale;
-
 import org.jcontainer.dna.Configuration;
-import org.objectledge.utils.StringUtils;
 
 /**
  * Configuration component - it provide the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: WebConfigurator.java,v 1.3 2004-02-03 11:30:39 pablo Exp $
+ * @version $Id: WebConfigurator.java,v 1.4 2004-08-20 15:59:38 zwierzem Exp $
  */
 public class WebConfigurator
 {
-	/** the default locale if not */
-	public static final String DEFAULT_LOCALE = "en_US";
-	
 	/** the default encoding */
 	public static final String DEFAULT_ENCODING = "ISO-8859-1";
 	
@@ -52,9 +46,6 @@ public class WebConfigurator
 	
 	/** the default action token */
 	public static final String DEFAULT_ACTION_TOKEN = "action";
-	
-	/** the default locale */
-	private Locale defaultLocale;
 	
 	/** the default encoding */
 	private String defaultEncoding;
@@ -72,22 +63,10 @@ public class WebConfigurator
 	 */
 	public WebConfigurator(Configuration config)
 	{
-		String locale = config.getChild("default_locale").getValue(DEFAULT_LOCALE);
-		defaultLocale = StringUtils.getLocale(locale);
 		defaultEncoding = config.getChild("default_encoding").getValue(DEFAULT_ENCODING);
 		viewToken = config.getChild("view_token").getValue(DEFAULT_VIEW_TOKEN);
 		actionToken = config.getChild("action_token").getValue(DEFAULT_ACTION_TOKEN);
 	}
-	
-    /**
-     * Get the default locale.
-     * 
-     * @return the default locale.
-     */
-    public Locale getDefaultLocale()
-    {
-    	return defaultLocale;
-    }
     
 	/**
 	 * Get the default encoding.
