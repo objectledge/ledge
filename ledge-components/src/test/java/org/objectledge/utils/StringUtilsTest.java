@@ -73,6 +73,36 @@ public class StringUtilsTest extends TestCase
     {    
         assertEquals(StringUtils.escapeNonASCIICharacters("a\u0123bc\u1234"),"a\\u0123bc\\u1234");
         assertEquals(StringUtils.expandUnicodeEscapes("a\\u1234b"),"a\u1234b");
+        
+        try
+        {
+            StringUtils.expandUnicodeEscapes("a\\u12b");
+            fail("should throw the exception");
+        }
+        catch(IllegalArgumentException e)
+        {
+            //ok!
+        }
+        try
+        {
+            StringUtils.expandUnicodeEscapes("a\\u12xfe");
+            fail("should throw the exception");
+        }
+        catch(Exception e)
+        {
+            //ok!
+        }
+        try
+        {
+            StringUtils.expandUnicodeEscapes("a\\ufd4e");
+            fail("should throw the exception");
+        }
+        catch(Exception e)
+        {
+            //ok!
+        }
+
+        assertEquals("abc",StringUtils.expandUnicodeEscapes("abc"));
     }
     
     public void testGetLocale()
@@ -84,6 +114,15 @@ public class StringUtilsTest extends TestCase
         assertEquals(locale.getCountry(),"US");
         assertEquals(locale.getLanguage(),"en");
         assertEquals(locale.getVariant(),"TEST");
+        try
+        {
+            locale = StringUtils.getLocale("pl-PL");
+            fail("should throw the exception");
+        }
+        catch(IllegalArgumentException e)
+        {
+            //ok!
+        }
     }
     
     public void testGetByteCount()
@@ -118,8 +157,17 @@ public class StringUtilsTest extends TestCase
         assertEquals(StringUtils.substitute("ab$1c$*",values),"abfoocbar");
         assertEquals(StringUtils.substitute("ab$$c",values),"ab$c");
         assertEquals(StringUtils.substitute("a$1b$2c$*",values),"afoobbarc");
+        assertEquals(StringUtils.substitute("a$1b$2c$3",values),"afoobbarc");
+        assertEquals(StringUtils.substitute("a$1b$1c$1",values),"afoobfoocfoo");
+        assertEquals(StringUtils.substitute("a$+",values),"a$+");
     }
     
-    
+    public void testIndent()
+        throws Exception
+    {
+        StringBuffer sb = new StringBuffer();
+        StringUtils.indent(sb, 4);
+        assertEquals("    ", sb.toString());        
+    }
     
 }
