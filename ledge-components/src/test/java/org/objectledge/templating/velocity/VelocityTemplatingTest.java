@@ -219,7 +219,7 @@ public class VelocityTemplatingTest extends TestCase
      */
     public void testGetTemplateEncoding()
     {
-    	assertEquals("ISO-8859-2", templating.getTemplateEncoding());
+    	assertEquals("UTF-8", templating.getTemplateEncoding());
     }
     
 	public void testPipelineComponents()
