@@ -5,20 +5,22 @@
   </properties>
     
   <body>
-    <section name="Introduction">
-      <p>
-        Object Ledge is a platform for building applications in Java 2 Standard and Enterprise 
-        Edition environments. 
-      </p>
-      <p>
-        ObjectLedge follows component / container and Inversion Of Control design paradigms 
-        implemented with the excelent <a href="http://picocontainer.org">PicoContainer</a> package.
-      </p>
-      <p>
-        ObjectLedge provides a number of components - basic building blocks of the applications,
-        a few extensions to the Pico framework, customized containers for easy deployment of
-        applications in command line, daemon, and J2EE servlet environments.
-      </p>
+    <section>
+      <subsection name="Introduction">
+       <p>
+          Object Ledge is a platform for building applications in Java 2 Standard and Enterprise 
+          Edition environments. 
+        </p>
+        <p>
+          ObjectLedge follows component / container and Inversion Of Control design paradigms 
+          implemented with the excelent <a href="http://picocontainer.org">PicoContainer</a> package.
+        </p>
+        <p>
+          ObjectLedge provides a number of components - basic building blocks of the applications,
+          a few extensions to the Pico framework, customized containers for easy deployment of
+          applications in command line, daemon, and J2EE servlet environments.
+        </p>
+      </subsection>
 
       <subsection name="Why the name?">
         <p>
