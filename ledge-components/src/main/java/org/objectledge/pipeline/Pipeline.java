@@ -36,7 +36,7 @@ import org.objectledge.context.Context;
  * to a number of "Valves", and provides error handling along the lines of Java try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.10 2004-01-12 10:29:48 fil Exp $
+ * @version $Id: Pipeline.java,v 1.11 2004-01-14 10:57:56 fil Exp $
  */
 public class Pipeline
     implements Runnable
@@ -145,35 +145,5 @@ public class Pipeline
 			}
             context.removeAttribute(PIPELINE_EXCEPTION);
         }
-    }
-    
-    /**
-     * Get catch valves
-     * 
-     * @return the catch valves.
-     */
-    public Runnable[] getCatchValves()
-    {
-        return catchValves;
-    }
-
-    /**
-     * Get finally valves
-     * 
-     * @return the finally valves.
-     */
-    public Runnable[] getFinallyValves()
-    {
-        return finallyValves;
-    }
-
-    /**
-     * Get try valves
-     * 
-     * @return the try valves.
-     */
-    public Runnable[] getTryValves()
-    {
-        return tryValves;
     }
 }

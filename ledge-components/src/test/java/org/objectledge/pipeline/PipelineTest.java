@@ -58,8 +58,5 @@ public class PipelineTest extends TestCase
     	Pipeline pipe = new Pipeline(context, new Log4JLogger(logger), 
     								 runnable, runnable, runnable);
 		pipe.run();
-		assertEquals(runnable, pipe.getCatchValves());
-		assertEquals(runnable, pipe.getTryValves());
-		assertEquals(runnable, pipe.getFinallyValves());
     }
 }
