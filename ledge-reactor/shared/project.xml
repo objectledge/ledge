@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.14 2004-01-08 13:12:31 fil Exp $ -->
+<!-- $Id: project.xml,v 1.15 2004-02-09 15:47:22 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -24,9 +24,7 @@
 
   <repository>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/ledge:${pom.artifactId}</developerConnection>
-    <!--
-    <connection>scm:cvs:pserver:anonymous@objectledge.org:/cvsroot/ledge:${pom.artifactId}</connection>
-    -->
+    <connection>scm:cvs:pserver:anoncvs@objectledge.org:/cvsroot/ledge:${pom.artifactId}</connection>
     <url>http://objectledge.org/viewcvs.cgi/${pom.artifactId}</url>
   </repository>
 
