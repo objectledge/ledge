@@ -144,7 +144,7 @@ public class MVCTest extends TestCase
         PrintExceptionValve catchValve = 
             new PrintExceptionValve();
         catchValve.process(context);
-        assertEquals(httpContext.getDirectResponse(),false);
+        assertEquals(httpContext.getDirectResponse(),true);
         context.setAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION,
             new ProcessingException("TEST"));
         catchValve.process(context);

@@ -51,7 +51,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.2 2004-02-10 10:40:38 zwierzem Exp $
+ * @version $Id: PageToolTest.java,v 1.3 2004-05-17 13:28:45 fil Exp $
  */
 public class PageToolTest extends TestCase
 {
@@ -173,8 +173,8 @@ public class PageToolTest extends TestCase
 		PageTool.StyleLink link2 = (PageTool.StyleLink) iter.next(); 
 		assertEquals(link1.getPriority(), 1);
 		assertEquals(link2.getPriority(), 2);
-		assertEquals(link1.getHref(), "/test/style/style1.css");
-		assertEquals(link2.getHref(), "/test/style/style2.css");
+		assertEquals(link1.getHref(), "/test/content/style/style1.css");
+		assertEquals(link2.getHref(), "/test/content/style/style2.css");
 	}
 
 	public void testAddScriptLink()
@@ -191,8 +191,8 @@ public class PageToolTest extends TestCase
 		PageTool.ScriptLink link2 = (PageTool.ScriptLink) iter.next(); 
 		assertEquals(link1.getCharset(), "ISO-8859-1");
 		assertNull(link2.getCharset());
-		assertEquals(link1.getSrc(), "/test/js/script1.js");
-		assertEquals(link2.getSrc(), "/test/js/script2.js");
+		assertEquals(link1.getSrc(), "/test/content/js/script1.js");
+		assertEquals(link2.getSrc(), "/test/content/js/script2.js");
 	}
 
 	public void testAddNameMeta()
