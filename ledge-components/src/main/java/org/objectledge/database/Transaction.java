@@ -30,6 +30,7 @@ package org.objectledge.database;
 import java.sql.SQLException;
 
 import javax.transaction.Status;
+import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.Logger;
@@ -38,7 +39,7 @@ import org.jcontainer.dna.Logger;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.2 2004-02-03 14:38:08 fil Exp $
+ * @version $Id: Transaction.java,v 1.3 2004-02-06 08:41:57 fil Exp $
  */
 public abstract class Transaction
 {
@@ -56,12 +57,21 @@ public abstract class Transaction
     }
     
     /**
-     * Returns the UserTransaction object.
+     * Returns the JTA UserTransaction object.
      * 
      * @return the UserTransaction object.
      * @throws SQLException if the UserTransaction object is not accessible.
      */
     public abstract UserTransaction getUserTransaction()
+        throws SQLException;
+        
+    /**
+     * Returns the JTA TransactionManager object.
+     * 
+     * @return the TransactionManager object.
+     * @throws SQLException if the TransactionManager object is not accessible.
+     */
+    public abstract TransactionManager getTransactionManager()
         throws SQLException;
     
     /**

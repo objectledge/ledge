@@ -31,6 +31,7 @@ import java.sql.SQLException;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.Logger;
@@ -39,7 +40,7 @@ import org.jcontainer.dna.Logger;
  * Operates upon the UserTransaction object provided by the application server through JNDI.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JndiTransaction.java,v 1.1 2004-02-03 14:38:31 fil Exp $
+ * @version $Id: JndiTransaction.java,v 1.2 2004-02-06 08:41:57 fil Exp $
  */
 public class JndiTransaction extends Transaction
 {
@@ -69,5 +70,14 @@ public class JndiTransaction extends Transaction
             throw (SQLException)new SQLException("failed to lookup UserTransaction object")
                 .initCause(e);
         }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public TransactionManager getTransactionManager()
+        throws SQLException
+    {
+        throw new SQLException("TransactionManager is not accessible.");
     }
 }

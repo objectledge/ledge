@@ -28,6 +28,7 @@
 package org.objectledge.database;
 
 import javax.naming.NamingException;
+import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.Logger;
@@ -38,7 +39,7 @@ import org.picocontainer.lifecycle.Stoppable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.1 2004-02-04 16:05:40 fil Exp $
+ * @version $Id: JotmTransaction.java,v 1.2 2004-02-06 08:41:57 fil Exp $
  */
 public class JotmTransaction
     extends Transaction
@@ -65,6 +66,14 @@ public class JotmTransaction
     public UserTransaction getUserTransaction()
     {
         return tmService.getUserTransaction();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public TransactionManager getTransactionManager()
+    {
+        return tmService.getTransactionManager();
     }
     
     /**
