@@ -51,7 +51,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.12 2004-03-28 09:34:56 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.13 2004-03-30 09:22:40 fil Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -81,7 +81,7 @@ public class VelocityTemplating implements Templating, LogSystem
     {
         this.logger = logger;
         engine = new VelocityEngine();
-        extension = config.getChild("extension").getValue("*.vt");
+        extension = config.getChild("extension").getValue(".vt");
         encoding = config.getChild("encoding").getValue("ISO-8859-1");
         try
         {
