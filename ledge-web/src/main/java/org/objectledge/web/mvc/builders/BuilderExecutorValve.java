@@ -28,7 +28,7 @@
 package org.objectledge.web.mvc.builders;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
@@ -41,7 +41,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.15 2004-01-22 15:15:11 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.16 2004-01-23 08:17:06 fil Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -85,8 +85,10 @@ public class BuilderExecutorValve
 	 * Run view building starting from a view builder chosen in request parameters.
      * 
      * @param context the thread's processing context.
+     * @throws ProcessingException if the processing fails.
 	 */
 	public void process(Context context)
+        throws ProcessingException
 	{
 		// setup used contexts
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
@@ -118,7 +120,7 @@ public class BuilderExecutorValve
                 }
                 if(routeCalls >= maxRouteCalls)
                 {
-                    throw new PipelineProcessingException("Maximum number of builder reroutings "+
+                    throw new ProcessingException("Maximum number of builder reroutings "+
                         "exceeded");
                 }
                 // TODO access control
@@ -150,7 +152,7 @@ public class BuilderExecutorValve
 	        }
 	        catch (BuildException e)
 	        {
-	            throw new PipelineProcessingException(e);
+	            throw new ProcessingException(e);
 	        }
 
             // get next view build level
@@ -190,7 +192,7 @@ public class BuilderExecutorValve
 		// did not reach a closing builder
 		if(enclosures >= maxEnclosures)
 		{
-			throw new PipelineProcessingException("Maximum number of builder enclosures exceeded");
+			throw new ProcessingException("Maximum number of builder enclosures exceeded");
 		}
 
 		// store building result

@@ -32,7 +32,7 @@ import java.io.PrintWriter;
 
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 
@@ -40,7 +40,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderTestValve.java,v 1.7 2004-01-22 15:15:11 fil Exp $
+ * @version $Id: RequestParametersLoaderTestValve.java,v 1.8 2004-01-23 08:17:07 fil Exp $
  */
 public class RequestParametersLoaderTestValve 
     implements Valve
@@ -56,8 +56,10 @@ public class RequestParametersLoaderTestValve
      * Run the pipeline valve - parse and load the parameters into the context.
      * 
      * @param context the context.
+     * @throws ProcessingException if the processing fails.
      */
     public void process(Context context)
+        throws ProcessingException
     {
     	Parameters parameters = RequestParameters.getRequestParameters(context);
 		HttpContext httpContext = HttpContext.getHttpContext(context);
@@ -70,7 +72,7 @@ public class RequestParametersLoaderTestValve
 		}
 		catch(Exception e)
 		{
-			throw new PipelineProcessingException("",e);
+			throw new ProcessingException("",e);
 		}
     }
 }

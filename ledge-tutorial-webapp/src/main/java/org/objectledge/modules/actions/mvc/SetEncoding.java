@@ -33,7 +33,7 @@ import javax.servlet.http.Cookie;
 
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
@@ -46,7 +46,7 @@ import org.objectledge.web.parameters.RequestParameters;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.2 2004-01-22 15:15:14 fil Exp $
+ * @version $Id: SetEncoding.java,v 1.3 2004-01-23 08:17:04 fil Exp $
  */
 public class SetEncoding 
     implements Valve, WebConstants
@@ -71,7 +71,7 @@ public class SetEncoding
         String encoding = parameters.get("encoding",null);
         if(encoding == null)
         {
-            throw new PipelineProcessingException("Parameter 'encoding' not found");
+            throw new ProcessingException("Parameter 'encoding' not found");
         }
         try
         {
@@ -79,7 +79,7 @@ public class SetEncoding
         }
         catch(java.io.UnsupportedEncodingException e)
         {
-            throw new PipelineProcessingException("Unsupported encoding "+encoding);
+            throw new ProcessingException("Unsupported encoding "+encoding);
         }
             
         String cookieKey = "encoding";

@@ -33,7 +33,7 @@ import org.objectledge.context.Context;
  * An element of the processing pipeline.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Valve.java,v 1.1 2004-01-22 15:15:15 fil Exp $
+ * @version $Id: Valve.java,v 1.2 2004-01-23 08:17:05 fil Exp $
  */
 public interface Valve
 {
@@ -41,8 +41,8 @@ public interface Valve
      * Processes the unit of work.
      * 
      * @param context the thread's processing context.
-     * @throws PipelineProcessingException if there is an error during processing.
+     * @throws ProcessingException if there is an error during processing.
      */
     public void process(Context context)
-        throws PipelineProcessingException;
+        throws ProcessingException;
 }

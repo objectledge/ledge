@@ -28,7 +28,7 @@
 package org.objectledge.web.mvc.actions;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
@@ -37,7 +37,7 @@ import org.objectledge.web.mvc.finders.MVCClassFinder;
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.9 2004-01-22 15:15:12 fil Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.10 2004-01-23 08:17:07 fil Exp $
  */
 public class ActionExecutorValve 
     implements Valve
@@ -59,8 +59,10 @@ public class ActionExecutorValve
      * Finds and executes an action for current request.
      * 
      * @param context the thread's processing context.
+     * @throws ProcessingException if the processing fails.
      */
     public void process(Context context)
+        throws ProcessingException
     {
 		// setup used contexts
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
@@ -71,7 +73,7 @@ public class ActionExecutorValve
             Valve action = classFinder.getAction(actionName);
             if(action == null)
             {
-                throw new PipelineProcessingException("unavailable action "+actionName);
+                throw new ProcessingException("unavailable action "+actionName);
             }
             
             // TODO access control

@@ -29,50 +29,50 @@
 package org.objectledge.pipeline;
 
 /**
- * 
+ * Thrown when Valve's processing encounters a problem.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineProcessingException.java,v 1.1 2004-01-12 15:00:59 fil Exp $
+ * @version $Id: ProcessingException.java,v 1.1 2004-01-23 08:17:05 fil Exp $
  */
 ///CLOVER:OFF
-public class PipelineProcessingException
-    extends RuntimeException
+public class ProcessingException
+    extends Exception
 {
     /**
-     * Constructs a new PipelineProcessingException with the default message.
+     * Constructs a new ProcessingException with the default message.
      */
-    public PipelineProcessingException()
+    public ProcessingException()
     {
         super("");
     }
 
     /**
-     * Constructs a new PipelineProcessingException with a custom message.
+     * Constructs a new ProcessingException with a custom message.
      * 
      * @param message the message.
      */
-    public PipelineProcessingException(String message)
+    public ProcessingException(String message)
     {
         super(message);
     }
     
     /**
-     * Constructs a new PipelineProcessingException with a nested exception.
+     * Constructs a new ProcessingException with a nested exception.
      * 
      * @param t the nested exception.
      */
-    public PipelineProcessingException(Throwable t)
+    public ProcessingException(Throwable t)
     {
         super(t);
     }
 
 	/**
-	 * Constructs a new PipelineProcessingException with a custom message.
+	 * Constructs a new ProcessingException with a custom message.
 	 * 
 	 * @param message the message.
 	 * @param t the nested exception.
 	 */
-	public PipelineProcessingException(String message, Throwable t)
+	public ProcessingException(String message, Throwable t)
 	{
 		super(message,t);
 	}

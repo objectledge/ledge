@@ -35,7 +35,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
-import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityTemplating;
@@ -49,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.9 2004-01-22 15:15:11 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.10 2004-01-23 08:17:06 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -141,7 +141,7 @@ public class BuilderExecutorValveTest extends TestCase
         }
         catch(Exception e)
         {
-            assertEquals(PipelineProcessingException.class, e.getClass());
+            assertEquals(ProcessingException.class, e.getClass());
         }
     }
     
@@ -157,7 +157,7 @@ public class BuilderExecutorValveTest extends TestCase
         }
         catch(Exception e)
         {
-            assertEquals(PipelineProcessingException.class, e.getClass());
+            assertEquals(ProcessingException.class, e.getClass());
         }
     }
     
@@ -173,7 +173,7 @@ public class BuilderExecutorValveTest extends TestCase
         }
         catch(Exception e)
         {
-            assertEquals(PipelineProcessingException.class, e.getClass());
+            assertEquals(ProcessingException.class, e.getClass());
             assertEquals(BuildException.class, e.getCause().getClass());
         }
     }

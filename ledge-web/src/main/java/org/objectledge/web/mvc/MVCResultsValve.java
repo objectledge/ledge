@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
@@ -40,7 +40,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.2 2004-01-22 15:15:11 fil Exp $
+ * @version $Id: MVCResultsValve.java,v 1.3 2004-01-23 08:17:06 fil Exp $
  */
 public class MVCResultsValve 
     implements Valve
@@ -56,8 +56,10 @@ public class MVCResultsValve
 	 * Run view building starting from a view builder chosen in request parameters.
      * 
      * @param context used application context 
+     * @throws ProcessingException if the processing fails.
 	 */
 	public void process(Context context)
+        throws ProcessingException
 	{
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
 		HttpContext httpContext = HttpContext.getHttpContext(context);
@@ -79,7 +81,7 @@ public class MVCResultsValve
 			}
 			catch(IOException e)
 			{
-				throw new PipelineProcessingException("Cannot write the response",e);
+				throw new ProcessingException("Cannot write the response",e);
 			}
 		}
 	}

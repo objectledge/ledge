@@ -19,7 +19,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
@@ -30,7 +30,7 @@ import org.objectledge.web.parameters.RequestParameters;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.4 2004-01-22 15:15:12 fil Exp $
+ * @version $Id: FileUploadValve.java,v 1.5 2004-01-23 08:17:07 fil Exp $
  */
 public class FileUploadValve 
     implements Valve, WebConstants
@@ -63,8 +63,10 @@ public class FileUploadValve
      * Run the valve.
      *
      * @param context the context.
+     * @throws ProcessingException if the processing fails.
      */
     public void process(Context context)
+        throws ProcessingException
     {
         Map uploadMap = new HashMap();
         HttpContext httpContext = HttpContext.getHttpContext(context);
@@ -107,11 +109,11 @@ public class FileUploadValve
             }
             catch (IOException e) 
             {
-                throw new PipelineProcessingException("UploadValve exception",e);
+                throw new ProcessingException("UploadValve exception",e);
             }
             catch (MessagingException e) 
             {
-				throw new PipelineProcessingException("UploadValve exception",e);
+				throw new ProcessingException("UploadValve exception",e);
             }
         }
         else
