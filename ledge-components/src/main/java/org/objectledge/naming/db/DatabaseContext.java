@@ -75,12 +75,30 @@ public class DatabaseContext implements Context
     public DatabaseContext(Hashtable env)
     {
         this.env = env;
-        context = new PersistentContext((String)env.get(Context.PROVIDER_URL));
         persistence = (Persistence)env.get(PERSISTENCE);
         if(persistence == null)
         {
             throw new RuntimeException("failed to retrieve the persistence " +                                        "component from environment");
         }
+        String dn = (String)env.get(Context.PROVIDER_URL);
+        List list = null;
+        try
+        {
+            list = persistence.load("dn = '"+dn+"'", PersistentContext.FACTORY);
+        }
+        catch(PersistenceException e)
+        {
+            throw new RuntimeException("failed to load '"+dn+"' context from database");
+        }
+        if(list.size() == 0)
+        {
+            throw new RuntimeException("failed to lookup the context in database");
+        }
+        if(list.size() > 1)
+        {
+            throw new RuntimeException("ambiguous context '"+dn+"' in database");
+        }
+        context = (PersistentContext)list.get(0);
     }
 
     /**
