@@ -72,6 +72,7 @@ public class MVCTest extends TestCase
         try
         {
             context = new Context();
+            context.clearAttributes();
             //prepare test
             String root = System.getProperty("ledge.root");
             if (root == null)
@@ -144,7 +145,7 @@ public class MVCTest extends TestCase
         PrintExceptionValve catchValve = 
             new PrintExceptionValve();
         catchValve.process(context);
-        assertEquals(httpContext.getDirectResponse(),true);
+        assertEquals(httpContext.getDirectResponse(), false);
         context.setAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION,
             new ProcessingException("TEST"));
         catchValve.process(context);
