@@ -38,7 +38,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContextImpl.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: MVCContextImpl.java,v 1.2 2003-12-30 17:26:25 zwierzem Exp $
  */
 public class MVCContextImpl implements MVCContext
 {
@@ -53,10 +53,10 @@ public class MVCContextImpl implements MVCContext
 		return (MVCContext)context.getAttribute(CONTEXT_KEY);
 	}
 
-	/** The Action for this request */
-	//protected Action action;
+	/** the action parameter. */
+	protected String action;
 
-	/** the view paramter. */
+	/** the view parameter. */
 	private String view;
 
 	/** the locale */
@@ -90,6 +90,22 @@ public class MVCContextImpl implements MVCContext
 		encoding = "ISO-8859-2";
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getAction()
+	{
+		return view;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setAction(String action)
+	{
+		this.action = action;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

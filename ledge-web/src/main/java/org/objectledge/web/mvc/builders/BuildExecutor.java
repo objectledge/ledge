@@ -44,7 +44,7 @@ import org.objectledge.web.mvc.TemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildExecutor.java,v 1.2 2003-12-30 14:54:36 zwierzem Exp $
+ * @version $Id: BuildExecutor.java,v 1.3 2003-12-30 17:26:25 zwierzem Exp $
  */
 public class BuildExecutor implements Runnable
 {
@@ -64,7 +64,7 @@ public class BuildExecutor implements Runnable
      * @param context used application context
      * @param classFinder finder for builder objects
      * @param templateFinder finder for template objects
-     * @param maxRouteCalls maxmimal number of {@link Builder#route()} calls per builder
+     * @param maxRouteCalls maxmimal number of {@link Builder#route()} calls per {@link Builder}
      * @param maxEnclosures maxmimal number of {@link Builder} enclosures
      * 	(also {@link Builder#getEnclosingViewPair()} calls)
 	 */
@@ -91,7 +91,7 @@ public class BuildExecutor implements Runnable
 	
 		// get initial builder, template and embedded result
 		String embeddedResult = null;
-		Builder builder = (Builder) classFinder.findBuilder(mvcContext.getView());
+		Builder builder = classFinder.findBuilder(mvcContext.getView());
 		Template template = templateFinder.findBuilderTemplate(mvcContext.getView());
 		
 		// start processing

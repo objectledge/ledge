@@ -36,13 +36,27 @@ import java.util.Locale;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: MVCContext.java,v 1.2 2003-12-30 17:26:25 zwierzem Exp $
  */
 public interface MVCContext
 {
 	/** key to store this context in thread context */
 	public static final String CONTEXT_KEY = "objectledge.web.pipeline_context";
 	
+	/**
+	 * Returns the action paremeter.
+	 * 
+	 * @return the value of action parameter.
+	 */
+	public String getAction();
+
+	/**
+	 * Sets the action parameter.
+	 *
+	 * @param action the action parameter.
+	 */
+	public void setAction(String action);
+
 	/**
 	 * Returns the view paremeter.
 	 *
