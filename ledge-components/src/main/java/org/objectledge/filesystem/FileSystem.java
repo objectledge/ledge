@@ -28,11 +28,11 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.3 2003-11-25 08:18:31 fil Exp $
+ * @version $Id: FileSystem.java,v 1.4 2003-11-25 08:24:00 fil Exp $
  */
 public class FileSystem
 {
-    private String protocol = "ab";
+    private String protocol = "ledge";
 
     /** The providers. */
     private List providers = new ArrayList();
