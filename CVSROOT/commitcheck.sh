@@ -20,6 +20,6 @@ $CVSROOT/CVSROOT/commit_prep.pl ${1+"$@"} || exit 2
 #
 # Bridge to cvsspam
 #
-$CVSROOT/CVSROOT/record_lastdir.rb || exit 2
+$CVSROOT/CVSROOT/record_lastdir.rb ${1+"$@"} || exit 2
 
 exit 0
