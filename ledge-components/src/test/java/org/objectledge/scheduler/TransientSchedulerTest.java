@@ -298,7 +298,7 @@ public class TransientSchedulerTest extends TestCase
         Date oldDate = calendar.getTime();
         calendar.set(Calendar.YEAR, 2003);
         calendar.set(Calendar.MINUTE,22);
-        calendar.set(Calendar.HOUR,10);
+        calendar.set(Calendar.HOUR_OF_DAY,10);
         calendar.set(Calendar.MONTH,11);
         calendar.set(Calendar.DAY_OF_MONTH,1);
         calendar.set(Calendar.SECOND,0);
