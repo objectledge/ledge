@@ -11,17 +11,26 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.pico.customization.CustomizationProvider;
+import org.objectledge.pico.customization.CustomizedComponentAdapter;
+import org.picocontainer.ComponentAdapter;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.PicoContainer;
+import org.picocontainer.PicoInitializationException;
+import org.picocontainer.PicoIntrospectionException;
+import org.picocontainer.defaults.DefaultPicoContainer;
+import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.1 2003-11-28 11:01:50 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.2 2003-11-28 15:51:45 fil Exp $
  */
 public class ConfigurationFactory
+    implements CustomizationProvider
 {
     private FileSystem fileSystem;
     
@@ -30,13 +39,19 @@ public class ConfigurationFactory
     /**
      * Creates a new instance of ConfigurationFactory.
      * 
+     * @param container the container we are being registered to.
      * @param fileSystem the file system to read configurations from.
      * @param directory the name of the directory where configurations reside.
      */
-    public ConfigurationFactory(FileSystem fileSystem, String directory)
+    public ConfigurationFactory(MutablePicoContainer container, FileSystem fileSystem, 
+        String directory)
     {
         this.fileSystem = fileSystem;
         this.directory = directory;
+        if(container != null)
+        {
+            registerAdapter(container);
+        }
     }
 
     /**
@@ -78,5 +93,36 @@ public class ConfigurationFactory
             throw new ComponentInitializationError("failed to parse configuration file "+
                 path+" for compoenent "+name, e);
         }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Object getCustomizedInsatnce(MutablePicoContainer dependenciesContainer, Object target)
+        throws PicoInitializationException, PicoIntrospectionException
+    {
+        return getConfig(target);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void verify(PicoContainer container) throws NoSatisfiableConstructorsException
+    {
+        // no dependencies
+    }
+    
+    /**
+     * Registers a CustomizedComponentAdapter for the {@link Configuration} type in the
+     * specified container.
+     * 
+     * @param container the container.
+     */
+    protected void registerAdapter(MutablePicoContainer container)
+    {
+        MutablePicoContainer configurationContainer = new DefaultPicoContainer();
+        ComponentAdapter configurationAdapter = new CustomizedComponentAdapter(Configuration.class, 
+            configurationContainer, this);
+        container.registerComponent(configurationAdapter);
     }
 }
