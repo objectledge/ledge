@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.2 2004-01-19 13:29:20 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.3 2004-01-19 13:44:44 fil Exp $
  */
 public class NameSequenceFactoryTest extends TestCase
 {
@@ -92,6 +92,15 @@ public class NameSequenceFactoryTest extends TestCase
     {
         NameSequenceFactory factory = getNameSequenceFactory("standard");
         assertEquals("views.foo.Bar", factory.getView(Bar.class));
+        try
+        {
+            factory.getView(NameSequenceFactory.class);
+            fail("exception should have been thrown");
+        }
+        catch(Exception e)
+        {
+            // success
+        }
         Templating templating = getTemplating();
         Template barTemplate = templating.getTemplate("views/foo/Bar");
         assertEquals("views.foo.Bar", factory.getView(barTemplate));
