@@ -28,28 +28,32 @@
 
 package org.objectledge.i18n;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.jmock.Mock;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
 import org.objectledge.parameters.RequestParametersLoaderValve;
+import org.objectledge.utils.AddToList;
 import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.utils.ReturnListValuesAsArray;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.TestHttpServletRequest;
-import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
+import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.MVCInitializerValve;
-import org.objectledge.web.mvc.TestHttpSession;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -59,6 +63,13 @@ public class WebI18nTest extends LedgeTestCase
     private Context context;
 
     private LocaleLoaderValve localeLoaderValve;
+    
+    private Mock mockHttpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private Mock mockHttpSession;
+    private HttpSession httpSession;
+    private Mock mockHttpServletResponse;
+    private HttpServletResponse httpServletResponse;
 
     public void setUp() throws Exception
     {
@@ -67,20 +78,26 @@ public class WebI18nTest extends LedgeTestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(LocaleLoaderValve.class));
         Configuration config = getConfig(fs,"tools/org.objectledge.web.WebConfigurator.xml");
         WebConfigurator webConfigurator = new WebConfigurator(config);
-        Map sessionMap = new HashMap();
-        TestHttpServletRequest request = new TestHttpServletRequest(sessionMap);
-        request.setupGetContentType("text/html");
-        request.setupGetParameterNames((new Vector()).elements());
-        request.setupPathInfo("view/Default");
-        request.setupGetContextPath("/test");
-        request.setupGetServletPath("ledge");
-        request.setupGetRequestURI("");
-        request.setupGetRemoteAddr("www.objectledge.com");
-        request.setupServerName("www.objectledge.org");
-        TestHttpSession session = new TestHttpSession();
-        request.setSession(session);
-        TestHttpServletResponse response = new TestHttpServletResponse(sessionMap);
-        HttpContext httpContext = new HttpContext(request, response);
+
+        mockHttpServletRequest = mock(HttpServletRequest.class);
+        httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+        mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+        mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
+        mockHttpServletRequest.stubs().method("getRemoteAddr").will(returnValue("objectledge.org"));
+        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
+
+        mockHttpSession = mock(HttpSession.class);
+        httpSession = (HttpSession)mockHttpSession.proxy();
+        mockHttpServletRequest.stubs().method("getSession").will(returnValue(httpSession));
+        
+        mockHttpServletResponse = mock(HttpServletResponse.class);
+        httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
+        
+        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
         httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
@@ -95,6 +112,12 @@ public class WebI18nTest extends LedgeTestCase
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
+        List cookieList = new ArrayList();
+        
+        mockHttpServletRequest.stubs().method("getCookies").will(new ReturnListValuesAsArray(cookieList));
+        mockHttpServletResponse.stubs().method("addCookie").with(ANYTHING).will(new AddToList(cookieList));
+        mockHttpSession.stubs().method("getAttribute").with(ANYTHING).will(returnValue(null));
+        mockHttpSession.stubs().method("setAttribute").with(ANYTHING, ANYTHING).isVoid();
 
         localeLoaderValve.process(context);
         Cookie[] cookies = httpContext.getRequest().getCookies();
@@ -108,5 +131,4 @@ public class WebI18nTest extends LedgeTestCase
         cookies = httpContext.getRequest().getCookies();
         assertEquals(cookies.length, 4);
     }
-
 }

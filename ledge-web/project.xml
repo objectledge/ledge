@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.33 2004-05-28 10:04:02 fil Exp $ -->
+<!-- $Id: project.xml,v 1.34 2004-05-28 13:34:27 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -153,18 +153,6 @@
       <artifactId>velocity</artifactId>
       <version>1.4</version>
       <url>http://jakarta.apache.org/velocity/</url>
-    </dependency>
-    <dependency>
-      <groupId>mockobjects</groupId>
-      <artifactId>mockobjects-core</artifactId>
-      <version>0.09</version>
-      <url>http://www.mockobjects.com</url>
-    </dependency>
-    <dependency>
-      <groupId>mockobjects</groupId>
-      <artifactId>mockobjects-jdk1.4-j2ee1.3</artifactId>
-      <version>0.09</version>
-      <url>http://www.mockobjects.com</url>
     </dependency>
     <dependency>
       <groupId>commons-pool</groupId>

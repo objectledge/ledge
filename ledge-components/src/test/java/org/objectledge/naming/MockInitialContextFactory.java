@@ -32,7 +32,11 @@ import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
 import javax.naming.spi.InitialContextFactory;
+
+import org.jmock.Mock;
+import org.jmock.core.stub.ReturnStub;
 
 /**
  * Mock initial context factory for testing purposes.
@@ -47,6 +51,8 @@ public class MockInitialContextFactory implements InitialContextFactory
     public Context getInitialContext(Hashtable environment) 
         throws NamingException
     {
-        return new TestMockContext();
+        Mock mockContext = new Mock(DirContext.class);
+        mockContext.stubs().method("lookup").will(new ReturnStub(mockContext.proxy()));
+        return (Context)mockContext.proxy();
     }
 }

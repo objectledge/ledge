@@ -11,8 +11,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/jaf/jars/activation-1.0.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/javamail/jars/mailapi-1.3.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jta/jars/jta-1.0.1b.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/mockobjects/jars/mockobjects-jdk1.4-j2ee1.3-0.09.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/mockobjects/jars/mockobjects-core-0.09.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-pool/jars/commons-pool-1.1.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/hsqldb/sources/hsqldb-1.7.2-rc6a-src.zip" kind="var" path="MAVEN_REPO/hsqldb/jars/hsqldb-1.7.2-rc6a-jdk1.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/dbunit/jars/dbunit-2.0.jar"/>

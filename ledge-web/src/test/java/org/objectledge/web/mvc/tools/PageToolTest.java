@@ -31,10 +31,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jmock.Mock;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
@@ -42,31 +44,27 @@ import org.objectledge.logging.LoggerFactory;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
+import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.utils.ReturnArgument;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.TestHttpServletRequest;
-import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCInitializerValve;
 import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.3 2004-05-17 13:28:45 fil Exp $
+ * @version $Id: PageToolTest.java,v 1.4 2004-05-28 13:34:28 fil Exp $
  */
-public class PageToolTest extends TestCase
+public class PageToolTest extends LedgeTestCase
 {
 	private LinkToolFactory linkToolFactory;
 
 	private Context context;
 
-    /**
-     * Constructor for PageToolTest.
-     * @param arg0
-     */
-    public PageToolTest(String arg0)
-    {
-        super(arg0);
-    }
+	private Mock mockHttpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private Mock mockHttpServletResponse;
+    private HttpServletResponse httpServletResponse;
 
 	public void setUp()
 		throws Exception
@@ -91,17 +89,24 @@ public class PageToolTest extends TestCase
 		WebConfigurator webConfigurator = new WebConfigurator(config);
 		config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactory.class);
 		linkToolFactory = new LinkToolFactory(config, context, webConfigurator);
-		TestHttpServletRequest request = new TestHttpServletRequest();
-		TestHttpServletResponse response = new TestHttpServletResponse();
-		request.setupGetContentType("text/html");
-		request.setupGetParameterNames((new Vector()).elements());
-		request.setupPathInfo("view/Default");
-		request.setupGetContextPath("/test");
-		request.setupGetServletPath("ledge");
-		request.setupGetRequestURI("");
-		request.setupServerName("www.objectledge.org");
-		HttpContext httpContext = new HttpContext(request, response);
-		httpContext.setEncoding(webConfigurator.getDefaultEncoding());
+
+        mockHttpServletRequest = mock(HttpServletRequest.class);
+        httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+        mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+        mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
+        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
+
+        mockHttpServletResponse = mock(HttpServletResponse.class);
+        httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
+        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
+
+        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+
+        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
 		context.setAttribute(HttpContext.class, httpContext);
 		RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
 		paramsLoader.process(context);

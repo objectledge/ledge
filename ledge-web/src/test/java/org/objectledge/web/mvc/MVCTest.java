@@ -28,12 +28,16 @@
 
 package org.objectledge.web.mvc;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Configuration;
+import org.jmock.Mock;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
@@ -41,31 +45,25 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.PrintExceptionValve;
-import org.objectledge.web.TestHttpServletRequest;
-import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class MVCTest extends TestCase
+public class MVCTest extends LedgeTestCase
 {
     private Context context;
 
     private MVCInitializerValve mvcInitializer;
     
-    
-    /**
-     * Constructor for MVCInitializerValveTest.
-     * @param arg0
-     */
-    public MVCTest(String arg0)
-    {
-        super(arg0);
-    }
+	private Mock mockHttpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private Mock mockHttpServletResponse;
+    private HttpServletResponse httpServletResponse;
     
     public void setUp()
     {
@@ -86,16 +84,32 @@ public class MVCTest extends TestCase
             Configuration config = configFactory.getConfig(WebConfigurator.class,
                   WebConfigurator.class);
             WebConfigurator webConfigurator = new WebConfigurator(config);
-            TestHttpServletRequest request = new TestHttpServletRequest();
-            TestHttpServletResponse response = new TestHttpServletResponse();
-            request.setupGetContentType("text/html");
-            request.setupGetParameterNames((new Vector()).elements());
-            request.setupPathInfo("view/Default");
-            request.setupGetContextPath("/test");
-            request.setupGetServletPath("ledge");
-            request.setupGetRequestURI("");
-            request.setupServerName("www.objectledge.org");
-            HttpContext httpContext = new HttpContext(request, response);
+
+            mockHttpServletRequest = mock(HttpServletRequest.class);
+            httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+            mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+            mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+            mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+            mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+            mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+            mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
+            mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
+
+            mockHttpServletResponse = mock(HttpServletResponse.class);
+            httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
+            mockHttpServletResponse.stubs().method("setContentLength").with(ANYTHING).isVoid();
+            mockHttpServletResponse.stubs().method("setContentType").with(ANYTHING).isVoid();
+            ServletOutputStream sos = new ServletOutputStream()
+            {
+                public void write(int b) throws IOException
+                {
+                    // ignore
+                }
+            };
+            mockHttpServletResponse.stubs().method("getOutputStream").will(returnValue(sos));            
+            
+            HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+
             httpContext.setEncoding(webConfigurator.getDefaultEncoding());
             context.setAttribute(HttpContext.class, httpContext);
             RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
@@ -148,6 +162,7 @@ public class MVCTest extends TestCase
         assertEquals(httpContext.getDirectResponse(), false);
         context.setAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION,
             new ProcessingException("TEST"));
+        mockHttpServletResponse.expects(once()).method("setContentLength").with(ANYTHING).isVoid();
         catchValve.process(context);
         httpContext = HttpContext.getHttpContext(context);
         assertEquals(httpContext.getDirectResponse(),true);

@@ -30,15 +30,17 @@ package org.objectledge.parameters;
 
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.jmock.Mock;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.TestHttpServletRequest;
-import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
 
 /**
@@ -50,6 +52,11 @@ import org.objectledge.web.WebConfigurator;
 public class RequestParametersTest extends LedgeTestCase
 {
     private Context context;
+
+    private Mock mockHttpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private Mock mockHttpServletResponse;
+    private HttpServletResponse httpServletResponse;
 
     /*
      * @see TestCase#setUp()
@@ -63,19 +70,21 @@ public class RequestParametersTest extends LedgeTestCase
             getLogger(RequestParametersLoaderValve.class));
         Configuration config = getConfig(fs,"config/org.objectledge.web.WebConfigurator.xml");
         WebConfigurator webConfigurator = new WebConfigurator(config);
-        TestHttpServletRequest request = new TestHttpServletRequest();
-        TestHttpServletResponse response = new TestHttpServletResponse();
-        request.setupGetContentType("text/html");
+        
+        mockHttpServletRequest = mock(HttpServletRequest.class);
+        httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+        mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         Vector parameterNames = new Vector();
         parameterNames.add("foo");
-        request.setupGetParameterNames(parameterNames.elements());
-        request.setupAddParameter("foo", "bar");
-        request.setupPathInfo("view/Default");
-        request.setupGetContextPath("/test");
-        request.setupGetServletPath("ledge");
-        request.setupGetRequestURI("");
-        request.setupServerName("www.objectledge.org");
-        HttpContext httpContext = new HttpContext(request, response);
+        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue(parameterNames.elements()));
+        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("foo")).will(returnValue(new String[] { "bar" }));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+        mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
+        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
+
+        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
         httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();

@@ -28,11 +28,19 @@
 
 package org.objectledge.upload;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.jmock.Mock;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.mail.MailSystem;
@@ -42,12 +50,8 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.threads.ThreadPool;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.TestHttpServletRequest;
-import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.web.mvc.TestHttpSession;
-
-import com.mockobjects.servlet.MockServletInputStream;
+import org.objectledge.web.WebConstants;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -59,6 +63,13 @@ public class UploadTest extends LedgeTestCase
     private FileUploadValve uploadValve;
 
     private FileUpload fileUpload;
+
+    private Mock mockHttpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private Mock mockHttpSession;
+    private HttpSession httpSession;
+    private Mock mockHttpServletResponse;
+    private HttpServletResponse httpServletResponse;
 
     public void setUp() throws Exception
     {
@@ -84,28 +95,40 @@ public class UploadTest extends LedgeTestCase
 
         //file upload valve
         uploadValve = new FileUploadValve(webConfigurator, logger, fileUpload, mailSystem);
-        TestHttpServletRequest request = new TestHttpServletRequest();
-        TestHttpServletResponse response = new TestHttpServletResponse();
-        //request.setupGetContentType("text/html");
-        request.setupGetContentType(fs.read("up_ct.txt", "ISO-8859-2"));
-        request.setupGetParameterNames((new Vector()).elements());
-        request.setupPathInfo("view/Default");
-        request.setupGetContextPath("/test");
-        request.setupGetServletPath("ledge");
-        request.setupGetRequestURI("");
-        request.setupServerName("www.objectledge.org");
-        request.setSession(new TestHttpSession());
-        request.setupGetContentLength((int)fs.length("up.txt"));
-        MockServletInputStream servletIS = new MockServletInputStream();
-        byte[] reqContent = fs.read("up.txt");
 
-        if (reqContent == null)
+        String contentType = fs.read("up_ct.txt", "ISO-8859-2");
+        final InputStream is = fs.getInputStream("up.txt");
+        ServletInputStream sis = new ServletInputStream()
         {
-            throw new Exception("file up.txt not found");
-        }
-        servletIS.setupRead(reqContent);
-        request.setupGetInputStream(servletIS);
-        HttpContext httpContext = new HttpContext(request, response);
+            public int read() throws IOException
+            {
+                return is.read();
+            }
+        };
+        
+        mockHttpServletRequest = mock(HttpServletRequest.class);
+        httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+        mockHttpServletRequest.stubs().method("getContentType").will(returnValue(contentType));
+        Vector parameterNames = new Vector();
+        parameterNames.add("foo");
+        mockHttpServletRequest.stubs().method("getCharacterEncoding").will(returnValue("ISO-8859-2"));
+        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue(parameterNames.elements()));
+        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("foo")).will(returnValue(new String[] { "bar" }));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+        mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
+        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
+        mockHttpServletRequest.stubs().method("getContentLength").will(returnValue((int)fs.length("up.txt")));
+        mockHttpServletRequest.stubs().method("getInputStream").will(returnValue(sis));
+
+        mockHttpSession = mock(HttpSession.class);
+        httpSession = (HttpSession)mockHttpSession.proxy();
+        mockHttpServletRequest.stubs().method("getSession").will(returnValue(httpSession));
+        mockHttpSession.stubs().method("getAttribute").with(eq(WebConstants.ENCODING_SESSION_KEY)).will(returnValue("ISO-8859-1"));
+        
+        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+
         httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();

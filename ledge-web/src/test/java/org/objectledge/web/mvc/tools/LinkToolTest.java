@@ -30,10 +30,12 @@ package org.objectledge.web.mvc.tools;
 
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jmock.Mock;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
@@ -43,9 +45,9 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
+import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.utils.ReturnArgument;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.TestHttpServletRequest;
-import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCInitializerValve;
 import org.objectledge.xml.XMLValidator;
@@ -56,20 +58,16 @@ import org.objectledge.xml.XMLValidator;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class LinkToolTest extends TestCase
+public class LinkToolTest extends LedgeTestCase
 {
     private LinkToolFactory linkToolFactory;
 
     private Context context;
 
-    /**
-     * Constructor for LinkToolTest.
-     * @param arg0
-     */
-    public LinkToolTest(String arg0)
-    {
-        super(arg0);
-    }
+    private Mock mockHttpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private Mock mockHttpServletResponse;
+    private HttpServletResponse httpServletResponse;
 
     public void setUp() throws Exception
     {
@@ -97,24 +95,31 @@ public class LinkToolTest extends TestCase
         WebConfigurator webConfigurator = new WebConfigurator(config);
         config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactory.class);
         linkToolFactory = new LinkToolFactory(config, context, webConfigurator);
-        TestHttpServletRequest request = new TestHttpServletRequest();
-        TestHttpServletResponse response = new TestHttpServletResponse();
-        request.setupGetContentType("text/html");
-        request.setupGetParameterNames((new Vector()).elements());
-        request.setupPathInfo("view/Default");
-        request.setupGetContextPath("/test");
-        request.setupGetServletPath("ledge");
-        request.setupGetRequestURI("");
-        request.setupServerName("www.objectledge.org");
-        HttpContext httpContext = new HttpContext(request, response);
+
+        mockHttpServletRequest = mock(HttpServletRequest.class);
+        httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+        mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+        mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
+        mockHttpServletRequest.stubs().method("getServerPort").will(returnValue(80));
+        mockHttpServletRequest.stubs().method("isSecure").will(returnValue(false));
+        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("www.objectledge.org"));
+
+        mockHttpServletResponse = mock(HttpServletResponse.class);
+        httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
+        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
+        
+        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+
         httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);
         MVCInitializerValve mVCInitializer = new MVCInitializerValve(webConfigurator);
         mVCInitializer.process(context);
-
-        
         
         LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
         assertNotNull(linkTool);
@@ -258,18 +263,25 @@ public class LinkToolTest extends TestCase
         webConfigurator = new WebConfigurator(config);
         config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactory.class);
         linkToolFactory = new LinkToolFactory(config, context, webConfigurator);
-        request = new TestHttpServletRequest();
-        response = new TestHttpServletResponse();
-        request.setupGetContentType("text/html");
-        request.setupGetParameterNames((new Vector()).elements());
-        request.setupPathInfo("");
-        request.setupGetContextPath("/test");
-        request.setupGetServletPath("/ledge/");
-        request.setupGetRequestURI("foo#bar");
-        request.setupServerName("www.objectledge.org");
-        request.setupIsSecure(true);
-        request.setupGetServerPort(443);
-        httpContext = new HttpContext(request, response);
+
+        mockHttpServletRequest = mock(HttpServletRequest.class);
+        httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+        mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+        mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue(""));
+        mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+        mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue("/foo#bar"));
+        mockHttpServletRequest.stubs().method("getServerName").will(returnValue("www.objectledge.org"));
+        mockHttpServletRequest.stubs().method("getServerPort").will(returnValue(443));
+        mockHttpServletRequest.stubs().method("isSecure").will(returnValue(true));
+
+        mockHttpServletResponse = mock(HttpServletResponse.class);
+        httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
+        mockHttpServletResponse.stubs().method("encodeURL").with(ANYTHING).will(new ReturnArgument());
+
+        httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+
         httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
         paramsLoader = new RequestParametersLoaderValve();

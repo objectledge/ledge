@@ -30,10 +30,12 @@ package org.objectledge.web.mvc;
 
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jmock.Mock;
 import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
@@ -46,9 +48,8 @@ import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.TemplatingContextLoaderValve;
 import org.objectledge.templating.velocity.VelocityTemplating;
+import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.TestHttpServletRequest;
-import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.xml.XMLValidator;
 
@@ -58,22 +59,19 @@ import org.objectledge.xml.XMLValidator;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class ExceptionRedirectorValveTest extends TestCase
+public class ExceptionRedirectorValveTest extends LedgeTestCase
 {
     private ExceptionRedirectorValve exceptionRedirectorValve;
 
     private Context context;
 
     private TemplatingContextLoaderValve templatingLoader;
-    /**
-     * Constructor for ExceptionRedirectorValveTest.
-     * @param arg0
-     */
-    public ExceptionRedirectorValveTest(String arg0)
-    {
-        super(arg0);
-    }
 
+	private Mock mockHttpServletRequest;
+    private HttpServletRequest httpServletRequest;
+    private Mock mockHttpServletResponse;
+    private HttpServletResponse httpServletResponse;
+    
     public void setUp()
     {
         try
@@ -94,16 +92,21 @@ public class ExceptionRedirectorValveTest extends TestCase
                                                            WebConfigurator.class);
             WebConfigurator webConfigurator = new WebConfigurator(config);
             
-            TestHttpServletRequest request = new TestHttpServletRequest();
-            TestHttpServletResponse response = new TestHttpServletResponse();
-            request.setupGetContentType("text/html");
-            request.setupGetParameterNames((new Vector()).elements());
-            request.setupPathInfo("view/Default");
-            request.setupGetContextPath("/test");
-            request.setupGetServletPath("ledge");
-            request.setupGetRequestURI("");
-            request.setupServerName("www.objectledge.org");
-            HttpContext httpContext = new HttpContext(request, response);
+            mockHttpServletRequest = mock(HttpServletRequest.class);
+            httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+            mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+            mockHttpServletRequest.stubs().method("getParameterNames").will(returnValue((new Vector()).elements()));
+            mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+            mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
+            mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("ledge"));
+            mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
+            mockHttpServletRequest.stubs().method("getServerName").will(returnValue("objectledge.org"));
+
+            mockHttpServletResponse = mock(HttpServletResponse.class);
+            httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
+
+            HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+
             httpContext.setEncoding(webConfigurator.getDefaultEncoding());
             context.setAttribute(HttpContext.class, httpContext);
             RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
