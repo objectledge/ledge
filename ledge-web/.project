@@ -3,7 +3,7 @@
 	<name>ledge-web</name>
 	<comment></comment>
 	<projects>
-		<project>ab-components</project>
+		<project>ledge-components</project>
 		<project>pico</project>
 	</projects>
 	<buildSpec>
