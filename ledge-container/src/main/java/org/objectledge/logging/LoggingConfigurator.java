@@ -34,7 +34,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Hierarchy;
+import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.spi.DefaultRepositorySelector;
+import org.apache.log4j.spi.RootCategory;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
@@ -47,7 +51,7 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.7 2004-06-16 14:33:35 fil Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.8 2004-06-24 14:01:33 fil Exp $
  */
 public class LoggingConfigurator
     implements Startable
@@ -79,7 +83,9 @@ public class LoggingConfigurator
      */
     public void start()
     {
-        configurator.doConfigure(config.getDocumentElement(), LogManager.getLoggerRepository());
+        Hierarchy hierarchy = new LedgeLoggerHierarchy(new RootCategory((Level)Level.DEBUG));
+        configurator.doConfigure(config.getDocumentElement(), hierarchy);
+        LogManager.setRepositorySelector(new DefaultRepositorySelector(hierarchy), this);
     }
     
     /**
