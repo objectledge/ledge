@@ -38,7 +38,7 @@ public class ParametersImplTest extends TestCase
      */
     public void testParametersImpl()
     {
-        //TODO Implement ParametersImpl().
+        //self tested
     }
 
     /**
@@ -46,7 +46,22 @@ public class ParametersImplTest extends TestCase
      */
     public void testParametersImplString()
     {
-        //TODO Implement ParametersImpl().
+        params = new ParametersImpl("foo=bar\n");
+        assertEquals(params.get("foo"),"bar");
+		params = new ParametersImpl("foo=bar,buzz,foo\nbar=foo");
+		assertEquals(params.getStrings("foo").length,3);
+		assertEquals(params.get("bar"),"foo");
+		params = new ParametersImpl("");
+		assertEquals(params.get("foo","bar"),"bar");
+		try
+		{
+			params = new ParametersImpl("foo");
+			fail("Should throw IllegalArgumentException");
+		}
+		catch(IllegalArgumentException e)
+		{
+			//expected
+		}
     }
 
     /**

@@ -20,7 +20,7 @@ import org.objectledge.utils.StringUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: ParametersImpl.java,v 1.3 2003-11-28 14:40:08 pablo Exp $
+ * @version $Id: ParametersImpl.java,v 1.4 2003-11-28 15:55:00 pablo Exp $
  */
 public class ParametersImpl implements Parameters
 {
@@ -651,23 +651,27 @@ public class ParametersImpl implements Parameters
 		{
 			return;
 		}
-		while(reader.ready())
+		String line = null;
+		do
 		{
 			// merge broken lines
 			StringBuffer sb = new StringBuffer();
-			String line = null;
 			boolean breakAtEnd = false;
 			int lastBrokenLine = 0;
 			do
 			{
-				line = reader.readLine().trim();
+				line = reader.readLine();
+				if(line != null)
+				{
+				
+				line = line.trim();
 				if(line.length() > 0 && !line.startsWith("#"))
 				{
 					if(line.endsWith("\\"))
 					{
 						breakAtEnd = true;
 						lastBrokenLine = reader.getLineNumber();
-						sb.append(line.substring(0, line.length()-1));
+				    	sb.append(line.substring(0, line.length()-1));
 					}
 					else
 					{
@@ -675,26 +679,32 @@ public class ParametersImpl implements Parameters
 						sb.append(line);
 					}
 				}
+				}
 			}
-			while((line.endsWith("\\") || line.length() == 0 || line.startsWith("#")) 
-					&& reader.ready());
+			while(reader.ready() && line != null &&
+			      (line.endsWith("\\") || line.length() == 0 || line.startsWith("#"))); 
 			if(breakAtEnd)
 			{
 				throw new IllegalArgumentException("The "+lastBrokenLine+" line is not ended");
 			}
 			// process the line			
-			line = sb.toString();
-			int delim = line.indexOf('=');
+			String line2 = sb.toString();
+			if(line2.length()==0)
+			{
+				continue;
+			}
+			int delim = line2.indexOf('=');
 			if(delim == -1)
 			{
-				throw new IllegalArgumentException("The property '"+line+"' has no '=' delimiter");
+				throw new IllegalArgumentException("The property '"+line2+"' has no '=' delimiter");
 			}
-			String name = line.substring(0,delim).trim();
-			String value = line.substring(delim+1).trim();
+			String name = line2.substring(0,delim).trim();
+			String value = line2.substring(delim+1).trim();
 			// process the value
 			if(value.indexOf(',') == -1)
 			{
 				add(name, value);
+				continue;
 			}
 			StringTokenizer st = new StringTokenizer(value,",");
 			ArrayList values = new ArrayList();
@@ -712,6 +722,7 @@ public class ParametersImpl implements Parameters
 			values.toArray(target);
 			add(name, target);
 		}
+		while(reader.ready() && line!=null);
     }
     
     /** 
