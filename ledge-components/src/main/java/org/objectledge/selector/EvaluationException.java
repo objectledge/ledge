@@ -31,11 +31,32 @@ package org.objectledge.selector;
  * Thrown when an exception occurs during evaluation of a variable.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EvaluationException.java,v 1.1 2004-01-22 11:28:01 fil Exp $
+ * @version $Id: EvaluationException.java,v 1.2 2004-01-23 12:10:05 fil Exp $
  */
 public class EvaluationException
     extends Exception
 {
+    /**
+     * Constructs new instance of the exception.
+     *
+     * <p>Child classes using this constructor should override <code>getMessage()</code> method.
+     * </p> 
+     */
+    public EvaluationException()
+    {
+        super();
+    }
+
+    /**
+     * Constructs new instance of the exception.
+     * 
+     * @param message the detail message.
+     */
+    public EvaluationException(String message)
+    {
+        super(message);
+    }
+
     /**
      * Constructs new instance of the exception.
      * 
