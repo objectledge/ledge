@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.20 2004-03-10 14:03:51 fil Exp $
+ * @version $Id: FileSystem.java,v 1.21 2004-03-31 10:02:17 fil Exp $
  */
 public class FileSystem
 {
@@ -67,6 +67,14 @@ public class FileSystem
      * read() methods. */
     private int maxReadSize;
 
+    /**
+     * Protected no-arg constructor to allow mocking.
+     */
+    protected FileSystem()
+    {
+        
+    }
+    
     /**
      * Creates a new instance of the File System.
      * 
@@ -1055,6 +1063,6 @@ public class FileSystem
         FileSystemProvider cfs = new org.objectledge.filesystem.
             ClasspathFileSystemProvider("classpath", 
             FileSystem.class.getClassLoader());
-        return new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
+        return new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 65536);
     }
 }
