@@ -7,7 +7,7 @@
       <item name="home" href="../../index.html"/>
       <item name="wiki" href="http://objectledge.org/wiki"/>
       <item name="issues" href="http://objectledge.org/jira"/>
-      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-container"/>
+      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-container/?only_with_tag=RELEASE-0_1"/>
     </links>
     <menu name="Refernce">
       <item name="Container subsystems"   href="/container-subsystems/index.html" collapse="true">

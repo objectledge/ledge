@@ -7,7 +7,7 @@
       <item name="home" href="../../index.html"/>
       <item name="wiki" href="http://objectledge.org/wiki"/>
       <item name="issues" href="http://objectledge.org/jira"/>
-      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-web"/>
+      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-web/?only_with_tag=RELEASE-0_1"/>
     </links>
     <menu name="Reference">
       <item name="Servlet integration" href="/servlet-integration/index.html" collapse="true">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.11 2004-01-06 10:36:25 mover Exp $ -->
+<!-- $Id: project.xml,v 1.11.2.1 2004-01-07 08:59:41 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -27,7 +27,7 @@
     <!--
     <connection>scm:cvs:pserver:anonymous@objectledge.org:/cvsroot/ledge:${pom.artifactId}</connection>
     -->
-    <url>http://objectledge.org/viewcvs.cgi/${pom.artifactId}</url>
+    <url>http://objectledge.org/viewcvs.cgi/${pom.artifactId}/?only_with_tag=RELEASE-0_1</url>
   </repository>
 
   <licenses>

@@ -8,7 +8,7 @@
       <item name="home" href="index.html"/>
       <item name="wiki" href="http://objectledge.org/wiki"/>
       <item name="issues" href="http://objectledge.org/jira"/>
-      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/"/>
+      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/?only_with_tag=RELEASE-0_1"/>
     </links>
     <menu name="Overview">
       <item name="Subprojects"						href="projects-overview.html"/>
