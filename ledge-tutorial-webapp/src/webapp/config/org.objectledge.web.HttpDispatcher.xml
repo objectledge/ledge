@@ -28,6 +28,19 @@
 --> 
 
 <config>
-  <method name="GET">org.objectledge.web.dispatcher.PipelineHttpDispatcher</method>
-  <method name="POST">org.objectledge.web.dispatcher.PipelineHttpDispatcher</method>
+
+  <!-- a single rule for handling all GET and POST requests -->
+  <rule>
+    <or>
+      <equal>
+        <variable name="method"/>
+        <string value="GET"/>
+      </equal>
+      <equal>
+        <variable name="method"/>
+        <string value="POST"/>
+      </equal>
+    </or>
+  </rule>
+  
 </config>

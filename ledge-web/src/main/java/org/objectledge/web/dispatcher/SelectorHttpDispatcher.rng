@@ -27,12 +27,8 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <oneOrMore>
-    <element name="method">
-      <attribute name="name"/>
-      <!-- should contain textual key of the component that will handle the request -->
-      <text/>
-    </element>
-  </oneOrMore>
-</element>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  
+  <include href="../../selector/Selector.rng"/>
+  
+</grammar>

@@ -30,9 +30,6 @@
 
 	<!-- end of core config -->
 
-    <component class-key="org.objectledge.web.HttpDispatcher" 
-    		   class="org.objectledge.web.dispatcher.HttpMethodDispatcher"/>
-
     <component class="org.objectledge.context.Context"/>
     <component class="org.objectledge.web.WebConfigurator"/>
     <component class="org.objectledge.web.mvc.MVCResultsValve"/>
@@ -74,6 +71,8 @@
         <component-parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
       </sequence-parameter>
     </component>      
+
+    <!-- // pipeline //////////////////////////////////////////////////////////////////////// -->
     
     <component key="org.objectledge.pipeline.ErrorHandlingPipeline"
                class="org.objectledge.pipeline.ErrorHandlingPipeline">
@@ -95,12 +94,22 @@
 	    <component-parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
       </sequence-parameter>
     </component>
+
+    <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
     
     <component key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"
                class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
       <component-parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
       <component-parameter/>
-      <component-parameter/>
     </component>
+    
+    <component class-key="org.objectledge.web.HttpDispatcher" 
+    		   class="org.objectledge.web.dispatcher.SelectorHttpDispatcher">
+       <component-parameter/>
+       <sequence-parameter>
+         <component-parameter class-key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"/>
+       </sequence-parameter>
+    </component>
+    
   </container>
 </container>

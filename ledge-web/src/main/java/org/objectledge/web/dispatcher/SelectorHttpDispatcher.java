@@ -1,18 +1,18 @@
 // 
 // Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 // All rights reserved. 
-//   
+// 
 // Redistribution and use in source and binary forms, with or without modification,  
 // are permitted provided that the following conditions are met: 
-//   
+//  
 // * Redistributions of source code must retain the above copyright notice,  
-//   this list of conditions and the following disclaimer. 
+//	 this list of conditions and the following disclaimer. 
 // * Redistributions in binary form must reproduce the above copyright notice,  
-//   this list of conditions and the following disclaimer in the documentation  
-//   and/or other materials provided with the distribution. 
+//	 this list of conditions and the following disclaimer in the documentation  
+//	 and/or other materials provided with the distribution. 
 // * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-//   nor the names of its contributors may be used to endorse or promote products  
-//   derived from this software without specific prior written permission. 
+//	 nor the names of its contributors may be used to endorse or promote products  
+//	 derived from this software without specific prior written permission. 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
@@ -24,8 +24,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
-//
-
+// 
 package org.objectledge.web.dispatcher;
 
 import java.io.IOException;
@@ -34,63 +33,62 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
-import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.pipeline.Valve;
-import org.objectledge.web.HttpContext;
+import org.objectledge.selector.EvaluationException;
+import org.objectledge.selector.IntrospectionVariables;
+import org.objectledge.selector.Selector;
+import org.objectledge.selector.Variables;
 import org.objectledge.web.HttpDispatcher;
 
 /**
- * Processes http requests using a Pipeline.
- *
- * <p>Created on Dec 23, 2003</p>
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.11 2004-01-27 15:22:24 fil Exp $
+ * A dispatcher that provides rule based selection of other dispatchers
+ *  
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: SelectorHttpDispatcher.java,v 1.1 2004-01-27 15:22:24 fil Exp $
  */
-public class PipelineHttpDispatcher 
+public class SelectorHttpDispatcher
     implements HttpDispatcher
 {
-	/** the pipeline */
-    private Valve pipeline;
-    
-    /** thead context. */
-    private Context context;
+    /** Selector of the dispatchers. */
+    private Selector selector;
     
     /**
-     * Creates a new pipeline dipspatcher.
+     * Constructs a dispatcher instance.
      * 
-     * @param pipeline the pipeline
-     * @param context the thread context
-     * @throws ConfigurationException if the configuration is malformed.
+     * @param config the selection rules.
+     * @param dispatchers the delegate dispatchers.
+     * @throws ConfigurationException if the rules configuration is malformed.
      */
-    public PipelineHttpDispatcher(Valve pipeline, Context context)
+    public SelectorHttpDispatcher(Configuration config, HttpDispatcher[] dispatchers)
         throws ConfigurationException
     {
-        this.pipeline = pipeline;
-        this.context = context;
+        selector = new Selector(config, dispatchers);
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public boolean dispatch(HttpServletRequest request, HttpServletResponse response)
+    public boolean dispatch(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException
     {
-        HttpContext httpContext = new HttpContext(request,response);
-        context.setAttribute(HttpContext.class, httpContext);
+        Variables vars = new IntrospectionVariables(request);
         try
         {
-            pipeline.process(context);
+            HttpDispatcher dispatcher = (HttpDispatcher)selector.select(vars);
+            if(dispatcher != null)
+            {
+                return dispatcher.dispatch(request, response);
+            }
+            else
+            {
+                return false;
+            }
         }
-        catch(ProcessingException e)
+        catch(EvaluationException e)
         {
-            throw new ServletException("processing failed", e);
+            throw new ServletException("dispatcher selection failed", e);
         }
-        finally
-        {
-            context.removeAttribute(HttpContext.class);
-        }
-        return httpContext.getDirectResponse();
     }
 }
+    

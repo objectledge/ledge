@@ -30,9 +30,6 @@
 
 	<!-- end of core config -->
 
-    <component class-key="org.objectledge.web.HttpDispatcher" 
-    		   class="org.objectledge.web.dispatcher.HttpMethodDispatcher"/>
-
     <component class="org.objectledge.context.Context"/>
     <component class="org.objectledge.web.WebConfigurator"/>
     <component class="org.objectledge.web.mvc.MVCInitializerValve"/>
@@ -71,6 +68,8 @@
       <constant-parameter value="4"/>
       <constant-parameter value="4"/>
     </component>
+
+    <!-- // pipeline //////////////////////////////////////////////////////////////////////// -->
     
     <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
       <component-parameter class-key="org.jcontainer.dna.Logger"/>
@@ -86,12 +85,22 @@
 	  <sequence-parameter/>
 	  <sequence-parameter/>
     </component>
+
+    <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
     		   
     <component key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"
                class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
       <component-parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
       <component-parameter/>
-      <component-parameter/>
     </component>
+    
+    <component class-key="org.objectledge.web.HttpDispatcher" 
+    		   class="org.objectledge.web.dispatcher.SelectorHttpDispatcher">
+       <component-parameter/>
+       <sequence-parameter>
+         <component-parameter class-key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"/>
+       </sequence-parameter>
+    </component>
+    
   </container>
 </container>
