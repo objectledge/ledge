@@ -35,7 +35,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.10 2004-08-10 10:18:42 zwierzem Exp $
+ * @version $Id: MVCContext.java,v 1.11 2005-03-03 13:26:59 zwierzem Exp $
  */
 public class MVCContext
 {
@@ -71,6 +71,7 @@ public class MVCContext
         // TODO: Decide whether the parameters should be overriden setView/setAction ???
         //RequestParameters requestParameters
 	    //this.requestParameters = requestParameters;
+        // This would be nice to have setAction method removed
 	}
 	
     /**

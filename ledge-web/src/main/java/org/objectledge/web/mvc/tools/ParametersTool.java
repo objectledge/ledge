@@ -29,29 +29,56 @@
 package org.objectledge.web.mvc.tools;
 
 import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.ParametersRead;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Give a read only access to request parameters.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ParametersTool.java,v 1.1 2005-02-22 20:06:27 zwierzem Exp $
+ * @version $Id: ParametersTool.java,v 1.2 2005-03-03 13:26:57 zwierzem Exp $
  */
-public class ParametersTool implements ParametersRead
+public class ParametersTool
 {
+    private MVCContext mvcContext;
     private Parameters parameters;
 
     /**
-     * Creates the parameters tool for a given set of parameters
+     * Creates the parameters tool for a given set of parameters and mvc context.
+     * 
+     * @param mvcContext
      * @param requestParameters
      */
-    public ParametersTool(Parameters parameters)
+    public ParametersTool(MVCContext mvcContext, Parameters parameters)
     {
+       this.mvcContext = mvcContext;
        this.parameters = parameters; 
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the action paremeter.
+     * 
+     * @return the value of action parameter.
+     */
+    public String getAction()
+    {
+        return mvcContext.getAction();
+    }
+    
+    /**
+     * Returns the view paremeter.
+     *
+     * @return the value of view parameter.
+     */
+    public String getView()
+    {
+        return mvcContext.getView();
+    }
+    
+    /**
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the string value of the parameter.
      */
     public String get(String name)
     {
@@ -59,7 +86,11 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the string value of the parameter.
      */
     public String get(String name, String defaultValue)
     {
@@ -67,15 +98,21 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
-     */
+     * Return all values of the parameter with specified name as an array. 
+     * 
+     * @param name the name of the parameters.
+     * @return the array of the string values of the parameter.
+    */
     public String[] getStrings(String name)
     {
         return parameters.getStrings(name);
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the boolean value of the parameter.
      */
     public boolean getBoolean(String name)
     {
@@ -83,7 +120,11 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the boolean value of the parameter.
      */
     public boolean getBoolean(String name, boolean defaultValue)
     {
@@ -91,15 +132,22 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
-     */
+     * Return all values of the parameter with specified name as an array. 
+     * 
+     * @param name the name of the parameters.
+     * @return the array of the boolean values of the parameter.
+    */
     public boolean[] getBooleans(String name)
     {
         return parameters.getBooleans(name);
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the float value of the parameter.
+     * @throws NumberFormatException if parameter is not a number.
      */
     public float getFloat(String name) throws NumberFormatException
     {
@@ -107,7 +155,11 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the float value of the parameter.
      */
     public float getFloat(String name, float defaultValue)
     {
@@ -115,15 +167,23 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
-     */
+     * Return all values of the parameter with specified name as an array. 
+     * 
+     * @param name the name of the parameters.
+     * @return the array of the float values of the parameter.
+     * @throws NumberFormatException if anyone of the values is not a number. 
+    */
     public float[] getFloats(String name) throws NumberFormatException
     {
         return parameters.getFloats(name);
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the integer value of the parameter.
+     * @throws NumberFormatException if parameter is not a number.
      */
     public int getInt(String name) throws NumberFormatException
     {
@@ -131,7 +191,11 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the integer value of the parameter.
      */
     public int getInt(String name, int defaultValue)
     {
@@ -139,15 +203,23 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
-     */
+     * Return all values of the parameter with specified name as an array. 
+     * 
+     * @param name the name of the parameters.
+     * @return the array of the integer values of the parameter.
+     * @throws NumberFormatException if anyone of the values is not a number.
+    */
     public int[] getInts(String name) throws NumberFormatException
     {
         return parameters.getInts(name);
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @return the integer value of the parameter.
+     * @throws NumberFormatException if parameter is not a number.
      */
     public long getLong(String name) throws NumberFormatException
     {
@@ -155,7 +227,11 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter as array of long values. 
+     * 
+     * @param name the name of the parameter.
+     * @return the array of parameter values.
+     * @throws NumberFormatException if parameter is not a number.
      */
     public long[] getLongs(String name) throws NumberFormatException
     {
@@ -163,7 +239,11 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Return the parameter with specified name. 
+     * 
+     * @param name the name of the parameter.
+     * @param defaultValue the default value of the parameter.
+     * @return the integer value of the parameter.
      */
     public long getLong(String name, long defaultValue)
     {
@@ -171,7 +251,9 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Return the names of all parameters.
+     * 
+     * @return the parameter names.
      */
     public String[] getParameterNames()
     {
@@ -179,7 +261,10 @@ public class ParametersTool implements ParametersRead
     }
 
     /**
-     * {@inheritDoc}
+     * Checks whether parameter is defined.
+     * 
+     * @param name the name of the parameter.
+     * @return <code>true</code> if parameter is defined.
      */
     public boolean isDefined(String name)
     {

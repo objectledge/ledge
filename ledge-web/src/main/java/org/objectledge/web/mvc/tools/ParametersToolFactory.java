@@ -31,12 +31,13 @@ package org.objectledge.web.mvc.tools;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.templating.tools.ContextToolFactory;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Context tool factory component to build the parameters tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ParametersToolFactory.java,v 1.1 2005-02-22 20:06:27 zwierzem Exp $
+ * @version $Id: ParametersToolFactory.java,v 1.2 2005-03-03 13:26:57 zwierzem Exp $
  */
 public class ParametersToolFactory implements ContextToolFactory
 {
@@ -57,7 +58,9 @@ public class ParametersToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		return new ParametersTool(RequestParameters.getRequestParameters(context));
+		return new ParametersTool(
+            MVCContext.getMVCContext(context),
+            RequestParameters.getRequestParameters(context));
 	}
 	
 	/**
