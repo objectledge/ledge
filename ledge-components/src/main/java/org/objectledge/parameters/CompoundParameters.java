@@ -42,7 +42,7 @@ import java.util.TreeSet;
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.org">Rafal Krzewski</a>
- * @version $Id: CompoundParameters.java,v 1.1 2005-01-17 10:38:02 pablo Exp $
+ * @version $Id: CompoundParameters.java,v 1.2 2005-01-26 03:46:15 rafal Exp $
  */
 public class CompoundParameters implements Parameters
 {
@@ -74,7 +74,7 @@ public class CompoundParameters implements Parameters
      *
      * @param array the containers.
      */
-    public CompoundParameters(Parameters array[])
+    public CompoundParameters(Parameters[] array)
     {
         containers = Arrays.asList(array);
         Collections.reverse(containers);
