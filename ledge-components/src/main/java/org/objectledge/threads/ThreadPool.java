@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
@@ -41,7 +42,7 @@ import org.picocontainer.lifecycle.Stoppable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.6 2004-02-02 13:50:54 fil Exp $
+ * @version $Id: ThreadPool.java,v 1.7 2004-02-02 16:06:36 fil Exp $
  */
 public class ThreadPool
     implements Stoppable
@@ -76,15 +77,24 @@ public class ThreadPool
     /**
      * Component constructor.
      * 
-     * @param context thread processing context.
      * @param cleanup the valve that should be invoked every time the thread finishes it's work.
+     * @param context thread processing context.
+     * @param config the pool configuration.
      * @param log the logger to use.
      */
-    public ThreadPool(Context context, Valve cleanup, Logger log)
+    public ThreadPool(Valve cleanup, Context context, Configuration config, Logger log)
     {
         this.context = context;
         this.cleanup = cleanup;
         this.log = log;
+        if(config != null)
+        {
+            daemonPriority = config.getChild("daemon-priority").getValueAsInteger(daemonPriority);
+            workerPriority = config.getChild("worker-priority").getValueAsInteger(workerPriority);
+            workerPoolCapacity = config.getChild("worker-pool-capacity").   
+                getValueAsInteger(workerPoolCapacity);
+        }
+        
         this.threadGroup = new ThreadGroup(THREAD_GROUP_NAME);
         this.workerPool = new WorkerPool(workerPoolCapacity, workerPriority, threadGroup, 
             log, context, cleanup);

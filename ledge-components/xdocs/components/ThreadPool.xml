@@ -30,12 +30,13 @@
       <subsection name="Browse">
         <p>
           <ul>
-            <li>ThreadPool <a href="../apidocs/org/objectledge/threads/ThreadPool.html">JavaDoc</a></li>
-            <li>ThreadPool <a href="../xref/org/objectledge/threads/ThreadPool.html">XRef</a></li>
-            <li>ThreadPool <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/threads/ThreadPool.java">CVS log</a></li>
             <li>Task <a href="../apidocs/org/objectledge/threads/Task.html">JavaDoc</a></li>
             <li>Task <a href="../xref/org/objectledge/threads/Task.html">XRef</a></li>
             <li>Task <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/threads/Task.java">CVS log</a></li>
+            <li>ThreadPool <a href="../apidocs/org/objectledge/threads/ThreadPool.html">JavaDoc</a></li>
+            <li>ThreadPool <a href="../xref/org/objectledge/threads/ThreadPool.html">XRef</a></li>
+            <li>ThreadPool <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/threads/ThreadPool.java">CVS log</a></li>
+            <li>ThreadPool configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/threads/ThreadPool.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
           </ul>
         </p>
       </subsection>
@@ -48,6 +49,7 @@
               <td width="100%">
                 <a href="Context.html">Context</a>,
                 <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>,
+                <a href="../../ledge-container/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>
               </td>
             </tr>
             <tr>
@@ -67,17 +69,23 @@
 	          <th widht="100%">descritpion</th>
 	        </tr>
 	        <tr>
-	          <td>1</td>
-	          <td><code>org.objectledge.context.Context</code></td>
-	          <td>the thread's context</td>
-	        </tr>
 	        <tr>
-	          <td>2</td>
+	          <td>1</td>
 	          <td><code>org.objectledge.pipeline.Valve</code></td>
 	          <td>the cleanup Valve</td>
 	        </tr>
+	        </tr>
+	          <td>2</td>
+	          <td><code>org.objectledge.context.Context</code></td>
+	          <td>the thread's context</td>
+	        </tr>
 		    <tr>
 		      <td>3</td>
+		      <td><code>import org.jcontainer.dna.Configuration</code></td>
+		      <td>the pool configuration</td>
+		    </tr>
+		    <tr>
+		      <td>4</td>
 		      <td><code>import org.jcontainer.dna.Logger</code></td>
 		      <td>the logger</td>
 		    </tr>

@@ -29,7 +29,9 @@ package org.objectledge.threads;
 
 import junit.framework.TestCase;
 
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
@@ -37,7 +39,7 @@ import org.objectledge.pipeline.Valve;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPoolTest.java,v 1.2 2004-02-02 09:03:50 pablo Exp $
+ * @version $Id: ThreadPoolTest.java,v 1.3 2004-02-02 16:06:36 fil Exp $
  */
 public class ThreadPoolTest extends TestCase
 {
@@ -56,8 +58,9 @@ public class ThreadPoolTest extends TestCase
     {
         Context context = new Context();
         Valve cleanup = null;
+        Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        ThreadPool pool = new ThreadPool(context, cleanup, log);
+        ThreadPool pool = new ThreadPool(cleanup, context, config, log);
         pool.runDaemon(new TestTask());
         Thread.sleep(100);
         pool.stop();
@@ -68,8 +71,9 @@ public class ThreadPoolTest extends TestCase
     {
         Context context = new Context();
         Valve cleanup = null;
+        Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        ThreadPool pool = new ThreadPool(context, cleanup, log);
+        ThreadPool pool = new ThreadPool(cleanup, context, config, log);
         pool.runWorker(new TestTask());
         Thread.sleep(100);
         pool.stop();
