@@ -29,7 +29,7 @@
 
 <config>
   <extension>.vt</extension>
-  <encoding>ISO-8859-2</encoding>
+  <encoding>UTF-8</encoding>
   <paths>
     <path>/templates/</path>
   </paths>
