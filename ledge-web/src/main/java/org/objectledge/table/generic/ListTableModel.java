@@ -42,7 +42,7 @@ import org.objectledge.table.TableState;
  * <p>Item indices are used as ids.</p>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListTableModel.java,v 1.3 2004-06-14 12:03:28 fil Exp $
+ * @version $Id: ListTableModel.java,v 1.4 2004-06-14 13:54:58 fil Exp $
  */
 public class ListTableModel
     implements ExtendedTableModel
@@ -149,7 +149,7 @@ public class ListTableModel
      *
      * @return the id of the object.
      */
-    public String getId(Object parent, Object child)
+    public String getId(String parent, Object child)
     {
         int index = list.indexOf(child);
         if(index >= 0)

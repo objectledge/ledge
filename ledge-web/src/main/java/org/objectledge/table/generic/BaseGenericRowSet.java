@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.6 2004-06-14 13:48:15 zwierzem Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.7 2004-06-14 13:54:58 fil Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -298,7 +298,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
             for(int i = 0; i< childrenList.size(); i++)
             {
                 Object childObject = childrenList.get(i);
-                String childId = model.getId(rootObject, childObject);
+                String childId = model.getId(rootId, childObject);
 
                 // go down the tree
                 TableRow childRow = getSubTree(childId, depth, rowList);

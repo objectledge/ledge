@@ -46,7 +46,7 @@ import org.objectledge.table.TableState;
  * the UI on the fly, the toolkit provides {@link PathTreeElement} class.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PathTreeTableModel.java,v 1.3 2004-06-14 12:03:28 fil Exp $
+ * @version $Id: PathTreeTableModel.java,v 1.4 2004-06-14 13:54:58 fil Exp $
  */
 public class PathTreeTableModel
     implements ExtendedTableModel
@@ -154,7 +154,7 @@ public class PathTreeTableModel
      *
      * @return the id of the object.
      */
-    public String getId(Object parent, Object child)
+    public String getId(String parent, Object child)
     {
         return (String)idByObject.get(child);
     }
