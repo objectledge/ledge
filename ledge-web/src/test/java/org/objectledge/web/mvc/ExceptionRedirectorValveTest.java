@@ -117,7 +117,7 @@ public class ExceptionRedirectorValveTest extends LedgeTestCase
 
             config = configFactory.getConfig(ExceptionRedirectorValve.class, 
                                             ExceptionRedirectorValve.class);
-            LoggerFactory loggerFactory = new LoggerFactory();
+            LoggerFactory loggerFactory = new LoggerFactory(null);
             Logger logger = loggerFactory.getLogger(ExceptionRedirectorValve.class);
             exceptionRedirectorValve = new ExceptionRedirectorValve(config, logger);
             

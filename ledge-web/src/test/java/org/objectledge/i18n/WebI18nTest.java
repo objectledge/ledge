@@ -104,7 +104,7 @@ public class WebI18nTest extends LedgeTestCase
         paramsLoader.process(context);
         MVCInitializerValve mvcInitializer = new MVCInitializerValve(webConfigurator);
         mvcInitializer.process(context);
-        LoggerFactory loggerFactory = new LoggerFactory();
+        LoggerFactory loggerFactory = new LoggerFactory(null);
         localeLoaderValve = new LocaleLoaderValve(logger, webConfigurator);
     }
 

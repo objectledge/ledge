@@ -91,7 +91,7 @@ public class ComponentsTest extends TestCase
                         getConfig(NameSequenceFactory.class, NameSequenceFactory.class);
             NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
             config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-            LoggerFactory loggerFactory = new LoggerFactory();
+            LoggerFactory loggerFactory = new LoggerFactory(null);
             Logger logger = loggerFactory.getLogger(Templating.class);
             Templating templating = new VelocityTemplating(config, logger, fs);
             logger = loggerFactory.getLogger(MVCFinder.class);

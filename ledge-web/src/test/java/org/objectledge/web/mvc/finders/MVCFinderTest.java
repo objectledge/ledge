@@ -50,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.8 2004-06-02 07:10:48 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.9 2004-06-25 12:55:35 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -83,7 +83,7 @@ public class MVCFinderTest extends TestCase
             getConfig(NameSequenceFactory.class, NameSequenceFactory.class);
         NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
         config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        LoggerFactory loggerFactory = new LoggerFactory();
+        LoggerFactory loggerFactory = new LoggerFactory(null);
         Logger logger = loggerFactory.getLogger(Templating.class);
         templating = new VelocityTemplating(config, logger, fs);
         logger = loggerFactory.getLogger(MVCFinder.class);

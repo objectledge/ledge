@@ -47,7 +47,7 @@ import org.picocontainer.defaults.Swappable;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.11 2004-03-16 08:37:26 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.12 2004-06-25 12:55:37 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -58,8 +58,12 @@ public class LoggerFactory
 
     /**
      * Creates a new instance of Factory and installs apropriate component adapter.
+     * 
+     * <p>We depend LoggingConfigurator to make sure that logging is configured before we create any logs.</p>
+     * 
+     * @param loggingConfigurator the LoggingConfigurator.
      */
-    public LoggerFactory()
+    public LoggerFactory(LoggingConfigurator loggingConfigurator)
     {
         this.loggerContainer = new DefaultPicoContainer();
     }

@@ -89,7 +89,7 @@ public class LinkToolTest extends LedgeTestCase
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
 
         Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        LoggerFactory loggerFactory = new LoggerFactory();
+        LoggerFactory loggerFactory = new LoggerFactory(null);
         Logger logger = loggerFactory.getLogger(Templating.class);
         Templating templating = new VelocityTemplating(config, logger, fs);
         config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
@@ -257,7 +257,7 @@ public class LinkToolTest extends LedgeTestCase
         validator = new XMLValidator(new XMLGrammarCache());
         configFactory = new ConfigurationFactory(fs, validator, ".");
         config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        loggerFactory = new LoggerFactory();
+        loggerFactory = new LoggerFactory(null);
         logger = loggerFactory.getLogger(Templating.class);
         templating = new VelocityTemplating(config, logger, fs);
         config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);

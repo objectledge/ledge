@@ -54,7 +54,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.5 2004-06-02 07:10:46 fil Exp $
+ * @version $Id: PageToolTest.java,v 1.6 2004-06-25 12:55:35 fil Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -83,7 +83,7 @@ public class PageToolTest extends LedgeTestCase
 		ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
 
 		Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-		LoggerFactory loggerFactory = new LoggerFactory();
+		LoggerFactory loggerFactory = new LoggerFactory(null);
 		Logger logger = loggerFactory.getLogger(Templating.class);
 		Templating templating = new VelocityTemplating(config, logger, fs);
 		config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);

@@ -21,7 +21,7 @@ import org.objectledge.xml.XMLValidator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfiguratorTest.java,v 1.12 2004-06-24 14:01:55 fil Exp $
+ * @version $Id: LoggingConfiguratorTest.java,v 1.13 2004-06-25 12:55:37 fil Exp $
  */
 public class LoggingConfiguratorTest extends TestCase
 {
@@ -44,7 +44,7 @@ public class LoggingConfiguratorTest extends TestCase
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         XMLValidator xv = new XMLValidator(new XMLGrammarCache());
         ConfigurationFactory cf = new ConfigurationFactory(fs, xv, "config");
-        new LoggingConfigurator(cf, fs).start();    
+        new LoggingConfigurator(cf, fs);    
         Logger logger = Logger.getLogger(LoggingConfiguratorTest.class);
         logger.debug("Yipee!");
         logger.error("tracing", new TracingException(4));

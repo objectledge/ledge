@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.12 2004-06-16 08:34:03 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.13 2004-06-25 12:55:35 fil Exp $
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
@@ -160,7 +160,7 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
     public Templating getTemplating() throws Exception
     {
         Configuration config = getConfig(fs,"org.objectledge.templating.Templating.xml");
-        LoggerFactory loggerFactory = new LoggerFactory();
+        LoggerFactory loggerFactory = new LoggerFactory(null);
         return new VelocityTemplating(config, loggerFactory.getLogger(Templating.class), fs);
     }
 }
