@@ -28,11 +28,9 @@
 
 package org.objectledge.web.mvc.actions;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
-import org.objectledge.configuration.ConfigurationFactory;
+import org.objectledge.LedgeWebTestCase;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
@@ -42,7 +40,6 @@ import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
-import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
@@ -50,59 +47,32 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class ActionExecutorValveTest extends TestCase
+public class ActionExecutorValveTest extends LedgeWebTestCase
 {
     private Context context;
-    
+
     private ActionExecutorValve actionExecutorValve;
-    /**
-     * Constructor for ActionExecutorValveTest.
-     * @param arg0
-     */
-    public ActionExecutorValveTest(String arg0)
+
+    public void setUp() throws Exception
     {
-        super(arg0);
+        context = new Context();
+        FileSystem fs = getFileSystem("src/test/resources/actions");
+        Configuration config = getConfig(fs, NameSequenceFactory.class, NameSequenceFactory.class);
+        NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
+        config = getConfig(fs, Templating.class, VelocityTemplating.class);
+        LoggerFactory loggerFactory = new LoggerFactory();
+        Logger logger = loggerFactory.getLogger(Templating.class);
+        Templating templating = new VelocityTemplating(config, logger, fs);
+        logger = loggerFactory.getLogger(MVCFinder.class);
+        MutablePicoContainer container = new DefaultPicoContainer();
+        container.registerComponentImplementation(Context.class);
+        MVCFinder finder = new MVCFinder(container, logger, templating, nameSequenceFactory);
+        actionExecutorValve = new ActionExecutorValve(finder);
+        MVCContext mvcContext = new MVCContext();
+        mvcContext.setAction(null);
+        context.setAttribute(MVCContext.class, mvcContext);
     }
 
-    public void setUp()
-    {
-
-        try
-        {
-            context = new Context();
-            
-            //prepare test
-            String root = System.getProperty("ledge.root");
-            if (root == null)
-            {
-                throw new Error("system property ledge.root undefined. " +
-                     "use -Dledge.root=.../ledge-container/src/test/resources");
-            }
-            FileSystem fs = FileSystem.getStandardFileSystem(root + "/actions");
-            XMLValidator validator = new XMLValidator();
-            ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
-            Configuration config = configFactory.
-                        getConfig(NameSequenceFactory.class, NameSequenceFactory.class);
-            NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
-            config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-            LoggerFactory loggerFactory = new LoggerFactory();
-            Logger logger = loggerFactory.getLogger(Templating.class);
-            Templating templating = new VelocityTemplating(config, logger, fs);
-            logger = loggerFactory.getLogger(MVCFinder.class);
-            MutablePicoContainer container = new DefaultPicoContainer();
-            container.registerComponentImplementation(Context.class); 
-            MVCFinder finder = new MVCFinder(container, logger, templating, nameSequenceFactory);
-            actionExecutorValve = new ActionExecutorValve(finder);
-            MVCContext mvcContext = new MVCContext();
-            mvcContext.setAction(null);
-            context.setAttribute(MVCContext.class, mvcContext);
-        }
-        catch (Exception e)
-        {
-            throw new Error(e);
-        }
-    }
-    
     public void testProcess() throws Exception
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
@@ -115,7 +85,7 @@ public class ActionExecutorValveTest extends TestCase
             actionExecutorValve.process(context);
             fail("Should throw the exception");
         }
-        catch(ProcessingException e)
+        catch (ProcessingException e)
         {
             //ok!
         }

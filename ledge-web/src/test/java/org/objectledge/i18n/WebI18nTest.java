@@ -34,12 +34,11 @@ import java.util.Vector;
 
 import javax.servlet.http.Cookie;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.LedgeTestCase;
 import org.objectledge.authentication.DefaultPrincipal;
-import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
@@ -51,90 +50,63 @@ import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.MVCInitializerValve;
 import org.objectledge.web.mvc.TestHttpSession;
-import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class WebI18nTest extends TestCase
+public class WebI18nTest extends LedgeTestCase
 {
     private Context context;
 
     private LocaleLoaderValve localeLoaderValve;
-    
-    
-    /**
-     * Constructor for MVCInitializerValveTest.
-     * @param arg0
-     */
-    public WebI18nTest(String arg0)
+
+    public void setUp() throws Exception
     {
-        super(arg0);
-    }
-    
-    public void setUp()
-    {
-        try
-        {
-            context = new Context();
-            //prepare test
-            String root = System.getProperty("ledge.root");
-            if (root == null)
-            {
-                throw new Error("system property ledge.root undefined. " +
-                 "use -Dledge.root=.../ledge-container/src/test/resources");
-            }
-            FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
-            XMLValidator validator = new XMLValidator();
-            ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
-            Configuration config = configFactory.getConfig(WebConfigurator.class,
-                  WebConfigurator.class);
-            WebConfigurator webConfigurator = new WebConfigurator(config);
-            Map sessionMap = new HashMap();
-            TestHttpServletRequest request = new TestHttpServletRequest(sessionMap);
-            request.setupGetContentType("text/html");
-            request.setupGetParameterNames((new Vector()).elements());
-            request.setupPathInfo("view/Default");
-            request.setupGetContextPath("/test");
-            request.setupGetServletPath("ledge");
-            request.setupGetRequestURI("");
-            request.setupGetRemoteAddr("www.objectledge.com");
-            request.setupServerName("www.objectledge.org");
-            TestHttpSession session = new TestHttpSession();
-            request.setSession(session);
-            TestHttpServletResponse response = new TestHttpServletResponse(sessionMap);
-            HttpContext httpContext = new HttpContext(request, response);
-            httpContext.setEncoding(webConfigurator.getDefaultEncoding());
-            context.setAttribute(HttpContext.class, httpContext);
-            RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
-            paramsLoader.process(context);
-            MVCInitializerValve mvcInitializer = new MVCInitializerValve(webConfigurator);
-            mvcInitializer.process(context);
-            LoggerFactory loggerFactory = new LoggerFactory();
-            Logger logger = loggerFactory.getLogger(LocaleLoaderValve.class);
-            localeLoaderValve = new LocaleLoaderValve(logger,webConfigurator);    
-        }
-        catch (Exception e)
-        {
-            throw new Error(e);
-        }
+        context = new Context();
+        FileSystem fs = getFileSystem();
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(LocaleLoaderValve.class));
+        Configuration config = getConfig(fs,"tools/org.objectledge.web.WebConfigurator.xml");
+        WebConfigurator webConfigurator = new WebConfigurator(config);
+        Map sessionMap = new HashMap();
+        TestHttpServletRequest request = new TestHttpServletRequest(sessionMap);
+        request.setupGetContentType("text/html");
+        request.setupGetParameterNames((new Vector()).elements());
+        request.setupPathInfo("view/Default");
+        request.setupGetContextPath("/test");
+        request.setupGetServletPath("ledge");
+        request.setupGetRequestURI("");
+        request.setupGetRemoteAddr("www.objectledge.com");
+        request.setupServerName("www.objectledge.org");
+        TestHttpSession session = new TestHttpSession();
+        request.setSession(session);
+        TestHttpServletResponse response = new TestHttpServletResponse(sessionMap);
+        HttpContext httpContext = new HttpContext(request, response);
+        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
+        context.setAttribute(HttpContext.class, httpContext);
+        RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
+        paramsLoader.process(context);
+        MVCInitializerValve mvcInitializer = new MVCInitializerValve(webConfigurator);
+        mvcInitializer.process(context);
+        LoggerFactory loggerFactory = new LoggerFactory();
+        localeLoaderValve = new LocaleLoaderValve(logger, webConfigurator);
     }
 
     public void testLocaleLoaderTest() throws Exception
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        
+
         localeLoaderValve.process(context);
         Cookie[] cookies = httpContext.getRequest().getCookies();
         assertNotNull(cookies);
-        assertEquals(cookies.length,2);
+        assertEquals(cookies.length, 2);
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
-        assertEquals(cookies.length,2);
-        mvcContext.setUserPrincipal(new DefaultPrincipal("foo"),true);
+        assertEquals(cookies.length, 2);
+        mvcContext.setUserPrincipal(new DefaultPrincipal("foo"), true);
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
-        assertEquals(cookies.length,4);
+        assertEquals(cookies.length, 4);
     }
+
 }

@@ -30,17 +30,16 @@ package org.objectledge.parameters;
 
 import java.util.Vector;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Configuration;
-import org.objectledge.configuration.ConfigurationFactory;
+import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.LedgeTestCase;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.TestHttpServletRequest;
 import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -48,18 +47,9 @@ import org.objectledge.xml.XMLValidator;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class RequestParametersTest extends TestCase
+public class RequestParametersTest extends LedgeTestCase
 {
     private Context context;
-
-    /**
-     * Constructor for RequestParametersTest.
-     * @param arg0
-     */
-    public RequestParametersTest(String arg0)
-    {
-        super(arg0);
-    }
 
     /*
      * @see TestCase#setUp()
@@ -67,50 +57,34 @@ public class RequestParametersTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        try
-        {
-            context = new Context();
-            //prepare test
-            String root = System.getProperty("ledge.root");
-            if (root == null)
-            {
-                throw new Error("system property ledge.root undefined. " + 
-                "use -Dledge.root=.../ledge-container/src/test/resources");
-            }
-            FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
-            XMLValidator validator = new XMLValidator();
-            ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
-            Configuration config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
-            WebConfigurator webConfigurator = new WebConfigurator(config);
-            TestHttpServletRequest request = new TestHttpServletRequest();
-            TestHttpServletResponse response = new TestHttpServletResponse();
-            request.setupGetContentType("text/html");
-            Vector parameterNames = new Vector();
-            parameterNames.add("foo");
-            request.setupGetParameterNames(parameterNames.elements());
-            request.setupAddParameter("foo","bar");
-            request.setupPathInfo("view/Default");
-            request.setupGetContextPath("/test");
-            request.setupGetServletPath("ledge");
-            request.setupGetRequestURI("");
-            request.setupServerName("www.objectledge.org");
-            HttpContext httpContext = new HttpContext(request, response);
-            httpContext.setEncoding(webConfigurator.getDefaultEncoding());
-            context.setAttribute(HttpContext.class, httpContext);
-            RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
-            paramsLoader.process(context);
-        }
-        catch (Exception e)
-        {
-            throw new Error(e);
-        }
+        context = new Context();
+        FileSystem fs = getFileSystem();
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(RequestParametersLoaderValve.class));
+        Configuration config = getConfig(fs,"config/org.objectledge.web.WebConfigurator.xml");
+        WebConfigurator webConfigurator = new WebConfigurator(config);
+        TestHttpServletRequest request = new TestHttpServletRequest();
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        request.setupGetContentType("text/html");
+        Vector parameterNames = new Vector();
+        parameterNames.add("foo");
+        request.setupGetParameterNames(parameterNames.elements());
+        request.setupAddParameter("foo", "bar");
+        request.setupPathInfo("view/Default");
+        request.setupGetContextPath("/test");
+        request.setupGetServletPath("ledge");
+        request.setupGetRequestURI("");
+        request.setupServerName("www.objectledge.org");
+        HttpContext httpContext = new HttpContext(request, response);
+        httpContext.setEncoding(webConfigurator.getDefaultEncoding());
+        context.setAttribute(HttpContext.class, httpContext);
+        RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
+        paramsLoader.process(context);
     }
 
     public void testInit()
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
         assertNotNull(parameters);
-        
     }
 
 }
