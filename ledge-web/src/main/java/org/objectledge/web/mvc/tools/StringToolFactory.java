@@ -1,5 +1,5 @@
 // 
-//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+//Copyright (c) 2003, 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 //All rights reserved. 
 //   
 //Redistribution and use in source and binary forms, with or without modification,  
@@ -28,26 +28,44 @@
 
 package org.objectledge.web.mvc.tools;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.objectledge.templating.tools.ContextToolFactory;
 
 /**
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Context tool factory component to build the user agent tool.
+ * 
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: StringToolFactory.java,v 1.1 2004-06-17 16:09:13 zwierzem Exp $
  */
-public class AllTests
+public class StringToolFactory implements ContextToolFactory
 {
+	/**
+	 * Component constructor.
+ 	 */
+	public StringToolFactory()
+	{
+	}
+	
+    /**
+	 * {@inheritDoc}
+	 */
+	public Object getTool()
+	{
+		return new StringTool();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void recycleTool(Object tool)
+	{
+		//do nothing StringTool is too simple object to be pooled
+	}
 
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("Test for org.objectledge.web.mvc.tools");
-        //$JUnit-BEGIN$
-        suite.addTestSuite(PageToolTest.class);
-        suite.addTestSuite(LinkToolTest.class);
-        suite.addTestSuite(StringToolTest.class);
-        //$JUnit-END$
-        return suite;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getKey()
+	{
+		return "string_tool";
+	}    
 }
