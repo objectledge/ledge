@@ -2,7 +2,7 @@
 
 <project>
   <pomVersion>3</pomVersion>
-  <extend>../ledge-common/project.xml</extend>
+  <extend>${ledgeCommon}/project.xml</extend>
   <name>Ledge tutorial webapp</name>
   <id>ledge-tutorial-webapp</id>
   <groupId>objectledge</groupId>
