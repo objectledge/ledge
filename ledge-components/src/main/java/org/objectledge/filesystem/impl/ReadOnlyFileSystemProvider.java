@@ -48,7 +48,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.6 2003-12-04 14:27:39 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.7 2003-12-04 14:42:21 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -335,7 +335,8 @@ public abstract class ReadOnlyFileSystemProvider
     /**
      * {@inheritDoc}
      */
-    public String[] list(String dir) throws IllegalArgumentException
+    public String[] list(String dir) 
+        throws IOException
     {
 		if(listing != null)
 		{
@@ -349,12 +350,12 @@ public abstract class ReadOnlyFileSystemProvider
 			}
 			else
 			{
-				return null;
+				throw new IOException(dir+" is not a directory");
 			}
 		}
 		else
 		{
-			return null;
+			throw new IOException(dir+" does not exist");
 		}
     }
 

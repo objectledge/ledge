@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.6 2003-12-04 14:27:39 fil Exp $
+ * @version $Id: FileSystem.java,v 1.7 2003-12-04 14:42:21 fil Exp $
  */
 public class FileSystem
 {
@@ -400,29 +400,36 @@ public class FileSystem
     /**
      * Lists the contents of a directory.
      * 
-     * <p>If the path does not point to a valid directory, <code>null</code> will be returned.</p>
-     * 
      * @param path the directory to list.
-     * @return the contents of a directory.
+     * @return array of names of the contents of a directory.
+     * @throws IOException if the pathname does not point to a directory.
      */
     public String[] list(String path)
+        throws IOException
     {
         for (Iterator i = providers.iterator(); i.hasNext();)
         {
             FileSystemProvider fp = (FileSystemProvider)i.next();
             if (fp.exists(path))
             {
-                if (fp.isDirectory(path) && fp.canRead(path))
+                if (fp.isDirectory(path))
                 {
-                    return fp.list(path);
+                    if(fp.canRead(path))
+                    {
+                        return fp.list(path);
+                    }
+                    else
+                    {
+                        throw new IOException("cannot read "+path);
+                    }
                 }
                 else
                 {
-                    return null;
+                    throw new IOException(path+" is not a directory");
                 }
             }
         }
-        return null;
+        throw new IOException(path+" does not exist");
     }
 
     /**

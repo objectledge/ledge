@@ -36,7 +36,7 @@ import java.io.OutputStream;
  * Specifies the contract between FileSystem abstarction and its concrete delegates.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemProvider.java,v 1.2 2003-12-03 14:14:13 mover Exp $
+ * @version $Id: FileSystemProvider.java,v 1.3 2003-12-04 14:42:21 fil Exp $
  */
 public interface FileSystemProvider
 {
@@ -103,11 +103,11 @@ public interface FileSystemProvider
      * 
      * @param dir the directory.
      * @return a list of names.
-     * @throws IllegalArgumentException if <code>dir</code> does not exist
+     * @throws IOException if <code>dir</code> does not exist
      *         or is not a directory.
      */
     public String[] list(String dir)
-        throws IllegalArgumentException;
+        throws IOException;
 
     /**
      * Atomically creates a new, empty file named by this abstract pathname if 

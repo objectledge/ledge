@@ -52,7 +52,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * considererd to be relative the the running user's current directory.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.4 2003-12-04 12:35:10 mover Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.5 2003-12-04 14:42:21 fil Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -171,20 +171,20 @@ public class LocalFileSystemProvider
      * {@inheritDoc}
      */
     public String[] list(String dir) 
-    	throws IllegalArgumentException
+    	throws IOException
     {
 		File file = getFile(dir);
 		if(!file.exists())
 		{
-			throw new IllegalArgumentException(dir+" does not exist");
+			throw new IOException(dir+" does not exist");
 		}
 		if(!file.canRead())
 		{
-			throw new IllegalArgumentException(dir+" is not readable");
+			throw new IOException(dir+" is not readable");
 		}
 		if(!file.isDirectory())
 		{
-			throw new IllegalArgumentException(dir+" is not a directory");
+			throw new IOException(dir+" is not a directory");
 		}
 		return file.list();
     }
