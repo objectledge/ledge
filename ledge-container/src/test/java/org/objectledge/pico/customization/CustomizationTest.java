@@ -41,6 +41,7 @@ import org.objectledge.logging.LoggerFactory;
 import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.test.FooComponent;
 import org.objectledge.xml.XMLValidator;
+import org.picocontainer.ComponentAdapter;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.defaults.CachingComponentAdapterFactory;
@@ -53,7 +54,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.13 2004-01-16 10:23:30 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.14 2004-01-27 17:01:11 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -95,10 +96,13 @@ public class CustomizationTest extends TestCase
                 new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
             }).getComponentInstance(container);
-        container.registerComponent(new CustomizedComponentAdapter(
+            
+        ComponentAdapter adapter = new CustomizedComponentAdapter(
             Configuration.class, 
             (CustomizedComponentProvider)container.
-                getComponentInstance(ConfigurationFactory.class)));
+                getComponentInstance(ConfigurationFactory.class));
+        adapter.verify(container);
+        container.registerComponent(adapter);
         container.registerComponentImplementation(LoggingConfigurator.class, 
             LoggingConfigurator.class).getComponentInstance(container);
             
