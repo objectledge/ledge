@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.4 2004-10-12 14:19:10 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.5 2004-10-15 10:17:22 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -157,3 +157,4 @@
     </version>
   </versions>
 </project>
+<!-- testing CVS tools integration . -->
