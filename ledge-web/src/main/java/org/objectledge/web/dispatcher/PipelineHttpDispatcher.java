@@ -36,7 +36,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.Pipeline;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.HttpDispatcher;
 import org.objectledge.web.WebConfigurator;
@@ -46,13 +47,13 @@ import org.objectledge.web.WebConfigurator;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.9 2004-01-22 15:15:09 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.10 2004-01-23 08:46:46 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
 {
 	/** the pipeline */
-    private Pipeline pipeline;
+    private Valve pipeline;
     
     /** thead context. */
     private Context context;
@@ -68,7 +69,7 @@ public class PipelineHttpDispatcher
      * @param webConfigurator the web configuration component.
      * @throws ConfigurationException if the configuration is malformed.
      */
-    public PipelineHttpDispatcher(Pipeline pipeline, Context context,
+    public PipelineHttpDispatcher(Valve pipeline, Context context,
     							   WebConfigurator webConfigurator)
         throws ConfigurationException
     {
@@ -86,8 +87,18 @@ public class PipelineHttpDispatcher
         HttpContext httpContext = new HttpContext(request,response);
         httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
-        pipeline.process(context);
-        context.removeAttribute(HttpContext.class);
+        try
+        {
+            pipeline.process(context);
+        }
+        catch(ProcessingException e)
+        {
+            throw new ServletException("processing failed", e);
+        }
+        finally
+        {
+            context.removeAttribute(HttpContext.class);
+        }
         return httpContext.getDirectResponse();
     }
 }
