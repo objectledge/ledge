@@ -26,19 +26,21 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web;
+package org.objectledge.web.parameters;
 
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.objectledge.context.Context;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.PipelineProcessingException;
 
 /**
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderTestValve.java,v 1.1 2003-12-29 11:53:24 fil Exp $
+ * @version $Id: RequestParametersLoaderTestValve.java,v 1.1 2004-01-12 14:28:43 fil Exp $
  */
 public class RequestParametersLoaderTestValve implements Runnable
 {

@@ -26,17 +26,18 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web;
+package org.objectledge.web.parameters;
 
 import org.objectledge.context.Context;
+import org.objectledge.web.HttpContext;
 
 /**
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoader.java,v 1.2 2003-12-29 09:45:14 pablo Exp $
+ * @version $Id: RequestParametersLoaderValve.java,v 1.1 2004-01-12 14:28:08 fil Exp $
  */
-public class RequestParametersLoader implements Runnable
+public class RequestParametersLoaderValve implements Runnable
 {
 	/** the context */
 	private Context context;
@@ -46,7 +47,7 @@ public class RequestParametersLoader implements Runnable
 	 * 
 	 * @param context the context.
 	 */
-	public RequestParametersLoader(Context context)
+	public RequestParametersLoaderValve(Context context)
 	{
 		this.context = context;		
 	}

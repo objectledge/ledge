@@ -40,7 +40,7 @@ import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.HttpContextImpl;
-import org.objectledge.web.RequestParameters;
+import org.objectledge.web.parameters.RequestParameters;
 
 /**
  * Context tool used to build web application links.
