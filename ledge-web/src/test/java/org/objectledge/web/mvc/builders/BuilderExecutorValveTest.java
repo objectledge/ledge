@@ -55,7 +55,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.15 2004-10-13 11:16:32 rafal Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.16 2005-02-17 17:10:25 zwierzem Exp $
  */
 public class BuilderExecutorValveTest 
 	extends LedgeTestCase
@@ -89,14 +89,17 @@ public class BuilderExecutorValveTest
         container.registerComponentInstance(MVCFinder.class, finder);
         context = new Context();
         context.clearAttributes();
-        executor = new BuilderExecutorValve(context, finder, finder, securityHelper, 8, 8);
+        ViewEnclosureManager viewEnclosureManager = new ViewEnclosureManager(context);
+        executor = new BuilderExecutorValve(context, finder, finder, securityHelper, viewEnclosureManager, 8, 8);
         mvcContext = new MVCContext();
         Mock mockServletRequest = mock(HttpServletRequest.class);
         Mock mockServletResponse = mock(HttpServletResponse.class);
         HttpContext httpContext = new HttpContext((HttpServletRequest)mockServletRequest.proxy(), 
             (HttpServletResponse)mockServletResponse.proxy());
         context.setAttribute(MVCContext.class, mvcContext);
-        context.setAttribute(TemplatingContext.class, templating.createContext());
+        TemplatingContext templatingContext = templating.createContext();
+        templatingContext.put(viewEnclosureManager.getKey(), viewEnclosureManager.getTool());
+        context.setAttribute(TemplatingContext.class, templatingContext);
         context.setAttribute(HttpContext.class, httpContext);
     }
     
