@@ -39,17 +39,25 @@ function WinPopup(id)
         // set window width and height
         if(width != null)
         {
-            this.width = width;
+        	if(width < 1.0)
+        	{
+            	width =  Math.floor(window.screen.availWidth * width);
+        	}
+        	this.width = width;
         }
         if(height != null)
         {
-            this.height = height;
+        	if(height < 1.0)
+        	{
+            	height = Math.floor(window.screen.availHeight * height);
+        	}
+			this.height = height;
         }
 
         // set default positioning
         if(positionType == null)
         {
-            positionType = "mouse";
+            positionType = "center middle";
         }
 
         // set default modifiers
@@ -59,6 +67,14 @@ function WinPopup(id)
                         "status=no,menubar=no,scrollbars=yes,resizable=yes";
         }
         // set window width and height
+        if(this.width > window.screen.availWidth)
+        {
+            this.width = window.screen.availWidth;
+        }
+        if(this.height > window.screen.availHeight)
+        {
+            this.height = window.screen.availHeight;
+        }
         modifiers += ",width="+this.width+",height="+this.height;
 
         // close previously opened window
@@ -101,30 +117,46 @@ function WinPopup(id)
             switch(positionElts[i])
             {
                 case 'mouse':
-                    winLeft = window._winPopups_mouseX;
-                    winTop = window._winPopups_mouseY;
+                    winLeft = window._winPopups_mouseX - winWidth / 2;
+                    winTop = window._winPopups_mouseY - winHeight / 2;
                     break;
                 //
                 case 'left':
                     winLeft = 0;
                     break;
                 case 'right':
-                    winLeft = window.screen.width;
+                    winLeft = window.screen.availWidth - winWidth;
                     break;
                 //
                 case 'top':
                     winTop = 0;
                     break;
                 case 'bottom':
-                    winTop = window.screen.height;
+                    winTop = window.screen.availHeight - winHeight;
                     break;
                 //
                 case 'center':
-                    winLeft = (window.screen.width - winWidth) / 2;
+                    winLeft = (window.screen.availWidth - winWidth) / 2;
                     break;
                 case 'middle':
-                    winTop = (window.screen.height - winHeight) / 2;
+                    winTop = (window.screen.availHeight - winHeight) / 2;
                     break;
+                default:
+        			var positionDef = positionElts[i].split(':');
+        			var orientation = positionDef[0];
+        			var posNumber = parseFloat(positionDef[1]);
+        			posNumber = posNumber < 0 ? 0 : posNumber;
+        			posNumber = posNumber > 1.0 ? 1.0 : posNumber;
+        			if(orientation == 'horizontal')
+        			{
+                    	winLeft = Math.round((window.screen.availWidth - winWidth) * posNumber);
+                		//alert(positionElts[i]+'\n'+orientation+'\n'+posNumber+'\n'+winLeft);
+        			}
+        			else if(orientation == 'vertical')
+        			{
+                    	winTop = Math.round((window.screen.availHeight - winHeight) * posNumber);
+                		//alert(positionElts[i]+'\n'+orientation+'\n'+posNumber+'\n'+winTop);
+        			}
             }
         }
 
@@ -132,25 +164,29 @@ function WinPopup(id)
         // fix window position to avoid exceptions
         var margin = 30; // 30 pixel margin for window decorations
 
-        if(winLeft + winWidth >= window.screen.width)
+        if(winLeft + winWidth >= window.screen.availWidth)
         {
-            winLeft = window.screen.width - winWidth - margin;
+            winLeft = window.screen.availWidth - winWidth - margin;
         }
         if(winLeft < 0)
         {
             winLeft = 0;
         }
 
-        if(winTop + winHeight >= window.screen.height)
+        if(winTop + winHeight >= window.screen.availHeight)
         {
-            winTop = window.screen.height - winHeight - margin;
+            winTop = window.screen.availHeight - winHeight - margin;
         }
         if(winTop < 0)
         {
             winTop = 0;
         }
 
-        //alert(winLeft+' '+winTop+' '+winWidth+' '+winHeight);
+        /*alert(' left:'+winLeft+' top:'+winTop+
+              '\n width:'+winWidth+' height:'+winHeight+
+              '\n sumWidth:'+(winLeft+winWidth)+' sumHeight:'+(winTop+winHeight)+
+              '\n screenWidth:'+window.screen.availWidth+' screenHeight:'+window.screen.availHeight);
+         */
         this.window.moveTo(winLeft, winTop);
     }
 }
