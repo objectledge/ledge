@@ -37,7 +37,7 @@ import org.objectledge.web.HttpContext;
  * Context tool factory component for html entity encoder tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoderToolFactory.java,v 1.3 2004-08-02 13:17:51 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoderToolFactory.java,v 1.4 2004-08-18 09:04:38 zwierzem Exp $
  */
 public class HTMLEntityEncoderToolFactory implements ContextToolFactory
 {
@@ -51,6 +51,7 @@ public class HTMLEntityEncoderToolFactory implements ContextToolFactory
  	 */
 	public HTMLEntityEncoderToolFactory(Context context, HTMLEntityEncoder htmlEntityEncoder)
 	{
+        this.context = context;
 		this.htmlEntityEncoder = htmlEntityEncoder;
 	}
 	
