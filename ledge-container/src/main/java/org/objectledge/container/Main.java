@@ -30,54 +30,40 @@ package org.objectledge.container;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.PicoContainer;
-import org.realityforge.cli.CLArgsParser;
-import org.realityforge.cli.CLOption;
-import org.realityforge.cli.CLOptionDescriptor;
-import org.realityforge.cli.CLUtil;
 
 /**
  * An entry point to ObjectLedge in command line environment.
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.7 2004-02-20 08:41:11 fil Exp $
+ * @version $Id: Main.java,v 1.8 2004-06-01 09:05:58 fil Exp $
  */
 public class Main
 {
     /** version string. */
     protected static final String VERSION = "0.1-dev";
     
-    /** root command line option identifier. */
-    protected static final int ROOT_OPTION = 'r';
-    
-    /** config command line option identifier. */
-    protected static final int CONFIG_OPTION = 'c';
-    
-    /** version command line option identifier. */
-    protected static final int VERSION_OPTION = 'v';
-    
-    /** help command line option identifier. */
-    protected static final int HELP_OPTION = 'h';
-    
-    /** recognized command line options. */
-    private static final CLOptionDescriptor[] OPTIONS =
-    { 
-        new CLOptionDescriptor("root", CLOptionDescriptor.ARGUMENT_REQUIRED, 
-            ROOT_OPTION, "set local file system root directory"),
-        new CLOptionDescriptor("config", CLOptionDescriptor.ARGUMENT_REQUIRED,
-            CONFIG_OPTION, "set config directory FS path"),
-        new CLOptionDescriptor("version", CLOptionDescriptor.ARGUMENT_DISALLOWED,
-            VERSION_OPTION, "print version information"),
-        new CLOptionDescriptor("help", CLOptionDescriptor.ARGUMENT_DISALLOWED,
-            VERSION_OPTION, "print usage information and exit")
-    };
+    private static Options options = new Options();
 
+    static 
+    {
+        options.addOption("r", "root", true, "set local file system root directory");
+        options.addOption("c", "config", true, "set config directory FS path");
+        options.addOption("v", "version", false, "print version information");
+        options.addOption("h", "help", false, "print usage information and exit");
+    }
+    
     /**
      * A private constructor - this class should be used statically only.
      */
@@ -92,72 +78,39 @@ public class Main
      */
     public static void main(String[] args)
     {
-        CLArgsParser parser = new CLArgsParser(args, OPTIONS);
-
-        if( null != parser.getErrorString() ) 
+        CommandLineParser parser = new PosixParser();
+        try
         {
-            System.err.println( "Error: " + parser.getErrorString() );
-            return;
-        }
-        
-        String root = System.getProperty("user.dir");
-        String config = "/config";
-        String componentClassName = null;
-        List clOptions = parser.getArguments();
-        String[] componentArgs = new String[0];
-        boolean usage = false;
-        int i=0;
-        optionLoop: for(; i<clOptions.size(); i++)
-        {
-            CLOption option = (CLOption)clOptions.get(i);
-            switch(option.getId())
+            CommandLine line = parser.parse(options, args);
+            if(line.hasOption("v"))
             {
-                case ROOT_OPTION:
-                    root = option.getArgument();
-                    break;
-                case CONFIG_OPTION:
-                    config = option.getArgument();
-                    break;
-                case VERSION_OPTION:
-                    printVersion();
-                    break;
-                case HELP_OPTION:                    usage = true;
-                    break;
-                case CLOption.TEXT_ARGUMENT:
-                    componentClassName = option.getArgument();
-                    break optionLoop;
-                default:
-                    throw new IllegalStateException("illegal state of the option parser");
+                printVersion();
             }
-        }
-        if(usage)
-        {
-            printUsage();
-        }
-        else
-        {
-            if(componentClassName == null)
+            if(line.hasOption("h"))
             {
                 printUsage();
             }
             else
             {
-                if(i < clOptions.size()-1)
+                String root = line.getOptionValue("r", System.getProperty("user.dir"));
+                String config = line.getOptionValue("c", "/config");
+                int componentArgCount = line.getArgList().size()-1;
+                if(componentArgCount < 0)
                 {
-                    componentArgs = new String[clOptions.size()-i-1];
-                    for(int j=0; j<componentArgs.length; j++)
-                    {
-                        CLOption option = (CLOption)clOptions.get(i+1+j);
-                        if(option.getId() != CLOption.TEXT_ARGUMENT)
-                        {
-                            throw new IllegalStateException("Ooops, conflicting option "+
-                                option.getId());
-                        }
-                        componentArgs[j] = option.getArgument();
-                    }
+                    System.err.println("component class name required");
                 }
-                run(root, config, componentClassName, componentArgs);
+                else
+                {
+                    String componentClassName = (String)line.getArgList().get(0);
+                    String[] componentArgs = new String[componentArgCount];
+                    line.getArgList().subList(1, componentArgCount).toArray(componentArgs);
+                    run(root, config, componentClassName, componentArgs);
+                }
             }
+        }
+        catch(ParseException exp)
+        {
+            System.err.println("Command line parsing failed: " + exp.getMessage());
         }
     }
     
@@ -174,13 +127,8 @@ public class Main
      */    
     protected static void printUsage()
     {
-        String nl = System.getProperty("line.separator");
-        StringBuffer msg = new StringBuffer();
-        msg.append("Usage: java "+Main.class.getName()+
-            " [options] componentClass [componentOptions]").append(nl).append(nl);
-        msg.append("Options: ").append(nl);
-        msg.append(CLUtil.describeOptions(OPTIONS).toString());
-        System.out.println(msg.toString());
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("ledge", options);
     }
 
     /**
