@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.4 2004-03-05 12:19:17 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.5 2004-03-16 15:36:42 zwierzem Exp $
  */
 public class TableTool
 {
@@ -347,7 +347,11 @@ public class TableTool
 			{
 				linesAndFolders.add(laFfile);
 			}
-			else 
+			else if(row.getVisibleChildCount() > 0)
+			{
+				linesAndFolders.add(laFfolderopen);
+			}
+			else
 			{
 				linesAndFolders.add(laFfolder);
 			}
@@ -400,7 +404,7 @@ public class TableTool
             // allow toggle expand links attachment
             if (hasMoreChildren(parent, row))
             {
-                if (isExpanded(row))
+                if (row.getVisibleChildCount() > 0)
                 {
                     linesAndFolders.add(laFTminus); // link on this element
                     linesAndFolders.add(laFfolderopen);
@@ -413,7 +417,7 @@ public class TableTool
             }
             else
             {
-                if (isExpanded(row))
+                if (row.getVisibleChildCount() > 0)
                 {
                     linesAndFolders.add(laFLminus); // link on this element
                     linesAndFolders.add(laFfolderopen);
@@ -486,10 +490,10 @@ public class TableTool
 		 * <li><code>L</code> - a line</li>
 		 * <li><code>T</code> - a line</li>
 		 * <li><code>blank</code> - empty element</li>
-		 * <li><code>Lplus</code> - a widget</li>
-		 * <li><code>Lminus</code> - a widget</li>
-		 * <li><code>Tplus</code> - a widget</li>
-		 * <li><code>Tminus</code> - a widget</li>
+		 * <li><code>Lplus</code> - a widget with <code>toggle-expand</code> link type</li>
+		 * <li><code>Lminus</code> - a widget with <code>toggle-expand</code> link type</li>
+		 * <li><code>Tplus</code> - a widget with <code>toggle-expand</code> link type</li>
+		 * <li><code>Tminus</code> - a widget with <code>toggle-expand</code> link type</li>
 		 * <li><code>folder</code> - an icon</li>
 		 * <li><code>file</code> - an icon</li>
 		 * <li><code>folderopen</code> - an icon</li>
