@@ -16,7 +16,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * class.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentProvider.java,v 1.2 2003-12-01 13:09:45 fil Exp $
+ * @version $Id: CustomizedComponentProvider.java,v 1.3 2003-12-01 15:55:07 fil Exp $
  */
 public interface CustomizedComponentProvider
 {
@@ -30,10 +30,12 @@ public interface CustomizedComponentProvider
      * @return customized instance of the component.
      * @throws PicoInitializationException if the customized component cannot be initialized.
      * @throws PicoIntrospectionException if the customized component cannot be initialized.
+     * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
     public Object getCustomizedInsatnce(MutablePicoContainer dependenciesContainer, 
         Object componentKey, Class componentImplementaion)
-        throws PicoInitializationException, PicoIntrospectionException;
+        throws PicoInitializationException, PicoIntrospectionException,
+            UnsupportedKeyTypeException;
     
     /**
      * Verifies if the customized component can be instantiated using the dependencies present
