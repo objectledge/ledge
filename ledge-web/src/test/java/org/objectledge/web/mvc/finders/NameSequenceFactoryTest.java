@@ -27,9 +27,8 @@
 // 
 package org.objectledge.web.mvc.finders;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Configuration;
+import org.objectledge.LedgeWebTestCase;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
@@ -42,9 +41,9 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.8 2004-01-20 11:58:58 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.9 2004-03-18 11:28:22 pablo Exp $
  */
-public class NameSequenceFactoryTest extends TestCase
+public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
     private FileSystem fs;
     
@@ -54,17 +53,9 @@ public class NameSequenceFactoryTest extends TestCase
      * Constructor for NameSequenceFactoryTest.
      * @param arg0
      */
-    public NameSequenceFactoryTest(String arg0)
-        throws Exception
+    public void setUp() throws Exception
     {
-        super(arg0);
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-            "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        fs = FileSystem.getStandardFileSystem(root+"/view-sequences");
+        fs = getFileSystem("src/test/resources/view-sequences");
         XMLValidator validator = new XMLValidator();        
         configFactory = new ConfigurationFactory(fs, validator, ".");
     }
@@ -153,16 +144,14 @@ public class NameSequenceFactoryTest extends TestCase
     
     public NameSequenceFactory getNameSequenceFactory(String configVariant)
         throws Exception
-    {
-        Configuration config = configFactory.
-            getConfig("org.objectledge.web.mvc.finders.NameSequenceFactory:"+configVariant, 
-                NameSequenceFactory.class);
+    { 
+        Configuration config = getConfig(fs,"org.objectledge.web.mvc.finders.NameSequenceFactory-"+configVariant+".xml");         
         return new NameSequenceFactory(config);
     }
     
-    public Templating getTemplating()
+    public Templating getTemplating() throws Exception
     {
-        Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
+        Configuration config = getConfig(fs,"org.objectledge.templating.Templating.xml");
         LoggerFactory loggerFactory = new LoggerFactory();
         return new VelocityTemplating(config, loggerFactory.getLogger(Templating.class), fs);
     }

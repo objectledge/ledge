@@ -30,30 +30,22 @@ package org.objectledge.upload;
 
 import java.util.Vector;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.log4j.xml.DOMConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.objectledge.LedgeTestCase;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.i18n.LocaleLoaderValve;
-import org.objectledge.logging.LoggerFactory;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.TestHttpServletRequest;
 import org.objectledge.web.TestHttpServletResponse;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.TestHttpSession;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
 import com.mockobjects.servlet.MockServletInputStream;
 
