@@ -25,59 +25,31 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 //
-package org.objectledge.web.mvc.actions;
+package org.objectledge.web.mvc.components;
 
-import org.objectledge.context.Context;
-import org.objectledge.pipeline.PipelineProcessingException;
-import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.mvc.finders.MVCClassFinder;
+import org.objectledge.templating.Template;
+import org.objectledge.web.mvc.builders.BuildException;
 
 /**
- * Pipeline component for executing MVC actions.
- * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.6 2004-01-20 11:59:39 zwierzem Exp $
+ * @version $Id: DefaultComponent.java,v 1.1 2004-01-20 11:59:38 zwierzem Exp $
  */
-public class ActionExecutorValve implements Runnable
+public class DefaultComponent implements Component
 {
-	/** context */
-	protected Context context;
-	/** Finder for builder objects. */
-	protected MVCClassFinder classFinder;
-
-	/**
-	 * Component constructor.
-	 * 
-	 * @param context used application context
-	 * @param classFinder finder for runnable action objects
-	 */
-	public ActionExecutorValve(Context context, MVCClassFinder classFinder)
-	{
-		this.context = context;
-		this.classFinder = classFinder;
-	}
-	
     /**
-     * Finds and executes an action for current request.
+     * {@inheritDoc}
      */
-    public void run()
+    public String build(Template template)
+    	throws BuildException
     {
-		// setup used contexts
-		MVCContext mvcContext = MVCContext.getMVCContext(context);
-        String actionName = mvcContext.getAction(); 
-        if(actionName != null)
-        {
-            try
-            {
-                // get and execute action
-                Runnable action = classFinder.getAction(actionName);
-                // TODO access control
-                action.run();
-            }
-            catch(ClassNotFoundException e)
-            {
-                throw new PipelineProcessingException("invalid action "+actionName, e);
-            }
-        }
+        return "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Template getTemplate()
+    {
+        return null;
     }
 }
