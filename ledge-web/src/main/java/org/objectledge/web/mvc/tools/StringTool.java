@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.10 2005-02-21 13:51:22 zwierzem Exp $
+ * @version $Id: StringTool.java,v 1.11 2005-02-25 14:28:14 zwierzem Exp $
  */
 public class StringTool
 {
@@ -166,4 +166,48 @@ public class StringTool
         Object[] objs = (Object[])obj;
         return objs.length;
     }
+    
+    /**
+     * Format size value in b, kb, Mb
+     *
+     * @param value the size in bytes.
+     * @return the size as string with a proper unit suffix
+     */
+    public String bytesSize(int value)
+    {
+        return bytesSize((long)value);
+    }
+    
+    /**
+     * Format size value in b, kb, Mb
+     *
+     * @param value the size in bytes.
+     * @return the size as string with a proper unit suffix
+     */
+    public String bytesSize(long value)
+    {
+        StringBuilder b = new StringBuilder();
+        if(value < 1024L)
+        {
+            return b.append(value).append("b").toString();
+        }
+        double floatValue = (double)value;
+        if(value < 1048576L)
+        {
+            b.append(floatValue/1024);
+            int index = b.indexOf(".");
+            if(index != -1 && b.length() > index+3)
+            {
+                b.setLength(index+3);
+            }
+            return b.append("kb").toString();
+        }
+        b.append(floatValue/1048576);
+        int index = b.indexOf(".");
+        if(index != -1 && b.length() > index+3)
+        {
+            b.setLength(index+3);
+        }
+        return b.append("Mb").toString();        
+    }    
 }
