@@ -31,11 +31,11 @@ package org.objectledge.table;
 /**
  * Extended version of <code>{@link TableModel}</code> interface, which
  * specifies basic data access methods needed by
- * <code>{@link GenericRowSet}</code> class.
+ * <code>{@link org.objectledge.table.generic.BaseGenericRowSet}</code> class.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ExtendedTableModel.java,v 1.5 2004-06-15 12:59:12 zwierzem Exp $
+ * @version $Id: ExtendedTableModel.java,v 1.6 2005-02-08 19:11:27 rafal Exp $
  */
 public interface ExtendedTableModel extends TableModel
 {

@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.14 2004-12-22 08:58:54 rafal Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.15 2005-02-08 19:11:41 rafal Exp $
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
@@ -52,7 +52,6 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
     
     /**
      * Constructor for NameSequenceFactoryTest.
-     * @param arg0
      */
     public void setUp() throws Exception
     {

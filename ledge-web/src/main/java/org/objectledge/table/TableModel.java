@@ -33,11 +33,12 @@ package org.objectledge.table;
  * and provide Your own implementation of <code>{@link TableRowSet}</code> interface,
  * or You can implement an <code>{@link ExtendedTableModel}</code> and use
  * default implementation of <code>{@link TableRowSet}</code> -
- * <code>{@link GenericListRowSet}</code> or <code>{@link GenericTreeRowSet}</code>.
+ * <code>{@link org.objectledge.table.generic.GenericListRowSet}</code> or 
+ * <code>{@link org.objectledge.table.generic.GenericTreeRowSet}</code>.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableModel.java,v 1.3 2004-08-19 12:16:54 zwierzem Exp $
+ * @version $Id: TableModel.java,v 1.4 2005-02-08 19:11:27 rafal Exp $
  */
 public interface TableModel
 {

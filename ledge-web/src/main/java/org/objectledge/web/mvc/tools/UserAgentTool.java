@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.5 2004-12-23 07:18:14 rafal Exp $
+ * @version $Id: UserAgentTool.java,v 1.6 2005-02-08 19:11:31 rafal Exp $
  */
 public class UserAgentTool
 {
@@ -214,7 +214,7 @@ public class UserAgentTool
     /**
      * Prepare the UA Information.
      *
-     * @param data the run data.
+     * @param httpContext the HttpContext.
      */
     private void prepareUAInfo(HttpContext httpContext)
     {

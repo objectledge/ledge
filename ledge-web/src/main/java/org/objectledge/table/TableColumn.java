@@ -38,12 +38,13 @@ import java.util.Map;
  * Apart from that it provides comparators which can be used as:
  * <ul>
  * <li>internal information about soring for TableModel implementations</li>
- * <li>Comparator provider for {@link GenericListRowSet} and {@link GenericTreeRowSet}
+ * <li>Comparator provider for {@link org.objectledge.table.generic.GenericListRowSet} and 
+ * {@link org.objectledge.table.generic.GenericTreeRowSet}
  * - {@link TableRowSet} implementations</li>
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumn.java,v 1.2 2004-12-23 07:17:47 rafal Exp $
+ * @version $Id: TableColumn.java,v 1.3 2005-02-08 19:11:27 rafal Exp $
  */
 public class TableColumn
 {

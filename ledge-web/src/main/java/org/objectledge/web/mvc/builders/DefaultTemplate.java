@@ -36,7 +36,7 @@ import org.objectledge.web.mvc.MVCConstants;
  * A default template which behaves as if it only contained <code>$embeddedPlaceholder</code>.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultTemplate.java,v 1.7 2004-08-09 19:48:43 pablo Exp $
+ * @version $Id: DefaultTemplate.java,v 1.8 2005-02-08 19:11:33 rafal Exp $
  */
 public class DefaultTemplate implements Template
 {    
@@ -54,7 +54,7 @@ public class DefaultTemplate implements Template
      * Merges default template. 
      * 
      * <p> This method returns string stored in templating context under
-     * @link{MVCConstants.EMBEDDED_PLACEHOLDER_KEY} key.</p>
+     * {@link MVCConstants#EMBEDDED_PLACEHOLDER_KEY} key.</p>
      * 
      * @param context used templating context
      * @return results of merging

@@ -35,7 +35,7 @@ import org.objectledge.web.mvc.components.Component;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.10 2004-01-22 15:15:12 fil Exp $
+ * @version $Id: MVCClassFinder.java,v 1.11 2005-02-08 19:11:39 rafal Exp $
  */
 public interface MVCClassFinder
 {
@@ -43,7 +43,7 @@ public interface MVCClassFinder
     
     /**
      * Returns a runnable action instance based on a given name. If no runnable is found, a
-     * {@link org.objectledge.web.mvc.actions.DefaultAction} is returned.
+     * <code>null</code> is returned.
      * 
      * @param actionName name of an action class
      * @return found runnable action instance

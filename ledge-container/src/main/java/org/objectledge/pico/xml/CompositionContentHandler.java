@@ -142,9 +142,6 @@ class CompositionContentHandler extends DefaultHandler
     
     //////////////////////////////////////////////////////////////////////////////////////////////
     
-    /**
-     * @param attributes
-     */
     void startContainer(Attributes attributes)
         throws SAXException
     {
@@ -170,9 +167,6 @@ class CompositionContentHandler extends DefaultHandler
         containerStack.add(container);
     }
 
-    /**
-     * @return true if ended top level container.
-     */
     void endContainer()
         throws SAXException
     {
@@ -183,10 +177,6 @@ class CompositionContentHandler extends DefaultHandler
         }
     }
 
-    /**
-     * @param attributes element attributes.
-     * @throws SAXException if the input data is incorrect.
-     */
     void startFactory(Attributes attributes) throws SAXException
     {
         Object key = makeKey(attributes, false);
@@ -203,18 +193,12 @@ class CompositionContentHandler extends DefaultHandler
         factoryStack.add((ComponentAdapterFactory)factory);
     }
 
-    /**
-     * @return true if ended top level factory.
-     */
     void endFactory()
         throws SAXException
     {
         factoryStack.removeLast();
     }
 
-    /**
-     * @param attributes
-     */
     void startComponent(Attributes attributes)
         throws SAXException
     {
@@ -227,9 +211,6 @@ class CompositionContentHandler extends DefaultHandler
         componentStack.add(new ComponentInfo(key, implClass));
     }
 
-    /**
-     * 
-     */
     void endComponent()
         throws SAXException
     {
@@ -436,7 +417,7 @@ class CompositionContentHandler extends DefaultHandler
      * Prepare a component parameter.
      * 
      * @param key the key or null for wildcard component parameter.
-     * @return
+     * @return a Parameter designating the component with the given key.
      */
     private Parameter makeComponentParameter(Object key)
     {
@@ -575,7 +556,7 @@ class CompositionContentHandler extends DefaultHandler
      * A key for stitching anonymous components to the component paremeters that define them.
      *
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: CompositionContentHandler.java,v 1.1 2005-02-04 02:28:34 rafal Exp $
+     * @version $Id: CompositionContentHandler.java,v 1.2 2005-02-08 19:11:23 rafal Exp $
      */
     private static class AnonymousKey
     {
@@ -706,7 +687,6 @@ class CompositionContentHandler extends DefaultHandler
          * Private State constructor.
          * 
          * @param tag the associated tag.
-         * @param allowed states that may be nested in this one.
          */
         State(final String tag)
         {

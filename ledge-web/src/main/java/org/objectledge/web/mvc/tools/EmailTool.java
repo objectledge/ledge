@@ -33,7 +33,7 @@ package org.objectledge.web.mvc.tools;
  * prevents e-mail harvesting by spammers.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EmailTool.java,v 1.2 2005-02-07 01:28:41 rafal Exp $
+ * @version $Id: EmailTool.java,v 1.3 2005-02-08 19:11:31 rafal Exp $
  */
 public class EmailTool
 {
@@ -62,8 +62,10 @@ public class EmailTool
     }
 
     /**
-     * @param c
-     * @return
+     * Provide hexadecimal ordinal of an UTF character. 
+     * 
+     * @param c a character
+     * @return hexadecimal representation of character's ordinal nubmer.
      */
     private String bin2Hex(char c)
     {

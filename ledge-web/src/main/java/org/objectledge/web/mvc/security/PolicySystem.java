@@ -44,12 +44,12 @@ import org.objectledge.security.RoleChecking;
  * PolicySystem - simple component to checks user permission to execute the action and
  * access the view.
  *
- * <p>You need to run PolicyCheckingValve {@link org.objectledge.policy.PolicyCheckingValve} 
- * to enforce the policies checking.</p>
+ * <p>You need to run PolicyCheckingValve {@link 
+ * org.objectledge.web.mvc.security.PolicyCheckingValve} to enforce the policies checking.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PolicySystem.java,v 1.1 2004-02-28 13:41:05 pablo Exp $
+ * @version $Id: PolicySystem.java,v 1.2 2005-02-08 19:11:29 rafal Exp $
  */
 public class PolicySystem
 {
@@ -392,7 +392,7 @@ public class PolicySystem
     /**
      * Checks if the user is in one of the given roles.
      * 
-     * @param principal the principal.
+     * @param user the user.
      * @param roles the list of roles.
      * @return <code>true</code> if user is in one of the roles.
      */
