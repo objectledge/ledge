@@ -52,7 +52,7 @@ import org.objectledge.filesystem.impl.ServletFileProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.7 2003-12-23 15:28:31 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.8 2003-12-23 15:47:52 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -133,7 +133,7 @@ public class LedgeServlet extends HttpServlet
         }
 
         dispatcher = (HttpDispatcher)container.getRootContainer().
-            getComponentInstance(HttpDispatcher.class.getName());
+            getComponentInstance(HttpDispatcher.class);
         if(dispatcher == null)
         {
             log.error("dispatcher component is missing");
