@@ -32,9 +32,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jcontainer.dna.Configurable;
+import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -58,8 +62,11 @@ public class LinkTool
 	/** the thread context */
 	private Context context;
 	
+    /** configuration. */
+    private LinkTool.Configuration config;
+    
 	/** the configurator component */
-	private WebConfigurator config;
+	//private WebConfigurator webConfig;
 	
 	/** the mvc context */
 	private MVCContext mvcContext;
@@ -106,15 +113,13 @@ public class LinkTool
 	/** 
 	 * Component constructor.
 	 * 
-	 * @param factory the link tool factory.
+	 * @param config the link tool configuraiton.
 	 * @param context the thread context.
-	 * @param config the configurator.
 	 */
-	public LinkTool(LinkToolFactory factory, Context context, WebConfigurator config)
+	public LinkTool(Context context, LinkTool.Configuration config)
 	{
-		this.factory = factory;
 		this.context = context;
-		this.config = config;
+        this.config = config;
 		mvcContext = MVCContext.getMVCContext(context);
 		httpContext = HttpContext.getHttpContext(context);
 		requestParameters = RequestParameters.getRequestParameters(context);
@@ -126,11 +131,10 @@ public class LinkTool
 		action = "";
 		parameters = new DefaultParameters();
 		fragment = null;
-		Set sticky = factory.getStickyKeys();
-		if(sticky != null)
+		if(config.hasStickyParamters())
 		{
 			parameters = new DefaultParameters(requestParameters);
-		    parameters.removeExcept(sticky);
+		    parameters.removeExcept(config.getStickyParametres());
 		}
 		sb = new StringBuffer();
 	}
@@ -153,7 +157,7 @@ public class LinkTool
 	 */
     public LinkTool http(int port)
 	{
-	    LinkTool target = (LinkTool)clone();
+	    LinkTool target = getLinkTool(this);
 	    target.showProtocolName = true;
 		target.protocolName = "http";
 		target.port = port;
@@ -178,7 +182,7 @@ public class LinkTool
 	 */
 	public LinkTool https(int port)
 	{
-		LinkTool target = (LinkTool)clone();
+		LinkTool target = getLinkTool(this);
 		target.showProtocolName = true;
 		target.protocolName = "https";
 		target.port = port;
@@ -192,7 +196,7 @@ public class LinkTool
      */
 	public LinkTool absolute()
 	{
-	    LinkTool target = (LinkTool)clone();
+	    LinkTool target = getLinkTool(this);
 		target.showProtocolName = true;
 		target.port = httpContext.getRequest().getServerPort();
 		if(httpContext.getRequest().isSecure())
@@ -213,7 +217,7 @@ public class LinkTool
      */
     public LinkTool sessionless()
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.includeSession = false;
         return target;
     }
@@ -226,9 +230,9 @@ public class LinkTool
      */
     public LinkTool resource(String path)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.resourceLink = true;
-        target.includeSession = !factory.isExternalContent();
+        target.includeSession = !config.isContentExternal();
         target.path = path;
         return target;
     }
@@ -242,7 +246,7 @@ public class LinkTool
      */
     public LinkTool set(String name, String value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         if (name.equals(config.getViewToken()))
         {
             target.view = value;
@@ -267,7 +271,7 @@ public class LinkTool
      */
     public LinkTool set(String name, int value)
     {
-		LinkTool target = (LinkTool)clone();
+		LinkTool target = getLinkTool(this);
 		target.parameters.set(name, value);
 		return target;
     }
@@ -281,7 +285,7 @@ public class LinkTool
      */
     public LinkTool set(String name, long value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.set(name, value);
         return target;
     }
@@ -295,7 +299,7 @@ public class LinkTool
      */
     public LinkTool set(String name, float value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.set(name, value);
         return target;
     }
@@ -309,7 +313,7 @@ public class LinkTool
      */
     public LinkTool set(String name, boolean value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.set(name, value);
         return target;
     }
@@ -323,7 +327,7 @@ public class LinkTool
      */
     public LinkTool set(Parameters parameters)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters = new DefaultParameters(parameters);
         target.parameters.remove(config.getViewToken());
         target.parameters.remove(config.getActionToken());
@@ -338,7 +342,7 @@ public class LinkTool
      */
     public LinkTool fragment(String fragment)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.fragment = fragment;
         return target;
     }
@@ -361,8 +365,8 @@ public class LinkTool
      */
     public LinkTool self()
     {
-        LinkTool target = (LinkTool)clone();
-        target.parameters.remove(factory.getStickyKeys());
+        LinkTool target = getLinkTool(this);
+        target.parameters.remove(config.getStickyParametres());
         target.parameters.add(requestParameters, true);
         target.parameters.remove(config.getViewToken());
         target.parameters.remove(config.getActionToken());
@@ -383,7 +387,7 @@ public class LinkTool
      */
     public LinkTool add(String name, String value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         if (name.equals(config.getViewToken()) || name.equals(config.getActionToken()))
         {
             throw new IllegalArgumentException("multiple values of the " + name + 
@@ -405,7 +409,7 @@ public class LinkTool
      */
     public LinkTool add(String name, int value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
     }
@@ -419,7 +423,7 @@ public class LinkTool
      */
     public LinkTool add(String name, long value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
     }
@@ -433,7 +437,7 @@ public class LinkTool
      */
     public LinkTool add(String name, float value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
     }
@@ -447,7 +451,7 @@ public class LinkTool
      */
     public LinkTool add(String name, boolean value)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.add(name, value);
         return target;
     }
@@ -460,7 +464,7 @@ public class LinkTool
      */
     public LinkTool add(Parameters parameters)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.parameters.add(parameters, false);
         return target;
     }
@@ -473,7 +477,7 @@ public class LinkTool
      */
     public LinkTool unset(String name)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         if (name.equals(config.getViewToken()))
         {
             target.view = "";
@@ -497,7 +501,7 @@ public class LinkTool
      */
     public LinkTool view(String view)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.view = view;
         return target;
     }
@@ -510,7 +514,7 @@ public class LinkTool
      */
     public LinkTool action(String action)
     {
-        LinkTool target = (LinkTool)clone();
+        LinkTool target = getLinkTool(this);
         target.action = action;
         return target;
     }
@@ -587,10 +591,9 @@ public class LinkTool
                 }
 
                 String[] keys = parameters.getParameterNames();
-                Set pathinfoSet = factory.getPathInfoKeys();
                 List pathinfoParameterKeys = new ArrayList();
                 List queryParameterKeys;
-                if (pathinfoSet.size() > 0)
+                if (config.hasPathInfoParamters())
                 {
                     queryParameterKeys = Arrays.asList(keys);
                 }
@@ -599,7 +602,7 @@ public class LinkTool
                     queryParameterKeys = new ArrayList(keys.length);
                     for (int i = 0; i < keys.length; i++)
                     {
-                        if (!pathinfoSet.contains(keys[i]))
+                        if (!config.isPathInfoParameter(keys[i]))
                         {
                             queryParameterKeys.add(keys[i]);
                         }
@@ -631,7 +634,7 @@ public class LinkTool
                         sb.append(action);
                         if (queryParameterKeys.size() > 0)
                         {
-                            sb.append(factory.getQuerySeparator());
+                            sb.append(config.getQuerySeparator());
                         }
                     }
                     for (int i = 0; i < queryParameterKeys.size(); i++)
@@ -645,12 +648,12 @@ public class LinkTool
                             sb.append(URLEncoder.encode(values[j], UTF_8));
                             if (j < values.length - 1)
                             {
-                                sb.append(factory.getQuerySeparator());
+                                sb.append(config.getQuerySeparator());
                             }
                         }
                         if (i < queryParameterKeys.size() - 1)
                         {
-                            sb.append(factory.getQuerySeparator());
+                            sb.append(config.getQuerySeparator());
                         }
                     }
                 }
@@ -683,23 +686,192 @@ public class LinkTool
     }
 
 	/**
-	 * Clone the object.
+	 * Clone the given LinkTool.
 	 * 
-	 * @return the object.
+     * @param source to LinkTool to clone
+	 * @return the clone.
 	 */
-	public Object clone()
+	private LinkTool getLinkTool(LinkTool source)
 	{
-		LinkTool target = new LinkTool(factory, context, config);
-		target.view = view;
-		target.action = action;
-		target.resourceLink = resourceLink;
-		target.includeSession = includeSession;
-		target.showProtocolName = showProtocolName;
-		target.protocolName = protocolName;
-		target.port = port;
-		target.path = path;
-		target.fragment = fragment;
-	    target.parameters = new DefaultParameters(parameters);
+		LinkTool target = new LinkTool(context, source.config);
+		target.view = source.view;
+		target.action = source.action;
+		target.resourceLink = source.resourceLink;
+		target.includeSession = source.includeSession;
+		target.showProtocolName = source.showProtocolName;
+		target.protocolName = source.protocolName;
+		target.port = source.port;
+		target.path = source.path;
+		target.fragment = source.fragment;
+	    target.parameters = new DefaultParameters(source.parameters);
 		return target;		
 	}
+    
+    /**
+     * Represents the shared configuration of the LinkTools
+     *
+     * <p>Created on Jan 14, 2004</p>
+     * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
+     */
+    public static class Configuration
+        implements Configurable
+    {        
+        /** the default query separator */
+        public static final String DEFAULT_QUERY_SEPARATOR = "&";
+
+        /** the sticky parameters keys */
+        private Set stickyKeys = new HashSet();
+    
+        /** the pathinfo parameters keys */
+        private Set pathinfoKeys = new HashSet();
+    
+        /** the query separator */
+        private String querySeparator;
+    
+        /** external resource switch */
+        private boolean externalContent;
+
+        /** the web configurator. */
+        private WebConfigurator webConfigurator;
+
+        /**
+         * Initializes the configuraiton object.
+         * 
+         * @param config DNA configuration
+         * @param webConfigurator the configuration of the web subsystem.
+         * @throws ConfigurationException if the configuration is invalid.
+         */
+        public Configuration(org.jcontainer.dna.Configuration config, 
+            WebConfigurator webConfigurator)
+            throws ConfigurationException
+        {
+            this.webConfigurator = webConfigurator;
+            configure(config);
+        }
+        
+        /**
+         * Initializes the internal state from DNA configuration object.
+         * 
+         * <p>This method may be used to reconfigure link tool at runtime.</p>
+         * 
+         * @param config DNA configuration
+         * @throws ConfigurationException if the configuration is invalid.
+         */
+        public void configure(org.jcontainer.dna.Configuration config)
+            throws ConfigurationException
+        {
+            try
+            {
+                org.jcontainer.dna.Configuration[] keys = 
+                    config.getChild("sticky").getChildren("key");
+                for (int i = 0; i < keys.length; i++)
+                {
+                    stickyKeys.add(keys[i].getValue());
+                }
+                keys = config.getChild("pathinfo").getChildren("key");
+                for (int i = 0; i < keys.length; i++)
+                {
+                    pathinfoKeys.add(keys[i].getValue());
+                }
+            }
+            catch (ConfigurationException e)
+            {
+                throw new ComponentInitializationError("failed to configure the component", e);
+            }
+            querySeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
+            externalContent = config.getChild("external_resource").getValueAsBoolean(false);
+        }
+
+        /**
+         *  Get the query string separator. 
+         *
+         * @return the query separator. 
+         */
+        public String getQuerySeparator()
+        {
+            return querySeparator;
+        }
+    
+        /**
+         * Is external content.
+         * 
+         * @return <code>true</code>if resources are external.
+         */
+        public boolean isContentExternal()
+        {
+            return externalContent;
+        }
+        
+        /**
+         * Check if a parameter is sticky.
+         * 
+         * @param paramName the parameter name.
+         * @return <code>true</code> if sticky.
+         */
+        public boolean isStickyParameter(String paramName)
+        {
+            return stickyKeys.contains(paramName);
+        }
+        
+        /**
+         * Returns the set of sticky parameter names.
+         * 
+         * @return the set of sticky parameter names.
+         */
+        public Set getStickyParametres()
+        {
+            return stickyKeys;
+        }
+        
+        /**
+         * Checks if there are any sticky paramerers.
+         * 
+         * @return <code>true</code> if there are any sticky paramerers.
+         */
+        public boolean hasStickyParamters()
+        {
+            return !stickyKeys.isEmpty();
+        }
+        
+        /**
+         * Check if a parameter belongs to pathinfo.
+         * 
+         * @param paramName the parameter name.
+         * @return <code>true</code> belongs to pathinfo.
+         */
+        public boolean isPathInfoParameter(String paramName)
+        {
+            return pathinfoKeys.contains(paramName);
+        }        
+        
+        /**
+         * Checks if there are any pathinfo parametrers.
+         * 
+         * @return <code>true</code> if there are any pathinfo parameters.
+         */
+        public boolean hasPathInfoParamters()
+        {
+            return !pathinfoKeys.isEmpty();
+        }
+        
+        /**
+         * Returns the view parameter name,
+         * 
+         * @return view parameter name.
+         */
+        public String getViewToken()
+        {
+            return webConfigurator.getViewToken();
+        }
+        
+        /**
+         * Return the action parameter name.
+         * 
+         * @return action parameter name.
+         */
+        public String getActionToken()
+        {
+            return webConfigurator.getActionToken();
+        }
+    }
 }

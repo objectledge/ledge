@@ -28,12 +28,8 @@
 
 package org.objectledge.web.mvc;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.WebConfigurator;
@@ -45,59 +41,28 @@ import org.objectledge.web.WebConfigurator;
  */
 public class LinkToolFactory implements ContextToolFactory
 {
-	/** the default query separator */
-	public static final String DEFAULT_QUERY_SEPARATOR = "&";
-
 	/** context */
 	private Context context;
 	
 	/** configuration component */
 	private WebConfigurator webConfigurator;
-	
-	/** the sticky parameters keys */
-	private Set stickyKeys;
-	
-	/** the pathinfo parameters keys */
-	private Set pathinfoKeys;
-	
-	/** the query separator */
-	private String querySeparator;
-	
-	/** external resource switch */
-	private boolean externalContent;
-
+    
+    private LinkTool.Configuration linkToolConfiguration;
+    	
 	/**
 	 * Component constructor.
 	 *
 	 * @param config the config.
 	 * @param context the context.
 	 * @param webConfigurator the web configurator component.
+     * @throws ConfigurationException if the configuraiton is invalid.
  	 */
 	public LinkToolFactory(Configuration config, Context context, WebConfigurator webConfigurator)
+        throws ConfigurationException
 	{
 		this.context = context;
 		this.webConfigurator = webConfigurator;
-		stickyKeys = new HashSet();
-		pathinfoKeys = new HashSet();
-		try
-		{
-			Configuration[] keys = config.getChild("sticky").getChildren("key");
-			for (int i = 0; i < keys.length; i++)
-			{
-				stickyKeys.add(keys[i].getValue());
-			}
-			keys = config.getChild("pathinfo").getChildren("key");
-			for (int i = 0; i < keys.length; i++)
-			{
-				pathinfoKeys.add(keys[i].getValue());
-			}
-		}
-		catch (ConfigurationException e)
-		{
-			throw new ComponentInitializationError("failed to configure the component", e);
-		}
-		querySeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
-		externalContent = config.getChild("external_resource").getValueAsBoolean(false);
+        this.linkToolConfiguration = new LinkTool.Configuration(config, webConfigurator);
 	}
 	
     /**
@@ -105,7 +70,7 @@ public class LinkToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		return new LinkTool(this, context, webConfigurator);
+		return new LinkTool(context, linkToolConfiguration);
 	}
 	
 	/**
@@ -122,45 +87,5 @@ public class LinkToolFactory implements ContextToolFactory
 	public String getKey()
 	{
 		return "link";
-	}
-    
-	/**
-	 * Get the sticky parameters keys set.
-	 * 
-	 * @return the sticky keys.
-	 */
-	public Set getStickyKeys()
-	{
-		return stickyKeys;
-	}
-
-	/**
-	 * Get the path info parameters keys.
-	 * 
-	 * @return the default encoding.
-	 */
-	public Set getPathInfoKeys()
-	{
-		return pathinfoKeys;
-	}
-
-	/**
-	 *  Get the query string separator. 
-	 *
-	 * @return the query separator. 
-	 */
-	public String getQuerySeparator()
-	{
-		return querySeparator;
-	}
-	
-	/**
-	 * Is external content.
-	 * 
-	 * @return <code>true</code>if resources are external.
-	 */
-	public boolean isExternalContent()
-	{
-		return externalContent;
-	}
+	}    
 }
