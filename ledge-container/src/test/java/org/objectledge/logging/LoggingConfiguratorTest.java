@@ -13,6 +13,7 @@ import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
+import org.objectledge.utils.TracingException;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 
@@ -20,7 +21,7 @@ import org.objectledge.xml.XMLValidator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfiguratorTest.java,v 1.11 2004-06-16 14:34:04 fil Exp $
+ * @version $Id: LoggingConfiguratorTest.java,v 1.12 2004-06-24 14:01:55 fil Exp $
  */
 public class LoggingConfiguratorTest extends TestCase
 {
@@ -37,13 +38,7 @@ public class LoggingConfiguratorTest extends TestCase
     public void testConfigurator()
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-                "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
+        FileSystemProvider lfs = new LocalFileSystemProvider("local", "src/test/resources");
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
@@ -52,5 +47,6 @@ public class LoggingConfiguratorTest extends TestCase
         new LoggingConfigurator(cf, fs).start();    
         Logger logger = Logger.getLogger(LoggingConfiguratorTest.class);
         logger.debug("Yipee!");
+        logger.error("tracing", new TracingException(4));
     }
 }
