@@ -28,6 +28,7 @@
 package org.objectledge.selector;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -53,7 +54,7 @@ import java.util.StringTokenizer;
  * UndefinedVariableException is thrown.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IntrospectionVariables.java,v 1.3 2004-01-23 13:58:03 fil Exp $
+ * @version $Id: IntrospectionVariables.java,v 1.4 2004-01-26 09:32:19 fil Exp $
  */
 public class IntrospectionVariables
     implements Variables
@@ -173,9 +174,15 @@ public class IntrospectionVariables
             {
                 return method.invoke(object, args);
             }
+            catch(InvocationTargetException e)
+            {
+                throw new EvaluationException("exception while evaluating variable", e.getCause());
+            }
             catch(Exception e)
             {
-                throw new EvaluationException("exception while evaluating variable", e);
+                ///CLOVER:OFF
+                throw new EvaluationException("unexpected exception while evaluating variable", e);
+                ///CLOVER:ON
             }
         }
         Field field;
@@ -195,7 +202,9 @@ public class IntrospectionVariables
             }
             catch(Exception e)
             {
-                throw new EvaluationException("exception while evaluation varaible", e);
+                ///CLOVER:OFF
+                throw new EvaluationException("unexpected exception while evaluation varaible", e);
+                ///CLOVER:ON
             }
         }
         args = new Object[] { property };
@@ -220,9 +229,15 @@ public class IntrospectionVariables
             {
                 return method.invoke(object, args);
             }
+            catch(InvocationTargetException e)
+            {
+                throw new EvaluationException("exception while evaluating variable", e.getCause());
+            }
             catch(Exception e)
             {
-                throw new EvaluationException("exception while evaluating variable", e);
+                ///CLOVER:OFF
+                throw new EvaluationException("unexpected exception while evaluating variable", e);
+                ///CLOVER:ON
             }
         }
         throw new UndefinedVariableException(property);
