@@ -51,15 +51,10 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.1 2004-06-25 11:20:30 fil Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.2 2004-06-25 12:53:04 fil Exp $
  */
 public class LoggingConfigurator
-    implements Startable
 {
-    private Document config;
-    
-    private DOMConfigurator configurator;
-    
     /**
      * Creates a new LoggingConfigurator.
      * 
@@ -75,26 +70,13 @@ public class LoggingConfigurator
         InputSource source = configurationFactory.
         	getConfigurationSource(LoggingConfigurator.class, LoggingConfigurator.class);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        config = builder.parse(source);
-        configurator = new LedgeDOMConfigurator(fileSystem);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void start()
-    {
+        Document config = builder.parse(source);
+        DOMConfigurator configurator = new LedgeDOMConfigurator(fileSystem);
+
         Hierarchy hierarchy = new LedgeLoggerHierarchy(new RootCategory((Level)Level.DEBUG));
         configurator.doConfigure(config.getDocumentElement(), hierarchy);
         // We use ClassLoader local, but accessible object as the guard. This allows reinitializing 
         // Log4J from within the same sandbox.
         LogManager.setRepositorySelector(new DefaultRepositorySelector(hierarchy), LogManager.class);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
     }
 }
