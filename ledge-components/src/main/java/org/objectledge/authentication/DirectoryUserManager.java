@@ -392,7 +392,8 @@ public class DirectoryUserManager extends UserManager
         }
         catch(NamingException e)
         {
-            throw new AuthenticationException("Failed to lookup user personal data");
+            throw new AuthenticationException("Failed to lookup user personal data" +
+                    " for principal: "+account.getName(), e);
         }
     }
 
