@@ -12,9 +12,6 @@ if test "x-$ENABLE_ACLS" = "x-yes" ; then
     $CVSROOT/CVSROOT/cvs_acls.pl ${1+"$@"} || exit 1
 fi
 
-TMPFILE=/tmp/cvs.$$
-cat > $TMPFILE
-
 #
 # Tests pass, make the patch ready to commit and report.
 #
