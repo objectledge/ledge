@@ -236,4 +236,24 @@
     </rule>
   </test>
   
+  <!-- // semantic errors /////////////////////////////////////////////////////////////////// -->
+  
+  <test result="exception">
+    <rule>
+      <matches>
+        <string value="[1-9]*"/>
+        <variable name="one"/>
+      </matches>
+    </rule>
+  </test>
+
+  <test result="exception">
+    <rule>
+      <equal>
+        <null/>
+        <variable name="one"/>
+      </equal>
+    </rule>
+  </test>
+  
 </tests>
