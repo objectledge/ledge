@@ -50,7 +50,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.17 2004-01-29 08:32:06 pablo Exp $
+ * @version $Id: FileSystem.java,v 1.18 2004-01-29 10:14:55 pablo Exp $
  */
 public class FileSystem
 {
@@ -62,7 +62,7 @@ public class FileSystem
     /** The size of the buffer. */
     private int bufferSize;
 
-    /** Maximum size of a file that is loaded into memory in one chunk by the 
+    /** Maximum size of a file that is loaded into memory in one chunk by the. 
      * read() methods. */
     private int maxReadSize;
 
@@ -887,6 +887,10 @@ public class FileSystem
     public static String normalizedPath(String path)
         throws IllegalArgumentException
     {
+        if(path.length()==0 || path.equals("/"))
+        {
+            return "/";
+        }
         StringTokenizer st = new StringTokenizer(path, "/");
         ArrayList temp = new ArrayList(st.countTokens());
         while(st.hasMoreTokens())

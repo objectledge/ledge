@@ -28,6 +28,8 @@
 
 package org.objectledge.filesystem;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -39,7 +41,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.4 2004-01-29 08:32:45 pablo Exp $
+ * @version $Id: FileSystemTest.java,v 1.5 2004-01-29 10:14:55 pablo Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -62,11 +64,23 @@ public class FileSystemTest extends TestCase
         fs = FileSystem.getStandardFileSystem(root);
     }
 
+    public void setUp()
+        throws Exception
+    {
+        fs.createNewFile("filex");
+    }
+
+    public void tearDown()
+        throws Exception
+    {
+        fs.delete("filex");
+    }
+
     public void testURL()
         throws Exception
     {
         
-        URL url = fs.getResource("/file");
+        URL url = fs.getResource("/filex");
         InputStream is = url.openStream();
         is.read();  
     }
@@ -108,7 +122,7 @@ public class FileSystemTest extends TestCase
     public void testGetOutputStream()
             throws Exception
     {
-        OutputStream os = fs.getOutputStream("file");
+        OutputStream os = fs.getOutputStream("filex");
         assertNotNull(os);
         os.close();
         
@@ -118,7 +132,7 @@ public class FileSystemTest extends TestCase
         assertEquals(fs.exists("foo"),true);
         fs.delete("foo");
         assertEquals(fs.exists("foo"),false);
-        os = fs.getOutputStream("file",true);
+        os = fs.getOutputStream("filex",true);
         assertNotNull(os);
         os.close();
         os = fs.getOutputStream("foo",true);
@@ -131,13 +145,13 @@ public class FileSystemTest extends TestCase
     public void testGetRandomAccess()
        throws Exception
     {
-        assertNotNull(fs.getRandomAccess("file","r"));
+        assertNotNull(fs.getRandomAccess("filex","r"));
     }
     
     public void testIsFile()
         throws Exception
     {
-        assertEquals(fs.isFile("file"),true);
+        assertEquals(fs.isFile("filex"),true);
         assertEquals(fs.isFile("config"),false);
     }
     
@@ -145,35 +159,35 @@ public class FileSystemTest extends TestCase
     public void testIsDirectory()
         throws Exception
     {
-        assertEquals(fs.isDirectory("file"),false);
+        assertEquals(fs.isDirectory("filex"),false);
         assertEquals(fs.isDirectory("config"),true);
     }
 
     public void testCanRead()
         throws Exception
     {
-        assertEquals(fs.canRead("file"),true);
+        assertEquals(fs.canRead("filex"),true);
         assertEquals(fs.canRead("foo"),false);
     }
     
     public void testCanWrite()
         throws Exception
     {
-        assertEquals(fs.canWrite("file"),true);
+        assertEquals(fs.canWrite("filex"),true);
         assertEquals(fs.canRead("foo"),false);
     }
     
     public void testLastModified()
         throws Exception
     {
-        assertEquals(fs.lastModified("file") == -1L,false);
+        assertEquals(fs.lastModified("filex") == -1L,false);
         assertEquals(fs.lastModified("foo"),-1L);
     }
     
     public void testLength()
         throws Exception
     {
-        assertEquals(fs.length("file"),0);
+        assertEquals(fs.length("filex"),0);
         assertEquals(fs.length("foo"),-1L);
     }
         
@@ -192,7 +206,7 @@ public class FileSystemTest extends TestCase
         }
         try
         {
-            assertEquals(fs.list("file").length,2);
+            assertEquals(fs.list("filex").length,2);
             fail("should throw the exception");
         }
         catch(IOException e)
@@ -205,7 +219,7 @@ public class FileSystemTest extends TestCase
     public void testCreateNewFile()
         throws Exception
     {
-        boolean result = fs.createNewFile("file");
+        boolean result = fs.createNewFile("filex");
         assertEquals(result,false);
         result = fs.createNewFile("foo");
         assertEquals(result,true);
@@ -222,7 +236,7 @@ public class FileSystemTest extends TestCase
         fs.delete("foo");
         try
         {
-            fs.mkdirs("file");
+            fs.mkdirs("filex");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -270,7 +284,7 @@ public class FileSystemTest extends TestCase
         throws IOException
     {
         assertEquals(fs.exists("foo"),false);
-        fs.copyFile("file","foo");
+        fs.copyFile("filex","foo");
         assertEquals(fs.exists("foo"),true);
         fs.delete("foo");
         try
@@ -334,25 +348,51 @@ public class FileSystemTest extends TestCase
         assertEquals(fs.read("foo")[0],"bar".getBytes("ISO-8859-2")[0]);
         assertEquals(fs.read("foo")[1],"bar".getBytes("ISO-8859-2")[1]);
         assertEquals(fs.read("foo")[2],"bar".getBytes("ISO-8859-2")[2]);
-        //Str
-        //fs.read(String path, OutputStream out)    
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(4);
+        fs.read("foo", baos);
+        assertEquals(baos.toString("ISO-8859-2"),"bar");
+        
+        fs.createNewFile("foo");
+        fs.write("foo","bar".getBytes("ISO-8859-2"));
+        assertEquals(fs.read("foo","ISO-8859-2"),"bar");
+            
+        fs.createNewFile("foo");
+        fs.write("foo",new ByteArrayInputStream("bar".getBytes("ISO-8859-2")));
+        assertEquals(fs.read("foo","ISO-8859-2"),"bar");
+
         fs.delete("foo");
     }
     
-    /*
+    public void testPaths()
+        throws Exception
+    {
+        assertEquals(FileSystem.normalizedPath("foo/bar"),"/foo/bar");
+        assertEquals(FileSystem.normalizedPath("foo//bar"),"/foo/bar");
+        assertEquals(FileSystem.normalizedPath("foo/../bar"),"/bar");
+        assertEquals(FileSystem.normalizedPath("foo/./bar"),"/foo/bar");
+        assertEquals(FileSystem.normalizedPath("/"),"/");
+        
+        assertEquals(FileSystem.basePath("/foo/bar"),"bar");
+        assertEquals(FileSystem.basePath("foo"),"foo");
+        assertEquals(FileSystem.basePath("/"),"");
+        
+        assertEquals(FileSystem.directoryPath("/"),"");
+        assertEquals(FileSystem.directoryPath("foo"),"");
+        assertEquals(FileSystem.directoryPath("foo/bar"),"/foo");
     
-    public byte[] read(String path) throws IOException
-    public String read(String path, String encoding)
-    public void write(String path, InputStream in) throws IOException
-    public void write(String path, byte[] bytes) throws IOException
-    public void write(String path, String string, String encoding)
-        throws IOException
-    public static String normalizedPath(String path)
-    public static String basePath(String path)
-    public static String directoryPath(String path)
-    public static String relativePath(String path, String base)
-        throws IllegalArgumentException
-    public static FileSystem getStandardFileSystem(String root)
-    */
+        assertEquals(FileSystem.relativePath("/foo/bar","/foo"),"/bar");
+        try
+        {
+            assertEquals(FileSystem.relativePath("/foo","/foo/bar"),"/bar");
+            fail("should throw the exception");
+        }
+        catch(IllegalArgumentException e)
+        {
+            //ok!
+        }
+        
+    }
+    
+    
 }
 
