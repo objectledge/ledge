@@ -12,9 +12,9 @@ import junit.framework.TestSuite;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.1 2003-11-25 14:56:38 fil Exp $
+ * @version $Id: ComponentsTests.java,v 1.1 2003-11-28 11:00:41 fil Exp $
  */
-public class AllTests
+public class ComponentsTests
 {
 
     public static Test suite()
