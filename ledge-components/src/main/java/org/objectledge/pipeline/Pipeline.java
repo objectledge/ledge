@@ -32,12 +32,11 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 
 /**
- * An implementation of the <code>Valve</code> interface that delegates it's run() method
- * to a number of other Valves, and provides error handling along the lines of Java 
+ * A Pipeline composed of sequences of Valves that provides error handling along the lines of Java 
  * try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.13 2004-01-22 15:15:15 fil Exp $
+ * @version $Id: Pipeline.java,v 1.14 2004-01-23 08:37:19 fil Exp $
  */
 public class Pipeline
     implements Valve
