@@ -6,7 +6,7 @@
   <body>
     <section name="Utils">
       <subsection name="RequestParameters">
-        <p>...</p>
+        <p>The HttpContext is a simple wrapping object for http servlet request/response objects.</p>
         <p class="more"><a href="RequestParameters.html">more</a></p>
       </subsection>
       <subsection name="HttpContext">

@@ -34,11 +34,11 @@ import java.util.Locale;
 import org.objectledge.context.Context;
 
 /**
- * The web context contains all needed information about http request.
+ * The web context contains all needed information about mvc processing parameters.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.7 2004-01-21 09:40:03 pablo Exp $
+ * @version $Id: MVCContext.java,v 1.8 2004-03-17 14:51:38 pablo Exp $
  */
 public class MVCContext
 {
