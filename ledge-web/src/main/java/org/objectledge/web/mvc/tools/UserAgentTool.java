@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.3 2004-02-02 16:56:36 zwierzem Exp $
+ * @version $Id: UserAgentTool.java,v 1.4 2004-03-19 13:32:29 zwierzem Exp $
  */
 public class UserAgentTool
 {
@@ -220,8 +220,15 @@ public class UserAgentTool
     {
         HttpServletRequest request = httpContext.getRequest();
         ua = request.getHeader("User-Agent");
-        ua = ua.toLowerCase();
-        ua.trim();
+        if(ua == null)
+        {
+        	ua = "";
+        }
+        else
+        {
+	        ua = ua.toLowerCase();
+	        ua.trim();
+		}
         platform = getPlatform(ua);
         int i = 0;
         if (ua.indexOf("opera") != -1)
