@@ -282,6 +282,8 @@ public class XMLI18n extends AbstractI18n
 		public void characters(char[] ch, int start, int length)
 			throws SAXParseException
         {
+        	//TODO build stack for multiple method invocation in case
+        	// the text processing was interrupted by other event.  
 		   	String value = new String(ch,start,length);
 			value = value.trim();
 			if(value.length()>0)
