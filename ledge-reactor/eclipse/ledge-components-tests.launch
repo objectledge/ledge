@@ -3,13 +3,13 @@
     <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.objectledge.ComponentsTests"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ledge-components"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dledge.root=."/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dledge.root=src/test/resources"/>
     <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
         <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
         <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
     </listAttribute>
     <stringAttribute key="org.eclipse.debug.ui.target_debug_perspective" value="perspective_default"/>
     <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="ledge-components/src/test/resources"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="ledge-components"/>
     <stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="org.eclipse.jdt.ui.JavaPerspective"/>
 </launchConfiguration>
