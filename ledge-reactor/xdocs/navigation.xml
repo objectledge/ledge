@@ -5,12 +5,10 @@
 
   <body>
     <links>
+      <item name="home" href="index.html"/>
       <item name="wiki" href="http://objectledge.org/wiki"/>
-      
-      <item name="ledge components" href="modules/ledge-components/index.html"/>
-      <item name="ledge container" href="modules/ledge-container/index.html"/>
-      <item name="ledge web" href="modules/ledge-web/index.html"/>
-      <item name="maven plugin" href="modules/ledge-maven-plugin/index.html"/>
+      <item name="issues" href="http://objectledge.org/jira"/>
+      <item name="cvsview" href="http://objecledge.org/cgi-bin/cvsview.cgi"/>
     </links>
     <menu name="Overview">
       <item name="Featured technologies"            href="technologies.html"/>
