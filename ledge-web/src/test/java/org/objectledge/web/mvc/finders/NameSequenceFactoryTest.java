@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.7 2004-01-20 09:17:41 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.8 2004-01-20 11:58:58 fil Exp $
  */
 public class NameSequenceFactoryTest extends TestCase
 {
@@ -88,6 +88,14 @@ public class NameSequenceFactoryTest extends TestCase
         assertEquals(false, templateSequence.hasNext());
         templateSequence = factory.getTemplateNameSequence("views", "foo.Bar", false);
         assertEquals("views/foo/Bar", templateSequence.next());
+        assertEquals(false, templateSequence.hasNext());
+        templateSequence = factory.getTemplateNameSequence("views", "foo", true);
+        assertEquals("views/foo/Default", templateSequence.next());
+        assertEquals("views/Default", templateSequence.next());
+        assertEquals(false, templateSequence.hasNext());
+        templateSequence = factory.getTemplateNameSequence("views", "foo.Default", true);
+        assertEquals("views/foo/Default", templateSequence.next());
+        assertEquals("views/Default", templateSequence.next());
         assertEquals(false, templateSequence.hasNext());
     }
     
