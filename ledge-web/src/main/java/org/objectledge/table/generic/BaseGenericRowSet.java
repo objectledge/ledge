@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.7 2004-06-14 13:54:58 fil Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.8 2004-06-15 14:16:52 zwierzem Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -222,7 +222,9 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         // start row list creation
         ArrayList rowList = new ArrayList();
         // WARN: save root row
-        this.rootRow = getSubTree(state.getRootId(), 0, rowList); // depth = 0
+        String rootId = state.getRootId();
+        Object rootObject = model.getObject(rootId);
+        this.rootRow = getSubTree(rootId, rootObject, 0, rowList); // depth = 0
 
         // sort rows collection for list view
         sortAllRows(rowList);
@@ -242,10 +244,8 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      * @param rowList the target node list.
      * @return the root of created subtree
      */
-    protected TableRow getSubTree(String rootId, int depth, List rowList)
+    protected TableRow getSubTree(String rootId, Object rootObject, int depth, List rowList)
     {
-        Object rootObject = model.getObject(rootId);
-
         //1. get children for this subtree root node
         Object[] childrenObjects = model.getChildren(rootObject);
 
@@ -301,7 +301,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
                 String childId = model.getId(rootId, childObject);
 
                 // go down the tree
-                TableRow childRow = getSubTree(childId, depth, rowList);
+                TableRow childRow = getSubTree(childId, childObject, depth, rowList);
 
                 // WARN: add TableRow to array created for children caching
                 children[i] = childRow;
