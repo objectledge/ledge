@@ -85,6 +85,47 @@
                       basedir="${plugin.dir}/plugin-resources/templates"
                       template="version.html.vt"/>
     </define:tag>
+    
+    <!--
+     | @param srcDir java.io.File
+     | @param srcMask java.lang.String
+     | @param dstDir java.io.File
+     -->
+    <define:tag name="smartCopy">
+      <j:set var="srcDir" value="${srcDir.canonicalFile}"/>
+      <j:set var="dstDir" value="${dstDir.canonicalFile}"/>
+      <fileScanner var="srcFiles">
+        <fileset dir="${srcDir.path}">
+          <include name="${srcMask}"/>
+        </fileset>
+      </fileScanner>
+      <j:forEach var="srcFile" items="${srcFiles.iterator()}">
+        <j:set var="relPath" value="${srcFile.path.substring(srcDir.path.length())}"/>
+        <util:file var="dstFile" name="${dstDir}/${relPath}"/>
+        <j:choose>
+          <j:when test="${dstFile.exists()}">
+            <util:loadText var="srcContent" file="${srcFile}"/>
+            <util:loadText var="dstContent" file="${dstFile}"/>
+            <j:choose>
+              <j:when test="${!srcContent.equals(dstContent)}">
+                <echo>updating ${dstFile.path} (modified)</echo>
+                <copy file="${srcFile.path}" tofile="${dstFile.path}"/>
+              </j:when>
+              <j:otherwise>
+                <!--
+                <echo>not updating ${dstFile.path} (not modified)</echo>
+                -->
+              </j:otherwise>
+            </j:choose>
+          </j:when>
+          <j:otherwise>
+            <echo>introducing ${dstFile.path} (new file)</echo>
+            <copy file="${srcFile.path}" tofile="${dstFile.path}"/>
+          </j:otherwise>
+        </j:choose>
+      </j:forEach>
+    </define:tag>
+    
   </define:taglib>
 
   <goal name="ledge:index-jar"
@@ -103,4 +144,47 @@
     <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
     <ledge:warVersionPage path="${webappDir}/content/version.html"/>
   </goal>
+  
+  <goal name="ledge:javacc">
+    <util:file var="srcDir" name="${pom.build.sourceDirectory}"/>
+    <j:set var="srcDir" value="${srcDir.canonicalFile}"/>
+    <!-- jjtree grammars -->
+    <fileScanner var="srcFiles">
+      <fileset dir="${srcDir.path}">
+        <include name="**/*.jjt"/>
+      </fileset>
+    </fileScanner>
+    <j:forEach var="srcFile" items="${srcFiles.iterator()}">
+      <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
+      <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
+      <j:set var="dstDir" value="${dstDir.canonicalFile}"/>
+      <copy todir="${dstDir.path}" overwrite="true">
+        <fileset dir="${srcFile.parentFile.path}">
+          <include name="*.java"/>
+        </fileset>
+      </copy>
+      <echo>Generating grammar for ${relPath}</echo>
+      <j:set var="dummy" value="${dstDir.mkdirs()}"/>
+      <jjtree target="${srcFile.path}" outputdirectory="${dstDir.path}" javacchome="${build.javacc.home}"/>
+      <ledge:smartCopy srcDir="${dstDir}" srcMask="*.jj" dstDir="${srcFile.parentFile}"/>
+      <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+    </j:forEach>
+
+    <!-- javacc parsers -->
+    <fileScanner var="srcFiles">
+      <fileset dir="${srcDir.path}">
+        <include name="**/*.jj"/>
+      </fileset>
+    </fileScanner>
+    <j:forEach var="srcFile" items="${srcFiles.iterator()}">
+      <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
+      <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
+      <echo>Generating parser for ${relPath}</echo>
+      <j:set var="dummy" value="${dstDir.mkdirs()}"/>
+      ${dstDir.mkdirs()}
+      <javacc target="${srcFile.path}" outputdirectory="${dstDir.path}" javacchome="${build.javacc.home}"/>
+      <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+    </j:forEach>
+  </goal>
+
 </project>
