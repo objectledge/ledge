@@ -50,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.13 2005-03-29 10:53:22 zwierzem Exp $
+ * @version $Id: MVCFinderTest.java,v 1.14 2005-03-29 12:25:38 zwierzem Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -116,11 +116,11 @@ public class MVCFinderTest extends TestCase
         builder = finder.findBuilder(null);
         assertNull(builder);
         builder = finder.findBuilder("foo.NotExistentClass");
-        assertNull(builder);
+        assertEquals(org.objectledge.test.views.foo.Default.class, builder.getClass());
         builder = finder.findBuilder("NotExistentClass");
-        assertNull(builder);
+        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
         builder = finder.findBuilder("nonexistentpackage.NotExistentClass");
-        assertNull(builder);
+        assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
     }
     
     public void testFindEnclosingViewName()
