@@ -32,7 +32,7 @@ import junit.framework.TestSuite;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AllTests.java,v 1.3 2004-02-12 13:51:20 zwierzem Exp $
+ * @version $Id: AllTests.java,v 1.4 2004-03-17 15:35:32 zwierzem Exp $
  */
 public class AllTests
 {
@@ -44,6 +44,7 @@ public class AllTests
         suite.addTest(new TestSuite(TableColumnTest.class));
         suite.addTest(new TestSuite(TableRowTest.class));
         suite.addTest(new TestSuite(TableStateTest.class));
+        suite.addTest(new TestSuite(TableToolTest.class));
         //$JUnit-END$
         return suite;
     }
