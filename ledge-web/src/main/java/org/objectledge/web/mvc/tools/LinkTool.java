@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.22 2005-03-03 16:30:17 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.23 2005-03-10 12:11:51 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -258,7 +258,7 @@ public class LinkTool
     {
         LinkTool target = getLinkTool(this);
         target.contentLink = true;
-        target.includeSession = !config.externalContent;
+        target.includeSession = this.includeSession && !config.externalContent;
         target.path = path;
         return target;
     }
