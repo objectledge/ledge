@@ -57,6 +57,49 @@
 		  </tr>
 		</table>
 	  </p>
+	  <p>To configure the XMLI18n component see the rng schema
+	  <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/i18n/impl/XMLI18n.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">
+	  view schema</a></p>
+	  <subsection name="I18n files format">
+	  <p>The name of the file is being checked for validity based on following regular expression: <br/> 
+	    <pre>
+[a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.xml
+	    </pre>
+	    Be sure your files conform to this magical string. :-) 
+
+       </p>
+       <p>
+	    First part of the file name represents the namespace, 
+		second part is locale marker. Namespace elements are separated with dots, 
+		locale is composed of "language" and "country" (capitalized) parts.
+		</p>
+		<p>
+		Language variants are not supported.
+
+        Here's an example of i18n usage:
+
+        We have a file in proper directory named as following:
+        <pre>
+foo.bar_pl_PL.xml
+        </pre>
+		
+	  </p>
+	  <p>File contains following XML code:<br/>
+      <pre>
+&lt;prefix name="foo2"&gt;
+  ...
+    &lt;prefix name=""bar2"&gt;
+      &lt;item name="baz"&gt;my_value&lt;/item&gt;
+    &lt;/prefix&gt;
+  ...
+&lt;/prefix&gt;
+      </pre>
+      The prefixes from file name and internal xml structure 
+      are joined into one namespace. Following the example, if you want to 
+      obtain the item value ('my_value') you should use: 
+      <code>foo.bar.foo2.&lt;...&gt;.bar2.baz</code> key.
+	  </p>
+	  </subsection>
     </section>
   </body>
 </document>  

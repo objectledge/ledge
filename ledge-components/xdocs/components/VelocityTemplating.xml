@@ -51,6 +51,12 @@
 		  </tr>
 		</table>
 	  </p>
+      <p>To configure the XMLI18n component see the rng schema
+      <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/templating/velocity/VelocityTemplating.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">
+      view schema
+      </a>
+      </p>
+   	  
     </section>
   </body>
 </document>  
