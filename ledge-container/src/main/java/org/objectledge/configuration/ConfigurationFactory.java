@@ -61,7 +61,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.14 2003-12-23 15:16:45 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.15 2003-12-23 15:47:16 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -96,13 +96,14 @@ public class ConfigurationFactory
      * Returns the configuration of the specific compoenent in the system.
      * 
      * @param key the key of the component in the system.
+     * @param implemenatation the implementation class of the component.
      * @return the configuration.
      */
-    public Configuration getConfig(Object key)
+    public Configuration getConfig(Object key, Class implemenatation)
     {
         String name = getComponentName(key);
         String path = getComponentConfigurationPath(key);
-        String schema = getComponentConfigurationSchemaPath(key);
+        String schema = getComponentConfigurationSchemaPath(implemenatation);
         if(!fileSystem.exists(path))
         {
             throw new ComponentInitializationError("configuration file "+path+" for component "+
@@ -149,7 +150,7 @@ public class ConfigurationFactory
     {
         String name = getComponentName(key);
         String path = getComponentConfigurationPath(key);
-        String schema = getComponentConfigurationSchemaPath(key);
+        String schema = getComponentConfigurationSchemaPath((Class)key);
         if(!fileSystem.exists(path))
         {
             throw new ComponentInitializationError("configuration file "+path+" for component "+
@@ -187,7 +188,7 @@ public class ConfigurationFactory
         throws PicoInitializationException, PicoIntrospectionException
     {
         return new InstanceComponentAdapter(getComponentName(componentKey), 
-            getConfig(componentKey));
+            getConfig(componentKey, componentImplementation));
     }
     
     /**
@@ -261,31 +262,14 @@ public class ConfigurationFactory
     /**
      * Returns the path of the configuration schema file for the specified key.
      * 
-     * @param componentKey the key.
+     * @param componentImplementation the implementation class of the component.
      * @return path the configuration file path.
      * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
-    protected String getComponentConfigurationSchemaPath(Object componentKey)
+    protected String getComponentConfigurationSchemaPath(Class componentImplementation)
         throws UnsupportedKeyTypeException
     {
-        if(componentKey instanceof Class)
-        {
-            return ((Class)componentKey).getName().replace('.','/')+".rng";
-        }
-        else if(componentKey instanceof String)
-        {
-            String key = ((String)componentKey);
-            if(key.indexOf(':') > 0)
-            {
-                key = key.substring(0, key.indexOf(':')); 
-            }
-            return key.replace('.','/')+".rng";
-        }
-        else
-        {
-            throw new UnsupportedKeyTypeException("unsupported component key type "+
-                componentKey.getClass().getName());
-        }
+        return ((Class)componentImplementation).getName().replace('.','/')+".rng";
     }
 
     /**

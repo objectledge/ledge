@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactoryTest.java,v 1.5 2003-12-05 08:27:03 fil Exp $
+ * @version $Id: ConfigurationFactoryTest.java,v 1.6 2003-12-23 15:47:16 fil Exp $
  */
 public class ConfigurationFactoryTest 
     extends TestCase
@@ -79,7 +79,8 @@ public class ConfigurationFactoryTest
     public void testGetConfig()
         throws ConfigurationException
     {
-        Configuration config = cf.getConfig(org.objectledge.test.FooComponent.class);
+        Configuration config = cf.getConfig(org.objectledge.test.FooComponent.class, 
+            org.objectledge.test.FooComponent.class);
         Configuration a = config.getChild("a");
         assertEquals(a.getValue(), "a");
         Configuration b = config.getChild("b");
