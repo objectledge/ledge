@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.8 2004-09-07 10:33:23 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.9 2004-09-07 14:44:07 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -145,7 +145,6 @@
     <report>maven-jdepend-plugin</report>
     <report>maven-checkstyle-plugin</report>
     <report>maven-junit-report-plugin</report>
-    <report>maven-pmd-plugin</report>
     <report>maven-simian-plugin</report>
     <report>maven-faq-plugin</report>
   </reports>
