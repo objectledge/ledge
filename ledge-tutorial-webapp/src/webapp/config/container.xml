@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<container>
+  <component class-key="org.picoextras.reflection.StringToObjectConverter"
+             class="org.objectledge.pico.LedgeStringToObjectConverter"/>
+
+  <container key="org.picocontainer.MutablePicoContainer" replace="true">
+    <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
+	  <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
+    </adapter-factory>
+    
+    <component class="org.objectledge.xml.XMLValidator"/>
+    <component class="org.objectledge.configuration.ConfigurationFactory" preload="true">
+      <component-parameter class-key="org.picocontainer.MutablePicoContainer"/>
+      <component-parameter class-key="org.objectledge.filesystem.FileSystem"/>
+      <component-parameter class-key="org.objectledge.xml.XMLValidator"/>
+      <component-parameter key="org.objectledge.ConfigBase"/>
+    </component>
+
+    <component class="org.objectledge.logging.LoggingConfigurator" preload="true"/>
+    <component class="org.objectledge.logging.LoggerFactory" preload="true"/>
+
+	<!-- end of core config -->
+
+    <component class-key="org.objectledge.web.HttpDispatcher" 
+    		   class="org.objectledge.web.dispatcher.HttpMethodDispatcher"/>
+
+    <component class="org.objectledge.context.Context"/>
+    <component class="org.objectledge.web.mvc.MVCContextInitializator"/>
+    <component class="org.objectledge.web.RequestParametersLoader"/>
+    <component class="org.objectledge.web.RequestParametersLoaderTestValve"/>
+    <component class-key="org.objectledge.templating.Templating"
+		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
+    <component class="org.objectledge.templating.TemplatingContextLoader"/>
+    <component class="org.objectledge.templating.ContextToolPopulator"/>
+    
+    <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
+    <component class="org.objectledge.i18n.impl.WebI18nToolFactory"/>
+    <component class="org.objectledge.templating.ContextTools">
+	  <sequence-parameter class="[Lorg.objectledge.templating.ContextToolFactory;">
+        <component-parameter class-key="org.objectledge.i18n.impl.WebI18nToolFactory"/>
+      </sequence-parameter>
+    </component>      
+    
+    <component key="org.objectledge.pipeline.Pipeline"
+               class="org.objectledge.pipeline.Pipeline">
+      <component-parameter class-key="org.objectledge.context.Context"/>               
+      <component-parameter class-key="org.jcontainer.dna.Logger"/>
+	  <sequence-parameter class="[Ljava.lang.Runnable;">
+        <component-parameter class-key="org.objectledge.web.RequestParametersLoader"/>
+        <component-parameter class-key="org.objectledge.web.RequestParametersLoaderTestValve"/>
+        <component-parameter class-key="org.objectledge.web.mvc.MVCContextInitializator"/>
+        <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
+        <component-parameter class-key="org.objectledge.templating.ContextToolPopulator"/>
+      </sequence-parameter>
+	  <sequence-parameter class="[Ljava.lang.Runnable;">
+      </sequence-parameter>
+	  <sequence-parameter class="[Ljava.lang.Runnable;">
+      </sequence-parameter>
+    </component>
+    		   
+    <component key="org.objectledge.web.dispatcher.PipelineHttpDispatcher"
+               class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+    </component>
+  </container>
+</container>

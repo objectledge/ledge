@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ledge-tutorial-webapp</name>
+	<comment></comment>
+	<projects>
+		<project>ledge-components</project>
+		<project>ledge-container</project>
+		<project>ledge-web</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.atlassw.tools.eclipse.checkstyle.CheckstyleBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
+	</natures>
+</projectDescription>
