@@ -38,17 +38,17 @@
       <element name="supported_locales">
         <oneOrMore>
           <element name="locale">
+            <optional>
+              <attribute name="default">
+                <text/>
+              </attribute>
+            </optional>
             <text/>
           </element>
         </oneOrMore>
       </element>
       <optional>  
         <element name="undefined_value">  
-          <text/>
-        </element>
-      </optional>    
-      <optional>
-        <element name="default_locale">  
           <text/>
         </element>
       </optional>    

@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.9 2004-08-25 07:17:56 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.10 2004-08-25 08:01:05 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -91,8 +91,6 @@ public abstract class AbstractI18n implements I18n
 	{
 		this.logger = logger;
 		undefinedValue = config.getChild("undefined_value").getValue(DEFAULT_UNDEFINED_VALUE);
-		defaultLocale = StringUtils.
-			getLocale(config.getChild("default_locale").getValue(DEFAULT_LOCALE));
 		useDefaultLocale = config.getChild("use_default_locale").
 			getValueAsBoolean(DEFAULT_USE_DEFAULT_LOCALE);
 		useKeyIfUndefined = config.getChild("use_key_if_undefined").
@@ -106,11 +104,20 @@ public abstract class AbstractI18n implements I18n
 			for(int i=0; i<locales.length; i++)
 			{
 			    supportedLocales[i] = StringUtils.getLocale(locales[i].getValue());
+			    if(locales[i].getAttributeAsBoolean("default", false))
+			    {
+			        defaultLocale = supportedLocales[i];
+			    }
+			}
+			if(defaultLocale == null && supportedLocales.length > 0)
+			{
+			    defaultLocale = supportedLocales[0];
 			}
 		}
 		else
 		{
 		    supportedLocales = new Locale[]{ StringUtils.getLocale(DEFAULT_LOCALE) };
+		    defaultLocale = StringUtils.getLocale(DEFAULT_LOCALE);
 		}
 	}
 	
