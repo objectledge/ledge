@@ -39,7 +39,7 @@ import java.util.Set;
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.9 2005-02-21 13:51:22 zwierzem Exp $
+ * @version $Id: PageTool.java,v 1.10 2005-03-24 14:28:33 zwierzem Exp $
  */
 public class PageTool
 {
@@ -69,14 +69,14 @@ public class PageTool
     /** Contains {@link Meta} objects. */
     protected ArrayList httpEquivMetas = new ArrayList();
 
-    /** Parent of LinkTool used to generate resource links. */
+    /** Parent of LinkTool used to generate content resource links. */
     protected LinkTool parentLinkTool;
-	/** LinkTool used to generate resource links. */
+	/** LinkTool used to generate content resource links. */
 	protected LinkTool linkTool;
 
 	/** 
 	 * Component constructor.
-	 * @param parentLinkTool the link tool used to generate links to page resources.
+	 * @param parentLinkTool the link tool used to generate links to page content resources.
 	 */
 	public PageTool(LinkTool parentLinkTool)
 	{
@@ -158,18 +158,18 @@ public class PageTool
     /**
      * This class represents basic property of tags which have an URI reference. It conforms to the
      * {@link Object#equals(Object)} and {@link Object#hashCode()} contracts to avoid multiple links
-     * to the same resource.
+     * to the same content resource.
      */
-    public class ResourceLink
+    public class ContentLink
     {
-		/** Relative URI of a linked resource. */ 
+		/** Relative URI of a linked content resource. */ 
         protected String href;
 
 		/**
-		 * Constructs a resource link. 
-		 * @param href relative URI of a linked resource 
+		 * Constructs a content resource link. 
+		 * @param href relative URI of a linked content resource 
 		 */
-        public ResourceLink(String href)
+        public ContentLink(String href)
         {
             this.href = href;
         }
@@ -187,10 +187,10 @@ public class PageTool
 		 */
 		public boolean equals(Object o)
 		{
-			return (o instanceof ResourceLink) && ((ResourceLink)o).href.equals(this.href);
+			return (o instanceof ContentLink) && ((ContentLink)o).href.equals(this.href);
 		}
 		
-		/** Generates a link for this resource link.
+		/** Generates a link for this content resource link.
 		 * @return generated link string (relative URI).
 		 */
         public String toString()
@@ -218,15 +218,15 @@ public class PageTool
      */
     public void addStyleLink(String href, int priority)
     {
-        addStyleLink(new ResourceLink(href), priority);
+        addStyleLink(new ContentLink(href), priority);
     }
 
     /** 
      * Adds a style link with a given priority.
-     * @param resLink a resource link to be added
+     * @param resLink a content resource link to be added
      * @param priority priority of a style link
      */
-    protected void addStyleLink(ResourceLink resLink, int priority)
+    protected void addStyleLink(ContentLink resLink, int priority)
     {
         if(!styleLinksSet.contains(resLink))
         {
@@ -262,10 +262,10 @@ public class PageTool
      */
     public class StyleLink
     {
-        private ResourceLink resLink;
+        private ContentLink resLink;
         private int priority;
 
-        StyleLink(ResourceLink resLink, int priority)
+        StyleLink(ContentLink resLink, int priority)
         {
             this.resLink = resLink;
             this.priority = priority;
@@ -308,7 +308,7 @@ public class PageTool
      */
     public void addScriptLink(String src, String charset)
     {
-        this.addScriptLink(new ResourceLink(src), charset);
+        this.addScriptLink(new ContentLink(src), charset);
     }
 
     /**
@@ -316,7 +316,7 @@ public class PageTool
      * @param srcLink a link to the script source
      * @param charset charset of a linked source file
      */
-    protected void addScriptLink(ResourceLink srcLink, String charset)
+    protected void addScriptLink(ContentLink srcLink, String charset)
     {
         if(!scriptLinksSet.contains(srcLink))
         {
@@ -346,10 +346,10 @@ public class PageTool
      */
     public class ScriptLink
     {
-        private ResourceLink resLink;
+        private ContentLink resLink;
         private String charset;
 
-        ScriptLink(ResourceLink srcLink, String charset)
+        ScriptLink(ContentLink srcLink, String charset)
         {
             this.resLink = srcLink;
             if(charset == null)
