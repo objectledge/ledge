@@ -49,7 +49,7 @@ import org.picocontainer.extras.ImplementationHidingComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.8 2004-01-16 10:23:14 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.9 2004-01-19 13:12:26 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -79,7 +79,7 @@ public class LoggerFactory
             ComponentAdapter adapter = createLoggerAdapter(marker, logger);
             loggerContainer.registerComponent(adapter);
         }
-        return (Logger)loggerContainer.getComponentInstance(key);
+        return (Logger)loggerContainer.getComponentInstance(marker);
     }
     
     /**
