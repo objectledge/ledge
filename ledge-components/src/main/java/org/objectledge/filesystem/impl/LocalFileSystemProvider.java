@@ -52,7 +52,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * considererd to be relative the the running user's current directory.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.3 2003-12-03 14:14:13 mover Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.4 2003-12-04 12:35:10 mover Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -206,7 +206,10 @@ public class LocalFileSystemProvider
     public void mkdirs(String path) throws IOException
     {
 		File file = getFile(path);
-		file.mkdirs();
+		if(!file.mkdirs())
+		{
+			throw new IOException("failed to create "+path); 
+		}
     }
 
     /**
@@ -215,7 +218,10 @@ public class LocalFileSystemProvider
     public void delete(String path) throws IOException
     {
 		File file = getFile(path);
-		file.delete();
+		if(!file.delete())
+		{
+			throw new IOException("failed to delete "+path);
+		}
     }
 
     /**
@@ -225,7 +231,10 @@ public class LocalFileSystemProvider
     {
 		File fromFile = getFile(from);
 		File toFile = getFile(to);
-		fromFile.renameTo(toFile);
+		if(!fromFile.renameTo(toFile))
+		{
+			throw new IOException("failed to rename "+from+" to "+to);
+		}
     }
 
     /**
