@@ -36,7 +36,6 @@ import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
