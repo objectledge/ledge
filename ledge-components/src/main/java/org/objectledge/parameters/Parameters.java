@@ -5,7 +5,7 @@ package org.objectledge.parameters;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.1 2003-11-27 12:05:34 pablo Exp $
+ * @version $Id: Parameters.java,v 1.2 2003-11-27 12:31:22 pablo Exp $
  */
 public interface Parameters
 {
@@ -97,14 +97,13 @@ public interface Parameters
     public long getLong(String name) throws NumberFormatException;
 
 	/**
-	 * Return the parameter values as long array. 
+	 * Return the parameter as array of long values. 
 	 * 
 	 * @param name the name of the parameter.
 	 * @return the array of parameter values.
 	 * @throws NumberFormatException.
 	 */
 	public long[] getLongs(String name) throws NumberFormatException;
-
 
     /**
      * Return the parameter with specified name. 
@@ -197,6 +196,14 @@ public interface Parameters
      * @param value the parameter value.
      */
     public void add(String name, String value);
+    
+	/**
+	 * Add the parameter.
+	 *
+	 * @param name the parameter name.
+	 * @param value the parameter values.
+	 */
+	public void add(String name, String[] values);
 
     /**
      * Add the parameter.
