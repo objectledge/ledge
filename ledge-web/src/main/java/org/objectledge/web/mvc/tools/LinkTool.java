@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.18 2004-12-23 07:18:14 rafal Exp $
+ * @version $Id: LinkTool.java,v 1.19 2004-12-27 10:46:24 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -75,20 +75,17 @@ public class LinkTool
     private static final org.objectledge.encodings.URLEncoder QUERY_STRING_ENCODER =
         new org.objectledge.encodings.URLEncoder();
     
-	/** link tool factory. */
-	private LinkToolFactory factory;
-	
     /** configuration. */
-    private LinkTool.Configuration config;
+    protected LinkTool.Configuration config;
     
 	/** the http context */
-	private HttpContext httpContext;
+    protected HttpContext httpContext;
 
     /** the mvc context */
-    private MVCContext mvcContext;
+    protected MVCContext mvcContext;
 
     /** the request parameters */
-	private RequestParameters requestParameters;
+    protected RequestParameters requestParameters;
 	
 	/** view, null for current request parameters view value, empty string for unset value */
 	private String view;
@@ -655,6 +652,8 @@ public class LinkTool
 		return target;
 	}
 
+    // start toString() - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    
+    
     /**
      * Produces a String representation of this link.
      * 
@@ -687,10 +686,11 @@ public class LinkTool
             {
                 sb.append(httpContext.getRequest().getServletPath());
 
-                String[] keys = parameters.getParameterNames();
-                appendPathInfo(sb, keys);
-                appendPathInfoSuffix(sb, pathInfoSuffix);
-                appendQueryString(sb, keys);
+                Parameters parametersTmp = getParameters(); 
+                String[] keys = parametersTmp.getParameterNames();
+                appendPathInfo(sb, keys, parametersTmp);
+                appendPathInfoSuffix(sb);
+                appendQueryString(sb, keys, parametersTmp);
             }
             
             if (fragment != null)
@@ -714,40 +714,113 @@ public class LinkTool
         ///CLOVER:ON
     }
 
+    /**
+     * Allows subclasses to override parameters rendered in {@link #toString()} method.
+     * 
+     * <p>WARN: This implementation only returns a reference to this <code>LinkTool</code>'s
+     * parameters field. If the subclass needs to change the rendered parameters, it should copy
+     * the parameters object.</p> 
+     * 
+     * @return the overriden parameters container
+     */
+    protected Parameters getParameters()
+    {
+        return parameters;
+    }
+    
     private void appendServerPart(StringBuffer sb)
     {
         if (showProtocolName)
         {
-            sb.append(protocolName);
+            final String protocolNameTmp = getProtocolName();
+            sb.append(protocolNameTmp);
             sb.append("://");
-            sb.append(httpContext.getRequest().getServerName());
-            if (((protocolName.length() == 0 || protocolName.equals("http")) && port != 80)
-                || (protocolName.equals("https") && port != 443)
-                || (protocolName.length() > 0 && 
-                   !protocolName.equals("https") && !protocolName.equals("http")))
+            sb.append(getServerName());
+            final int portTmp = getPort();
+            if (mustAppendPort(protocolNameTmp, portTmp))
             {
-                sb.append(':').append(port);
+                sb.append(':').append(portTmp);
             }
         }
     }
 
+    /**
+     * Allows subclasses to override protocol name rendered in {@link #toString()} method.
+     * 
+     * @return the overriden protocol name
+     */
+    protected String getProtocolName()
+    {
+        return protocolName;
+    }
+
+    /**
+     * Allows subclasses to override server name rendered in {@link #toString()} method.
+     * 
+     * @return the overriden server name
+     */
+    protected String getServerName()
+    {
+        return httpContext.getRequest().getServerName();
+    }
+
+    /**
+     * Allows subclasses to override check for port number inclusion requirement in
+     * {@link #toString()} method.
+     * This implementation returns <code>true</code> if port number is different from default
+     * protocol port (default port number for http is 80, for https 443). 
+     * 
+     * @param protocolNameTmp appended protocol name
+     * @param portTmp appended (or not) port number
+     * @return <code>true</code> if port number must be appended.
+     */
+    protected boolean mustAppendPort(String protocolNameTmp, int portTmp)
+    {
+        return ((protocolNameTmp.length() == 0 || protocolNameTmp.equals("http")) && portTmp != 80)
+               || (protocolNameTmp.equals("https") && portTmp != 443)
+               || (protocolNameTmp.length() > 0
+                   && !protocolNameTmp.equals("https") && !protocolNameTmp.equals("http"));
+    }
+
+    /**
+     * Allows subclasses to override port number rendered in {@link #toString()} method.
+     * 
+     * @return the overriden port number
+     */
+    protected int getPort()
+    {
+        return port;
+    }
+    
+    
     private void appendContentLink(StringBuffer sb)
         throws UnsupportedEncodingException
     {
-        if (path.length() > 0)
+        final String pathTmp = getPath();
+        if (pathTmp.length() > 0)
         {
-            if (path.charAt(0) != '/')
+            if (pathTmp.charAt(0) != '/')
             {
                 sb.append('/');
             }
-            sb.append(QUERY_STRING_ENCODER.encodeQueryStringValue(path, PARAMETER_ENCODING));
+            sb.append(QUERY_STRING_ENCODER.encodeQueryStringValue(pathTmp, PARAMETER_ENCODING));
         }
     }
+    
+    /**
+     * Allows subclasses to override static content path rendered in {@link #toString()} method.
+     * 
+     * @return the overriden content path
+     */
+    protected String getPath()
+    {
+        return path;
+    }
 
-    private void appendPathInfo(StringBuffer sb, String[] keys)
+    private void appendPathInfo(StringBuffer sb, String[] keys, Parameters parametersTmp)
         throws UnsupportedEncodingException
     {
-        String outView = view; 
+        String outView = getView(); 
         if (outView == null) // override with current view
         {
             outView = mvcContext.getView();
@@ -762,7 +835,7 @@ public class LinkTool
             String key = keys[i];
             if (config.pathinfoParameterNames.contains(key))
             {
-                String[] values = parameters.getStrings(key);
+                String[] values = parametersTmp.getStrings(key);
                 for (int j = 0; j < values.length; j++)
                 {
                     sb.append('/').append(URLEncoder.encode(key, PARAMETER_ENCODING));
@@ -771,30 +844,53 @@ public class LinkTool
             }
         }
     }
+    
+    /**
+     * Allows subclasses to override view name rendered in {@link #toString()} method.
+     * 
+     * @return the overriden view name or <code>null</code> if it should be replaced with view
+     *  from current request.
+     */
+    protected String getView()
+    {
+        return view;
+    }
 
-    private void appendPathInfoSuffix(StringBuffer sb, String pathInfoSuffix)
+    private void appendPathInfoSuffix(StringBuffer sb)
         throws UnsupportedEncodingException
     {
-        if(pathInfoSuffix != null && pathInfoSuffix.length() > 0)
+        final String pathInfoSuffixTmp = getPathInfoSuffix();
+        if(pathInfoSuffixTmp != null && pathInfoSuffixTmp.length() > 0)
         {
-            if(pathInfoSuffix.charAt(0) != '/')
+            if(pathInfoSuffixTmp.charAt(0) != '/')
             {
                 sb.append('/');    
             }
-            sb.append(URLEncoder.encode(pathInfoSuffix, PARAMETER_ENCODING));
+            sb.append(URLEncoder.encode(pathInfoSuffixTmp, PARAMETER_ENCODING));
         }
     }
     
-    private void appendQueryString(StringBuffer sb, String[] keys)
+    /**
+     * Allows subclasses to override pathinfo suffix rendered in {@link #toString()} method.
+     * 
+     * @return the overriden pathinfo suffix
+     */
+    protected String getPathInfoSuffix()
+    {
+        return pathInfoSuffix;
+    }
+    
+    private void appendQueryString(StringBuffer sb, String[] keys, Parameters parametersTmp)
         throws UnsupportedEncodingException
     {
         String querySeparator = "?";
-        String querySeparator2 = config.queryStringSeparator;
+        final String querySeparator2 = config.queryStringSeparator;
 
-        if (!action.equals(""))
+        String actionTmp = getAction();
+        if (actionTmp != null && actionTmp.length() > 0)
         {
             sb.append(querySeparator);
-            sb.append(config.actionToken).append('=').append(action);
+            sb.append(config.actionToken).append('=').append(actionTmp);
             querySeparator = querySeparator2;
         }
         
@@ -803,7 +899,7 @@ public class LinkTool
             String key = keys[i];
             if (!config.pathinfoParameterNames.contains(key))
             {
-                String[] values = parameters.getStrings(key);
+                String[] values = parametersTmp.getStrings(key);
                 for (int j = 0; j < values.length; j++)
                 {
                     sb.append(querySeparator);
@@ -818,6 +914,18 @@ public class LinkTool
             }
         }
     }
+    
+    /**
+     * Allows subclasses to override action name rendered in {@link #toString()} method.
+     * 
+     * @return the overriden action name
+     */
+    protected String getAction()
+    {
+        return action;
+    }
+
+    // end toString() - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    
     
 	/**
 	 * Clone the given LinkTool.
