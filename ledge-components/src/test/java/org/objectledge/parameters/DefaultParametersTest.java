@@ -30,6 +30,8 @@ package org.objectledge.parameters;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -90,6 +92,27 @@ public class DefaultParametersTest extends TestCase
         {
             //expected
         }
+        try
+        {
+            params = new DefaultParameters((String)null);
+            fail("Should throw IllegalArgumentException");
+        }
+        catch (IllegalArgumentException e)
+        {
+            //expected
+        }
+        
+        
+        String source = "foo=bar,foo\nbar=foo\n";
+        params = new DefaultParameters(source);
+        assertEquals(params.get("bar","bar"),"foo");
+        assertEquals(params.getParameterNames().length,2);
+        
+        source = "foo=bar,f\\\noo\nbar=foo\n";
+        params = new DefaultParameters(source);
+        assertEquals(params.get("bar","bar"),"foo");
+        assertEquals(params.getParameterNames().length,2);
+        
     }
 
     /**
@@ -459,6 +482,7 @@ public class DefaultParametersTest extends TestCase
         params.set("foo", "bar");
         params.set("foo", "foo");
         params.remove("foo", "bar");
+        params.remove("bar", "foo");
         assertEquals(params.isDefined("foo"), true);
         assertEquals(params.get("foo", "bar"), "foo");
     }
@@ -498,6 +522,35 @@ public class DefaultParametersTest extends TestCase
         assertEquals(params.isDefined("foo"), true);
         assertEquals(params.getFloat("foo", 1L), 2L, 2L);
     }
+
+    /**
+     * Test for void remove(Set)
+     */
+    public void testRemoveSet()
+    {
+        params.set("foo", "bar");
+        params.set("bar", "foo");
+        Set set = new HashSet();
+        set.add("foo");
+        params.remove(set);
+        assertEquals(params.isDefined("foo"), false);
+        assertEquals(params.isDefined("bar"),true);
+    }
+
+    /**
+     * Test for void remove(Set)
+     */
+    public void testRemoveExcept()
+    {
+        params.set("foo", "bar");
+        params.set("bar", "foo");
+        Set set = new HashSet();
+        set.add("foo");
+        params.removeExcept(set);
+        assertEquals(params.isDefined("bar"), false);
+        assertEquals(params.isDefined("foo"),true);
+    }
+
 
     /**
      * Test for void set(String, String)
@@ -767,7 +820,15 @@ public class DefaultParametersTest extends TestCase
     {
         String source = "foo=bar,foo=foo,bar=foo\n";
         params = new DefaultParameters(source);
-        System.out.println("TEST:"+params.toString());
+        assertEquals(params.toString(),source);
+        
+        source = "foo=bar,foo\nbar=foo\n";
+        params = new DefaultParameters(source);
+        assertEquals(params.toString(),source);
+        
+        source = "foo=ba\\,r,foo\nbar=foo\n";
+        params = new DefaultParameters(source);
+        System.out.println("WYNIK:"+params.toString());
         assertEquals(params.toString(),source);
     }
 
