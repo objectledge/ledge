@@ -28,79 +28,97 @@
 
 package org.objectledge.web;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.security.Principal;
+import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.objectledge.templating.Template;
 
 /**
- * The web context contains all needed information about http request.
+ * The pieline context contains all needed information for pipeline processing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.2 2003-12-23 23:40:23 pablo Exp $
+ * @version $Id: PipelineContext.java,v 1.1 2003-12-23 23:40:23 pablo Exp $
  */
-public interface HttpContext
+public interface PipelineContext
 {
-	/** the key that points the http context is thread context. */ 
-	public static final String CONTEXT_KEY = "objectledge.web.http_context";
+	/** key to store this context in thread context */
+	public static final String CONTEXT_KEY = "objectledge.web.pipeline_context";
 	
 	/**
-     * Get the servlet request.
-     * 
-     * @return the http request
-     */
-    public HttpServletRequest getRequest();
-    
-	/**
-	 * Get the servlet response.
+	 * Returns the view Template.
 	 *
-	 * @return the http response.
+	 * @return the Screen Template.
 	 */
-	public HttpServletResponse getResponse();
+	public Template getScreenTemplate();
 	
 	/**
-	 * Sends a temporary redirect response to new location
+	 * Sets the Screen Template.
 	 *
-	 * @param location the redirect location URL.
-	 * @throws java.io.IOException If an input or output exception occurs.
+	 * @param template the Screen Template.
 	 */
-	public void sendRedirect(String location)
-		throws IOException;
-		
-	/**
-	 * Wrapping method for writing some data to response output stream.
-	 *  
-	 * @return an OutputStream.
-	 * @throws IOException if happens.
-	 */
-	public OutputStream getOutputStream()
-		throws IOException;
-
-	/**
-	 * Sets the direct response flag.
-	 */
-	public void setDirectResponse();
-
-	/**
-	 * Returns the direct response flag.
-	 *
-	 * @return the direct response flag.
-	 */
-	public boolean getDirectResponse();
+	public void setScreenTemplate(Template template);
 	
 	/**
-	 * Returns the content type.
+	 * Returns the locale.
 	 *
-	 * @return the content type.
+	 * @return the locale
 	 */
-	public String getContentType();
+	public Locale getLocale();
 
 	/**
-	 * Sets the content type.
+	 * Sets the locale.
 	 *
-	 * @param type the content type.
+	 * @param locale the locale.
 	 */
-	public void setContentType(String type);
+	public void setLocale(Locale locale);
+
+	/**
+	 * Returns the encoding.
+	 *
+	 * @return the encoding.
+	 */
+	public String getEncoding();
+
+	/**
+	 * Sets the encoding.
+	 *
+	 * @param encoding the encoding.
+	 */
+	public void setEncoding(String encoding);
+	
+	/**
+	 * Returns the media.
+	 *
+	 * @return the media.
+	 */
+	public String getMedia();
+
+	/**
+	 * Sets the media.
+	 *
+	 * @param media the media.
+	 */
+	public void setMedia(String media);
+
+	/**
+	 * Returns the user performing the request.
+	 *
+	 * @return the user.
+	 */
+	public Principal getUserPrincipal();
+
+	/**
+	 * Checks whether user is authenticated by system. 
+	 * 
+	 * @return <code>true</code> if the current user is not an anounymous.
+	 */
+	public boolean isUserAuthenticated();
+
+	/**
+	 * Sets the current authenticated user.
+	 *
+	 * @param user the current authenticated user.
+	 * @param authenticated <code>true</code> if named user is authenticated.
+	 */
+	public void setUserPrincipal(Principal user, boolean authenticated);
 }

@@ -28,22 +28,19 @@
 
 package org.objectledge.web;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
+import java.util.Locale;
 
 import org.objectledge.context.Context;
-
+import org.objectledge.templating.Template;
 
 /**
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContextImpl.java,v 1.2 2003-12-23 23:40:23 pablo Exp $
+ * @version $Id: PipelineContextImpl.java,v 1.1 2003-12-23 23:40:23 pablo Exp $
  */
-public class HttpContextImpl implements HttpContext
+public class PipelineContextImpl implements PipelineContext
 {
 	/**
 	 *  Usefull method to retrieve http context from context.
@@ -51,103 +48,135 @@ public class HttpContextImpl implements HttpContext
 	 * @param context the context.
 	 * @return the http context.
 	 */
-	public static HttpContext retrieve(Context context)
+	public static PipelineContext retrieve(Context context)
 	{
-		return (HttpContext)context.getAttribute(CONTEXT_KEY);
+		return (PipelineContext)context.getAttribute(CONTEXT_KEY);
 	}
+
 	
-	/** http request */
-	private HttpServletRequest request;
-	
-	/** http response */
-	private HttpServletResponse response;
-	
-	/** direct response flag */
-	private boolean directResponse;
-	
-	/** response content type */
-	private String contentType;
-	
+	/** The screen template. */
+	protected Template screenTemplate;
+
+	/** The Action for this request */
+	//protected Action action;
+
+	/** the locale */
+	protected Locale locale;
+
+	/** the encoding */
+	protected String encoding;
+
+	/** the media */
+	protected String media;
+
+    /** the user. */
+	protected Principal user;
+
+    /** is the user authenticated */
+	protected boolean authenticated;
+
+	/** The name of the view paramter. */
+    protected String viewToken;
+	 
 	/**
-	 * Construct new http context.
-	 * 
-	 * @param request the http request.
-	 * @param response the http response.
+	 * Construct new pipeline context.
 	 */
-	public HttpContextImpl(HttpServletRequest request, HttpServletResponse response)
+	public PipelineContextImpl()
 	{
-		this.request = request;
-		this.response = response;
-		directResponse = false;
-		contentType = request.getContentType();
+		user = null;
+		authenticated = false;
+		// TODO load some default values - but from?
+		locale = new Locale("pl","PL");
+		encoding = "ISO-8859-2";
+		viewToken = "Default";
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 */
+	public Template getScreenTemplate()
+	{
+		return screenTemplate;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setScreenTemplate(Template template)
+	{
+		screenTemplate = template;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Locale getLocale()
+	{
+		return locale;
+	}
+
+    /**
      * {@inheritDoc}
      */
-    public HttpServletRequest getRequest()
+    public void setLocale(Locale locale)
     {
-    	return request;
+    	this.locale = locale;
     }
-    
-	/**
-	 * {@inheritDoc}
-	 */
-	public HttpServletResponse getResponse()
-	{
-		return response;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void sendRedirect(String location)
-		throws IOException
-	{
-		directResponse = true;
-		response.sendRedirect(location);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public OutputStream getOutputStream()
-		throws IOException
-	{
-		directResponse = true;
-		response.setContentType(getContentType());
-		return response.getOutputStream();
-	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setDirectResponse()
+    public String getEncoding()
 	{
-		directResponse = true;
+		return encoding;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean getDirectResponse()
-	{
-		return directResponse;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void setEncoding(String encoding)
+    {
+    	this.encoding = encoding;
+    }
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getContentType()
-	{
-		return contentType;
-	}
+    public String getMedia()
+    {
+    	return media;
+    }
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setContentType(String type)
-	{
-		contentType = type;
-	}
+    public void setMedia(String media)
+    {
+    	this.media = media;
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public Principal getUserPrincipal()
+    {
+    	return user;
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public boolean isUserAuthenticated()
+    {
+    	return authenticated;
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public void setUserPrincipal(Principal user, boolean authenticated)
+    {
+    	this.user = user;
+    	this.authenticated = authenticated;
+    }
 }

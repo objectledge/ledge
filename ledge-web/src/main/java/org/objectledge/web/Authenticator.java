@@ -28,79 +28,56 @@
 
 package org.objectledge.web;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.security.Principal;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.objectledge.authentication.Authentication;
+import org.objectledge.context.Context;
 
 /**
- * The web context contains all needed information about http request.
+ * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.2 2003-12-23 23:40:23 pablo Exp $
+ * @version $Id: Authenticator.java,v 1.1 2003-12-23 23:40:23 pablo Exp $
  */
-public interface HttpContext
+public class Authenticator implements Runnable, WebConstants
 {
-	/** the key that points the http context is thread context. */ 
-	public static final String CONTEXT_KEY = "objectledge.web.http_context";
+	/** the context */
+	private Context context;
+	
+	/** the authentication component */
+	private Authentication authentication;
 	
 	/**
-     * Get the servlet request.
-     * 
-     * @return the http request
+	 * Constructor
+	 * 
+	 * @param context the context.
+	 */
+	public Authenticator(Context context, Authentication authentication)
+	{
+		this.context = context;		
+		this.authentication = authentication;
+	}
+	
+    /**
+     * Run the pipeline valve - authenticate user.
      */
-    public HttpServletRequest getRequest();
-    
-	/**
-	 * Get the servlet response.
-	 *
-	 * @return the http response.
-	 */
-	public HttpServletResponse getResponse();
-	
-	/**
-	 * Sends a temporary redirect response to new location
-	 *
-	 * @param location the redirect location URL.
-	 * @throws java.io.IOException If an input or output exception occurs.
-	 */
-	public void sendRedirect(String location)
-		throws IOException;
-		
-	/**
-	 * Wrapping method for writing some data to response output stream.
-	 *  
-	 * @return an OutputStream.
-	 * @throws IOException if happens.
-	 */
-	public OutputStream getOutputStream()
-		throws IOException;
-
-	/**
-	 * Sets the direct response flag.
-	 */
-	public void setDirectResponse();
-
-	/**
-	 * Returns the direct response flag.
-	 *
-	 * @return the direct response flag.
-	 */
-	public boolean getDirectResponse();
-	
-	/**
-	 * Returns the content type.
-	 *
-	 * @return the content type.
-	 */
-	public String getContentType();
-
-	/**
-	 * Sets the content type.
-	 *
-	 * @param type the content type.
-	 */
-	public void setContentType(String type);
+    public void run()
+    {
+    	HttpContext httpContext = HttpContextImpl.retrieve(context);
+		PipelineContext pipelineContext = PipelineContextImpl.retrieve(context);
+    	Principal principal = (Principal)httpContext.getRequest().
+			getSession().getAttribute(PRINCIPAL_SESSION_KEY);
+		Principal anonymous = authentication.getAnonymousUser();
+		boolean authenticated = false;
+		if(principal == null)
+		{
+			principal = anonymous;
+		}
+		else
+		{
+			authenticated = !principal.equals(anonymous);
+		}
+		pipelineContext.setUserPrincipal(principal, authenticated);
+    	httpContext.getRequest().getSession().setAttribute(PRINCIPAL_SESSION_KEY, principal);
+    }
 }

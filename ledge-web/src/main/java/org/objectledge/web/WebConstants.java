@@ -28,79 +28,21 @@
 
 package org.objectledge.web;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-
 /**
- * The web context contains all needed information about http request.
- *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.2 2003-12-23 23:40:23 pablo Exp $
+ * The constants used by web components 
  */
-public interface HttpContext
+public interface WebConstants
 {
-	/** the key that points the http context is thread context. */ 
-	public static final String CONTEXT_KEY = "objectledge.web.http_context";
-	
-	/**
-     * Get the servlet request.
-     * 
-     * @return the http request
-     */
-    public HttpServletRequest getRequest();
+	/** Session key for the current user. */
+	public static final String PRINCIPAL_SESSION_KEY =
+		"org.objectledge.web.Principal";
+
+	/** Session key for the current locale. */
+	public static final String LOCALE_SESSION_KEY = 
+		"org.objectledge.web.Locale";
     
-	/**
-	 * Get the servlet response.
-	 *
-	 * @return the http response.
-	 */
-	public HttpServletResponse getResponse();
-	
-	/**
-	 * Sends a temporary redirect response to new location
-	 *
-	 * @param location the redirect location URL.
-	 * @throws java.io.IOException If an input or output exception occurs.
-	 */
-	public void sendRedirect(String location)
-		throws IOException;
-		
-	/**
-	 * Wrapping method for writing some data to response output stream.
-	 *  
-	 * @return an OutputStream.
-	 * @throws IOException if happens.
-	 */
-	public OutputStream getOutputStream()
-		throws IOException;
-
-	/**
-	 * Sets the direct response flag.
-	 */
-	public void setDirectResponse();
-
-	/**
-	 * Returns the direct response flag.
-	 *
-	 * @return the direct response flag.
-	 */
-	public boolean getDirectResponse();
-	
-	/**
-	 * Returns the content type.
-	 *
-	 * @return the content type.
-	 */
-	public String getContentType();
-
-	/**
-	 * Sets the content type.
-	 *
-	 * @param type the content type.
-	 */
-	public void setContentType(String type);
+	/** Session key for the current encoding. */ 
+	public static final String ENCODING_SESSION_KEY =
+		"org.objectledge.web.Encoding";
 }
+
