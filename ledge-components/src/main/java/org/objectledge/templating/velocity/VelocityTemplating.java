@@ -51,7 +51,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.11 2004-03-26 14:04:35 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.12 2004-03-28 09:34:56 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -103,7 +103,7 @@ public class VelocityTemplating implements Templating, LogSystem
 					{
 						value = properties[i].getValue();
 					}
-					engine.setProperty(name, value);
+					engine.addProperty(name, value);
 				}
             }
         }
