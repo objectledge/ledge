@@ -50,7 +50,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.7 2004-01-05 16:46:11 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.8 2004-01-15 11:45:21 fil Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -205,7 +205,7 @@ public class VelocityTemplating implements Templating, LogSystem
     /**
      * {@inheritDoc}
      */
-    public void evaluate(TemplatingContext context, Reader source, Writer target, String logTag)
+    public void merge(TemplatingContext context, Reader source, Writer target, String logTag)
     	throws MergingException
     {
         boolean success = false;

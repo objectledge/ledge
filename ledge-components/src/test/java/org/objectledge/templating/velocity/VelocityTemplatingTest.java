@@ -185,7 +185,7 @@ public class VelocityTemplatingTest extends TestCase
 			context.put("foo","bar");
 			StringWriter target = new StringWriter();
 			StringReader source = new StringReader("foo $foo");
-			templating.evaluate(context,source,target,"test"); 
+			templating.merge(context,source,target,"test"); 
 			assertEquals("foo bar",target.toString());
 		}
 		catch(MergingException e)

@@ -36,7 +36,7 @@ import java.io.Writer;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Templating.java,v 1.4 2003-12-29 13:32:06 fil Exp $
+ * @version $Id: Templating.java,v 1.5 2004-01-15 11:45:20 fil Exp $
  */
 ///CLOVER:OFF
 public interface Templating
@@ -75,7 +75,7 @@ public interface Templating
 	 * @param name the template name for logging purposes.
 	 * @throws MergingException if something goes wrong.
 	 */
-	public void evaluate(TemplatingContext context, Reader source, 
+	public void merge(TemplatingContext context, Reader source, 
 						  Writer target, String name) 
 		throws MergingException;
 		
