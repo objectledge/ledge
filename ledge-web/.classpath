@@ -9,5 +9,10 @@
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
     <classpathentry kind="src" path="/dna"/>
     <classpathentry kind="var" path="MAVEN_REPO/httpunit/jars/httpunit-1.5.3.jar"/>
+    <classpathentry kind="src" path="/ledge-container"/>
+    <classpathentry kind="src" path="/nano"/>
+    <classpathentry kind="var" path="MAVEN_REPO/nekohtml/jars/nekohtml-0.8.1.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xercesImpl-2.6.0.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xmlParserAPIs-2.6.0.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
