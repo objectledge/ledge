@@ -28,10 +28,10 @@
 package org.objectledge.web.mvc.builders;
 
 /**
- *
+ * Thrown when a builder encunters a problem in rendering.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildException.java,v 1.1 2004-01-15 09:40:28 fil Exp $
+ * @version $Id: BuildException.java,v 1.2 2004-01-15 10:30:31 fil Exp $
  */
 ///CLOVER:OFF
 public class BuildException extends Exception

@@ -33,18 +33,14 @@ import org.objectledge.templating.Template;
  * Contains a pair of view construction elements - a builder and template.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ViewPair.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
+ * @version $Id: ViewPair.java,v 1.2 2004-01-15 10:30:31 fil Exp $
  */
 public class ViewPair
 {
-	/**
-	 * Builder bound by this pair.
-	 */
+	/** Builder bound by this pair. */
 	private Builder builder;
 	
-	/**
-	 * Template bound by this pair.
-	 */
+	/** Template bound by this pair. */
 	private Template template;
 	
 	/**

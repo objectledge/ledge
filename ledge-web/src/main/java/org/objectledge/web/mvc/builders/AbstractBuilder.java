@@ -36,17 +36,15 @@ import org.objectledge.templating.TemplatingContext;
  * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.3 2004-01-15 09:40:28 fil Exp $
+ * @version $Id: AbstractBuilder.java,v 1.4 2004-01-15 10:30:31 fil Exp $
  */
 public abstract class AbstractBuilder implements Builder
 {
-	/**
-	 * Application context used by this builder instance.
-	 */
+	/** Application context used by this builder instance. */
 	protected Context context;
 	
 	/**
-	 * Builders only need context.
+	 * Constructs a builder instance.
 	 * 
 	 * @param context application context for use by this builder.
 	 */
@@ -67,7 +65,7 @@ public abstract class AbstractBuilder implements Builder
 	 * {@inheritDoc}
 	 */
     public String build(Template template, String embeddedBuildResults)
-    throws BuildException
+        throws BuildException
     {
     	try
     	{
