@@ -44,13 +44,18 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.3 2003-12-03 15:13:14 mover Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.4 2003-12-05 08:53:09 fil Exp $
  */
 public class LoggingConfigurator
 {
 
     /**
+     * Creates a new LoggingConfigurator.
      * 
+     * @param configurationFactory the configuration factory.
+     * @throws ParserConfigurationException if the JAXP system is not configured properly.
+     * @throws IOException if the configuration cannot be loaded.
+     * @throws SAXException if the configuration cannot be parsed.
      */
     public LoggingConfigurator(ConfigurationFactory configurationFactory)
         throws ParserConfigurationException, IOException, SAXException

@@ -50,7 +50,7 @@ import org.picocontainer.extras.ImplementationHidingComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.2 2003-12-03 15:13:14 mover Exp $
+ * @version $Id: LoggerFactory.java,v 1.3 2003-12-05 08:53:09 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -103,7 +103,8 @@ public class LoggerFactory
         else
         {                
             ComponentAdapter adapter = loggerContainer.findComponentAdapter(marker);
-            ImplementationHidingComponentAdapter proxyAdapter = (ImplementationHidingComponentAdapter)
+            ImplementationHidingComponentAdapter proxyAdapter = 
+                (ImplementationHidingComponentAdapter)
                 ((DecoratingComponentAdapter)adapter).getDelegate();
             proxyAdapter.hotSwap(logger);
         }
@@ -142,7 +143,12 @@ public class LoggerFactory
     
     // implementation ///////////////////////////////////////////////////////////////////////////
 
-
+    /**
+     * Returns a marker for the component (used as key in the logger container).
+     * 
+     * @param key reqesting component key.
+     * @return key for the logger.
+     */
     protected String getComponentMarker(Object key)
     {
         if(key instanceof Class)
@@ -155,6 +161,13 @@ public class LoggerFactory
         }
     }
     
+    /**
+     * Creates a new logger adapter.
+     * 
+     * @param marker the marker for the logger.
+     * @param logger the logger object.
+     * @return a component adapter.
+     */
     protected ComponentAdapter createLoggerAdapter(String marker, Logger logger)
     {
         ComponentAdapter adapter = new InstanceComponentAdapter(marker, logger);
