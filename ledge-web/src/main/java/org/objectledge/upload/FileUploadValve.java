@@ -29,9 +29,9 @@ import org.objectledge.web.parameters.RequestParameters;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.1 2004-01-14 13:29:45 fil Exp $
+ * @version $Id: FileUploadValve.java,v 1.2 2004-01-14 13:30:21 fil Exp $
  */
-public class UploadValve implements Runnable, WebConstants
+public class FileUploadValve implements Runnable, WebConstants
 {
 	/** web configurator */
 	private WebConfigurator config; 
@@ -56,7 +56,7 @@ public class UploadValve implements Runnable, WebConstants
      * @param mailSystem the mailSystem.
      * @param context the context.
      */
-    public UploadValve(WebConfigurator config, Logger logger,  
+    public FileUploadValve(WebConfigurator config, Logger logger,  
      				    MailSystem mailSystem, Context context)
     {
     	this.config = config;
