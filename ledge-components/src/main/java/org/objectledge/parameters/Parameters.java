@@ -5,7 +5,7 @@ package org.objectledge.parameters;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.3 2003-11-27 14:57:58 pablo Exp $
+ * @version $Id: Parameters.java,v 1.4 2003-11-27 17:05:19 pablo Exp $
  */
 public interface Parameters
 {
@@ -82,8 +82,9 @@ public interface Parameters
 	 * 
 	 * @param name the name of the parameters.
 	 * @return the array of the float values of the parameter.
+	 * @throws NumberFormatException if anyone of the values is not a number. 
 	*/
-	public float[] getFloats(String name);
+	public float[] getFloats(String name) throws NumberFormatException;
 
     /**
      * Return the parameter with specified name. 
@@ -108,8 +109,9 @@ public interface Parameters
 	 * 
 	 * @param name the name of the parameters.
 	 * @return the array of the integer values of the parameter.
+	 * @throws NumberFormatException if anyone of the values is not a number.
 	*/
-	public int[] getInts(String name);
+	public int[] getInts(String name) throws NumberFormatException;
 
     /**
      * Return the parameter with specified name. 
