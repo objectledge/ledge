@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.9 2004-01-29 15:33:58 pablo Exp $
+ * @version $Id: AllTests.java,v 1.10 2004-02-28 13:41:06 pablo Exp $
  */
 public class AllTests
 {
@@ -50,6 +50,7 @@ public class AllTests
         suite.addTest(org.objectledge.web.mvc.components.AllTests.suite());
         suite.addTest(org.objectledge.web.mvc.finders.AllTests.suite());
         suite.addTest(org.objectledge.web.mvc.builders.AllTests.suite());
+        suite.addTest(org.objectledge.web.mvc.security.AllTests.suite());
         suite.addTest(org.objectledge.web.mvc.tools.AllTests.suite());
         suite.addTest(new TestSuite(ExceptionRedirectorValveTest.class));
         suite.addTest(new TestSuite(MVCTest.class));

@@ -36,12 +36,13 @@ import org.objectledge.web.mvc.MVCConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.17 2004-02-19 12:13:30 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.18 2004-02-28 13:41:06 pablo Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -123,8 +124,8 @@ public class BuilderExecutorValve
                     throw new ProcessingException("Maximum number of builder reroutings "+
                         "exceeded");
                 }
-                // TODO access control
-
+                // security check
+                SecurityHelper.checkSecurity(builder, context);
                 // get the template
                 // let builder override the template
                 Template overrideTemplate = builder.getTemplate(); 

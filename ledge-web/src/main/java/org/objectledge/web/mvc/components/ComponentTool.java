@@ -28,20 +28,26 @@
 package org.objectledge.web.mvc.components;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.4 2004-01-21 14:40:00 fil Exp $
+ * @version $Id: ComponentTool.java,v 1.5 2004-02-28 13:41:20 pablo Exp $
  */
 public class ComponentTool
 {
+    /** The context */
+    protected Context context;
+    
 	/** The class finder for finding component objects. */
 	protected MVCClassFinder classFinder;
+    
 	/** The template finder for finding component templates. */
 	protected MVCTemplateFinder templateFinder;
     
@@ -61,6 +67,7 @@ public class ComponentTool
     public ComponentTool(Context context, MVCClassFinder classFinder, 
         MVCTemplateFinder templateFinder)
     {
+        this.context = context;
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
         this.defaultComponent = new DefaultComponent(context);
@@ -74,7 +81,8 @@ public class ComponentTool
 	 * @return contents of a rendered component
 	 * @throws BuildException on problems with component building
 	 */
-	public String embed(String componentName) throws BuildException
+	public String embed(String componentName) 
+        throws BuildException, ProcessingException
 	{
 		Component component = classFinder.getComponent(componentName);
 		Template template = templateFinder.getComponentTemplate(componentName);
@@ -99,8 +107,7 @@ public class ComponentTool
 			}
 			component = defaultComponent;
 		}		
-
-		// TODO: Add security check
+        SecurityHelper.checkSecurity(component, context);
 		return component.build(template);
 	}
 }

@@ -32,12 +32,13 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.10 2004-01-23 08:17:07 fil Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.11 2004-02-28 13:41:06 pablo Exp $
  */
 public class ActionExecutorValve 
     implements Valve
@@ -75,8 +76,7 @@ public class ActionExecutorValve
             {
                 throw new ProcessingException("unavailable action "+actionName);
             }
-            
-            // TODO access control
+            SecurityHelper.checkSecurity(action, context);
             action.process(context);
         }
     }
