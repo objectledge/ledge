@@ -35,11 +35,6 @@
   </start>
   <define name="baseConfig">
     <interleave>
-      <optional>
-        <element name="context_tool_key">
-          <text/>
-        </element>
-      </optional>    
       <optional>  
         <element name="undefined_value">  
           <text/>

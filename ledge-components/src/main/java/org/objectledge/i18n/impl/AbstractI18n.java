@@ -35,8 +35,6 @@ import java.util.Map;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.i18n.I18n;
-import org.objectledge.i18n.I18nTool;
-import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.utils.StringUtils;
 
 /**
@@ -44,13 +42,10 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.5 2004-08-19 15:19:28 zwierzem Exp $
+ * @version $Id: AbstractI18n.java,v 1.6 2004-08-19 15:40:34 zwierzem Exp $
  */
-public abstract class AbstractI18n implements I18n, ContextToolFactory
+public abstract class AbstractI18n implements I18n
 {
-	/** default context tool key */
-	public static final String DEFAULT_CONTEXT_TOOL_KEY = "i18n";
-	
 	/** undefinied value */
 	public static final String DEFAULT_UNDEFINED_VALUE = "[?]";
 	
@@ -66,10 +61,7 @@ public abstract class AbstractI18n implements I18n, ContextToolFactory
 	/** logger */
 	protected Logger logger;
 	
-	/** context tool key */
-	private String contextToolKey;
-
-	/** context tool key */
+	/** string returned when a key has no defined value */
 	private String undefinedValue;
 
 	/** default locale */
@@ -93,7 +85,6 @@ public abstract class AbstractI18n implements I18n, ContextToolFactory
 	public AbstractI18n(Configuration config, Logger logger)
 	{
 		this.logger = logger;
-		contextToolKey = config.getChild("context_tool_key").getValue(DEFAULT_CONTEXT_TOOL_KEY);
 		undefinedValue = config.getChild("undefined_value").getValue(DEFAULT_UNDEFINED_VALUE);
 		defaultLocale = StringUtils.
 			getLocale(config.getChild("default_locale").getValue(DEFAULT_LOCALE));
@@ -182,29 +173,4 @@ public abstract class AbstractI18n implements I18n, ContextToolFactory
 	 * {@inheritDoc}
 	 */
 	public abstract void reload();
-    
-    // context tool factory methods
-	/**
-	 * {@inheritDoc}
-	 */
-	public Object getTool()
-	{
-		return new I18nTool(this, defaultLocale, null);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void recycleTool(Object tool)
-	{
-        // these simple objects do not need recycling
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getKey()
-	{
-		return contextToolKey;
-	}
 }

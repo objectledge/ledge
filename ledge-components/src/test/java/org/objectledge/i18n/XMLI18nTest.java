@@ -142,7 +142,7 @@ public class XMLI18nTest extends TestCase
 
     public void testGetTool()
     {
-		I18nTool tool = (I18nTool)i18n.getTool();
+		I18nTool tool = new I18nTool(i18n, i18n.getDefaultLocale(), null);
     	assertNotNull(tool);
 		String key = "foo_$1_bar_$2";
 		String[] values = new String[]{"foo","bar"};
@@ -159,11 +159,6 @@ public class XMLI18nTest extends TestCase
 		tool = tool.usePrefix("");
     }
 
-    public void testGetKey()
-    {
-    	assertEquals("i18n",i18n.getKey());
-    }
-    
     public void testUndefined()
     {
         Locale plLocale = new Locale("pl","PL");
