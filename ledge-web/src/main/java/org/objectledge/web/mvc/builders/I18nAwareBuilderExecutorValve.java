@@ -27,19 +27,22 @@
 //
 package org.objectledge.web.mvc.builders;
 
+import java.util.Locale;
+
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18n;
 import org.objectledge.templating.Template;
+import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.1 2004-01-19 13:14:37 zwierzem Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.2 2004-01-19 14:21:55 zwierzem Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
-	private I18n i18n;
+	private Locale defaultLocale;
 	
     /**
      * {@inheritDoc}
@@ -55,7 +58,7 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
         I18n i18n)
     {
         super(context, classFinder, templateFinder, maxRouteCalls, maxEnclosures);
-		this.i18n = i18n;
+		this.defaultLocale = i18n.getDefaultLocale();
     }
     
     /**
@@ -63,6 +66,47 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
      */
     protected Template resolveTemplate(Template template)
     {
+    	// get current locale && try to get template
+    	MVCContext mvcContext = MVCContext.getMVCContext(context);
+		Template newTemplate = resolveTemplate(template, mvcContext.getLocale());
+		if(newTemplate != null)
+		{
+			return newTemplate;
+		}
+    	// get default locale && try to get template
+		newTemplate = resolveTemplate(template, defaultLocale);
+		if(newTemplate != null)
+		{
+			return newTemplate;
+		}
+		// return provided template if others failed 
         return super.resolveTemplate(template);
+    }
+
+    /**
+     * Gets a template for a given base template and locale.
+     * 
+     * @param template base template object
+     * @param locale locale to find template for
+     * @return found template or null
+     */
+    private Template resolveTemplate(Template template, Locale locale)
+    {
+		if(locale == null)
+		{
+			return null;
+		}
+		
+    	String localeStr = locale.toString();
+    	if(localeStr.length() != 0)
+    	{
+    		String templateName = template.getName() + "." + localeStr;
+    		Template newTemplate = templateFinder.getTemplate(templateName);
+    		if(newTemplate != null)
+    		{
+    			return newTemplate;
+    		}
+    	}
+        return template;
     }
 }
