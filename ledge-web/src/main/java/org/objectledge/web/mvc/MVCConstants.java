@@ -31,13 +31,16 @@ package org.objectledge.web.mvc;
  * A set of constant values used throughout MVC package.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCConstants.java,v 1.6 2005-02-10 17:46:21 rafal Exp $
+ * @version $Id: MVCConstants.java,v 1.7 2005-03-11 10:28:23 rafal Exp $
  */
 ///CLOVER:OFF
 public final class MVCConstants
 {
 	/** Templating context key for embedded view elements. */
 	public static final String EMBEDDED_PLACEHOLDER_KEY = "embeddedPlaceholder";
+    
+    /** Templating context key for innermost rendered view. */
+    public static final String INNERMOST_VIEW_KEY = "innermostView";
     
     /**
      * A private constructor to prevent instantiation.

@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.28 2005-02-28 10:07:50 rafal Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.29 2005-03-11 10:28:28 rafal Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -111,6 +111,8 @@ public class BuilderExecutorValve
 		String embeddedResult = null;
 		Builder builder = null;
 		Template template = null;
+        // usually equal to request's 'view' parameter, but may be affected by builder routing
+        String innermostView = null;
 		
 		// start processing
 		int enclosures;
@@ -144,7 +146,9 @@ public class BuilderExecutorValve
 
 			// embedded results --------------------------------------------------------------------
 			embeddedResult = embeddedResult == null ? "": embeddedResult;
+            innermostView = innermostView == null ? viewName : innermostView;
 			templatingContext.put(MVCConstants.EMBEDDED_PLACEHOLDER_KEY, embeddedResult);
+            templatingContext.put(MVCConstants.INNERMOST_VIEW_KEY, innermostView);
             
             // default builder / template if not resolved up to this point -------------------------
             Builder actualBuilder = builder != null ? builder : defaultBuilder;
