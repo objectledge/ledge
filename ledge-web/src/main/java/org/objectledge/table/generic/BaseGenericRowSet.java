@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.2 2004-02-11 13:42:11 zwierzem Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.3 2004-03-05 12:11:41 zwierzem Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -64,17 +64,14 @@ public abstract class BaseGenericRowSet extends BaseRowSet
     protected HashMap rowsByParent = new HashMap();
 
     /** This map allows quick parent row lookup.
-     * Used in {@link #hasMoreChildren(TableRow,TableRow)} and {@link
-     * #getParentRow(TableRow)}. */
+     * Used in {@link #hasMoreChildren(TableRow,TableRow)} and {@link #getParentRow(TableRow)}. */
     protected HashMap rowsByChild = new HashMap();
 
-    /** This map allows quick row lookup by it's id.
-     * May be useful in some subclasses.
-     */
+    /** This map allows quick row lookup by it's id. May be useful in some subclasses. */
     protected HashMap rowsById = new HashMap();
 
     /**
-     * construct the object
+     * Construct the object.
      *
      * @param state the state of the table instance
      * @param model the table model
@@ -85,12 +82,11 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         this.model = model;
     }
 
-    /**
-     * Returns an list of {@link TableRow} objects, which represents
-     * a view of TableModel data defined by TableState object.
-     *
-     * @return a list of rows.
-     */
+	// TableRowSet interface implementation -------------------------------------------------------
+
+	/**
+	 * {@inheritDoc}
+	 */
     public TableRow[] getRows()
     {
         if(rows == null)
@@ -106,22 +102,9 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         return rows;
     }
 
-    /**
-     * Returns the row by it's id.
-     *
-     * @param id id of the row
-     * @return the row
-     */
-    public TableRow getRowById(String id)
-    {
-        // in case rows were not drawn from the model
-        getRows();
-        return (TableRow)rowsById.get(id);
-    }
-
-    /**
-     * Gets the root node of the row set.
-     */
+	/**
+	 * {@inheritDoc}
+	 */
     public TableRow getRootRow()
     {
         // in case rows were not drawn from the model
@@ -129,25 +112,19 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         return rootRow;
     }
 
-    /**
-     * Returns the parent row of the row
-     *
-     * @param state the state of the table
-     * @param row the child row
-     * @return the parent row
-     */
-    public TableRow getParentRow(TableRow row)
+	/**
+	 * {@inheritDoc}
+	 */
+    public TableRow getParentRow(TableRow childRow)
     {
         // in case rows were not drawn from the model
         getRows();
-        return (TableRow)rowsByChild.get(row);
+        return (TableRow)rowsByChild.get(childRow);
     }
 
-    /**
-     * Checks whether the ancestor has more children
-     *
-     * @return <code>true</code> if has more children
-     */
+	/**
+	 * {@inheritDoc}
+	 */
     public boolean hasMoreChildren(TableRow ancestorRow, TableRow descendantRow)
     {
         // in case rows were not drawn from the model
@@ -179,11 +156,9 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         return (childRow != lastChildRow);
     }
 
-    /**
-     * Return the number of elements in returned array.
-     *
-     * @return the size of returned array
-     */
+	/**
+	 * {@inheritDoc}
+	 */
     public int getPageRowCount()
     {
         // in case rows were not drawn from the model
@@ -191,11 +166,9 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         return list.length;
     }
 
-    /**
-     * Return the total number of rows in this row set.
-     *
-     * @return total number of rows
-     */
+	/**
+	 * {@inheritDoc}
+	 */
     public int getTotalRowCount()
     {
         // in case rows were not drawn from the model
@@ -203,11 +176,29 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         return totalRowCount;
     }
 
-    // implementation ////////////////////////////////////////////////////////
+	// other methods ------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the row by it's id.
+	 *
+	 * @param id id of the row
+	 * @return the row
+	 */
+	public TableRow getRowById(String id)
+	{
+		// in case rows were not drawn from the model
+		getRows();
+		return (TableRow)rowsById.get(id);
+	}
+
+    // implementation -----------------------------------------------------------------------------
 
     /**
      * Returns a sublist of of a given list which corresponds to a view
      * of table state's current page in this row set.
+     * 
+     * @param list a lit of table rows to be snipped to current view page
+     * @return a list of table nodes containing only current page rows.
      */
     protected List getCurrentPageRows(List list)
     {
@@ -264,9 +255,10 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      * Builds tree nodes for the specified subtree and stores them in the
      * target list.
      *
-     * @param node the root node of the subtree.
+     * @param rootId the root node of the subtree.
      * @param depth the nesting depth of the subtree root.
-     * @param target the target node list.
+     * @param rowList the target node list.
+     * @return the root of created subtree
      */
     protected TableRow getSubTree(String rootId, int depth, List rowList)
     {
@@ -294,7 +286,8 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         // 2.1. create current rootRow
         int childCount = childrenList.size();
         int visibleChildCount = continueRecursion ? childrenList.size() : 0;
-        TableRow rootRow = new TableRow(rootId, rootObject, depth, childCount, visibleChildCount);
+        TableRow localRootRow =
+        	new TableRow(rootId, rootObject, depth, childCount, visibleChildCount);
 
         // 2.2. add current root row to rowList
         if(rootObject != null)
@@ -302,12 +295,12 @@ public abstract class BaseGenericRowSet extends BaseRowSet
             // check if a MAIN root node should be shown (depth==0 and state.getShowRoot()==true)
             if(depth > 0 || state.getShowRoot())
             {
-                rowList.add(rootRow);
+                rowList.add(localRootRow);
             }
         }
 
         // 2.3. map root row by it's id
-        rowsById.put(rootId, rootRow);
+        rowsById.put(rootId, localRootRow);
 
         // -------------------
 
@@ -334,19 +327,19 @@ public abstract class BaseGenericRowSet extends BaseRowSet
                 // WARN: add TableRow to array created for children caching
                 children[i] = childRow;
                 // WARN: cache childRow's parent row
-                rowsByChild.put(childRow, rootRow);
+                rowsByChild.put(childRow, localRootRow);
             }
 
             // WARN: cache this rows children
-            rowsByParent.put(rootRow, children);
+            rowsByParent.put(localRootRow, children);
         }
 
         // -------------------
 
-        return rootRow;
+        return localRootRow;
     }
 
-    // utility methods ///////////////////////////////////////////////////////
+    // utility methods ----------------------------------------------------------------------------
 
     /**
      * Check whether the object with a given id is expanded.
@@ -358,14 +351,14 @@ public abstract class BaseGenericRowSet extends BaseRowSet
     protected abstract boolean expanded(String id);
 
     /**
-     *   Sorts rows collection for list view
+     * Sorts rows collection for list view
      *
      * @param rowsList list of table rows for current view.
      */
     protected abstract void sortRows(List rowsList);
 
     /**
-     *   Sorts children collection for tree or forest view
+     * Sorts children collection for tree or forest view
      *
      * @param childrenList list of children nodes for current subtree.
      */
