@@ -17,6 +17,7 @@
 	        <li>DBScheduler <a href="../../xref/org/objectledge/scheduler/db/DBScheduler.html">XRef</a></li>
 	        <li>DBScheduler <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/scheduler/db/DBScheduler.html">CVS log</a></li>
 	        <li>DBScheduler configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/scheduler/db/DBScheduler.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
+   	        <li>DBScheduler database schema <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/sql/scheduler/scheduler.sql?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
 	      </ul>
 	    </p>
       </subsection>
@@ -82,15 +83,6 @@
 		  </table>
  	    </p>
  	  </subsection>  
- 	  
-	  <subsection name="The database table schema">
-  	    <p>
-  	    ...
-        </p>
-		<p>
-<source><![CDATA[SQLSchema]]></source>
-   	    </p>
-	  </subsection>
     </section>
   </body>
 </document>  
