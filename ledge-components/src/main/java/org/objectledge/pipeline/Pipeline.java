@@ -34,7 +34,7 @@ import org.objectledge.context.Context;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.5 2003-12-22 16:53:52 pablo Exp $
+ * @version $Id: Pipeline.java,v 1.6 2003-12-23 17:06:38 pablo Exp $
  */
 public class Pipeline
     implements Runnable
@@ -71,7 +71,27 @@ public class Pipeline
      */    
     public void run()
     {
-        
+        try
+        {
+        	for(int i = 0; i < tryValves.length; i++)
+        	{
+        		tryValves[i].run();
+        	}
+        }
+        catch(Exception e)
+        {
+			for(int i = 0; i < catchValves.length; i++)
+		    {
+				catchValves[i].run();
+		    }
+        }
+        finally
+        {
+			for(int i = 0; i < finallyValves.length; i++)
+			{
+				finallyValves[i].run();
+			}
+        }
     }
     
     /**
