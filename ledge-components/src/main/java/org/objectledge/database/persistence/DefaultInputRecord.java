@@ -40,6 +40,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.objectledge.utils.StringUtils;
+
 /**
  * An implementation of {@link DefaultInputRecord} that wraps a
  * <code>java.sql.ResultSet</code>.
@@ -237,7 +239,7 @@ public class DefaultInputRecord implements InputRecord
     {
         try
         {
-            return rs.getString(field);
+            return StringUtils.expandUnicodeEscapes(rs.getString(field));
         }
         catch(SQLException e)
         {
