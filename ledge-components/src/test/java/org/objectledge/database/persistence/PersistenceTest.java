@@ -142,15 +142,6 @@ public class PersistenceTest extends TestCase
         assertEquals(persistence.exists("test_object","id = 10"),false);
         assertEquals(persistence.count("test_object",null),1);
         
-        try
-        {
-            persistence.delete(object2);
-            fail("should throw the exception");
-        }
-        catch(IllegalStateException e)
-        {
-            //ok!
-        }
         assertEquals(list.size(),1);
         persistence.delete(object);
         list = persistence.load(null, testFactory);

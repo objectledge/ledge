@@ -44,7 +44,7 @@ import org.objectledge.database.DatabaseUtils;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DefaultPersistence.java,v 1.3 2004-02-27 12:23:23 pablo Exp $
+ * @version $Id: DefaultPersistence.java,v 1.4 2004-03-12 13:07:16 fil Exp $
  */
 public class DefaultPersistence implements Persistence
 {
@@ -249,10 +249,6 @@ public class DefaultPersistence implements Persistence
     {
         synchronized (object)
         {
-            if (!object.getSaved())
-            {
-                throw new IllegalStateException("no state has been saved yet");
-            }
             Connection conn = null;
             try
             {
