@@ -164,6 +164,6 @@ public class ExceptionRedirectorValveTest extends LedgeTestCase
         exceptionRedirectorValve.process(context);
         assertEquals(mvcContext.getView(), "BarError");
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        assertEquals((String)templatingContext.get("original_view"),"FooError");
+        assertEquals("FooError", (String)templatingContext.get("originalView"));
     }
 }
