@@ -97,8 +97,9 @@
        <url>http://picocontainer.org/</url>
     </dependency>
     <dependency>
-      <id>commons-collections</id>
-      <version>2.1</version>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.0</version>
       <url>http://jakarta.apache.org./commons/collections</url>
       <properties>
         <war.bundle>true</war.bundle>
