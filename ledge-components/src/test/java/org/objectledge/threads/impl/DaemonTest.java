@@ -42,7 +42,7 @@ import org.objectledge.threads.Task;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DaemonTest.java,v 1.4 2004-02-02 13:07:07 fil Exp $
+ * @version $Id: DaemonTest.java,v 1.5 2005-01-28 02:52:07 rafal Exp $
  */
 public class DaemonTest extends TestCase
 {
@@ -125,52 +125,6 @@ public class DaemonTest extends TestCase
         }
     }
 
-    public void testForcedStop()
-        throws Exception
-    {
-        synchronized(whiteboard)
-        {
-            Task task = new ForcedStopTask();
-            int priority = Thread.NORM_PRIORITY;
-            ThreadGroup threadGroup = new ThreadGroup("Test group");
-            Context context = new Context();
-            whiteboard.clear();
-            Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-            Thread.sleep(DELAY);
-            daemon.stop();
-            Thread.sleep(DELAY);
-            assertNotNull(whiteboard.get("started"));
-            assertNull(whiteboard.get("interrupted"));
-            assertNull(whiteboard.get("cleaned up"));
-        }
-    }
-    
-    public void testExternalStop()
-        throws Exception
-    {
-        synchronized(whiteboard)
-        {
-            Task task = new LongRunningTask();
-            int priority = Thread.NORM_PRIORITY;
-            ThreadGroup threadGroup = new ThreadGroup("Test group");
-            Context context = new Context();
-            whiteboard.clear();
-            Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-            Thread.sleep(DELAY);
-            Thread[] threads = new Thread[1];
-            assertEquals(1, threadGroup.activeCount());
-            threadGroup.enumerate(threads);
-            threads[0].stop();
-            daemon.stop();
-            Thread.sleep(DELAY);
-            assertNotNull(whiteboard.get("started"));
-            assertNull(whiteboard.get("interrupted"));
-            assertNull(whiteboard.get("cleaned up"));
-        }
-    }
-    
     public void testDoubleStop()
         throws Exception
     {
@@ -271,29 +225,6 @@ public class DaemonTest extends TestCase
         {
             whiteboard.put("started", "yes");
             throw new ProcessingException("processing failed");
-        }
-    }
-    
-    private class ForcedStopTask
-        extends Task
-    {
-        public synchronized void process(Context context)
-        {
-           try
-           {
-               whiteboard.put("started", "yes");
-               this.wait();
-           }
-           catch(InterruptedException e)
-           {
-               whiteboard.put("interrupted", "yes");
-               return;
-           }
-        }
-        
-        public void terminate(Thread thread)
-        {
-            thread.stop();
         }
     }
     
