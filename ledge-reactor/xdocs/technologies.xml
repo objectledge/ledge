@@ -63,6 +63,18 @@
               <p style="text-align:center;"><img alt="Maven logo" style="border:none; margin-bottom:5px;" src="images/maven.jpg" /><br /><a href="http://maven.apache.org/">Maven</a></p>
             </td>
           </tr>
+	  <tr>
+     	    <td width="33%" style="vertical-align:bottom; background:white;">
+	      <p style="text-align:center;">
+	        <img alt="JIRA logo" style="border:none; margin-bottom:5px;" src="images/jira_button_120wx60h.gif" /><br />
+  	        <a href="http://www.atlassian.com/software/jira/?clicked=Non-Profit">JIRA</a><br/>
+		<a href="http://objectledge.org/jira">view issues</a>
+	      </p>
+  	    </td>
+	    <td colspan="2" style="vertical-align:bottom; background:white;">
+	      <br/>
+	    </td>
+	  </tr>
         </table>
 
       </subsection>
