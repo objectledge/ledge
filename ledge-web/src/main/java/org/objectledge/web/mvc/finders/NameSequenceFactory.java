@@ -34,7 +34,7 @@ import org.objectledge.templating.Template;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactory.java,v 1.1 2004-01-19 11:43:10 fil Exp $
+ * @version $Id: NameSequenceFactory.java,v 1.2 2004-01-19 12:04:57 zwierzem Exp $
  */
 public class NameSequenceFactory
 {
@@ -88,6 +88,22 @@ public class NameSequenceFactory
             result[i] = children[i].getValue();
         }
         // check for overlaps
+		for (int i = 0; i < result.length; i++)
+        {
+            String prefix1 = result[i];
+            for (int j = 0; j < result.length; j++)
+            {
+                String prefix2 = result[j];
+                if (i != j
+                	&& prefix1.length() > prefix2.length()
+                	&& prefix1.startsWith(prefix2))
+                {
+                	// TODO ???
+                	throw new ConfigurationException("Overlapping prefixes: "+
+                		prefix1 + " " +prefix2, null);
+                }
+            }
+        }
         return result;
     }
 
