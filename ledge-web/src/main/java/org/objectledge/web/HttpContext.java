@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +45,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.7 2004-05-25 09:41:17 pablo Exp $
+ * @version $Id: HttpContext.java,v 1.8 2004-06-29 13:41:31 zwierzem Exp $
  */
 public class HttpContext
 {
@@ -77,9 +78,6 @@ public class HttpContext
 	/** the output writer */
 	private PrintWriter writer;
 	
-	/** the encoding */
-	private String encoding;
-
 	/**
 	 * Construct new http context.
 	 * 
@@ -92,7 +90,6 @@ public class HttpContext
 		this.response = response;
 		directResponse = false;
 		contentType = request.getContentType();
-		encoding = "ISO-8859-1";
 	}
 	
     /**
@@ -158,18 +155,10 @@ public class HttpContext
 		if(writer == null)
 		{
 			directResponse = true;
-			Writer osw = new OutputStreamWriter(getOutputStream(), encoding);
+			Writer osw = new OutputStreamWriter(getOutputStream(), getEncoding());
 			writer = new PrintWriter(osw, false);
 		}
 		return writer;
-	}
-
-    /**
-     * Sets the direct response flag.
-     */
-	public void setDirectResponse()
-	{
-		directResponse = true;
 	}
 
     /**
@@ -209,7 +198,12 @@ public class HttpContext
 	 */
 	public String getEncoding()
 	{
-		return encoding;
+        String encoding = request.getCharacterEncoding();
+        if(encoding == null)
+        {
+            encoding = "ISO-8859-1";
+        }
+        return encoding;
 	}
 
 	/**
@@ -219,7 +213,16 @@ public class HttpContext
 	 */
 	public void setEncoding(String encoding)
 	{
-		this.encoding = encoding;
+        try
+        {
+            request.setCharacterEncoding(encoding);
+        }
+        ///CLOVER:OFF
+        catch (UnsupportedEncodingException e)
+        {
+            throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
+        }
+        ///CLOVER:ON
 	}
 
     /**
