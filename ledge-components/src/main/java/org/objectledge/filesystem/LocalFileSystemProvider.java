@@ -55,7 +55,7 @@ import org.objectledge.filesystem.impl.LocalRandomAccessFile;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.4 2004-09-27 13:30:56 zwierzem Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.5 2004-09-27 19:08:43 zwierzem Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -143,12 +143,12 @@ public class LocalFileSystemProvider
      */
     public boolean checkPathChars(String path)
     {
-        if(path != null && path.length() > 0)
+        if(path == null || path.length() == 0)
         {
-            String newPath = rewritePath(path);
-            return newPath != null && newPath.equals(path);
+            return false;
         }
-        return false;
+        String newPath = rewritePath(path);
+        return newPath != null && newPath.equals(path);
     }
 
 
