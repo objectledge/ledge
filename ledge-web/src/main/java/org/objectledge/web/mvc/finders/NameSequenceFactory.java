@@ -34,7 +34,7 @@ import org.objectledge.templating.Template;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactory.java,v 1.5 2004-01-19 15:03:16 fil Exp $
+ * @version $Id: NameSequenceFactory.java,v 1.6 2004-01-19 16:04:54 fil Exp $
  */
 public class NameSequenceFactory
 {
@@ -119,12 +119,21 @@ public class NameSequenceFactory
      * 
      * @param view the view.
      * @param infix the path infix ("actions", "views","components")
+     * @param fallback <code>true</code>pefrorm scoping fallback
      * @return name sequence.
      */
-    public Sequence getClassNameSequence(String infix, String view)
+    public Sequence getClassNameSequence(String infix, String view, boolean fallback)
     {
-        Sequence fallback = getClassNameFallbackSequence(view);        
-        return new ViewLookupSequence(classPrefices, classSeparator, infix, fallback);
+        Sequence fallbackSequence;
+        if(fallback)
+        {
+            fallbackSequence = getClassNameFallbackSequence(view);        
+        }
+        else
+        {
+            fallbackSequence = getClassNameFixedSequence(view);
+        }
+        return new ViewLookupSequence(classPrefices, classSeparator, infix, fallbackSequence);
     }
     
     /**
@@ -132,12 +141,21 @@ public class NameSequenceFactory
      * 
      * @param view the view.
      * @param infix the path infix ("views", "components")
+     * @param fallback <code>true</code>pefrorm scoping fallback
      * @return name sequence.
      */
-    public Sequence getTemplateNameSequence(String infix, String view)
+    public Sequence getTemplateNameSequence(String infix, String view, boolean fallback)
     {
-        Sequence fallback = getTemplateNameFallbackSequence(view);        
-        return new ViewLookupSequence(templatePrefices, templateSeparator, infix, fallback);
+        Sequence fallbackSequence; 
+        if(fallback)
+        {
+            fallbackSequence = getTemplateNameFallbackSequence(view);        
+        }
+        else
+        {
+            fallbackSequence = getTemplateNameFixedSequence(view);
+        }
+        return new ViewLookupSequence(templatePrefices, templateSeparator, infix, fallbackSequence);
     }
 
     /**
@@ -180,6 +198,17 @@ public class NameSequenceFactory
     }
 
     /**
+     * Produces the class name fixed sequence.
+     * 
+     * @param view the view.
+     * @return fallback sequence.
+     */    
+    protected Sequence getClassNameFixedSequence(String view)
+    {
+        return new FixedSequence(view.replace(viewSeparator, classSeparator));
+    }
+
+    /**
      * Produces the template name fallback sequence.
      * 
      * <p>This is a planned extension point.</p>
@@ -191,6 +220,17 @@ public class NameSequenceFactory
     {
         return new ViewFallbackSequence(view, viewSeparator,templateSeparator, 
             templateDefaultSuffix);
+    }
+
+    /**
+     * Produces the class name fixed sequence.
+     * 
+     * @param view the view.
+     * @return fallback sequence.
+     */    
+    protected Sequence getTemplateNameFixedSequence(String view)
+    {
+        return new FixedSequence(view.replace(viewSeparator, templateSeparator));
     }
 
     /**

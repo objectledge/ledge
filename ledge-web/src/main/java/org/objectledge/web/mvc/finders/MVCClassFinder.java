@@ -33,7 +33,7 @@ import org.objectledge.web.mvc.builders.Builder;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.4 2004-01-15 12:28:35 fil Exp $
+ * @version $Id: MVCClassFinder.java,v 1.5 2004-01-19 16:04:54 fil Exp $
  */
 public interface MVCClassFinder
 {
@@ -44,9 +44,11 @@ public interface MVCClassFinder
      * {@link org.objectledge.web.mvc.actions.DefaultAction} is returned.
      * 
      * @param actionName name of an action class
-     * @return found runnable action instance 
+     * @return found runnable action instance
+     * @throws ClassNotFoundException if action class is not available. 
      */
-    public Runnable findAction(String actionName);
+    public Runnable findAction(String actionName)
+        throws ClassNotFoundException;
     
     // builders /////////////////////////////////////////////////////////////////////////////////
 
