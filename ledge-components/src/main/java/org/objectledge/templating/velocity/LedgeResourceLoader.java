@@ -31,7 +31,6 @@ package org.objectledge.templating.velocity;
 import java.io.InputStream;
 
 import org.apache.commons.collections.ExtendedProperties;
-import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.log.LogSystem;
 import org.apache.velocity.runtime.resource.Resource;
@@ -42,7 +41,7 @@ import org.objectledge.filesystem.FileSystem;
  * A helper class that implements the velocity resource loader class.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LedgeResourceLoader.java,v 1.2 2004-01-20 12:36:11 fil Exp $
+ * @version $Id: LedgeResourceLoader.java,v 1.3 2004-02-10 12:04:19 fil Exp $
  */
 public class LedgeResourceLoader extends ResourceLoader
 {
