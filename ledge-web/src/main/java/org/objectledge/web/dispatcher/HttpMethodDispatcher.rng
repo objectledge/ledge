@@ -33,6 +33,6 @@
       <attribute name="name"/>
       <!-- should contain textual key of the component that will handle the request -->
       <text/>
-    </element name="method">
+    </element>
   </oneOrMore>
 </element>
