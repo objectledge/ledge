@@ -6,7 +6,7 @@ import java.util.HashMap;
  *
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UIConstants.java,v 1.2 2005-02-08 20:33:30 rafal Exp $
+ * @version $Id: UIConstants.java,v 1.3 2005-02-10 17:46:51 rafal Exp $
  */
 public class UIConstants
 {
@@ -152,6 +152,7 @@ public class UIConstants
 
     private UIConstants()
     {
+        // static factory pattern
     }
 
     public static UIConstants getInstance()

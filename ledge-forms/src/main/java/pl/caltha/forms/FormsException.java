@@ -4,12 +4,13 @@ package pl.caltha.forms;
  * Thrown on any problems in form processing.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsException.java,v 1.1 2005-01-19 06:55:23 pablo Exp $
+ * @version $Id: FormsException.java,v 1.2 2005-02-10 17:46:48 rafal Exp $
  */
 public class FormsException extends java.lang.Exception
 {
     public FormsException()
     {
+        // default constructor
     }
     
     public FormsException(String msg)

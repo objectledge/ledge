@@ -77,6 +77,7 @@ public class PersistentAttribute implements Persistent
      */
     public PersistentAttribute()
     {
+        // default constructor
     }
 
     /**

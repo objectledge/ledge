@@ -11,7 +11,7 @@ import pl.caltha.forms.internal.util.Util;
 /** A base class for a node of the UI tree structure.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Node.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: Node.java,v 1.2 2005-02-10 17:48:37 rafal Exp $
  */
 public class Node extends Parent
 implements Cloneable
@@ -215,5 +215,6 @@ implements Cloneable
     protected void init(UI ui)
     throws ConstructionException
     {
+        // does nothing
     }
 }

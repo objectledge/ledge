@@ -44,7 +44,7 @@ import org.picocontainer.Startable;
  * server.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ContentExtractor.java,v 1.2 2004-12-22 08:58:38 rafal Exp $
+ * @version $Id: ContentExtractor.java,v 1.3 2005-02-10 17:46:23 rafal Exp $
  */
 public class ContentExtractor
 	implements Startable
@@ -163,5 +163,6 @@ public class ContentExtractor
      */
     public void stop()
     {
+        // I wish Startable iterface was split back into Startable/Stoppable
     }
 }

@@ -43,7 +43,7 @@ import org.picocontainer.Startable;
  * Thread pool component.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.9 2004-12-27 05:17:58 rafal Exp $
+ * @version $Id: ThreadPool.java,v 1.10 2005-02-10 17:47:08 rafal Exp $
  */
 public class ThreadPool
     implements Startable
@@ -130,6 +130,7 @@ public class ThreadPool
      */
     public void start()
     {
+        // I wish Startable interface was split
     }
     
     /**

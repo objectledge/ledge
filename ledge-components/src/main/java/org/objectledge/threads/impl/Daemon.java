@@ -37,7 +37,7 @@ import org.picocontainer.Startable;
  * A daemon thread helper object.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Daemon.java,v 1.3 2004-12-27 05:17:30 rafal Exp $
+ * @version $Id: Daemon.java,v 1.4 2005-02-10 17:46:53 rafal Exp $
  */
 public class Daemon
     implements Runnable, Startable
@@ -155,6 +155,7 @@ public class Daemon
      */    
     public void start()
     {
+        // Startable interface should really be split
     }
     
     /**

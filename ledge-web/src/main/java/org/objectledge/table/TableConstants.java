@@ -33,7 +33,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableConstants.java,v 1.5 2004-12-23 07:17:47 rafal Exp $
+ * @version $Id: TableConstants.java,v 1.6 2005-02-10 17:46:22 rafal Exp $
  */
 public final class TableConstants {
 
@@ -57,5 +57,6 @@ public final class TableConstants {
      */
     private TableConstants()
     {
+        // static access only
     }
 }

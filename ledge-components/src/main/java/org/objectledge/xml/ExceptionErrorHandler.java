@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
  * Warnings are ignored.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExceptionErrorHandler.java,v 1.1 2004-06-01 11:13:11 zwierzem Exp $
+ * @version $Id: ExceptionErrorHandler.java,v 1.2 2005-02-10 17:46:57 rafal Exp $
  */
 public class ExceptionErrorHandler implements ErrorHandler
 {
@@ -45,6 +45,7 @@ public class ExceptionErrorHandler implements ErrorHandler
 	 */
 	public void warning(SAXParseException e) throws SAXException
 	{
+        // ignored
 	}
 
 	/**

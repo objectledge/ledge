@@ -42,7 +42,7 @@ import java.util.StringTokenizer;
  * Scheduler (see {@link AbstractScheduler#DATE_FORMAT_DEFAULT}).</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AtSchedule.java,v 1.2 2005-02-08 00:35:32 rafal Exp $
+ * @version $Id: AtSchedule.java,v 1.3 2005-02-10 17:46:58 rafal Exp $
  */
 public class AtSchedule
     implements Schedule
@@ -68,6 +68,7 @@ public class AtSchedule
      */
     AtSchedule()
     {
+        // limited access
     }
 
     /**

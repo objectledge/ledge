@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.27 2004-12-27 03:05:53 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.28 2005-02-10 17:47:04 rafal Exp $
  */
 public class FileSystem
 {
@@ -72,7 +72,7 @@ public class FileSystem
      */
     protected FileSystem()
     {
-        
+        // needed by jMock
     }
     
     /**

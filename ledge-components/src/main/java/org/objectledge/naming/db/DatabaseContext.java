@@ -439,6 +439,7 @@ public class DatabaseContext implements Context
      */
     public void close() throws NamingException
     {
+        // does nothing
     }
 
     /**

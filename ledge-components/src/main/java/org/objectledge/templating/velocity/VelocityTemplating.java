@@ -52,7 +52,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.18 2005-02-09 22:13:02 rafal Exp $
+ * @version $Id: VelocityTemplating.java,v 1.19 2005-02-10 17:46:54 rafal Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -288,6 +288,7 @@ public class VelocityTemplating implements Templating, LogSystem
      */
     public void init(RuntimeServices services)
     {
+        // does nothing
     }
 
     /**

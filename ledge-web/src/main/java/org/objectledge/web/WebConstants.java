@@ -41,6 +41,7 @@ public final class WebConstants
      */
     private WebConstants()
     {
+        // static access only
     }
 }
 

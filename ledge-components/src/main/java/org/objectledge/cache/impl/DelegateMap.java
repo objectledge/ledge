@@ -39,7 +39,7 @@ import org.objectledge.cache.spi.LayeredMap;
  * A map that delegates all it's methods to another Map object.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DelegateMap.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: DelegateMap.java,v 1.2 2005-02-10 17:47:03 rafal Exp $
  */
 public abstract class DelegateMap
     implements LayeredMap
@@ -56,6 +56,7 @@ public abstract class DelegateMap
      */
     public DelegateMap()
     {
+        // default constructor
     }
 
     /**

@@ -38,7 +38,7 @@ import org.picocontainer.Startable;
  * A worker thread helper object.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Worker.java,v 1.5 2004-12-27 05:17:30 rafal Exp $
+ * @version $Id: Worker.java,v 1.6 2005-02-10 17:46:53 rafal Exp $
  */
 public class Worker 
     implements Runnable, Startable
@@ -208,6 +208,7 @@ public class Worker
      */
     public void start()
     {
+        // I wish Startable interface was split
     }
     
     /**

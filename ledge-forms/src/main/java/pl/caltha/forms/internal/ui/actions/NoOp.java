@@ -10,7 +10,7 @@ import pl.caltha.forms.internal.ui.UI;
 /** Noop action for watching value changes on controls.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NoOp.java,v 1.1 2005-01-19 06:55:32 pablo Exp $
+ * @version $Id: NoOp.java,v 1.2 2005-02-10 17:46:49 rafal Exp $
  */
 public class NoOp extends pl.caltha.forms.internal.ui.Action
 {
@@ -23,6 +23,7 @@ public class NoOp extends pl.caltha.forms.internal.ui.Action
      */
     public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
     {
+        // do nothing very thoroughly
     }
 }
 

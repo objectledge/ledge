@@ -33,7 +33,7 @@ import org.objectledge.pipeline.Valve;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: TestAction.java,v 1.2 2004-01-22 15:15:12 fil Exp $
+ * @version $Id: TestAction.java,v 1.3 2005-02-10 17:46:24 rafal Exp $
  */
 public class TestAction 
     implements Valve
@@ -43,5 +43,6 @@ public class TestAction
      */
     public void process(Context context)
     {
+        // does nothing
     }
 }

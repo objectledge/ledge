@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * Generator for encoding converter tables.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: EncoderGenerator.java,v 1.4 2004-12-23 07:16:31 rafal Exp $
+ * @version   $Id: EncoderGenerator.java,v 1.5 2005-02-10 17:46:55 rafal Exp $
  */
 public class EncoderGenerator
 {
@@ -55,6 +55,7 @@ public class EncoderGenerator
 
 	private EncoderGenerator()
 	{
+        // static access only (commandline runnable class)
 	}
 
     /**
@@ -178,7 +179,7 @@ public class EncoderGenerator
         out.write(" * Encoder for "+encodingName+" character set.\n");
         out.write(" *\n");
         out.write(" * @author <a href=\"mailto:dgajda@caltha.pl\">Damian Gajda</a>\n");
-        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.4 2004-12-23 07:16:31 rafal Exp $\n");
+        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.5 2005-02-10 17:46:55 rafal Exp $\n");
         out.write(" */\n");
         out.write("public class CharEncoder"+encodingName+"\n");
         out.write("         extends CharEncoder\n");

@@ -35,7 +35,7 @@ import org.objectledge.database.persistence.Persistent;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Pawel Potempski</a>
- * @version $Id: TestValue.java,v 1.1 2004-02-13 14:15:27 pablo Exp $
+ * @version $Id: TestValue.java,v 1.2 2005-02-10 17:47:02 rafal Exp $
  */
 public class TestValue implements Persistent
 {
@@ -53,6 +53,7 @@ public class TestValue implements Persistent
 
     public TestValue()
     {
+        // default constructor
     }
 
     public TestValue(String name, int quantity)

@@ -41,7 +41,7 @@ import org.objectledge.filesystem.FileSystem;
  * to Object Ledge FileSystem.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: URLConnectionImpl.java,v 1.6 2004-11-04 11:09:10 rafal Exp $
+ * @version $Id: URLConnectionImpl.java,v 1.7 2005-02-10 17:47:09 rafal Exp $
  */
 public class URLConnectionImpl 
     extends URLConnection
@@ -70,6 +70,7 @@ public class URLConnectionImpl
      */
     public void connect() throws IOException
     {
+        // does nothing
     }
     
     /**

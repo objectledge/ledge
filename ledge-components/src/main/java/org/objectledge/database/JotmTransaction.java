@@ -42,7 +42,7 @@ import org.picocontainer.Startable;
  * An implementation of the Transaction interface using JOTM.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.9 2004-12-27 03:05:47 rafal Exp $
+ * @version $Id: JotmTransaction.java,v 1.10 2005-02-10 17:47:01 rafal Exp $
  */
 public class JotmTransaction
     extends Transaction
@@ -88,6 +88,7 @@ public class JotmTransaction
      */
     public void start()
     {
+        // I wisht Startable interface was split
     }
     
     /**

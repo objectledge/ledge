@@ -75,6 +75,7 @@ public class DefaultEnumeration implements NamingEnumeration
      */
     public void close() throws NamingException
     {
+        // does nothing
     }
 
     /**

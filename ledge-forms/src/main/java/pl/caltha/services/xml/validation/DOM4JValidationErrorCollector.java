@@ -15,7 +15,7 @@ import pl.caltha.services.xml.CollectingErrorHandler;
  * ErrorHandler that collects all errors.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DOM4JValidationErrorCollector.java,v 1.1 2005-01-20 16:44:51 pablo Exp $
+ * @version $Id: DOM4JValidationErrorCollector.java,v 1.2 2005-02-10 17:46:50 rafal Exp $
  */
 public class DOM4JValidationErrorCollector
      extends CollectingErrorHandler
@@ -82,15 +82,17 @@ implements DOM4JContentHandler, ExtendedContentHandler
     /** receives notification of the start of a document.
      */
     public void startDocument()
-    throws SAXException
+        throws SAXException
     {
+        // ignored
     }
 
     /** receives notification of the end of a document.
      */
     public void endDocument()
-    throws SAXException
+        throws SAXException
     {
+        // ignored
     }
 
     /** receives notification of the start of an element.
@@ -99,8 +101,9 @@ implements DOM4JContentHandler, ExtendedContentHandler
      * called after this method.
      */
     public void startElement(String namespaceURI, String localName, String qName)
-    throws SAXException
+        throws SAXException
     {
+        // ignored
     }
 
     /** receives notification of the start of an attribute.
@@ -126,15 +129,17 @@ implements DOM4JContentHandler, ExtendedContentHandler
      * for all attributes.
      */
     public void endAttributePart()
-    throws SAXException
+        throws SAXException
     {
+        // ignored
     }
 
     /** receives notification of the end of an element.
      */
     public void endElement(String namespaceURI, String localName, String qName)
-    throws SAXException
+        throws SAXException
     {
+        // ignored
     }
 
     /** receives notification of a string.

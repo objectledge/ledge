@@ -35,7 +35,7 @@ import junit.framework.TestCase;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IntrospectionVariablesTest.java,v 1.3 2005-02-07 01:29:43 rafal Exp $
+ * @version $Id: IntrospectionVariablesTest.java,v 1.4 2005-02-10 17:47:00 rafal Exp $
  */
 public class IntrospectionVariablesTest extends TestCase
 {
@@ -171,6 +171,7 @@ public class IntrospectionVariablesTest extends TestCase
         
         public void getVoidPublicMethod()
         {
+            // does nothing
         }
         
         public String isNonBooleanIsMethod()

@@ -47,7 +47,7 @@ import org.picocontainer.PicoContainer;
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.9 2004-12-23 07:16:00 rafal Exp $
+ * @version $Id: Main.java,v 1.10 2005-02-10 17:46:46 rafal Exp $
  */
 public class Main
 {
@@ -69,6 +69,7 @@ public class Main
      */
     private Main()
     {
+        // static access only (commandline runnable class)
     }
 
     /**

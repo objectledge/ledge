@@ -135,6 +135,7 @@ public abstract class AbstractScheduler
      */
     public void stop()
     {
+        // I wish startable interface was split back to Startable/Stoppable
     }
 
     // Scheduler interface ////////////////////////////////////////////

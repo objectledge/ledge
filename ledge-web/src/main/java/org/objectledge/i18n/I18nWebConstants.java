@@ -44,6 +44,7 @@ public final class I18nWebConstants
      */
     private I18nWebConstants()
     {
+        // static access only
     }
 }
 

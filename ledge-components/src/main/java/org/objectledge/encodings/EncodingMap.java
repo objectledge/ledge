@@ -86,7 +86,7 @@ import java.util.HashMap;
  * </pre>
  * 
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: EncodingMap.java,v 1.2 2004-02-03 13:47:49 zwierzem Exp $
+ * @version   $Id: EncodingMap.java,v 1.3 2005-02-10 17:46:55 rafal Exp $
  */
 public class EncodingMap
 {
@@ -381,6 +381,7 @@ public class EncodingMap
     /** Default constructor. */
     private EncodingMap()
     {
+        // static access only
     }
 
     /**

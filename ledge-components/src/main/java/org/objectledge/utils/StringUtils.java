@@ -44,7 +44,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.24 2005-02-08 00:35:40 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.25 2005-02-10 17:48:35 rafal Exp $
  */
 public class StringUtils
 {
@@ -53,7 +53,7 @@ public class StringUtils
      */
     private StringUtils()
     {
-        
+        // static access only
     }
     
     /**

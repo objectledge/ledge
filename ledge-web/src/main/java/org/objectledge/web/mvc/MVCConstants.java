@@ -31,7 +31,7 @@ package org.objectledge.web.mvc;
  * A set of constant values used throughout MVC package.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCConstants.java,v 1.5 2004-12-23 02:34:42 rafal Exp $
+ * @version $Id: MVCConstants.java,v 1.6 2005-02-10 17:46:21 rafal Exp $
  */
 ///CLOVER:OFF
 public final class MVCConstants
@@ -44,5 +44,6 @@ public final class MVCConstants
      */
     private MVCConstants()
     {
+        // static access only
     }
 }
