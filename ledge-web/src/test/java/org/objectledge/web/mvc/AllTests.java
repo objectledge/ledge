@@ -35,14 +35,14 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.1 2004-01-15 16:38:54 fil Exp $
+ * @version $Id: AllTests.java,v 1.2 2004-01-20 11:22:48 fil Exp $
  */
 public class AllTests
 {
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.web");
+        TestSuite suite = new TestSuite("Test for org.objectledge.web.mvc");
         //$JUnit-BEGIN$
 
         //$JUnit-END$
