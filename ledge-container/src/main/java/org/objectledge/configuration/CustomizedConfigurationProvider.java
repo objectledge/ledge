@@ -30,24 +30,20 @@ package org.objectledge.configuration;
 import org.jcontainer.dna.Configuration;
 import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.UnsupportedKeyTypeException;
-import org.picocontainer.ComponentAdapter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.PicoVerificationException;
-import org.picocontainer.defaults.InstanceComponentAdapter;
 
 /**
  * Provides Configuration objects to the components being initialized using ConfigurationFactory.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CustomizedConfigurationProvider.java,v 1.3 2004-12-27 05:18:08 rafal Exp $
+ * @version $Id: CustomizedConfigurationProvider.java,v 1.4 2005-02-04 02:28:03 rafal Exp $
  */
 public class CustomizedConfigurationProvider
 	implements CustomizedComponentProvider
 {
-    private PicoContainer container;
-    
     private ConfigurationFactory configurationFactory;
     
     /**
@@ -59,32 +55,16 @@ public class CustomizedConfigurationProvider
     {
         this.configurationFactory = configurationFactory;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void setContainer(PicoContainer container)
-    {
-        this.container = container;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public PicoContainer getContainer()
-    {
-        return container;
-    }
 
     /**
      * {@inheritDoc}
      */
-    public ComponentAdapter getCustomizedAdapter(Object componentKey, Class componentImplementation)
+    public Object getCustomizedComponentInstance(PicoContainer container, Object componentKey, 
+        Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException
     {
         String componentName = getComponentName(componentKey);
-        return new InstanceComponentAdapter(componentName, 
-            configurationFactory.getConfig(componentName, componentImplementation));
+        return configurationFactory.getConfig(componentName, componentImplementation);
     }
     
     /**
@@ -98,7 +78,7 @@ public class CustomizedConfigurationProvider
     /**
      * {@inheritDoc}
      */
-    public void verify() throws PicoVerificationException
+    public void verify(PicoContainer container) throws PicoVerificationException
     {
         // no dependencies
     }

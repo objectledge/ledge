@@ -36,7 +36,7 @@ import org.picocontainer.PicoContainer;
  * {@link CustomizingConstructorComponentAdapter}.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PicoPersistentFactory.java,v 1.1 2004-02-26 10:32:43 fil Exp $
+ * @version $Id: PicoPersistentFactory.java,v 1.2 2005-02-04 02:28:02 rafal Exp $
  */
 public class PicoPersistentFactory implements PersistentFactory
 {
@@ -69,7 +69,6 @@ public class PicoPersistentFactory implements PersistentFactory
     public Persistent newInstance() throws Exception
     {
         ComponentAdapter adapter = new CustomizingConstructorComponentAdapter(type, type, null);
-        adapter.setContainer(container);
-        return (Persistent)adapter.getComponentInstance(); 
+        return (Persistent)adapter.getComponentInstance(container); 
     }
 }

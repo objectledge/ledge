@@ -33,73 +33,57 @@ import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.PicoVerificationException;
+import org.picocontainer.PicoVisitor;
 
 /**
  * An adapter for a component that is customized on behalf of a component that is asking for it.
- * 
- * <p>When another component is being initialized and it depends on the component that is managed 
- * by this adapter (identified by the componentKey), the customizedContainerProvider is asked to 
+ * <p>
+ * When another component is being initialized and it depends on the component that is managed by
+ * this adapter (identified by the componentKey), the customizedContainerProvider is asked to
  * produce an instance of the customized component. Thus, different components may recieve different
- * instnaces of the managed component, depending on the customizedComponentProvider's semantics.</p>
- *
- * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.14 2004-02-17 15:50:29 fil Exp $
+ * instnaces of the managed component, depending on the customizedComponentProvider's semantics.
+ * </p>
+ * 
+ * @author <a href="Rafal.Krzewski">rafal@caltha.pl </a>
+ * @version $Id: CustomizedComponentAdapter.java,v 1.15 2005-02-04 02:28:00 rafal Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
 {
-    private PicoContainer container;
-    
     private Object componentKey;
 
     private CustomizedComponentProvider customizedComponentProvider;
-    
+
     /**
      * Crates a new instance of the adapter.
      * 
      * @param componentKey the component key this adapter manages.
      * @param customizedComponentProvider a provider of customized components.
      */
-    public CustomizedComponentAdapter(
-        Object componentKey,
+    public CustomizedComponentAdapter(Object componentKey,
         CustomizedComponentProvider customizedComponentProvider)
     {
         this.componentKey = componentKey;
         this.customizedComponentProvider = customizedComponentProvider;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void setContainer(PicoContainer container)
-    {
-        this.container = container;
-        customizedComponentProvider.setContainer(container);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public PicoContainer getContainer()
-    {
-        return container;
-    }
 
     /**
      * {@inheritDoc}
      */
-    public Object getComponentInstance()
+    public Object getComponentInstance(PicoContainer container)
         throws PicoInitializationException, PicoIntrospectionException
     {
         // lacking a better idea...
-        return customizedComponentProvider;
+        return customizedComponentProvider.getCustomizedComponentInstance(container, null, null);
     }
-    
+
     /**
      * Returns a customized components instance.
+     * <p>
+     * This method is called by the {@link CustomizingConstructorComponentAdapter}.
+     * </p>
      * 
-     * <p>This method is called by the {@link CustomizingConstructorComponentAdapter}.</p>
-     * 
+     * @param container the container for resolving references.
      * @param componentKey the key of the requesting component.
      * @param componentImplementation the implemenation class of the requesting component.
      * @return a customized component instance.
@@ -107,22 +91,23 @@ public class CustomizedComponentAdapter
      * @throws PicoIntrospectionException if there is a problem introspecting classes.
      * @throws UnsupportedKeyTypeException if the requesting component key if an unsupported type.
      */
-    public Object getComponentInstance(Object componentKey, Class componentImplementation)
+    public Object getComponentInstance(PicoContainer container, Object componentKey,
+        Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException, UnsupportedKeyTypeException
-    {        
-         ComponentAdapter adapter = customizedComponentProvider.
-             getCustomizedAdapter(componentKey, componentImplementation);
-         return adapter.getComponentInstance();
+    {
+        return customizedComponentProvider.getCustomizedComponentInstance(container, componentKey,
+            componentImplementation);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void verify() throws PicoVerificationException
+    public void verify(PicoContainer container)
+        throws PicoVerificationException
     {
-        customizedComponentProvider.verify();    
+        customizedComponentProvider.verify(container);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -137,5 +122,13 @@ public class CustomizedComponentAdapter
     public Object getComponentKey()
     {
         return componentKey;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void accept(PicoVisitor visitor)
+    {
+        visitor.visitComponentAdapter(this);
     }
 }
