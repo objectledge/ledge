@@ -179,7 +179,7 @@ public class XMLI18n extends AbstractI18n
 	 * SAX Parser event handler class to load locale properties.
 	 *  
 	 */
-	protected class SAXEventHandler
+	protected static class SAXEventHandler
 		   extends DefaultHandler
 	{
 	    /** the document locator */
@@ -305,7 +305,6 @@ public class XMLI18n extends AbstractI18n
 				}
 				sb.append(item);
 				String name = sb.toString();
- 				String previousValue = (String)map.get(name);
                 if(map.containsKey(name))
 				{
                     throw new SAXParseException(name+" already defined ", locator);
