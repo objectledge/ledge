@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.objectledge.cache.DelayedUpdate;
-import org.objectledge.cache.spi.CachingSPI;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.TimeoutMap;
 
@@ -46,7 +46,7 @@ import org.objectledge.cache.spi.TimeoutMap;
  * more frequently than {@link #ttl} milliseconds.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: TimeoutMapImpl.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: TimeoutMapImpl.java,v 1.2 2004-02-26 11:34:28 fil Exp $
  */
 public class TimeoutMapImpl
     extends WrappingMap
@@ -63,8 +63,8 @@ public class TimeoutMapImpl
     /** The entry TTL. */
     private long ttl = TTL_DEFAULT;
 
-    /** The Caching. */
-    private CachingSPI caching;
+    /** The DefaultCacheFactory. */
+    private CacheFactorySPI caching;
     
     /** Time when last update (cache cleanup occured). */
     private long lastUpdate;
@@ -85,7 +85,7 @@ public class TimeoutMapImpl
     /**
      * {@inheritDoc}
      */
-    public void configure(CachingSPI caching, String name, String config)
+    public void configure(CacheFactorySPI caching, String name, String config)
     {
         this.caching = caching;
         try

@@ -29,7 +29,7 @@
 package org.objectledge.cache;
 
 import org.jcontainer.dna.Configuration;
-import org.objectledge.cache.spi.CachingSPI;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableValueFactory;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.PersistenceException;
@@ -40,7 +40,7 @@ import org.objectledge.database.persistence.PersistentFactory;
  * An implementation of ValueFactory interface that uses the persistency.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PersistenceValueFactory.java,v 1.3 2004-02-23 14:23:02 fil Exp $
+ * @version $Id: PersistenceValueFactory.java,v 1.4 2004-02-26 11:34:25 fil Exp $
  */
 public class PersistenceValueFactory
     implements ConfigurableValueFactory
@@ -121,7 +121,7 @@ public class PersistenceValueFactory
     /**
      * {@inheritDoc}
      */
-    public void configure(CachingSPI caching, String name, Configuration config)
+    public void configure(CacheFactorySPI caching, String name, Configuration config)
     {
         Configuration[] parameters = config.getChildren("parameter");
         String vClass = null;

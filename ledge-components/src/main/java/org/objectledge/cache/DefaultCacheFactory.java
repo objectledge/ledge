@@ -44,7 +44,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
-import org.objectledge.cache.spi.CachingSPI;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.ConfigurableValueFactory;
 import org.objectledge.cache.spi.DistributedMap;
@@ -61,7 +61,7 @@ import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
 
 /**
- * Caching component.
+ * DefaultCacheFactory component.
  * 
  * <p>An instance declaration is a list of map layer declarations.
  * A map layer declaration is composed of a map type name (both
@@ -75,10 +75,10 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Caching.java,v 1.3 2004-02-13 14:15:28 pablo Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.1 2004-02-26 11:34:25 fil Exp $
  */
-public class Caching
-    implements CachingSPI
+public class DefaultCacheFactory
+    implements CacheFactorySPI, CacheFactory
 {
     // constants ////////////////////////////////////////////////////////////
     /** Type constant for HashMap */
@@ -181,7 +181,7 @@ public class Caching
      * @throws ConfigurationException thrown if configuration is invalid.
      * @throws ClassNotFoundException thrown if one of the class not found.
      */
-    public Caching(Configuration config, Logger logger, 
+    public DefaultCacheFactory(Configuration config, Logger logger, 
                     ThreadPool threadPool, Notification notification,
                     Persistence persistence)
         throws ConfigurationException, ClassNotFoundException
@@ -263,7 +263,7 @@ public class Caching
         threadPool.runDaemon(new DelayedUpdateTask());
     }                          
 
-    // CachingSPI interface ////////////////////////////////////////////////
+    // CacheFactorySPI interface ////////////////////////////////////////////////
 
     /**
      * {@inheritDoc}

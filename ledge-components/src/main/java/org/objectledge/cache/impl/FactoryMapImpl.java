@@ -31,7 +31,7 @@ package org.objectledge.cache.impl;
 import java.util.Map;
 
 import org.objectledge.cache.ValueFactory;
-import org.objectledge.cache.spi.CachingSPI;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.FactoryMap;
 
@@ -39,7 +39,7 @@ import org.objectledge.cache.spi.FactoryMap;
  * An implementation of factory map.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: FactoryMapImpl.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: FactoryMapImpl.java,v 1.2 2004-02-26 11:34:28 fil Exp $
  */
 public class FactoryMapImpl
     extends DelegateMap
@@ -81,7 +81,7 @@ public class FactoryMapImpl
      * @param name the name of the map.
      * @param config an opaque String.
      */
-    public void configure(CachingSPI caching, String name, String config)
+    public void configure(CacheFactorySPI caching, String name, String config)
     {
         //TODO config/name -> name/config
         this.factory = caching.getValueFactory(config, name);

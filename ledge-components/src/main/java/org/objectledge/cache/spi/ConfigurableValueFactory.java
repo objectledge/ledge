@@ -35,7 +35,7 @@ import org.objectledge.cache.ValueFactory;
  * Implemented by ValueFactories that are instantiated by the caching component.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConfigurableValueFactory.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
+ * @version $Id: ConfigurableValueFactory.java,v 1.3 2004-02-26 11:34:28 fil Exp $
  */
 public interface ConfigurableValueFactory
     extends ValueFactory
@@ -47,7 +47,7 @@ public interface ConfigurableValueFactory
      * @param name the name of the map this factory in being attached to.
      * @param config the configuration options present in the properties file.
      */
-    public void configure(CachingSPI caching, String name, Configuration config);
+    public void configure(CacheFactorySPI caching, String name, Configuration config);
 }
 
     

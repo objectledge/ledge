@@ -37,7 +37,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import org.objectledge.cache.spi.CachingSPI;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.LRUMap;
 
@@ -52,7 +52,7 @@ import org.objectledge.cache.spi.LRUMap;
  * implement than put() LRU ordering ;-)</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LRUMapImpl.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
+ * @version $Id: LRUMapImpl.java,v 1.3 2004-02-26 11:34:28 fil Exp $
  */
 public class LRUMapImpl
     extends DelegateMap
@@ -86,7 +86,7 @@ public class LRUMapImpl
     /**
      * {@inheritDoc}
      */
-    public void configure(CachingSPI caching, String name, String config)
+    public void configure(CacheFactorySPI caching, String name, String config)
     {
         try
         {

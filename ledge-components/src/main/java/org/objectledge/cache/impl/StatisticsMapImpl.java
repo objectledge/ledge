@@ -31,7 +31,7 @@ package org.objectledge.cache.impl;
 import java.text.NumberFormat;
 import java.util.Map;
 
-import org.objectledge.cache.spi.CachingSPI;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.StatisticsMap;
 
@@ -40,7 +40,7 @@ import org.objectledge.cache.spi.StatisticsMap;
  *
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsMapImpl.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: StatisticsMapImpl.java,v 1.2 2004-02-26 11:34:28 fil Exp $
  */
 public class StatisticsMapImpl
     extends DelegateMap
@@ -89,7 +89,7 @@ public class StatisticsMapImpl
     /**
      * {@inheritDoc}
      */
-    public void configure(CachingSPI caching, String name, String config)
+    public void configure(CacheFactorySPI caching, String name, String config)
     {
         setName(name);
         caching.addStatisticsMap(this);

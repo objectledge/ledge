@@ -44,6 +44,7 @@ import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.cache.impl.DelegateMap;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.LRUMap;
 import org.objectledge.cache.spi.StatisticsMap;
 import org.objectledge.context.Context;
@@ -72,7 +73,7 @@ public class CachingTest extends TestCase
 {
     private static final String TEST_CHANNEL = "test_channel";
     
-    private Caching caching;
+    private CacheFactorySPI caching;
 
     private Notification notification;
     /**
@@ -105,7 +106,7 @@ public class CachingTest extends TestCase
                                                 getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         InputSource source = new InputSource(
-            fs.getInputStream("config/org.objectledge.cache.Caching.xml"));
+            fs.getInputStream("config/org.objectledge.cache.CacheFactory.xml"));
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         XMLReader reader = parserFactory.newSAXParser().getXMLReader();
         SAXConfigurationHandler handler = new SAXConfigurationHandler();
@@ -113,8 +114,7 @@ public class CachingTest extends TestCase
         reader.setErrorHandler(handler);
         reader.parse(source);
         config = handler.getConfiguration();
-        XMLValidator validator = new XMLValidator();
-        caching = new Caching(config, logger, pool, notification, persistence);
+        caching = new DefaultCacheFactory(config, logger, pool, notification, persistence);
     }
 
     public void testCaching()

@@ -34,9 +34,9 @@ package org.objectledge.cache;
  *
  * <p>The usage pattern for <code>DelayedUpdate</code> supporting objects is:
  * <ol>
- *    <li> {@link Caching#register(DelayedUpdate)} is called on the
+ *    <li> {@link CacheFactory#register(DelayedUpdate)} is called on the
  *    object.</li>
- *    <li> The <code>Caching</code> queries the requested delay time with
+ *    <li> The <code>CacheFactory</code> queries the requested delay time with
  *    {@link #getUpdateLatency()} call, and puts the object into the waiting queue.</li>
  *    <li> After the requested delay time passes, {@link #update()} is called
  *    and the object is removed from the queue.</li>
@@ -48,7 +48,7 @@ package org.objectledge.cache;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DelayedUpdate.java,v 1.1 2004-02-12 11:41:27 pablo Exp $
+ * @version $Id: DelayedUpdate.java,v 1.2 2004-02-26 11:34:25 fil Exp $
  */
 public interface DelayedUpdate
 {

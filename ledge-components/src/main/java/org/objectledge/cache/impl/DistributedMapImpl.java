@@ -36,7 +36,7 @@ import java.io.ObjectOutputStream;
 
 import org.objectledge.cache.NoLongerValidException;
 import org.objectledge.cache.Refreshable;
-import org.objectledge.cache.spi.CachingSPI;
+import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.DistributedMap;
 import org.objectledge.notification.Notification;
@@ -46,7 +46,7 @@ import org.objectledge.notification.NotificationReceiver;
  * An implementation of {@link DistributedMap} using the {@link Notification}.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DistributedMapImpl.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
+ * @version $Id: DistributedMapImpl.java,v 1.3 2004-02-26 11:34:28 fil Exp $
  */
 public class DistributedMapImpl
     extends DelegateMap
@@ -81,7 +81,7 @@ public class DistributedMapImpl
     /**
      * {@inheritDoc}
      */
-    public void configure(CachingSPI caching, String name, String config)
+    public void configure(CacheFactorySPI caching, String name, String config)
     {
         attach(caching.getNotification(), name);
     }    

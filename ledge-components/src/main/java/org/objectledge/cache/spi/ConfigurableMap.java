@@ -34,7 +34,7 @@ import java.util.Map;
  * Implemented by maps the that can be configured with textual input.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>*
- * @version $Id: ConfigurableMap.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: ConfigurableMap.java,v 1.2 2004-02-26 11:34:28 fil Exp $
  */
 public interface ConfigurableMap
     extends Map
@@ -46,5 +46,5 @@ public interface ConfigurableMap
      * @param name the name of the map.
      * @param config the cache configuration.
      */
-    public void configure(CachingSPI caching, String name, String config);
+    public void configure(CacheFactorySPI caching, String name, String config);
 }
