@@ -36,36 +36,58 @@ import java.util.StringTokenizer;
  * 
  * <p> For constructor arguments ("a.b.c", ".", "/") the following is generated: </p>
  * <p>
- *   <table width="100%">
+ *   <table>
  *     <tr>
- *       <th>call no.</th>
- *       <th width="100%">next()</th>
+ *       <th>iteration</th>
+ *       <th>next()</th>
  *     </tr>
  *     <tr>
  *       <td>1</td>
- *       <td>a/b/c</td>
- *     </tr>
- *     <tr>
- *       <td>2</td>
  *       <td>a/b/c/Default</td>
  *     </tr>
  *     <tr>
- *       <td>3</td>
+ *       <td>2</td>
  *       <td>a/b/Default</td>
  *     </tr>
  *     <tr>
- *       <td>4</td>
+ *       <td>3</td>
  *       <td>a/Default</td>
  *     </tr>
  *     <tr>
- *       <td>5</td>
+ *       <td>4</td>
+ *       <td>Default</td>
+ *     </tr>
+ *   </table>
+ * </p>
+ * 
+ * <p> For constructor arguments ("a.b.C", ".", "/") the following is generated: </p>
+ * <p>
+ *   <table>
+ *     <tr>
+ *       <th>iteration</th>
+ *       <th>next()</th>
+ *     </tr>
+ *     <tr>
+ *       <td>1</td>
+ *       <td>a/b/C</td>
+ *     </tr>
+ *     <tr>
+ *       <td>2</td>
+ *       <td>a/b/Default</td>
+ *     </tr>
+ *     <tr>
+ *       <td>3</td>
+ *       <td>a/Default</td>
+ *     </tr>
+ *     <tr>
+ *       <td>4</td>
  *       <td>Default</td>
  *     </tr>
  *   </table>
  * </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequence.java,v 1.1 2004-01-15 16:38:54 fil Exp $
+ * @version $Id: ViewFallbackSequence.java,v 1.2 2004-01-16 14:38:35 fil Exp $
  */
 public class ViewFallbackSequence
 {
@@ -116,7 +138,7 @@ public class ViewFallbackSequence
      */
     public boolean hasNext()
     {
-        return position < tokens.length+2;
+        return position < tokens.length+1;
     }
     
     /**
@@ -128,31 +150,25 @@ public class ViewFallbackSequence
     {
         if(!hasNext())
         {
-            throw new NoSuchElementException((position+2)+" > "+(tokens.length+2));
+            throw new NoSuchElementException((position+1)+" > "+(tokens.length+1));
         }
         buff.setLength(0);
-        if(position == 0)
+        for(int i=0; i<tokens.length - position; i++)
         {
-            for(int i=0; i<tokens.length; i++)
+            buff.append(tokens[i]);
+            if(i < tokens.length - position -1)
             {
-                buff.append(tokens[i]);
-                if(i<tokens.length-1)
-                {
-                    buff.append(outSeparator);
-                }
+                buff.append(outSeparator);
             }
         }
-        else
+        if(position != 0 || !Character.isUpperCase(tokens[tokens.length-1].charAt(0)))
         {
-            int j = tokens.length + 1 - position;
-            for(int i=0; i<j; i++)
+            if(position < tokens.length)
             {
-                buff.append(tokens[i]);
                 buff.append(outSeparator);
             }
             buff.append(defaultSuffix);
         }
-        
         position++;
         return buff.toString();
     }
