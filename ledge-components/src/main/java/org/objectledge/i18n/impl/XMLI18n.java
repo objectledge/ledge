@@ -41,6 +41,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.xml.sax.Attributes;
@@ -77,16 +78,17 @@ public class XMLI18n extends I18nBase
 	/**
 	 * Component constructor.
 	 * 
-	 * @param config the configuration
+	 * @param config the configuration.
+	 * @param logger the logger.
 	 * @param fileSystem the file system.
 	 * @param localeDir the locale files directory.
 	 * @throws ParserConfigurationException if happen.
 	 * @throws SAXException if happen.
 	 */	
-	public XMLI18n(Configuration config, FileSystem fileSystem, String localeDir)
+	public XMLI18n(Configuration config, Logger logger, FileSystem fileSystem, String localeDir)
 		throws ParserConfigurationException, SAXException 
 	{
-		super(config);
+		super(config, logger);
 		System.out.println("XMLI18n init called");
 		this.fileSystem = fileSystem;
 		this.localeDir = localeDir;
@@ -95,13 +97,13 @@ public class XMLI18n extends I18nBase
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		parser = factory.newSAXParser();
 		handler = new SAXEventHandler();
-		init();
+		reload();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	protected void init()
+	public void reload()
 	{
 		Map newLocaleMap = new HashMap();
 		try

@@ -55,4 +55,10 @@ public interface I18n
 	 * @return the the output string.
 	 */
 	String get(Locale locale, String key, String[] values);
+	
+	/**
+	 * Reload the localization.
+	 * 
+	 */
+	void reload();
 }

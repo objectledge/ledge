@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
 import org.objectledge.i18n.I18n;
 import org.objectledge.templating.ContextToolFactory;
 import org.objectledge.utils.StringUtils;
@@ -59,6 +60,9 @@ public class I18nBase implements I18n, ContextToolFactory
 	/** default setting for using key as undefinied value */
 	public static final boolean DEFAULT_USE_KEY_IF_UNDEFINED = true;
 	
+	/** logger */
+	protected Logger logger;
+	
 	/** context tool key */
 	private String contextToolKey;
 
@@ -80,13 +84,16 @@ public class I18nBase implements I18n, ContextToolFactory
 	/**
 	 * Component constructor.
 	 *
-	 * @param config the configuration. 
+	 * @param config the configuration.
+	 * @param logger the logger. 
 	 */
-	public I18nBase(Configuration config)
+	public I18nBase(Configuration config, Logger logger)
 	{
+		this.logger = logger;
 		contextToolKey = config.getChild("context_tool_key").getValue(DEFAULT_CONTEXT_TOOL_KEY);
 		undefinedValue = config.getChild("undefined_value").getValue(DEFAULT_UNDEFINED_VALUE);
-		defaultLocale = new Locale(config.getChild("default_locale").getValue(DEFAULT_LOCALE));
+		defaultLocale = StringUtils.
+			getLocale(config.getChild("default_locale").getValue(DEFAULT_LOCALE));
 		useDefaultLocale = config.getChild("use_default_locale").
 			getValueAsBoolean(DEFAULT_USE_DEFAULT_LOCALE);
 		useKeyIfUndefined = config.getChild("use_key_if_undefined").
@@ -138,7 +145,7 @@ public class I18nBase implements I18n, ContextToolFactory
 	/**
 	 * {@inheritDoc}
 	 */
-	protected void init()
+	public void reload()
 	{
 		//empty loader should be overriden
 	}
