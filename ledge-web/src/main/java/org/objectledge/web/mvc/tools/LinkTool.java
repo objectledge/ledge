@@ -48,9 +48,24 @@ import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
 
 /**
- * Context tool used to build web application links.
+ * Context tool used to build web application links. It works in a pull manner. The template
+ * designer provides instances of <code>LinkTool</code> with all the necessary parameters,
+ * the <code>LinkTool</code> itself is responsible for generation of a proper URL string based on 
+ * this parameters. An example of <code>LinkTool</code> usage in Velocity template:
+ * 
+ * <h4>template</h4>
+ * <pre>
+ * $link.view('somepackage.SomeView').action('somepackage.SomeAction').set('paramName','paramValue')
+ * </pre>
+ *
+ * <h4>output</h4>
+ * <pre>
+ * /context/servlet/view/somepackage.SomeView?action=somepackage.SomeAction&amp;paramName=paramValue
+ * </pre>
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: LinkTool.java,v 1.4 2004-03-19 17:12:02 zwierzem Exp $
  */
 public class LinkTool
 {
