@@ -14,11 +14,19 @@
         <p>Those are the runtime dependencies of the core components, that are needed to run
         any ObjectLedge application.</p>
         
-        <p>PicoContainer</p>
-
-        <p>DNA</p>
-        
-        <p>Jing</p>
+        <table width="100%">
+     	  <tr>
+     	    <td width="33%" style="vertical-align:bottom; background:white;">
+              <p style="text-align:center;"><img alt="Pico Container logo" style="border:none; margin-bottom:5px;" src="images/pico-logo.png" /><br /><a href="http://www.picocontainer.org/">PicoContainer</a></p>
+            </td>
+            <td width="33%" style="vertical-align:bottom; background:white;">
+              <p style="text-align:center;"><img alt="DNA Framework logo" style="border:none; margin-bottom:5px;" src="images/dna-logo.png" /><br /><a href="http://dna.jcontainer.org/">DNA</a></p>
+            </td>
+            <td width="33%" style="vertical-align:bottom; background:white;">
+              <p style="text-align:center;"><a href="http://www.thaiopensource.com/relaxng/jing.html">Jing</a></p> 
+            </td>
+          </tr>
+        </table>
         
       </subsection>
       <subsection name="Optional dependencies">
@@ -26,18 +34,37 @@
         run the application only if it uses the mentioned components. However they are
         required to compile ObjectLedge codebase.</p>
         
-        <p>Velocity</p>
-        
+        <table width="33%" border="0" style="color:white;">
+     	  <tr>
+     	    <td style="background:white; vertical-align:bottom; ">
+              <p style="text-align:center;"><img alt="Velocity logo" style="border:none; margin-bottom:5px;" src="images/powered-by-logo.gif" /><br /><a href="http://jakarta.apache.org/velocity/">Velocity</a></p>
+            </td>
+            <td width="33%" style="vertical-align:bottom; background:white;">
+              <br />  
+            </td>
+            <td width="33%" style="vertical-align:bottom; background:white;">
+              <br />
+            </td>            
+          </tr>
+        </table>
       </subsection>
       <subsection name="Tools">
         <p>We use many excelent Open Source tools for developing ObjectLedge.</p>
         
-        <p>Eclipse</p>
-        
-        <p>Maven</p>
-        
-        <p>JUnit</p>
-        
+        <table width="100%" border="0" style="color:white;">
+     	  <tr>
+     	    <td width="33%" style="vertical-align:bottom; background:white;">
+              <p style="text-align:center;"><img alt="Eclipse logo" style="border:none; margin-bottom:5px;" src="images/EclipseBannerPic.jpg" /><br /><a href="http://www.eclipse.org/">Eclipse</a></p>
+            </td>
+     	    <td width="33%" style="vertical-align:bottom; background:white;">
+              <p style="text-align:center;"><img alt="Junit logo" style="border:none; margin-bottom:5px;" src="images/frogMov.gif" /><img alt="keep the bar green to keep the code clean..." style="border:none; float:left; margin-right:10px;" src="images/keep.gif" /><br /><a href="http://www.junit.org/">JUnit</a></p>
+            </td>
+     	    <td width="33%" style="vertical-align:bottom; background:white;">
+              <p style="text-align:center;"><img alt="Maven logo" style="border:none; margin-bottom:5px;" src="images/maven.jpg" /><br /><a href="http://maven.apache.org/">Maven</a></p>
+            </td>
+          </tr>
+        </table>
+
       </subsection>
     </section>
     </body>
