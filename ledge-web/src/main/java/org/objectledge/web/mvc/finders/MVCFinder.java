@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectledge.templating.Template;
+import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.actions.DefaultAction;
 import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
@@ -40,7 +41,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.4 2004-01-15 12:18:40 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.5 2004-01-15 16:37:03 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -60,15 +61,24 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	
 	/** Prefixes for builder classes. */
 	private String[] classPrefixes;
+    
+    /** Prefixes for templates */
+    private String[] templatePrefixes;
+    
+    /** The Templating component. */
+    private Templating templating;
 	
     /**
      * Creates a MVCFinder component.
      * 
      * @param container the container to store loaded classes.
+     * @param templating the templating component.
      */
-	public MVCFinder(MutablePicoContainer container)
+	public MVCFinder(MutablePicoContainer container, Templating templating)
 	{
 		this.container = container;
+        this.templating = templating;
+        
 		container.registerComponentImplementation(DefaultBuilder.class);
 		container.registerComponentImplementation(DefaultAction.class);
 		// TODO container.registerComponentImplementation(DefaultComponent.class);
@@ -77,12 +87,14 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		defaultAction = (DefaultAction) container.getComponentInstance(DefaultAction.class);
 	}
 
-	/**
+    // builder templates ////////////////////////////////////////////////////////////////////////
+
+    	/**
 	 * {@inheritDoc}
 	 */
     public Template findBuilderTemplate(String name)
     {
-        // TODO Auto-generated method stub
+        
         return null;
     }
 
@@ -104,7 +116,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         return null;
     }
 
-	// MVCClassFinder -----------------------------------------------------------------------------
+	// actions //////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * {@inheritDoc}
@@ -117,6 +129,8 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		}
 		return (Runnable) getInstance(ACTIONS, actionName);
 	}
+
+    // builders /////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * {@inheritDoc}
@@ -150,7 +164,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         return null;
     }
 
-    // implementation -----------------------------------------------------------------------------
+    // implementation ///////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Gets an instance of an object depending on it's finder name and type
@@ -207,5 +221,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 		}
 		// will return null on non existing class
 		return (Class) classCache.get(classNamePart);
-	}    
+	}
+    
 }
