@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.8 2004-01-14 11:29:17 fil Exp $
+ * @version $Id: StringUtils.java,v 1.9 2004-01-20 17:20:03 pablo Exp $
  */
 public class StringUtils
 {
@@ -103,6 +103,59 @@ public class StringUtils
         }
         return input;
     }
+    
+	/**
+	 * Backslash escape reserved characters in a string.
+	 *
+	 * @param in the string to process.
+	 * @return the string reserved characters escaped.
+	 */
+	public static String backslashEscape(String in, String reserved)
+	{
+		StringBuffer out = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(in,reserved,true);
+		while(st.hasMoreTokens())
+		{
+			String t = st.nextToken();
+			if(t.length() == 1 && reserved.indexOf(t) >= 0)
+			{
+				out.append('\\');
+			}
+			out.append(t);
+		}               
+		return out.toString();
+	}
+
+	/**
+	 * Escapes characters outside the US-ASCII range as Java unicode scapes
+	 * (&#2F;uxxxx where x is a hexadecimal digit.)
+	 *
+	 * @param s the string to process.
+	 * @return processed string.
+	 */
+	public static String escapeNonASCIICharacters(String s)
+	{
+		StringBuffer buff = new StringBuffer();
+		char[] chars = s.toCharArray();
+		for(int i=0; i<chars.length; i++)
+		{
+			if((int)chars[i] < 128)
+			{
+				buff.append(chars[i]);
+			}
+			else
+			{
+				buff.append("\\u");
+				String ucode = Integer.toString((int)chars[i], 16);
+				for(int j=4-ucode.length(); j>0; j--)
+				{
+					buff.append('0');
+				}
+				buff.append(ucode);
+			}
+		}
+		return buff.toString();
+	}
 
     /**
      * Expand unicode escapes.
