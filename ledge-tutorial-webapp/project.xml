@@ -76,7 +76,7 @@
       </properties>      
     </dependency>
     <dependency>
-      <groupId>picocontainer</groupId>
+      <groupId>nanocontainer</groupId>
       <artifactId>nanocontainer</artifactId>
       <version>1.0-alpha-1-SNAPSHOT</version>
       <properties>
@@ -100,7 +100,7 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-      <url>http://nanocontainer.org/</url>
+      <url>http://picocontainer.org/picoextras</url>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
@@ -109,7 +109,7 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-      <url>http://nanocontainer.org/</url>
+      <url>http://picocontainer.org/picoextras</url>
     </dependency>
     <dependency>
       <id>commons-collections</id>
