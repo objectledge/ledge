@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launchConfiguration type="org.eclipse.jdt.junit.launchconfig">
-    <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.objectledge.ContainerTests"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ledge-container"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dledge.root=src/test/resources"/>
-    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
-        <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
-        <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
-    </listAttribute>
-    <stringAttribute key="org.eclipse.debug.ui.target_debug_perspective" value="perspective_default"/>
-    <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="ledge-container"/>
-    <stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="org.eclipse.jdt.ui.JavaPerspective"/>
+<booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.objectledge.ContainerTests"/>
+<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ledge-container"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dledge.root=src/test/resources"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.debug.ui.target_debug_perspective" value="perspective_default"/>
+<stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
+<booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="ledge-container"/>
+<stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="org.eclipse.jdt.ui.JavaPerspective"/>
 </launchConfiguration>
