@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXMLContainerBuilder.java,v 1.4 2004-02-23 09:05:39 fil Exp $
+ * @version $Id: LedgeXMLContainerBuilder.java,v 1.5 2004-03-02 11:07:53 fil Exp $
  */
 public class LedgeXMLContainerBuilder 
     extends ScriptedContainerBuilder
@@ -91,7 +91,7 @@ public class LedgeXMLContainerBuilder
         }
     }
     
-    public MutablePicoContainer createContainer(PicoContainer parentContainer, 
+    public MutablePicoContainer createContainerFromScript(PicoContainer parentContainer, 
         Object assemblyScope) 
     {
         try
