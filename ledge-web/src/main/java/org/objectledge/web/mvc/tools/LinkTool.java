@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.15 2004-10-07 10:55:51 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.16 2004-10-07 15:31:29 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -689,10 +689,7 @@ public class LinkTool
 
                 String[] keys = parameters.getParameterNames();
                 appendPathInfo(sb, keys);
-                if(pathInfoSuffix != null)
-                {
-                    sb.append('/').append(URLEncoder.encode(pathInfoSuffix, PARAMETER_ENCODING));
-                }
+                appendPathInfoSuffix(sb, pathInfoSuffix);
                 appendQueryString(sb, keys);
             }
             
@@ -772,6 +769,19 @@ public class LinkTool
                     sb.append('/').append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
                 }
             }
+        }
+    }
+
+    private void appendPathInfoSuffix(StringBuffer sb, String pathInfoSuffix)
+        throws UnsupportedEncodingException
+    {
+        if(pathInfoSuffix != null && pathInfoSuffix.length() > 0)
+        {
+            if(pathInfoSuffix.charAt(0) != '/')
+            {
+                sb.append('/');    
+            }
+            sb.append(URLEncoder.encode(pathInfoSuffix, PARAMETER_ENCODING));
         }
     }
     
