@@ -29,74 +29,138 @@
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
   <interleave>
-    <!-- required properties -->
-    <element name="driver">
-      <text/>
-    </element>
-    <element name="url">
-      <text/>
-    </element>
+    <!-- connection properties -->
+    <element name="connection">
+      <interleave>
+        <!-- required properties -->
+        <element name="driver">
+          <text/>
+        </element>
+        <element name="url">
+          <text/>
+        </element>
     
-    <!-- credentials -->
-    <optional>
-      <element name="user">  
-        <text/>
-      </element>
-    </optional>
-    <optional>    
-      <element name="password">  
-        <text/>
-      </element>
-    </optional> 
+        <!-- credentials -->
+        <optional>
+          <element name="user">  
+            <text/>
+          </element>
+        </optional>
+        <optional>    
+          <element name="password">  
+            <text/>
+          </element>
+        </optional> 
+        <optional>
+          <element name="login-timeout">
+           <text/>
+          </element>
+        </optional>
+
+        <!-- other properties -->
+        <optional>
+          <element name="transaction-isolation">
+            <text/>
+          </element>
+        </optional>
     
-    <!-- pool capacity -->
+        <optional>
+          <element name="prepared-statement-cache-size">
+            <text/>
+          </element>
+        </optional>
+    
+      </interleave>
+    </element>
+
+    <!-- deadlock timeouts -->    
     <optional>
-      <element name="capacity">
+      <element name="deadlock">  
         <interleave>
           <optional>
-            <element name="min">
+            <element name="max-wait">
               <text/>
             </element>
           </optional>
-          <element name="max">
-            <text/>
-          </element>
+          <optional>
+            <element name="retry-wait">
+              <text/>
+            </element>
+          </optional>
         </interleave>
       </element>
     </optional>
 
-    <!-- timeouts -->    
+    <!-- pool properties -->
     <optional>
-      <element name="deadlock">  
-        <optional>
-          <element name="max-wait">
-            <text/>
-          </element>
-        </optioal>
-        <optional>
-          <element name="retry-wait">
-            <text/>
-          </element>
-        </optioal>
-      </element>
-    </optional>
- 
-    <optional>
-      <element name="login-timeout">
-        <text/>
-      </element>
-    </optional>
-    
-    <!-- other properties -->
-    <optional>
-      <element name="transaction-isolation">
-        <text/>
-      </element>
-    </optional>
-    
-    <optional>
-      <element name="prepared-statement-cache-size">
-        <text/>
+      <element name="pool">      
+        <interleave>
+          <!-- pool capacity -->
+          <optional>
+            <element name="capacity">
+              <interleave>
+                <optional>
+                  <element name="min">
+                    <text/>
+                  </element>
+                </optional>
+                <element name="max">
+                  <text/>
+                </element>
+              </interleave>
+            </element>
+          </optional>
+          <!-- pool cleanup -->
+          <optional>
+            <element name="cleanup">
+              <interleave>
+                <!-- force GC during cleanup -->
+                <optional>
+                  <element name="gc">
+                    <text/>
+                  </element>
+                </optional>
+                <!-- cleanup thread wakeup interval -->
+                <optional>
+                  <element name="interval">
+                    <text/>
+                  </element>
+                </optional>
+                <!-- lifetime of unused connections -->
+                <optional>
+                  <element name="unused-life-time">
+                    <text/>
+                  </element>
+                </optional>
+              </interleave>
+            </element>
+          </optional>
+          <!-- connection checking -->
+          <optional>
+            <element name="checking">
+              <interleave>
+                <!-- connection checking level
+                 |     0 - no checking
+                 |     1 - check connection object
+                 |     2 - run validation query on connection
+                 |     3 - check all connection objects in the pool
+                 |     4 - run validation query on all connections in the pool
+                 -->
+                <optional>
+                  <element name="level">
+                    <text/>
+                  </element>
+                </optional>
+                <!-- connection validation statement -->
+                <optional>
+                  <element name="statement">
+                    <text/>
+                  </element>
+                </optional>
+              </interleave>
+            </element>
+          </optional>
+        </interleave>
       </element>
     </optional>
     

@@ -45,7 +45,7 @@ import org.picocontainer.lifecycle.Stoppable;
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSource.java,v 1.1 2004-02-06 08:42:59 fil Exp $
+ * @version $Id: XaPoolDataSource.java,v 1.2 2004-02-06 11:17:23 fil Exp $
  */
 public class XaPoolDataSource extends DelegatingDataSource
     implements XADataSource, Stoppable
@@ -87,19 +87,21 @@ public class XaPoolDataSource extends DelegatingDataSource
         StandardXADataSource xaDataSource = new StandardXADataSource();
         xaDataSource.setTransactionManager(transaction.getTransactionManager());
 
-        long deadlockMaxWait = config.getChild("deadlock").getChild("max-wait").
-            getValueAsInteger(-1);
-        long deadlockRetryWait = config.getChild("deadlock").getChild("retry-wait").
-            getValueAsInteger(-1);
-        String driverName = config.getChild("driver").getValue();
-        int loginTimeout = config.getChild("login-timeout").getValueAsInteger(-1);
-        String password = config.getChild("password").getValue(null);
-        int preparedStmtCacheSize = config.getChild("prepared-statement-cache-size").
-            getValueAsInteger(-1);
-        int transactionIsolation = config.getChild("transaction-isolation").
-            getValueAsInteger(-1);
-        String url = config.getChild("url").getValue();
-        String user = config.getChild("user").getValue(null);
+        Configuration connectionConfig = config.getChild("connection");     
+        String driverName = connectionConfig.getChild("driver").getValue();
+        String url = connectionConfig.getChild("url").getValue();
+        String user = connectionConfig.getChild("user").getValue(null);
+        String password = connectionConfig.getChild("password").getValue(null);
+
+        int loginTimeout = connectionConfig.getChild("login-timeout").getValueAsInteger(-1);
+        int transactionIsolation = connectionConfig.
+            getChild("transaction-isolation").getValueAsInteger(-1);
+        int preparedStmtCacheSize = connectionConfig.
+            getChild("prepared-statement-cache-size").getValueAsInteger(-1);
+
+        Configuration deadlockConfig = config.getChild("deadlock"); 
+        long deadlockMaxWait = deadlockConfig.getChild("max-wait").getValueAsInteger(-1);
+        long deadlockRetryWait = deadlockConfig.getChild("retry-wait").getValueAsInteger(-1);
         
         // CoreDataSource
         if(user != null)
@@ -139,17 +141,24 @@ public class XaPoolDataSource extends DelegatingDataSource
         
         // pooling //////////////////////////////////////////////////////////////////////////////
 
-        Configuration minSizeConfig = config.getChild("capacity").getChild("min");
-        int minSize = minSizeConfig.getValueAsInteger(-1);
-        Configuration maxSizeConfig = config.getChild("capacity").getChild("max");
-        int maxSize = maxSizeConfig.getValueAsInteger(-1);
-        // GC
-        // lifeTime
-        // sleepTime
-        // checkLevel
-        // jdbcTestStatement
-        
+        Configuration poolConfig = config.getChild("pool");
 
+        Configuration minSizeConfig = poolConfig.getChild("capacity").getChild("min");
+        int minSize = minSizeConfig.getValueAsInteger(-1);
+        Configuration maxSizeConfig = poolConfig.getChild("capacity")
+            .getChild("max");
+        int maxSize = maxSizeConfig.getValueAsInteger(-1);
+        boolean gc = poolConfig.getChild("cleanup").
+            getChild("gc").getValueAsBoolean(false);
+        int lifeTime = poolConfig.getChild("cleanup").
+            getChild("unused-life-time").getValueAsInteger(-1);
+        int sleepTime = poolConfig.getChild("cleanup").
+            getChild("interval").getValueAsInteger(-1);
+        int checkLevel = poolConfig.getChild("checking").
+            getChild("level").getValueAsInteger(0);
+        String jdbcTestStatement = poolConfig.getChild("checking").
+            getChild("statement").getValue(null);
+        
         StandardXAPoolDataSource xaPoolDataSource = new StandardXAPoolDataSource(xaDataSource);
         xaPoolDataSource.setTransactionManager(transaction.getTransactionManager());
         xaPoolDataSource.setDataSource(xaDataSource);
@@ -187,6 +196,20 @@ public class XaPoolDataSource extends DelegatingDataSource
                 throw new ConfigurationException("illegal maximum pool size", 
                     maxSizeConfig.getPath(), maxSizeConfig.getLocation(), e);
             }
+        }
+        xaPoolDataSource.setGC(gc);
+        if(lifeTime != -1)
+        {
+            xaPoolDataSource.setLifeTime(lifeTime);
+        }
+        if(sleepTime != -1)
+        {
+            xaPoolDataSource.setLifeTime(sleepTime);
+        }
+        xaPoolDataSource.setCheckLevelObject(checkLevel);
+        if(jdbcTestStatement != null)
+        {
+            xaPoolDataSource.setJdbcTestStmt(jdbcTestStatement);
         }
         return xaPoolDataSource;
     }

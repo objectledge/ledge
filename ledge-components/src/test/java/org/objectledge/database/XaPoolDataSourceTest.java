@@ -27,6 +27,7 @@
 // 
 package org.objectledge.database;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -35,19 +36,26 @@ import javax.sql.DataSource;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 import javax.transaction.Status;
+import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.xml.XMLValidator;
 import org.picocontainer.lifecycle.Stoppable;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.1 2004-02-06 08:42:58 fil Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.2 2004-02-06 11:17:24 fil Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -63,16 +71,18 @@ public class XaPoolDataSourceTest extends TestCase
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
         transaction = new JotmTransaction(log);
         
-        DefaultConfiguration conf = new DefaultConfiguration("config","","/");
-        DefaultConfiguration driver = new DefaultConfiguration("driver","","/config");
+        DefaultConfiguration conf = new DefaultConfiguration("config","","");
+        DefaultConfiguration conn = new DefaultConfiguration("connection","","config");
+        conf.addChild(conn);
+        DefaultConfiguration driver = new DefaultConfiguration("driver","","config/connection");
         driver.setValue("org.hsqldb.jdbcDriver"); 
-        conf.addChild(driver);    
-        DefaultConfiguration url = new DefaultConfiguration("url","","/config");
+        conn.addChild(driver);    
+        DefaultConfiguration url = new DefaultConfiguration("url","","config/connection");
         url.setValue("jdbc:hsqldb:."); 
-        conf.addChild(url);    
-        DefaultConfiguration user = new DefaultConfiguration("user","","/config");
+        conn.addChild(url);    
+        DefaultConfiguration user = new DefaultConfiguration("user","","config/connection");
         user.setValue("sa");
-        conf.addChild(user);
+        conn.addChild(user);
         
         dataSource = new XaPoolDataSource(transaction, conf);
     }
@@ -200,6 +210,30 @@ public class XaPoolDataSourceTest extends TestCase
             DatabaseUtils.close(conn, stmt, rs);
         }
     }
+    
+    public void testMinmalXMLConfig()
+        throws Exception
+    {
+        Configuration config = getConfig(
+            "database/org.objectledge.database.XaPoolDataSource-minimal.xml",
+            "org/objectledge/database/XaPoolDataSource.rng");
+        XaPoolDataSource source = new XaPoolDataSource(transaction, config);
+        Connection conn = source.getConnection();
+        conn.close();
+        ((Stoppable)source).stop();
+    }
+
+    public void testFullXMLConfig()
+        throws Exception
+    {
+        Configuration config = getConfig(
+            "database/org.objectledge.database.XaPoolDataSource-full.xml",
+            "org/objectledge/database/XaPoolDataSource.rng");
+        XaPoolDataSource source = new XaPoolDataSource(transaction, config);
+        //Connection conn = source.getConnection();
+        //conn.close();
+        ((Stoppable)source).stop();
+    }
 
     /**
      * Constructor for XaPoolDataSourceTest.
@@ -208,5 +242,41 @@ public class XaPoolDataSourceTest extends TestCase
     public XaPoolDataSourceTest(String arg0)
     {
         super(arg0);
+    }
+
+    /**
+     * Load configuration. 
+     * 
+     * This should really be refactored somewhere visible.
+     * 
+     * @param configPath
+     * @param schemaPath
+     * @return
+     * @throws Exception
+     */
+    public Configuration getConfig(String configPath, String schemaPath)
+        throws Exception
+    {
+        String root = System.getProperty("ledge.root");
+        if(root == null)
+        {
+            throw new RuntimeException("system property ledge.root undefined." +
+                " use -Dledge.root=.../ledge-container/src/test/resources");
+        }
+        FileSystem fs = FileSystem.getStandardFileSystem(root);
+        
+        URL configUrl = fs.getResource(configPath);
+        URL schemaUrl = fs.getResource(schemaPath);
+        
+        XMLValidator validator = new XMLValidator();
+        validator.validate(configUrl, schemaUrl);
+        InputSource source = new InputSource(configUrl.toString());
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+        SAXConfigurationHandler handler = new SAXConfigurationHandler();
+        reader.setContentHandler(handler);
+        reader.setErrorHandler(handler);
+        reader.parse(source);
+        return handler.getConfiguration();
     }
 }
