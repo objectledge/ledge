@@ -51,7 +51,7 @@ import org.xml.sax.InputSource;
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.3 2003-12-16 10:48:58 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.4 2003-12-17 10:02:17 fil Exp $
  */
 public class LedgeContainer
     extends NanoContainer
@@ -71,6 +71,9 @@ public class LedgeContainer
     
     /** The document builder to use. */
     protected DocumentBuilder documentBuilder;
+
+    /** The boot container (hard rerence to make sure it not goes away). */
+    protected MutablePicoContainer bootContainer;
 
     // initialization //////////////////////////////////////////////////////////////////////////
 
@@ -116,6 +119,7 @@ public class LedgeContainer
         super(monitor);
         this.fs = fs;
         this.documentBuilder = documentBuilder;
+        init();
     }
     
     /**
@@ -146,7 +150,7 @@ public class LedgeContainer
         
         try
         {
-            MutablePicoContainer bootContainer = new DefaultPicoContainer();
+            bootContainer = new DefaultPicoContainer();
             bootContainer.registerComponentInstance(FileSystem.class, fs);
             bootContainer.registerComponentInstance(ClassLoader.class, getClass().getClassLoader());
             return frontEnd.createPicoContainer(composition, bootContainer);
