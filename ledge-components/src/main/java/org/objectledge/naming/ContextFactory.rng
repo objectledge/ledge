@@ -27,28 +27,55 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <zeroOrMore>
+<grammar  xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <element name="config">
+      <zeroOrMore>
+        <ref name="context"/>
+      </zeroOrMore>
+    </element>
+  </start>
+  
+  <define name="context">
     <element name="context">
       <attribute name="name"/>
  	  <attribute name="initial_factory"/>
- 	  <zeroOrMore>
- 	    <element name="property">
-          <attribute name="name"/>
-          <choice>
-            <attribute name="value"/>
-            <text/>
-          </choice>
-	    </element>
-      </zeroOrMore>
       <zeroOrMore>
-        <element name="alias">
-          <choice> 	    
-            <attribute name="name"/>
-            <text/>
-          </choice>
-        </element>
+        <choice>
+          <ref name="property"/>
+          <ref name="component-property"/>
+          <ref name="alias"/>
+        </choice>
       </zeroOrMore>
+	</element>	  
+  </start>
+
+  <define name="property">
+    <element name="property">
+      <attribute name="name"/>
+      <choice>
+        <attribute name="value"/>
+        <text/>
+      </choice>
+	</element>
+  </define>
+  
+  <define name="component-property">
+    <element name="component-property">
+      <attribute name="name"/>
+      <choice>
+        <attribute name="key"/>
+        <attribute name="class-key"/>
+      </choice>
     </element>
-  </zeroOrMore>
-</element>
+  </define>
+
+  <define name="alias">
+    <element name="alias">
+      <choice> 	    
+        <attribute name="name"/>
+        <text/>
+      </choice>
+    </element>
+  </define>
+</grammar>

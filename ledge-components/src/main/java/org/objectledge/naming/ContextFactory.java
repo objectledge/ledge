@@ -14,13 +14,14 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.picocontainer.PicoContainer;
 
 /**
  * Naming context factory component.
  *
  * @author <a href="mail:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mail:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ContextFactory.java,v 1.3 2004-01-27 17:24:45 pablo Exp $
+ * @version $Id: ContextFactory.java,v 1.4 2004-02-12 13:26:58 fil Exp $
  */
 public class ContextFactory
 {
@@ -39,53 +40,76 @@ public class ContextFactory
 	/**
 	 * Component constructor.
 	 * 
+     * @param container the container to resolve component properties from.
 	 * @param config the configuration.
 	 * @param logger the logger.
+     * @throws ConfigurationException if the component's configuration is invalid.
 	 */  
-  	public ContextFactory(Configuration config, Logger logger)
+  	public ContextFactory(PicoContainer container, Configuration config, Logger logger)
+        throws ConfigurationException
   	{
   		this.logger = logger;
-  		try
-  		{
-  			Configuration[] contexts = config.getChildren("context");
-			for (int i = 0; i < contexts.length; i++)
-			{
-				Hashtable env = new Hashtable();
-				String name = contexts[i].getAttribute("name");
-				// initial factory is required.
-				String initialFactory = contexts[i].getAttribute("initial_factory");
-				env.put("java.naming.factory.initial", initialFactory);
-				Configuration[] properties = contexts[i].getChildren("property");
-				for (int j = 0; j < properties.length; j++)
-				{
-					String propertyName = properties[j].getAttribute("name");
-					String propertyValue = properties[j].getAttribute("value", null);
-					if (propertyValue == null)
-					{
-						propertyValue = properties[j].getValue();
-					}
-					env.put(propertyName, propertyValue);
-				}
-				initial.put(name, env);
-				Configuration[] aliases = contexts[i].getChildren("alias");
-				for (int j = 0; j < aliases.length; j++)
-				{
-					String aliasName = aliases[j].getAttribute("name");
-					String prevContext = (String)alias.get(aliasName);
-					if(prevContext != null)
-					{
-						throw new ComponentInitializationError("alias used" +							" in more than one context: '"+prevContext+"','"+name+"...");
-					}
-					alias.put(aliasName, name);
-				}
-			}
-  		}
-        ///CLOVER:OFF
-  		catch(ConfigurationException e)
-  		{
-  			throw new ComponentInitializationError("Invalid configuration",e);
-  		}
-        ///CLOVER:ON
+        Configuration[] contexts = config.getChildren("context");
+        for (int i = 0; i < contexts.length; i++)
+        {
+            Hashtable env = new Hashtable();
+            String name = contexts[i].getAttribute("name");
+            // initial factory is required.
+            String initialFactory = contexts[i].getAttribute("initial_factory");
+            env.put("java.naming.factory.initial", initialFactory);
+            Configuration[] properties = contexts[i].getChildren("property");
+            for (int j = 0; j < properties.length; j++)
+            {
+                String propertyName = properties[j].getAttribute("name");
+                String propertyValue = properties[j].getAttribute("value", null);
+                if (propertyValue == null)
+                {
+                    propertyValue = properties[j].getValue();
+                }
+                env.put(propertyName, propertyValue);
+            }
+            Configuration[] componentProperties = contexts[i].getChildren("component-property");
+            for (int j = 0; j < componentProperties.length; j++)
+            {
+                String propertyName = componentProperties[j].getAttribute("name");
+                Object key = componentProperties[j].getAttribute("key", null);
+                if(key == null)
+                {
+                    String cn = componentProperties[j].getAttribute("class-key");
+                    try
+                    {
+                        key = Class.forName(cn);
+                    }
+                    catch(ClassNotFoundException e)
+                    {
+                        throw new ConfigurationException("non-existent class "+cn, 
+                            componentProperties[j].getPath(), 
+                            componentProperties[j].getLocation());
+                    }
+                }
+                Object component = container.getComponentInstance(key);
+                if(component == null)
+                {
+                    throw new ConfigurationException("missing component "+key, 
+                        componentProperties[j].getPath(), 
+                        componentProperties[j].getLocation());
+                }
+                env.put(propertyName, component);
+            }
+            initial.put(name, env);
+            Configuration[] aliases = contexts[i].getChildren("alias");
+            for (int j = 0; j < aliases.length; j++)
+            {
+                String aliasName = aliases[j].getAttribute("name");
+                String prevContext = (String)alias.get(aliasName);
+                if(prevContext != null)
+                {
+                    throw new ComponentInitializationError("alias used" +
+                        " in more than one context: '"+prevContext+"','"+name+"...");
+                }
+                alias.put(aliasName, name);
+            }
+        }
   	}
 
     /**
