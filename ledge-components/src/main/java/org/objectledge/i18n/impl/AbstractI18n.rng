@@ -35,6 +35,13 @@
   </start>
   <define name="baseConfig">
     <interleave>
+      <element name="supported_locales">
+        <oneOrMore>
+          <element name="locale">
+            <text/>
+          </element>
+        </oneOrMore>
+      </element>
       <optional>  
         <element name="undefined_value">  
           <text/>

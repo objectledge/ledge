@@ -42,6 +42,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
@@ -90,10 +91,11 @@ public class XMLI18n extends AbstractI18n
 	 * @param xmlValidator the XML Validator.
 	 * @throws ParserConfigurationException if happen.
 	 * @throws SAXException if happen.
+	 * @throws ConfigurationException
 	 */	
 	public XMLI18n(Configuration config, Logger logger,
 					FileSystem fileSystem, XMLValidator xmlValidator)
-		throws ParserConfigurationException, SAXException 
+		throws ParserConfigurationException, SAXException, ConfigurationException 
 	{
 		super(config, logger);
 		logger.info("XMLI18n init called");

@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.i18n.I18n;
 import org.objectledge.utils.StringUtils;
@@ -42,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.8 2004-08-24 13:17:01 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.9 2004-08-25 07:17:56 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -77,7 +78,7 @@ public abstract class AbstractI18n implements I18n
 	protected Map localeMap;
 	
 	/** supported locale */
-	protected Locale[] supportedLocale;
+	protected Locale[] supportedLocales;
 	
 	/**
 	 * Component constructor.
@@ -86,6 +87,7 @@ public abstract class AbstractI18n implements I18n
 	 * @param logger the logger. 
 	 */
 	public AbstractI18n(Configuration config, Logger logger)
+		throws ConfigurationException
 	{
 		this.logger = logger;
 		undefinedValue = config.getChild("undefined_value").getValue(DEFAULT_UNDEFINED_VALUE);
@@ -97,8 +99,19 @@ public abstract class AbstractI18n implements I18n
 			getValueAsBoolean(DEFAULT_USE_KEY_IF_UNDEFINED);
 		localeMap = new HashMap();
 
-	    //TODO add configuration here
-		supportedLocale =  new Locale[]{new Locale("pl","PL"), new Locale("en", "US")};
+		if(config.getChild("supported_locales", false) != null)
+		{
+			Configuration[] locales = config.getChild("supported_locales").getChildren(); 
+			supportedLocales =  new Locale[locales.length];
+			for(int i=0; i<locales.length; i++)
+			{
+			    supportedLocales[i] = StringUtils.getLocale(locales[i].getValue());
+			}
+		}
+		else
+		{
+		    supportedLocales = new Locale[]{ StringUtils.getLocale(DEFAULT_LOCALE) };
+		}
 	}
 	
 	/**
@@ -114,7 +127,7 @@ public abstract class AbstractI18n implements I18n
 	 */
 	public Locale[] getSupportedLocales()
 	{
-	    return supportedLocale;
+	    return supportedLocales;
 	}
 	
     /**
