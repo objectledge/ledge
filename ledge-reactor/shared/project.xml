@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.7 2003-12-18 16:12:02 fil Exp $ -->
+<!-- $Id: project.xml,v 1.8 2003-12-18 16:37:17 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -16,18 +16,23 @@
   <issueTrackingUrl>http://objectledge.org/jira</issueTrackingUrl>
    
   <url>http://objectledge.org/</url>
+  
+  <siteAddress>objectledge.org</siteAddress>
+  <siteDirectory>/home/caltha/objectledge/www</siteDirectory>
+  <distributionSite>objectledge.org</distributionSite>
+  <distributionDirectory>/home/caltha/objectledge/builds</distributionDirectory>
 
   <repository>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/ledge:${pom.artifactId}</developerConnection>
-    <!-- connection -->
-    <!-- url -->
+    <connection>scm:cvs:pserver:anonymous@objectledge.org:/cvsroot/ledge:${pom.artifactId}</connection>
+    <url>http://objectledge.org/cgi-bin/viewcvs.cgi/${pom.artifactId}</url>
   </repository>
 
   <licenses>
     <license>
       <name>BSD</name>
       <url>http://objectledge.org/license.html</url>
-      <!-- distribution -->
+      <distribution>repo</distribution>
     </license>
   </licenses>
 
