@@ -33,6 +33,7 @@ import java.io.Writer;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogSystem;
 import org.jcontainer.dna.Configuration;
@@ -51,7 +52,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.17 2005-01-28 04:13:34 rafal Exp $
+ * @version $Id: VelocityTemplating.java,v 1.18 2005-02-09 22:13:02 rafal Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -128,16 +129,16 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             throw new ComponentInitializationError("failed to initialze Velocity", e);
         }
-        engine.setProperty(VelocityEngine.RUNTIME_LOG_LOGSYSTEM, this);
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, this);
         engine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
-        engine.setProperty(VelocityEngine.RESOURCE_LOADER, "objectledge");
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "objectledge");
         engine.setProperty("objectledge.resource.loader.class",
 			"org.objectledge.templating.velocity.LedgeResourceLoader");
         engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LEDGE_FILE_SYSTEM,
         	 fileSystem);
         engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
              this);
-        engine.setProperty(VelocityEngine.INPUT_ENCODING, encoding);
+        engine.setProperty(RuntimeConstants.INPUT_ENCODING, encoding);
         try
         {
             engine.init();
