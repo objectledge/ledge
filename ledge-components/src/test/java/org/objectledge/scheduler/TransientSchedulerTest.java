@@ -75,7 +75,8 @@ public class TransientSchedulerTest extends TestCase
         super.setUp();
         String root = System.getProperty("ledge.root");
         fs = FileSystem.getStandardFileSystem(root);
-        InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+        InputSource source = new InputSource(fs.getInputStream(
+            "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document logConfig = builder.parse(source);
         DOMConfigurator.configure(logConfig.getDocumentElement());
@@ -91,7 +92,8 @@ public class TransientSchedulerTest extends TestCase
         scheduleFactories[0] = new AtScheduleFactory();
         scheduleFactories[1] = new CronScheduleFactory(i18n);
         MutablePicoContainer container = new DefaultPicoContainer();
-        scheduler = new TransientScheduler(container, config, logger, threadPool, scheduleFactories);
+        scheduler = new TransientScheduler(container, config, 
+            logger, threadPool, scheduleFactories);
         scheduler.start();
     }
 

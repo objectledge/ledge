@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXMLContainerBuilder.java,v 1.5 2004-03-02 11:07:53 fil Exp $
+ * @version $Id: LedgeXMLContainerBuilder.java,v 1.6 2004-04-01 08:54:21 fil Exp $
  */
 public class LedgeXMLContainerBuilder 
     extends ScriptedContainerBuilder
@@ -83,7 +83,8 @@ public class LedgeXMLContainerBuilder
         InputSource inputSource = new InputSource(script);
         try 
         {
-            rootElement = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource).getDocumentElement();
+            rootElement = DocumentBuilderFactory.newInstance().newDocumentBuilder().
+                parse(inputSource).getDocumentElement();
         } 
         catch (Exception e) 
         {
@@ -91,7 +92,7 @@ public class LedgeXMLContainerBuilder
         }
     }
     
-    public MutablePicoContainer createContainerFromScript(PicoContainer parentContainer, 
+    public PicoContainer createContainerFromScript(PicoContainer parentContainer, 
         Object assemblyScope) 
     {
         try
@@ -348,7 +349,8 @@ public class LedgeXMLContainerBuilder
      * @throws ClassNotFoundException if a missing class is referenced.
      * @throws PicoCompositionException if the composition data is invalid.
      */
-    protected ReflectionContainerAdapter loadContainerContents(ReflectionContainerAdapter reflectionFrontEnd, 
+    protected ReflectionContainerAdapter loadContainerContents(
+        ReflectionContainerAdapter reflectionFrontEnd, 
         Element containerElement) 
         throws ClassNotFoundException, PicoCompositionException 
     {
@@ -378,8 +380,8 @@ public class LedgeXMLContainerBuilder
                 else if (name.equals("container")) 
                 {
                     MutablePicoContainer childContainer =  loadContainer((Element)child);
-                    ReflectionContainerAdapter childFrontEnd = createReflectionContainerAdapter(reflectionFrontEnd, 
-                        childContainer);
+                    ReflectionContainerAdapter childFrontEnd = 
+                        createReflectionContainerAdapter(reflectionFrontEnd, childContainer);
                     loadContainerContents(childFrontEnd, (Element)child);
                     Object key = getKey((Element)child, null);
                     if(key != null)
@@ -505,7 +507,8 @@ public class LedgeXMLContainerBuilder
      * @param container the container.
      * @return a reflection front end.
      */
-    protected ReflectionContainerAdapter createReflectionContainerAdapter(MutablePicoContainer container) 
+    protected ReflectionContainerAdapter createReflectionContainerAdapter(
+        MutablePicoContainer container) 
     {
         return new DefaultReflectionContainerAdapter(container);
     }
@@ -517,7 +520,8 @@ public class LedgeXMLContainerBuilder
      * @param container the container.
      * @return a reflection front end.
      */
-    protected ReflectionContainerAdapter createReflectionContainerAdapter(ReflectionContainerAdapter parent, 
+    protected ReflectionContainerAdapter createReflectionContainerAdapter(
+        ReflectionContainerAdapter parent, 
         MutablePicoContainer container) 
     {
         return new DefaultReflectionContainerAdapter(parent, container);

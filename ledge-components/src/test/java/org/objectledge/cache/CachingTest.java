@@ -62,7 +62,6 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.notification.Notification;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.ThreadPool;
-import org.objectledge.xml.XMLValidator;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 

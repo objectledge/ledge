@@ -40,6 +40,14 @@ import org.objectledge.web.mvc.MVCContext;
 public abstract class SecurityHelper
 {
     /**
+     * A private constructor to prevent instantiation of this static method only class.
+     */
+    private SecurityHelper()
+    {
+        
+    }
+
+    /**
      * Check the security on object.
      * 
      * @param obj the object.

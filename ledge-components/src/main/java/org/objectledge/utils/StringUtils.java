@@ -41,11 +41,18 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.14 2004-03-18 09:14:51 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.15 2004-04-01 08:54:25 fil Exp $
  */
 public class StringUtils
 {
-
+    /**
+     * A private constructor to prevent instantiation of this static method only class.
+     */
+    private StringUtils()
+    {
+        
+    }
+    
     /**
      *  Prepares a given String to be used as a HTTP cookie name.
    	 * 

@@ -52,7 +52,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
 {
     private FileSystem fileSystem;
 
-    // filesystem ///////////////////////////////////////////////////////////////////////////////    
+    // filesystem ///////////////////////////////////////////////////////////////////////////////
 
     protected FileSystem getFileSystem() throws Exception
     {
@@ -176,7 +176,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     /**
      * Creates a mock object implementation.
      * 
-     * @parm coreMock a coreMock to wrap.
+     * @param coreMock a coreMock to wrap.
      * @return a mock object implementation.
      */   
     public Mock mock(DynamicMock coreMock)

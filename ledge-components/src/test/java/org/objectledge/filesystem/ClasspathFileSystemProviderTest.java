@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.2 2004-03-18 09:37:37 pablo Exp $
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.3 2004-04-01 08:54:25 fil Exp $
  */
 public class ClasspathFileSystemProviderTest extends TestCase
 {
@@ -57,7 +57,8 @@ public class ClasspathFileSystemProviderTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        provider = new ClasspathFileSystemProvider("classpath", ClasspathFileSystemProvider.class.getClassLoader());
+        provider = new ClasspathFileSystemProvider("classpath", 
+            ClasspathFileSystemProvider.class.getClassLoader());
     }
 
     public void testGetName()
@@ -80,7 +81,7 @@ public class ClasspathFileSystemProviderTest extends TestCase
     public void testIsFile()
     {
         assertTrue("The resource is not a file - check test resources!", 
-        			provider.isFile("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+            provider.isFile("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
         //assertFalse("The resource is a file - check test resources!", 
         //  			provider.isFile("org/objectledge/filesystem/"));
     }
@@ -90,15 +91,15 @@ public class ClasspathFileSystemProviderTest extends TestCase
         //assertTrue("The resource is not a directory - check test resources!", 
         //			provider.isDirectory("org/objectledge/filesystem/"));
         assertFalse("The resource is a directory - check test resources!", 
-        			provider.isDirectory("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        	provider.isDirectory("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 
     public void testCanRead()
     {
 		assertTrue("The resource is not readable - check test resources!", 
-					provider.canRead("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+			provider.canRead("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
 		assertFalse("The resource is readable - check test resources!", 
-					provider.canRead("nofile"));
+			provider.canRead("nofile"));
     }
 
     public void testCanWrite()
@@ -186,12 +187,14 @@ public class ClasspathFileSystemProviderTest extends TestCase
     public void testLastModified()
     {
         assertEquals(-1L, provider.lastModified(""));
-        //assertEquals(true, 1079100713000L == provider.lastModified("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        //assertEquals(true, 1079100713000L == provider.
+        //    lastModified("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 
     public void testLength()
     {
         assertEquals(-1L, provider.length(""));
-        //assertEquals(true, 12345L == provider.length("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        //assertEquals(true, 12345L == provider.
+        //    length("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 }

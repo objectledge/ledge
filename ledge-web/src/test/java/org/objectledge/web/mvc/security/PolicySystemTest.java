@@ -143,7 +143,8 @@ public class PolicySystemTest extends LedgeWebTestCase
     {
         Policy[] policies = policySystem.getPolicies();
         assertEquals(policies.length, 1);
-        policySystem.addPolicy("foo", false, false, new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
+        policySystem.addPolicy("foo", false, false, 
+            new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
         policies = policySystem.getPolicies();
         assertEquals(policies.length, 2);
     }
@@ -152,7 +153,8 @@ public class PolicySystemTest extends LedgeWebTestCase
     {
         Policy[] policies = policySystem.getPolicies();
         assertEquals(policies.length, 1);
-        policySystem.addPolicy("foo", false, false, new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
+        policySystem.addPolicy("foo", false, false, 
+            new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
         policies = policySystem.getPolicies();
         assertEquals(policies.length, 2);
         policySystem.removePolicy("foo");
@@ -173,15 +175,18 @@ public class PolicySystemTest extends LedgeWebTestCase
     {
         Policy policy = policySystem.getPolicy("bar");
         assertEquals(policySystem.checkPolicy(new DefaultPrincipal("root"), true, policy), true);
-        policy = new Policy(false, true, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        policy = new Policy(false, true, 
+            new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
         assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"), false, policy), false);
-        policy = new Policy(false, false, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        policy = new Policy(false, false, 
+            new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
         assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"), false, policy), true);
     }
 
     public void testRequiresSSL()
     {
-        policySystem.addPolicy("foo", true, true, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        policySystem.addPolicy("foo", true, true, 
+            new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
         assertEquals(policySystem.requiresSSL("view", "action"), false);
         assertEquals(policySystem.requiresSSL("foo", "bar"), true);
         assertEquals(policySystem.requiresSSL("foo2", "bar2"), false);
@@ -189,7 +194,8 @@ public class PolicySystemTest extends LedgeWebTestCase
 
     public void testRequiresLogin()
     {
-        policySystem.addPolicy("foo", true, true, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        policySystem.addPolicy("foo", true, true, 
+            new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
         assertEquals(policySystem.requiresLogin("view", "action"), true);
         assertEquals(policySystem.requiresLogin("foo", "bar"), true);
         assertEquals(policySystem.requiresLogin("foo2", "bar2"), false);
@@ -197,16 +203,22 @@ public class PolicySystemTest extends LedgeWebTestCase
 
     public void testCheckAccess()
     {
-        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("root"), true), true);
-        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("user"), true), false);
-        assertEquals(policySystem.checkAccess("foo2", "bar2", new DefaultPrincipal("user"), true), true);
-        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("anon"), true), false);
-        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("foo"), true), false);
+        assertEquals(policySystem.checkAccess("view", "action", 
+            new DefaultPrincipal("root"), true), true);
+        assertEquals(policySystem.checkAccess("view", "action", 
+            new DefaultPrincipal("user"), true), false);
+        assertEquals(policySystem.checkAccess("foo2", "bar2", 
+            new DefaultPrincipal("user"), true), true);
+        assertEquals(policySystem.checkAccess("view", "action", 
+            new DefaultPrincipal("anon"), true), false);
+        assertEquals(policySystem.checkAccess("view", "action", 
+            new DefaultPrincipal("foo"), true), false);
     }
 
     public void testPolicyTest()
     {
-        Policy policy = new Policy(false, true, new String[] { "admin" }, new String[] { "foo*" }, new String[] { "bar*" });
+        Policy policy = new Policy(false, true, 
+            new String[] { "admin" }, new String[] { "foo*" }, new String[] { "bar*" });
         assertEquals(policy.getActionPatterns()[0], "bar*");
         assertEquals(policy.getViewPatterns()[0], "foo*");
         assertEquals(policy.matchesRequest("foo", "bar"), true);

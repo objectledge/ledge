@@ -28,8 +28,6 @@
 
 package org.objectledge.parameters.directory;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.HashSet;
 
 import javax.naming.directory.Attributes;
@@ -56,10 +54,7 @@ import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.FileSystemProvider;
-import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
@@ -92,8 +87,8 @@ public class DirectoryParametersTest extends TestCase
         try
         {
             fs = FileSystem.getStandardFileSystem(".");
-            InputSource source = new InputSource(fs.
-                getInputStream("src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
+            InputSource source = new InputSource(fs.getInputStream(
+                "src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             DOMConfigurator.configure(logConfig.getDocumentElement());

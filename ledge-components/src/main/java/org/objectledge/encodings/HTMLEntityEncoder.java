@@ -39,12 +39,13 @@ import org.picocontainer.MutablePicoContainer;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.7 2004-03-22 10:44:57 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.8 2004-04-01 08:54:26 fil Exp $
  */
 public class HTMLEntityEncoder
 {
     private static final CharEncoderHTMLEntity HTML_ENTITY_ENCODER = new CharEncoderHTMLEntity();
-	private static final String ENCODER_CLASS_PREFIX = "org.objectledge.encodings.encoders.CharEncoder";
+	private static final String ENCODER_CLASS_PREFIX = 
+        "org.objectledge.encodings.encoders.CharEncoder";
 	private MutablePicoContainer container;
 
 	/**

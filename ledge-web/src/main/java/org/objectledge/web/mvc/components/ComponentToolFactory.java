@@ -30,7 +30,6 @@ package org.objectledge.web.mvc.components;
 
 import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
-import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 

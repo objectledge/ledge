@@ -49,11 +49,11 @@ import org.objectledge.web.mvc.MVCContext;
 
 public class PolicyCheckingValveTest extends LedgeWebTestCase
 {
-    Context context;
-    Mock requestMock = mock(HttpServletRequest.class);
-    HttpServletRequest request = (HttpServletRequest)requestMock.proxy();
-    Mock responseMock = mock(HttpServletResponse.class);
-    HttpServletResponse response = (HttpServletResponse)responseMock.proxy();
+    private Context context;
+    private Mock requestMock = mock(HttpServletRequest.class);
+    private HttpServletRequest request = (HttpServletRequest)requestMock.proxy();
+    private Mock responseMock = mock(HttpServletResponse.class);
+    private HttpServletResponse response = (HttpServletResponse)responseMock.proxy();
     
     private PolicyCheckingValve policyValve;
 

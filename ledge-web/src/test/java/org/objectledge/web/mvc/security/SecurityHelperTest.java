@@ -44,10 +44,10 @@ import org.objectledge.web.mvc.MVCContext;
 public class SecurityHelperTest extends LedgeTestCase
 {
 
-    Mock requestMock = mock(HttpServletRequest.class);
-    HttpServletRequest request = (HttpServletRequest)requestMock.proxy();
-    Mock responseMock = mock(HttpServletResponse.class);
-    HttpServletResponse response = (HttpServletResponse)responseMock.proxy();
+    private Mock requestMock = mock(HttpServletRequest.class);
+    private HttpServletRequest request = (HttpServletRequest)requestMock.proxy();
+    private Mock responseMock = mock(HttpServletResponse.class);
+    private HttpServletResponse response = (HttpServletResponse)responseMock.proxy();
 
     public void testSecurityHelper() throws Exception
     {

@@ -59,7 +59,8 @@ public class RequestParametersTest extends LedgeTestCase
         super.setUp();
         context = new Context();
         FileSystem fs = getFileSystem();
-        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(RequestParametersLoaderValve.class));
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.
+            getLogger(RequestParametersLoaderValve.class));
         Configuration config = getConfig(fs,"config/org.objectledge.web.WebConfigurator.xml");
         WebConfigurator webConfigurator = new WebConfigurator(config);
         TestHttpServletRequest request = new TestHttpServletRequest();

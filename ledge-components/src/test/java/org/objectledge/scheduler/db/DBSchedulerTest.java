@@ -88,7 +88,8 @@ public class DBSchedulerTest extends TestCase
         super.setUp();
         String root = System.getProperty("ledge.root");
         fs = FileSystem.getStandardFileSystem(root);
-        InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
+        InputSource source = new InputSource(fs.getInputStream(
+            "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document logConfig = builder.parse(source);
         DOMConfigurator.configure(logConfig.getDocumentElement());
@@ -106,7 +107,8 @@ public class DBSchedulerTest extends TestCase
         
         Persistence persistence = new DefaultPersistence(database, logger);
         MutablePicoContainer container = new DefaultPicoContainer();
-        scheduler = new DBScheduler(container, config, logger, threadPool, scheduleFactories, persistence);
+        scheduler = new DBScheduler(container, config, 
+            logger, threadPool, scheduleFactories, persistence);
         scheduler.start();
     }
 
@@ -242,15 +244,16 @@ public class DBSchedulerTest extends TestCase
         user.setValue("sa");
         conf.addChild(user);
         DataSource ds = new HsqldbDataSource(conf);
-        FileSystem fs = FileSystem.getStandardFileSystem(".");
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
             DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGenerator.sql", "UTF-8"));
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_scheduler"))
         {        
-            DatabaseUtils.runScript(ds, fs.getReader("sql/scheduler/db/DBScheduler.sql", "UTF-8"));
-            DatabaseUtils.runScript(ds, fs.getReader("sql/scheduler/db/DBSchedulerTest.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, 
+                fs.getReader("sql/scheduler/db/DBScheduler.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, 
+                fs.getReader("sql/scheduler/db/DBSchedulerTest.sql", "UTF-8"));
         }
         return ds;
     }

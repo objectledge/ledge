@@ -80,7 +80,8 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         throws Exception
     {
         fs = FileSystem.getStandardFileSystem(".");
-        InputSource source = new InputSource(fs.getInputStream("src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
+        InputSource source = new InputSource(fs.getInputStream(
+            "src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document logConfig = builder.parse(source);
         DOMConfigurator.configure(logConfig.getDocumentElement());
@@ -106,7 +107,8 @@ public class DirectoryUserManagerTest extends LedgeTestCase
                     "org/objectledge/authentication/LoginVerifier.rng");
         LoginVerifier loginVerifier = new LoginVerifier(config);
         config = getConfig("config/org.objectledge.authentication.DirectoryUserManager.xml");
-        userManager = new DirectoryUserManager(config, logger, namingPolicy, loginVerifier, passwordGenerator, passwordDigester, contextFactory);
+        userManager = new DirectoryUserManager(config, logger, namingPolicy, loginVerifier, 
+            passwordGenerator, passwordDigester, contextFactory);
     }
 
     public void testUserExists()

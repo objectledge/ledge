@@ -54,10 +54,7 @@ import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.FileSystemProvider;
-import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
@@ -91,8 +88,8 @@ public class ContextFactoryTest extends TestCase
         try
         {
             fs = FileSystem.getStandardFileSystem(".");
-            InputSource source = new InputSource(fs.
-                getInputStream("src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
+            InputSource source = new InputSource(fs.getInputStream(
+                "src/test/resources/config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             DOMConfigurator.configure(logConfig.getDocumentElement());

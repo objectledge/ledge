@@ -36,14 +36,13 @@ import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
-import org.dbunit.operation.DatabaseOperation;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.objectledge.filesystem.FileSystem;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGeneratorTest.java,v 1.6 2004-03-22 08:28:23 fil Exp $
+ * @version $Id: IdGeneratorTest.java,v 1.7 2004-04-01 08:54:25 fil Exp $
  */
 public class IdGeneratorTest extends DatabaseTestCase
 {

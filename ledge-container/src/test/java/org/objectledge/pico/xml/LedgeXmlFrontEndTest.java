@@ -33,9 +33,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
@@ -48,15 +45,13 @@ import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.ObjectReference;
 import org.picocontainer.defaults.SimpleReference;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
 /**
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEndTest.java,v 1.8 2004-02-17 15:50:30 fil Exp $
+ * @version $Id: LedgeXmlFrontEndTest.java,v 1.9 2004-04-01 08:54:21 fil Exp $
  */
 public class LedgeXmlFrontEndTest extends TestCase
 {

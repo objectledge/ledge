@@ -41,7 +41,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.9 2004-03-18 11:28:22 pablo Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.10 2004-04-01 08:54:19 fil Exp $
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
@@ -145,7 +145,8 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
     public NameSequenceFactory getNameSequenceFactory(String configVariant)
         throws Exception
     { 
-        Configuration config = getConfig(fs,"org.objectledge.web.mvc.finders.NameSequenceFactory-"+configVariant+".xml");         
+        Configuration config = getConfig(fs,
+            "org.objectledge.web.mvc.finders.NameSequenceFactory-"+configVariant+".xml");         
         return new NameSequenceFactory(config);
     }
     
