@@ -24,3 +24,13 @@
 # character to interpose another module into the current module.  This
 # can be useful for creating a module that consists of many directories
 # spread out over the entire source repository.
+
+ledge-all-components -d ledge-all/ledge-components
+ledge-all-container -d ledge-all/ledge-container
+ledge-all-maven-plugin -d ledge-all/ledge-maven-plugin
+ledge-all-reactor -d ledge-all/ledge-reactor
+ledge-all-tutorial-webapp -d ledge-all/ledge-tutorial-webapp
+ledge-all-web -d ledge-all/ledge-web
+
+ledge-all -a ledge-all-components ledge-all-components ledge-all-maven-plugin ledge-all-maven-plugin ledge-all-tutorial-webapp ledge-all-web
+ 
