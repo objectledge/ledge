@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.12 2004-01-13 13:42:30 pablo Exp $ -->
+<!-- $Id: project.xml,v 1.13 2004-01-13 13:44:05 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -135,12 +135,6 @@
       <artifactId>jing</artifactId>
       <version>20030619</version>
       <url>http://www.thaiopensource.com/relaxng/jing.html</url>
-    </dependency>
-    <dependency>
-      <groupId>saxon</groupId>
-      <artifactId>saxon</artifactId>
-      <version>6.5.3</version>
-      <url>http://saxon.sourceforge.net/</url>
     </dependency>
     <dependency>
       <groupId>httpunit</groupId>

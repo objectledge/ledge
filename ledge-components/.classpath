@@ -4,14 +4,13 @@
     <classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
-    <classpathentry kind="var" path="MAVEN_REPO/saxon/jars/saxon-6.5.3.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/jing/jars/jing-20030619.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4-dev.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-2.1.jar"/>
-    <classpathentry kind="src" path="/pico"/>
     <classpathentry kind="src" path="/dna"/>
     <classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/jaf/jars/activation-1.0.2.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/javamail/jars/javamail-1.2.jar"/>
+    <classpathentry kind="src" path="/pico"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
