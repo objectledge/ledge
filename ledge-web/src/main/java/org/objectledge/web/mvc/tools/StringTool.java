@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.8 2004-12-22 08:58:14 rafal Exp $
+ * @version $Id: StringTool.java,v 1.9 2005-02-02 22:25:15 pablo Exp $
  */
 public class StringTool
 {
@@ -145,5 +145,25 @@ public class StringTool
     public String wrap(String in, int width)
     {
         return StringUtils.wrap(in, width); 
+    }
+    
+    /**
+     * Get array size.
+     * 
+     * @param obj the array.
+     * @return the size.
+     */
+    public int getArraySize(Object obj)
+    {
+        if(obj == null)
+        {
+            return 0;
+        }
+        if(obj.getClass().getComponentType() == null)
+        {
+            return 0;
+        }
+        Object[] objs = (Object[])obj;
+        return objs.length;
     }
 }
