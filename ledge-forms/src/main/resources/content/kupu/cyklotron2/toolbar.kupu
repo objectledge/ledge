@@ -33,7 +33,7 @@
 
 
   <kupu:part name="select-styles">
-#set($formattingNames = $i18n.useCommon('labeo-forms.htmlarea.formattingNames'))
+#set($formattingNames = $i18n.usePrefix('ledge-forms.formattingNames'))
     <select id="kupu-tb-styles">
       <option value="P" i18n:translate="paragraph-normal">
         $formattingNames.get('p')
