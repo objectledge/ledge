@@ -36,6 +36,7 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.CollectionUtils;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
@@ -46,7 +47,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * A template tool for embedding components in application UI.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.11 2005-02-02 22:27:41 pablo Exp $
+ * @version $Id: ComponentTool.java,v 1.12 2005-02-25 10:36:29 pablo Exp $
  */
 public class ComponentTool
 {
@@ -113,7 +114,7 @@ public class ComponentTool
     public String embed(String componentName, List config) 
         throws BuildException, ProcessingException
     {
-        return embed(componentName, listToMap(config));
+        return embed(componentName, CollectionUtils.listToMap(config));
     }
     
     /**
@@ -188,22 +189,4 @@ public class ComponentTool
 	{
 	    return template;
 	}
-    
-    /**
-     * Converst a list of two element lists (key, value) into a map.
-     *
-     * @param list the list
-     * @return a map
-     */
-    private Map listToMap(List list)
-    {
-        Map map = new HashMap(list.size());
-        Iterator i = list.iterator();
-        while(i.hasNext())
-        {
-            List l = (List)i.next();
-            map.put(l.get(0), l.get(1));
-        }
-        return map;
-    }
 }
