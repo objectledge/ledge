@@ -45,7 +45,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.14 2004-10-25 14:54:55 rafal Exp $
+ * @version $Id: DatabaseUtils.java,v 1.15 2004-12-20 16:12:07 pablo Exp $
  */
 public class DatabaseUtils
 {
@@ -187,63 +187,85 @@ public class DatabaseUtils
     public static void runScript(DataSource dataSource, Reader reader)
         throws IOException, SQLException
     {
-        LineNumberReader script = new LineNumberReader(reader);
-        StringBuffer buff = new StringBuffer();
-        int start;
-        
         Connection conn = dataSource.getConnection();
+        try
+        {
+            runScript(conn, reader);
+        }
+        finally
+        {
+            close(conn);
+        }
+    }
+
+    /**
+     * Executes an SQL script.
+     * 
+     * @see runScript.
+     * @param conn the connections to the database.
+     * @param reader the reader to read script from.
+     * @throws IOException if the script cannot be read.
+     * @throws SQLException if there is a problem executing the script. 
+     */    
+    public static void runScript(Connection conn, Reader reader)
+    	throws IOException, SQLException
+    {
         Statement stmt = conn.createStatement();
         try
         {
-            while(script.ready())
-            {
-                buff.setLength(0);
-                String line = script.readLine();
-                if( line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
-                {
-                    continue;
-                }
-                start = script.getLineNumber();
-                while(script.ready() && line.charAt(line.length()-1) != ';')
-                {
-                    buff.append(line);
-                    line = script.readLine();
-                    if(line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
-                    {
-                        if(script.ready())
-                        {
-                            line = script.readLine();
-                            continue;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                if(line.length() == 0 || line.trim().charAt(line.trim().length()-1) != ';')
-                {
-                    throw new SQLException("unterminated statement at line "+start);
-                }
-                buff.append(line);                
-                buff.setLength(buff.length()-1); // remove ;
-                try
-                {
-                    stmt.execute(buff.toString());
-                }
-                catch(SQLException e)
-                {
-                    throw (SQLException)
-                        new SQLException("error executing statement at line "+start).initCause(e);
-                }
-            }
+	        LineNumberReader script = new LineNumberReader(reader);
+	        StringBuffer buff = new StringBuffer();
+	        int start;
+	        
+	        while(script.ready())
+	        {
+	            buff.setLength(0);
+	            String line = script.readLine();
+	            if( line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
+	            {
+	                continue;
+	            }
+	            start = script.getLineNumber();
+	            while(script.ready() && line.charAt(line.length()-1) != ';')
+	            {
+	                buff.append(line);
+	                line = script.readLine();
+	                if(line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
+	                {
+	                    if(script.ready())
+	                    {
+	                        line = script.readLine();
+	                        continue;
+	                    }
+	                    else
+	                    {
+	                        break;
+	                    }
+	                }
+	            }
+	            if(line.length() == 0 || line.trim().charAt(line.trim().length()-1) != ';')
+	            {
+	                throw new SQLException("unterminated statement at line "+start);
+	            }
+	            buff.append(line);                
+	            buff.setLength(buff.length()-1); // remove ;
+	            try
+	            {
+	                stmt.execute(buff.toString());
+	            }
+	            catch(SQLException e)
+	            {
+	                throw (SQLException)
+	                    new SQLException("error executing statement at line "+start).initCause(e);
+	            }
+	        }
         }
         finally
         {
             close(stmt);
-            close(conn);
-        }
+        }        
     }
+    
     
     /**
      * Checks if the given database contains a table with the given name.
