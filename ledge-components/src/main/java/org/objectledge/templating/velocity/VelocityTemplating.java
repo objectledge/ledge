@@ -51,7 +51,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.14 2004-06-29 13:32:44 zwierzem Exp $
+ * @version $Id: VelocityTemplating.java,v 1.15 2005-01-19 13:50:39 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -295,5 +295,13 @@ public class VelocityTemplating implements Templating, LogSystem
                 logger.debug(message);
                 break;
         }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void invalidateTemplate(String name)
+    {
+        //do nothing
     }
 }

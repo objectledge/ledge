@@ -35,7 +35,7 @@ import java.io.Writer;
  * Templating component.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Templating.java,v 1.6 2004-12-27 05:17:49 rafal Exp $
+ * @version $Id: Templating.java,v 1.7 2005-01-19 13:50:19 pablo Exp $
  */
 ///CLOVER:OFF
 public interface Templating
@@ -95,4 +95,11 @@ public interface Templating
 	 * @return character encoding name.
 	 */
 	public String getTemplateEncoding();
+    
+    /**
+     * Invalidate template in local cache.
+     * 
+     * @param name the template name.
+     */
+    public void invalidateTemplate(String name);
 }
