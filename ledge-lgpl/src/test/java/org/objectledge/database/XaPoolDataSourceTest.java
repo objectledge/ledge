@@ -57,7 +57,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.1 2004-09-03 12:09:29 rafal Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.2 2005-02-08 20:33:04 rafal Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -282,7 +282,7 @@ public class XaPoolDataSourceTest extends TestCase
      * 
      * @param configPath
      * @param schemaPath
-     * @return
+     * @return the configuration object.
      * @throws Exception
      */
     public Configuration getConfig(String configPath, String schemaPath)

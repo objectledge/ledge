@@ -8,14 +8,13 @@ import org.objectledge.web.mvc.tools.LinkTool;
 /** This a Context tool used to generate Form interfaces.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormTool.java,v 1.2 2005-01-20 16:44:50 pablo Exp $
+ * @version $Id: FormTool.java,v 1.3 2005-02-08 20:33:22 rafal Exp $
  */
 public interface FormTool
 {
     /** Generates form UI.
      * @param instance form User data which is used to generate the UI.
-     * @param actionName Name of an action which will be used in a link
-     * stored in <code>action</code> attribute of the form.
+     * @param formLink the linkTool to use.
      * @param skinName name of a FormTool velocity template to use.
      * @throws MergingException Thrown on any problems when generating UI.
      * @return generated UI markup.
@@ -25,7 +24,7 @@ public interface FormTool
 
     /** Generates form UI, uses default Form look.
      * @param instance form User data which is used to generate the UI.
-     * @param actionName Name of an action which will be used in a link
+     * @param formLink the linkTool to use.
      * stored in <code>action</code> attribute of the form.
      * @throws MergingException Thrown on any problems when generating UI.
      * @return generated UI markup.

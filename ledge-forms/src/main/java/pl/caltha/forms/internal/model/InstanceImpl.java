@@ -16,7 +16,7 @@ import pl.caltha.services.xml.validation.DOM4JValidator;
  * Container for user form data.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: InstanceImpl.java,v 1.2 2005-01-20 16:44:56 pablo Exp $
+ * @version $Id: InstanceImpl.java,v 1.3 2005-02-08 20:33:32 rafal Exp $
  */
 public class InstanceImpl extends AbstractInstance
     implements Instance, java.io.Serializable
@@ -77,7 +77,7 @@ public class InstanceImpl extends AbstractInstance
     //-------------------------------------
     // HTML form indentification methods
 
-    /** Getter for {@link pl.caltha.forms.FormData} wide instance id.
+    /** Getter for session wide instance id.
      * @return Value of instance id. */
     public String getId()
     {

@@ -19,7 +19,7 @@ import pl.caltha.services.xml.XMLService;
  * Represents Form definition.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormImpl.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
+ * @version $Id: FormImpl.java,v 1.3 2005-02-08 20:33:27 rafal Exp $
  */
 public class FormImpl implements Form
 {
@@ -156,7 +156,7 @@ public class FormImpl implements Form
     }
 
     /** Returns ID for this form's definition file. This is a form definition URI
-     * ({@link getFormDefinitionURI}) changed to be compatible with XHTML IDs. */
+     * ({@link Form#getDefinitionURI}) changed to be compatible with XHTML IDs. */
     public String getId()
     {
         return id;

@@ -13,7 +13,7 @@ import pl.caltha.forms.internal.util.Util;
 /** Action that removes a repeat instance trees.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: BaseInsertDeleteAction.java,v 1.1 2005-01-19 06:55:32 pablo Exp $
+ * @version $Id: BaseInsertDeleteAction.java,v 1.2 2005-02-08 20:33:35 rafal Exp $
  */
 public abstract class BaseInsertDeleteAction
 extends BaseReferenceAction
@@ -34,7 +34,7 @@ extends BaseReferenceAction
      * <code>repeat</code> element. */
     protected String repeatId;
     /** {@link pl.caltha.forms.internal.ui.NodeRepeat} - <code>repeat</code>
-     * element referenced in <code>at</code> attribute ({@link ref}). */
+     * element referenced in <code>at</code> attribute. */
     protected NodeRepeat repeat;
 
     protected int clipIndex(Number result, List contextNodes)

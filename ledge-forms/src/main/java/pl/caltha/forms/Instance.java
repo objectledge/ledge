@@ -4,11 +4,11 @@ package pl.caltha.forms;
  * Defines container for user inputed form data and form's UI state.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Instance.java,v 1.1 2005-01-19 06:55:23 pablo Exp $
+ * @version $Id: Instance.java,v 1.2 2005-02-08 20:33:22 rafal Exp $
  */
 public interface Instance
 {
-    /** Getter for {@link pl.caltha.forms.FormData} wide instance id.
+    /** Getter for session wide instance id.
      * @return Value of instance id. */
     public String getId();
 

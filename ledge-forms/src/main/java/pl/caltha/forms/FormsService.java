@@ -60,7 +60,7 @@ public interface FormsService
      * @param formName            Form's system wide identifier, this one is
      *      used to allow same form definitions to be used in different site
      *      contexts.
-     * @param data                RunData for current request.
+     * @param httpContext HttpConext for current request.
      * @return                    found or newly created Instance object.
      * @throws FormsException  thrown when a found Instance is not an
      *      instance for a given Form definition.
@@ -74,7 +74,7 @@ public interface FormsService
      *
      * @param formName    Form's system wide identifier, this one is used to
      *      allow same form definitions to be used in different site contexts.
-     * @param data        RunData for current request - created instance will
+     * @param httpContext HttpConext for current request.
      *      be stored in this user's session.
      * @param savedState  Serialized Instance data.
      * @return            Deserialized Instance object.
@@ -89,7 +89,7 @@ public interface FormsService
      * instance processing is finished. Otherwise heavy instance data will be
      * kept during whole user session.
      *
-     * @param data      Description of Parameter
+     * @param httpContext HttpConext for current request.
      * @param instance  Description of Parameter
      */
     public void removeInstance(HttpContext httpContext, Instance instance);

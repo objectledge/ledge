@@ -7,7 +7,7 @@ import pl.caltha.forms.ConstructionException;
 /** A base implementation for a node of the UI tree structure.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NodeCaption.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: NodeCaption.java,v 1.2 2005-02-08 20:33:30 rafal Exp $
  */
 public class NodeCaption extends Node
 {
@@ -76,8 +76,8 @@ public class NodeCaption extends Node
     // methods used by UIBuilder
 
     /** Adds a child Node to this Node.
-     * @param node A new child Node for this Node.
-     * @throws InvalidChildException Thrown when this type child Node is not supported.
+     * @param child A new child Node for this Node.
+     * @throws ConstructionException Thrown when this type child Node is not supported.
      */
     protected void addChild(Node child)
     throws ConstructionException

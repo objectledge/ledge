@@ -14,7 +14,7 @@ import pl.caltha.forms.ConstructionException;
 /** Utility class for form-tool.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Util.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
+ * @version $Id: Util.java,v 1.3 2005-02-08 20:33:12 rafal Exp $
  */
 public class Util
 {
@@ -151,7 +151,7 @@ public class Util
      * First checks if a <code>resourceURI</code> if its already expanded,
      * if not treats it as an URI relative to a <code>baseURI</code>.
      * @param baseURI a base URI
-     * @param resourcePath an URI of a resoruce.
+     * @param resourceURI an URI of a resoruce.
      * @return Expanded URI or an empty string if resoruceURI was empty.
      */
     public static String expandURI(String baseURI, String resourceURI)

@@ -25,7 +25,7 @@ import pl.caltha.services.xml.XMLService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsServiceImpl.java,v 1.3 2005-01-21 14:00:06 pablo Exp $
+ * @version $Id: FormsServiceImpl.java,v 1.4 2005-02-08 20:33:27 rafal Exp $
  */
 public class FormsServiceImpl 
 implements FormsService
@@ -251,7 +251,7 @@ implements FormsService
      * object.
      * @param formName              Form's system wide identifier, this one is used to allow
      *      same form definitions to be used in different site contexts.
-     * @param data                  RunData for current request.
+     * @param httpContext HttpConext for current request.
      * @throws FormsException    thrown when a found Instance is not an instance
      *      for a given Form definition.
      * @return found or newly created Instance object
@@ -292,17 +292,15 @@ implements FormsService
     }
 
     /** Returns an Instance object creating it from a given saved state.
-     * @param form Form definition to which an created Instance will be connected.
      * @param formName Form's system wide identifier, this one is used to allow
      * same form definitions to be used in different site contexts.
-     * @param data RunData for current request - created instance will be stored in
-     * this user's session.
+     * @param httpContext HttpConext for current request.
      * @param savedState Serialized Instance data.
      * @throws Exception thrown on problems with deserialization.
      * @return Deserialized Instance object.
      */
     public Instance getInstance(String formName, HttpContext httpContext, byte[] savedState)
-    throws Exception
+        throws Exception
     {
         if(!formsByName.containsKey(formName))
         {
@@ -361,9 +359,8 @@ implements FormsService
     
     /** FormData is a container for storing form Instances in users session.
      *
-     * @see net.labeo.webcore.SessionContext
      * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-     * @version $Id: FormsServiceImpl.java,v 1.3 2005-01-21 14:00:06 pablo Exp $
+     * @version $Id: FormsServiceImpl.java,v 1.4 2005-02-08 20:33:27 rafal Exp $
      */
     public class FormData
     {

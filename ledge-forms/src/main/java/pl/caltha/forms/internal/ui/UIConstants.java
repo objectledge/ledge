@@ -6,7 +6,7 @@ import java.util.HashMap;
  *
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UIConstants.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: UIConstants.java,v 1.2 2005-02-08 20:33:30 rafal Exp $
  */
 public class UIConstants
 {
@@ -19,12 +19,12 @@ public class UIConstants
     /** Key for name of a control which will dispatch an event. */
     public static final String DISPATCH_CONTROL_NAME = "formtool.dispatch.control";
 
-    /** Getter for {@link INSTANCE_ID_NAME} constant}. */
+    /** Getter for {@link #INSTANCE_ID_NAME} constant}. */
     public String getInstanceIdName()
     {
         return INSTANCE_ID_NAME;
     }
-    /** Getter for {@link DISPATCH_CONTROL_NAME} constant}. */
+    /** Getter for {@link #DISPATCH_CONTROL_NAME} constant}. */
     public String getDispatchControlName()
     {
         return DISPATCH_CONTROL_NAME;

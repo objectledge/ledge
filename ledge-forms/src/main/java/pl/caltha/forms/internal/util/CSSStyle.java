@@ -7,7 +7,7 @@ import org.w3c.dom.css.CSSValue;
 /**
  * Gives access to the CSS properties.
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author <a href="mailto:dgajda@elka.pw.edu.pl>Damian Gajda</a>
  */
 public class CSSStyle
@@ -47,7 +47,7 @@ public class CSSStyle
     
     /**
      * Returns the specified property's CSSValue.
-     * @param property 		The name of the property to return.
+     * @param propertyName  The name of the property to return.
      * @return 				The specified property's CSSValue.
      */
     public CSSValue getPropertyCSSValue( String propertyName )
@@ -62,7 +62,7 @@ public class CSSStyle
     
     /**
      * Returns the specified property's CSSValue.
-     * @param property 		The name of the property to return.
+     * @param propertyName	The name of the property to return.
      * @return 				The specified property's CSSValue.
      */
     public String getProperty( String propertyName )

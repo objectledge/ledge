@@ -46,7 +46,7 @@ import org.picocontainer.Startable;
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSource.java,v 1.1 2004-09-03 12:08:16 rafal Exp $
+ * @version $Id: XaPoolDataSource.java,v 1.2 2005-02-08 20:33:01 rafal Exp $
  */
 public class XaPoolDataSource extends DelegatingDataSource
     implements XADataSource, Startable
@@ -59,11 +59,12 @@ public class XaPoolDataSource extends DelegatingDataSource
      * 
      * @param transaction transaction manager wrapper.
      * @param config the data source configuration.
-     * @param loggingConfguration enforces instantiation order on Pico, may be null.
+     * @param loggingConfigurator enforces instantiation order on Pico, may be null.
      * @throws ConfigurationException if the configuration is invalid.
      * @throws SQLException if the pool could not be initialized.
      */
-    public XaPoolDataSource(Transaction transaction, Configuration config, LoggingConfigurator loggingConfigurator)
+    public XaPoolDataSource(Transaction transaction, Configuration config, LoggingConfigurator 
+        loggingConfigurator)
         throws ConfigurationException, SQLException
     {
         super(getDataSource(transaction, config));

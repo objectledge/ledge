@@ -13,7 +13,7 @@ import pl.caltha.forms.internal.util.Util;
  * specification.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Reference.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: Reference.java,v 1.2 2005-02-08 20:33:30 rafal Exp $
  */
 public abstract class Reference
 implements Cloneable
@@ -101,7 +101,7 @@ implements Cloneable
      * attribute is defined, if not it tries to get a bind element from
      * {@link #parentReferenceNode}. If there is no bind element for parent node
      * it gets a default one.
-     * @param bindId Bind IDREF from <code>bind</code> attribute.
+     * @param ui UI instance to connect to.
      * @throws ConstructionException Thrown on wrong bind IDREF.
      * @return Found Bind element.
      */

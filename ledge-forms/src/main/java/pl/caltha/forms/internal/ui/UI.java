@@ -15,7 +15,7 @@ import pl.caltha.forms.internal.util.Util;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UI.java,v 1.2 2005-01-20 16:44:52 pablo Exp $
+ * @version $Id: UI.java,v 1.3 2005-02-08 20:33:30 rafal Exp $
  */
 public class UI
 {
@@ -159,7 +159,7 @@ public class UI
     // user interaction
 
     /** Sets values inputed by a user on a given instance. Values are taken
-     * from current request's {@link net.labeo.webcore.RunData}.
+     * from current request.
      * This method is recursive, but traverses only the user visible part
      * of the tree - this avoids clearing unvisible select fields.
      */
@@ -239,7 +239,7 @@ public class UI
     }
 
     /** Dispatches events upon incoming parameters. Parameters are taken
-     * from current request's {@link net.labeo.webcore.RunData}.
+     * from current request.
      */
     public void dispatchEvents(InstanceImpl instance, Parameters parameters)
     {

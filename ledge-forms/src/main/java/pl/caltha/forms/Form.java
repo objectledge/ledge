@@ -31,7 +31,7 @@ import org.objectledge.parameters.Parameters;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Form.java,v 1.2 2005-01-20 16:44:50 pablo Exp $
+ * @version $Id: Form.java,v 1.3 2005-02-08 20:33:22 rafal Exp $
  */
 public interface Form
 {
@@ -77,7 +77,7 @@ public interface Form
     throws Exception;
 
     /** Returns ID for this form's definition file. This is a form definition URI
-     * ({@link getFormDefinitionURI}) changed to be compatible with XHTML IDs. */
+     * ({@link #getDefinitionURI}) changed to be compatible with XHTML IDs. */
     public String getId();
     /** Returns URI for this form's definition file. */
     public String getDefinitionURI();

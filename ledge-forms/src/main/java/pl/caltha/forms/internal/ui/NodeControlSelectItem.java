@@ -9,8 +9,8 @@ import pl.caltha.forms.internal.util.Util;
 /** Class that represents a selection item in select controls.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NodeControlSelectItem.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
- * @see pl.caltha.forms.internal.ui.elements.Select
+ * @version $Id: NodeControlSelectItem.java,v 1.2 2005-02-08 20:33:30 rafal Exp $
+ * @see pl.caltha.forms.internal.ui.NodeControlSelect
  */
 
 public class NodeControlSelectItem extends NodeCaption
@@ -18,11 +18,9 @@ public class NodeControlSelectItem extends NodeCaption
     /** The only constructor, common to all UI nodes.
      * Takes item's value attribute and adds this item to
      * it's select via
-     * {@link pl.caltha.forms.internal.ui.elements.Select#addItemByValue(NodeControlSelectItem)}.
+     * {@link pl.caltha.forms.internal.ui.NodeControlSelect#addItemByValue(NodeControlSelectItem)}.
      * @param type element type of this UI node. In this case <code>item</code>.
      * @param atts SAX attributes collection. In this case containing a <code>value</code> attribute.
-     * @param parent parent node of this UI node.
-     * @param containingUI parent UI object.
      * @throws ConstructionException thrown on problems on UI node's construction.
      */
     public NodeControlSelectItem(String type, Attributes atts)
