@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.7 2003-12-03 14:40:24 mover Exp $ -->
+<!-- $Id: project.xml,v 1.8 2003-12-04 08:41:19 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -48,6 +48,14 @@
   
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.rng</include>
+        </includes>
+      </resource>
+    </resources>
     <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
     <unitTest>
       <excludes>
@@ -67,6 +75,12 @@
       <groupId>jing</groupId>
       <artifactId>jing</artifactId>
       <version>20030619</version>
+    </dependency>
+    <!-- runtime -->
+    <dependency>
+      <groupId>saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <version>6.5.3</version>
     </dependency>
   </dependencies>
 </project>
