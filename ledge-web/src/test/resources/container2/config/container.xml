@@ -3,7 +3,7 @@
   <component class-key="org.picoextras.reflection.StringToObjectConverter"
              class="org.objectledge.pico.LedgeStringToObjectConverter"/>
 
-  <container key="org.picocontainer.MutablePicoContainer" replace="true">
+  <container class-key="org.picocontainer.MutablePicoContainer" replace="true">
     <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
 	  <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
     </adapter-factory>
@@ -45,7 +45,10 @@
       </sequence-parameter>
     </component>
     
-    <component class="org.objectledge.web.mvc.finders.MVCFinder"/>
+    <container key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
+    <component class="org.objectledge.web.mvc.finders.MVCFinder">
+      <component-parameter key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
+    </component>
     <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
     <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
       <component-parameter/>
