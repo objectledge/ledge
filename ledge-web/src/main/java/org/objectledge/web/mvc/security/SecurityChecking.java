@@ -34,7 +34,7 @@ import org.objectledge.context.Context;
  * The interface of all mvc security objects.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SecurityChecking.java,v 1.3 2004-08-03 09:47:18 pablo Exp $
+ * @version $Id: SecurityChecking.java,v 1.4 2004-10-11 09:49:25 zwierzem Exp $
  */
 public interface SecurityChecking
 {
@@ -58,6 +58,10 @@ public interface SecurityChecking
     
     /**
      * Check the access rights.
+     * 
+     * <p>TODO: this security checking context information should be passed up the call hierarchy
+     * using an exception or some kind of container object. This method instead of returning
+     * <code>boolean</code> should throw an exception with meaningful message.</p>
      * 
      * @param context the context.
      * @return <code>true</code>if requires.
