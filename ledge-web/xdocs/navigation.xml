@@ -20,7 +20,7 @@
       <item name="Components" href="/components/index.html" collapse="true">
         <item name="Servlet FS provider" href="/components/ServletFileSystemProvider.html"/>
         <item name="Upload valve" href="/components/UploadValve.html"/>
-        <item name="Request parameters loader valve" href="/components/RequestParameters.html"/>
+        <item name="Parameters loader valve" href="/components/RequestParameters.html"/>
         <item name="Locale loader valve" href="/components/LocaleLoaderValve.html"/>
         <item name="Web i18n tool factory" href="/components/WebI18nToolFactory.html"/>
         <item name="Web configurator" href="/components/WebConfigurator.html"/>

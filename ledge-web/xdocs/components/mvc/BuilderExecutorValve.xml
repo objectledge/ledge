@@ -8,7 +8,7 @@
     <section name="BuilderExecutorValve">
       <subsection name="Description">
         <p>
-
+         Pipeline component for executing MVC view building.
         </p>
       </subsection>
       
@@ -67,7 +67,7 @@
 		    <tr>
 		      <td>4</td>
 		      <td>int</td>
-		      <td>The maxmimal number of Builder#route() calls per {@link Builder}.</td>
+		      <td>The maxmimal number of Builder#route() calls per Builder.</td>
 		    </tr>
 		    <tr>
 		      <td>5</td>
