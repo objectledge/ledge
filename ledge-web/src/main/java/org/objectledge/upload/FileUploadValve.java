@@ -24,16 +24,15 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.web.WebConstants;
 
 /**
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.10 2004-06-30 11:10:55 zwierzem Exp $
+ * @version $Id: FileUploadValve.java,v 1.11 2004-08-20 15:59:08 zwierzem Exp $
  */
 public class FileUploadValve 
-    implements Valve, WebConstants
+    implements Valve
 {
     /** the web configurator */
     private WebConfigurator webConfigurator;
