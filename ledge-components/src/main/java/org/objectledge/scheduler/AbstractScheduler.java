@@ -41,6 +41,7 @@ import java.util.TreeMap;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
 import org.picocontainer.MutablePicoContainer;
@@ -450,7 +451,7 @@ public abstract class AbstractScheduler
             return "scheduler: "+job.getName();
         }
 
-        public void run()
+        public void process(Context context)
         {
             synchronized(runners)
             {
@@ -552,7 +553,7 @@ public abstract class AbstractScheduler
             return "Scheduled Job";
         }
         
-        public void run()
+        public void process(Context context)
         {
             synchronized(queue)
             {

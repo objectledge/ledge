@@ -21,6 +21,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.mail.impl.FileSystemDataSource;
 import org.objectledge.templating.Templating;
@@ -32,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.6 2004-01-29 15:33:16 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.7 2004-01-30 14:39:53 fil Exp $
  */
 public class MailSystem
 {
@@ -359,7 +360,7 @@ public class MailSystem
         /**
          * {@inheritDoc}
          */
-        public void run()
+        public void process(Context context)
         {
             loop : while (!Thread.interrupted())
             {

@@ -27,19 +27,17 @@
 // 
 package org.objectledge.threads;
 
+import org.objectledge.pipeline.Valve;
+
 /**
  * A task executed by ThreadPool's threads.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Task.java,v 1.1 2004-01-22 08:53:26 fil Exp $
+ * @version $Id: Task.java,v 1.2 2004-01-30 14:39:53 fil Exp $
  */
 public abstract class Task
+    implements Valve
 {
-    /** 
-     * Runns the task.
-     */
-    public abstract void run();
-    
     /**
      * Returns the name of the task.
      * 
@@ -47,7 +45,7 @@ public abstract class Task
      */
     public String getName()
     {
-        return null;
+        return getClass().getName();
     }
     
     /**

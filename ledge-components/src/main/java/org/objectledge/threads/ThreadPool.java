@@ -27,48 +27,82 @@
 // 
 package org.objectledge.threads;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
+import org.objectledge.threads.impl.Daemon;
 import org.picocontainer.lifecycle.Stoppable;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.2 2004-01-22 15:53:14 pablo Exp $
+ * @version $Id: ThreadPool.java,v 1.3 2004-01-30 14:39:53 fil Exp $
  */
 public class ThreadPool
     implements Stoppable
 {
-    private Runnable[] cleanupHooks;
+    // constants ////////////////////////////////////////////////////////////////////////////////
+    
+    private static final String THREAD_GROUP_NAME = "Ledge ThreadPool";
+    
+    // instance variables ///////////////////////////////////////////////////////////////////////
+    
+    /** thread's processing context. */
+    private Context context;    
+    
+    /** cleanup valve (possibly pipeline). */
+    private Valve cleanup;
+    
+    /** thread pool's thread group. */
+    private ThreadGroup threadGroup;
+    
+    private int daemonPriority = Thread.MIN_PRIORITY;
+    
+    private int workerPriority = Thread.MIN_PRIORITY;
+    
+    private Set threads = new HashSet();
+
+    private Logger log;
     
     /**
      * Component constructor.
      * 
-     * @param cleanupHooks the hooks that should be run every time the thread finish his work.
+     * @param context thread processing context.
+     * @param cleanup the valve that should be invoked every time the thread finishes it's work.
+     * @param log the logger to use.
      */
-    public ThreadPool(Runnable[] cleanupHooks)
+    public ThreadPool(Context context, Valve cleanup, Logger log)
     {
-        this.cleanupHooks = cleanupHooks; 
+        this.context = context;
+        this.cleanup = cleanup;
+        this.log = log;
+        threadGroup = new ThreadGroup(THREAD_GROUP_NAME); 
     }
     
     /**
      * Run the worker task.
      * 
      * @param task the task to run.
-     * @return the thread thats run the task.
      */
-    public Thread runWorker(Task task)
+    public void runWorker(Task task)
     {
-        return null;
     }
     
     /**
      * Run the daemon task.
      * 
      * @param task the task to run.
-     * @return the thread thats run the task.
      */
-    public Thread runDaemon(Task task)
+    public void runDaemon(Task task)
     {
-        return null;
+        synchronized(threads)
+        {
+            threads.add(new Daemon(task, daemonPriority, threadGroup, log, context, cleanup));     
+        }
     }
     
     /**
@@ -76,5 +110,15 @@ public class ThreadPool
      */
     public void stop()
     {
+        synchronized(threads)
+        {
+            Iterator i = threads.iterator();
+            while(i.hasNext())
+            {
+                Stoppable thread = (Stoppable)i.next();
+                thread.stop();
+                i.remove();
+            }
+        }
     }
 }
