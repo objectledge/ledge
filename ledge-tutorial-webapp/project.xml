@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <project>
   <pomVersion>3</pomVersion>
-  <extends>${basedir}/../common/project.xml</extends>
+  <extend>../ledge-reactor/shared/project.xml</extend>
 
   <name>Ledge tutorial webapp</name>
   <id>ledge-tutorial-webapp</id>
