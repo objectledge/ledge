@@ -40,10 +40,12 @@ import org.objectledge.web.HttpContext;
  * An utility for the file download functionality.
  *
  * @author <a href="dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileDownload.java,v 1.1 2004-10-04 14:25:04 zwierzem Exp $
+ * @version $Id: FileDownload.java,v 1.2 2004-10-07 15:30:33 zwierzem Exp $
  */
 public class FileDownload
 {
+    public static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
+    
     // instance variables ///////////////////////////////////////////////////////////////////////
     
     /** the thread's processing context. */
@@ -70,13 +72,24 @@ public class FileDownload
      * @param is the input stream of data to be downloaded
      * @param contentType the content-type of downloaded data
      * @param lastModified the last modification date of dowloaded data.
+     * @param bytesSize number of bytes that will be sent (size of data from input stream) the file
+     *  cannot be larger than 4GB
      * @throws IOException thrown on errors while downloading
      */
-    public void dumpData(InputStream is, String contentType, long lastModified)
+    public void dumpData(InputStream is, String contentType, long lastModified, int bytesSize)
         throws IOException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
+        // TODO: Decide whether to put default content type into HttpContext
+        if(contentType == null || contentType.length() == 0)
+        {
+            contentType = OCTET_STREAM_CONTENT_TYPE;
+        }
         httpContext.setContentType(contentType);
+        if(bytesSize > 0)
+        {
+            httpContext.getResponse().addIntHeader("Content-Length", bytesSize);
+        }
         httpContext.getResponse().addDateHeader("Last-Modified", lastModified);
         OutputStream os = httpContext.getOutputStream();
         byte[] buffer = new byte[is.available() > 0 ? is.available() : 4096];
@@ -94,8 +107,22 @@ public class FileDownload
     }
 
     /**
+     * Dumps the <code>InputStream</code> contents as a direct response with unknown size.
+     * 
+     * @param is the input stream of data to be downloaded
+     * @param contentType the content-type of downloaded data
+     * @param lastModified the last modification date of dowloaded data.
+     * @throws IOException thrown on errors while downloading
+     */
+    public void dumpData(InputStream is, String contentType, long lastModified)
+        throws IOException
+    {
+        dumpData(is, contentType, lastModified, -1);
+    }
+
+    /**
      * Dumps the <code>InputStream</code> contents as a direct response with current time as last
-     * modification time
+     * modification time and unknown size.
      * 
      * @param is the input stream of data to be downloaded
      * @param contentType the content-type of downloaded data
