@@ -24,4 +24,4 @@
 # supported. There can be only one entry that matches a given
 # repository.
 #
-DEFAULT	$CVSROOT/CVSROOT/cvsedit.pl
+DEFAULT	$CVSROOT/CVSROOT/cvsedit.pl %l
