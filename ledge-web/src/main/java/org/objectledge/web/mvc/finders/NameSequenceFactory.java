@@ -34,7 +34,7 @@ import org.objectledge.templating.Template;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactory.java,v 1.4 2004-01-19 12:47:46 zwierzem Exp $
+ * @version $Id: NameSequenceFactory.java,v 1.5 2004-01-19 15:03:16 fil Exp $
  */
 public class NameSequenceFactory
 {
@@ -118,46 +118,50 @@ public class NameSequenceFactory
      * Produces a class name sequence for the specified view. 
      * 
      * @param view the view.
+     * @param infix the path infix ("actions", "views","components")
      * @return name sequence.
      */
-    public Sequence getClassNameSequence(String view)
+    public Sequence getClassNameSequence(String infix, String view)
     {
         Sequence fallback = getClassNameFallbackSequence(view);        
-        return new ViewLookupSequence(classPrefices, classSeparator, fallback);
+        return new ViewLookupSequence(classPrefices, classSeparator, infix, fallback);
     }
     
     /**
      * Produces a template name sequence for the specified view. 
      * 
      * @param view the view.
+     * @param infix the path infix ("views", "components")
      * @return name sequence.
      */
-    public Sequence getTemplateNameSequence(String view)
+    public Sequence getTemplateNameSequence(String infix, String view)
     {
         Sequence fallback = getTemplateNameFallbackSequence(view);        
-        return new ViewLookupSequence(templatePrefices, templateSeparator, fallback);
+        return new ViewLookupSequence(templatePrefices, templateSeparator, infix, fallback);
     }
 
     /**
      * Returns the view name for the specified template.
      * 
      * @param template the template.
+     * @param infix the path infix ("views", "components")
      * @return the view name.
      */    
-    public String getView(Template template)
+    public String getView(String infix, Template template)
     {
-        return getView(template.getName(), "template", templatePrefices, templateSeparator);
+        return getView(template.getName(), "template", infix, templatePrefices, templateSeparator);
     }
 
     /**
      * Returns the view name for the specified class.
      * 
      * @param clazz the class.
+     * @param infix the path infix ("actions", "views","components")
      * @return the view name.
      */    
-    public String getView(Class clazz)
+    public String getView(String infix, Class clazz)
     {
-        return getView(clazz.getName(), "class", classPrefices, classSeparator);
+        return getView(clazz.getName(), "class", infix, classPrefices, classSeparator);
     }
     
     // implementation ///////////////////////////////////////////////////////////////////////////
@@ -194,27 +198,37 @@ public class NameSequenceFactory
      * 
      * @param name the object name.
      * @param what the type of object ("class"/"template") used for exception message.
+     * @param infix the path infix ("actions", "views","components")
      * @param prefices the prefices to search.
      * @param separator the separator to replace.
      * @return the view name.
      */
-    protected String getView(String name, String what, String[] prefices, char separator)
+    protected String getView(String name, String what, 
+        String infix, String[] prefices, char separator)
     {
         if(prefices.length > 0)
         {
             for(int i=0; i<prefices.length; i++)
             {
-                if(name.startsWith(prefices[i]))
+                if(name.startsWith(prefices[i]) && 
+                    name.substring(prefices[i].length()+1).startsWith(infix))
                 {
-                    return name.substring(prefices[i].length()+1).
+                    return name.substring(prefices[i].length()+infix.length()+2).
                         replace(separator, viewSeparator);
                 }
             }
-            throw new IllegalArgumentException(what+" "+name+" outside defined prefices");
+            throw new IllegalArgumentException(what+" "+name+" outside defined prefices or "+infix);
         }
         else
         {
-            return name.replace(separator, viewSeparator);
+            if(name.startsWith(infix))
+            {
+                return name.substring(infix.length()+1).replace(separator, viewSeparator);
+            }
+            else
+            {
+                throw new IllegalArgumentException(what+" "+name+" not within "+infix);
+            }
         }
     }
 }

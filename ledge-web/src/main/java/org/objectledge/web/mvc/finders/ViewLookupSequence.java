@@ -32,7 +32,7 @@ import java.util.NoSuchElementException;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequence.java,v 1.4 2004-01-19 13:44:24 fil Exp $
+ * @version $Id: ViewLookupSequence.java,v 1.5 2004-01-19 15:03:16 fil Exp $
  */
 public class ViewLookupSequence
     implements Sequence
@@ -42,6 +42,8 @@ public class ViewLookupSequence
     private String[] prefices;
     
     private Sequence viewFallbackSequence;
+    
+    private String infix;
     
     private int position = 0;
     
@@ -55,11 +57,12 @@ public class ViewLookupSequence
      * @param outSeparator separator to use in generated paths.
      */
     public ViewLookupSequence(String[] prefices, char outSeparator, 
-        Sequence viewFallbackSequence)
+        String infix, Sequence viewFallbackSequence)
     {
         this.prefices = prefices;
-        this.viewFallbackSequence = viewFallbackSequence;
         this.outSeparator = outSeparator;
+        this.infix = infix;
+        this.viewFallbackSequence = viewFallbackSequence;
     }
 
     /**
@@ -107,6 +110,7 @@ public class ViewLookupSequence
             buff.append(prefices[position]);
             buff.append(outSeparator);
         }
+        buff.append(infix).append(outSeparator);
         buff.append(viewFallbackSequence.next());
         return buff.toString();
     }

@@ -33,7 +33,7 @@ import junit.framework.TestCase;
  * Generates a view lookup sequence based on a prefix, and fallback sequence.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequenceTest.java,v 1.4 2004-01-19 13:44:44 fil Exp $
+ * @version $Id: ViewLookupSequenceTest.java,v 1.5 2004-01-19 15:03:16 fil Exp $
  */
 public class ViewLookupSequenceTest extends TestCase
 {
@@ -51,15 +51,16 @@ public class ViewLookupSequenceTest extends TestCase
         ViewFallbackSequence fallbackSequence = 
             new ViewFallbackSequence("a.b.c", '.', '/', "Default");
         String[] prefices = { "one", "two" };
-        ViewLookupSequence sequence = new ViewLookupSequence(prefices, '/', fallbackSequence);
-        assertEquals("one/a/b/c/Default", sequence.next());
-        assertEquals("one/a/b/Default", sequence.next());
-        assertEquals("one/a/Default", sequence.next());
-        assertEquals("one/Default", sequence.next());
-        assertEquals("two/a/b/c/Default", sequence.next());
-        assertEquals("two/a/b/Default", sequence.next());
-        assertEquals("two/a/Default", sequence.next());
-        assertEquals("two/Default", sequence.next());
+        ViewLookupSequence sequence;
+        sequence = new ViewLookupSequence(prefices, '/', "views", fallbackSequence);
+        assertEquals("one/views/a/b/c/Default", sequence.next());
+        assertEquals("one/views/a/b/Default", sequence.next());
+        assertEquals("one/views/a/Default", sequence.next());
+        assertEquals("one/views/Default", sequence.next());
+        assertEquals("two/views/a/b/c/Default", sequence.next());
+        assertEquals("two/views/a/b/Default", sequence.next());
+        assertEquals("two/views/a/Default", sequence.next());
+        assertEquals("two/views/Default", sequence.next());
         assertEquals(false, sequence.hasNext());
         try
         {
@@ -74,11 +75,11 @@ public class ViewLookupSequenceTest extends TestCase
         assertEquals(true, sequence.hasNext());
 
         prefices = new String[0];
-        sequence = new ViewLookupSequence(prefices, '/', fallbackSequence);
-        assertEquals("a/b/c/Default", sequence.next());
-        assertEquals("a/b/Default", sequence.next());
-        assertEquals("a/Default", sequence.next());
-        assertEquals("Default", sequence.next());
+        sequence = new ViewLookupSequence(prefices, '/', "views", fallbackSequence);
+        assertEquals("views/a/b/c/Default", sequence.next());
+        assertEquals("views/a/b/Default", sequence.next());
+        assertEquals("views/a/Default", sequence.next());
+        assertEquals("views/Default", sequence.next());
         assertEquals(false, sequence.hasNext());
         try
         {
