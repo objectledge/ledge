@@ -98,7 +98,8 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         PasswordGenerator passwordGenerator = new PasswordGenerator();
         PasswordDigester passwordDigester = new PasswordDigester("md5");
         config = getConfig("config/org.objectledge.authentication.NamingPolicy.xml");
-        
+        checkSchema("config/org.objectledge.authentication.NamingPolicy.xml", 
+                            "org/objectledge/authentication/NamingPolicy.rng");        
         NamingPolicy namingPolicy = new NamingPolicy(config);
         config = getConfig("config/org.objectledge.authentication.LoginVerifier.xml");
         checkSchema("config/org.objectledge.authentication.LoginVerifier.xml", 
