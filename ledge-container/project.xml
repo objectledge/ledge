@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.13 2003-12-29 14:06:28 fil Exp $ -->
+<!-- $Id: project.xml,v 1.13.2.1 2004-01-06 22:14:32 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -9,7 +9,7 @@
   
   <groupId>objectledge</groupId>
   <id>ledge-container</id>
-  <currentVersion>0.1-dev</currentVersion>
+  <currentVersion>0.1</currentVersion>
   <name>Ledge Container</name>
   <shortDescription>
     A container based on Pico/Nano packages with added value of more expressive
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.1</version>
       <url>http://objectledge.org/modules/ledge-components/</url>
     </dependency>
     <dependency>
@@ -67,25 +67,25 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-20031227.104100</version>
       <url>http://picocontainer.org/</url>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picoextras-reflection</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1-20031224.064700</version>
       <url>http://nanocontainer.org/</url>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picoextras-script</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1-20031224.064900</version>
       <url>http://nanocontainer.org/</url>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>nanocontainer</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-alpha-1-20031208.183800</version>
       <url>http://nanocontainer.org/</url>
     </dependency>
     <dependency>
