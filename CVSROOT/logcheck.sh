@@ -11,6 +11,9 @@ cat > $TEMPFILE
 #
 $CVSROOT/CVSROOT/log_accum.pl $USER "${1} ${2}" < $TEMPFILE
 
+REPO=${1}
+shift
+
 #
 # Invoke cvsspam
 #
@@ -19,18 +22,9 @@ $CVSROOT/CVSROOT/collect_diffs.rb --from $USER $@ < $TEMPFILE
 #
 # Invoke DamageControl
 #
-ruby /home/damagecontrol/current/bin/requestbuild --url http://localhost:4712/private/xmlrpc --projectname `echo ${1} | cut -d / -f 1`
+ruby /home/damagecontrol/current/bin/requestbuild --url http://localhost:4712/private/xmlrpc --projectname `echo $REPO | cut -d / -f 1`
 
 #
 # clean up
 #
 rm $TEMPFILE
-
-#debug
-echo '$@' $@
-echo -n "args "
-while [ $# -ne 0 ]; do
-  echo -n -$1
-  shift
-done
-echo -
