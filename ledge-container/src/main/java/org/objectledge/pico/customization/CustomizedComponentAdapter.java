@@ -45,7 +45,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * of the managed component, depending on the customizedComponentProvider's semantics.</p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.10 2003-12-17 11:23:06 fil Exp $
+ * @version $Id: CustomizedComponentAdapter.java,v 1.11 2003-12-23 15:17:05 fil Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
@@ -98,8 +98,12 @@ public class CustomizedComponentAdapter
     public Object getComponentInstance(MutablePicoContainer dependencyContainer, 
         Object componentKey, Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException, UnsupportedKeyTypeException
-    {
-        String marker = ((Class)componentKey).getName();
+    {        
+        String marker = componentKey.toString();
+        if(componentKey instanceof Class)
+        {
+            marker = ((Class)componentKey).getName();
+        }
         if(customizedComponentContainer.hasComponent(marker))
         {
             return customizedComponentContainer.getComponentInstance(marker);
