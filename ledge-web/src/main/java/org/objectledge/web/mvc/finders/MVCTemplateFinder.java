@@ -33,15 +33,15 @@ import org.objectledge.templating.Template;
  * Finds templates that should be used for rendering specific views
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCTemplateFinder.java,v 1.1 2004-01-15 10:49:01 fil Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.2 2004-01-15 12:18:40 fil Exp $
  */
 public interface MVCTemplateFinder
 {
 	/**
-	 * Returns an builder template for a given builder name. If no template is found, a
+	 * Returns an builder template for a given view name. If no template is found, a
 	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
 	 * 
-     * @param name name of a builder for which a template must be found
+     * @param name view name to look up template for.
 	 * @return found template
      */
     public Template findBuilderTemplate(String name);
@@ -50,8 +50,16 @@ public interface MVCTemplateFinder
 	 * Returns an enclosing builder template for a given builder. If no template is found, a
 	 * {@link org.objectledge.web.mvc.builders.DefaultTemplate} is returned.
 	 * 
-	 * @param builder a builder for which an eclosing builder template must be found 
-	 * @return found template
+	 * @param builderTemplate a builder for which an eclosing builder template must be found 
+	 * @return the template.
 	 */
-	public Template findEnclosingBuilderTemplate(Template builder);
+	public Template findEnclosingBuilderTemplate(Template builderTemplate);
+    
+    /**
+     * Returns the name of the view that corresponds to the given builder template.
+     * 
+     * @param builderTemplate the builder template.
+     * @return the view name.
+     */
+    public String findViewName(Template builderTemplate);
 }
