@@ -23,20 +23,16 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.WebConfigurator;
 
 /**
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.11 2004-08-20 15:59:08 zwierzem Exp $
+ * @version $Id: FileUploadValve.java,v 1.12 2005-03-09 13:32:55 zwierzem Exp $
  */
 public class FileUploadValve 
     implements Valve
 {
-    /** the web configurator */
-    private WebConfigurator webConfigurator;
-    
     /** the logger */
     private Logger logger;
     
@@ -54,10 +50,8 @@ public class FileUploadValve
      * @param fileUpload the file upload component.
      * @param mailSystem the mailSystem.
      */
-    public FileUploadValve(WebConfigurator webConfigurator, Logger logger, 
-                           FileUpload fileUpload, MailSystem mailSystem)
+    public FileUploadValve(Logger logger, FileUpload fileUpload, MailSystem mailSystem)
     {
-        this.webConfigurator = webConfigurator;
     	this.logger = logger;
         this.fileUpload = fileUpload;
     	this.mailSystem = mailSystem;
