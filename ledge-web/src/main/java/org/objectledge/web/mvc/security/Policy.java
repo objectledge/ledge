@@ -33,7 +33,7 @@ package org.objectledge.web.mvc.security;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Policy.java,v 1.1 2004-02-28 13:41:05 pablo Exp $
+ * @version $Id: Policy.java,v 1.2 2004-03-18 14:10:15 pablo Exp $
  */
 public class Policy
 {
@@ -221,11 +221,11 @@ public class Policy
     private boolean match(Object pattern, String element)
     {
         String[] pat = (String[])pattern;
-        if(pat[0] != null && element.equals(pat[0]))
+        if(pat[0] != null && pat[0].equals(element))
         {
             return true;
         }
-        if(pat[1] != null && element.startsWith(pat[1]))
+        if(pat[1] != null && element != null && element.startsWith(pat[1]))
         {
             return true;
         }

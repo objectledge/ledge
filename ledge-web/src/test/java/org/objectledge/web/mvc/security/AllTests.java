@@ -41,7 +41,9 @@ public class AllTests
     {
         TestSuite suite = new TestSuite("Test for org.objectledge.policy");
         //$JUnit-BEGIN$
+        suite.addTest(new TestSuite(PolicyCheckingValveTest.class));
         suite.addTest(new TestSuite(PolicySystemTest.class));
+        suite.addTest(new TestSuite(SecurityHelperTest.class));
         //$JUnit-END$
         return suite;
     }

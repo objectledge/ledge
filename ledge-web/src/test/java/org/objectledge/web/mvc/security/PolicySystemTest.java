@@ -30,113 +30,77 @@ package org.objectledge.web.mvc.security;
 
 import java.security.Principal;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.LedgeWebTestCase;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.authentication.UserUnknownException;
-import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.logging.LoggerFactory;
+import org.objectledge.i18n.LocaleLoaderValve;
 import org.objectledge.security.RoleChecking;
-import org.objectledge.web.mvc.security.Policy;
-import org.objectledge.web.mvc.security.PolicySystem;
-import org.objectledge.xml.XMLValidator;
 
-/**
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
-public class PolicySystemTest extends TestCase
+public class PolicySystemTest extends LedgeWebTestCase
 {
     private PolicySystem policySystem;
 
-    /**
-     * Constructor for PolicySystemTest.
-     * @param arg0
-     */
-    public PolicySystemTest(String arg0)
+    public void setUp() throws Exception
     {
-        super(arg0);
-    }
-
-    public void setUp()
-    {
-        try
+        FileSystem fs = getFileSystem("src/test/resources/config");
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(LocaleLoaderValve.class));
+        Configuration config = getConfig(fs, PolicySystem.class, PolicySystem.class);
+        RoleChecking roleChecking = new RoleChecking()
         {
-            //prepare test
-            String root = System.getProperty("ledge.root");
-            if (root == null)
+            public String[] getRoles(Principal user) throws UserUnknownException
             {
-                throw new Error("system property ledge.root undefined. " + 
-                                 "use -Dledge.root=.../ledge-container/src/test/resources");
-            }
-            FileSystem fs = FileSystem.getStandardFileSystem(root + "/policy");
-            XMLValidator validator = new XMLValidator();
-            ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
-            Configuration config = configFactory.getConfig(PolicySystem.class, PolicySystem.class);
-            LoggerFactory loggerFactory = new LoggerFactory();
-            Logger logger = loggerFactory.getLogger(PolicySystem.class);
-            RoleChecking roleChecking = new RoleChecking()
-            {
-                public String[] getRoles(Principal user) throws UserUnknownException
+                if (user.getName() == "root")
                 {
-                    if(user.getName() == "root")
-                    {
-                        return new String[]{"admin","moderator"};
-                    }
-                    if(user.getName() == "user")
-                    {
-                        return new String[]{"user"};
-                    }
-                    if(user.getName() == "anon")
-                    {
-                        return null;
-                    }
-                    throw new UserUnknownException("unknown user: "+user.getName());
+                    return new String[] { "admin", "moderator" };
                 }
-            };
-            policySystem = new PolicySystem(config, logger, roleChecking);
-        }
-        catch (Exception e)
-        {
-            throw new Error(e);
-        }
+                if (user.getName() == "user")
+                {
+                    return new String[] { "user" };
+                }
+                if (user.getName() == "anon")
+                {
+                    return null;
+                }
+                throw new UserUnknownException("unknown user: " + user.getName());
+            }
+        };
+        policySystem = new PolicySystem(config, logger, roleChecking);
     }
     public void testGetGlobalSSL()
     {
-        assertEquals(policySystem.getGlobalSSL(),false);
+        assertEquals(policySystem.getGlobalSSL(), false);
     }
 
     public void testGetGlobalLogin()
     {
-        assertEquals(policySystem.getGlobalLogin(),false);
+        assertEquals(policySystem.getGlobalLogin(), false);
     }
 
     public void testSetGlobalSSL()
     {
         policySystem.setGlobalSSL(true);
-        assertEquals(policySystem.getGlobalSSL(),true);
+        assertEquals(policySystem.getGlobalSSL(), true);
     }
 
     public void testSetGlobalLogin()
     {
         policySystem.setGlobalLogin(true);
-        assertEquals(policySystem.getGlobalLogin(),true);
+        assertEquals(policySystem.getGlobalLogin(), true);
     }
 
     public void testGetGlobalAccess()
     {
-        assertEquals(policySystem.getGlobalAccess(),true);
+        assertEquals(policySystem.getGlobalAccess(), true);
     }
 
     public void testSetGlobalAccess()
     {
         policySystem.setGlobalAccess(false);
-        assertEquals(policySystem.getGlobalAccess(),false);
+        assertEquals(policySystem.getGlobalAccess(), false);
     }
 
     /*
@@ -151,7 +115,7 @@ public class PolicySystemTest extends TestCase
             policy = policySystem.getPolicy("foo");
             fail("should throw the exception");
         }
-        catch(IllegalArgumentException e)
+        catch (IllegalArgumentException e)
         {
             //ok!
         }
@@ -161,7 +125,7 @@ public class PolicySystemTest extends TestCase
     {
         Policy[] policies = policySystem.getPolicies();
         assertNotNull(policies);
-        assertEquals(policies.length,1);
+        assertEquals(policies.length, 1);
     }
 
     /*
@@ -169,39 +133,37 @@ public class PolicySystemTest extends TestCase
      */
     public void testGetPolicyStringString()
     {
-        Policy policy = policySystem.getPolicy("action","view");
+        Policy policy = policySystem.getPolicy("action", "view");
         assertNull(policy);
-        policy = policySystem.getPolicy("view","action");
+        policy = policySystem.getPolicy("view", "action");
         assertNotNull(policy);
     }
 
     public void testAddPolicy()
     {
         Policy[] policies = policySystem.getPolicies();
-        assertEquals(policies.length,1);
-        policySystem.addPolicy("foo",false,false,new String[]{"admin"},
-                               new String[]{"view"},new String[]{"action"});
+        assertEquals(policies.length, 1);
+        policySystem.addPolicy("foo", false, false, new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
         policies = policySystem.getPolicies();
-        assertEquals(policies.length,2);
+        assertEquals(policies.length, 2);
     }
 
     public void testRemovePolicy()
     {
         Policy[] policies = policySystem.getPolicies();
-        assertEquals(policies.length,1);
-        policySystem.addPolicy("foo",false,false,new String[]{"admin"},
-                               new String[]{"view"},new String[]{"action"});
-        policies = policySystem.getPolicies();                       
-        assertEquals(policies.length,2);
+        assertEquals(policies.length, 1);
+        policySystem.addPolicy("foo", false, false, new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
+        policies = policySystem.getPolicies();
+        assertEquals(policies.length, 2);
         policySystem.removePolicy("foo");
         policies = policySystem.getPolicies();
-        assertEquals(policies.length,1);
+        assertEquals(policies.length, 1);
         try
         {
             policySystem.removePolicy("foo2");
             fail("should throw the exception");
         }
-        catch(IllegalArgumentException e)
+        catch (IllegalArgumentException e)
         {
             //ok!
         }
@@ -210,58 +172,47 @@ public class PolicySystemTest extends TestCase
     public void testCheckPolicy()
     {
         Policy policy = policySystem.getPolicy("bar");
-        assertEquals(policySystem.checkPolicy(new DefaultPrincipal("root"),true,policy),true);
-        policy = new Policy(false,true,new String[]{"admin"},
-                            new String[]{"foo"},new String[]{"bar"});
-        assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"),false,policy),false);
-        policy = new Policy(false,false,new String[]{"admin"},
-                            new String[]{"foo"},new String[]{"bar"});
-        assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"),false,policy),true);                            
+        assertEquals(policySystem.checkPolicy(new DefaultPrincipal("root"), true, policy), true);
+        policy = new Policy(false, true, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"), false, policy), false);
+        policy = new Policy(false, false, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"), false, policy), true);
     }
 
     public void testRequiresSSL()
     {
-        policySystem.addPolicy("foo",true,true,new String[]{"admin"},
-                                new String[]{"foo"},new String[]{"bar"});
-        assertEquals(policySystem.requiresSSL("view","action"),false);
-        assertEquals(policySystem.requiresSSL("foo","bar"),true);                                
-        assertEquals(policySystem.requiresSSL("foo2","bar2"),false);
+        policySystem.addPolicy("foo", true, true, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        assertEquals(policySystem.requiresSSL("view", "action"), false);
+        assertEquals(policySystem.requiresSSL("foo", "bar"), true);
+        assertEquals(policySystem.requiresSSL("foo2", "bar2"), false);
     }
 
     public void testRequiresLogin()
     {
-        policySystem.addPolicy("foo",true,true,new String[]{"admin"},
-                               new String[]{"foo"},new String[]{"bar"});
-        assertEquals(policySystem.requiresLogin("view","action"),true);
-        assertEquals(policySystem.requiresLogin("foo","bar"),true);                                
-        assertEquals(policySystem.requiresLogin("foo2","bar2"),false);
+        policySystem.addPolicy("foo", true, true, new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
+        assertEquals(policySystem.requiresLogin("view", "action"), true);
+        assertEquals(policySystem.requiresLogin("foo", "bar"), true);
+        assertEquals(policySystem.requiresLogin("foo2", "bar2"), false);
     }
 
     public void testCheckAccess()
     {
-        assertEquals(policySystem.checkAccess("view","action",
-                     new DefaultPrincipal("root"),true),true);
-        assertEquals(policySystem.checkAccess("view","action",
-                     new DefaultPrincipal("user"),true),false);
-        assertEquals(policySystem.checkAccess("foo2","bar2",
-                             new DefaultPrincipal("user"),true),true);
-        assertEquals(policySystem.checkAccess("view","action",
-                             new DefaultPrincipal("anon"),true),false);
-        assertEquals(policySystem.checkAccess("view","action",
-                         new DefaultPrincipal("foo"),true),false);
+        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("root"), true), true);
+        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("user"), true), false);
+        assertEquals(policySystem.checkAccess("foo2", "bar2", new DefaultPrincipal("user"), true), true);
+        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("anon"), true), false);
+        assertEquals(policySystem.checkAccess("view", "action", new DefaultPrincipal("foo"), true), false);
     }
-    
+
     public void testPolicyTest()
     {
-        Policy policy = new Policy(false,true,new String[]{"admin"},
-           new String[]{"foo*"},new String[]{"bar*"});
-        assertEquals(policy.getActionPatterns()[0],"bar*");
-        assertEquals(policy.getViewPatterns()[0],"foo*");
-        assertEquals(policy.matchesRequest("foo","bar"),true);            
-        assertEquals(policy.matchesRequest("foo2","bar"),true);
-        assertEquals(policy.matchesRequest("bar.foo","xxx"),false);
-        assertEquals(policy.matchesRequest("foo.foo","bar.foo"),true);
-        assertEquals(policy.matchesRequest("bar.foo","bar.bar"),true);
+        Policy policy = new Policy(false, true, new String[] { "admin" }, new String[] { "foo*" }, new String[] { "bar*" });
+        assertEquals(policy.getActionPatterns()[0], "bar*");
+        assertEquals(policy.getViewPatterns()[0], "foo*");
+        assertEquals(policy.matchesRequest("foo", "bar"), true);
+        assertEquals(policy.matchesRequest("foo2", "bar"), true);
+        assertEquals(policy.matchesRequest("bar.foo", "xxx"), false);
+        assertEquals(policy.matchesRequest("foo.foo", "bar.foo"), true);
+        assertEquals(policy.matchesRequest("bar.foo", "bar.bar"), true);
     }
-    
 }
