@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.RandomAccessFile;
@@ -19,7 +20,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.2 2003-11-25 10:00:46 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.3 2003-11-25 11:01:27 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -102,9 +103,10 @@ public abstract class ReadOnlyFileSystemProvider
      *  
      * @param location the location of the listing
      * @param is the stream used for reading the listing.
+     * @throws ComponentInitializationError if the index file is malformed.
      */
-    // TODO throw a meaningful exception type
 	protected void processListing(String location, InputStream is)
+        throws ComponentInitializationError
 	{
 		try
 		{
@@ -157,8 +159,8 @@ public abstract class ReadOnlyFileSystemProvider
 				}
 				catch(NumberFormatException e)
 				{
-					throw new Error("invalid length "+length+" for file "+path+" in index "+
-                        location);
+					throw new ComponentInitializationError("invalid length "+length+" for file "+
+                        path+" in index "+location);
 				}
 				try
 				{
@@ -179,8 +181,8 @@ public abstract class ReadOnlyFileSystemProvider
 						current = (Map)current.get(token);
 						if(current == null)
 						{
-							throw new Error("missing parent directory for "+path+" in index "+
-                                location);
+							throw new ComponentInitializationError("missing parent directory for "+
+                                path+" in index "+location);
 						}
 					}
 					else
@@ -210,7 +212,7 @@ public abstract class ReadOnlyFileSystemProvider
 		}
 		catch(IOException e)
 		{
-			throw new Error("failed to load index "+location, e);
+			throw new ComponentInitializationError("failed to load index "+location, e);
 		}
 	}
 
