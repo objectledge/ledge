@@ -41,7 +41,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.7 2004-02-20 12:37:18 pablo Exp $
+ * @version $Id: AuthenticationValve.java,v 1.8 2004-05-27 16:36:53 pablo Exp $
  */
 public class AuthenticationValve 
     implements Valve, WebConstants
@@ -75,7 +75,7 @@ public class AuthenticationValve
 		Principal anonymous = null;
         try
         {
-            userManager.getAnonymousAccount();
+            anonymous = userManager.getAnonymousAccount();
         }
         catch(AuthenticationException e)
         {
