@@ -39,6 +39,11 @@
     </element>
   </optional>
   <optional>
+    <element name="system_email">
+      <text/>
+    </element>
+  </optional>  
+  <optional>
     <element name="email_pattern">
       <text/>
     </element>

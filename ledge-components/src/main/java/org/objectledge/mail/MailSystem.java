@@ -33,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.10 2004-03-22 09:27:51 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.11 2005-01-27 00:56:01 pablo Exp $
  */
 public class MailSystem
 {
@@ -72,6 +72,9 @@ public class MailSystem
 
     /** system mail logger */
     private String debugAddress;
+    
+    /** system address */
+    private String systemAddress;
 
 	/** email address validator pattern */
 	private Pattern emailAddressPattern; 
@@ -99,6 +102,7 @@ public class MailSystem
             	.getValue("/config/mime.types");
             mimeMap = new MimetypesFileTypeMap(fileSystem.getInputStream(mimeTypeFilePath));
             debugAddress = config.getChild("big_brother_email").getValue("");
+            systemAddress = config.getChild("system_email").getValue("");
             String pattern = config.getChild("email_pattern")
             	.getValue(EMAIL_ADDRESS_PATTERN);
             emailAddressPattern = Pattern.compile(pattern);
@@ -268,6 +272,17 @@ public class MailSystem
 		Matcher m = emailAddressPattern.matcher(address);
 		return m.matches();
 	}
+    
+    /**
+     * Get the system address.
+     * 
+     * @return the system address.
+     */
+    public String getSystemAddress()
+    {
+        return systemAddress;
+    }
+    
 	    
     /**
      * The authenticator .
