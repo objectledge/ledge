@@ -37,17 +37,18 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.7 2004-08-19 16:39:27 zwierzem Exp $
+ * @version $Id: I18nTool.java,v 1.8 2004-08-20 08:00:31 zwierzem Exp $
  */
 public class I18nTool
 {
-    private I18n i18n;
+    /** the i18n container */
+    protected I18n i18n;
 
     /** buffer used keep the tools prefix and to build absolute keys. */
     protected StringBuffer prefixBuf = new StringBuffer();
 	
 	/** current locale */
-	private Locale locale;
+	protected Locale locale;
 	
 	/**
 	 * Default constructor.
@@ -89,10 +90,15 @@ public class I18nTool
             prefixBuf.setLength(prefixLength); // get back to previous prefix
             return target;
 		}
-        return this;
+        else
+        {
+            I18nTool target = createInstance(this); // the prefix buffer is copied
+            target.prefixBuf.setLength(0); // clear the prefix
+            return target;
+        }
 	}
 	
-	/**
+    /**
 	 * Override request locale.
 	 * 
 	 * @param locale the locale string representation.
