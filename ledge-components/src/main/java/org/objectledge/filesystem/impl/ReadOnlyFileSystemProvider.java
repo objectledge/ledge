@@ -48,7 +48,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.9 2003-12-04 15:21:33 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.10 2004-01-13 12:51:31 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -56,7 +56,7 @@ public abstract class ReadOnlyFileSystemProvider
 	// constants ////////////////////////////////////////////////////////////
 	
     /** locations of the file listings, in order of precedence. */
-	static final String[] LISTING_LOCATION =  
+	public static final String[] LISTING_LOCATION =  
 	{
 		"/WEB-INF/files.lst",
 		"/META-INF/files.lst",
