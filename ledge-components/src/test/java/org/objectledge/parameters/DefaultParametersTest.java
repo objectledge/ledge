@@ -30,10 +30,6 @@ package org.objectledge.parameters;
 
 import junit.framework.TestCase;
 
-import org.objectledge.parameters.AmbiguousParameterException;
-import org.objectledge.parameters.DefaultParameters;
-import org.objectledge.parameters.UndefinedParameterException;
-
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
