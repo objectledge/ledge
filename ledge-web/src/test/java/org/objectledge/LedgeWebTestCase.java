@@ -42,13 +42,13 @@ public abstract class LedgeWebTestCase extends LedgeTestCase
 {
     private ConfigurationFactory configFactory;
         
-    protected Configuration getConfig(FileSystem fs, Object key, Class impl) throws Exception
+    protected Configuration getConfig(FileSystem fs, Class role, Class impl) throws Exception
     {
         if(configFactory == null)
         {
             XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             configFactory = new ConfigurationFactory(fs, validator, ".");
         }
-        return configFactory.getConfig(key, impl);
+        return configFactory.getConfig(role, impl);
     }      
 }
