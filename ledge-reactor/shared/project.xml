@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.3 2003-12-05 14:43:21 fil Exp $ -->
+<!-- $Id: project.xml,v 1.4 2003-12-05 18:08:50 mover Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -38,7 +38,7 @@
     </developer>
     
     <developer>
-      <name>Pawe? Potempski</name>
+      <name>Pawel Potempski</name>
       <id>pablo</id>
       <email>pablo@caltha.pl</email>
       <roles>
@@ -47,24 +47,26 @@
     </developer>
     
     <developer>
-      <name>Damian Gajda</name>
-      <id>damian</id>
-      <email>damian@caltha.pl</email>
-      <roles>
-        <role>java developer</role>
-      </roles>
-    </developer>
-    
-    <developer>
-      <name>Micha? Mach</name>
+      <name>Michal Mach</name>
       <id>mover</id>
       <email>mover@caltha.pl</email>
       <roles>
         <role>java developer</role>
+        <role>documentation engineer</role>
       </roles>
     </developer>
   </developers>
-  
+ 
+    <developer>
+      <name>Damian Gajda</name>
+      <id>zwierzem</id>
+      <email>zwierzem@caltha.pl</email>
+      <roles>
+        <role>java developer</role>
+      </roles>
+    </developer>
+
+ 
   <!-- contributors -->
   
 </project>
