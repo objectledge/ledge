@@ -36,8 +36,9 @@ import java.io.Writer;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Templating.java,v 1.2 2003-12-17 11:31:52 fil Exp $
+ * @version $Id: Templating.java,v 1.3 2003-12-22 16:54:11 pablo Exp $
  */
+///CLOVER:OFF
 public interface Templating
 {
 	/**
@@ -96,3 +97,4 @@ public interface Templating
 	 */
 	public String getTemplateEncoding();
 }
+///CLOVER:ON

@@ -33,8 +33,9 @@ package org.objectledge.templating;
  * Interface for all templating contexts.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: TemplatingContext.java,v 1.1 2003-12-05 18:34:29 pablo Exp $
+ * @version $Id: TemplatingContext.java,v 1.2 2003-12-22 16:54:11 pablo Exp $
  */
+///CLOVER:OFF
 public interface TemplatingContext
 {
 	/**
@@ -77,3 +78,4 @@ public interface TemplatingContext
 	 */
 	public String[] getKeys();
 }
+///CLOVER:ON

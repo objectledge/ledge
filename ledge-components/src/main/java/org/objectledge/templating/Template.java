@@ -33,8 +33,9 @@ package org.objectledge.templating;
  * Interface for system template. 
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Template.java,v 1.1 2003-12-05 18:34:29 pablo Exp $
+ * @version $Id: Template.java,v 1.2 2003-12-22 16:54:11 pablo Exp $
  */
+///CLOVER:OFF
 public interface Template
 {
 	/**
@@ -47,3 +48,4 @@ public interface Template
 	public String merge(TemplatingContext context)
 		throws MergingException;
 }
+///CLOVER:ON
