@@ -30,7 +30,7 @@ import org.objectledge.web.WebConstants;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.6 2004-01-23 11:22:46 pablo Exp $
+ * @version $Id: FileUploadValve.java,v 1.7 2004-01-29 15:33:57 pablo Exp $
  */
 public class FileUploadValve 
     implements Valve, WebConstants
@@ -81,6 +81,7 @@ public class FileUploadValve
             try
             {
                 Session session = mailSystem.getSession();
+                session.setDebug(true);
                 String headers = "Content-Type: " + 
                 	   httpContext.getRequest().getContentType() +"\n\n";
                 InputStream uploadStream = new SequenceInputStream(

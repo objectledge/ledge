@@ -26,91 +26,26 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web;
+package org.objectledge.upload;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
-import org.objectledge.web.mvc.TestHttpSession;
-
-import com.mockobjects.servlet.MockHttpServletRequest;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
+ * To change the template for this generated type comment go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class TestHttpServletRequest
-    extends MockHttpServletRequest implements HttpServletRequest
+public class AllWebTests
 {
-    private Map sessionMap;
-    
-    private boolean isSecure = false;
-    
-    private int serverPort = 80;
-    
-    private int contentLength = 0;
-    
-    private String characterEncoding = "ISO-8859-2";
 
-    public TestHttpServletRequest()
+    public static Test suite()
     {
-        super();
-        sessionMap = new HashMap();
+        TestSuite suite = new TestSuite("Test for org.objectledge.upload");
+        //$JUnit-BEGIN$
+        suite.addTest(new TestSuite(UploadTest.class));
+        //$JUnit-END$
+        return suite;
     }
-    
-    public TestHttpServletRequest(Map sessionMap)
-    {
-        this.sessionMap = sessionMap;
-    }
-
-    
-    public int getServerPort()
-    {
-        return serverPort;
-    }
-    
-    public boolean isSecure()
-    {
-        return isSecure;
-    }
-    
-    public int getContentLength()
-    {
-        return contentLength;
-    }
-    
-    public String getCharacterEncoding()
-    {
-        return characterEncoding;
-    }
-    
-    public void setupIsSecure(boolean isSecure)
-    {
-        this.isSecure = isSecure;
-    }
-    
-    public void setupGetServerPort(int serverPort)
-    {
-        this.serverPort = serverPort;
-    }
-    
-    public void setupGetContentLength(int length)
-    {
-        this.contentLength = length;
-    }
-    
-    public void setupGetCharacterEncoding(String characterEncoding)
-    {
-        this.characterEncoding = characterEncoding;
-    }
-    
-    public Cookie[] getCookies()
-    {
-        Cookie[] cookies = (Cookie[])sessionMap.get(TestHttpSession.COOKIE_KEY);
-        return cookies; 
-    }
-    
 }
