@@ -129,6 +129,7 @@ public class XMLI18nTest extends TestCase
     	assertEquals("bar",i18n.get(plLocale,"foo.bar.foo"));
     	assertEquals("bar",i18n.get(enLocale,"foo.bar.foo"));
 		assertEquals("bar",i18n.get(enLocale,"bar.foo.bar.foo"));
+        assertEquals("foo&bar",i18n.get(plLocale,"bar.foo.foobar"));
     }
 
     /*

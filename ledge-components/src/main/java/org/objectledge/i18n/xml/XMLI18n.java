@@ -200,6 +200,9 @@ public class XMLI18n extends AbstractI18n
 		/** base prefix */
 		private String basePrefix;
 		
+        /** characters buffer */
+        private StringBuffer currentChars = new StringBuffer(256);
+        
 		/**
 		 * Initializes the hadler before parsing a new file.
 		 *
@@ -265,6 +268,7 @@ public class XMLI18n extends AbstractI18n
 		 * {@inheritDoc}
 		 */
 		public void endElement(String uri, String localName, String qName)
+            throws SAXException
 		{
 			if("prefix".equals(localName))
 			{
@@ -272,7 +276,42 @@ public class XMLI18n extends AbstractI18n
 			}
 			else if("item".equals(localName))
 			{
-			    item = null;
+                // TODO build stack for multiple method invocation in case
+                // the text processing was interrupted by other event.  
+                String value = currentChars.toString();
+                currentChars.setLength(0);
+                value = value.trim();
+                if(value.length()>0)
+                {
+                    if(item==null)
+                    {
+                        throw new SAXParseException("strings need to be nested in <item>", locator);
+                    }
+                    sb.setLength(0);
+                    if(basePrefix != null && basePrefix.length()>0)
+                    {
+                        sb.append(basePrefix);
+                        if(!basePrefix.endsWith("."))
+                        {
+                            sb.append('.');
+                        }
+                    }
+                    for (int i = 0; i < prefix.size(); i++)
+                    {
+                        sb.append(prefix.get(i)).append('.');
+                    }
+                    sb.append(item);
+                    String name = sb.toString();
+                    if (map.containsKey(name))
+                    {
+                        throw new SAXParseException(name + " already defined ", locator);
+                    }
+                    else
+                    {
+                        map.put(name, value);
+                    }
+                }
+    		    item = null;
 			}
 		}
     
@@ -282,40 +321,8 @@ public class XMLI18n extends AbstractI18n
 		public void characters(char[] ch, int start, int length)
 			throws SAXParseException
         {
-        	//TODO build stack for multiple method invocation in case
-        	// the text processing was interrupted by other event.  
-		   	String value = new String(ch,start,length);
-			value = value.trim();
-			if(value.length()>0)
-			{
-			    if(item==null)
-			    {
-					throw new SAXParseException("strings need to be nested in <item>", locator);
-				}
-                sb.setLength(0);
-                if(basePrefix != null && basePrefix.length()>0)
-                {
-                	sb.append(basePrefix);
-                	if(!basePrefix.endsWith("."))
-                	{
-                		sb.append('.');
-                	}
-                }
-                for(int i=0; i<prefix.size(); i++)
-                {
-				    sb.append(prefix.get(i)).append('.');
-				}
-				sb.append(item);
-				String name = sb.toString();
-                if(map.containsKey(name))
-				{
-                    throw new SAXParseException(name+" already defined ", locator);
-				}
-				else
-				{
-				    map.put(name, value);
-				}
-			}
-		}
+            currentChars.append(ch, start, length);
+            
+        			}
     }
 }

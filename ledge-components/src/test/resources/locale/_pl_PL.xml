@@ -1,5 +1,7 @@
+<strings>
 <prefix name="foo">
   <prefix name="bar">
      <item name="foo">bar</item>
   </prefix>
 </prefix>
+</strings>

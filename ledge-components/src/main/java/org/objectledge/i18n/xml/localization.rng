@@ -29,20 +29,24 @@
 
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
   <start>
-    <ref name="prefix"/>
-  </start>
-  <define name="prefix">
-    <element name="prefix">
-      <attribute name="name"/>
+    <element name="strings">
       <zeroOrMore>
-        <choice>
-          <ref name="prefix"/>
-          <element name="item">
-            <attribute name="name"/>
-            <text/>
-          </element>      
-        </choice>
+        <ref name="node"/>
       </zeroOrMore>
     </element>
+  </start>
+  <define name="node">
+    <choice>
+      <element name="prefix">
+        <attribute name="name"/>
+        <zeroOrMore>
+          <ref name="node"/>
+        </zeroOrMore>
+      </element>
+      <element name="item">
+        <attribute name="name"/>
+        <text/>
+      </element>      
+    </choice>
   </define>
 </grammar>
