@@ -69,37 +69,37 @@ public class PipelineTest extends LedgeTestCase
 
     public void testRun() throws Exception
     {
-        tryValveMock.expect(once()).method("process");
-        finallyValveMock.expect(once()).method("process");
+        tryValveMock.expects(once()).method("process");
+        finallyValveMock.expects(once()).method("process");
         pipe.process(context);
     }
     
     public void testRun2() throws Exception
     {
-        tryValveMock.expect(once()).method("process").
+        tryValveMock.expects(once()).method("process").
             will(throwException(new ProcessingException("foo")));
-        catchValveMock.expect(once()).method("process");
-        finallyValveMock.expect(once()).method("process");
-        loggerMock.expect(once()).method("error");
+        catchValveMock.expects(once()).method("process");
+        finallyValveMock.expects(once()).method("process");
+        loggerMock.expects(once()).method("error");
         pipe.process(context);
     }
 
     public void testRun3() throws Exception
     {
-        tryValveMock.expect(once()).method("process").
+        tryValveMock.expects(once()).method("process").
             will(throwException(new ProcessingException("foo")));
-        catchValveMock.expect(once()).method("process").
+        catchValveMock.expects(once()).method("process").
             will(throwException(new ProcessingException("foo")));
-        loggerMock.expect(atLeastOnce()).method("error");
-        finallyValveMock.expect(once()).method("process");
+        loggerMock.expects(atLeastOnce()).method("error");
+        finallyValveMock.expects(once()).method("process");
         pipe.process(context);
     }
         
     public void testRun4() throws Exception
     {        
-        tryValveMock.expect(once()).method("process");
-        loggerMock.expect(once()).method("error");
-        finallyValveMock.expect(once()).method("process").
+        tryValveMock.expects(once()).method("process");
+        loggerMock.expects(once()).method("error");
+        finallyValveMock.expects(once()).method("process").
             will(throwException(new ProcessingException("foo")));
         pipe.process(context);
     }

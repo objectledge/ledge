@@ -51,7 +51,7 @@ public class SecurityHelperTest extends LedgeTestCase
 
     public void testSecurityHelper() throws Exception
     {
-        requestMock.stub().method("getContentType").will(returnValue("text/plain"));
+        requestMock.stubs().method("getContentType").will(returnValue("text/plain"));
         Context context = new Context();
         context.clearAttributes();
         MVCContext mvcContext = new MVCContext();
@@ -69,7 +69,7 @@ public class SecurityHelperTest extends LedgeTestCase
         context.setAttribute(HttpContext.class, httpContext);
         try
         {
-            requestMock.expect(once()).method("isSecure").will(returnValue(true));
+            requestMock.expects(once()).method("isSecure").will(returnValue(true));
             SecurityHelper.checkSecurity(obj, context);
             fail("should throw the exception");
         }
@@ -78,7 +78,7 @@ public class SecurityHelperTest extends LedgeTestCase
             //ok!        
         }
         context.setAttribute(MVCContext.class, mvcContext);
-        requestMock.expect(once()).method("isSecure").will(returnValue(true));
+        requestMock.expects(once()).method("isSecure").will(returnValue(true));
         try
         {
             SecurityHelper.checkSecurity(obj, context);
@@ -90,10 +90,10 @@ public class SecurityHelperTest extends LedgeTestCase
         }
         
         mvcContext.setUserPrincipal(null, true);
-        requestMock.expect(once()).method("isSecure").will(returnValue(true));
+        requestMock.expects(once()).method("isSecure").will(returnValue(true));
         SecurityHelper.checkSecurity(obj, context);
         
-        requestMock.expect(once()).method("isSecure").will(returnValue(false));
+        requestMock.expects(once()).method("isSecure").will(returnValue(false));
         try
         {
             SecurityHelper.checkSecurity(obj, context);

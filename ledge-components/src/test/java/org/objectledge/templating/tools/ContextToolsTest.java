@@ -60,12 +60,12 @@ public class ContextToolsTest extends LedgeTestCase
         Context context = new Context();
         templatingContext = new VelocityContext();
 	   	ContextTools contextTools = new ContextTools(new ContextToolFactory[]{toolFactory});
-        toolFactoryMock.expect(once()).method("getKey").will(returnValue("foo"));
-        toolFactoryMock.expect(once()).method("getTool").will(returnValue("bar"));
+        toolFactoryMock.expects(once()).method("getKey").will(returnValue("foo"));
+        toolFactoryMock.expects(once()).method("getTool").will(returnValue("bar"));
         contextTools.populateTools(templatingContext);
         assertEquals("bar", templatingContext.get("foo"));
-        toolFactoryMock.expect(once()).method("getKey").will(returnValue("foo"));
-        toolFactoryMock.expect(once()).method("recycleTool");
+        toolFactoryMock.expects(once()).method("getKey").will(returnValue("foo"));
+        toolFactoryMock.expects(once()).method("recycleTool");
         contextTools.recycleTools(templatingContext);
     }
 }

@@ -84,7 +84,7 @@ public class PolicyCheckingValveTest extends LedgeWebTestCase
 
         context = new Context();
         context.clearAttributes();
-        requestMock.stub().method("getContentType").will(returnValue("text/plain"));
+        requestMock.stubs().method("getContentType").will(returnValue("text/plain"));
         MVCContext mvcContext = new MVCContext();
         HttpContext httpContext = new HttpContext(request, response);
         context.setAttribute(MVCContext.class, mvcContext);

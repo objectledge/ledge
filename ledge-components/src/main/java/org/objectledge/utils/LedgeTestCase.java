@@ -37,7 +37,9 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+import org.jmock.cglib.CGLIBCoreMock;
 import org.jmock.core.Constraint;
+import org.jmock.core.CoreMock;
 import org.jmock.core.DynamicMock;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLValidator;
@@ -135,55 +137,27 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     }
 
     // jMock goodies ////////////////////////////////////////////////////////////////////////////
- 
-    /**
-     * Creates a mock object implementation.
-     * 
-     * @param mockedType the mocked type.
-     * @return a mock object implementation.
-     */   
-    public Mock mock(Class mockedType)
-    {
-        if((mockedType.getModifiers() & Modifier.INTERFACE) == Modifier.INTERFACE)
-        {
-            return new Mock(mockedType);
-        }
-        else
-        {
-            return new org.jmock.cglib.Mock(mockedType);
-        }
-    }
 
     /**
-     * Creates a mock object implementation.
+     * Create a CoreMock object.
      * 
-     * @param mockedType the mocked type.
-     * @param name the mock object name.
-     * @return a mock object implementation.
-     */   
-    public Mock mock(Class mockedType, String name)
+     * <p>CGLIB mocks will be created for concrete classes, JMock CoreMocks for interfaces.</p>
+     * 
+     * @param mockedType to type to mock.
+     * @param roleName mocked object role name
+     */
+    protected DynamicMock newCoreMock(Class mockedType, String roleName)
     {
         if((mockedType.getModifiers() & Modifier.INTERFACE) == Modifier.INTERFACE)
         {
-            return new Mock(mockedType, name);
+            return new CoreMock(mockedType, roleName);
         }
         else
         {
-            return new org.jmock.cglib.Mock(mockedType, name);
-        }
+            return new CGLIBCoreMock(mockedType, roleName);
+        }        
     }
-    
-    /**
-     * Creates a mock object implementation.
-     * 
-     * @param coreMock a coreMock to wrap.
-     * @return a mock object implementation.
-     */   
-    public Mock mock(DynamicMock coreMock)
-    {
-        return new Mock(coreMock);
-    }    
-    
+        
     /**
      * Create a Constraint on map elements
      * 
@@ -195,5 +169,4 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     {
         return new MapElement(key, c);
     }
-
 }
