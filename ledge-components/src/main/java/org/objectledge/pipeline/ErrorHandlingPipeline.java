@@ -36,9 +36,9 @@ import org.objectledge.context.Context;
  * try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.14 2004-01-23 08:37:19 fil Exp $
+ * @version $Id: ErrorHandlingPipeline.java,v 1.1 2004-01-23 08:47:26 fil Exp $
  */
-public class Pipeline
+public class ErrorHandlingPipeline
     implements Valve
 {
     /** key to store the exception in the context */
@@ -60,7 +60,7 @@ public class Pipeline
      * @param catchValves the valves to be used in the catch stage.
      * @param finallyValves the valves to be used in the finaly stage.
      */
-    public Pipeline(Logger logger, Valve[] tryValves, Valve[] catchValves, 
+    public ErrorHandlingPipeline(Logger logger, Valve[] tryValves, Valve[] catchValves, 
         Valve[] finallyValves)
     {
         this.logger = logger;

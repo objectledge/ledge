@@ -51,11 +51,12 @@ public class PipelineTest extends TestCase
     }
 
     public void testRun()
+        throws Exception
     {
     	Context context = new Context();
     	Valve[] runnable = new Valve[0];
-    	Logger logger = Logger.getLogger(Pipeline.class);
-    	Pipeline pipe = new Pipeline(new Log4JLogger(logger), 
+    	Logger logger = Logger.getLogger(ErrorHandlingPipeline.class);
+    	Valve pipe = new ErrorHandlingPipeline(new Log4JLogger(logger), 
     								 runnable, runnable, runnable);
 		pipe.process(context);
     }

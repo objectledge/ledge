@@ -75,8 +75,8 @@
       </sequence-parameter>
     </component>      
     
-    <component key="org.objectledge.pipeline.Pipeline"
-               class="org.objectledge.pipeline.Pipeline">
+    <component key="org.objectledge.pipeline.ErrorHandlingPipeline"
+               class="org.objectledge.pipeline.ErrorHandlingPipeline">
       <component-parameter class-key="org.jcontainer.dna.Logger"/>
 	  <sequence-parameter>
         <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderValve"/>

@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.Pipeline;
+import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SimpleCatchProcessingExceptionValve.java,v 1.3 2004-01-23 08:17:06 fil Exp $
+ * @version $Id: SimpleCatchProcessingExceptionValve.java,v 1.4 2004-01-23 08:47:27 fil Exp $
  */
 public class SimpleCatchProcessingExceptionValve 
     implements Valve
@@ -63,7 +63,7 @@ public class SimpleCatchProcessingExceptionValve
         throws ProcessingException
 	{
 		HttpContext httpContext = HttpContext.getHttpContext(context);
-        Throwable t = (Throwable)context.getAttribute(Pipeline.PIPELINE_EXCEPTION);
+        Throwable t = (Throwable)context.getAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION);
         if(t instanceof ProcessingException)
         {
         	try

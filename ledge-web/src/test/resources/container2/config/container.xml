@@ -71,7 +71,7 @@
       <constant-parameter value="4"/>
     </component>
     
-    <component class="org.objectledge.pipeline.Pipeline">
+    <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
       <component-parameter class-key="org.jcontainer.dna.Logger"/>
 	  <sequence-parameter>
         <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderValve"/>
