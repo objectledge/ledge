@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>I18n</title>
+  </properties>
+
+  <body>
+    <section name="Templating">
+      <subsection name="Description">
+        <p>Templating components separates the hard business
+           logic coding from presentation. It makes application development and maintainance much easier.
+        </p>
+     </subsection>
+      <subsection name="Browse">
+	    <p>
+	      <ul>
+	        <li>Templating <a href="../apidocs/org/objectledge/templating/Templating.html">JavaDoc</a></li>
+	        <li>Templating <a href="../xref/org/objectledge/templating/Templating.html">XRef</a></li>
+	        <li>Templating <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/templating/Templating.java">CVS log</a></li>
+	      </ul>
+	    </p>
+      </subsection>
+
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+				not applicable
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+      
+      <subsection name="Implementations">
+        <ul>
+          <li>
+            <p>An implementation of the <code>Templating</code> interface, based on Velocity engine.</p>
+            <p class="more"><a href="templating/VelocityTemplating.html">more</a></p>
+          </li>
+        </ul>
+      </subsection>
+      
+      <subsection name="Extensions">
+        <ul>
+          <li>
+            <p>Context tools - the usefull objects that are being populated into the templating context</p>
+            <p class="more"><a href="templating/ContextTools.html">more</a></p>
+          </li>
+        </ul>
+      </subsection>
+    </section>
+  </body>
+</document>  
+  

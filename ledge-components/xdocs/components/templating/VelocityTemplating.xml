@@ -7,14 +7,14 @@
   <body>
     <section name="Velocity Templating">
       <subsection name="Description">
-        <p>Provides the simple templating based on velocity engine.</p>
+        <p>Provides the simple <a href="../I18n.html">Templating</a> based on velocity engine.</p>
       </subsection>
     
       <subsection name="Browse">
         <p>
           <ul>
             <li>VelocityTemplating <a href="../apidocs/org/objectledge/templating/velocity/VelocityTemplating.html">JavaDoc</a></li>
-            <li>VelocityTemplating <a href="../xref/org/objectledge/templating/velocity/VelocityTemplating.html">XRef</a></li>
+            <li>VelocityTemplating <a href="../../xref/org/objectledge/templating/velocity/VelocityTemplating.html">XRef</a></li>
             <li>VelocityTemplating <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/templating/velocity/VelocityTemplating.java">CVS log</a></li>
             <li>VelocityTemplating configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/templating/velocity/VelocityTemplating.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
           </ul>
