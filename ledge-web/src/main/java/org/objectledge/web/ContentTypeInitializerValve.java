@@ -26,21 +26,18 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web.mvc;
+package org.objectledge.web;
 
 import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.Valve;
-import org.objectledge.web.WebConfigurator;
 
 /**
- * Pipeline processing valve that initialize pipeline context.
+ * Pipeline processing valve that initializes http context content type.
  *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.8 2005-03-09 13:33:25 zwierzem Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: ContentTypeInitializerValve.java,v 1.1 2005-03-09 13:33:24 zwierzem Exp $
  */
-public class MVCInitializerValve 
+public class ContentTypeInitializerValve 
     implements Valve
 {
 	/** the web configuration component */
@@ -51,22 +48,19 @@ public class MVCInitializerValve
 	 * 
 	 * @param webConfigurator the web configuration component.
 	 */
-	public MVCInitializerValve(WebConfigurator webConfigurator)
+	public ContentTypeInitializerValve(WebConfigurator webConfigurator)
 	{
 		this.webConfigurator = webConfigurator;
 	}
 	
     /**
-     * Run the pipeline valve - initialize and store the pipeline context.
+     * Pipeline processing valve that initializes http context.
      * 
      * @param context the context.
      */
     public void process(Context context)
     {
-    	MVCContext mvcContext = new MVCContext();
-        Parameters requestParamters = RequestParameters.getRequestParameters(context);
-        mvcContext.setAction(requestParamters.get(webConfigurator.getActionToken(), null));
-        mvcContext.setView(requestParamters.get(webConfigurator.getViewToken(), null));
-    	context.setAttribute(MVCContext.class, mvcContext);
+    	HttpContext httpContext = HttpContext.getHttpContext(context);
+    	httpContext.setContentType(webConfigurator.getDefaultContentType());
     }
 }
