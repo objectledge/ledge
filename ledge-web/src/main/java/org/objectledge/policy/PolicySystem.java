@@ -37,7 +37,6 @@ import java.util.Map;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.UserUnknownException;
 
 /**
@@ -49,7 +48,7 @@ import org.objectledge.authentication.UserUnknownException;
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PolicySystem.java,v 1.1 2004-02-02 13:52:42 pablo Exp $
+ * @version $Id: PolicySystem.java,v 1.2 2004-02-03 10:41:42 pablo Exp $
  */
 public class PolicySystem
 {
@@ -80,14 +79,13 @@ public class PolicySystem
      * @param config the configuration.
      * @param logger the logger.
      * @param roleChecking the role checking component.
+     * @throws ConfigurationException if config is invalid.
      */
     public PolicySystem(Configuration config, Logger logger, RoleChecking roleChecking)
+        throws ConfigurationException
     {
         this.logger = logger;
         this.roleChecking = roleChecking;
-        try
-        {
-        
         globalSSL = config.getChild("globalSSL").getValueAsBoolean(globalSSL);
         globalLogin = config.getChild("globalLoginRequired").getValueAsBoolean(globalLogin);
         globalAccess = config.getChild("globalAccess").getValueAsBoolean(globalAccess);
@@ -118,11 +116,6 @@ public class PolicySystem
             addPolicy(name, ssl, auth, (String[])roles.toArray(new String[roles.size()]),
                        (String[])views.toArray(new String[views.size()]),
                        (String[])actions.toArray(new String[actions.size()]));
-        }
-        }
-        catch(ConfigurationException e)
-        {
-            throw new ComponentInitializationError("failed to init the component",e);
         }
     }
 
