@@ -28,14 +28,17 @@
 
 package org.objectledge.utils;
 
+import java.lang.reflect.Modifier;
 import java.net.URL;
 
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
-import org.jmock.Constraint;
-import org.jmock.builder.MockObjectTestCase;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
+import org.jmock.core.Constraint;
+import org.jmock.core.DynamicMock;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLValidator;
 import org.xml.sax.InputSource;
@@ -132,7 +135,55 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     }
 
     // jMock goodies ////////////////////////////////////////////////////////////////////////////
+ 
+    /**
+     * Creates a mock object implementation.
+     * 
+     * @param mockedType the mocked type.
+     * @return a mock object implementation.
+     */   
+    public Mock mock(Class mockedType)
+    {
+        if((mockedType.getModifiers() & Modifier.INTERFACE) == Modifier.INTERFACE)
+        {
+            return new Mock(mockedType);
+        }
+        else
+        {
+            return new org.jmock.cglib.Mock(mockedType);
+        }
+    }
 
+    /**
+     * Creates a mock object implementation.
+     * 
+     * @param mockedType the mocked type.
+     * @param name the mock object name.
+     * @return a mock object implementation.
+     */   
+    public Mock mock(Class mockedType, String name)
+    {
+        if((mockedType.getModifiers() & Modifier.INTERFACE) == Modifier.INTERFACE)
+        {
+            return new Mock(mockedType, name);
+        }
+        else
+        {
+            return new org.jmock.cglib.Mock(mockedType, name);
+        }
+    }
+    
+    /**
+     * Creates a mock object implementation.
+     * 
+     * @parm coreMock a coreMock to wrap.
+     * @return a mock object implementation.
+     */   
+    public Mock mock(DynamicMock coreMock)
+    {
+        return new Mock(coreMock);
+    }    
+    
     /**
      * Create a Constraint on map elements
      * 

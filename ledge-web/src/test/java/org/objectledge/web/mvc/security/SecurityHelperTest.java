@@ -31,7 +31,7 @@ package org.objectledge.web.mvc.security;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jmock.builder.Mock;
+import org.jmock.Mock;
 import org.objectledge.context.Context;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
@@ -44,9 +44,9 @@ import org.objectledge.web.mvc.MVCContext;
 public class SecurityHelperTest extends LedgeTestCase
 {
 
-    Mock requestMock = new Mock(HttpServletRequest.class);
+    Mock requestMock = mock(HttpServletRequest.class);
     HttpServletRequest request = (HttpServletRequest)requestMock.proxy();
-    Mock responseMock = new Mock(HttpServletResponse.class);
+    Mock responseMock = mock(HttpServletResponse.class);
     HttpServletResponse response = (HttpServletResponse)responseMock.proxy();
 
     public void testSecurityHelper() throws Exception

@@ -29,15 +29,13 @@ package org.objectledge.utils;
 
 import java.util.Map;
 
-import org.jmock.Constraint;
+import org.jmock.core.Constraint;
 
 /**
  * A constraint for Map elements
  * 
- * TODO move it someplace else.
- * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MapElement.java,v 1.1 2004-03-19 13:55:23 fil Exp $
+ * @version $Id: MapElement.java,v 1.2 2004-03-24 14:40:15 fil Exp $
  */
 public class MapElement implements Constraint
 {
@@ -64,11 +62,15 @@ public class MapElement implements Constraint
         return c.eval(((Map)o).get(key));
     }
     
-    /**
+    /** 
      * {@inheritDoc}
      */
-    public String toString()
+    public StringBuffer describeTo(StringBuffer buffer)
     {
-        return "get(" + key.toString() + ") " + c.toString();
+        buffer.append("get(");
+        buffer.append(key.toString());
+        buffer.append(") ");
+        c.describeTo(buffer);
+        return buffer;
     }
 }

@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.37 2004-03-23 11:32:34 fil Exp $ -->
+<!-- $Id: project.xml,v 1.38 2004-03-24 14:40:15 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -206,7 +206,7 @@
     <dependency>
       <groupId>jmock</groupId>
       <artifactId>jmock</artifactId>
-      <version>20040220-211330</version>
+      <version>20030324-104648</version>
     </dependency>    
   </dependencies>
 </project>

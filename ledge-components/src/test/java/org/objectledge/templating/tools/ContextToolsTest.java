@@ -28,7 +28,7 @@
 
 package org.objectledge.templating.tools;
 
-import org.jmock.builder.Mock;
+import org.jmock.Mock;
 import org.objectledge.context.Context;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityContext;
@@ -41,7 +41,7 @@ import org.objectledge.utils.LedgeTestCase;
  */
 public class ContextToolsTest extends LedgeTestCase
 {
-    private Mock toolFactoryMock = new Mock(ContextToolFactory.class);
+    private Mock toolFactoryMock = mock(ContextToolFactory.class);
     private ContextToolFactory toolFactory = (ContextToolFactory)toolFactoryMock.proxy();
     private TemplatingContext templatingContext;
     

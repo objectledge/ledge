@@ -29,7 +29,7 @@
 package org.objectledge.pipeline;
 
 import org.jcontainer.dna.Logger;
-import org.jmock.builder.Mock;
+import org.jmock.Mock;
 import org.objectledge.context.Context;
 import org.objectledge.utils.LedgeTestCase;
 
@@ -54,10 +54,10 @@ public class PipelineTest extends LedgeTestCase
     public void setUp()
     {
         context = new Context();
-        loggerMock = new Mock(Logger.class);
-        tryValveMock = new Mock(Valve.class);
-        catchValveMock = new Mock(Valve.class);
-        finallyValveMock = new Mock(Valve.class);
+        loggerMock = mock(Logger.class);
+        tryValveMock = mock(Valve.class);
+        catchValveMock = mock(Valve.class);
+        finallyValveMock = mock(Valve.class);
 
         logger = (Logger)loggerMock.proxy();
         tryValve = (Valve)tryValveMock.proxy();

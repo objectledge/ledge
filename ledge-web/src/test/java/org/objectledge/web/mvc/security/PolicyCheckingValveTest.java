@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.jmock.builder.Mock;
+import org.jmock.Mock;
 import org.objectledge.LedgeWebTestCase;
 import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.context.Context;
@@ -50,9 +50,9 @@ import org.objectledge.web.mvc.MVCContext;
 public class PolicyCheckingValveTest extends LedgeWebTestCase
 {
     Context context;
-    Mock requestMock = new Mock(HttpServletRequest.class);
+    Mock requestMock = mock(HttpServletRequest.class);
     HttpServletRequest request = (HttpServletRequest)requestMock.proxy();
-    Mock responseMock = new Mock(HttpServletResponse.class);
+    Mock responseMock = mock(HttpServletResponse.class);
     HttpServletResponse response = (HttpServletResponse)responseMock.proxy();
     
     private PolicyCheckingValve policyValve;
