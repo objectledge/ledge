@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.i18n.impl;
+package org.objectledge.i18n.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +44,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.impl.I18nBase;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;

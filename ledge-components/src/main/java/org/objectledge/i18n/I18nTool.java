@@ -26,11 +26,10 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.i18n.impl;
+package org.objectledge.i18n;
 
 import java.util.Locale;
 
-import org.objectledge.i18n.I18n;
 import org.objectledge.templating.ContextToolFactory;
 import org.objectledge.utils.StringUtils;
 
@@ -59,7 +58,7 @@ public class I18nTool
 	 * @param i18n the i18n component.
 	 * @param prefix the prefix;
 	 */
-	I18nTool(I18n i18n, ContextToolFactory factory, Locale locale, String prefix)
+	public I18nTool(I18n i18n, ContextToolFactory factory, Locale locale, String prefix)
 	{
 		this.i18n = i18n;
 		this.factory = factory;

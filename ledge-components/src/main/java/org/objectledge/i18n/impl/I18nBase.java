@@ -35,6 +35,7 @@ import java.util.Map;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.i18n.I18n;
+import org.objectledge.i18n.I18nTool;
 import org.objectledge.templating.ContextToolFactory;
 import org.objectledge.utils.StringUtils;
 
