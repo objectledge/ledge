@@ -68,7 +68,7 @@
   <define name="login-property">
     <element name="login-property">
       <choice>
-        <attribute name="name">
+        <attribute name="name"/>
         <text/>
       </choice>
     </element>
