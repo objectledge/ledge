@@ -30,7 +30,7 @@ package org.objectledge.selector;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UndefinedVariableException.java,v 1.2 2004-01-23 12:09:39 fil Exp $
+ * @version $Id: UndefinedVariableException.java,v 1.3 2004-01-23 13:36:29 fil Exp $
  */
 public class UndefinedVariableException 
     extends EvaluationException
@@ -73,6 +73,6 @@ public class UndefinedVariableException
      */
     public String getMessage()
     {
-        return "Undefined variable "+variable;
+        return "Undefined variable "+getVariable();
     }
 }
