@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>MVC Page model</title>
+  </properties>
+  <body>
+    <section name="MVC Page model">
+      <p>
+      Every web page (be it HTML or WML) rendered by ObjectLedge MVC subsystem consists of following
+      elements:
+      </p>
+      <ul>
+      <li>main Builder selected by <code>view</code> request parameter</li>
+      <li>a number of enclosing Builders which work as a multi-level layout
+      (number of those builders is <code>0</code> up to configured <code>maxEnclosures</code>
+      number)</li>
+      <li>a number of possibly embedded page Components</li>
+      </ul>
+
+      <p>
+      The following illustration shows the page structure. Boxes with a black outline are Builders.
+      Dark grey boxes are components. The white box with black outline is the main Builder selected
+      by the request <code>view</code> parameter.
+      </p>
+
+      <p><img src="../images/mvc-page-model.png" alt="The ObjectLedge MVC page structure" /></p>
+
+      <!-- -->
+      <p>
+      The central part of the page model is a selected Builder and it's template. Templates and
+      Builders are selected partly separately in order to allow use of template-only builders -
+      great for creation of layouts shared between builders.
+      </p>
+
+      <p>The page model of ObjectLedge MVC web application introduces following concepts:</p>
+      <ul>
+      <li>Builder</li>
+      <li>Builder finding and defaulting</li>
+      <li>Template</li>
+      <li>Template finding and defaulting</li>
+      <li>Component</li>
+      </ul>
+      <p>In order to view an ObjectLedge generated webpage one has to specify a link which leads to
+      it (assuming the ObjectLedge web application is running). The main parameter in this link is
+      the <code>view</code> parameter (the name depends on the configuration). The example of such a
+      link:</p>
+      <pre>http://localhost:8080/webappcontext/ledgeservlet/view/management.statistics.Traffic</pre>
+      <p>The <code>view</code> parameter value for this link is
+      <code>management.statistics.Traffic</code>. This value means that OL MVC engine should find
+      and show the Traffic builder packaged under
+        <code>&lt;configured-package-prefix&gt;.views.management.statistics.Traffic</code>
+        (see MVCClassFinder component configuration).</p>
+      <subsection name="Builder enclosures">
+      <p>If the given</p>
+      </subsection>
+    </section>
+  </body>
+</document>
+

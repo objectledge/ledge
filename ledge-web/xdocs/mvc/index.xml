@@ -11,7 +11,7 @@
       application concerns - namely: presentation and businness logic. This separation is good for
       understanding and maintaining the code. MVC is already a quite old and mature concept, comes
       from Smalltalk developers and is extensively used in client GUI Java APIs like Swing and SWT.
-      The web application frameworks have adapted this pattern and implemented it in very different
+      The web application frameworks have adapted this pattern and implemented it in many different
       ways providing different levels of flexibility.
       </p>
 
