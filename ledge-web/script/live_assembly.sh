@@ -47,7 +47,7 @@ for DIR in `find $WORKSPACE -maxdepth 1`; do
 done
 
 if [ ! -f $LIB_TIMESTAMP -o ! -d $LIB_SRC -o $WEBAPP_PROJECT -nt $LIB_TIMESTAMP ]; then
-    maven -d $WEBAPP_PROJECT_DIR war:webapp
+    maven -o -d $WEBAPP_PROJECT_DIR war:webapp
     mkdir -p $LIB_DIR
     for LIB in `find $LIB_SRC -name \*.jar`; do
 	if ! basename $LIB | grep $INCLUDES > /dev/null; then
