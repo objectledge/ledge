@@ -32,13 +32,13 @@ import java.net.URL;
 import org.objectledge.datatype.DatatypeSet;
 import org.objectledge.datatype.DatatypeSetFactory;
 import org.objectledge.xml.XMLGrammarCache;
-;
+
 
 /**
  * DatatypeSet factory implementation based on XMLGrammarCache/MSV.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLSchemaDatatypeSetFactory.java,v 1.3 2004-12-27 04:43:19 rafal Exp $
+ * @version $Id: XMLSchemaDatatypeSetFactory.java,v 1.4 2005-02-11 11:30:44 rafal Exp $
  */
 public class XMLSchemaDatatypeSetFactory implements DatatypeSetFactory
 {

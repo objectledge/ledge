@@ -221,5 +221,5 @@ public class IDConstraintTypeDetector extends IDConstraintChecker {
         }
         /** returns the source of the error. */
         Locator getLocation() { return IDConstraintTypeDetector.this.getLocator(); }
-    };
+    }
 }
