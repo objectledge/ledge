@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.1 2003-12-23 16:38:37 fil Exp $
+ * @version $Id: AllTests.java,v 1.2 2004-01-16 07:20:36 fil Exp $
  */
 public class AllTests
 {
@@ -46,6 +46,7 @@ public class AllTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(LedgeServletTest.class));
         //$JUnit-END$
+        suite.addTest(org.objectledge.web.mvc.AllTests.suite());
         return suite;
     }
 }
