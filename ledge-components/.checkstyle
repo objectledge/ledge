@@ -5,5 +5,7 @@
     </fileset>
     <fileset name="main sources" enabled="true" check-config-name="Ledge checks">
         <file-match-pattern match-pattern="main.*java$" include-pattern="true"/>
+        <file-match-pattern match-pattern="scheduler/cron/.*java$" include-pattern="false"/>
+        <file-match-pattern match-pattern="encodings/encoders" include-pattern="false"/>
     </fileset>
 </fileset-config>
