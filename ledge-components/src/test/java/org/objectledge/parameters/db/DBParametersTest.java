@@ -41,9 +41,12 @@ import junit.framework.TestCase;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.context.Context;
+import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
+import org.objectledge.database.JotmTransaction;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
@@ -71,17 +74,22 @@ public class DBParametersTest extends TestCase
     {
         super(arg0);
         DataSource dataSource = getDataSource();
-        LineNumberReader script = new LineNumberReader(new InputStreamReader(new FileInputStream("src/main/sql/database/IdGenerator.sql"), "UTF-8"));
+        LineNumberReader script = new LineNumberReader(
+            new InputStreamReader(
+            new FileInputStream("src/main/sql/database/IdGenerator.sql"), "UTF-8"));
         DatabaseUtils.runScript(dataSource, script);
-        script = new LineNumberReader(new InputStreamReader(new FileInputStream("src/main/sql/parameters/DBParameters.sql"), "UTF-8"));
+        script = new LineNumberReader(new InputStreamReader(
+            new FileInputStream("src/main/sql/parameters/DBParameters.sql"), "UTF-8"));
         DatabaseUtils.runScript(dataSource, script);
-
-        script = new LineNumberReader(new InputStreamReader(new FileInputStream("src/test/resources/parameters/test.sql"), "UTF-8"));
+        script = new LineNumberReader(new InputStreamReader(
+            new FileInputStream("src/test/resources/parameters/test.sql"), "UTF-8"));
         DatabaseUtils.runScript(dataSource, script);
         IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        persistence = new Persistence(dataSource, idGenerator, logger);
-        manager = new DBParametersManager(dataSource, idGenerator, logger);
+        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
+        Database database = new Database(dataSource, idGenerator, transaction);
+        persistence = new Persistence(database, logger);
+        manager = new DBParametersManager(database, logger);
     }
 
     public void testDBParameters() throws Exception
