@@ -87,7 +87,10 @@ public class PasswordDigester
             }
             catch (Exception e)
             {
-                throw new IllegalArgumentException("Digest password exception: "+e.getMessage());
+                RuntimeException ee = new IllegalArgumentException("Digest password exception: "+
+                                                                    e.getMessage());
+                ee.initCause(e);
+                throw ee;
             }
         }
         else
