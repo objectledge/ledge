@@ -44,7 +44,7 @@ import com.meterware.servletunit.ServletUnitClient;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServletTest.java,v 1.7 2004-01-29 09:50:38 fil Exp $
+ * @version $Id: LedgeServletTest.java,v 1.8 2004-06-28 10:08:36 fil Exp $
  */
 public class LedgeServletTest extends TestCase
 {
@@ -73,13 +73,7 @@ public class LedgeServletTest extends TestCase
     public ServletRunner getRunner(String resources)
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-            "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        root = root+"/"+resources;
+        String root = "src/test/resources/"+resources;
         FileSystem fs = FileSystem.getStandardFileSystem(root);
         InputStream webXml = fs.getInputStream("/WEB-INF/web.xml");
         if(webXml == null)

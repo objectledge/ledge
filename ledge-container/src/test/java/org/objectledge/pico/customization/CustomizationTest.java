@@ -56,7 +56,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.17 2004-06-25 11:15:47 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.18 2004-06-28 10:08:40 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -72,13 +72,7 @@ public class CustomizationTest extends TestCase
 
     public void testCustomization() throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-                "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
+        FileSystemProvider lfs = new LocalFileSystemProvider("local", "src/test/resources");
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);

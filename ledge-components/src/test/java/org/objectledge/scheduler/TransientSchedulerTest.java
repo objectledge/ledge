@@ -75,8 +75,7 @@ public class TransientSchedulerTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        String root = System.getProperty("ledge.root");
-        fs = FileSystem.getStandardFileSystem(root);
+        fs = FileSystem.getStandardFileSystem("src/test/resources");
         InputSource source = new InputSource(fs.getInputStream(
             "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();

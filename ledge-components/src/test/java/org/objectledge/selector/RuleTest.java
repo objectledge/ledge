@@ -47,7 +47,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RuleTest.java,v 1.2 2004-06-01 11:13:57 zwierzem Exp $
+ * @version $Id: RuleTest.java,v 1.3 2004-06-28 10:08:44 fil Exp $
  */
 public class RuleTest extends TestCase
 {
@@ -64,14 +64,8 @@ public class RuleTest extends TestCase
     public void testRules()
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-            "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystem fs = FileSystem.getStandardFileSystem(root+"/selector");
-        URL configUrl = fs.getResource("RuleTest.xml");
+        FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources");
+        URL configUrl = fs.getResource("selector/RuleTest.xml");
         URL schemaUrl = fs.getResource("org/objectledge/selector/RuleTest.rng");
         if(configUrl == null || schemaUrl == null)
         {

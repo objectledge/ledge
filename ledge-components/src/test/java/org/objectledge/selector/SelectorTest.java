@@ -48,7 +48,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SelectorTest.java,v 1.3 2004-06-01 11:13:57 zwierzem Exp $
+ * @version $Id: SelectorTest.java,v 1.4 2004-06-28 10:08:44 fil Exp $
  */
 public class SelectorTest extends TestCase
 {
@@ -65,14 +65,8 @@ public class SelectorTest extends TestCase
     public Configuration getSelectorConfig(String name)
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-            "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystem fs = FileSystem.getStandardFileSystem(root+"/selector");
-        URL configUrl = fs.getResource(name);
+        FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources");
+        URL configUrl = fs.getResource("selector/"+name);
         URL schemaUrl = fs.getResource("org/objectledge/selector/Selector.rng");
         if(configUrl == null || schemaUrl == null)
         {

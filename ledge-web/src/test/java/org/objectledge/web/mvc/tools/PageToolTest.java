@@ -54,7 +54,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.6 2004-06-25 12:55:35 fil Exp $
+ * @version $Id: PageToolTest.java,v 1.7 2004-06-28 10:08:37 fil Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -70,14 +70,7 @@ public class PageToolTest extends LedgeTestCase
 	public void setUp()
 		throws Exception
 	{
-		//prepare test
-		String root = System.getProperty("ledge.root");
-		if (root == null)
-		{
-			throw new Exception("system property ledge.root undefined. " +
-					 "use -Dledge.root=.../ledge-container/src/test/resources");
-		}
-		FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
+		FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources/tools");
 		context = new Context();
 		XMLValidator validator = new XMLValidator(new XMLGrammarCache());
 		ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");

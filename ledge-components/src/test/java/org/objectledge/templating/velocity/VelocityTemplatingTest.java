@@ -80,12 +80,7 @@ public class VelocityTemplatingTest extends TestCase
     public VelocityTemplatingTest(String arg0)
     {
         super(arg0);
-		String root = System.getProperty("ledge.root");
-		if(root == null)
-		{
-			throw new RuntimeException("system property ledge.root undefined." +				" use -Dledge.root=.../ledge-container/src/test/resources");
-		}
-		FileSystemProvider lfs = new LocalFileSystemProvider("local", root);
+		FileSystemProvider lfs = new LocalFileSystemProvider("local", "src/test/resources");
 		FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
 			getClass().getClassLoader());
 		FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);

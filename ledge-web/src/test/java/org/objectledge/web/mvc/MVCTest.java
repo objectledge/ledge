@@ -72,14 +72,7 @@ public class MVCTest extends LedgeTestCase
         {
             context = new Context();
             context.clearAttributes();
-            //prepare test
-            String root = System.getProperty("ledge.root");
-            if (root == null)
-            {
-                throw new Error("system property ledge.root undefined. " +
-                 "use -Dledge.root=.../ledge-container/src/test/resources");
-            }
-            FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
+            FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources/tools");
             XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
             Configuration config = configFactory.getConfig(WebConfigurator.class,

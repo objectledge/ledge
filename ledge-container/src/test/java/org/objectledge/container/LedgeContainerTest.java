@@ -37,7 +37,7 @@ import org.objectledge.test.FooComponent;
  *
  * <p>Created on Dec 16, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainerTest.java,v 1.5 2004-02-17 15:50:30 fil Exp $
+ * @version $Id: LedgeContainerTest.java,v 1.6 2004-06-28 10:08:40 fil Exp $
  */
 public class LedgeContainerTest extends TestCase
 {
@@ -53,14 +53,7 @@ public class LedgeContainerTest extends TestCase
     public void testLedgeContainer()
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-                "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        root = root+"/container1";
-        FileSystem fs = FileSystem.getStandardFileSystem(root);
+        FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources/container1");
         
         LedgeContainer container = new LedgeContainer(fs, "/config", getClass().getClassLoader());
         assertNotNull(container.getContainer().getComponentInstance(FooComponent.class)); 
@@ -69,15 +62,8 @@ public class LedgeContainerTest extends TestCase
     public void testMain()
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-                "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        root = root+"/container1";
-        String[] args = new String[] { "-r", root, "org.objectledge.test.FooComponent", 
-            "blah1", "blah2"};
+        String[] args = new String[] { "-r", "src/test/resources/container1", 
+                        "org.objectledge.test.FooComponent", "blah1", "blah2"};
         Main.main(args);
     }
 }

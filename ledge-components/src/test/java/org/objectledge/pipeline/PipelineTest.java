@@ -80,7 +80,7 @@ public class PipelineTest extends LedgeTestCase
             will(throwException(new ProcessingException("foo")));
         catchValveMock.expects(once()).method("process");
         finallyValveMock.expects(once()).method("process");
-        loggerMock.expects(once()).method("error");
+        loggerMock.expects(once()).method("debug");
         pipe.process(context);
     }
 
@@ -90,7 +90,8 @@ public class PipelineTest extends LedgeTestCase
             will(throwException(new ProcessingException("foo")));
         catchValveMock.expects(once()).method("process").
             will(throwException(new ProcessingException("foo")));
-        loggerMock.expects(atLeastOnce()).method("error");
+        loggerMock.expects(once()).method("debug");
+        loggerMock.expects(once()).method("error");
         finallyValveMock.expects(once()).method("process");
         pipe.process(context);
     }

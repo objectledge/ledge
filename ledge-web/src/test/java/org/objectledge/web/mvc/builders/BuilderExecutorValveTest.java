@@ -50,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.12 2004-06-25 12:55:35 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.13 2004-06-28 10:08:38 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -74,13 +74,7 @@ public class BuilderExecutorValveTest extends TestCase
     public void setUp(String base)
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-            "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystem fs = FileSystem.getStandardFileSystem(root+"/"+base);
+        FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources/"+base);
         XMLValidator validator = new XMLValidator(new XMLGrammarCache());        
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
         Configuration config = configFactory.

@@ -61,15 +61,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     {
         if (fileSystem == null)
         {
-            String root = System.getProperty("ledge.root");
-            if (root != null && root.length() > 0)
-            {
-                fileSystem = FileSystem.getStandardFileSystem(root);
-            }
-            else
-            {
-                fileSystem = FileSystem.getStandardFileSystem(".");
-            }
+            fileSystem = FileSystem.getStandardFileSystem("src/test/resources");
         }
         return fileSystem;
     }

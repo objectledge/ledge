@@ -76,14 +76,7 @@ public class LinkToolTest extends LedgeTestCase
 
     public void testFactoryTest() throws Exception
     {
-        //prepare test
-        String root = System.getProperty("ledge.root");
-        if (root == null)
-        {
-            throw new Exception("system property ledge.root undefined. " +
-                     "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystem fs = FileSystem.getStandardFileSystem(root + "/tools");
+        FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources/tools");
         context = new Context();
         XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
@@ -252,7 +245,7 @@ public class LinkToolTest extends LedgeTestCase
         
         
         // some other initial          
-        fs = FileSystem.getStandardFileSystem(root + "/tools2");
+        fs = FileSystem.getStandardFileSystem("src/test/resources/tools2");
         context = new Context();
         validator = new XMLValidator(new XMLGrammarCache());
         configFactory = new ConfigurationFactory(fs, validator, ".");

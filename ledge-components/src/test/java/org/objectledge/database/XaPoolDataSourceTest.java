@@ -57,7 +57,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.6 2004-06-25 11:21:55 fil Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.7 2004-06-28 10:08:46 fil Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -259,13 +259,7 @@ public class XaPoolDataSourceTest extends TestCase
     public Configuration getConfig(String configPath, String schemaPath)
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new RuntimeException("system property ledge.root undefined." +
-                " use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        FileSystem fs = FileSystem.getStandardFileSystem(root);
+        FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources");
         
         URL configUrl = fs.getResource(configPath);
         URL schemaUrl = fs.getResource(schemaPath);

@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.6 2004-03-17 12:47:26 pablo Exp $
+ * @version $Id: FileSystemTest.java,v 1.7 2004-06-28 10:08:46 fil Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -55,13 +55,7 @@ public class FileSystemTest extends TestCase
         throws Exception
     {
         super(arg0);
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-             throw new Exception("system property ledge.root undefined. "+
-                      "use -Dledge.root=.../ledge-components/src/test/resources");
-        }
-        fs = FileSystem.getStandardFileSystem(root);
+        fs = FileSystem.getStandardFileSystem("src/test/resources");
     }
 
     public void setUp()

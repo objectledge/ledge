@@ -52,7 +52,7 @@ import org.xml.sax.SAXParseException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEndTest.java,v 1.10 2004-06-01 15:34:50 fil Exp $
+ * @version $Id: LedgeXmlFrontEndTest.java,v 1.11 2004-06-28 10:08:40 fil Exp $
  */
 public class LedgeXmlFrontEndTest extends TestCase
 {
@@ -73,14 +73,7 @@ public class LedgeXmlFrontEndTest extends TestCase
         throws Exception
     {
         super.setUp();
-        
-        String root = System.getProperty("ledge.root");
-        if(root == null)
-        {
-            throw new Exception("system property ledge.root undefined. "+
-                "use -Dledge.root=.../ledge-container/src/test/resources");
-        }
-        fs = FileSystem.getStandardFileSystem(root);
+        fs = FileSystem.getStandardFileSystem("src/test/resources");
         validator = new XMLValidator(new XMLGrammarCache());
     }
 
