@@ -44,7 +44,7 @@ import org.objectledge.web.mvc.TemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildExecutor.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
+ * @version $Id: BuildExecutor.java,v 1.2 2003-12-30 14:54:36 zwierzem Exp $
  */
 public class BuildExecutor implements Runnable
 {
@@ -99,15 +99,16 @@ public class BuildExecutor implements Runnable
 		for (enclosures = 0; enclosures < maxEnclosures; enclosures++)
 		{
 			// route builder
-			Builder routeBuilder = null;
+			boolean builderRouted = false; 
 			for (int routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
 	        {
-	        	routeBuilder = builder.route();
+				Builder routeBuilder = builder.route();
 				if(routeBuilder == null)
 				{
 					break;
 				}
 				builder = routeBuilder;
+				builderRouted = true;
 	        }
 
 	        // get the template
@@ -118,7 +119,7 @@ public class BuildExecutor implements Runnable
 				template = overrideTemplate;
 			}
 	        // find a template for this builder
-	        if(overrideTemplate == null && routeBuilder != null)
+	        if(overrideTemplate == null && builderRouted)
 	        {
 				template = templateFinder.findBuilderTemplate(
 					classFinder.findName(builder.getClass()));
