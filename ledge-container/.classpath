@@ -11,5 +11,6 @@
     <classpathentry kind="var" path="MAVEN_REPO/saxon/jars/saxon-6.5.3.jar"/>
     <classpathentry kind="var"
         path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar" sourcepath="MAVEN_REPO/log4j/sources/log4j-1.2.8-source.zip"/>
+    <classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4-dev.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
