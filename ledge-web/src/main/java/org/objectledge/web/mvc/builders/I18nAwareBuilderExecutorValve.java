@@ -32,17 +32,20 @@ import java.util.Locale;
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18n;
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.3 2004-01-19 14:44:27 zwierzem Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.4 2004-01-19 15:19:50 zwierzem Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
 	private Locale defaultLocale;
+	private Templating templating;
 	
     /**
      * {@inheritDoc}
@@ -55,10 +58,11 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
         MVCTemplateFinder templateFinder,
         int maxRouteCalls,
         int maxEnclosures,
-        I18n i18n)
+        I18n i18n, Templating templating)
     {
         super(context, classFinder, templateFinder, maxRouteCalls, maxEnclosures);
 		this.defaultLocale = i18n.getDefaultLocale();
+		this.templating = templating;
     }
     
     /**
@@ -100,12 +104,15 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
     	String localeStr = locale.toString();
     	if(localeStr.length() != 0)
     	{
-    		String templateName = template.getName() + "." + localeStr;
-    		Template newTemplate = templateFinder.getTemplate(templateName);
-    		if(newTemplate != null)
-    		{
-    			return newTemplate;
-    		}
+            try
+            {
+				String templateName = template.getName() + "." + localeStr;
+                return templating.getTemplate(templateName);
+            }
+            catch (TemplateNotFoundException e)
+            {
+            	return null;
+            }
     	}
         return template;
     }
