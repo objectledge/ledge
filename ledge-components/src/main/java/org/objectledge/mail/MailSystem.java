@@ -27,7 +27,7 @@ import org.objectledge.templating.Templating;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.1 2004-01-09 14:44:33 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.2 2004-01-14 10:42:02 fil Exp $
  */
 public class MailSystem
 {
@@ -234,7 +234,10 @@ public class MailSystem
         }
 
 		/**
-		 * {@inheritDoc}
+		 * Add credentials for the specified protocol.
+         * 
+         * @param protocol the protocol.
+         * @param credentials the credentials.
 		 */
         public void addCredentials(String protocol, String credentials)
         {
