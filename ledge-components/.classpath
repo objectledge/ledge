@@ -11,5 +11,7 @@
     <classpathentry kind="src" path="/pico"/>
     <classpathentry kind="src" path="/dna"/>
     <classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/jaf/jars/activation-1.0.2.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/javamail/jars/javamail-1.2.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
