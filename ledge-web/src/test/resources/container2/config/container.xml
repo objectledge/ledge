@@ -31,7 +31,7 @@
     <component class-key="org.objectledge.templating.Templating"
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
     <component class="org.objectledge.templating.TemplatingContextLoader"/>
-    <component class="org.objectledge.templating.tools.ContextToolPopulator"/>
+    <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
     
     <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
     <component class="org.objectledge.i18n.WebI18nToolFactory"/>
@@ -50,7 +50,7 @@
         <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderTestValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.MVCContextInitializator"/>
         <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
-        <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulator"/>
+        <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
       </sequence-parameter>
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
       </sequence-parameter>

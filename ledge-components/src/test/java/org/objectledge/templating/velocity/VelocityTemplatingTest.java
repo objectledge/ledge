@@ -55,8 +55,8 @@ import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.TemplatingContextLoader;
 import org.objectledge.templating.tools.ContextToolFactory;
-import org.objectledge.templating.tools.ContextToolPopulator;
-import org.objectledge.templating.tools.ContextToolRecycler;
+import org.objectledge.templating.tools.ContextToolPopulatorValve;
+import org.objectledge.templating.tools.ContextToolRecyclerValve;
 import org.objectledge.templating.tools.ContextTools;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -233,8 +233,8 @@ public class VelocityTemplatingTest extends TestCase
 	    	Runnable[] tryValves = new Runnable[3];
 	    	ContextTools contextTools = new ContextTools(new ContextToolFactory[0]);
 	    	tryValves[0] = new TemplatingContextLoader(context, templating);
-			tryValves[1] = new ContextToolPopulator(context, contextTools);
-			tryValves[2] = new ContextToolRecycler(context, contextTools);
+			tryValves[1] = new ContextToolPopulatorValve(context, contextTools);
+			tryValves[2] = new ContextToolRecyclerValve(context, contextTools);
 		
 			Logger logger = Logger.getLogger(Pipeline.class);
 			Pipeline pipe = new Pipeline(context, new Log4JLogger(logger), 

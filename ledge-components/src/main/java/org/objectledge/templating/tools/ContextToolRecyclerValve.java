@@ -36,7 +36,7 @@ import org.objectledge.templating.TemplatingContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class ContextToolPopulator implements Runnable
+public class ContextToolRecyclerValve implements Runnable
 {
 	/** tool component */
 	private ContextTools contextTools;
@@ -50,19 +50,19 @@ public class ContextToolPopulator implements Runnable
 	 * @param context the context.
 	 * @param contextTools the context tool component.
 	 */
-	public ContextToolPopulator(Context context, ContextTools contextTools)
+	public ContextToolRecyclerValve(Context context, ContextTools contextTools)
 	{
 		this.context = context;
 		this.contextTools = contextTools;
 	}
 	
 	/**
-	 * Borrow the tools and put them into the context. 
+	 * Recycle previously populated context tools. 
 	 */
 	public void run()
 	{
 		TemplatingContext templatingContext = (TemplatingContext)context
 			.getAttribute(TemplatingContext.CONTEXT_KEY);
-		contextTools.populateTools(templatingContext);
+		contextTools.recycleTools(templatingContext);
 	}
 }
