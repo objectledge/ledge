@@ -7,5 +7,6 @@
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="lib" path="/usr/local/eclipse-2.1.2/plugins/org.aspectj.ajde_1.1.4/aspectjrt.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/dna/jars/dna-api-1.0.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
