@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileService backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.1 2003-11-25 08:19:49 fil Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.2 2003-11-25 10:00:46 fil Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -34,6 +33,9 @@ public abstract class ReadOnlyFileSystemProvider
 		"/META-INF/files.lst",
 		"/files.lst"	
 	};
+    
+    /** the character encoding used in file listings. */
+    public static final String LISTING_ENCODING = "UTF-8";
 	
 	// instance variables ///////////////////////////////////////////////////
 
@@ -58,9 +60,8 @@ public abstract class ReadOnlyFileSystemProvider
      * Creates an instance of the provider
      * 
      * @param name the name of the provider.
-     * @param listingEncoding the character encoding used in the file listng.
      */
-	public ReadOnlyFileSystemProvider(String name, String listingEncoding)
+	public ReadOnlyFileSystemProvider(String name)
 	{
         this.name = name;
 		String location = null;
@@ -76,7 +77,7 @@ public abstract class ReadOnlyFileSystemProvider
 		}
 		if(is != null)
 		{
-			processListing(location, listingEncoding, is);
+			processListing(location, is);
 		}
 	}
 
@@ -100,15 +101,15 @@ public abstract class ReadOnlyFileSystemProvider
      * Processes a listing.
      *  
      * @param location the location of the listing
-     * @param encoding the character encoding used in the listing.
      * @param is the stream used for reading the listing.
      */
     // TODO throw a meaningful exception type
-	protected void processListing(String location, String encoding, InputStream is)
+	protected void processListing(String location, InputStream is)
 	{
 		try
 		{
-			LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, encoding));
+			LineNumberReader reader = new LineNumberReader(
+                new InputStreamReader(is, LISTING_ENCODING));
 			ArrayList tempList = new ArrayList();
 			StringBuffer tempBuffer = new StringBuffer();
 			while(reader.ready())
@@ -206,10 +207,6 @@ public abstract class ReadOnlyFileSystemProvider
 					}
 				}
 			}
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			throw new Error("listingEncoding "+encoding+" is not supported", e);
 		}
 		catch(IOException e)
 		{
