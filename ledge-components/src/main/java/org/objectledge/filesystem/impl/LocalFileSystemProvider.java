@@ -24,7 +24,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * considererd to be relative the the running user's current directory.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.1 2003-11-25 14:56:08 fil Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.2 2003-12-03 13:00:03 fil Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -57,7 +57,7 @@ public class LocalFileSystemProvider
         {
             root = System.getProperty("user.home") + fs + root.substring(2);
         }
-        if(!root.startsWith(fs) && root.charAt(1) != ':')
+        if(!root.startsWith(fs) && (root.length() <= 1 || root.charAt(1) != ':'))
         {
             root = System.getProperty("user.dir") + fs + root;
         }
