@@ -7,6 +7,8 @@
   <body>
     <section>
     <subsection name="0.1 release">
+      <p>Planned release: December 16, 2003</p>
+      <p>Actual release: - </p>
       <p>Components</p>
       <ul>
         <li>FileSystem component, FileSystemProvider interface with Local and Classpath 
@@ -34,6 +36,8 @@
     </subsection>
     
     <subsection name="0.2 release">
+      <p>Planned release: January 07, 2004</p>
+      <p>Actual release: - </p>
       <p>Components</p>
       <ul>
         <li>Context component</li>
@@ -43,39 +47,66 @@
         <li>Velocity Templating implementation</li>
         <li>MVC classes abstraction</li>
         <li>Parameters abstraction, default implementation</li>
-        <li>view components mapper</li>
+        <li>Request parameters -> View components mapper</li>
+        <li>HTTP pipeline Valves utilizing MVC</li>
+        <li>Pull model support - Templating context populating Valve</li>
       </ul>      
     </subsection>
     
    
     <subsection name="0.3 release">
+      <p>Planned release: January 16, 2004</p>
+      <p>Actual release: - </p>
       <p>Components</p>
       <ul>
-        <li>i18n</li>
-        <li>Database access</li>
-        <li>Authentication</li>
-        <li>User information storage</li>
+        <li>Internationalization (i18n) component</li>
+        <li>Database access (connections,transacitons)</li>
+        <li>Directory service access</li>
+        <li>Parameters persistent in JNDI DirectoryContext</li>
+        <li>Authentication &amp; user information storage</li>
         <li>Web console access</li>
-        <li>Event handling</li>
-        <li>Static security policies</li>
-        <li>XML parsing</li>
+        <li>Event Whiteboard component</li>
+        <li>Declarative View/Action authentications</li>
+        <li>XML handling utilities</li>
         <li>Tabular data presentation</li>
         <li>Caching services</li>
-        <li>Mail handling services</li>
-        <li>Upload handling</li>
-        <li>Persistence</li>
-        <li>Scheduled actions</li>
-        <li>String toolset</li>
-        <li>User agent toolset</li>
+        <li>Mail handling component</li>
+        <li>HTML forms File Upload</li>
+        <li>Simple Object Persistence to DB</li>
+        <li>Scheduled jobs</li>
+        <li>Page tool (html &lt;head&gt; manipulation) for templating</li>
+        <li>String tool for templating</li>
+        <li>User agent tool for templating</li>
       </ul>      
     </subsection>
     
     <subsection name="0.4 release">
+      <p>Planned release: March 5, 2004</p>
+      <p>Actual release: - </p>
       <p>Components</p>
       <ul>
-        <li>OR mapping component</li>
+        <li>Parameters persistent in DB</li>
+        <li>Full-fledged O-R mapping support</li>
+        <li>MTA (mail server) interface</li>
+        <li>Unicode -&gt; HTML entities transcoder</li>
       </ul>      
     </subsection>    
+
+    <subsection name="0.5 release">
+      <p>Planned release: March 19, 2004</p>
+      <p>Actual release: - </p>
+      <p>Components</p>
+      <ul>
+        <li>RMI-IIOP notification service</li>
+        <li>Distributed operation of O-R mapping layer</li>
+      </ul>
+      <p>All modules</p>
+      <ul>
+        <li>Object pooling where apropriate</li>
+        <li>Speed optimizations</li>
+        <li>Wrap up for 1.0 release</li>
+      </ul>
+    </subsection>
     
     </section>
   </body>
