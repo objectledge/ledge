@@ -40,7 +40,7 @@ import org.objectledge.utils.StringUtils;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintExceptionValve.java,v 1.1 2004-01-29 10:12:15 fil Exp $
+ * @version $Id: PrintExceptionValve.java,v 1.2 2004-03-26 14:02:24 pablo Exp $
  */
 public class PrintExceptionValve 
     implements Valve
@@ -63,11 +63,23 @@ public class PrintExceptionValve
 	{
 		HttpContext httpContext = HttpContext.getHttpContext(context);
         Throwable t = (Throwable)context.getAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION);
-        if(t != null && t instanceof ProcessingException)
+        if(t != null)
         {
         	try
 			{
-                String result = t.toString();
+                Throwable tt = t;
+                StringBuffer sb = new StringBuffer();
+                sb.append("Stacktrace start:<br/>\n");
+                
+                while(tt != null)
+                {
+                    sb.append(tt.toString());
+                    sb.append("<br/>\n");
+                    tt = tt.getCause();
+                }
+                sb.append("end of stacktrace");
+                 
+                String result = sb.toString();
 				httpContext.setContentType("text/html");
 				httpContext.getResponse().setContentLength(
 			       	StringUtils.getByteCount(result, httpContext.getEncoding()));
