@@ -126,32 +126,7 @@
         </j:choose>
       </j:forEach>
     </define:tag>
-    
-    <!--
-     | Prepares JavaCC command line arguments
-     |
-     | @param input the input file
-     | @param outputDir the output directory
-     | @param var the jelly variable to assign argument array to
-     -->
-    <define:tag name="javaccargs">
-      <j:useList var="args"/>
-      <j:invoke on="${args}" method="add">
-        <j:arg value="-output_directory=${outputDir}"/>
-      </j:invoke>
-      <j:invoke on="${args}" method="add">
-        <j:arg value="${input}"/>
-      </j:invoke>
-      <j:invokeStatic className="java.lang.Class" method="forName" var="string">
-        <j:arg value="java.lang.String"/>
-      </j:invokeStatic>
-      <j:invokeStatic className="java.lang.reflect.Array" method="newInstance" var="stringArray">
-        <j:arg type="java.lang.Class" value="${string}"/>
-        <j:arg type="int" value="2"/>
-      </j:invokeStatic>
-      <j:set scope="parent" var="${var}" value="${args.toArray(stringArray)}"/>
-    </define:tag>
-    
+
     <!--
      | Invokes JJTree
      |
@@ -159,11 +134,12 @@
      | @param outputDir the output directory
      -->
     <define:tag name="jjtree">
-      <ledge:javaccargs input="${input}" outputDir="${outputDir}" var="args"/>
-      <j:new className="org.javacc.jjtree.JJTree" var="jjtree"/>
-      <j:invoke on="${jjtree}" method="main">
-        <j:arg type="[Ljava.lang.String;" value="${args}"/>
-      </j:invoke>
+      <exec dir="${dir}" executable="java">
+        <arg value="-classpath"/>
+        <arg value="${plugin.getDependencyPath('javacc:javacc')}"/>
+        <arg value="jjtree"/>
+        <arg value="${input}"/>
+      </exec>
     </define:tag>
 
     <!--
@@ -173,10 +149,12 @@
      | @param outputDir the output directory
      -->
     <define:tag name="javacc">
-      <ledge:javaccargs input="${input}" outputDir="${outputDir}" var="args"/>
-      <j:invokeStatic className="org.javacc.parser.Main" method="mainProgram">
-        <j:arg type="[Ljava.lang.String;" value="${args}"/>
-      </j:invokeStatic>
+      <exec dir="${dir}" executable="java">
+        <arg value="-classpath"/>
+        <arg value="${plugin.getDependencyPath('javacc:javacc')}"/>
+        <arg value="javacc"/>
+        <arg value="${input}"/>
+      </exec>
     </define:tag>
     
   </define:taglib>
@@ -211,14 +189,16 @@
       <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
       <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
       <j:set var="dstDir" value="${dstDir.canonicalFile}"/>
+      <j:set var="dummy" value="${dstDir.mkdirs()}"/>
       <copy todir="${dstDir.path}" overwrite="true">
         <fileset dir="${srcFile.parentFile.path}">
+          <include name="*.jjt"/>
+          <include name="*.jj"/>
           <include name="*.java"/>
         </fileset>
       </copy>
       <echo>Generating grammar for ${relPath}</echo>
-      <j:set var="dummy" value="${dstDir.mkdirs()}"/>
-      <ledge:jjtree input="${srcFile.path}" outputDir="${dstDir.path}"/>
+      <ledge:jjtree input="${srcFile.name}" dir="${dstDir.path}"/>
       <ledge:smartCopy srcDir="${dstDir}" srcMask="*.jj" dstDir="${srcFile.parentFile}"/>
       <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
     </j:forEach>
@@ -234,8 +214,13 @@
       <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
       <echo>Generating parser for ${relPath}</echo>
       <j:set var="dummy" value="${dstDir.mkdirs()}"/>
-      ${dstDir.mkdirs()}
-      <ledge:javacc input="${srcFile.path}" outputDir="${dstDir.path}"/>
+      <copy todir="${dstDir.path}" overwrite="true">
+        <fileset dir="${srcFile.parentFile.path}">
+          <include name="*.jj"/>
+          <include name="*.java"/>
+        </fileset>
+      </copy>
+      <ledge:javacc input="${srcFile.name}" dir="${dstDir.path}"/>
       <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
     </j:forEach>
   </goal>
