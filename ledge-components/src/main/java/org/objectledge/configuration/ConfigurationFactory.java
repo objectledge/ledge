@@ -51,7 +51,7 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.5 2004-12-22 08:35:18 rafal Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.6 2004-12-23 01:54:51 rafal Exp $
  */
 public class ConfigurationFactory
 {
@@ -210,7 +210,6 @@ public class ConfigurationFactory
      * 
      * @param componentImplementation the implementation class of the component.
      * @return path the configuration file path.
-     * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
     protected String getComponentConfigurationSchemaPath(Class componentImplementation)
     {
