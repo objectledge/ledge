@@ -27,14 +27,16 @@
 //
 package org.objectledge.web.mvc.components;
 
+import org.objectledge.context.Context;
 import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.3 2004-01-20 14:15:08 zwierzem Exp $
+ * @version $Id: ComponentTool.java,v 1.4 2004-01-21 14:40:00 fil Exp $
  */
 public class ComponentTool
 {
@@ -42,17 +44,27 @@ public class ComponentTool
 	protected MVCClassFinder classFinder;
 	/** The template finder for finding component templates. */
 	protected MVCTemplateFinder templateFinder;
+    
+    /** the default component implementation. */
+    protected Component defaultComponent;
+    
+    /** the default template. */
+    protected Template defaultTemplate;
 	
     /**
      * Construct a component tool.
      * 
-     * @param classFinder class finder for finding component objects
-     * @param templateFinder template finder for finding component templates
+     * @param context thread's processing context.
+     * @param classFinder class finder for finding component objects.
+     * @param templateFinder template finder for finding component templates.
      */
-    public ComponentTool(MVCClassFinder classFinder, MVCTemplateFinder templateFinder)
+    public ComponentTool(Context context, MVCClassFinder classFinder, 
+        MVCTemplateFinder templateFinder)
     {
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
+        this.defaultComponent = new DefaultComponent(context);
+        this.defaultTemplate = new DefaultTemplate();
     }
 
 	/**
@@ -75,7 +87,7 @@ public class ComponentTool
 			}
 			if(template == null)
 			{
-				template = templateFinder.getDefaultTemplate();
+				template = defaultTemplate;
 			}
 		}
 		else
@@ -85,7 +97,7 @@ public class ComponentTool
 				throw new IllegalArgumentException("No component nor template with name "
 					+ componentName);			
 			}
-			component = classFinder.getDefaultComponent();
+			component = defaultComponent;
 		}		
 
 		// TODO: Add security check

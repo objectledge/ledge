@@ -50,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.5 2004-01-20 13:39:48 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.6 2004-01-21 14:39:59 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -97,7 +97,7 @@ public class MVCFinderTest extends TestCase
         Template template = finder.findBuilderTemplate("foo.Bar");
         assertEquals( "views/foo/Bar", template.getName());
         template = finder.findBuilderTemplate(null);
-        assertEquals(DefaultTemplate.class, template.getClass());
+        assertNull(template);
         template = finder.findBuilderTemplate("foo.NonExistentView");
         assertEquals("views/foo/Default", template.getName());
         template = finder.findBuilderTemplate("NonExistentView");
@@ -115,7 +115,7 @@ public class MVCFinderTest extends TestCase
         template = finder.findEnclosingBuilderTemplate(template);
         assertEquals("views/Default", template.getName());
         template = finder.findEnclosingBuilderTemplate(template);
-        assertEquals(DefaultTemplate.class, template.getClass());
+        assertNull(template);
     }
 
     /*
@@ -132,15 +132,8 @@ public class MVCFinderTest extends TestCase
     {
         Runnable action = finder.getAction("foo.TestAction");
         assertEquals(TestAction.class, action.getClass());
-        try
-        {
-            finder.getAction("foo.NonExistentAction");
-            fail("exception expected");
-        }
-        catch(Exception e)
-        {
-            // success
-        }
+        action = finder.getAction("foo.NonExistentAction");
+        assertNull(action);
     }
 
     public void testFindBuilder()
@@ -148,7 +141,7 @@ public class MVCFinderTest extends TestCase
         Builder builder = finder.findBuilder("foo.Bar");
         assertEquals(org.objectledge.test.views.foo.Bar.class, builder.getClass());
         builder = finder.findBuilder(null);
-        assertEquals(DefaultBuilder.class, builder.getClass());
+        assertNull(builder);
         builder = finder.findBuilder("foo.NotExistentClass");
         assertEquals(org.objectledge.test.views.foo.Default.class, builder.getClass());
         builder = finder.findBuilder("NotExistentClass");
@@ -166,7 +159,7 @@ public class MVCFinderTest extends TestCase
         builder = finder.findEnclosingBuilder(builder);        
         assertEquals(org.objectledge.test.views.Default.class, builder.getClass());
         builder = finder.findEnclosingBuilder(builder);
-        assertEquals(DefaultBuilder.class, builder.getClass());        
+        assertNull(builder);        
     }
 
     public void testGetComponentTemplate()

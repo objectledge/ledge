@@ -33,17 +33,10 @@ import org.objectledge.templating.Template;
  * Finds templates that should be used for rendering specific views
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCTemplateFinder.java,v 1.7 2004-01-20 14:14:19 zwierzem Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.8 2004-01-21 14:39:59 fil Exp $
  */
 public interface MVCTemplateFinder
 {
-	/**
-	 * Returns a default template instance.
-	 * 
-	 * @return default template instance
-	 */
-	public Template getDefaultTemplate();
-
     // builders /////////////////////////////////////////////////////////////////////////////////
     
 	/**

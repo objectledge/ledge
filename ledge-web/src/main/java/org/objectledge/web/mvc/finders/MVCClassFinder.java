@@ -34,7 +34,7 @@ import org.objectledge.web.mvc.components.Component;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.8 2004-01-21 13:22:54 pablo Exp $
+ * @version $Id: MVCClassFinder.java,v 1.9 2004-01-21 14:39:59 fil Exp $
  */
 public interface MVCClassFinder
 {
@@ -46,18 +46,9 @@ public interface MVCClassFinder
      * 
      * @param actionName name of an action class
      * @return found runnable action instance
-     * @throws IllegalArgumentException if action class is not available. 
      */
-    public Runnable getAction(String actionName)
-        throws IllegalArgumentException;
+    public Runnable getAction(String actionName);
     
-	/**
-	 * Returns a default action instance.
-	 * 
-	 * @return default action instance
-	 */
-	public Runnable getDefaultAction();
-
     // builders /////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -86,13 +77,6 @@ public interface MVCClassFinder
 	 */
 	public String findViewName(Builder builder);
 
-	/**
-	 * Returns a default builder instance.
-	 * 
-	 * @return default builder instance
-	 */
-	public Builder getDefaultBuilder();
-	
 	// components /////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -103,11 +87,4 @@ public interface MVCClassFinder
 	 * @return found component instance
 	 */
 	public Component getComponent(String componentName);
-
-	/**
-	 * Returns a default component instance.
-	 * 
-	 * @return default component instance
-	 */
-	public Component getDefaultComponent();
 }

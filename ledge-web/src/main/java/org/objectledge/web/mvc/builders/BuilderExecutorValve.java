@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.11 2004-01-21 11:03:23 pablo Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.12 2004-01-21 14:40:00 fil Exp $
  */
 public class BuilderExecutorValve implements Runnable
 {
@@ -54,6 +54,11 @@ public class BuilderExecutorValve implements Runnable
 	protected int maxRouteCalls;  
 	/** maximum number of builder enclosures. */
 	protected int maxEnclosures;
+    /** the default builder. */
+    protected Builder defaultBuilder;
+    /** the default template. */
+    protected Template defaultTemplate;
+
 	/**
 	 * Component constructor.
 	 * 
@@ -72,6 +77,9 @@ public class BuilderExecutorValve implements Runnable
 		this.templateFinder = templateFinder;
 		this.maxRouteCalls = maxRouteCalls;
 		this.maxEnclosures = maxEnclosures;
+        // take them in through pico?        
+        this.defaultBuilder = new DefaultBuilder(context);
+        this.defaultTemplate = new DefaultTemplate();
 	}
 	
 	/**
@@ -92,54 +100,58 @@ public class BuilderExecutorValve implements Runnable
 		int enclosures;
 		for (enclosures = 0; enclosures < maxEnclosures; enclosures++)
 		{
-			// route builder
-			boolean builderRouted = false;
-            int routeCalls; 
-			for (routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
-	        {
-				Builder routeBuilder = builder.route();
-				if(routeBuilder == null)
-				{
-					break;
-				}
-				builder = routeBuilder;
-				builderRouted = true;
-	        }
-            if(routeCalls >= maxRouteCalls)
+            if(builder != null)
             {
-                throw new PipelineProcessingException("Maximum number of builder reroutings "+
-                    "exceeded");
-            }
-            // TODO access control
+                // route builder
+                boolean builderRouted = false;
+                int routeCalls; 
+                for (routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
+                {
+                    Builder routeBuilder = builder.route();
+                    if(routeBuilder == null)
+                    {
+                        break;
+                    }
+                    builder = routeBuilder;
+                    builderRouted = true;
+                }
+                if(routeCalls >= maxRouteCalls)
+                {
+                    throw new PipelineProcessingException("Maximum number of builder reroutings "+
+                        "exceeded");
+                }
+                // TODO access control
 
-	        // get the template
-	        // let builder override the template
-	        Template overrideTemplate = builder.getTemplate(); 
-			if(overrideTemplate != null)
-			{
-				template = overrideTemplate;
-			}
-	        // find a template for this builder
-	        if(overrideTemplate == null && builderRouted)
-	        {
-				template = templateFinder.findBuilderTemplate(
-					classFinder.findViewName(builder));
-	        }
+                // get the template
+                // let builder override the template
+                Template overrideTemplate = builder.getTemplate(); 
+                if(overrideTemplate != null)
+                {
+                    template = overrideTemplate;
+                }
+                // find a template for this builder
+                if(overrideTemplate == null && builderRouted)
+                {
+                    template = templateFinder.findBuilderTemplate(
+                        classFinder.findViewName(builder));
+                }
+            }
 
 			// build view level
 			embeddedResult = embeddedResult == null ? "": embeddedResult;
 			templatingContext.put(MVCConstants.EMBEDDED_PLACEHOLDER_KEY, embeddedResult);
 			try
 	        {
-	        	template = resolveTemplate(template);
-				embeddedResult = builder.build(template, embeddedResult);
+                Builder actualBuilder = builder != null ? builder : defaultBuilder;
+                Template actualTemplate = template != null ? resolveTemplate(template) :
+                     defaultTemplate;
+				embeddedResult = actualBuilder.build(actualTemplate, embeddedResult);
 	        }
 	        catch (BuildException e)
 	        {
 	            throw new PipelineProcessingException(e);
 	        }
 
-			//TODO: How to stop - maybe on defaultBuilder and defaultTemplate 	
 			// get next view build level
 	        ViewPair pair = builder.getEnclosingViewPair();
 			if(pair != null)
@@ -161,16 +173,13 @@ public class BuilderExecutorValve implements Runnable
 				}
 				template = enclosingTemplate;
 				
-				//WARN: quick hack
-				if(classFinder.getDefaultBuilder().equals(builder)
-				&& templateFinder.getDefaultTemplate().equals(template))
+				if(template == null && builder == null)
 				{
 					break;
 				}
 			}
 			else
 			{
-				// stop building
 				break;
 			}
 		}

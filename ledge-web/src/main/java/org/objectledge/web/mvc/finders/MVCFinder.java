@@ -31,19 +31,15 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
-import org.objectledge.web.mvc.actions.DefaultAction;
 import org.objectledge.web.mvc.builders.Builder;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
-import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.components.Component;
-import org.objectledge.web.mvc.components.DefaultComponent;
 import org.picocontainer.MutablePicoContainer;
 
 /**
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.20 2004-01-21 13:22:54 pablo Exp $
+ * @version $Id: MVCFinder.java,v 1.21 2004-01-21 14:39:59 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -55,10 +51,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	private static final String COMPONENTS = "components";
 	
 	private MutablePicoContainer container;
-	private Runnable defaultAction;
-	private DefaultBuilder defaultBuilder;
-	private DefaultComponent defaultComponent;
-    private DefaultTemplate defaultTemplate = new DefaultTemplate();
 	
     /** the logger. */
     private Logger logger;
@@ -84,25 +76,9 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         this.logger = logger;
         this.templating = templating;
         this.nameSequenceFactory = nameSequenceFactory;
-        
-		container.registerComponentImplementation(DefaultBuilder.class);
-		container.registerComponentImplementation(DefaultAction.class);
-		container.registerComponentImplementation(DefaultComponent.class);
-		
-		defaultBuilder = (DefaultBuilder) container.getComponentInstance(DefaultBuilder.class);
-		defaultAction = (DefaultAction) container.getComponentInstance(DefaultAction.class);
-		defaultComponent= (DefaultComponent) container.getComponentInstance(DefaultComponent.class);
 	}
 
 	// templates ////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Template getDefaultTemplate()
-	{
-		return defaultTemplate;
-	}
 
     // builder templates ////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +87,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Template findBuilderTemplate(String view)
     {
-		return findTemplate(VIEWS, view, true, defaultTemplate, "findBuilderTemplate");
+		return findTemplate(VIEWS, view, true, null, "findBuilderTemplate");
     }
 
 	/**
@@ -136,7 +112,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
                 // go on
             }
         }
-        return defaultTemplate;
+        return null;
     }
     
     /**
@@ -163,22 +139,8 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 * {@inheritDoc}
 	 */
 	public Runnable getAction(String actionName)
-        throws IllegalArgumentException
 	{
-		Runnable action = (Runnable) findObject(ACTIONS, actionName, false, null,  "getAction");
-		if(action != null)
-		{
-			return action;
-		}
-        throw new IllegalArgumentException("action "+actionName+" is not available");
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Runnable getDefaultAction()
-	{
-		return defaultAction;
+		return (Runnable)findObject(ACTIONS, actionName, false, "getAction");
 	}
 
     // builders /////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +150,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Builder findBuilder(String view)
     {
-		return (Builder) findObject(VIEWS, view, true, defaultBuilder,  "findBuilder");
+		return (Builder) findObject(VIEWS, view, true, "findBuilder");
     }
 
 	/**
@@ -196,11 +158,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Builder findEnclosingBuilder(Builder builder)
     {
-    	if(defaultBuilder.equals(builder))
-    	{
-    		return defaultBuilder;
-    	}
-
         String view = findViewName(builder);
         Sequence sequence = nameSequenceFactory.
             getClassNameSequence(VIEWS, view, true);
@@ -218,7 +175,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
                 // go on
             }
         }
-        return defaultBuilder;
+        return null;
     }
 
 	/**
@@ -226,21 +183,8 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public String findViewName(Builder builder)
     {
-    	//TODO what to do if default builder was requested???
-    	if(defaultBuilder.equals(builder))
-    	{
-    		return null;
-    	}
         return nameSequenceFactory.getView(VIEWS, builder.getClass());
     }
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Builder getDefaultBuilder()
-	{
-		return defaultBuilder;
-	}
 
 	// components ///////////////////////////////////////////////////////////////////////////////
 
@@ -250,16 +194,8 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	public Component getComponent(String componentName)
 	{
 		return (Component)
-            findObject(COMPONENTS, componentName, false, null,  "getComponent");
+            findObject(COMPONENTS, componentName, false, "getComponent");
 	}    
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Component getDefaultComponent()
-	{
-		return defaultComponent;
-	}
 
     // implementation ///////////////////////////////////////////////////////////////////////////
 
@@ -287,14 +223,13 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 				}
 			}
 		}
-		return defaultTemplate;
+		return null;
 	}
 
     private Object findObject(
         String classType,
         String className,
         boolean fallback,
-        Object defaultObject,
         String methodName)
 	{
 		if(className != null && className.length() != 0)
@@ -315,7 +250,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 				}
 			}
 		}
-		return defaultObject;
+		return null;
 	}
 
 	/**
