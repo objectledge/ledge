@@ -35,6 +35,7 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,7 +49,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.19 2005-03-15 11:44:28 zwierzem Exp $
+ * @version $Id: DefaultParameters.java,v 1.20 2005-03-23 12:40:05 zwierzem Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -153,17 +154,7 @@ public class DefaultParameters implements Parameters
     public DefaultParameters(Parameters source)
     {
         setupMap();
-        String[] names = source.getParameterNames();
-        for (int i = 0; i < names.length; i++)
-        {
-            String[] values = source.getStrings(names[i]);
-            if (values != null)
-            {
-                String[] target = new String[values.length];
-                System.arraycopy(values, 0, target, 0, values.length);
-                map.put(names[i], target);
-            }
-        }
+        add(source, true);
     }
 
     /**
@@ -195,7 +186,7 @@ public class DefaultParameters implements Parameters
             throw new AmbiguousParameterException("Parameter '" + name + "'has multiple values");
         }
         String value = values[0];
-        if(value != null && value.equals(""))
+        if(value.equals(""))
         {
             return null;
         }
@@ -523,9 +514,16 @@ public class DefaultParameters implements Parameters
      */
     public void set(String name, String value)
     {
-        String[] values = new String[1];
-        values[0] = value;
-        map.put(name, values);
+        if(value != null)
+        {
+            String[] values = new String[1];
+            values[0] = value;
+            map.put(name, values);
+        }
+        else
+        {
+            map.remove(name);
+        }
     }
 
     /**
@@ -533,9 +531,22 @@ public class DefaultParameters implements Parameters
      */
     public void set(String name, String[] values)
     {
-        String[] target = new String[values.length];
-        System.arraycopy(values, 0, target, 0, values.length);
-        map.put(name, target);
+        ArrayList<String> list = new ArrayList<String>(values.length);
+        for (String val : values)
+        {
+            if(val != null)
+            {
+                list.add(val);
+            }
+        }
+        if(list.size() > 0)
+        {
+            map.put(name, (String[]) list.toArray(new String[list.size()]));
+        }
+        else
+        {
+            map.remove(name);
+        }
     }
 
     /**
@@ -564,7 +575,14 @@ public class DefaultParameters implements Parameters
      */
     public void set(String name, Date value)
     {
-        set(name, Long.toString(value.getTime()));
+        if(value != null)
+        {
+            set(name, Long.toString(value.getTime()));
+        }
+        else
+        {
+            remove(name);
+        }
     }
 
     /**
@@ -572,12 +590,27 @@ public class DefaultParameters implements Parameters
      */
     public void set(String name, Date[] values)
     {
-        String[] target = new String[values.length];
-        for (int i = 0; i < values.length; i++)
+        ArrayList<Date> list = new ArrayList<Date>(values.length);
+        for (Date val : values)
         {
-            target[i] = Long.toString(values[i].getTime());
+            if(val != null)
+            {
+                list.add(val);
+            }
         }
-        map.put(name, target);
+        if(list.size() > 0)
+        {
+            String[] target = new String[list.size()];
+            for (int i = 0; i < target.length; i++)
+            {
+                target[i] = Long.toString(list.get(i).getTime());
+            }
+            map.put(name, target);
+        }
+        else
+        {
+            map.remove(name);
+        }
     }
 
     /**
@@ -671,16 +704,27 @@ public class DefaultParameters implements Parameters
         String[] prevValues = (String[])map.get(name);
         if (prevValues == null || prevValues.length == 0)
         {
-            String[] target = new String[values.length];
-            System.arraycopy(values, 0, target, 0, values.length);
-            map.put(name, target);
+            set(name, values);
         }
         else
         {
-            String[] target = new String[prevValues.length + values.length];
-            System.arraycopy(prevValues, 0, target, 0, prevValues.length);
-            System.arraycopy(values, 0, target, prevValues.length, values.length);
-            map.put(name, target);
+            ArrayList<String> list = new ArrayList<String>(values.length + prevValues.length);
+            list.addAll(Arrays.asList(prevValues));
+            for (String val : values)
+            {
+                if(val != null)
+                {
+                    list.add(val);
+                }
+            }
+            if(list.size() > 0)
+            {
+                map.put(name, (String[]) list.toArray(new String[list.size()]));
+            }
+            else
+            {
+                map.remove(name);
+            }
         }
     }
 
@@ -710,8 +754,10 @@ public class DefaultParameters implements Parameters
      */
     public void add(String name, Date value)
     {
-        add(name, Long.toString(value.getTime()));
-        
+        if(value != null)
+        {
+            add(name, Long.toString(value.getTime()));
+        }
     }
 
     /**
@@ -719,12 +765,23 @@ public class DefaultParameters implements Parameters
      */
     public void add(String name, Date[] values)
     {
-        String[] target = new String[values.length];
-        for (int i = 0; i < values.length; i++)
+        ArrayList<Date> list = new ArrayList<Date>(values.length);
+        for (Date val : values)
         {
-            target[i] = Long.toString(values[i].getTime());
+            if(val != null)
+            {
+                list.add(val);
+            }
         }
-        add(name, target);
+        if(list.size() > 0)
+        {
+            String[] target = new String[list.size()];
+            for (int i = 0; i < target.length; i++)
+            {
+                target[i] = Long.toString(list.get(i).getTime());
+            }
+            add(name, target);
+        }
     }
     
     /**
