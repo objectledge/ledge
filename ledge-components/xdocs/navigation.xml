@@ -9,6 +9,7 @@
       
       <item name="ledge container" href="../../modules/ledge-container/index.html"/>
       <item name="ledge web" href="../../modules/ledge-web/index.html"/>
+      <item name="maven plugin" href="../../modules/ledge-maven-plugin/index.html"/>
     </links>
     <menu name="Reference">
       <item name="Components" href="components.html" collapse="true"/>
