@@ -34,7 +34,7 @@ import org.jcontainer.dna.Configuration;
  * Configuration component - it provide the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: WebConfigurator.java,v 1.6 2004-09-14 11:40:43 rafal Exp $
+ * @version $Id: WebConfigurator.java,v 1.7 2004-09-14 12:15:19 rafal Exp $
  */
 public class WebConfigurator
 {
@@ -70,7 +70,7 @@ public class WebConfigurator
 	public WebConfigurator(Configuration config)
 	{
 		defaultEncoding = config.getChild("default_encoding").getValue(DEFAULT_ENCODING);
-		defaultContentType = config.getChild("default_content_type").getValue(DEFAULT_ENCODING);
+		defaultContentType = config.getChild("default_content_type").getValue(DEFAULT_CONTENT_TYPE);
 		viewToken = config.getChild("view_token").getValue(DEFAULT_VIEW_TOKEN);
 		actionToken = config.getChild("action_token").getValue(DEFAULT_ACTION_TOKEN);
 	}
