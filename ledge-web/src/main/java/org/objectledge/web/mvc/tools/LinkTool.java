@@ -65,7 +65,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.4 2004-03-19 17:12:02 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.5 2004-03-28 09:36:05 pablo Exp $
  */
 public class LinkTool
 {
@@ -603,6 +603,7 @@ public class LinkTool
             sb.append(httpContext.getRequest().getContextPath());
             if (resourceLink)
             {
+                sb.append(config.getBaseResourcePath());
                 if (path.length() > 0)
                 {
                     if (path.charAt(0) != '/')
@@ -807,6 +808,9 @@ public class LinkTool
         /** the default query separator */
         public static final String DEFAULT_QUERY_SEPARATOR = "&";
 
+        /** the default base resource path */
+        public static final String DEFAULT_BASE_RESOURCE_PATH = "/content";
+
         /** the sticky parameters keys */
         private Set stickyKeys = new HashSet();
     
@@ -821,6 +825,9 @@ public class LinkTool
 
         /** the web configurator. */
         private WebConfigurator webConfigurator;
+        
+        /** base resource path */
+        private String baseResourcePath;
 
         /**
          * Initializes the configuraiton object.
@@ -861,6 +868,8 @@ public class LinkTool
                 {
                     pathinfoKeys.add(keys[i].getValue());
                 }
+                baseResourcePath = config.getChild("baseResourcePath")
+                    .getValue(DEFAULT_BASE_RESOURCE_PATH);
             }
             ///CLOVER:OFF
             catch (ConfigurationException e)
@@ -931,6 +940,16 @@ public class LinkTool
         public boolean hasPathInfoParamters()
         {
             return !pathinfoKeys.isEmpty();
+        }
+        
+        /**
+         * Get the base resource path.
+         * 
+         * @return the base resource path.
+         */
+        public String getBaseResourcePath()
+        {
+            return baseResourcePath;
         }
         
         /**

@@ -172,9 +172,9 @@ public class LinkToolTest extends TestCase
         assertEquals(linkTool.https(8090).toString(),
                      "https://www.objectledge.org:8090/test/ledge");
         assertEquals(linkTool.sessionless().toString(), "/test/ledge");
-        assertEquals(linkTool.resource("foo").toString(), "/test/foo");
-        assertEquals(linkTool.resource("").toString(), "/test");
-        assertEquals(linkTool.resource("/foo").toString(), "/test/foo");
+        assertEquals(linkTool.resource("foo").toString(), "/content/test/foo");
+        assertEquals(linkTool.resource("").toString(), "/content/test");
+        assertEquals(linkTool.resource("/foo").toString(), "/content/test/foo");
         assertEquals(linkTool.fragment("foo").toString(), "/test/ledge#foo");
         assertEquals(linkTool.fragment("foo").fragment(),"foo");
         assertEquals(linkTool.self().toString(),"/test/ledge");
