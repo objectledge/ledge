@@ -48,7 +48,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.3 2004-01-21 13:11:37 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.4 2004-01-21 14:48:18 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -114,6 +114,40 @@ public class BuilderExecutorValveTest extends TestCase
         context.setAttribute(TemplatingContext.class, templating.createContext());
         executor.run();
         assertEquals("Default(RoutedTo())", mvcContext.getBuildResult());
+    }
+    
+    public void testInfiniteRoute()
+    {
+        MVCContext mvcContext = new MVCContext();
+        mvcContext.setView("RouteToSelf");
+        context.setAttribute(MVCContext.class, mvcContext);
+        context.setAttribute(TemplatingContext.class, templating.createContext());
+        try
+        {
+            executor.run();
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            // success
+        }
+    }
+    
+    public void testInfiniteEnclosure()
+    {
+        MVCContext mvcContext = new MVCContext();
+        mvcContext.setView("EncloseSelf");
+        context.setAttribute(MVCContext.class, mvcContext);
+        context.setAttribute(TemplatingContext.class, templating.createContext());
+        try
+        {
+            executor.run();
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            // success
+        }
     }
     
     public void testOverride()
