@@ -75,7 +75,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Caching.java,v 1.2 2004-02-12 13:41:42 pablo Exp $
+ * @version $Id: Caching.java,v 1.3 2004-02-13 14:15:28 pablo Exp $
  */
 public class Caching
     implements CachingSPI
@@ -230,7 +230,7 @@ public class Caching
             initImpl(type, clazz, iface);    
         }
         
-        Configuration[] aliases = config.getChildren("config");
+        Configuration[] aliases = config.getChildren("alias");
         for(int i = 0; i < aliases.length; i++)
         {
             String name = aliases[i].getAttribute("name");
@@ -240,18 +240,22 @@ public class Caching
         for(int i = 0; i < factories.length; i++)
         {
             String name = factories[i].getAttribute("name");
-            instanceConfigurations.put(name,factories[i]);
+            factoryConfigurations.put(name,factories[i]);
         }
         Configuration[] instanceNodes = config.getChildren("instance");
         for(int i =0; i < instanceNodes.length;i++)
         {
             String name = instanceNodes[i].getAttribute("name");
-            String value = instanceNodes[i].getValue();
-            Configuration instanceConfig = instanceNodes[i]; 
-            if(value.startsWith("config:"))
+            Configuration instanceConfig = instanceNodes[i];
+            String alias = instanceNodes[i].getAttribute("alias",null);
+            if(alias != null)
             {
-                String alias = value.substring(7);
                 instanceConfig = (Configuration)instanceConfigurations.get(alias);
+                if(instanceConfig == null)
+                {
+                    throw new ComponentInitializationError(
+                        "cannot find conifured alias: '"+alias+"'");
+                }
             }
             Map map = buildInstance(name, instanceConfig);
             instances.put(name, map);
@@ -275,6 +279,7 @@ public class Caching
         {
             return (Map)cl.newInstance();
         }
+        ///CLOVER:OFF
         catch(VirtualMachineError t)
         {
             throw t;
@@ -287,6 +292,7 @@ public class Caching
         {
             throw new RuntimeException("failed to instantaite map of type "+type, t);
         }
+        ///CLOVER:ON
     }
 
     /**
@@ -339,18 +345,23 @@ public class Caching
         }
         try
         {
-            obj = Class.forName(fclass);
+            obj = Class.forName(fclass).newInstance();
         }
         catch(ClassNotFoundException e)
         {
             throw new IllegalArgumentException(fclass+" not found");
         }
+        catch(Exception e)
+        {
+            throw new IllegalArgumentException(fclass+" not found");
+        }
+        
         if(!(obj instanceof ConfigurableValueFactory))
         {
             throw new IllegalArgumentException(fclass+" does not implement " +
-                                        "ConfigurableValueFactory interface");
+                                               "ConfigurableValueFactory interface");
         } 
-        ((ConfigurableValueFactory)obj).configure(map, factoryConfig);
+        ((ConfigurableValueFactory)obj).configure(this, map, factoryConfig);
         return (ValueFactory)obj;
     }
 
@@ -432,8 +443,8 @@ public class Caching
      */
     public ValueFactory getPersitenceValueFactory(Class valueClass)
     {
-        PersistenceValueFactory factory = new PersistenceValueFactory(persistence);
-        factory.init(valueClass);
+        PersistenceValueFactory factory = new PersistenceValueFactory();
+        factory.init(valueClass, persistence);
         return factory;
     }
 
@@ -505,6 +516,13 @@ public class Caching
         return notification;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Persistence getPersistence()
+    {
+        return persistence;
+    }
     // implementation ////////////////////////////////////////////////////////
 
     /**
@@ -575,7 +593,7 @@ public class Caching
             String type = s.substring(0,op);
             String mapConfig = s.substring(op+1,cp);
             current = getMap(type);
-            if(i > 1)
+            if(i > 0)
             {
                 if(current instanceof LayeredMap)
                 {
@@ -652,6 +670,7 @@ public class Caching
                             {
                                 obj.update();
                             }
+                            ///CLOVER:OFF
                             catch(VirtualMachineError e)
                             {
                                 throw e;
@@ -664,6 +683,7 @@ public class Caching
                             {
                                 logger.error("exception in delayed update thread", e);
                             }
+                            ///CLOVER:ON
                         }
                         if(!queue.isEmpty())
                         {

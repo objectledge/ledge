@@ -50,7 +50,7 @@ import org.objectledge.cache.spi.SoftMap;
  * occur only if dangling link number exceeds a defined threshold.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SoftMapImpl.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: SoftMapImpl.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
  */
 public class SoftMapImpl
     extends DelegateMap
@@ -85,7 +85,7 @@ public class SoftMapImpl
      */
     public SoftMapImpl()
     {
-        super(new HashMap());
+        super((Map)new HashMap());
         this.ring = new Object[protect];
         this.pos = 0;
     }

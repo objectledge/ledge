@@ -52,7 +52,7 @@ import org.objectledge.cache.spi.LRUMap;
  * implement than put() LRU ordering ;-)</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LRUMapImpl.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: LRUMapImpl.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
  */
 public class LRUMapImpl
     extends DelegateMap
@@ -94,7 +94,7 @@ public class LRUMapImpl
         }
         catch(NumberFormatException e)
         {
-            throw new IllegalArgumentException("invalid capacity spec "+config);
+            throw new IllegalArgumentException("invalid capacity spec '"+config+"' for '"+name+"'");
         }
     }
 

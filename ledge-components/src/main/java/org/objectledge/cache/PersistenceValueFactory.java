@@ -29,6 +29,7 @@
 package org.objectledge.cache;
 
 import org.jcontainer.dna.Configuration;
+import org.objectledge.cache.spi.CachingSPI;
 import org.objectledge.cache.spi.ConfigurableValueFactory;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.PersistenceException;
@@ -39,7 +40,7 @@ import org.objectledge.database.persistence.PersistentFactory;
  * An implementation of ValueFactory interface that uses the persistency.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PersistenceValueFactory.java,v 1.1 2004-02-12 11:41:27 pablo Exp $
+ * @version $Id: PersistenceValueFactory.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
  */
 public class PersistenceValueFactory
     implements ConfigurableValueFactory
@@ -59,9 +60,8 @@ public class PersistenceValueFactory
      * 
      * @param persistence the persistence.
      */
-    public PersistenceValueFactory(Persistence persistence)
+    public PersistenceValueFactory()
     {
-        this.persistence = persistence;
     }
 
     /**
@@ -69,8 +69,9 @@ public class PersistenceValueFactory
      *
      * @param cl the class of the values.
      */
-    public void init(final Class cl)
+    public void init(final Class cl, Persistence persistence)
     {
+        this.persistence = persistence;
         if(!Persistent.class.isAssignableFrom(cl))
         {
             throw new IllegalArgumentException(cl.getName()+" does not implement " +                                                "Persistent interface");
@@ -119,17 +120,20 @@ public class PersistenceValueFactory
     }
 
     /**
-     * Configures the value factory.
-     *
-     * <p>This method expects "valueClass" configuration parameter.</p>
-     * 
-     * @param name the name of the map this factory is being connected to.
-     * @param config the configuration.
+     * {@inheritDoc}
      */
-    public void configure(String name, Configuration config)
+    public void configure(CachingSPI caching, String name, Configuration config)
     {
-        String vClass = config.getChild("valueClass").getValue(null);
-        if(vClass == null)
+        Configuration[] parameters = config.getChildren("parameter");
+        String vClass = null;
+        for(int i = 0; i < parameters.length; i++)
+        {
+            if(parameters[i].getAttribute("name","").equals("valueClass"))
+            {
+                vClass = parameters[i].getAttribute("value","");
+            }
+        }
+        if(vClass == null || vClass.length()==0)
         {
             throw new IllegalArgumentException("required parameter valueClass is missing");
         }
@@ -142,6 +146,6 @@ public class PersistenceValueFactory
         {
             throw new IllegalArgumentException("cannot instantiate the class"+e.getMessage());
         }
-        init(cl);
+        init(cl, caching.getPersistence());
     }
 }

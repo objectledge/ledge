@@ -46,7 +46,7 @@ import org.objectledge.notification.NotificationReceiver;
  * An implementation of {@link DistributedMap} using the {@link Notification}.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DistributedMapImpl.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: DistributedMapImpl.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
  */
 public class DistributedMapImpl
     extends DelegateMap
@@ -95,7 +95,8 @@ public class DistributedMapImpl
     {
         this.notification = notification;
         channel = CHANNEL_NAME+"/"+name;
-        notification.addReceiver(channel, this);
+        //TODO uncomment it when notification implemented
+        //notification.addReceiver(channel, this);
     }   
 
     /**

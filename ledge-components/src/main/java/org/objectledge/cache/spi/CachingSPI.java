@@ -33,11 +33,12 @@ import java.util.Map;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.cache.DelayedUpdate;
 import org.objectledge.cache.ValueFactory;
+import org.objectledge.database.persistence.Persistence;
 import org.objectledge.notification.Notification;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CachingSPI.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: CachingSPI.java,v 1.2 2004-02-13 14:15:28 pablo Exp $
  */
 public interface CachingSPI
 {
@@ -212,4 +213,12 @@ public interface CachingSPI
      * @return the notification system.
      */
     public Notification getNotification();
+    
+    /**
+     * Get the persistence system.
+     * 
+     * @return the persistence.
+     */
+    public Persistence getPersistence();
+    
 }
