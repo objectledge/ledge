@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.5 2004-05-13 15:48:56 fil Exp $ -->
+<!-- $Id: project.xml,v 1.6 2004-05-25 13:40:34 fil Exp $ -->
 <project>
 
   <extend>../ledge-common/project.xml</extend>
@@ -50,7 +50,7 @@
     </dependency>
     <dependency>
       <id>velocity</id>
-      <version>1.4-dev</version>
+      <version>1.4</version>
     </dependency>
   </dependencies>
 

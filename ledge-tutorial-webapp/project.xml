@@ -106,7 +106,7 @@
     </dependency>
     <dependency>
       <id>velocity</id>
-      <version>1.4-dev</version>
+      <version>1.4</version>
       <url>http://jakarta.apache.org/velocity</url>
       <properties>
         <war.bundle>true</war.bundle>

@@ -7,7 +7,7 @@
 	<classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.3.jar"/>
 	<classpathentry kind="src" path="/ledge-components"/>
 	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/httpunit/jars/httpunit-1.5.3.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/httpunit/jars/httpunit-1.5.4.jar"/>
 	<classpathentry kind="src" path="/ledge-container"/>
 	<classpathentry kind="var" path="MAVEN_REPO/nekohtml/jars/nekohtml-0.8.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xercesImpl-2.6.0.jar"/>
