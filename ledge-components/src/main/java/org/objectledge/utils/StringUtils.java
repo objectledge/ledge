@@ -44,7 +44,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.27 2005-03-02 15:42:02 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.28 2005-03-23 10:29:40 pablo Exp $
  */
 public class StringUtils
 {
@@ -119,6 +119,10 @@ public class StringUtils
 	 */
 	public static String backslashEscape(String in, String reserved)
 	{
+        if(in == null)
+        {
+            return null;
+        }
 		StringBuilder out = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(in,reserved,true);
 		while(st.hasMoreTokens())
