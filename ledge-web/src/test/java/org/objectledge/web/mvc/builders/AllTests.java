@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.builders;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -35,19 +35,17 @@ import junit.framework.TestSuite;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: AllTests.java,v 1.3 2004-01-20 15:01:41 fil Exp $
+ * @version $Id: AllTests.java,v 1.1 2004-01-20 15:01:41 fil Exp $
  */
 public class AllTests
 {
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.web.mvc");
+        TestSuite suite = new TestSuite("Test for org.objectledge.web.builders");
         //$JUnit-BEGIN$
-
+        suite.addTest(new TestSuite(BuilderExecutorValveTest.class));
         //$JUnit-END$
-        suite.addTest(org.objectledge.web.mvc.finders.AllTests.suite());
-        suite.addTest(org.objectledge.web.mvc.builders.AllTests.suite());
         return suite;
     }
 }
