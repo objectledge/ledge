@@ -59,7 +59,7 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.23 2004-06-01 15:34:50 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.24 2004-06-11 10:36:32 zwierzem Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -293,6 +293,7 @@ public class ConfigurationFactory
      * @param schemaPath the the schema file path.
      * @throws IOException if the configuration, or schema cannot be read.
      * @throws SAXException if the configuration, or schema cannot be parsed.
+     * @throws ParserConfigurationException if the parser is badly configured.
      */
     protected void checkSchema(Configuration configuration, String schemaPath)
         throws SAXException, IOException, ParserConfigurationException
@@ -311,7 +312,7 @@ public class ConfigurationFactory
      * @param schemaPath the the schema file path.
      * @throws IOException if the configuration, or schema cannot be read.
      * @throws SAXException if the configuration, or schema cannot be parsed.
-     * @throws IncorrectSchemaException if the schema is malformed.
+     * @throws ParserConfigurationException if the parser is badly configured.
      */
     protected void checkSchema(String configuration, String schemaPath)
         throws SAXException, IOException, ParserConfigurationException
