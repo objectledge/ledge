@@ -51,7 +51,7 @@ import org.xml.sax.InputSource;
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.4 2003-12-17 10:02:17 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.5 2003-12-22 12:58:53 fil Exp $
  */
 public class LedgeContainer
     extends NanoContainer
@@ -59,15 +59,21 @@ public class LedgeContainer
     // constants ////////////////////////////////////////////////////////////////////////////////
     
     /** Location of the container composition file. */
-    public static final String COMPOSITION_PATH = "config/container.xml";
+    public static final String COMPOSITION_FILE = "/container.xml";
 
     /** Default xml front end implementation. */
     public static final String FRONT_END_CLASS = "org.objectledge.pico.xml.LedgeXmlFrontEnd";
+    
+    /** Config base path key. */
+    public static final String CONFIG_BASE_KEY = "org.objectledge.ConfigBase";
     
     // instance variables ///////////////////////////////////////////////////////////////////////
     
     /** The filesystem to use for reading composition & it's schema. */
     protected FileSystem fs;
+    
+    /** The path name of the configuration base directory. */
+    protected String configBase;
     
     /** The document builder to use. */
     protected DocumentBuilder documentBuilder;
@@ -83,12 +89,13 @@ public class LedgeContainer
      * <p>A default JAXP parser, and a console monitor will be used.</p>
      * 
      * @param fs the file system to load container composition file from.
+     * @param configBase the configuration directory path.
      * @throws ParserConfigurationException if the JAXP subsystem is not configured correctly.
      */
-    public LedgeContainer(FileSystem fs)
+    public LedgeContainer(FileSystem fs, String configBase)
         throws ParserConfigurationException
     {
-        this(fs, new ConsoleNanoContainerMonitor());
+        this(fs, configBase, new ConsoleNanoContainerMonitor());
     }
 
     /**
@@ -97,27 +104,30 @@ public class LedgeContainer
      * <p>A default JAXP parser will be used.</p>
      * 
      * @param fs the file system to load container composition file from.
+     * @param configBase the configuration directory path.
      * @param monitor a nano container monitor to use.
      * @throws ParserConfigurationException if the JAXP subsystem is not configured correctly.
      */
-    public LedgeContainer(FileSystem fs, NanoContainerMonitor monitor)
+    public LedgeContainer(FileSystem fs, String configBase, NanoContainerMonitor monitor)
         throws ParserConfigurationException
     {
-        this(fs, DocumentBuilderFactory.newInstance().newDocumentBuilder(), monitor);
+        this(fs, configBase, DocumentBuilderFactory.newInstance().newDocumentBuilder(), monitor);
     }
     
     /**
      * Creates a ledge container instance.
      * 
      * @param fs the file system to load container composition file from.
+     * @param configBase the configuration directory path.
      * @param documentBuilder a document builder to use for parsing composition file.
      * @param monitor a nano container monitor to use.
      */
-    public LedgeContainer(FileSystem fs, DocumentBuilder documentBuilder, 
+    public LedgeContainer(FileSystem fs, String configBase, DocumentBuilder documentBuilder, 
         NanoContainerMonitor monitor)
     {
         super(monitor);
         this.fs = fs;
+        this.configBase = configBase;
         this.documentBuilder = documentBuilder;
         init();
     }
@@ -153,6 +163,7 @@ public class LedgeContainer
             bootContainer = new DefaultPicoContainer();
             bootContainer.registerComponentInstance(FileSystem.class, fs);
             bootContainer.registerComponentInstance(ClassLoader.class, getClass().getClassLoader());
+            bootContainer.registerComponentInstance(CONFIG_BASE_KEY, configBase);
             return frontEnd.createPicoContainer(composition, bootContainer);
         }
         catch(Exception e)
@@ -164,9 +175,10 @@ public class LedgeContainer
     private Element getComposition() 
         throws Exception 
     {
+        String compositionPath = configBase + COMPOSITION_FILE;
         XMLValidator validator = new XMLValidator(fs);
-        validator.validate(COMPOSITION_PATH, LedgeXmlFrontEnd.SCHEMA_PATH);
-        InputSource inputSource = new InputSource(fs.getInputStream(COMPOSITION_PATH));
+        validator.validate(compositionPath, LedgeXmlFrontEnd.SCHEMA_PATH);
+        InputSource inputSource = new InputSource(fs.getInputStream(compositionPath));
         Document document = documentBuilder.parse(inputSource);
         return document.getDocumentElement();
     }

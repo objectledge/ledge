@@ -39,7 +39,7 @@ import org.objectledge.test.FooComponent;
  *
  * <p>Created on Dec 16, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainerTest.java,v 1.1 2003-12-17 10:03:54 fil Exp $
+ * @version $Id: LedgeContainerTest.java,v 1.2 2003-12-22 12:59:08 fil Exp $
  */
 public class LedgeContainerTest extends TestCase
 {
@@ -64,8 +64,24 @@ public class LedgeContainerTest extends TestCase
         root = root+"/container1";
         FileSystem fs = FileSystem.getStandardFileSystem(root);
         
-        NanoContainer container = new LedgeContainer(fs, new Log4JNanoContainerMonitor());
+        NanoContainer container = new LedgeContainer(fs, "/config", 
+            new Log4JNanoContainerMonitor());
         container.addShutdownHook();
         assertNotNull(container.getRootContainer().getComponentInstance(FooComponent.class)); 
+    }
+    
+    public void testMain()
+        throws Exception
+    {
+        String root = System.getProperty("ledge.root");
+        if(root == null)
+        {
+            throw new Exception("system property ledge.root undefined. "+
+                "use -Dledge.root=.../ledge-container/src/test/resources");
+        }
+        root = root+"/container1";
+        String[] args = new String[] { "-r", root, "org.objectledge.test.FooComponent", 
+            "blah1", "blah2"};
+        Main.main(args);
     }
 }
