@@ -24,13 +24,15 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.mail.impl.FileSystemDataSource;
 import org.objectledge.templating.Templating;
+import org.objectledge.threads.Task;
+import org.objectledge.threads.ThreadPool;
 
 /**
  * Mail system component.
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.3 2004-01-19 16:53:51 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.4 2004-01-22 10:53:29 pablo Exp $
  */
 public class MailSystem
 {
@@ -46,7 +48,7 @@ public class MailSystem
     private Logger logger;
 
     /** thread pool */
-    //private ThreadPool threadPool;
+    private ThreadPool threadPool;
 
     /** file service */
     private FileSystem fileSystem;
@@ -79,13 +81,16 @@ public class MailSystem
      * @param logger the logger.
      * @param fileSystem the file system.
      * @param templating the templating.
+     * @param threadPool the threadPool.
      */
     public MailSystem(Configuration config, Logger logger,
-    				   FileSystem fileSystem, Templating templating)
+    				   FileSystem fileSystem, Templating templating,
+                       ThreadPool threadPool)
     {
 		this.logger = logger;
 		this.fileSystem = fileSystem;
 		this.templating = templating;
+        this.threadPool = threadPool;
         try
         {
             String mimeTypeFilePath = config.getChild("mime_type_file_path")
@@ -125,6 +130,7 @@ public class MailSystem
                     sessionsMap.put(name, session);
                 }
             }
+            threadPool.runDaemon(new DeliverMailTask());
         }
         catch (ConfigurationException e)
         {
@@ -327,6 +333,54 @@ public class MailSystem
                 }
             }
             return null;
+        }
+    }
+    
+    /**
+     * Deaemon task responsible for sending enqueued e-mail messages.
+     */
+    private class DeliverMailTask extends Task
+    {
+        /**
+         * {@inheritDoc}
+         */
+        public String getName()
+        {
+            return "E-mail delivery task";
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public void run()
+        {
+            loop : while (!Thread.interrupted())
+            {
+                Object object;
+                synchronized (mailQueue)
+                {
+                    if (mailQueue.size() == 0)
+                    {
+                        try
+                        {
+                            mailQueue.wait();
+                        }
+                        catch (InterruptedException e)
+                        {
+                            break loop;
+                        }
+                    }
+                    object = mailQueue.removeFirst();
+                }
+                try
+                {
+                    ((LedgeMessage)object).send(true);
+                }
+                catch (Exception e)
+                {
+                    logger.error("DeliverMailTask couldn't send enqueued e-mail", e);
+                }
+            }
         }
     }
 }
