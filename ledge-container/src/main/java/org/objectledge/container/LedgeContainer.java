@@ -50,7 +50,7 @@ import org.xml.sax.SAXParseException;
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.9 2004-02-19 15:12:21 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.10 2004-02-20 08:40:34 fil Exp $
  */
 public class LedgeContainer
 {
@@ -89,7 +89,7 @@ public class LedgeContainer
         throws IOException, ClassNotFoundException, PicoCompositionException
     {
         NanoContainer nano = new NanoContainer(getCompositionFile(fs, configBase), FRONT_END_CLASS,
-            null, classLoader);
+            classLoader);
         containerBuilder = nano.getContainerBuilder();
         ObjectReference parentRef = new SimpleReference();
         parentRef.set(getBootContainer(fs, configBase, classLoader));
