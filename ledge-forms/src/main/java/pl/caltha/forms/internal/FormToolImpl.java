@@ -1,6 +1,5 @@
 package pl.caltha.forms.internal;
 
-import org.jcontainer.dna.Configuration;
 import org.objectledge.context.Context;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
@@ -17,7 +16,7 @@ import pl.caltha.forms.internal.ui.UIConstants;
 /** This a form tool context tool implementation.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormToolImpl.java,v 1.2 2005-01-20 16:44:55 pablo Exp $
+ * @version $Id: FormToolImpl.java,v 1.3 2005-01-27 00:58:23 pablo Exp $
  */
 public class FormToolImpl 
 implements FormTool
