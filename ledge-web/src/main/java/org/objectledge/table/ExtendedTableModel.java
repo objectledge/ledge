@@ -35,7 +35,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ExtendedTableModel.java,v 1.4 2004-06-14 13:54:59 fil Exp $
+ * @version $Id: ExtendedTableModel.java,v 1.5 2004-06-15 12:59:12 zwierzem Exp $
  */
 public interface ExtendedTableModel extends TableModel
 {
@@ -49,6 +49,10 @@ public interface ExtendedTableModel extends TableModel
 
     /**
      * Returns the model dependent object by its id, may return <code>null</code>.
+     *
+     * <p>TODO: Because ther rest of the tree may be retrieved in a recursive way using
+     * getChildren(Object) only the tree root must be retrieved by using its id. Thus this method
+     * should be renamed to getRootObject(String)</p>  
      *
      * @param objectId the id of the object
      * @return model object
