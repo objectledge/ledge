@@ -35,146 +35,112 @@
   <start>
     <ref name="container"/>
   </start>
-  
+
   <define name="container">
     <element name="container">
-      <ref name="attlist.container"/>
-      <optional>
-        <ref name="adapter-factory"/>
-      </optional>
-      <zeroOrMore>
-        <choice>
-          <ref name="component"/>
-          <ref name="component-adapter"/>
-          <ref name="pseudo-component"/>
-          <ref name="container"/>
-        </choice>
-      </zeroOrMore>
-    </element>
-  </define>
-
-  <define name="attlist.container" combine="interleave">
-    <optional>
-      <attribute name="front-end"/>
-    </optional>  
-    <optional>
-      <attribute name="adapter-factory"/>
-    </optional>  
-    <optional>
-      <choice>
-        <attribute name="key"/>
-        <attribute name="class-key"/>
-      </choice>
-    </optional>  
-    <optional>
-      <attribute name="class"/>
-    </optional>  
-    <optional>
-      <attribute name="replace" a:defaultValue="false">
-        <choice>
-          <value>false</value>
-          <value>true</value>
-        </choice>
-      </attribute>
-    </optional>  
-  </define>
-
-  <define name="adapter-factory">
-    <element name="adapter-factory">
-      <attribute name="class"/>
-      <optional>
-        <ref name="adapter-factory"/>
-      </optional>
-    </element>
-  </define>
-
-  <define name="component">
-    <element name="component">
-       <ref name="attlist.component"/>
-       <zeroOrMore>
-         <ref name="parameter"/>
-       </zeroOrMore>
-    </element>
-  </define>
-
-  <define name="attlist.component" combine="interleave">
-    <attribute name="class"/>
-    <optional>
-      <choice>
-        <attribute name="key"/>
-        <attribute name="class-key"/>
-      </choice>
-    </optional>
-  </define>
-
-  <define name="component-adapter">
-    <element name="component-adapter">
-       <ref name="attlist.component-adapter"/>
-       <zeroOrMore>
-         <ref name="parameter"/>
-       </zeroOrMore>
-    </element>
-  </define>
-
-  <define name="attlist.component-adapter" combine="interleave">
-    <attribute name="class"/>
-  </define>
-
-  <define name="parameter">
-    <choice>
-      <ref name="constant-parameter"/>
-      <ref name="component-parameter"/>
-      <ref name="sequence-parameter"/>
-    </choice>
-  </define>
-  
-  <define name="constant-parameter">
-    <element name="constant-parameter">
       <optional>
         <attribute name="class"/>
       </optional>
-      <attribute name="value"/>
-    </element>
-  </define>
-  
-  <define name="component-parameter">
-    <element name="component-parameter">
       <optional>
         <choice>
           <attribute name="key"/>
           <attribute name="class-key"/>
         </choice>
       </optional>
-    </element>
-  </define>
-  
-  <define name="sequence-parameter">
-    <element name="sequence-parameter">
-      <zeroOrMore>
-        <ref name="parameter"/>
-      </zeroOrMore>
-    </element>
-  </define>
-  
-  <define name="pseudo-component">
-    <element name="pseudo-component">
-      <attribute name="factory"/>
-      <ref name="any-element"/>
-    </element>
-  </define>
-  
-  <define name="any-element">
-    <element>
-      <anyName/>
       <zeroOrMore>
         <choice>
-          <attribute>
-            <anyName/>
-          </attribute>
-          <text/>
-          <ref name="any-element"/>
+          <ref name="container"/>
+          <ref name="factory"/>
+          <ref name="component"/>
+          <ref name="alias"/>
         </choice>
       </zeroOrMore>
     </element>
+  </define>
+
+  <define name="component">
+    <element name="component">
+      <attribute name="class"/>
+      <optional>
+        <choice>
+          <attribute name="key"/>
+          <attribute name="class-key"/>
+          <attribute name="anon"/>
+        </choice>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="parameter"/>
+          <ref name="sequence"/>
+          <ref name="component"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="sequence">
+    <element name="sequence">
+      <optional>
+        <attribute name="class"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="parameter"/>
+          <ref name="component"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="parameter">
+    <element name="parameter">
+      <optional>
+        <choice>
+          <group>
+            <attribute name="value"/>
+            <optional>
+              <attribute name="class"/>
+            </optional>
+          </group>
+          <choice>
+            <attribute name="key"/>
+            <attribute name="class-key"/>
+          </choice>
+        </choice>  
+      </optional>
+      <empty/>
+    </element>
   </define>  
-</grammar>	 
+  
+  <define name="factory">
+    <element name="factory">
+      <choice>
+        <attribute name="key"/>
+        <attribute name="class-key"/>
+      </choice>
+      <zeroOrMore>
+        <choice>
+          <ref name="container"/>
+          <ref name="factory"/>
+          <ref name="component"/>
+          <ref name="alias"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="alias">
+    <element name="alias">
+      <choice>
+        <attribute name="key"/>
+        <attribute name="class-key"/>
+      </choice>
+      <choice>
+        <attribute name="ref"/>
+        <attribute name="class-ref"/>
+      </choice>
+      <empty/>
+    </element>
+  </define>
+
+</grammar>
