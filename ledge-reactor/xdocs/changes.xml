@@ -34,7 +34,155 @@
         package, as they are accessed by the casual users - they should not be forced to look into impl packages.
       </action>
     </release>
-    <release version="0.3" date="CVS HEAD">
+    <!-- type = add fix remove update -->
+    <release version="0.3" date="September 3, 2004">
+      <action dev="pablo" type="add" issue="LEDGE-1">
+        More tests for Filesystem has been written.
+      </action>
+      <action dev="pablo" type="fix" issue="LEDGE-3">
+        Multiple character blocks with a single tag are now handled correctly by i18n xml loader.
+      </action>
+      <action dev="pablo" type="add" issue="LEDGE-7">
+        More tests for StringUtils have been written.
+      </action>
+      <action dev="fil" type="fix" issue="LEDGE-8">
+        Test for ErrorHandlingPipeline have been improved.
+      </action>
+      <action dev="fil" type="fix" issue="LEDGE-9">
+        Test for ContextToolFactory have been improved.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-16">
+        FileAppender and RollingFileAppender implementations working over Ledge FS are now available.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-17">
+        LoggingConfigurator has been enhanced to pico-instantiate certain Log4J components, making
+        components in Ledge container available for their initializaiton.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-18">
+        Ledge was updated to compile against pico 1.0-beta-4 (superceded by later changes)
+      </action>
+      <action dev="fil" type="fix" issue="LEDGE-24">
+        Quirsk in commandline processing were removed thanks to migration to commons-cli.
+      </action>
+      <action dev="fil" type="remove" issue="LEDGE-31">
+        LedgeServletTest.testLedgeServlet2 testcase was removed, because of it was causing problems,
+        and was essentialy an integration and not unit test.
+      </action>
+      <action dev="pablo" type="fix" issue="LEDGE-41">
+        uploadLimit property was moved to the proper place - FileUpload configuration.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-43">
+        HttpContext was briefly documented.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-45">
+        Ledge web documentation was reorganized.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-48">
+        ThreadPool was implemented using commons-pool.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-51">
+        Tests for policy package were added.
+      </action>
+      <action dev="pablo" type="fix" issue="LEDGE-52">
+        Strings can be now defined outside of any prefix defined inside i18m xml file - prefix
+        defined by file name applies to those.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-58">
+        Build system was upgraded to use pre-1.0 maven.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-59">
+        Stack trace formatter was ported in, and adapted to use JDK1.4+ features.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-60">
+        Stack trace prettyprinting was added to PrintExceptionValve and ExceptionReriderctorValve.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-61">
+        Stack trace prettyprinting was plugged into Ledge's Log4J loggers.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-62">
+        ConfigurationFactory was moved into ledge-components module. It's needed by some components
+        and it's useful in component tests.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-63">
+        ConfigurationFactory was split into part handling configuration loading, and part hanling
+        associating configuration with components.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-64">
+        LoggingConfigurator was moved into ledge-components module. A component may depend on it
+        to request that logging be initialized before the component is constructed. Useful if 
+        instantiating the component causes massive logging from dependant 3rd party objects.
+      </action>
+      <action dev="fil" type="fix" issue="LEDGE-65">
+        ledge.root system property is no longer needed for tests
+      </action>
+      <action dev="fil" type="fix" issue="LEDGE-66">
+        TestSuite classes were removed. Test are looked up easily withouthem both by Maven and Eclipse.
+      </action>
+      <action dev="pablo" type="fix" issue="LEDGE-67">
+        DatabaseContext was fixed to create subcontexts with correct ids.
+      </action>
+      <action dev="zwierzem" type="add" issue="LEDGE-68">
+        Unicode characters are correctly passed around int POST and GET requests, and links are 
+        generated encoded aproprietly.
+      </action>
+      <action dev="zwierzem" type="update" issue="LEDGE-69">
+        All Java and Velocity source files were transcoded into UTF-8, and apropriate settings were
+        applied for the build system and Eclipse.
+      </action>
+      <action dev="zwierzem" type="add" issue="LEDGE-70">
+        HTML entities sent by the browser are decoded into unicode characters in parameters.
+      </action>
+      <action dev="zwierzem" type="add" issue="LEDGE-71">
+        Unicode characters not mappable to the chosen output encoding are transformed into HTML
+        entities.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-72">
+        Table filters are now stored in the tool not the state objects. Fixes problems with temporary
+        momory leakage.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-73">
+        LinkTool uses custom url encoder to avoid encoding / in the query string.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-74">
+        LinkTool was stripped from unsed code reorganized for better maintainablitiy.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-75">
+        I18n strings can be defined in intermediate nodes in addition to leaf nodes.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-76">
+        All old issues were scheduled among releases.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-77">
+        Table toolkit parmeters were changed into camelCase.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-79">
+       LinkTool was fixed with respect to extensibility.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-80">
+       I18n tool was fixed with respect to extensibility.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-81">
+        SecuirtyHelper is no longer refernced statically, allowing more flexibility and extensibility.
+      </action>
+      <action dev="zwierzem" type="fix" issue="LEDGE-82">
+        I18n context border cases were worked out.
+      </action>
+      <action dev="fil" type="add" issue="LEDGE-86">
+        New roadmap document was prepared.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-87">
+        Jira house cleaning was performed including setting components and versions on all issues,
+        closing resolved issues and sheduling issues among releases.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-88">
+        Dev version docs were generated with Maven 1.0 with some adjustments and published on the web.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-94">
+        Maven release management tools were used to do the release for the first time.
+      </action>
+      <action dev="fil" type="update" issue="LEDGE-95">
+        changes.xml files were reorganized and filled in from jira.
+      </action>
     </release>
   </body>
 </document>
