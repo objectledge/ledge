@@ -30,7 +30,7 @@
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe³ Potempski</a>
- * @version $Id: table.vt,v 1.4 2004-03-05 12:54:18 zwierzem Exp $
+ * @version $Id: table.vt,v 1.5 2004-06-11 19:22:28 zwierzem Exp $
 *###
 #**
  * Displays a single header cell contents.
@@ -173,7 +173,7 @@ $i18n.get('table.page.size')
  * @param $row the row to displays tree images for.
  *#
 #macro(tableView_linesAndFolders $table $row $tableLink)
-#tableView_linesAndFoldersBase($table $row $tableLink.set('row_id',$row.id).action('table,ToggleExpanded'))##
+#tableView_linesAndFoldersBase($table $row $tableLink.set('row_id',$row.id).action('table.ToggleExpanded'))##
 #end
 
 #**
