@@ -7,18 +7,14 @@
     <menu name="Overview">
       <item name="Featured technologies"            href="technologies.html"/>
     </menu>
-<!--
     <menu name="Modules">
     #if ($createOverviewPage == "true" )
-      <item name="${overviewPageLinkTitle}"
-href="${overviewPageLink}.html"/>
+      <item name="${overviewPageLinkTitle}"        href="${overviewPageLink}.html"/>
     #end
     #foreach ($reactorProject in $reactorProjects)
-      <item name="$reactorProject.name"
-href="/${aggregateDir}${reactorProject.artifactId}/index.html"/>
+      <item name="$reactorProject.name"            href="/${aggregateDir}${reactorProject.artifactId}/index.html"/>
     #end
     </menu>
--->
 <!--
     <search/>
 -->
