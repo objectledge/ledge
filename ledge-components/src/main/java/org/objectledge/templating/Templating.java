@@ -31,15 +31,27 @@ package org.objectledge.templating;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.objectledge.ComponentInitializationError;
+
 /**
  * Templating component.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Templating.java,v 1.7 2005-01-19 13:50:19 pablo Exp $
+ * @version $Id: Templating.java,v 1.8 2005-01-28 02:42:24 pablo Exp $
  */
 ///CLOVER:OFF
 public interface Templating
 {
+    /**
+     * Restart the templating service.
+     * 
+     * @throws ComponentInitializationError if anything goes wrong.
+     * @throws VirtualMachineError if anything goes wrong.
+     * @throws ThreadDeath if anything goes wrong.
+     */
+    public void restart() 
+        throws ComponentInitializationError, VirtualMachineError, ThreadDeath;
+    
 	/**
 	 * Create an empty {@link TemplatingContext} object.
 	 *

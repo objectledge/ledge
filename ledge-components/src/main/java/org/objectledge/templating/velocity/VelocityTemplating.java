@@ -51,7 +51,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.15 2005-01-19 13:50:39 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.16 2005-01-28 02:42:27 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -70,6 +70,10 @@ public class VelocityTemplating implements Templating, LogSystem
     /** template encoding */
     private String encoding = "ISO-8859-1";
 
+    private Configuration config;
+    
+    private FileSystem fileSystem;
+    
     /**
      * Creates a new instance of the templating system.
      * 
@@ -79,7 +83,22 @@ public class VelocityTemplating implements Templating, LogSystem
      */
     public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem)
     {
+        this.config = config;
         this.logger = logger;
+        this.fileSystem = fileSystem;
+        restart();
+    }
+
+    /**
+     * @param config
+     * @param fileSystem
+     * @throws ComponentInitializationError
+     * @throws VirtualMachineError
+     * @throws ThreadDeath
+     */
+    public void restart() 
+        throws ComponentInitializationError, VirtualMachineError, ThreadDeath
+    {
         engine = new VelocityEngine();
         extension = config.getChild("extension").getValue(".vt");
         encoding = config.getChild("encoding").getValue("ISO-8859-1");
