@@ -110,7 +110,7 @@ import java.util.StringTokenizer;
  * </p>
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequence.java,v 1.4 2004-01-20 11:23:52 fil Exp $
+ * @version $Id: ViewFallbackSequence.java,v 1.5 2004-01-20 11:59:42 fil Exp $
  */
 public class ViewFallbackSequence
     implements Sequence
@@ -137,13 +137,13 @@ public class ViewFallbackSequence
         char outSeparator, String defaultSuffix)
     {
         StringTokenizer tokenizer = new StringTokenizer(path, ""+inSeparator);
-        if(!path.endsWith(inSeparator+defaultSuffix))
+        if(path.equals(defaultSuffix) || path.endsWith(inSeparator+defaultSuffix))
         {
-            tokens = new String[tokenizer.countTokens()];
+            tokens = new String[tokenizer.countTokens()-1];
         }
         else
         {
-            tokens = new String[tokenizer.countTokens()-1];
+            tokens = new String[tokenizer.countTokens()];
         }
         for(int i=0; i<tokens.length; i++)
         {
@@ -192,12 +192,19 @@ public class ViewFallbackSequence
                 buff.append(outSeparator);
             }
         }
-        if(position != 0 || !Character.isUpperCase(tokens[tokens.length-1].charAt(0)))
+        if(tokens.length != 0)
         {
-            if(position < tokens.length)
+            if(position != 0 || !Character.isUpperCase(tokens[tokens.length-1].charAt(0)))
             {
-                buff.append(outSeparator);
+                if(position < tokens.length)
+                {
+                    buff.append(outSeparator);
+                }
+                buff.append(defaultSuffix);
             }
+        }
+        else
+        {
             buff.append(defaultSuffix);
         }
         position++;
