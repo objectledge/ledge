@@ -32,15 +32,15 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.Task;
-import org.picocontainer.lifecycle.Stoppable;
+import org.picocontainer.Startable;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Worker.java,v 1.3 2004-02-02 13:06:49 fil Exp $
+ * @version $Id: Worker.java,v 1.4 2004-02-17 15:48:42 fil Exp $
  */
 public class Worker 
-    implements Runnable, Stoppable
+    implements Runnable, Startable
 {
     private Thread thread;
     
@@ -200,6 +200,13 @@ public class Worker
     public Task getCurrentTask()
     {
         return task;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
     }
     
     /**

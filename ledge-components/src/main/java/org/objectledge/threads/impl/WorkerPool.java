@@ -39,13 +39,13 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.Task;
-import org.picocontainer.lifecycle.Stoppable;
+import org.picocontainer.Startable;
 
 /**
  * Manages a pool of worker threads.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerPool.java,v 1.4 2004-02-02 14:24:24 fil Exp $
+ * @version $Id: WorkerPool.java,v 1.5 2004-02-17 15:48:42 fil Exp $
  */
 public class WorkerPool
 {
@@ -150,7 +150,7 @@ public class WorkerPool
             Iterator i = workerSet.iterator();
             while(i.hasNext())
             {
-                Stoppable thread = (Stoppable)i.next();
+                Startable thread = (Startable)i.next();
                 thread.stop();
                 i.remove();
             }

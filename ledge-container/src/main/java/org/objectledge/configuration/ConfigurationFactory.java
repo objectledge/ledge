@@ -45,8 +45,8 @@ import org.picocontainer.ComponentAdapter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
+import org.picocontainer.PicoVerificationException;
 import org.picocontainer.defaults.InstanceComponentAdapter;
-import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -59,7 +59,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.20 2004-01-16 10:23:14 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.21 2004-02-17 15:50:31 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -71,6 +71,8 @@ public class ConfigurationFactory
     private XMLValidator xmlValidator;
     
     private URL relaxngUrl;
+    
+    private PicoContainer container;
     
     /**
      * Creates a new instance of ConfigurationFactory.
@@ -87,6 +89,22 @@ public class ConfigurationFactory
         this.xmlValidator = xmlValidator;
         this.directory = directory;
         this.relaxngUrl = fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setContainer(PicoContainer container)
+    {
+        this.container = container;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public PicoContainer getContainer()
+    {
+        return container;
     }
 
     /**
@@ -198,7 +216,7 @@ public class ConfigurationFactory
     /**
      * {@inheritDoc}
      */
-    public void verify(PicoContainer container) throws NoSatisfiableConstructorsException
+    public void verify() throws PicoVerificationException
     {
         // no dependencies
     }

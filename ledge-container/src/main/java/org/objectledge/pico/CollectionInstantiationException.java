@@ -25,72 +25,29 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.database;
+package org.objectledge.pico;
 
-import javax.naming.NamingException;
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectweb.jotm.Jotm;
-import org.objectweb.transaction.jta.TMService;
-import org.picocontainer.Startable;
+import org.picocontainer.PicoInstantiationException;
 
 /**
- * 
+ * Thrown when a Collection subclass instance cannot be instantiated by SequenceParameter.
+ *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.4 2004-02-17 15:48:45 fil Exp $
+ * @version $Id: CollectionInstantiationException.java,v 1.1 2004-02-17 15:50:29 fil Exp $
  */
-public class JotmTransaction
-    extends Transaction
-    implements Startable
+public class CollectionInstantiationException
+    extends PicoInstantiationException
 {
-    private TMService tmService;
-    
     /**
-     * Creates an instance of JOTM based transaction manager.
+     * Creates an exception instance.
      * 
-     * @param tracing tracing depth.
-     * @param context the threads processing context.
-     * @param log the logger to use.
-     * @throws NamingException if the manager could not be initialized.
+     * @param msg the detail message.
+     * @param cause the root cause of the excpetion.
      */
-    public JotmTransaction(int tracing, Context context, Logger log)
-        throws NamingException
+    public CollectionInstantiationException(String msg, Throwable cause)
     {
-        super(tracing, context, log);
-        tmService = new Jotm(true, false);
+        super(msg, cause);
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    public UserTransaction getUserTransaction()
-    {
-        return tmService.getUserTransaction();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public TransactionManager getTransactionManager()
-    {
-        return tmService.getTransactionManager();
-    }
     
-    /**
-     * {@inheritDoc}
-     */
-    public void start()
-    {
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
-        tmService.stop();
-    }
 }

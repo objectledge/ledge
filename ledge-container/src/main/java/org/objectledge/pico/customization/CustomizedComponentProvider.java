@@ -32,17 +32,31 @@ import org.picocontainer.ComponentAdapter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
-import org.picocontainer.defaults.NoSatisfiableConstructorsException;
+import org.picocontainer.PicoVerificationException;
 
 /**
  * Provides customized component adapters, based on requesting component's key and implementation 
  * class.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentProvider.java,v 1.7 2004-01-16 10:21:53 fil Exp $
+ * @version $Id: CustomizedComponentProvider.java,v 1.8 2004-02-17 15:50:29 fil Exp $
  */
 public interface CustomizedComponentProvider
 {
+    /**
+     * Associates the provider with a container.
+     * 
+     * @param container the container.
+     */
+    public void setContainer(PicoContainer container);
+    
+    /**
+     * Returns the associated container.
+     * 
+     * @return the container.
+     */
+    public PicoContainer getContainer();
+    
     /**
      * Returns a customized component instance.
      * 
@@ -66,12 +80,11 @@ public interface CustomizedComponentProvider
     
     /**
      * Verifies if the customized component can be instantiated using the dependencies present
-     * in the given container.
+     * in the associated container.
      * 
-     * @param container the container to verify.
      * @throws NoSatisfiableConstructorsException if the container does not contain required
      *         dependencies.
      */
-    public void verify(PicoContainer container) 
-        throws NoSatisfiableConstructorsException;
+    public void verify() 
+        throws PicoVerificationException;
 }

@@ -78,7 +78,7 @@
     <dependency>
       <groupId>nanocontainer</groupId>
       <artifactId>nanocontainer</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-beta-1-SNAPSHOT</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -87,29 +87,11 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-beta-5-SNAPSHOT</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
        <url>http://picocontainer.org/</url>
-    </dependency>
-    <dependency>
-      <groupId>picocontainer</groupId>
-      <artifactId>picoextras-reflection</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-      <url>http://picocontainer.org/picoextras</url>
-    </dependency>
-    <dependency>
-      <groupId>picocontainer</groupId>
-      <artifactId>picoextras-script</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-      <url>http://picocontainer.org/picoextras</url>
     </dependency>
     <dependency>
       <id>commons-collections</id>

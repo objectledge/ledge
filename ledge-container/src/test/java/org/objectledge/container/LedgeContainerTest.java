@@ -30,8 +30,6 @@ package org.objectledge.container;
 
 import junit.framework.TestCase;
 
-import org.nanocontainer.Log4JNanoContainerMonitor;
-import org.nanocontainer.NanoContainer;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.FooComponent;
 
@@ -39,7 +37,7 @@ import org.objectledge.test.FooComponent;
  *
  * <p>Created on Dec 16, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainerTest.java,v 1.4 2004-01-13 14:02:16 fil Exp $
+ * @version $Id: LedgeContainerTest.java,v 1.5 2004-02-17 15:50:30 fil Exp $
  */
 public class LedgeContainerTest extends TestCase
 {
@@ -64,10 +62,8 @@ public class LedgeContainerTest extends TestCase
         root = root+"/container1";
         FileSystem fs = FileSystem.getStandardFileSystem(root);
         
-        NanoContainer container = new LedgeContainer(fs, "/config", 
-            new Log4JNanoContainerMonitor());
-        container.addShutdownHook();
-        assertNotNull(container.getRootContainer().getComponentInstance(FooComponent.class)); 
+        LedgeContainer container = new LedgeContainer(fs, "/config", getClass().getClassLoader());
+        assertNotNull(container.getContainer().getComponentInstance(FooComponent.class)); 
     }
     
     public void testMain()

@@ -40,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.22 2004-01-22 15:15:12 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.23 2004-02-17 15:50:26 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -261,7 +261,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         throws ClassNotFoundException
 	{
         Class clazz = Class.forName(className);
-        if(!container.hasComponent(clazz))
+        if(container.getComponentInstance(clazz) == null)
         {
             container.registerComponentImplementation(clazz);
         }

@@ -28,14 +28,14 @@
 
 package org.objectledge.pico.xml;
 
-import org.picoextras.script.PicoCompositionException;
+import org.nanocontainer.integrationkit.PicoCompositionException;
 
 /**
  * Thrown when the nesting ComponentAdapterFactory does not have a constuructor useful for chaining.
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: NonChainableFactoryException.java,v 1.2 2003-12-29 13:30:25 fil Exp $
+ * @version $Id: NonChainableFactoryException.java,v 1.3 2004-02-17 15:50:30 fil Exp $
  */
 ///CLOVER:OFF
 public class NonChainableFactoryException 

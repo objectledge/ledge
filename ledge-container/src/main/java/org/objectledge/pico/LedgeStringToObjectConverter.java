@@ -28,16 +28,16 @@
 
 package org.objectledge.pico;
 
-import org.picoextras.reflection.Converter;
-import org.picoextras.reflection.InvalidConversionException;
-import org.picoextras.reflection.StringToObjectConverter;
+import org.nanocontainer.reflection.Converter;
+import org.nanocontainer.reflection.InvalidConversionException;
+import org.nanocontainer.reflection.StringToObjectConverter;
 
 /**
  * Converts strings to a number of predefined Java classes.
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeStringToObjectConverter.java,v 1.2 2004-01-14 11:44:47 fil Exp $
+ * @version $Id: LedgeStringToObjectConverter.java,v 1.3 2004-02-17 15:50:29 fil Exp $
  */
 public class LedgeStringToObjectConverter extends StringToObjectConverter
 {

@@ -3,7 +3,6 @@
     <classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
     <classpathentry kind="src" path="src/main/java"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="src" path="/pico"/>
     <classpathentry kind="src" path="/dna"/>
     <classpathentry kind="src" path="/ledge-components"/>
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
@@ -11,9 +10,10 @@
     <classpathentry kind="var"
         path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar" sourcepath="MAVEN_REPO/log4j/sources/log4j-1.2.8-source.zip"/>
     <classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4-dev.jar"/>
-    <classpathentry kind="src" path="/nano"/>
-    <classpathentry kind="src" path="/picoextras-reflection"/>
-    <classpathentry kind="src" path="/picoextras-script"/>
     <classpathentry kind="var" path="MAVEN_REPO/spice/jars/spice-cli-1.0.jar"/>
+    <classpathentry kind="var"
+        path="MAVEN_REPO/picocontainer/jars/picocontainer-1.0-beta-5-SNAPSHOT.jar" sourcepath="MAVEN_REPO/picocontainer/sources/picocontainer-1.0-beta-5-SNAPSHOT-src.zip"/>
+    <classpathentry kind="var"
+        path="MAVEN_REPO/nanocontainer/jars/nanocontainer-1.0-beta-1-SNAPSHOT.jar" sourcepath="MAVEN_REPO/nanocontainer/sources/nanocontainer-1.0-beta-1-SNAPSHOT-src.zip"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -1,55 +1,55 @@
 <?xml version="1.0"?>
 <container>
-  <component class-key="org.picoextras.reflection.StringToObjectConverter"
+  <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
+    <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
+  </adapter-factory>
+
+  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
              class="org.objectledge.pico.LedgeStringToObjectConverter"/>
-
-  <container class-key="org.picocontainer.MutablePicoContainer" replace="true">
-    <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
-	  <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
-    </adapter-factory>
     
-    <component key="org.objectledge.filesystem.FileSystemProvider:local" 
-               class="org.objectledge.filesystem.LocalFileSystemProvider">
-      <constant-parameter value="local"/>
-      <component-parameter key="org.objectledge.filesystem.FileSystem:root"/>
-    </component>
-    <component key="org.objectledge.filesystem.FileSystemProvider:classpath" 
-               class="org.objectledge.filesystem.ClasspathFileSystemProvider">
-      <constant-parameter value="classpath"/>
-      <component-parameter/>
-    </component>
-    <component class="org.objectledge.filesystem.FileSystem">
-      <sequence-parameter>
-        <component-parameter key="org.objectledge.filesystem.FileSystemProvider:local"/>
-        <component-parameter key="org.objectledge.filesystem.FileSystemProvider:classpath"/>
-      </sequence-parameter>
-      <constant-parameter value="4096"/>
-      <constant-parameter value="4096"/>
-    </component>
+  <component key="org.objectledge.filesystem.FileSystemProvider:local" 
+             class="org.objectledge.filesystem.LocalFileSystemProvider">
+    <constant-parameter value="local"/>
+    <component-parameter key="org.objectledge.filesystem.FileSystem:root"/>
+  </component>
     
-    <component class="org.objectledge.xml.XMLValidator"/>
-
-    <component class="org.objectledge.configuration.ConfigurationFactory">
-      <component-parameter/>
-      <component-parameter/>
-      <constant-parameter value="/config"/>
-    </component>
-    <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-      <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
-      <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
-    </component-adapter>
-
-    <component class="org.objectledge.logging.LoggerFactory"/>
-    <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-      <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
-      <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
-    </component-adapter>
-
-	<component class="org.objectledge.logging.LoggingConfigurator"/>
+  <component key="org.objectledge.filesystem.FileSystemProvider:classpath" 
+             class="org.objectledge.filesystem.ClasspathFileSystemProvider">
+    <constant-parameter value="classpath"/>
+    <component-parameter/>
+  </component>
     
-	<!-- end of core config -->
-
-    <component class="org.objectledge.test.FooComponent"/>
+  <component class="org.objectledge.filesystem.FileSystem">
+    <sequence-parameter>
+      <component-parameter key="org.objectledge.filesystem.FileSystemProvider:local"/>
+      <component-parameter key="org.objectledge.filesystem.FileSystemProvider:classpath"/>
+    </sequence-parameter>
+    <constant-parameter value="4096"/>
+    <constant-parameter value="4096"/>
+  </component>
     
-  </container>
+  <component class="org.objectledge.xml.XMLValidator"/>
+
+  <component class="org.objectledge.configuration.ConfigurationFactory">
+    <component-parameter/>
+    <component-parameter/>
+    <constant-parameter value="/config"/>
+  </component>
+  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
+    <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
+  </component-adapter>
+
+  <component class="org.objectledge.logging.LoggerFactory"/>
+  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
+    <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
+  </component-adapter>
+
+  <component class="org.objectledge.logging.LoggingConfigurator"/>
+    
+  <!-- end of core config -->
+
+  <component class="org.objectledge.test.FooComponent"/>
+    
 </container>

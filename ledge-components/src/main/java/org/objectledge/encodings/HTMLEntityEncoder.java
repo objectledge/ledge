@@ -39,7 +39,7 @@ import org.picocontainer.MutablePicoContainer;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.2 2004-02-03 13:48:08 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.3 2004-02-17 15:48:46 fil Exp $
  */
 public class HTMLEntityEncoder
 {
@@ -182,7 +182,7 @@ public class HTMLEntityEncoder
 		try
 		{
 			encodingName = EncodingMap.getIANA2JavaMapping(encodingName);
-			if(!container.hasComponent(encodingName))
+			if(container.getComponentInstance(encodingName) == null)
 			{
 				Class clazz = Class.forName(encoderClassPrefix + encodingName);
 				container.registerComponentImplementation(encodingName, clazz);

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <container>
-  <component class-key="org.picoextras.reflection.StringToObjectConverter"
-             class="org.objectledge.pico.LedgeStringToObjectConverter"/>
-
-  <container class-key="org.picocontainer.MutablePicoContainer" replace="true">
+<!--  <container class-key="org.picocontainer.MutablePicoContainer" replace="true"> -->
     <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
 	  <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
     </adapter-factory>
+
+    <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
+              class="org.objectledge.pico.LedgeStringToObjectConverter"/>
     
     <component class="org.objectledge.xml.XMLValidator"/>
 
@@ -32,5 +32,5 @@
 
     <component class="org.objectledge.test.FooComponent"/>
     
-  </container>
+<!--  </container> -->
 </container>

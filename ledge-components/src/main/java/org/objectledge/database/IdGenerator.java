@@ -34,16 +34,16 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.picocontainer.lifecycle.Stoppable;
+import org.picocontainer.Startable;
 
 /**
  * A component that generates unique, monotonous ids for table rows in a relational database. 
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGenerator.java,v 1.3 2004-02-10 10:05:13 fil Exp $
+ * @version $Id: IdGenerator.java,v 1.4 2004-02-17 15:48:45 fil Exp $
  */
 public class IdGenerator
-    implements Stoppable
+    implements Startable
 {
     private DataSource dataSource;
     
@@ -77,7 +77,7 @@ public class IdGenerator
     {
         if(conn == null)
         {
-            start();
+            init();
         }
         try
         {
@@ -87,12 +87,12 @@ public class IdGenerator
         {
             // The db server might have disconnected. Attempt to reconnect once.
             stop();
-            start();
+            init();
             return getNextIdInternal(table);
         }
     }
 
-    private void start()
+    public void init()
         throws SQLException
     {
         conn = dataSource.getConnection();
@@ -103,6 +103,13 @@ public class IdGenerator
             prepareStatement("INSERT INTO id_table(table,next_id) VALUES(?, 1)");
         updateStmt = conn.
             prepareStatement("UPDATE id_table SET next_id = next_id + 1 WHERE table = ?");
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
     }
     
     /**

@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.nanocontainer.Log4JNanoContainerMonitor;
 import org.objectledge.container.LedgeContainer;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
@@ -52,7 +51,7 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.13 2004-01-13 14:02:19 fil Exp $
+ * @version $Id: LedgeServlet.java,v 1.14 2004-02-17 15:50:26 fil Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -123,7 +122,7 @@ public class LedgeServlet extends HttpServlet
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4096);
         try
         {
-            container = new LedgeContainer(fs, config, new Log4JNanoContainerMonitor());    
+            container = new LedgeContainer(fs, config, getClass().getClassLoader());    
         }
         catch(Exception e)
         {
@@ -131,7 +130,7 @@ public class LedgeServlet extends HttpServlet
             throw new ServletException("failed to initialize container", e);
         }
 
-        dispatcher = (HttpDispatcher)container.getRootContainer().
+        dispatcher = (HttpDispatcher)container.getContainer().
             getComponentInstance(HttpDispatcher.class);
         if(dispatcher == null)
         {

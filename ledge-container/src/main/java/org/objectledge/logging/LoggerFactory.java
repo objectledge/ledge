@@ -38,23 +38,25 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
-import org.picocontainer.defaults.CachingComponentAdapter;
+import org.picocontainer.PicoVerificationException;
+import org.picocontainer.defaults.DecoratingComponentAdapter;
 import org.picocontainer.defaults.DefaultPicoContainer;
+import org.picocontainer.defaults.ImplementationHidingComponentAdapter;
 import org.picocontainer.defaults.InstanceComponentAdapter;
-import org.picocontainer.defaults.NoSatisfiableConstructorsException;
-import org.picocontainer.extras.DecoratingComponentAdapter;
-import org.picocontainer.extras.ImplementationHidingComponentAdapter;
+import org.picocontainer.defaults.Swappable;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.9 2004-01-19 13:12:26 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.10 2004-02-17 15:50:32 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
 {
     private MutablePicoContainer loggerContainer;
+
+    private PicoContainer container;
 
     /**
      * Creates a new instance of Factory and installs apropriate component adapter.
@@ -62,6 +64,22 @@ public class LoggerFactory
     public LoggerFactory()
     {
         this.loggerContainer = new DefaultPicoContainer();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setContainer(PicoContainer container)
+    {
+        this.container = container;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public PicoContainer getContainer()
+    {
+        return container;
     }
 
     /**
@@ -73,7 +91,7 @@ public class LoggerFactory
     public Logger getLogger(Object key)
     {
         String marker = getComponentMarker(key);
-        if(!loggerContainer.hasComponent(marker))
+        if(loggerContainer.getComponentInstance(marker) == null)
         {
             Logger logger = createLogger(marker);
             ComponentAdapter adapter = createLoggerAdapter(marker, logger);
@@ -91,19 +109,15 @@ public class LoggerFactory
     public void setLogger(Object key, Logger logger)
     {
         String marker = getComponentMarker(key);
-        if(!loggerContainer.hasComponent(marker))
+        if(loggerContainer.getComponentInstance(marker) != null)
         {
             ComponentAdapter adapter = createLoggerAdapter(marker, logger);
             loggerContainer.registerComponent(adapter);
         }
         else
-        {                
-            ComponentAdapter adapter = loggerContainer.findComponentAdapter(marker);
-            Object proxy = adapter.getComponentInstance(loggerContainer);
-            ImplementationHidingComponentAdapter proxyAdapter = 
-                (ImplementationHidingComponentAdapter)
-                ((DecoratingComponentAdapter)adapter).getDelegate();
-            proxyAdapter.hotSwap(proxy, logger);
+        {   
+            Swappable proxy = (Swappable)loggerContainer.getComponentInstance(marker);
+            proxy.__hotSwap(logger);             
         }
     }
 
@@ -116,14 +130,14 @@ public class LoggerFactory
         throws PicoInitializationException, PicoIntrospectionException, UnsupportedKeyTypeException
     {
         String marker = getComponentMarker(componentKey);
-        if(!loggerContainer.hasComponent(marker))
+        if(loggerContainer.getComponentInstance(marker) == null)
         {
             Logger logger = createLogger(marker);
             return createLoggerAdapter(marker, logger);
         }
         else
         {
-            return loggerContainer.findComponentAdapter(marker);
+            return loggerContainer.getComponentAdapter(marker);
         }
     }
 
@@ -138,7 +152,7 @@ public class LoggerFactory
     /**
      * {@inheritDoc}
      */
-    public void verify(PicoContainer container) throws NoSatisfiableConstructorsException
+    public void verify() throws PicoVerificationException
     {
         // no dependencies
     }
@@ -173,8 +187,8 @@ public class LoggerFactory
     protected ComponentAdapter createLoggerAdapter(String marker, Logger logger)
     {
         ComponentAdapter adapter = new InstanceComponentAdapter(marker, logger);
-        adapter = new ImplementationHidingComponentAdapter(adapter);
-        adapter = new CachingComponentAdapter(adapter);
+        // adapter = new ImplementationHidingComponentAdapter(adapter);
+        // adapter = new CachingComponentAdapter(adapter);
         return adapter;
     }
     

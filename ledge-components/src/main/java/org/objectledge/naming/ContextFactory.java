@@ -21,7 +21,7 @@ import org.picocontainer.PicoContainer;
  *
  * @author <a href="mail:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mail:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ContextFactory.java,v 1.4 2004-02-12 13:26:58 fil Exp $
+ * @version $Id: ContextFactory.java,v 1.5 2004-02-17 15:48:44 fil Exp $
  */
 public class ContextFactory
 {
@@ -75,19 +75,44 @@ public class ContextFactory
                 Object key = componentProperties[j].getAttribute("key", null);
                 if(key == null)
                 {
-                    String cn = componentProperties[j].getAttribute("class-key");
-                    try
+                    String cn = componentProperties[j].getAttribute("class-key", null);
+                    if(cn != null)
                     {
-                        key = Class.forName(cn);
-                    }
-                    catch(ClassNotFoundException e)
-                    {
-                        throw new ConfigurationException("non-existent class "+cn, 
-                            componentProperties[j].getPath(), 
-                            componentProperties[j].getLocation());
+                        try
+                        {
+                            key = Class.forName(cn);
+                        }
+                        catch(ClassNotFoundException e)
+                        {
+                            throw new ConfigurationException("non-existent class "+cn, 
+                                componentProperties[j].getPath(), 
+                                componentProperties[j].getLocation());
+                        }
                     }
                 }
-                Object component = container.getComponentInstance(key);
+                Object component = null;
+                if(key != null)
+                {
+                    component = container.getComponentInstance(key);
+                }
+                else
+                {
+                    String cn = componentProperties[j].getAttribute("class");
+                    if(cn != null)
+                    {
+                        try
+                        {
+                            key = Class.forName(cn);
+                        }
+                        catch(ClassNotFoundException e)
+                        {
+                            throw new ConfigurationException("non-existent class "+cn, 
+                                componentProperties[j].getPath(), 
+                                componentProperties[j].getLocation());
+                        }
+                        component = container.getComponentInstanceOfType((Class)key);
+                    }
+                }
                 if(component == null)
                 {
                     throw new ConfigurationException("missing component "+key, 

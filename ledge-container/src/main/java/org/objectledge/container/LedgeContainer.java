@@ -28,34 +28,26 @@
 
 package org.objectledge.container;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.nanocontainer.ConsoleNanoContainerMonitor;
 import org.nanocontainer.NanoContainer;
-import org.nanocontainer.NanoContainerMonitor;
+import org.nanocontainer.integrationkit.PicoCompositionException;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.pico.xml.LedgeXmlFrontEnd;
+import org.objectledge.pico.xml.LedgeXMLContainerBuilder;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
-import org.picoextras.script.PicoCompositionException;
-import org.picoextras.script.xml.XmlFrontEnd;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
 /**
  * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.7 2004-01-15 13:23:20 fil Exp $
+ * @version $Id: LedgeContainer.java,v 1.8 2004-02-17 15:50:31 fil Exp $
  */
 public class LedgeContainer
     extends NanoContainer
@@ -66,88 +58,70 @@ public class LedgeContainer
     public static final String COMPOSITION_FILE = "/container.xml";
 
     /** Default xml front end implementation. */
-    public static final String FRONT_END_CLASS = "org.objectledge.pico.xml.LedgeXmlFrontEnd";
+    public static final String FRONT_END_CLASS = "org.objectledge.pico.xml.LedgeXMLContainerBuilder";
     
     /** Config base path key. */
     public static final String CONFIG_BASE_KEY = "org.objectledge.ConfigBase";
     
-    // instance variables ///////////////////////////////////////////////////////////////////////
+    /** fake composition file extenstion */
+    public static final String LEDGE = ".ledge";
     
-    /** The filesystem to use for reading composition & it's schema. */
-    protected FileSystem fs;
-    
-    /** The path name of the configuration base directory. */
-    protected String configBase;
-    
-    /** The document builder to use. */
-    protected DocumentBuilder documentBuilder;
-
-    /** The boot container (hard rerence to make sure it not goes away). */
-    protected MutablePicoContainer bootContainer;
-
     // initialization //////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Creates a ledge container instance.
-     * 
-     * <p>A default JAXP parser, and a console monitor will be used.</p>
-     * 
-     * @param fs the file system to load container composition file from.
-     * @param configBase the configuration directory path.
-     * @throws ParserConfigurationException if the JAXP subsystem is not configured correctly.
-     */
-    public LedgeContainer(FileSystem fs, String configBase)
-        throws ParserConfigurationException
+    static 
     {
-        this(fs, configBase, new ConsoleNanoContainerMonitor());
-    }
-
-    /**
-     * Creates a ledge container instance.
-     * 
-     * <p>A default JAXP parser will be used.</p>
-     * 
-     * @param fs the file system to load container composition file from.
-     * @param configBase the configuration directory path.
-     * @param monitor a nano container monitor to use.
-     * @throws ParserConfigurationException if the JAXP subsystem is not configured correctly.
-     */
-    public LedgeContainer(FileSystem fs, String configBase, NanoContainerMonitor monitor)
-        throws ParserConfigurationException
-    {
-        this(fs, configBase, DocumentBuilderFactory.newInstance().newDocumentBuilder(), monitor);
+        extensionToComposers.put(LEDGE, FRONT_END_CLASS);
     }
     
     /**
-     * Creates a ledge container instance.
+     * Creates an instance of the LedgeContainer
      * 
-     * @param fs the file system to load container composition file from.
-     * @param configBase the configuration directory path.
-     * @param documentBuilder a document builder to use for parsing composition file.
-     * @param monitor a nano container monitor to use.
-     */
-    public LedgeContainer(FileSystem fs, String configBase, DocumentBuilder documentBuilder, 
-        NanoContainerMonitor monitor)
+     * @param fs the FileSystem
+     * @param configBase configuration directory.
+     * @param classLoader the classload to load classes with.
+     * @throws IOException if the composition file could not be read.
+     * @throws ClassNotFoundException if the container builder class could not be instantiated.
+     * @throws PicoCompositionException if the composition file is invalid, or could not be 
+     *         verified due to system failure.
+     */    
+    public LedgeContainer(FileSystem fs, String configBase, ClassLoader classLoader)
+        throws IOException, ClassNotFoundException, PicoCompositionException
     {
-        super(monitor);
-        this.fs = fs;
-        this.configBase = configBase;
-        this.documentBuilder = documentBuilder;
-        init();
+        super(getCompositionFile(fs, configBase), 
+              LEDGE, 
+              getBootContainer(fs, configBase, classLoader), 
+              classLoader);
     }
     
     /**
-     * {@inheritDoc}
+     * Returns the instance of the built container.
+     * 
+     * @return the instance of the built container.
      */
-    protected PicoContainer createPicoContainer()
-        throws PicoCompositionException
+    public PicoContainer getContainer()
     {
-        URL compositionUrl = null;
-        Element composition;
+        return (PicoContainer)containerRef.get();
+    }
+    
+    /**
+     * Verifies and returns the composition file.
+     * 
+     * @param fs the FileSystem to load compositoin file from.
+     * @param configBase configuration directory.
+     * @return the composition file.
+     * @throws IOException if the file could not be read.
+     * @throws PicoCompositionException if the composition file is invalid, or could not be 
+     *         verified due to system failure.
+     */
+    protected static Reader getCompositionFile(FileSystem fs, String configBase)
+        throws IOException, PicoCompositionException
+    {
+        URL compositionUrl = fs.getResource(configBase + COMPOSITION_FILE);
         try
         {
-            compositionUrl = getCompositionUrl();
-            composition = getComposition(compositionUrl);
+            XMLValidator validator = new XMLValidator();
+            validator.validate(compositionUrl, 
+                fs.getResource(LedgeXMLContainerBuilder.SCHEMA_PATH));
         }
         catch(SAXParseException e)
         {
@@ -159,56 +133,25 @@ public class LedgeContainer
             throw new PicoCompositionException("composition file "+compositionUrl+
                 "is missing or invalid", e);
         }
-
-        XmlFrontEnd frontEnd;
-        try
-        {
-            frontEnd = getFrontEnd(composition);
-        }
-        catch(Exception e)
-        {
-            throw new PicoCompositionException("failed to intialize front end", e);
-        }
         
-        try
-        {
-            bootContainer = new DefaultPicoContainer();
-            bootContainer.registerComponentInstance(FileSystem.class, fs);
-            bootContainer.registerComponentInstance(ClassLoader.class, getClass().getClassLoader());
-            bootContainer.registerComponentInstance(CONFIG_BASE_KEY, configBase);
-            return frontEnd.createPicoContainer(composition, bootContainer);
-        }
-        catch(Exception e)
-        {
-            throw new PicoCompositionException("failed to compose container from "+compositionUrl,
-                e);
-        }
+        return new InputStreamReader(fs.getInputStream(configBase + COMPOSITION_FILE));        
     }
 
-    private Element getComposition(URL compositionUrl) 
-        throws Exception 
+    /**
+     * Returns the boot component container.
+     * 
+     * @param fs the FileSystem
+     * @param configBase configuration directory.
+     * @param classLoader the classload to load classes with.
+     * @return the boot component container.
+     */    
+    protected static PicoContainer getBootContainer(FileSystem fs, String configBase, 
+        ClassLoader classLoader)
     {
-        XMLValidator validator = new XMLValidator();
-        validator.validate(compositionUrl, fs.getResource(LedgeXmlFrontEnd.SCHEMA_PATH));
-        InputSource inputSource = new InputSource(compositionUrl.toString());
-        Document document = documentBuilder.parse(inputSource);
-        return document.getDocumentElement();
-    }
-    
-    private URL getCompositionUrl()
-        throws MalformedURLException
-    {
-        return fs.getResource(configBase + COMPOSITION_FILE);
-    }
-    
-    private XmlFrontEnd getFrontEnd(Element element)
-        throws Exception
-    {
-        String cn = element.getAttribute("front-end");
-        if(cn == null || cn.equals(""))
-        {
-            cn = FRONT_END_CLASS;    
-        }
-        return (XmlFrontEnd) Class.forName(cn).newInstance();
+        MutablePicoContainer bootContainer = new DefaultPicoContainer();
+        bootContainer.registerComponentInstance(FileSystem.class, fs);
+        bootContainer.registerComponentInstance(ClassLoader.class, classLoader);
+        bootContainer.registerComponentInstance(CONFIG_BASE_KEY, configBase);
+        return bootContainer;
     }
 }

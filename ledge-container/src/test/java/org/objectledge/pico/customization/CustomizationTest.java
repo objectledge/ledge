@@ -54,7 +54,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.14 2004-01-27 17:01:11 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.15 2004-02-17 15:50:32 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -85,7 +85,6 @@ public class CustomizationTest extends TestCase
         factory = new CachingComponentAdapterFactory(factory);
         MutablePicoContainer container = new DefaultPicoContainer(factory);
 
-        container.registerComponentInstance(MutablePicoContainer.class, container);
         container.registerComponentInstance(FileSystem.class, fs);
         container.registerComponentImplementation(XMLValidator.class, XMLValidator.class);
         container.registerComponentImplementation(
@@ -95,19 +94,19 @@ public class CustomizationTest extends TestCase
                 new ComponentParameter(FileSystem.class),
                 new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
-            }).getComponentInstance(container);
+            }).getComponentInstance();
             
         ComponentAdapter adapter = new CustomizedComponentAdapter(
             Configuration.class, 
             (CustomizedComponentProvider)container.
                 getComponentInstance(ConfigurationFactory.class));
-        adapter.verify(container);
+        adapter.verify();
         container.registerComponent(adapter);
         container.registerComponentImplementation(LoggingConfigurator.class, 
-            LoggingConfigurator.class).getComponentInstance(container);
+            LoggingConfigurator.class).getComponentInstance();
             
         container.registerComponentImplementation(LoggerFactory.class, LoggerFactory.class).
-            getComponentInstance(container);
+            getComponentInstance();
         container.registerComponent(new CustomizedComponentAdapter(
             Logger.class, 
             (CustomizedComponentProvider)container.

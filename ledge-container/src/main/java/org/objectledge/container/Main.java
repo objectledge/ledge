@@ -34,8 +34,7 @@ import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.nanocontainer.Log4JNanoContainerMonitor;
-import org.nanocontainer.NanoContainerMonitor;
+import org.nanocontainer.NanoContainer;
 import org.objectledge.filesystem.FileSystem;
 import org.realityforge.cli.CLArgsParser;
 import org.realityforge.cli.CLOption;
@@ -47,7 +46,7 @@ import org.realityforge.cli.CLUtil;
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.4 2004-01-14 12:06:29 fil Exp $
+ * @version $Id: Main.java,v 1.5 2004-02-17 15:50:31 fil Exp $
  */
 public class Main
 {
@@ -198,11 +197,11 @@ public class Main
         BasicConfigurator.configure();
         Logger log = Logger.getLogger(Main.class);
         LedgeContainer container = null; 
-        NanoContainerMonitor monitor = new Log4JNanoContainerMonitor();
         try
         {
             FileSystem fs = FileSystem.getStandardFileSystem(root);
-            container = new LedgeContainer(fs, config, monitor);
+            container = new LedgeContainer(fs, config, Main.class.getClassLoader());
+            addShutdownHook(container);
         }
         catch(Exception e)
         {
@@ -215,7 +214,7 @@ public class Main
             try
             {
                 componentClass = Class.forName(componentClassName);
-                component =  container.getRootContainer().getComponentInstance(componentClass);
+                component =  container.getContainer().getComponentInstance(componentClass);
                 if(component == null)
                 {
                     log.error("Component "+componentClassName+" is missing from the assembly");
@@ -256,5 +255,23 @@ public class Main
                 log.error("Failed to invoke "+componentClassName+".main(String[])", e);
             }
         }
+    }
+    
+    private static void addShutdownHook(final NanoContainer nanoContainer)
+    {
+        // add a shutdown hook that will tell the builder to kill it.
+        Runnable shutdownHook = new Runnable() {
+            public void run() {
+                System.out.println("Shutting Down NanoContainer");
+                try {
+                    nanoContainer.killContainer();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    System.out.println("Exiting VM");
+                }
+            }
+        };
+        Runtime.getRuntime().addShutdownHook(new Thread(shutdownHook));
     }
 }

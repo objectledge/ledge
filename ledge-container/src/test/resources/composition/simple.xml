@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <container>
-  <component class-key="org.picoextras.reflection.StringToObjectConverter"
+  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
              class="org.objectledge.pico.LedgeStringToObjectConverter"/>
 
   <component key="org.objectledge.filesystem.FileSystemProvider:local" 

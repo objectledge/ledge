@@ -39,16 +39,16 @@ import org.enhydra.jdbc.standard.StandardXADataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.database.impl.DelegatingDataSource;
-import org.picocontainer.lifecycle.Stoppable;
+import org.picocontainer.Startable;
 
 /**
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSource.java,v 1.2 2004-02-06 11:17:23 fil Exp $
+ * @version $Id: XaPoolDataSource.java,v 1.3 2004-02-17 15:48:45 fil Exp $
  */
 public class XaPoolDataSource extends DelegatingDataSource
-    implements XADataSource, Stoppable
+    implements XADataSource, Startable
 {
     /**
      * Constructs a DataSource instance.
@@ -62,6 +62,13 @@ public class XaPoolDataSource extends DelegatingDataSource
         throws ConfigurationException, SQLException
     {
         super(getDataSource(transaction, config));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
     }
 
     /**

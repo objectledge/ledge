@@ -36,12 +36,12 @@ import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.context.Context;
-import org.picocontainer.lifecycle.Stoppable;
+import org.picocontainer.Startable;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransactionTest.java,v 1.4 2004-02-09 08:45:32 fil Exp $
+ * @version $Id: JotmTransactionTest.java,v 1.5 2004-02-17 15:48:45 fil Exp $
  */
 public class JotmTransactionTest extends TestCase
 {
@@ -76,7 +76,7 @@ public class JotmTransactionTest extends TestCase
     
     public void tearDown()
     {
-        ((Stoppable)transaction).stop(); 
+        ((Startable)transaction).stop(); 
     }
     
     public void testGetUserTransaction()

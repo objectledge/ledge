@@ -6,8 +6,6 @@
 		<project>dna</project>
 		<project>ledge-components</project>
 		<project>ledge-container</project>
-		<project>nano</project>
-		<project>pico</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

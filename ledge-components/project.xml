@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.29 2004-02-12 13:33:45 fil Exp $ -->
+<!-- $Id: project.xml,v 1.30 2004-02-17 15:48:44 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -91,7 +91,7 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-beta-5-SNAPSHOT</version>
       <url>http://picocontainer.org</url>
     </dependency>
     <dependency>

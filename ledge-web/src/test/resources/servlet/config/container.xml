@@ -1,37 +1,36 @@
 <?xml version="1.0"?>
 <container>
-  <component class-key="org.picoextras.reflection.StringToObjectConverter"
+  <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
+    <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
+  </adapter-factory>
+
+  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
              class="org.objectledge.pico.LedgeStringToObjectConverter"/>
 
-  <container class-key="org.picocontainer.MutablePicoContainer" replace="true">
-    <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
-	  <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
-    </adapter-factory>
     
-    <component class="org.objectledge.xml.XMLValidator"/>
+  <component class="org.objectledge.xml.XMLValidator"/>
 
-    <component class="org.objectledge.configuration.ConfigurationFactory">
-      <component-parameter/>
-      <component-parameter/>
-      <constant-parameter value="/config"/>
-    </component>
-    <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-      <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
-      <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
-    </component-adapter>
+  <component class="org.objectledge.configuration.ConfigurationFactory">
+    <component-parameter/>
+    <component-parameter/>
+    <constant-parameter value="/config"/>
+  </component>
+  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
+    <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
+  </component-adapter>
     
-    <component class="org.objectledge.logging.LoggerFactory"/>
-    <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
-      <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
-      <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
-    </component-adapter>
+  <component class="org.objectledge.logging.LoggerFactory"/>
+  <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+    <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
+    <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
+  </component-adapter>
 
-    <component class="org.objectledge.logging.LoggingConfigurator"/>
+  <component class="org.objectledge.logging.LoggingConfigurator"/>
 
-	<!-- end of core config -->
+  <!-- end of core config -->
 
-    <component class-key="org.objectledge.web.HttpDispatcher"
-               class="org.objectledge.web.dispatcher.StaticHttpDispatcher"/>
+  <component class-key="org.objectledge.web.HttpDispatcher"
+             class="org.objectledge.web.dispatcher.StaticHttpDispatcher"/>
 
-  </container>
 </container>

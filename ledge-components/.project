@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>dna</project>
-		<project>pico</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

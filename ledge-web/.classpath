@@ -4,13 +4,11 @@
     <classpathentry kind="src" path="src/test/java"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.3.jar"/>
-    <classpathentry kind="src" path="/pico"/>
     <classpathentry kind="src" path="/ledge-components"/>
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
     <classpathentry kind="src" path="/dna"/>
     <classpathentry kind="var" path="MAVEN_REPO/httpunit/jars/httpunit-1.5.3.jar"/>
     <classpathentry kind="src" path="/ledge-container"/>
-    <classpathentry kind="src" path="/nano"/>
     <classpathentry kind="var" path="MAVEN_REPO/nekohtml/jars/nekohtml-0.8.1.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xercesImpl-2.6.0.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xmlParserAPIs-2.6.0.jar"/>
@@ -21,5 +19,9 @@
     <classpathentry kind="var" path="MAVEN_REPO/velocity/jars/velocity-1.4-dev.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/mockobjects/jars/mockobjects-jdk1.4-j2ee1.3-0.09.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/mockobjects/jars/mockobjects-core-0.09.jar"/>
+    <classpathentry kind="var"
+        path="MAVEN_REPO/picocontainer/jars/picocontainer-1.0-beta-5-SNAPSHOT.jar" sourcepath="MAVEN_REPO/picocontainer/sources/picocontainer-1.0-beta-5-SNAPSHOT-src.zip"/>
+    <classpathentry kind="var"
+        path="MAVEN_REPO/nanocontainer/jars/nanocontainer-1.0-beta-1-SNAPSHOT.jar" sourcepath="MAVEN_REPO/nanocontainer/sources/nanocontainer-1.0-beta-1-SNAPSHOT-src.zip"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -34,15 +34,13 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.picocontainer.ComponentAdapter;
-import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoException;
 import org.picocontainer.PicoInitializationException;
-import org.picocontainer.PicoInstantiationException;
 import org.picocontainer.PicoIntrospectionException;
+import org.picocontainer.PicoVerificationException;
 import org.picocontainer.defaults.AssignabilityRegistrationException;
-import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 
 /**
  * A Parameter that is a sequence of nested Parameter objects.
@@ -53,7 +51,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * size, or a no-argument constructor) or be Java array type.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameter.java,v 1.3 2004-01-12 10:50:33 fil Exp $
+ * @version $Id: SequenceParameter.java,v 1.4 2004-02-17 15:50:29 fil Exp $
  */
 public class SequenceParameter implements Parameter
 {
@@ -111,11 +109,13 @@ public class SequenceParameter implements Parameter
      *
      * <p>Created on Dec 8, 2003</p>
      * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
-     * @version $Id: SequenceParameter.java,v 1.3 2004-01-12 10:50:33 fil Exp $
+     * @version $Id: SequenceParameter.java,v 1.4 2004-02-17 15:50:29 fil Exp $
      */
     private static class SequenceComponentAdapter
         implements ComponentAdapter
     {
+        private PicoContainer container;
+        
         private ComponentAdapter[] adapters;
         
         private Object componentKey;
@@ -129,17 +129,32 @@ public class SequenceParameter implements Parameter
             this.adapters = adapters;
         }
         
+        /**
+         * {@inheritDoc}
+         */
+        public void setContainer(PicoContainer container)
+        {
+            this.container = container;
+        }
+    
+        /**
+         * {@inheritDoc}
+         */
+        public PicoContainer getContainer()
+        {
+            return container;
+        }
         
         /**
          * {@inheritDoc}
          */
-        public Object getComponentInstance(MutablePicoContainer dependencyContainer)
+        public Object getComponentInstance()
             throws PicoInitializationException, PicoIntrospectionException
         {
             Object[] instances = new Object[adapters.length];
             for (int i = 0; i < adapters.length; i++)
             {
-                instances[i] = adapters[i].getComponentInstance(dependencyContainer);
+                instances[i] = adapters[i].getComponentInstance();
             }
             if(getComponentImplementation().getComponentType() != null)
             {
@@ -170,9 +185,10 @@ public class SequenceParameter implements Parameter
                         }
                         catch(NoSuchMethodException ee)
                         {
-                            throw new PicoInstantiationException("cannot instantiate Collection "+
+                            throw new CollectionInstantiationException(
+                                "cannot instantiate Collection "+
                                 getComponentImplementation().getName()+
-                                " no supported constructors found");
+                                " no supported constructors found", ee);
                         }
                     }
                 }
@@ -184,7 +200,8 @@ public class SequenceParameter implements Parameter
                     }
                     else
                     {
-                        throw new PicoInstantiationException("cannot instantiate Collection "+
+                        throw new CollectionInstantiationException(
+                            "cannot instantiate Collection "+
                             getComponentImplementation().getName(), e);
                     }
                 }
@@ -198,12 +215,12 @@ public class SequenceParameter implements Parameter
         /**
          * {@inheritDoc}
          */
-        public void verify(PicoContainer picoContainer) throws NoSatisfiableConstructorsException
+        public void verify() throws PicoVerificationException
         {
             for (int i = 0; i < adapters.length; i++)
             {
                 ComponentAdapter adapter = adapters[i];
-                adapter.verify(picoContainer);
+                adapter.verify();
             }
         }
 

@@ -37,15 +37,15 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.impl.Daemon;
 import org.objectledge.threads.impl.WorkerPool;
-import org.picocontainer.lifecycle.Stoppable;
+import org.picocontainer.Startable;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.7 2004-02-02 16:06:36 fil Exp $
+ * @version $Id: ThreadPool.java,v 1.8 2004-02-17 15:48:46 fil Exp $
  */
 public class ThreadPool
-    implements Stoppable
+    implements Startable
 {
     // constants ////////////////////////////////////////////////////////////////////////////////
     
@@ -123,6 +123,13 @@ public class ThreadPool
             threads.add(new Daemon(task, daemonPriority, threadGroup, log, context, cleanup));     
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
+    }
     
     /**
      * {@inheritDoc}
@@ -134,7 +141,7 @@ public class ThreadPool
             Iterator i = threads.iterator();
             while(i.hasNext())
             {
-                Stoppable thread = (Stoppable)i.next();
+                Startable thread = (Startable)i.next();
                 thread.stop();
                 i.remove();
             }

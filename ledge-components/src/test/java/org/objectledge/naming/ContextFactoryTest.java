@@ -194,11 +194,12 @@ public class ContextFactoryTest extends TestCase
         DataSource ds = getDataSource();
         DefaultPicoContainer container = new DefaultPicoContainer();
         container.registerComponentInstance("TestDS", ds);
+        container.registerComponentInstance(DataSource.class, ds);
         Configuration config = getConfig("naming/dbNaming.xml");
         contextFactory = new ContextFactory(container, config, log);
         
         contextFactory.getContext("byKey");
-        contextFactory.getContext("byClassKey");
+        contextFactory.getContext("byClass");
     }
     
     private DataSource getDataSource()

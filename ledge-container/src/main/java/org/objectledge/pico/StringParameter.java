@@ -28,19 +28,19 @@
 
 package org.objectledge.pico;
 
+import org.nanocontainer.reflection.StringToObjectConverter;
 import org.picocontainer.ComponentAdapter;
 import org.picocontainer.Parameter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.defaults.InstanceComponentAdapter;
-import org.picoextras.reflection.StringToObjectConverter;
 
 /**
  * A parameter that is intialized with a string, and is converted to the desired type on demand.
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: StringParameter.java,v 1.2 2004-01-16 08:51:19 fil Exp $
+ * @version $Id: StringParameter.java,v 1.3 2004-02-17 15:50:29 fil Exp $
  */
 public class StringParameter 
     implements Parameter

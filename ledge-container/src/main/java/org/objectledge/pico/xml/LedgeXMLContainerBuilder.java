@@ -29,9 +29,18 @@
 package org.objectledge.pico.xml;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.nanocontainer.integrationkit.PicoCompositionException;
+import org.nanocontainer.reflection.DefaultReflectionContainerAdapter;
+import org.nanocontainer.reflection.ReflectionContainerAdapter;
+import org.nanocontainer.script.ScriptedContainerBuilder;
+import org.nanocontainer.script.xml.XMLPseudoComponentFactory;
 import org.objectledge.pico.SequenceParameter;
 import org.objectledge.pico.StringParameter;
 import org.picocontainer.ComponentAdapter;
@@ -42,14 +51,11 @@ import org.picocontainer.defaults.ComponentAdapterFactory;
 import org.picocontainer.defaults.ComponentParameter;
 import org.picocontainer.defaults.DefaultComponentAdapterFactory;
 import org.picocontainer.defaults.DefaultPicoContainer;
-import org.picoextras.reflection.DefaultReflectionFrontEnd;
-import org.picoextras.reflection.ReflectionFrontEnd;
-import org.picoextras.script.PicoCompositionException;
-import org.picoextras.script.xml.XmlFrontEnd;
-import org.picoextras.script.xml.XmlPseudoComponentFactory;
+import org.picocontainer.defaults.ObjectReference;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -58,10 +64,10 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.14 2004-01-16 13:08:26 fil Exp $
+ * @version $Id: LedgeXMLContainerBuilder.java,v 1.1 2004-02-17 15:50:30 fil Exp $
  */
-public class LedgeXmlFrontEnd 
-    implements XmlFrontEnd
+public class LedgeXMLContainerBuilder 
+    extends ScriptedContainerBuilder
 {
     // constants /////////////////////////////////////////////////////////////////////////////////
     
@@ -69,29 +75,45 @@ public class LedgeXmlFrontEnd
     public static final String SCHEMA_PATH = "org/objectledge/pico/xml/container.rng";
     
     // instance variables ////////////////////////////////////////////////////////////////////////
+
+    protected Element rootElement;
+
+    // ContainerBuilder interface ////////////////////////////////////////////////////////////////
     
-    // XmlFrontEnd interface /////////////////////////////////////////////////////////////////////
-    
-    /**
-     * {@inheritDoc}
-     */    
-    public PicoContainer createPicoContainer(Element rootElement) 
-        throws IOException, SAXException, ClassNotFoundException, PicoCompositionException 
+    public LedgeXMLContainerBuilder(Reader script, ClassLoader classLoader) 
     {
-        MutablePicoContainer mutablePicoContainer = loadContainer(rootElement);
-        return createPicoContainer(rootElement, mutablePicoContainer);
-    }    
+        super(script, classLoader);
+        InputSource inputSource = new InputSource(script);
+        try 
+        {
+            rootElement = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputSource).getDocumentElement();
+        } 
+        catch (Exception e) 
+        {
+            throw new PicoCompositionException(e);
+        }
+    }
     
-    /**
-     * {@inheritDoc}
-     */    
-    public PicoContainer createPicoContainer(Element rootElement, 
-        MutablePicoContainer mutablePicoContainer)
-        throws IOException, SAXException, ClassNotFoundException, PicoCompositionException 
+    public void buildContainer(ObjectReference containerRef, ObjectReference parentContainerRef, 
+        Object assemblyScope) 
     {
-        ReflectionFrontEnd rootReflectionFrontEnd = createReflectionFrontEnd(mutablePicoContainer);
-        return loadContainerContents(rootReflectionFrontEnd, rootElement).
-            getPicoContainer();
+        try
+        {
+            PicoContainer parentContainer = (PicoContainer) parentContainerRef.get();
+            ReflectionContainerAdapter parentReflectionContainerAdapter = 
+                createReflectionContainerAdapter((MutablePicoContainer)parentContainer);
+            MutablePicoContainer container = loadContainer(rootElement);
+            container.setParent(parentContainer);
+            ReflectionContainerAdapter rootReflectionContainerAdapter = 
+                createReflectionContainerAdapter(parentReflectionContainerAdapter, container);
+            loadContainerContents(rootReflectionContainerAdapter, rootElement).
+                getPicoContainer();
+            containerRef.set(container);
+        }
+        catch(Exception e)
+        {
+            throw new PicoCompositionException(e);
+        }
     }
     
     // implementation ///////////////////////////////////////////////////////////////////////////
@@ -99,12 +121,12 @@ public class LedgeXmlFrontEnd
     /**
      * Registers a component using information from an DOM element.
      *  
-     * @param reflectionFrontEnd the ReflectionFrontEnd to use.
+     * @param reflectionFrontEnd the ReflectionContainerAdapter to use.
      * @param componentElement the element,
      * @throws ClassNotFoundException if the DOM model references a nonexistent class.
      * @throws PicoCompositionException if the DOM model contains invalid data.
      */
-    protected void loadComponent(ReflectionFrontEnd reflectionFrontEnd, 
+    protected void loadComponent(ReflectionContainerAdapter reflectionFrontEnd, 
         Element componentElement) 
         throws ClassNotFoundException, PicoCompositionException
     {
@@ -128,12 +150,12 @@ public class LedgeXmlFrontEnd
     /**
      * Registers a component adapter using information from an DOM element.
      *  
-     * @param reflectionFrontEnd the ReflectionFrontEnd to use.
+     * @param reflectionFrontEnd the ReflectionContainerAdapter to use.
      * @param adapterElement the element,
      * @throws ClassNotFoundException if the DOM model references a nonexistent class.
      * @throws PicoCompositionException if the DOM model contains invalid data.
      */
-    protected void loadComponentAdapter(ReflectionFrontEnd reflectionFrontEnd, 
+    protected void loadComponentAdapter(ReflectionContainerAdapter reflectionFrontEnd, 
         Element adapterElement)
         throws ClassNotFoundException, PicoCompositionException
     {
@@ -146,7 +168,7 @@ public class LedgeXmlFrontEnd
                 " is not a ComponentAdapter");
         }
         DefaultPicoContainer tempContainer = new DefaultPicoContainer();
-        tempContainer.addParent(reflectionFrontEnd.getPicoContainer());
+        tempContainer.setParent(reflectionFrontEnd.getPicoContainer());
         Object anonymous = new Object();
         if(parameters.length > 0)
         {
@@ -158,7 +180,7 @@ public class LedgeXmlFrontEnd
         }
         ComponentAdapter adapter = (ComponentAdapter)tempContainer.getComponentInstance(anonymous); 
         reflectionFrontEnd.getPicoContainer().registerComponent(adapter);
-        reflectionFrontEnd.getPicoContainer().removeChild(tempContainer);
+        tempContainer.setParent(null);
     }
 
     private Parameter[] loadParameters(Element element)
@@ -330,7 +352,7 @@ public class LedgeXmlFrontEnd
      * @throws ClassNotFoundException if a missing class is referenced.
      * @throws PicoCompositionException if the composition data is invalid.
      */
-    protected ReflectionFrontEnd loadContainerContents(ReflectionFrontEnd reflectionFrontEnd, 
+    protected ReflectionContainerAdapter loadContainerContents(ReflectionContainerAdapter reflectionFrontEnd, 
         Element containerElement) 
         throws ClassNotFoundException, PicoCompositionException 
     {
@@ -360,7 +382,7 @@ public class LedgeXmlFrontEnd
                 else if (name.equals("container")) 
                 {
                     MutablePicoContainer childContainer =  loadContainer((Element)child);
-                    ReflectionFrontEnd childFrontEnd = createReflectionFrontEnd(reflectionFrontEnd, 
+                    ReflectionContainerAdapter childFrontEnd = createReflectionContainerAdapter(reflectionFrontEnd, 
                         childContainer);
                     loadContainerContents(childFrontEnd, (Element)child);
                     Object key = getKey((Element)child, null);
@@ -372,7 +394,7 @@ public class LedgeXmlFrontEnd
                     String replace = ((Element)child).getAttribute("replace");
                     if(replace != null && replace.equals("true"))
                     {
-                        reflectionFrontEnd = createReflectionFrontEnd((MutablePicoContainer)
+                        reflectionFrontEnd = createReflectionContainerAdapter((MutablePicoContainer)
                             childContainer);
                     }
                     componentCount++;
@@ -396,7 +418,7 @@ public class LedgeXmlFrontEnd
         String picoContainerClassName = element.getAttribute("class");
         String adapterFactoryClass = element.getAttribute("adapter-factory");
 
-        ReflectionFrontEnd tempContainer = new DefaultReflectionFrontEnd();
+        ReflectionContainerAdapter tempContainer = new DefaultReflectionContainerAdapter();
 
         if (adapterFactoryClass != null && !adapterFactoryClass.equals("")) {
             tempContainer.registerComponentImplementation(ComponentAdapterFactory.class, 
@@ -429,9 +451,6 @@ public class LedgeXmlFrontEnd
         {
             tempContainer.registerComponentImplementation(key, picoContainerClassName); 
         }
-        MutablePicoContainer container = (MutablePicoContainer) tempContainer.getPicoContainer().
-            getComponentInstance(key);
-        container.registerComponentInstance(key, container);
         return (MutablePicoContainer) tempContainer.getPicoContainer().
             getComponentInstance(key);
     }
@@ -444,7 +463,7 @@ public class LedgeXmlFrontEnd
      * @throws ClassNotFoundException if a missing class is refernced.
      * @throws PicoCompositionException if the composition data is invalid.
      */
-    protected void loadPseudoComponent(ReflectionFrontEnd pico, Element componentElement) 
+    protected void loadPseudoComponent(ReflectionContainerAdapter pico, Element componentElement) 
         throws ClassNotFoundException, PicoCompositionException 
     {
         String factoryClass = componentElement.getAttribute("factory");
@@ -456,10 +475,10 @@ public class LedgeXmlFrontEnd
             // unless we provide a default.
         }
 
-        ReflectionFrontEnd tempContainer = new DefaultReflectionFrontEnd();
-        tempContainer.registerComponentImplementation(XmlPseudoComponentFactory.class.getName(), 
+        ReflectionContainerAdapter tempContainer = new DefaultReflectionContainerAdapter();
+        tempContainer.registerComponentImplementation(XMLPseudoComponentFactory.class.getName(), 
             factoryClass);
-        XmlPseudoComponentFactory factory = (XmlPseudoComponentFactory)tempContainer.
+        XMLPseudoComponentFactory factory = (XMLPseudoComponentFactory)tempContainer.
             getPicoContainer().getComponentInstances().get(0);
 
         NodeList nl = componentElement.getChildNodes();
@@ -490,9 +509,9 @@ public class LedgeXmlFrontEnd
      * @param container the container.
      * @return a reflection front end.
      */
-    protected ReflectionFrontEnd createReflectionFrontEnd(MutablePicoContainer container) 
+    protected ReflectionContainerAdapter createReflectionContainerAdapter(MutablePicoContainer container) 
     {
-        return new DefaultReflectionFrontEnd(container);
+        return new DefaultReflectionContainerAdapter(container);
     }
     
     /**
@@ -502,10 +521,10 @@ public class LedgeXmlFrontEnd
      * @param container the container.
      * @return a reflection front end.
      */
-    protected ReflectionFrontEnd createReflectionFrontEnd(ReflectionFrontEnd parent, 
+    protected ReflectionContainerAdapter createReflectionContainerAdapter(ReflectionContainerAdapter parent, 
         MutablePicoContainer container) 
     {
-        return new DefaultReflectionFrontEnd(parent, container);
+        return new DefaultReflectionContainerAdapter(parent, container);
     }
 
     /**

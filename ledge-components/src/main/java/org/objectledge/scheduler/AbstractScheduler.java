@@ -418,7 +418,7 @@ public abstract class AbstractScheduler
         try
         {
             Class clazz = Class.forName(className);
-            if(!container.hasComponent(clazz))
+            if(container.getComponentInstance(clazz) == null)
             {
                 container.registerComponentImplementation(clazz);
             }

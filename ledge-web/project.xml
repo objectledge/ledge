@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.17 2004-01-30 09:41:34 fil Exp $ -->
+<!-- $Id: project.xml,v 1.18 2004-02-17 15:50:26 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -90,13 +90,13 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-beta-5-SNAPSHOT</version>
       <url>http://picocontainer.org/</url>
     </dependency>
     <dependency>
       <groupId>nanocontainer</groupId>
       <artifactId>nanocontainer</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
+      <version>1.0-beta-1-SNAPSHOT</version>
       <url>http://nanocontainer.org/</url>
     </dependency>
     <dependency>
@@ -112,18 +112,6 @@
       <url>http://jakarta.apache.org/log4j/docs/index.html</url>
     </dependency>
     <!-- testing -->
-    <dependency>
-      <groupId>picocontainer</groupId>
-      <artifactId>picoextras-reflection</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
-      <url>http://picocontainer.org/picoextras</url>
-    </dependency>
-    <dependency>
-      <groupId>picocontainer</groupId>
-      <artifactId>picoextras-script</artifactId>
-      <version>1.0-alpha-1-SNAPSHOT</version>
-      <url>http://picocontainer.org/picoextras</url>
-    </dependency>
     <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-impl</artifactId>
@@ -195,6 +183,12 @@
       <artifactId>mockobjects-jdk1.4-j2ee1.3</artifactId>
       <version>0.09</version>
       <url>http://www.mockobjects.com</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
   </dependencies>
 </project>

@@ -49,14 +49,14 @@ import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLValidator;
-import org.picocontainer.lifecycle.Stoppable;
+import org.picocontainer.Startable;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.3 2004-02-06 15:38:26 fil Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.4 2004-02-17 15:48:46 fil Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -90,8 +90,8 @@ public class XaPoolDataSourceTest extends TestCase
     
     public void tearDown()
     {
-        ((Stoppable)transaction).stop(); 
-        ((Stoppable)dataSource).stop(); 
+        ((Startable)transaction).stop(); 
+        ((Startable)dataSource).stop(); 
     }
 
     public void testPlainTransaction()
@@ -221,7 +221,7 @@ public class XaPoolDataSourceTest extends TestCase
         XaPoolDataSource source = new XaPoolDataSource(transaction, config);
         Connection conn = source.getConnection();
         conn.close();
-        ((Stoppable)source).stop();
+        ((Startable)source).stop();
     }
 
     public void testFullXMLConfig()
@@ -233,7 +233,7 @@ public class XaPoolDataSourceTest extends TestCase
         XaPoolDataSource source = new XaPoolDataSource(transaction, config);
         //Connection conn = source.getConnection();
         //conn.close();
-        ((Stoppable)source).stop();
+        ((Startable)source).stop();
     }
 
     /**
