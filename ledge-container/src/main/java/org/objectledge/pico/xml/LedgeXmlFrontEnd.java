@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.4 2003-12-23 08:19:50 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.5 2003-12-23 15:18:23 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -120,9 +120,9 @@ public class LedgeXmlFrontEnd
 
         Class implementation = loadClass(className);
         Object key;
-        if (stringKey == null || stringKey.equals("")) 
+        if (stringKey != null && !stringKey.equals("")) 
         {
-            key = implementation;
+            key = stringKey;    
         }
         else
         {
@@ -132,7 +132,7 @@ public class LedgeXmlFrontEnd
             }
             else
             {
-                key = stringKey;    
+                key = implementation;
             }
         }
         if(parameters.length != 0)
