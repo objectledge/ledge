@@ -37,7 +37,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nContext.java,v 1.2 2004-08-20 15:58:58 zwierzem Exp $
+ * @version $Id: I18nContext.java,v 1.3 2005-02-21 17:42:06 rafal Exp $
  */
 public class I18nContext
 {
@@ -55,6 +55,14 @@ public class I18nContext
 	/** the locale */
 	private Locale locale;
 
+    /**
+     * Needed for mocking.
+     */
+    protected I18nContext()
+    {
+        
+    }
+    
 	/**
 	 * Construct new pipeline context.
      * 
