@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>LedgeServlet</title>
+  </properties>
+  <body>
+    <section name="LedgeServlet">
+      <p>Dependencies:
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%">
+              <a href="../../ledge-components/components/LocalFileSystemProvider.html">LocalFileSystemProvider</a>,
+              <a href="../../ledge-components/components/ClasspathFileSystemProvider.html">ClasspathFileSystemProvider</a>,
+              <a href="../components/ServletFileSystemProvider.html">ServletFileSystemProvider</a>,
+              <a href="../../ledge-container/container-subsystems/LedgeContainer.html">LedgeContainer</a>
+            </td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>Log4j (log4j), NanoContainer (picocontainer:nanocontainer)</td>
+          </tr>
+        </table>
+      </p>
+
+      <p>LedgeServlet is the entry point of a Ledge application in the servlet environment.
+      It performs startup and shutdown of the system and forwards HTTP requests to designated
+      components through <a href="HttpDispatcher.html">HttpDispatcher</a> interface.</p>
+      
+      <p>Configuration parameters:
+        <table>
+          <tr>
+            <th>name</th>
+            <th>default</th>
+            <th width="100%">description</th>
+          </tr>
+          <tr>
+            <td>root</td>
+            <td><code>javax.servlet.context.tempdir</code> context attribute, 
+            or <code>user.dir</code> system property if the former is not available.</td>
+            <td>The root directory of the local file system td use.</td>
+          </tr>
+          <tr>
+            <td>config</td>
+            <td>/config</td>
+            <td>The base path of system configuration, within Ledge FileSystem.</td>
+          </tr>
+        </table>
+      </p>
+      
+      <p>The configuration parameters may be given as servlet initailizaion parameters in the
+      <code>web.xml</code> file, or as servlet context attributes. In the latter case the actual
+      name of the attribute is composed of the servlet-name under which LedgeServlet is registered,
+      a dot and the actual parameter name. Consider the following <code>web.xml</code> file:</p>
+      
+      <source><![CDATA[
+<?xml version="1.0"?>
+<web-app>
+  <servlet>
+    <servlet-name>ledge</servlet-name>
+    <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ledge</servlet-name>
+    <url-pattern>/ledge/*</url-pattern>
+  </servlet-mapping>
+</web-app>]]></source>
+      
+      <p>The root directory can be used at deployment time with the following Tomcat application
+      definition file:</p>
+      
+      <source><![CDATA[
+<?xml version="1.0"?>
+<Context path="/app"
+         docBase="/home/app/production/app.war"
+         reloadable="false">
+  <Parameter name="ledge.root" 
+             value="/home/app/production/work" 
+             override="false"/>
+</Context>]]></source>
+      
+      <p><a href="../apidocs/org/objectledge/web/LedgeServlet.html">View JavaDoc</a></p>
+    </section>
+  </body>
+</document>

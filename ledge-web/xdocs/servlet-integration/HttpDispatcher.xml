@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>HttpDispatcher</title>
+  </properties>
+  <body>
+    <section name="HttpDispatcher">
+      <p>HttpDispatcher is a straightforward interface that the LedgeServlet uses to delegate
+      request processing to components. Note that dispatchers can be easily chained/multiplexed.
+      </p>
+      
+      <p><a href="../apidocs/org/objectledge/web/HttpDispatcher.html">View JavaDoc</a></p>
+    </section>
+  </body>
+</document>

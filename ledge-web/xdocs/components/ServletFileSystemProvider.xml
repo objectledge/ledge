@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>ServletFileSystemProvider</title>
+  </properties>
+
+  <body>
+    <section name="ServletFileSystemProvider">
+      <p>Dependencies:
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%"><code>javax.servlet.ServletContext</code></td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>none</td>
+          </tr>
+        </table>
+      </p>
+        
+      <p>This is an implementation of the FileSystemProvider that delegates it's functionality
+      to the <code>java.lang.Classloader.getResource(String)</code> calls. Stat operations,
+      directory existence checking and listings are supported only if there are listing files
+      available. The ObjectLedge Maven plugin is able to generate these files automatically.</p>
+
+      <p><a href="../apidocs/org/objectledge/filesystem/impl/ClasspathFileSystemProvider.html">View JavaDoc</a></p>
+        
+      <p>Constructor parameters:
+        <table>
+	      <tr>
+		    <th>position</th>
+		    <th>type</th>
+		    <th widht="100%">descritpion</th>
+		  </tr>
+		  <tr>
+		    <td>1</td>
+		    <td>String</td>
+		    <td>name of the provider, used in <code>FileSystem.getProvider(String)</code> calls, 
+		    and returned from <code>FileSystemProvider.getName()</code> calls on providers returned 
+		    from <code>FileSystem.getProviders()</code> method.</td>
+		  </tr>
+		  <tr>
+		    <td>2</td>
+		    <td>javax.servlet.ServletContext</td>
+		    <td>The ServletContext instance resources are read from.</td>
+		  </tr>
+        </table>
+      </p>        
+    </section>
+  </body>
+</document>
+  
