@@ -49,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.6 2004-01-21 15:23:53 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.7 2004-01-21 15:36:29 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -70,7 +70,7 @@ public class BuilderExecutorValveTest extends TestCase
         super(arg0);
     }
 
-    public void setUp()
+    public void setUp(String base)
         throws Exception
     {
         String root = System.getProperty("ledge.root");
@@ -79,7 +79,7 @@ public class BuilderExecutorValveTest extends TestCase
             throw new Exception("system property ledge.root undefined. "+
             "use -Dledge.root=.../ledge-container/src/test/resources");
         }
-        FileSystem fs = FileSystem.getStandardFileSystem(root+"/builders");
+        FileSystem fs = FileSystem.getStandardFileSystem(root+"/"+base);
         XMLValidator validator = new XMLValidator();        
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
         Configuration config = configFactory.
@@ -103,21 +103,36 @@ public class BuilderExecutorValveTest extends TestCase
     }
     
     public void testEnclosure()
+        throws Exception
     {
+        setUp("builders");
         mvcContext.setView("foo.Bar");
         executor.run();
         assertEquals("Default(foo/Default(foo/Bar()))", mvcContext.getBuildResult());
     }
     
     public void testRoute()
+        throws Exception
     {
+        setUp("builders");
         mvcContext.setView("Router");
         executor.run();
         assertEquals("Default(RoutedTo())", mvcContext.getBuildResult());
     }
     
-    public void testInfiniteRoute()
+    public void testOverride()
+        throws Exception
     {
+        setUp("builders");
+        mvcContext.setView("Overrider");
+        executor.run();
+        assertEquals("Default(OverridenTo())", mvcContext.getBuildResult());
+    }
+    
+    public void testInfiniteRoute()
+        throws Exception
+    {
+        setUp("builders");
         mvcContext.setView("RouteToSelf");
         try
         {
@@ -131,7 +146,9 @@ public class BuilderExecutorValveTest extends TestCase
     }
     
     public void testInfiniteEnclosure()
+        throws Exception
     {
+        setUp("builders");
         mvcContext.setView("EncloseSelf");
         try
         {
@@ -144,10 +161,12 @@ public class BuilderExecutorValveTest extends TestCase
         }
     }
     
-    public void testOverride()
+    public void testTemplateOnlyEnclosure()
+        throws Exception
     {
-        mvcContext.setView("Overrider");
+        setUp("builders-templateonly");
+        mvcContext.setView("foo.Bar");
         executor.run();
-        assertEquals("Default(OverridenTo())", mvcContext.getBuildResult());
+        assertEquals("Default(foo/Default(foo/Bar()))", mvcContext.getBuildResult());
     }
 }
