@@ -1,38 +1,30 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.9 2004-06-02 12:37:27 fil Exp $ -->
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: project.xml,v 1.10 2004-09-03 13:34:47 rafal Exp $ -->
+
 <project>
   <pomVersion>3</pomVersion>
-  
   <extend>../ledge-common/project.xml</extend>
-
   <!-- project info -->
-  
+
   <groupId>objectledge</groupId>
   <id>ledge-reactor</id>
-  <currentVersion>0.3-dev</currentVersion>
-  
+  <currentVersion>0.3</currentVersion>
   <name>ObjectLedge</name>
   <shortDescription>Object Ledge - documentation package.</shortDescription>
-  <description>
-    Object Ledge is a platform for building applications in Java 2 Standard and Enterprise Edition 
-    environments. 
-    
-    ObjectLedge follows component / container and Inversion Of Control design paradigms 
-    implemented with the excelent <a href="http://picocontainer.org">PicoContainer</a> package.
-
-    ObjectLedge provides a number of components - basic building blocks of the applications,
-    a few extensions to the Pico framework, customized containers for easy deployment of
-    applications in command line, daemon, and J2EE servlet environments.    
+  <description>Object Ledge is a platform for building applications in Java 2 Standard and Enterprise Edition environments. ObjectLedge follows component / container and Inversion Of Control design paradigms implemented with the excelent
+    <a href="http://picocontainer.org">PicoContainer</a>package. ObjectLedge provides a number of components - basic building blocks of the applications, a few extensions to the Pico framework, customized containers for easy deployment of applications in command line, daemon, and J2EE servlet environments.
   </description>
-  <reports>   
+  <reports>
     <report>maven-license-plugin</report>
     <report>maven-changes-plugin</report>
     <report>maven-statcvs-plugin</report>
-    <report>maven-faq-plugin</report>    
+    <report>maven-faq-plugin</report>
     <report>maven-multiproject-plugin</report>
     <report>maven-dashboard-plugin</report>
     <report>maven-multichanges-plugin</report>
     <!-- <report>maven-jira-plugin</report> -->
+
   </reports>
   <dependencies>
     <dependency>
@@ -40,12 +32,19 @@
       <groupId>statcvs</groupId>
       <artifactId>maven-statcvs-plugin</artifactId>
       <version>2.5</version>
-    </dependency>  
+    </dependency>
     <dependency>
       <type>plugin</type>
       <groupId>findbugs</groupId>
       <artifactId>maven-findbugs-plugin</artifactId>
       <version>0.7.2</version>
-    </dependency>  
+    </dependency>
   </dependencies>
+  <versions>
+    <version>
+      <id>0.3</id>
+      <name>0.3</name>
+      <tag>RELEASE-0_3</tag>
+    </version>
+  </versions>
 </project>

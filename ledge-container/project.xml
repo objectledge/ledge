@@ -1,22 +1,17 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.28 2004-08-20 09:04:59 rafal Exp $ -->
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: project.xml,v 1.29 2004-09-03 13:33:09 rafal Exp $ -->
+
 <project>
   <pomVersion>3</pomVersion>
-  
   <extend>../ledge-common/project.xml</extend>
-
   <!-- project info -->
-  
+
   <groupId>objectledge</groupId>
   <id>ledge-container</id>
-  <currentVersion>0.3-dev</currentVersion>
+  <currentVersion>0.3</currentVersion>
   <name>Ledge Container</name>
-  <shortDescription>
-    A container based on Pico/Nano packages with added value of more expressive
-    composition file syntax, and providing  components with XML based schema checked 
-    configuration and externally configured loggers.
-  </shortDescription>
-
+  <shortDescription>A container based on Pico/Nano packages with added value of more expressive composition file syntax, and providing components with XML based schema checked configuration and externally configured loggers.</shortDescription>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -42,7 +37,6 @@
       </resources>
     </unitTest>
   </build>
-  
   <dependencies>
     <dependency>
       <groupId>objectledge</groupId>
@@ -105,6 +99,7 @@
       <url>https://sourceforge.net/projects/relaxng</url>
     </dependency>
     <!-- runtime -->
+
     <dependency>
       <groupId>xsdlib</groupId>
       <artifactId>xsdlib</artifactId>
@@ -112,5 +107,11 @@
       <url>https://msv.dev.java.net/</url>
     </dependency>
   </dependencies>
-  
+  <versions>
+    <version>
+      <id>0.3</id>
+      <name>0.3</name>
+      <tag>RELEASE-0_3</tag>
+    </version>
+  </versions>
 </project>
