@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Overview of mvc components</title>
+  </properties>
+  <body>
+    <section name="Web components">
+      <subsection name="MVC initializer valve">
+        <p>The pipeline valve that initialize all needed data for mvc pipeline processing</p>
+        <p class="more"><a href="MVCInitializerValve.html">more</a></p>
+      </subsection>
+      <subsection name="MVC results valve">
+        <p>The pipeline valve that read the processing result and write it to servlet response</p>
+        <p class="more"><a href="MVCResultsValve.html">more</a></p>
+      </subsection>
+      <subsection name="Action executor valve">
+        <p>The pipeline valve that execute the action if appears in request.</p>
+        <p class="more"><a href="ActionExecutorValve.html">more</a></p>
+      </subsection>
+      <subsection name="Component tool factory">
+        <p>The component produces the context tool used to include the MVC components within the view.</p>
+        <p class="more"><a href="ComponentToolFactory.html">more</a></p>
+      </subsection>
+      <subsection name="MVC Class Finder">
+        <p> An interface finder for finding MVC model classes.</p>
+        <p class="more"><a href="MVCClassFinder.html">more</a></p>
+      </subsection>
+      <subsection name="MVC Template Finder">
+        <p>An interface finder for finding MVC templates that should be used for
+          rendering specific views or components.
+        </p>
+        <p class="more"><a href="MVCTemplateFinder.html">more</a></p>
+      </subsection>
+      <subsection name="MVC Finder">
+        <p>The default implementation of the finder interfaces.</p>
+        <p class="more"><a href="MVCFinder.html">more</a></p>
+      </subsection>
+      <subsection name="Name sequence factory">
+        <p>The component produces a class or template name sequence for the specified view.</p>
+        <p class="more"><a href="NameSequenceFactory.html">more</a></p>
+      </subsection>
+      <subsection name="Builder executor valve">
+        <p>Pipeline component for executing MVC view building.</p>
+        <p class="more"><a href="BuilderExecutorValve.html">more</a></p>
+      </subsection>
+    </section>
+  </body>
+</document>
+  

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>BuilderExecutorValve</title>
+  </properties>
+
+  <body>
+    <section name="BuilderExecutorValve">
+      <subsection name="Description">
+        <p>
+
+        </p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>BuilderExecutorValve <a href="../../apidocs/org/objectledge/web/mvc/builders/BuilderExecutorValve.html">JavaDoc</a></li>
+            <li>BuilderExecutorValve <a href="../../xref/org/objectledge/web/mvc/builders/BuilderExecutorValve.html">XRef</a></li>
+            <li>BuilderExecutorValve <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/mvc/builders/BuilderExecutorValve.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="MVCClassFinder.html">MVCClassFinder</a>,
+                <a href="MVCTemplateFinder.html">MVCTemplateFinder</a>,
+                <a href="../../../../ledge-components/docs/components/Context.html">Context</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>DNA API (dna:dna-api)</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">        
+        <p>
+          <table>
+	        <tr>
+	   	      <th>position</th>
+		      <th>type</th>
+		      <th widht="100%">descritpion</th>
+		    </tr>		      
+            <tr>
+	          <td>1</td>
+	          <td><code>org.objectledge.context.Context</code></td>
+	          <td>the context</td>
+	        </tr>
+		    <tr>
+		      <td>2</td>
+		      <td>org.objectledge.web.mvc.finders.MVCClassFinder</td>
+		      <td>The logger.</td>
+		    </tr>
+		    <tr>
+		      <td>3</td>
+		      <td>org.objectledge.web.mvc.finders.MVCTemplateFinder</td>
+		      <td>The logger.</td>
+		    </tr>
+		    <tr>
+		      <td>4</td>
+		      <td>int</td>
+		      <td>The maxmimal number of Builder#route() calls per {@link Builder}.</td>
+		    </tr>
+		    <tr>
+		      <td>5</td>
+		      <td>int</td>
+		      <td>The maxmimal number of Builder enclosures.</td>
+		    </tr>
+          </table>
+        </p>        
+      </subsection>
+    </section>
+  </body>
+</document>

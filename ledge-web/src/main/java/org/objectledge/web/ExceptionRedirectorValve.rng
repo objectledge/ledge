@@ -41,5 +41,10 @@
       <text/>
     </element>    
   </optional>
+  <optional>      
+    <element name="error_level">
+      <text/>
+    </element>    
+  </optional>
   </interleave>      
 </element>

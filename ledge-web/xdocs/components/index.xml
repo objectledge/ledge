@@ -45,7 +45,12 @@
         </p>
         <p class="more"><a href="WebI18nToolFactory.html">more</a></p>
       </subsection>
-      
+      <subsection name="Exception redirector valve">
+        <p>The pipeline processing valve which redirect to appropriate view if the exception occured 
+        during pipeline processing.
+        </p>
+        <p class="more"><a href="ExceptionRedirectorValve.html">more</a></p>
+      </subsection>
     </section>
   </body>
 </document>

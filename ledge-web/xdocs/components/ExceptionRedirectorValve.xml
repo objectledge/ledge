@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Exception redirector valve</title>
+  </properties>
+
+  <body>
+    <section name="ExceptionRedirectorValve">
+      <subsection name="Description">
+        <p>
+        The pipeline processing valve which redirect to appropriate view in case the exception occured 
+        during pipeline processing. Also it logs the exception according to level set in
+        configuration. If no exception was configured it always redirect to 'error_view' and uses
+        'error_level' logging level.
+        </p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>ExceptionRedirectorValve <a href="../apidocs/org/objectledge/web/ExceptionRedirectorValve.html">JavaDoc</a></li>
+            <li>ExceptionRedirectorValve <a href="../xref/org/objectledge/web/ExceptionRedirectorValve.html">XRef</a></li>
+            <li>ExceptionRedirectorValve <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/ExceptionRedirectorValve.java">CVS log</a></li>
+	        <li>ExceptionRedirectorValve configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/ExceptionRedirectorValve.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="../../../ledge-container/docs/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>,
+                <a href="../../../ledge-container/docs/container-subsystems/LoggerFactory.html">LoggerFactory</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">        
+        <p>
+          <table>
+	        <tr>
+	   	      <th>position</th>
+		      <th>type</th>
+		      <th widht="100%">descritpion</th>
+		    </tr>
+            <tr>
+	          <td>1</td>
+	          <td><code>org.jcontainer.dna.Configuration</code></td>
+	          <td>the configuration</td>
+	        </tr>
+            <tr>
+	          <td>2</td>
+	          <td><code>org.jcontainer.dna.Logger</code></td>
+	          <td>the configuration</td>
+	        </tr>	        
+          </table>
+        </p>        
+      </subsection>
+    </section>
+  </body>
+</document>

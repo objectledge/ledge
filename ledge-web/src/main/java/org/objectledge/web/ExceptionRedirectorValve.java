@@ -55,6 +55,9 @@ public class ExceptionRedirectorValve implements Valve
     /** error view */
     private String errorView;
     
+    /** error log level */
+    private String errorLevel;
+    
     /** exception - view mapping */
     private Map exceptionViewMap;
 
@@ -77,6 +80,7 @@ public class ExceptionRedirectorValve implements Valve
         try
         {
             errorView = config.getChild("error_view").getValue("Error");
+            errorLevel = config.getChild("error_level").getValue("ERROR");
             Configuration[] exception = config.getChildren("exception");
             for (int i = 0; i < exception.length; i++)
             {
@@ -89,8 +93,8 @@ public class ExceptionRedirectorValve implements Valve
             }
             if(!exceptionViewMap.containsKey(Throwable.class))
             {
-                exceptionViewMap.put(Throwable.class, "");
-                exceptionLoggingLevelMap.put(Throwable.class, errorView);
+                exceptionViewMap.put(Throwable.class, errorView);
+                exceptionLoggingLevelMap.put(Throwable.class, errorLevel);
             }
         }
         catch(Exception e)
