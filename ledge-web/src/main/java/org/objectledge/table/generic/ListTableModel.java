@@ -1,0 +1,176 @@
+// 
+//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+//All rights reserved. 
+// 
+//Redistribution and use in source and binary forms, with or without modification,  
+//are permitted provided that the following conditions are met: 
+//  
+//* Redistributions of source code must retain the above copyright notice,  
+//this list of conditions and the following disclaimer. 
+//* Redistributions in binary form must reproduce the above copyright notice,  
+//this list of conditions and the following disclaimer in the documentation  
+//and/or other materials provided with the distribution. 
+//* Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+//nor the names of its contributors may be used to endorse or promote products  
+//derived from this software without specific prior written permission. 
+// 
+//THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+//AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+//WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+//IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+//INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+//BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+//OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+//WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+//ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+//POSSIBILITY OF SUCH DAMAGE. 
+// 
+
+package org.objectledge.table.generic;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.objectledge.table.ExtendedTableModel;
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableConstants;
+import org.objectledge.table.TableRowSet;
+import org.objectledge.table.TableState;
+
+/**
+ * A table model for wrapping a <code>java.util.List</code>
+ *
+ * <p>Item indices are used as ids.</p>
+ * 
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: ListTableModel.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ */
+public class ListTableModel
+    implements ExtendedTableModel
+{
+    /** The embeded list. */
+    protected List list;
+
+    /** The columns of the list. */
+    protected TableColumn[] columns;
+
+    /**
+     * Constructs a new model.
+     *
+     * @param list the list to build model for.
+     * @param columns the columns of the table, <code>null</code> to disable sorting.
+     */
+    public ListTableModel(List list, TableColumn[] columns)
+    {
+        this.list = list;
+        if(columns == null)
+        {
+            this.columns = new TableColumn[0];
+        }
+        else
+        {
+            this.columns = columns;
+        }
+    }
+
+    /**
+     * Constructs a new model.
+     *
+     * @param array the array to build model for.
+     * @param columns the columns of the table, <code>null</code> to disable sorting.
+     */
+    public ListTableModel(Object[] array, TableColumn[] columns)
+    {
+        this(Arrays.asList(array), columns);
+    }
+
+    /**
+     * Returns a {@link TableRowSet} object initialised by this model
+     * and a given {@link TableState}.
+     *
+     * @param state the parent
+     * @return table of children
+     */
+    public TableRowSet getRowSet(TableState state)
+    {
+        if(state.getViewType() == TableConstants.VIEW_AS_LIST)
+        {
+            return new GenericListRowSet(state, this);
+        }
+        else
+        {
+            return new GenericTreeRowSet(state, this);
+        }
+    }
+
+    /**
+     * Gets all children of the parent, may return empty array.
+     *
+     * @param parent the parent
+     * @return table of children
+     */
+    public Object[] getChildren(Object parent)
+    {
+        if(parent == null)
+        {
+            return list.toArray();
+        }
+        else
+        {
+            return new Object[0];
+        }
+    }
+
+    /**
+     * Returns the model dependent object by its id.
+     *
+     * @param id the id of the object
+     * @return model object
+     */
+    public Object getObject(String id)
+    {
+        try
+        {
+            int index = Integer.parseInt(id);
+            return list.get(index);
+        }
+        catch(NumberFormatException e)
+        {
+            return null;
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the id of the object.
+     *
+     * @param object model object.
+     * @return the id of the object.
+     */
+    public String getId(Object object)
+    {
+        int index = list.indexOf(object);
+        if(index >= 0)
+        {
+            return Integer.toString(index);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Returns array of column definitions. They are created on every call,
+     * because they can get modified durig it's lifecycle.
+     *
+     * @return array of <code>TableColumn</code> objects
+     */
+    public TableColumn[] getColumns()
+    {
+        return columns;
+    }
+}
