@@ -39,7 +39,6 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
-import org.picocontainer.defaults.CachingComponentAdapter;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
@@ -50,7 +49,7 @@ import org.picocontainer.extras.ImplementationHidingComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.3 2003-12-05 08:53:09 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.4 2003-12-15 09:44:18 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -136,6 +135,14 @@ public class LoggerFactory
     /**
      * {@inheritDoc}
      */
+    public Class getCustomizedComponentImplementation()
+    {
+        return Logger.class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void verify(PicoContainer container) throws NoSatisfiableConstructorsException
     {
         // no dependencies
@@ -172,7 +179,6 @@ public class LoggerFactory
     {
         ComponentAdapter adapter = new InstanceComponentAdapter(marker, logger);
         adapter = new ImplementationHidingComponentAdapter(adapter);
-        adapter = new CachingComponentAdapter(adapter);
         return adapter;
     }
     
