@@ -36,12 +36,12 @@ import java.io.Writer;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Templating.java,v 1.1 2003-12-05 18:34:29 pablo Exp $
+ * @version $Id: Templating.java,v 1.2 2003-12-17 11:31:52 fil Exp $
  */
 public interface Templating
 {
 	/**
-	 * Create an empty {@link Context} object.
+	 * Create an empty {@link TemplatingContext} object.
 	 *
 	 * @return a Context.
 	 */
