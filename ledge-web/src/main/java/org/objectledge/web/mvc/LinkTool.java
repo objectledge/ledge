@@ -219,28 +219,16 @@ public class LinkTool
     }
 
     /**
-     * Set link to point to the external resource.
+     * Set link to point to the resource.
      *
      * @param path the path to static resource.
      * @return the link tool.
      */
     public LinkTool resource(String path)
     {
-        return resource(path, true);
-    }
-
-    /**
-     * Set link to point to the resource.
-     *
-     * @param path the path to static resource.
-     * @param external <code>true</code> if resource is served by external server.
-     * @return the link tool.
-     */
-    public LinkTool resource(String path, boolean external)
-    {
         LinkTool target = (LinkTool)clone();
         target.resourceLink = true;
-        target.includeSession = !external;
+        target.includeSession = !factory.isExternalContent();
         target.path = path;
         return target;
     }

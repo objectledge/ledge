@@ -34,6 +34,11 @@
         <text/>
       </element>
     </optional>    
+    <optional>    
+      <element name="external_content">  
+        <text/>
+      </element>
+    </optional>    
     <optional>
       <element name="sticky">
         <zeroOrMore>

@@ -60,8 +60,11 @@ public class LinkToolFactory implements ContextToolFactory
 	/** the pathinfo parameters keys */
 	private Set pathinfoKeys;
 	
-	/** the queryt separator */
+	/** the query separator */
 	private String querySeparator;
+	
+	/** external resource switch */
+	private boolean externalContent;
 
 	/**
 	 * Component constructor.
@@ -94,6 +97,7 @@ public class LinkToolFactory implements ContextToolFactory
 			throw new ComponentInitializationError("failed to configure the component", e);
 		}
 		querySeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
+		externalContent = config.getChild("external_resource").getValueAsBoolean(false);
 	}
 	
     /**
@@ -148,5 +152,15 @@ public class LinkToolFactory implements ContextToolFactory
 	public String getQuerySeparator()
 	{
 		return querySeparator;
+	}
+	
+	/**
+	 * Is external content.
+	 * 
+	 * @return <code>true</code>if resources are external.
+	 */
+	public boolean isExternalContent()
+	{
+		return externalContent;
 	}
 }
