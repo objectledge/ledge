@@ -27,7 +27,6 @@
 // 
 package org.objectledge.selector;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -54,7 +53,7 @@ import java.util.StringTokenizer;
  * UndefinedVariableException is thrown.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IntrospectionVariables.java,v 1.4 2004-01-26 09:32:19 fil Exp $
+ * @version $Id: IntrospectionVariables.java,v 1.5 2005-02-07 01:29:41 rafal Exp $
  */
 public class IntrospectionVariables
     implements Variables
@@ -182,28 +181,6 @@ public class IntrospectionVariables
             {
                 ///CLOVER:OFF
                 throw new EvaluationException("unexpected exception while evaluating variable", e);
-                ///CLOVER:ON
-            }
-        }
-        Field field;
-        try
-        {
-            field = clazz.getField(property);
-        }
-        catch(NoSuchFieldException e)
-        {
-            field = null;
-        }
-        if(field != null)
-        {
-            try
-            {
-                return field.get(object);
-            }
-            catch(Exception e)
-            {
-                ///CLOVER:OFF
-                throw new EvaluationException("unexpected exception while evaluation varaible", e);
                 ///CLOVER:ON
             }
         }

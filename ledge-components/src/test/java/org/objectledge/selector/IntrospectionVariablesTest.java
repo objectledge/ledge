@@ -35,7 +35,7 @@ import junit.framework.TestCase;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IntrospectionVariablesTest.java,v 1.2 2004-01-26 09:32:42 fil Exp $
+ * @version $Id: IntrospectionVariablesTest.java,v 1.3 2005-02-07 01:29:43 rafal Exp $
  */
 public class IntrospectionVariablesTest extends TestCase
 {
@@ -54,7 +54,6 @@ public class IntrospectionVariablesTest extends TestCase
         Variables variables;
         
         variables = new IntrospectionVariables(new PlainObject());
-        assertTrue(variables.isDefined("publicField"));
         assertTrue(variables.isDefined("publicMethod"));
         assertTrue(variables.isDefined("publicBooleanMethod"));
         assertTrue(variables.isDefined("publicBooleanPrimitiveMethod"));
@@ -82,9 +81,6 @@ public class IntrospectionVariablesTest extends TestCase
     {
         Variables variables;
         variables = new IntrospectionVariables(new PlainObject());
-        assertTrue(variables.isDefined("nested.publicField"));
-        assertTrue(variables.isDefined("nested.nested.publicField"));
-        assertTrue(variables.isDefined("nested.nested.nested.publicField"));
         assertTrue(variables.isDefined("nested.publicMethod"));
         assertTrue(variables.isDefined("nested.publicBooleanMethod"));
         assertTrue(variables.isDefined("nested.publicBooleanPrimitiveMethod"));
@@ -98,12 +94,10 @@ public class IntrospectionVariablesTest extends TestCase
     {
         Variables variables;
         variables = new IntrospectionVariables(new PlainObject());
-        assertEquals("publicField", variables.get("publicField"));
         assertEquals("publicMethod", variables.get("nested.publicMethod"));
         assertEquals(Boolean.TRUE, variables.get("publicBooleanMethod"));
         assertEquals(Boolean.TRUE, variables.get("publicBooleanPrimitiveMethod"));
         
-        assertEquals("publicField", variables.get("nested.publicField"));
         assertEquals("publicMethod", variables.get("nested.publicMethod"));
         assertEquals(Boolean.TRUE, variables.get("nested.publicBooleanMethod"));
         assertEquals(Boolean.TRUE, variables.get("nested.publicBooleanPrimitiveMethod"));
@@ -170,8 +164,6 @@ public class IntrospectionVariablesTest extends TestCase
     
     private static class PlainObject
     {
-        public String publicField = "publicField";
-        
         public String getPublicMethod()
         {
             return "publicMethod";
