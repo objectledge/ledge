@@ -29,8 +29,8 @@
 		<p class="more"><a href="ComponentCustomization.html">more</a></p>
       </subsection>
       
-      <subsection name="Enhanced XMLFrontEnd">
-        <p>Ledge XMLFrontEnd has the same functionality as the Nano-provided one but with a few 
+      <subsection name="Enhanced XmlFrontEnd">
+        <p>Ledge XmlFrontEnd has the same functionality as the Nano-provided one but with a few 
         changes and additions.
         </p>
         <ul>
@@ -41,7 +41,7 @@
           <li><a href="SequenceParameter.html">SeuqenceParameters</a> are supported</li>
           <li>The composition is checked against a RelaxNG schema.</li>
         </ul>
-		<p class="more"><a href="XMLFrontEnd.html">more</a></p>
+		<p class="more"><a href="XmlFrontEnd.html">more</a></p>
       </subsection>
     </section>
   </body>
