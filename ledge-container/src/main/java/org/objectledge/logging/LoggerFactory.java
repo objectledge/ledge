@@ -49,7 +49,7 @@ import org.picocontainer.extras.ImplementationHidingComponentAdapter;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.4 2003-12-15 09:44:18 fil Exp $
+ * @version $Id: LoggerFactory.java,v 1.5 2003-12-17 11:22:32 fil Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
@@ -183,7 +183,7 @@ public class LoggerFactory
     }
     
     /**
-     * Registers a CustomizedComponentAdapter for the {@link Configuration} type in the
+     * Registers a CustomizedComponentAdapter for the {@link Logger} type in the
      * specified container.
      * 
      * @param container the container.
