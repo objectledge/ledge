@@ -54,7 +54,7 @@ public class PersistentContext implements Persistent
     {
         public Persistent newInstance()
         {
-            return new PersistentContext(null);
+            return new PersistentContext(null, -1);
         }
     };
     
@@ -74,9 +74,10 @@ public class PersistentContext implements Persistent
      * 
      * @param dn the dn of the context.
      */
-    public PersistentContext(String dn)
+    public PersistentContext(String dn, long parentId)
     {
         this.dn = dn;
+        this.parentId = parentId;
     }
 
     /**

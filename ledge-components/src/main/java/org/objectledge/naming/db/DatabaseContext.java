@@ -502,7 +502,7 @@ public class DatabaseContext implements Context
         {
             throw new NameAlreadyBoundException("context '"+dn+"' already exists");
         }
-        PersistentContext subContext = new PersistentContext(dn);
+        PersistentContext subContext = new PersistentContext(dn, context.getContextId());
         try
         {
             persistence.save(subContext);
