@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<container>
+  <container key="org.picocontainer.MutablePicoContainer" replace="true">
+    <adapter-factory class="org.picocontainer.defaults.CachingComponentAdapterFactory">
+	  <adapter-factory class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
+    </adapter-factory>
+    
+    <component class="org.objectledge.xml.XMLValidator"/>
+    <component class="org.objectledge.configuration.ConfigurationFactory" preload="true">
+      <component-parameter class="org.picocontainer.MutablePicoContainer"/>
+      <component-parameter class="org.objectledge.filesystem.FileSystem"/>
+      <component-parameter class="org.objectledge.xml.XMLValidator"/>
+      <component-parameter key="org.objectledge.ConfigBase"/>
+    </component>
+
+    <component class="org.objectledge.logging.LoggingConfigurator" preload="true"/>
+    <component class="org.objectledge.logging.LoggerFactory" preload="true"/>
+
+	<!-- end of core config -->
+
+    <component class-key="org.objectledge.web.HttpDispatcher" 
+    		   class="org.objectledge.web.dispatcher.HttpMethodDispatcher"/>
+    		   
+    <component key="org.objectledge.web.dispatcher.DummyDispatcher"
+               class="org.objectledge.web.dispatcher.DummyDispatcher"/>
+    
+  </container>
+</container>
