@@ -35,9 +35,9 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutor.java,v 1.2 2004-01-12 15:52:11 fil Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.1 2004-01-12 15:57:08 fil Exp $
  */
-public class ActionExecutor implements Runnable
+public class ActionExecutorValve implements Runnable
 {
 	/** context */
 	protected Context context;
@@ -50,7 +50,7 @@ public class ActionExecutor implements Runnable
 	 * @param context used application context
 	 * @param classFinder finder for runnable action objects
 	 */
-	public ActionExecutor(Context context, MVCClassFinder classFinder)
+	public ActionExecutorValve(Context context, MVCClassFinder classFinder)
 	{
 		this.context = context;
 		this.classFinder = classFinder;
