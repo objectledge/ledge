@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.4 2004-01-19 15:19:50 zwierzem Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.5 2004-01-20 17:27:18 pablo Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
@@ -50,7 +50,13 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
     /**
      * {@inheritDoc}
      * 
+     * @param context the context.
+     * @param classFinder the class finder.
+     * @param templateFinder the template finder.
+     * @param maxRouteCalls the max route calls.
+     * @param maxEnclosures the max enclosures. 
      * @param i18n an i18n component for choosing templates upon currently selected Locale.
+     * @param templating the templating component.
      */
     public I18nAwareBuilderExecutorValve(
         Context context,
