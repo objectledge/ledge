@@ -34,10 +34,10 @@
     <component class="org.objectledge.templating.ContextToolPopulator"/>
     
     <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
-    <component class="org.objectledge.i18n.impl.WebI18nToolFactory"/>
+    <component class="org.objectledge.i18n.WebI18nToolFactory"/>
     <component class="org.objectledge.templating.ContextTools">
 	  <sequence-parameter class="[Lorg.objectledge.templating.ContextToolFactory;">
-        <component-parameter class-key="org.objectledge.i18n.impl.WebI18nToolFactory"/>
+        <component-parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
       </sequence-parameter>
     </component>      
     
