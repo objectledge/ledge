@@ -40,16 +40,17 @@ import org.objectledge.web.mvc.MVCContext;
  * Context tool factory component to build the link tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: LinkToolFactoryImpl.java,v 1.1 2004-12-28 04:25:17 zwierzem Exp $
+ * @version $Id: LinkToolFactoryImpl.java,v 1.2 2005-01-13 15:10:56 rafal Exp $
  */
 public class LinkToolFactoryImpl implements LinkToolFactory
 {
-	/** context */
+	/** the context. */
 	protected Context context;
 	
-	/** configuration component */
+	/** configuration component. */
 	protected WebConfigurator webConfigurator;
     
+    /** link tool configuration. */
     protected LinkTool.Configuration linkToolConfiguration;
     	
 	/**
@@ -60,7 +61,8 @@ public class LinkToolFactoryImpl implements LinkToolFactory
 	 * @param webConfigurator the web configurator component.
      * @throws ConfigurationException if the configuraiton is invalid.
  	 */
-	public LinkToolFactoryImpl(Configuration config, Context context, WebConfigurator webConfigurator)
+	public LinkToolFactoryImpl(Configuration config, Context context, 
+        WebConfigurator webConfigurator)
         throws ConfigurationException
 	{
 		this.context = context;

@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.19 2004-12-27 10:46:24 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.20 2005-01-13 15:10:56 rafal Exp $
  */
 public class LinkTool
 {
@@ -78,13 +78,13 @@ public class LinkTool
     /** configuration. */
     protected LinkTool.Configuration config;
     
-	/** the http context */
+	/** the http context. */
     protected HttpContext httpContext;
 
-    /** the mvc context */
+    /** the mvc context. */
     protected MVCContext mvcContext;
 
-    /** the request parameters */
+    /** the request parameters. */
     protected RequestParameters requestParameters;
 	
 	/** view, null for current request parameters view value, empty string for unset value */
@@ -652,7 +652,7 @@ public class LinkTool
 		return target;
 	}
 
-    // start toString() - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    
+    // start toString() - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     
     /**
      * Produces a String representation of this link.
@@ -925,7 +925,7 @@ public class LinkTool
         return action;
     }
 
-    // end toString() - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    
+    // end toString() - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     
 	/**
 	 * Clone the given LinkTool.
