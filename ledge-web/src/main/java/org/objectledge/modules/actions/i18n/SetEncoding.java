@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.modules.actions.mvc;
+package org.objectledge.modules.actions.i18n;
 
 import java.security.Principal;
 
@@ -47,7 +47,7 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.1 2004-08-27 07:57:50 rafal Exp $
+ * @version $Id: SetEncoding.java,v 1.1 2004-09-06 11:08:29 zwierzem Exp $
  */
 public class SetEncoding 
     implements Valve
