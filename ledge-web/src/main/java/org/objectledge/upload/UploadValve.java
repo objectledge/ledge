@@ -29,7 +29,7 @@ import org.objectledge.web.parameters.RequestParameters;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UploadValve.java,v 1.1 2004-01-13 13:06:39 pablo Exp $
+ * @version $Id: UploadValve.java,v 1.2 2004-01-14 13:18:09 fil Exp $
  */
 public class UploadValve implements Runnable, WebConstants
 {
@@ -222,19 +222,9 @@ public class UploadValve implements Runnable, WebConstants
         } 
         else 
         {
-            int size = part.getSize();
-            UploadContainer container = new UploadContainer(name,filename,
-                                                            (size != -1 ? size : 0),mimeType);
-            int result = container.load(part.getInputStream());
-			if (result == -1) 
-			{
-				logger.error("UploadValve - couldn't write the uploaded data to the container");
-		    }
-			else
-			{
-				logger.debug("UploadValve - the uploaded data has been successfully written " +							 "to the container");
-			}
-            uploadMap.put(name,container);
+            UploadContainer container = new UploadContainer(name, filename, mimeType,
+                part.getSize(), part.getInputStream());
+            uploadMap.put(name, container);
             logger.debug("Upload Hook - craeted container "+name);
         }
     }

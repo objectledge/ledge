@@ -29,6 +29,7 @@
 package org.objectledge.upload;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -37,7 +38,7 @@ import java.io.UnsupportedEncodingException;
  * Uploaded resource container.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UploadContainer.java,v 1.1 2004-01-13 13:06:39 pablo Exp $
+ * @version $Id: UploadContainer.java,v 1.2 2004-01-14 13:18:09 fil Exp $
  */
 public class UploadContainer
 {
@@ -61,14 +62,26 @@ public class UploadContainer
 	 * 
 	 * @param name the name of the resource.
 	 * @param filename the file name.
-	 * @param size the size of loaded data.
-	 * @param mimeType the mime type. 
+     * @param mimeType the mime type. 
+	 * @param size the size of data to load (-1 if unknown).
+     * @param dataStream a stream to load data from.
+     * @throws IOException if the data could not be loaded.
 	 */
-	public UploadContainer(String name, String filename, int size, String mimeType)
+	public UploadContainer(String name, String filename, String mimeType, int size, 
+        InputStream dataStream)
+        throws IOException
 	{
 		this.name = name;
-		this.size = size;
-		this.data = new byte[size];
+        if(size > 0)
+        {
+            this.size = size;
+            this.data = new byte[size];
+            load(dataStream, size);
+        }
+        else
+        {
+            this.size = load(dataStream);
+        }
 		this.mimeType = mimeType;
 		if (filename == null || filename.equals("")) 
 		{
@@ -81,17 +94,41 @@ public class UploadContainer
 	}
     
 	/**
-	 * load data to the container.
+	 * Load data to the container.
 	 *
 	 * @param is the data input stream.
-	 * @return the number of successfully written bytes.
+     * @param count the number of bytes to read.
 	 * @throws IOException if occured.
 	 */
-	public int load(InputStream is) throws IOException 
+	private void load(InputStream is, int count) throws IOException 
 	{
-		return is.read(data, 0, size);
+		is.read(data, 0, count);
 	}
 
+    /**
+     * Load data to the container.
+     *
+     * @param is the data input stream.
+     * @return the number of successfully written bytes.
+     * @throws IOException if occured.
+     */
+    private int load(InputStream is) throws IOException 
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int count = 0;
+        byte[] buff = new byte[4096];
+        while(count > 0)
+        {
+            count = is.read(buff,0,buff.length);
+            if(count > 0)
+            {
+                baos.write(buff,0,count);
+            }
+        }
+        data = baos.toByteArray();
+        return data.length;
+    }
+    
 	/**
 	 * get the name of the item.
 	 *
@@ -127,7 +164,7 @@ public class UploadContainer
 	 *
 	 * @return the data.
 	 */
-	public byte[] getData()
+	public byte[] getBytes()
 	{
 		return data;
 	}
