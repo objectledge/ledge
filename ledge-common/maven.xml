@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.4 2004-09-03 13:20:59 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.5 2004-11-25 11:35:11 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
@@ -10,7 +10,9 @@
 	</preGoal>         
 	
 	<preGoal name="war:war">
-	  <attainGoal name="ledge:index-war"/>
+    <attainGoal name="ledge:repackage-content"/>
+    <attainGoal name="ledge:version-war"/>
+    <attainGoal name="ledge:index-war"/>
 	</preGoal>
   </j:if>
 
