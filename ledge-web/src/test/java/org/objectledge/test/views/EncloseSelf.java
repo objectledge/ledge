@@ -28,13 +28,14 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
+import org.objectledge.templating.Template;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 import org.objectledge.web.mvc.builders.ViewPair;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EncloseSelf.java,v 1.1 2004-01-21 14:48:18 fil Exp $
+ * @version $Id: EncloseSelf.java,v 1.2 2004-05-27 13:00:01 fil Exp $
  */
 public class EncloseSelf
     extends DefaultBuilder
@@ -44,7 +45,7 @@ public class EncloseSelf
         super(context);
     }
     
-    public ViewPair getEnclosingViewPair()
+    public ViewPair getEnclosingViewPair(Template actualTemplate)
     {
         return new ViewPair(this, null); 
     }
