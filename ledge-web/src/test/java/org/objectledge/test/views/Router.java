@@ -28,28 +28,23 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
-import org.objectledge.web.mvc.finders.MVCFinder;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Router.java,v 1.1 2004-01-20 15:27:10 fil Exp $
+ * @version $Id: Router.java,v 1.2 2005-02-16 17:19:25 zwierzem Exp $
  */
 public class Router
     extends DefaultBuilder
 {
-    private MVCFinder finder;
-    
-    public Router(Context context, MVCFinder finder)
+    public Router(Context context)
     { 
         super(context);
-        this.finder = finder;
     }
     
-    public Builder route()
+    public String route(String thisViewName)
     {
-        return finder.findBuilder("RoutedTo");
+        return "RoutedTo";
     }
 }

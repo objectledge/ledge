@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.23 2005-02-08 19:11:33 rafal Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.24 2005-02-16 17:19:28 zwierzem Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -70,7 +70,7 @@ public class BuilderExecutorValve
      * @param classFinder finder for builder objects
      * @param templateFinder finder for template objects
      * @param securityHelper security helper for access checking
-     * @param maxRouteCalls maxmimal number of {@link Builder#route()} calls per {@link Builder}
+     * @param maxRouteCalls maxmimal number of {@link Builder#route(String)} calls per {@link Builder}
      * @param maxEnclosures maxmimal number of {@link Builder} enclosures
      * 	(also {@link Builder#getEnclosingViewPair(Template)} calls)
 	 */
@@ -103,8 +103,9 @@ public class BuilderExecutorValve
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 	
 		// get initial builder, template and embedded result
+        String viewName = mvcContext.getView();
 		String embeddedResult = null;
-		Builder builder = classFinder.findBuilder(mvcContext.getView());
+		Builder builder = classFinder.findBuilder(viewName);
 		Template template = templateFinder.findBuilderTemplate(mvcContext.getView());
 		
 		// start processing
@@ -118,12 +119,14 @@ public class BuilderExecutorValve
                 int routeCalls;
                 for (routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
                 {
-                    Builder routeBuilder = builder.route();
-                    if(routeBuilder == null)
+                    
+                    String routeBuilderName = builder.route(viewName);
+                    if(routeBuilderName == null)
                     {
                         break;
                     }
-                    builder = routeBuilder;
+                    viewName = routeBuilderName;
+                    builder = classFinder.findBuilder(viewName);
                     builderRouted = true;
                 }
                 if(routeCalls >= maxRouteCalls)
@@ -188,6 +191,7 @@ public class BuilderExecutorValve
 				enclosingBuilder = classFinder.findEnclosingBuilder(builder);
 			}
 			builder = enclosingBuilder;
+            // TODO: viewName = enclosingViewName;
 
 			if(enclosingTemplate == null && template != null)
 			{

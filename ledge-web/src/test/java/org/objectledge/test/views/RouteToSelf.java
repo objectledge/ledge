@@ -28,13 +28,12 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RouteToSelf.java,v 1.1 2004-01-21 14:48:18 fil Exp $
+ * @version $Id: RouteToSelf.java,v 1.2 2005-02-16 17:19:25 zwierzem Exp $
  */
 public class RouteToSelf extends DefaultBuilder
 {
@@ -43,8 +42,8 @@ public class RouteToSelf extends DefaultBuilder
         super(context);
     }
     
-    public Builder route()
+    public String route(String thisViewName)
     {
-        return this;
+        return thisViewName;
     }
 }

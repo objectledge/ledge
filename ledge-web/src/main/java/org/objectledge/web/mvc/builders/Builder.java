@@ -33,7 +33,7 @@ import org.objectledge.templating.Template;
  * Builder of a single view element.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.4 2004-05-18 11:24:53 pablo Exp $
+ * @version $Id: Builder.java,v 1.5 2005-02-16 17:19:28 zwierzem Exp $
  */
 ///CLOVER:OFF
 public interface Builder
@@ -42,10 +42,13 @@ public interface Builder
 	 * This method is called to allow the view builder to redirect the control to another builder
 	 * without executing the build method.
 	 * 
-     * @return the builder which will be executed instead of current builder, or <code>null</code>
-     *         to execute this builder.
+     * @param thisViewName the name of currently processed view (builder)
+     *  (from request, route calls or enclosure)
+	 * 
+     * @return the name of the view which will be executed instead of current builder, or
+     *  <code>null</code> to execute this builder.
      */
-    public Builder route();
+    public String route(String thisViewName);
     
 	/**
 	 * Build method executes builder logic which should return rendered <code>String</code>.
