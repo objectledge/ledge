@@ -44,7 +44,7 @@ import com.meterware.servletunit.ServletUnitClient;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServletTest.java,v 1.4 2003-12-23 17:14:28 pablo Exp $
+ * @version $Id: LedgeServletTest.java,v 1.5 2003-12-29 09:44:44 pablo Exp $
  */
 public class LedgeServletTest extends TestCase
 {
@@ -105,6 +105,11 @@ public class LedgeServletTest extends TestCase
 		WebResponse response = client.getResponse(request);
 		assertNotNull(response);
 		assertEquals(200, response.getResponseCode());
-		assertEquals("Hello world!", response.getText());
+		assertEquals("bar", response.getText());
+		request = new GetMethodWebRequest("http://localhost/ledge/foo/foo");
+		response = client.getResponse(request);
+		assertNotNull(response);
+		assertEquals(200, response.getResponseCode());
+		assertEquals("foo", response.getText());
 	}
 }
