@@ -40,7 +40,7 @@ import org.objectledge.web.HttpContext;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderTestValve.java,v 1.2 2004-01-12 15:00:58 fil Exp $
+ * @version $Id: RequestParametersLoaderTestValve.java,v 1.3 2004-01-14 13:01:27 fil Exp $
  */
 public class RequestParametersLoaderTestValve implements Runnable
 {
@@ -70,7 +70,7 @@ public class RequestParametersLoaderTestValve implements Runnable
 		response.setContentType("text");
 		try
 		{
-			PrintWriter pw = response.getWriter();
+			PrintWriter pw = httpContext.getPrintWriter();
 			pw.print(parameters.get("foo","bar"));
 			pw.close();
 		}
