@@ -36,7 +36,7 @@ import org.objectledge.context.Context;
  *
  * <p>Created on Jan 14, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileUpload.java,v 1.1 2004-01-14 13:27:16 fil Exp $
+ * @version $Id: FileUpload.java,v 1.2 2004-01-14 13:28:48 fil Exp $
  */
 public class FileUpload
 {
@@ -70,7 +70,7 @@ public class FileUpload
      * @param name the name of the item.
      * @return the upload container, or <code>null</code> if not available.
      */
-    public UploadContainer getItem(String name) 
+    public UploadContainer getContainer(String name) 
     {
         Map map =(Map)context.getAttribute(UPLOAD_CONTEXT_KEY);
         if (map == null) 
