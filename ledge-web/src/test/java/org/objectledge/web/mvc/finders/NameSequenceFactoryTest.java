@@ -42,7 +42,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.3 2004-01-19 13:44:44 fil Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.4 2004-01-19 13:52:18 fil Exp $
  */
 public class NameSequenceFactoryTest extends TestCase
 {
@@ -85,6 +85,18 @@ public class NameSequenceFactoryTest extends TestCase
         assertEquals("views/Default", templateSequence.next());
         assertEquals("Default", templateSequence.next());
         assertEquals(false, templateSequence.hasNext());
+    }
+    
+    public void testDots()
+        throws Exception
+    {
+        NameSequenceFactory factory = getNameSequenceFactory("dots");
+        Sequence classSequence = factory.getClassNameSequence("views.foo.Bar");
+        assertEquals("org.objectledge.test.views.foo.Bar", classSequence.next());
+        assertEquals("org.objectledge.test.views.foo.Default", classSequence.next());
+        assertEquals("org.objectledge.test.views.Default", classSequence.next());
+        assertEquals("org.objectledge.test.Default", classSequence.next());
+        assertEquals(false, classSequence.hasNext());
     }
     
     public void testReverseLookups()
