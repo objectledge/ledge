@@ -30,9 +30,10 @@ package org.objectledge.selector;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UndefinedVariableException.java,v 1.1 2004-01-22 11:28:01 fil Exp $
+ * @version $Id: UndefinedVariableException.java,v 1.2 2004-01-23 12:09:39 fil Exp $
  */
-public class UndefinedVariableException extends Exception
+public class UndefinedVariableException 
+    extends EvaluationException
 {
     private String variable;
     
