@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>ObjectLedge : container </title>
+  </properties>
+  
+  <body>
+    <section name="PicoContainer extensions">
+      <subsection name="SequenceParameter">
+      </subsection>
+      
+      <subsection name="ComponentAdapter customization">
+      </subsection>
+      
+      <subsection name="XML front end">
+      </subsection>
+    </section>
+  </body>
+</document>
+  
