@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.i18n.impl;
+package org.objectledge.i18n;
 
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18n;
