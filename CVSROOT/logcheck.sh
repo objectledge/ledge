@@ -1,5 +1,7 @@
 #! /bin/sh
 
+echo -${1}- -`echo ${1} | cut -d , -f 1`-
+
 #
 # capture log
 #
