@@ -1,0 +1,9 @@
+## A template for generating the file list
+#foreach($dir in $files.directories())
+#if($dir.path.length() > $skip)
+${dir.path.substring($skip)}/
+#end
+#end
+#foreach($file in $files.iterator())
+$file.path.substring($skip) $file.length() $file.lastModified()
+#end

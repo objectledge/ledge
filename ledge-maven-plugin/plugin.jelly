@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+ | Ledge Maven plugin 
+ |
+ | @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ | @version $Id$
+ -->
+<project xmlns:j="jelly:core"
+         xmlns:define="jelly:define"
+         xmlns:velocity="jelly:velocity"
+         xmlns:ant="jelly:ant"
+         xmlns:ledge="ledge">
+
+  <define:taglib uri="ledge">
+    <!--
+     | Create index file used by ReadOnlyFileSystemProvider
+     | 
+     | @param @dir directory to index
+     | @param @index the file to write index to. ${dir}/META-INF/files.lst if not set.
+     -->
+    <define:tag name="index-files">
+      <ant:echo>Creating file index...</ant:echo>
+      <j:if test="${dir == null}">
+        <ant:fail>required attribute directory is not set</ant:fail>
+      </j:if>
+      <j:if test="${index == null}">
+        <j:set var="index" value="${dir}/META-INF/files.lst"/>
+      </j:if>
+      <j:new var="indexFile" className="java.io.File">
+        <j:arg type="java.lang.String" value="${index}"/>
+      </j:new>
+      <j:invoke method="mkdirs" on="${indexFile.getParentFile()}"/>
+      <ant:fileScanner var="files">
+        <ant:fileset dir="${dir}" excludes="**/.*"/>
+      </ant:fileScanner>
+      <j:new var="dirFile" className="java.io.File">
+        <j:arg type="java.lang.String" value="${dir}"/>
+      </j:new>
+      <j:set var="skip" value="${dirFile.canonicalPath.length()}"/>
+      <velocity:merge name="${index}"
+                      basedir="${plugin.dir}/plugin-resources/templates"
+                      template="files.lst.vt"
+                      outputEncoding="UTF-8"/>        
+    </define:tag>
+  </define:taglib>
+
+  <goal name="ledge:index-jar"
+        description="Generates a jar index in maven.build.dest/META-INF/files.lst">
+    <ledge:index-files dir="${maven.build.dest}"/>
+  </goal>
+  
+  <goal name="ledge:index-war"
+        description="Generates a war index in maven.war.webapp.dir/WEB-INF/files.lst">
+    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
+    <ledge:index-files dir="${webappDir}" index="${webappDir}/WEB-INF/files.lst"/>
+  </goal> 
+  
+</project>

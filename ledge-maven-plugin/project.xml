@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: project.xml,v 1.1 2003-11-25 13:06:42 fil Exp $ -->
+<project>
+
+  <extend>../ledge-reactor/shared/project.xml</extend>
+
+  <!-- project info -->
+  
+  <groupId>objectledge</groupId> 
+  <id>ledge-maven-plugin</id>
+  <currentVersion>1.0</currentVersion>
+  <name>Ledge Maven plugin</name>
+  <shortDescription>A plugin for the Maven build tool useful in development of Ledge based applications.</shortDescription>
+  
+  <!-- dependencies -->
+  
+  <dependencies>
+    <dependency>
+      <groupId>commons-jelly</groupId>
+      <artifactId>commons-jelly-tags-velocity</artifactId>
+      <version>20030303.205659</version>
+    </dependency>
+    <dependency>
+      <id>velocity</id>
+      <version>1.4-dev</version>
+    </dependency>
+  </dependencies>
+
+  <!-- build -->
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/plugin-resources</directory>
+        <targetPath>plugin-resources</targetPath>
+      </resource>
+      <resource>
+        <includes>
+          <include>plugin.*</include>
+          <include>project.xml</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+</project>
