@@ -33,12 +33,12 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import org.objectledge.pico.SequenceParameter;
+import org.objectledge.pico.StringParameter;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.ComponentAdapterFactory;
 import org.picocontainer.defaults.ComponentParameter;
-import org.picocontainer.defaults.ConstantParameter;
 import org.picocontainer.defaults.DefaultComponentAdapterFactory;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picoextras.reflection.DefaultReflectionFrontEnd;
@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  *
  * <p>Created on Dec 8, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeXmlFrontEnd.java,v 1.7 2003-12-29 11:10:33 fil Exp $
+ * @version $Id: LedgeXmlFrontEnd.java,v 1.8 2004-01-09 14:15:51 fil Exp $
  */
 public class LedgeXmlFrontEnd 
     implements XmlFrontEnd
@@ -204,15 +204,8 @@ public class LedgeXmlFrontEnd
     private Parameter loadConstantParameter(Element element)
         throws ClassNotFoundException, PicoCompositionException
     {
-        String className = element.getAttribute("class");
         String stringValue = element.getAttribute("value");
-        if(className == null || className.equals(""))
-        {
-            className = "java.lang.String";
-        }
-        Class desiredClass = loadClass(className);
-        Object value = converter.convertTo(desiredClass, stringValue);
-        return new ConstantParameter(value);
+        return new StringParameter(stringValue);
     }
     
     /**
@@ -243,10 +236,8 @@ public class LedgeXmlFrontEnd
     private Parameter loadSequenceParameter(Element element)
         throws ClassNotFoundException, PicoCompositionException
     {
-        String paramteterClassName = element.getAttribute("class");
         Parameter[] parameters = loadParameters(element);
-        Class parameterClass = loadClass(paramteterClassName);
-        return new SequenceParameter(parameters, parameterClass);
+        return new SequenceParameter(parameters);
     }
 
 

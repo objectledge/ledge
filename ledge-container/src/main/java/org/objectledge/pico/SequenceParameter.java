@@ -53,35 +53,14 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * size, or a no-argument constructor) or be Java array type.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameter.java,v 1.1 2003-12-08 12:35:27 fil Exp $
+ * @version $Id: SequenceParameter.java,v 1.2 2004-01-09 14:15:51 fil Exp $
  */
 public class SequenceParameter implements Parameter
 {
     private Parameter[] elements;
     
-    private Class componentImplementation = null;
-
     /**
-     * Creates a type-bounded sequence parameter.
-     * 
-     * @param elements the sequence elements.
-     * @param componentImplementation the expected type of the paramter instance.
-     *        should be a collection, or an array type.
-     */
-    public SequenceParameter(Parameter[] elements, Class componentImplementation)
-    {
-        this.elements = elements;
-        this.componentImplementation = componentImplementation;
-        if(componentImplementation.getComponentType() == null &&
-            !Collection.class.isAssignableFrom(componentImplementation))
-        {
-            throw new NonCompositeTypeException(componentImplementation.getName()+
-                " is not a Collection nor array type");        
-        }
-    }
-    
-    /**
-     * Creates an unboudned sequence parameter.
+     * Creates a sequence parameter.
      * 
      * @param elements the sequence elements.
      */
@@ -93,18 +72,24 @@ public class SequenceParameter implements Parameter
     /**
      * {@inheritDoc}
      */
-    public ComponentAdapter resolveAdapter(PicoContainer componentRegistry)
+    public ComponentAdapter resolveAdapter(PicoContainer componentRegistry, Class expectedType)
         throws PicoIntrospectionException
     {
         ComponentAdapter[] adapters = new ComponentAdapter[elements.length];
-        Class elementType = null;
-        if(componentImplementation.getComponentType() != null)
+        if(expectedType.getComponentType() == null &&
+            !Collection.class.isAssignableFrom(expectedType))
         {
-            elementType = componentImplementation.getComponentType();
+            throw new NonCompositeTypeException(expectedType.getName()+
+                " is not a Collection nor array type");        
+        }
+        Class elementType = null;
+        if(expectedType.getComponentType() != null)
+        {
+            elementType = expectedType.getComponentType();
         }
         for (int i = 0; i < elements.length; i++)
         {
-            adapters[i] = elements[i].resolveAdapter(componentRegistry);
+            adapters[i] = elements[i].resolveAdapter(componentRegistry, null);
             if(adapters[i] == null)
             {
                 return null; 
@@ -118,7 +103,7 @@ public class SequenceParameter implements Parameter
                 }
             }
         }
-        return new SequenceComponentAdapter(adapters, componentImplementation);
+        return new SequenceComponentAdapter(adapters, expectedType);
     }
     
     /**
@@ -126,7 +111,7 @@ public class SequenceParameter implements Parameter
      *
      * <p>Created on Dec 8, 2003</p>
      * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
-     * @version $Id: SequenceParameter.java,v 1.1 2003-12-08 12:35:27 fil Exp $
+     * @version $Id: SequenceParameter.java,v 1.2 2004-01-09 14:15:51 fil Exp $
      */
     private static class SequenceComponentAdapter
         implements ComponentAdapter

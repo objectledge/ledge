@@ -44,7 +44,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameterTest.java,v 1.3 2004-01-08 10:11:59 fil Exp $
+ * @version $Id: SequenceParameterTest.java,v 1.4 2004-01-09 14:15:51 fil Exp $
  */
 public class SequenceParameterTest extends TestCase
 {
@@ -94,8 +94,7 @@ public class SequenceParameterTest extends TestCase
                             "org.objectledge.filesystem.FileSystemProvider:local"),
                         new ComponentParameter(
                             "org.objectledge.filesystem.FileSystemProvider:classpath"),
-                    },
-                    Class.forName("[Lorg.objectledge.filesystem.FileSystemProvider;")
+                    }
                 ),
                 new ConstantParameter(new Integer(4096)),
                 new ConstantParameter(new Integer(4096))
