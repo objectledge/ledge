@@ -28,9 +28,12 @@
 
 package org.objectledge.web;
 
-import java.util.Hashtable;
+import java.io.File;
+import java.io.InputStream;
 
 import junit.framework.TestCase;
+
+import org.objectledge.filesystem.FileSystem;
 
 import com.meterware.httpunit.GetMethodWebRequest;
 import com.meterware.httpunit.WebRequest;
@@ -42,7 +45,7 @@ import com.meterware.servletunit.ServletUnitClient;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServletTest.java,v 1.1 2003-12-23 08:22:51 fil Exp $
+ * @version $Id: LedgeServletTest.java,v 1.2 2003-12-23 14:36:59 fil Exp $
  */
 public class LedgeServletTest extends TestCase
 {
@@ -59,16 +62,20 @@ public class LedgeServletTest extends TestCase
     public void testLedgeServlet()
         throws Exception
     {
-        ServletRunner runner = new ServletRunner();
-        Hashtable params = new Hashtable();
         String root = System.getProperty("ledge.root");
         if(root == null)
         {
             throw new Exception("system property ledge.root undefined. "+
                 "use -Dledge.root=.../ledge-container/src/test/resources");
         }
-        params.put("ledge.root", root+"/container1");
-        runner.registerServlet("ledge", LedgeServlet.class.getName(), params);
+        root = root+"/container1";
+        FileSystem fs = FileSystem.getStandardFileSystem(root);
+        InputStream webXml = fs.getInputStream("/WEB-INF/web.xml");
+        if(webXml == null)
+        {
+            throw new Exception(root+"/WEB-INF/web.xml not found");
+        }
+        ServletRunner runner = new ServletRunner(webXml);
         ServletUnitClient client = runner.newClient();
         WebRequest request = new GetMethodWebRequest("http://localhost/ledge");
         WebResponse response = client.getResponse(request);
