@@ -41,7 +41,7 @@ import org.picocontainer.Startable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.7 2004-07-22 16:39:41 zwierzem Exp $
+ * @version $Id: JotmTransaction.java,v 1.8 2004-12-22 08:35:11 rafal Exp $
  */
 public class JotmTransaction
     extends Transaction
@@ -55,7 +55,7 @@ public class JotmTransaction
      * @param tracing tracing depth.
      * @param context the threads processing context.
      * @param log the logger to use.
-     * @param loggingConfguration enforces instantiation order on Pico, may be null.
+     * @param loggingConfigurator enforces instantiation order on Pico, may be null.
      * @throws NamingException if the manager could not be initialized.
      */
     public JotmTransaction(int tracing, Context context, Logger log, 

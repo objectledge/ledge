@@ -38,7 +38,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  * Base encoder using CharacterEncoders.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractEncoder.java,v 1.1 2004-07-05 12:38:47 zwierzem Exp $
+ * @version $Id: AbstractEncoder.java,v 1.2 2004-12-22 08:35:13 rafal Exp $
  */
 public abstract class AbstractEncoder
 {
@@ -69,6 +69,12 @@ public abstract class AbstractEncoder
 
 	// implementation ----------------------------------------------------------------------------
 	
+    /**
+     * Returns an encoder instance for the specific encoding.
+     * 
+     * @param encodingName the name of character encoding.
+     * @return the encoder object.
+     */
     protected CharEncoder getCharsetEncoder(String encodingName)
     {
     	if(encodingName == null)

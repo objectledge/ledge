@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DateFormatTool.java,v 1.3 2004-11-04 12:33:58 zwierzem Exp $
+ * @version $Id: DateFormatTool.java,v 1.4 2004-12-22 08:34:58 rafal Exp $
  */
 public class DateFormatTool
 {
@@ -58,8 +58,10 @@ public class DateFormatTool
 
 	/**
 	 * Default constructor.
-	 * @param i18n the i18n component.
+     * 
+	 * @param dateFormater the date formatter object.
 	 * @param locale the locale.
+     * @param format the date format object.
 	 */
 	public DateFormatTool(DateFormatter dateFormater, Locale locale, DateFormat format)
 	{
@@ -74,6 +76,7 @@ public class DateFormatTool
      * Sets the formatting style.
      *
      * @param patternAlias the pattern name.
+     * @return new DateFormatTool instance.
      */
     public DateFormatTool style(String patternAlias)
     {
@@ -89,6 +92,7 @@ public class DateFormatTool
      * <code>java.text.SimpleDateFormat</code> documentation.</p>
      *
      * @param pattern the formatting pattern.
+     * @return new DateFormatTool instance.
      */
     public DateFormatTool pattern(String pattern)
     {
@@ -122,6 +126,7 @@ public class DateFormatTool
      * Formats the Date object.
      *
      * @param date the Date.
+     * @return formatted date.
      */
     public String format(Date date)
     {
@@ -135,7 +140,8 @@ public class DateFormatTool
     /**
      * Formats the date given as Unix time.
      *
-     * @parm date the date given as Unix time.
+     * @param date the date given as Unix time.
+     * @return formatted date.
      */
     public String format(long date)
     {
@@ -156,6 +162,8 @@ public class DateFormatTool
      *   <li>millisecond</li>
      *  </ul>
      * </p>
+     * @param date the date to split.
+     * @return list of date fields, as described above.
      */
     public List getFields(Date date)
     {
@@ -176,6 +184,9 @@ public class DateFormatTool
      *   <li>millisecond</li>
      *  </ul>
      * </p>
+     * @param date the date to split.
+     * @param zone the timezone to use.
+     * @return list of date fields, as described above.
      */
     public List getFields(Date date, TimeZone zone)
     {
@@ -198,6 +209,9 @@ public class DateFormatTool
 
     /**
      * Returns the time zone object with the specified id.
+     * 
+     * @param id time zone identifier string.
+     * @return a TimeZone object.
      */
     public TimeZone getTimeZone(String id)
     {
@@ -206,6 +220,8 @@ public class DateFormatTool
 
     /**
      * Returns the available time zone ids.
+     * 
+     * @return list of recognized time zone ids.
      */
     public List getTimeZoneIds()
     {

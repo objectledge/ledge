@@ -44,7 +44,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.16 2004-12-20 16:08:01 pablo Exp $
+ * @version $Id: AbstractI18n.java,v 1.17 2004-12-22 08:35:01 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -89,6 +89,7 @@ public abstract class AbstractI18n implements I18n
 	 *
 	 * @param config the configuration.
 	 * @param logger the logger. 
+     * @throws ConfigurationException if the component configutation is malformed.
 	 */
 	public AbstractI18n(Configuration config, Logger logger)
 		throws ConfigurationException

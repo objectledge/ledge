@@ -35,16 +35,16 @@ import org.apache.log4j.spi.LoggerFactory;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeLoggerHierarchy.java,v 1.1 2004-06-24 14:00:50 fil Exp $
+ * @version $Id: LedgeLoggerHierarchy.java,v 1.2 2004-12-22 08:34:55 rafal Exp $
  */
 public class LedgeLoggerHierarchy extends Hierarchy
 {
     private LoggerFactory ledgeLoggerFactory;
     
     /**
-     * Creates new LedgeLoggerHierarch instance.
+     * Creates new LedgeLoggerHierarchy instance.
      * 
-     * @param root
+     * @param root the root Logger of the Hierarchy.
      */
     public LedgeLoggerHierarchy(Logger root)
     {

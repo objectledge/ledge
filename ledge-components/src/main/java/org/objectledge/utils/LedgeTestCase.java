@@ -56,7 +56,12 @@ public abstract class LedgeTestCase extends MockObjectTestCase
 
     // filesystem ///////////////////////////////////////////////////////////////////////////////
 
-    protected FileSystem getFileSystem() throws Exception
+    /**
+     * Returns FileSystem component instance rooted at "src/test/resources" directory.
+     * 
+     * @return FileSystem component instance.
+     */
+    protected FileSystem getFileSystem() 
     {
         if (fileSystem == null)
         {
@@ -65,6 +70,12 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         return fileSystem;
     }
 
+    /**
+     * Returns standard FileSystem rooted at the specified path.
+     * 
+     * @param root the root directory of the standard file system.
+     * @return FileSystem component instance.
+     */
     protected FileSystem getFileSystem(String root)
     {
         return FileSystem.getStandardFileSystem(root);
@@ -92,6 +103,13 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         return handler.getConfiguration();
     }
 
+    /**
+     * Check component's configuration against a specified schema.
+     * 
+     * @param configuration the configuration path.
+     * @param schema schema path.
+     * @throws Exception if the configration validation fails.
+     */
     protected void checkSchema(String configuration, String schema) throws Exception
     {
 
@@ -137,6 +155,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
      * 
      * @param mockedType to type to mock.
      * @param roleName mocked object role name
+     * @return a CoreMock object.
      */
     protected DynamicMock newCoreMock(Class mockedType, String roleName)
     {

@@ -32,14 +32,14 @@ package org.objectledge.filesystem;
  * file's/directory's name. The message contains the unsupported characters.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UnsupportedCharactersInFilePathException.java,v 1.1 2004-09-24 11:24:34 zwierzem Exp $
+ * @version $Id: UnsupportedCharactersInFilePathException.java,v 1.2 2004-12-22 08:35:00 rafal Exp $
  */
 public class UnsupportedCharactersInFilePathException extends Exception
 {
     /**
      * Constructs a new UnsupportedCharactersInFilePathException with a custom message.
      * 
-     * @param message
+     * @param message the detail message.
      */
     public UnsupportedCharactersInFilePathException(String message)
     {

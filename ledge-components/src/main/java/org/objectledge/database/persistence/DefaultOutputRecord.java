@@ -61,6 +61,8 @@ public class DefaultOutputRecord implements OutputRecord
         
     /**
      * Constructs an <code>OutputRecordImpl</code>.
+     * 
+     * @param object a Presistent object.
      */
     public DefaultOutputRecord(Persistent object)
     {

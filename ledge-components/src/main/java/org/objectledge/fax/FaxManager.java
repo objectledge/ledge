@@ -36,7 +36,7 @@ import org.objectledge.parameters.Parameters;
  * Fax manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FaxManager.java,v 1.1 2004-06-24 15:21:38 pablo Exp $
+ * @version $Id: FaxManager.java,v 1.2 2004-12-22 08:35:08 rafal Exp $
  */
 public interface FaxManager 
 {
@@ -50,6 +50,7 @@ public interface FaxManager
      * @param notificationAddress the address to send the notification.
      * @param highResolution the resolution mode switch.
      * @param from the fax sender header.
+     * @throws FaxManagerException if fax seding failed.
      */
     public void sendFax(String destinationAddress, String content, String encoding, boolean notify, 
                         String notificationAddress, boolean highResolution, String from)
@@ -62,6 +63,7 @@ public interface FaxManager
      * @param from the fax sender header.
      * @param content the body of the fax.
      * @param parameters the fax sending paramters.
+     * @throws FaxManagerException if fax seding failed.
      */
     public void sendFax(String destinationAddress, String from, 
     					InputStream content, Parameters parameters)

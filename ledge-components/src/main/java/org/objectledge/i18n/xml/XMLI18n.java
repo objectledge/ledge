@@ -91,8 +91,8 @@ public class XMLI18n extends AbstractI18n
 	 * @param xmlValidator the XML Validator.
 	 * @throws ParserConfigurationException if happen.
 	 * @throws SAXException if happen.
-	 * @throws ConfigurationException
-	 */	
+	 * @throws ConfigurationException if the component configutation is malformed.	 
+     */	
 	public XMLI18n(Configuration config, Logger logger,
 					FileSystem fileSystem, XMLValidator xmlValidator)
 		throws ParserConfigurationException, SAXException, ConfigurationException 

@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * The date formater component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DateFormatter.java,v 1.1 2004-09-17 13:13:53 rafal Exp $
+ * @version $Id: DateFormatter.java,v 1.2 2004-12-22 08:34:57 rafal Exp $
  */
 public class DateFormatter
 {
@@ -61,6 +61,7 @@ public class DateFormatter
 	 *
 	 * @param config the configuration.
 	 * @param logger the logger. 
+     * @throws ConfigurationException if the component configuration is malformed.
 	 */
 	public DateFormatter(Configuration config, Logger logger)
 		throws ConfigurationException
@@ -94,7 +95,7 @@ public class DateFormatter
 	/**
 	 * Get the date format based on defined pattern.
 	 * 
-	 * @param alias the pattern name.
+	 * @param pattern the pattern.
 	 * @param locale the locale.
 	 * @return the date format object.
 	 */

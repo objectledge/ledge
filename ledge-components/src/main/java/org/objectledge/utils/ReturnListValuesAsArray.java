@@ -38,13 +38,18 @@ import org.jmock.core.Stub;
  * A Stub for returing values of a predefined list as an array. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ReturnListValuesAsArray.java,v 1.1 2004-05-28 13:34:33 fil Exp $
+ * @version $Id: ReturnListValuesAsArray.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
  */
 public class ReturnListValuesAsArray
 	implements SelfDescribing, Stub
 {
     private List list;
     
+    /**
+     * Creates new ReturnListValuesAsArray Stub instance.
+     * 
+     * @param list the list to be returned.
+     */
     public ReturnListValuesAsArray(List list)
     {
         this.list = list;

@@ -34,14 +34,14 @@ import org.apache.log4j.Priority;
  * Logger subclass, created to plug in {@link StackTrace} throwable formatter.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeLogger.java,v 1.2 2004-12-21 06:30:18 rafal Exp $
+ * @version $Id: LedgeLogger.java,v 1.3 2004-12-22 08:34:55 rafal Exp $
  */
 public class LedgeLogger extends Logger
 {
     /**
      * Creates new LedgeCategory instance.
      * 
-     * @param name
+     * @param name the name of the logger.
      */
     public LedgeLogger(String name)
     {
@@ -50,6 +50,11 @@ public class LedgeLogger extends Logger
 
     /**
      * This method creates a new logging event and logs the event without further checks.
+     * 
+     * @param fqcn the fully qualified name of the class that initiated the event.
+     * @param level the logging priority.
+     * @param message the message.
+     * @param t the attached Throwable, if any.
      */
     protected void forcedLog(String fqcn, Priority level, Object message, Throwable t)
     {

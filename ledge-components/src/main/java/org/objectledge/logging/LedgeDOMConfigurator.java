@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
  * implementation.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeDOMConfigurator.java,v 1.2 2004-12-21 06:24:27 rafal Exp $
+ * @version $Id: LedgeDOMConfigurator.java,v 1.3 2004-12-22 08:34:55 rafal Exp $
  */
 public class LedgeDOMConfigurator
 	extends DOMConfigurator
@@ -156,6 +156,9 @@ public class LedgeDOMConfigurator
     
     /**
      * Used internally to parse an appender element.
+     * 
+     * @param appenderElement DOM element describing an appender.
+     * @return an Appender object.
      */
     protected Appender parseAppender(Element appenderElement)
     {

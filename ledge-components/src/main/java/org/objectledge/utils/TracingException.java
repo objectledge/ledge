@@ -31,7 +31,7 @@ package org.objectledge.utils;
  * to cut down the stactrace to the few important frames.</p>
  *
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
- * @version $Id: TracingException.java,v 1.1 2004-06-23 13:13:34 fil Exp $
+ * @version $Id: TracingException.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
  */
 public class TracingException
 	extends Exception
@@ -49,6 +49,8 @@ public class TracingException
 
     /**
      * Constructs a new <code>TracingException</code> with the specified depth.
+     * 
+     * @param depth desired tracing depth.
      */
     public TracingException(int depth)
     {

@@ -73,6 +73,7 @@ public class PersistentContext implements Persistent
      * Persistent context constructor.
      * 
      * @param dn the dn of the context.
+     * @param parentId the id of the parent context.
      */
     public PersistentContext(String dn, long parentId)
     {

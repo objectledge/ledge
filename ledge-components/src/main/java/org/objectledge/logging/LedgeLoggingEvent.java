@@ -36,7 +36,7 @@ import org.apache.log4j.spi.ThrowableInformation;
  * LoggingEvent subclass, created to plug in {@link StackTrace} throwable formatter.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeLoggingEvent.java,v 1.1 2004-06-24 14:00:50 fil Exp $
+ * @version $Id: LedgeLoggingEvent.java,v 1.2 2004-12-22 08:34:54 rafal Exp $
  */
 public class LedgeLoggingEvent
 	extends LoggingEvent
@@ -46,12 +46,12 @@ public class LedgeLoggingEvent
     /**
      * Creates new LedgeLoggingEvent instance.
      * 
-     * @param fqnOfCategoryClass
-     * @param logger
-     * @param timeStamp
-     * @param priority
-     * @param message
-     * @param throwable
+     * @param fqnOfCategoryClass the fully qualified name of the logger class.
+     * @param logger the logger object.
+     * @param timeStamp time stamp of the event.
+     * @param priority event priority.
+     * @param message the message.
+     * @param throwable the attached throwable if any.
      */
     public LedgeLoggingEvent(String fqnOfCategoryClass, Category logger, long timeStamp,
         Priority priority, Object message, Throwable throwable)
@@ -66,11 +66,11 @@ public class LedgeLoggingEvent
     /**
      * Creates new LedgeLoggingEvent instance.
      * 
-     * @param fqnOfCategoryClass
-     * @param logger
-     * @param priority
-     * @param message
-     * @param throwable
+     * @param fqnOfCategoryClass the fully qualified name of the logger class.
+     * @param logger the logger object.
+     * @param priority event priority.
+     * @param message the message.
+     * @param throwable the attached throwable if any.
      */
     public LedgeLoggingEvent(String fqnOfCategoryClass, Category logger, Priority priority,
         Object message, Throwable throwable)
@@ -89,6 +89,8 @@ public class LedgeLoggingEvent
      * 
      * <p> Note that the {@link Throwable}object contained within a {@link ThrowableInformation}does
      * not survive serialization. </p>
+     * 
+     * @return ThrowableInformation contained within this event.
      */
     public ThrowableInformation getThrowableInformation() 
     {

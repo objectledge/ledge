@@ -40,12 +40,17 @@ import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
  * A derivate of log4j.FileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeFileAppender.java,v 1.3 2004-09-24 11:25:24 zwierzem Exp $
+ * @version $Id: LedgeFileAppender.java,v 1.4 2004-12-22 08:34:55 rafal Exp $
  */
 public class LedgeFileAppender extends FileAppender
 {
     private FileSystem fileSystem;
     
+    /**
+     * Creates new LedgeFileAppender instance.
+     * 
+     * @param fileSystem Ledge FileSystem object.
+     */
     public LedgeFileAppender(FileSystem fileSystem)
     {
         this.fileSystem = fileSystem;
@@ -63,10 +68,11 @@ public class LedgeFileAppender extends FileAppender
      * <b>Do not use this method directly. To configure a FileAppender or one of its subclasses, set
      * its properties one by one and then call activateOptions. </b>
      * 
-     * @param fileName
-     *            The path to the log file.
-     * @param append
-     *            If true will append to fileName. Otherwise will truncate fileName.
+     * @param fileName The path to the log file.
+     * @param append If true will append to fileName. Otherwise will truncate fileName.
+     * @param bufferedIO If true buffered IO will be used.
+     * @param bufferSize the size of buffer in bytes.
+     * @throws IOException if setting up the file IO fails.
      */
     public synchronized void setFile(String fileName, boolean append, boolean bufferedIO,
         int bufferSize) throws IOException

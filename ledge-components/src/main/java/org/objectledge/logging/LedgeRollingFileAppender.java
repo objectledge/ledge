@@ -40,13 +40,18 @@ import org.objectledge.filesystem.FileSystem;
  * A derivate of log4j.RollingFileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeRollingFileAppender.java,v 1.4 2004-12-21 06:30:18 rafal Exp $
+ * @version $Id: LedgeRollingFileAppender.java,v 1.5 2004-12-22 08:34:55 rafal Exp $
  */
 public class LedgeRollingFileAppender
 	extends RollingFileAppender
 {
     private FileSystem fileSystem;
     
+    /**
+     * Creates new LedgeRollingFileAppender instance.
+     * 
+     * @param fileSystem the Ledge FileSystem.
+     */
     public LedgeRollingFileAppender(FileSystem fileSystem)
     {
         this.fileSystem = fileSystem;
@@ -64,10 +69,11 @@ public class LedgeRollingFileAppender
      * <b>Do not use this method directly. To configure a FileAppender or one of its subclasses, set
      * its properties one by one and then call activateOptions. </b>
      * 
-     * @param fileName
-     *            The path to the log file.
-     * @param append
-     *            If true will append to fileName. Otherwise will truncate fileName.
+     * @param fileName The path to the log file.
+     * @param append If true will append to fileName. Otherwise will truncate fileName.
+     * @param bufferedIO If true buffered IO will be used.
+     * @param bufferSize the size of buffer in bytes.
+     * @throws IOException if setting up the file IO fails.
      */
     public synchronized void setFile(String fileName, boolean append, boolean bufferedIO,
         int bufferSize) throws IOException

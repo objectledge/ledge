@@ -35,7 +35,7 @@ import java.util.List;
  * Captures a full stack trace in a multi-level <code>Throwable</code> sequence.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTrace.java,v 1.4 2004-12-21 06:30:16 rafal Exp $
+ * @version $Id: StackTrace.java,v 1.5 2004-12-22 08:35:04 rafal Exp $
  */
 public class StackTrace
 {    
@@ -170,6 +170,7 @@ public class StackTrace
      * Appends the stack trace to the provided StringBuffer.
      * 
      * @param buff the buffer.
+     * @return the StringBuffer passed in, for chaining.
      */
     public StringBuffer appendTo(StringBuffer buff)
     {

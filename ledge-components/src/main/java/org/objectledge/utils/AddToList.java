@@ -37,13 +37,18 @@ import org.jmock.core.Stub;
  * A Stub for adding objects to a predefined list.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddToList.java,v 1.1 2004-05-28 13:34:33 fil Exp $
+ * @version $Id: AddToList.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
  */
 public class AddToList
 	implements SelfDescribing, Stub
 {
     private List list;
     
+    /**
+     * Creates new AddToList Stub instance.
+     * 
+     * @param list to add objects to.
+     */
     public AddToList(List list)
     {
         this.list = list;
@@ -57,6 +62,9 @@ public class AddToList
         return buff.append("addToList("+list+")");
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public Object invoke(Invocation invocation)
     {
         if(invocation.parameterValues.size() != 1)
