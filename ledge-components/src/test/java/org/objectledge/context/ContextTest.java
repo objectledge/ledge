@@ -75,8 +75,14 @@ public class ContextTest extends TestCase
     public void testRemoveAttribute()
     {
 		context.setAttribute("foo","bar");
+        assertNotNull(context.getAttribute("foo"));
 		context.removeAttribute("foo");
 		assertNull(context.getAttribute("foo"));
+
+        context.setAttribute(Object.class, "bzz");
+        assertNotNull(context.getAttribute(Object.class));
+        context.removeAttribute(Object.class);
+        assertNull(context.getAttribute(Object.class));
     }
 
     public void testClearAttributes()

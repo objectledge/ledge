@@ -165,5 +165,12 @@ public class XMLI18nTest extends TestCase
     {
     	assertEquals("i18n",i18n.getKey());
     }
-
+    
+    public void testUndefined()
+    {
+        Locale plLocale = new Locale("pl","PL");
+        Locale noLocale = new Locale("no","NO");
+        assertEquals("foo2", i18n.get(noLocale, "foo2"));
+        assertEquals("undefined", i18n.get(plLocale, "undefined"));
+    }
 }
