@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.1 2004-05-13 15:48:58 fil Exp $ -->
+<!-- $Id: project.xml,v 1.2 2004-05-17 15:04:00 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -50,6 +50,18 @@
   </licenses>
 
   <mailingLists>
+    <mailingList>
+      <name>ObjectLedge release announcements</name>
+      <subscribe>objectledge-announce-subscribe@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-announce-unsubscribe@lists.objectledge.org</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-announce/</archive>
+    </mailingList>
+    <mailingList>
+      <name>ObjectLedge users discussion</name>
+      <subscribe>objectledge-user-subscribe@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-user-unsubscribe@lists.objectledge.org</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-user/</archive>
+    </mailingList>
     <mailingList>
       <name>ObjectLedge developers discussion</name>
       <subscribe>objectledge-dev-subscribe@lists.objectledge.org</subscribe>
@@ -127,4 +139,19 @@
 
   <!-- contributors -->
   
+  <reports>
+    <report>maven-license-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-tasklist-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-checkstyle-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-pmd-plugin</report>
+    <report>maven-simian-plugin</report>
+    <report>maven-faq-plugin</report>    
+    <report>maven-findbugs-plugin</report>
+  </reports>
+
 </project>

@@ -27,9 +27,14 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
  
-<!-- $Id: maven.xml,v 1.5 2003-12-18 15:31:56 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.6 2004-05-17 15:03:54 fil Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:ant="jelly:ant">
-  <postGoal name="xdoc:register-reports">
-  </postGoal>
+
+   <j:if test="${context.getVariable('maven.mode.online') == true}">
+     <postGoal name="xdoc:register-reports">
+       <attainGoal name="maven-linkcheck-plugin:register"/>
+     </postGoal>
+   </j:if>
+
 </project>

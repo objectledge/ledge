@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.7 2004-05-13 15:48:54 fil Exp $ -->
+<!-- $Id: project.xml,v 1.8 2004-05-17 15:03:54 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -24,4 +24,14 @@
     a few extensions to the Pico framework, customized containers for easy deployment of
     applications in command line, daemon, and J2EE servlet environments.    
   </description>
+  <reports>   
+    <report>maven-license-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-statcvs-plugin</report>
+    <report>maven-faq-plugin</report>    
+    <report>maven-multiproject-plugin</report>
+    <report>maven-dashboard-plugin</report>
+    <report>maven-multichanges-plugin</report>
+    <!-- <report>maven-jira-plugin</report> -->
+  </reports>
 </project>

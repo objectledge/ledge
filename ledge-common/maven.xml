@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.1 2004-05-13 15:48:58 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.2 2004-05-17 15:03:59 fil Exp $ -->
 <project xmlns:j="jelly:core"
+         xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
-  <postGoal name="xdoc:register-reports">
-    <j:if test="${context.getVariable('ledge.changelogs') == 'true'}">
-	  <attainGoal name="maven-statcvs-plugin:register"/>
+
+  <preGoal name="jar:jar">
+    <attainGoal name="ledge:index-jar"/>
+  </preGoal>         
+
+  <preGoal name="war:war">
+    <attainGoal name="ledge:index-war"/>
+  </preGoal>
+
+  <!-- reports -->
+         
+  <j:if test="${pom.bulid != null and !empty(pom.build.unitTestSourceDirectory)}">
+    <util:file var="testDir" name="${pom.build.unitTestSourceDirectory}"/>
+    <j:if test="${testDir.exists()}">
+      <postGoal name="xdoc:register-reports">
+        <attainGoal name="maven-clover-plugin:register"/>
+      </postGoal>
     </j:if>
-    <attainGoal name="maven-linkcheck-plugin:deregister"/>
-    <attainGoal name="maven-pmd-plugin:register"/>
-    <attainGoal name="maven-simian-plugin:register"/>
-    <attainGoal name="maven-findbugs-plugin:register"/>
-  </postGoal>
+  </j:if>
+   
+  <j:if test="${context.getVariable('maven.mode.online') == true}">
+    <postGoal name="xdoc:register-reports">
+      <attainGoal name="maven-statcvs-plugin:register"/>
+    </postGoal>
+  </j:if>
+
 </project>         
