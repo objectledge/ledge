@@ -26,42 +26,33 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.templating;
-
-import org.objectledge.context.Context;
+package org.objectledge.templating.tools;
 
 /**
- * Context tools populator.
+ * Context tool factory interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class ContextToolRecycler implements Runnable
+public interface ContextToolFactory
 {
-	/** tool component */
-	private ContextTools contextTools;
-	
-	/** context */
-	private Context context;
-	
 	/**
-	 * Component constructor.
+	 * Get the tool instance.
 	 * 
-	 * @param context the context.
-	 * @param contextTools the context tool component.
+	 * @return the tool instance.
 	 */
-	public ContextToolRecycler(Context context, ContextTools contextTools)
-	{
-		this.context = context;
-		this.contextTools = contextTools;
-	}
+	Object getTool();
 	
 	/**
-	 * Recycle previously populated context tools. 
+	 * Return the tool instance to the object pool.
+	 * 
+	 * @param tool the tool instance.
 	 */
-	public void run()
-	{
-		TemplatingContext templatingContext = (TemplatingContext)context
-			.getAttribute(TemplatingContext.CONTEXT_KEY);
-		contextTools.recycleTools(templatingContext);
-	}
+	void recycleTool(Object tool);
+
+	/**	
+ 	 * Get the key of the tool.
+ 	 *  
+ 	 * @return the tool key.
+ 	 */
+	String getKey();
 }

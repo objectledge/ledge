@@ -29,11 +29,11 @@
 package org.objectledge.i18n;
 
 import org.objectledge.context.Context;
-import org.objectledge.templating.ContextToolFactory;
+import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.mvc.MVCContext;
 
 /**
- * Base implementation of I18n component.
+ * Web bases I18n tool factory.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */

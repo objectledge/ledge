@@ -30,7 +30,7 @@ package org.objectledge.i18n;
 
 import java.util.Locale;
 
-import org.objectledge.templating.ContextToolFactory;
+import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.utils.StringUtils;
 
 /**

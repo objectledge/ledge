@@ -26,33 +26,65 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.templating;
+package org.objectledge.templating.tools;
+
+import org.objectledge.templating.TemplatingContext;
 
 /**
- * Context tool factory interface.
+ * Context tools components.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public interface ContextToolFactory
+public class ContextTools
 {
-	/**
-	 * Get the tool instance.
-	 * 
-	 * @return the tool instance.
-	 */
-	Object getTool();
+	/** tool factories list */
+	private ContextToolFactory[] toolFactories;
 	
 	/**
-	 * Return the tool instance to the object pool.
+	 * Component constructor.
 	 * 
-	 * @param tool the tool instance.
+	 * @param toolFactories the factories list.
 	 */
-	void recycleTool(Object tool);
-
-	/**	
- 	 * Get the key of the tool.
- 	 *  
- 	 * @return the tool key.
- 	 */
-	String getKey();
+	public ContextTools(ContextToolFactory[] toolFactories)
+	{
+		this.toolFactories = toolFactories;
+	}
+	
+	/**
+	 * Borrow the tools and put them into the context. 
+	 * 
+	 * @param templatingContext the templating context.
+	 */
+	public void populateTools(TemplatingContext templatingContext)
+	{
+		for(int i = 0; i < toolFactories.length; i++)
+		{
+			templatingContext.put(toolFactories[i].getKey(), 
+								  toolFactories[i].getTool());
+		}
+	}
+	
+	/**
+	 * Recycle all populated tools.
+	 * 
+	 * @param templatingContext the templating context.
+	 */
+	public void recycleTools(TemplatingContext templatingContext)
+	{
+		for(int i = 0; i < toolFactories.length; i++)
+		{
+			Object tool = templatingContext.get(toolFactories[i].getKey());
+			toolFactories[i].recycleTool(tool);
+		}
+	}
+	
+	/**
+	 * Get the factories.
+	 * 
+	 * @return the registered factories.
+	 */
+	public ContextToolFactory[] getToolFactories()
+	{
+		return toolFactories;
+	}
 }

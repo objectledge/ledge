@@ -26,63 +26,43 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.templating;
+package org.objectledge.templating.tools;
+
+import org.objectledge.context.Context;
+import org.objectledge.templating.TemplatingContext;
 
 /**
- * Context tools components.
+ * Context tools populator.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class ContextTools
+public class ContextToolPopulator implements Runnable
 {
-	/** tool factories list */
-	private ContextToolFactory[] toolFactories;
+	/** tool component */
+	private ContextTools contextTools;
+	
+	/** context */
+	private Context context;
 	
 	/**
 	 * Component constructor.
 	 * 
-	 * @param toolFactories the factories list.
+	 * @param context the context.
+	 * @param contextTools the context tool component.
 	 */
-	public ContextTools(ContextToolFactory[] toolFactories)
+	public ContextToolPopulator(Context context, ContextTools contextTools)
 	{
-		this.toolFactories = toolFactories;
+		this.context = context;
+		this.contextTools = contextTools;
 	}
 	
 	/**
 	 * Borrow the tools and put them into the context. 
-	 * 
-	 * @param templatingContext the templating context.
 	 */
-	public void populateTools(TemplatingContext templatingContext)
+	public void run()
 	{
-		for(int i = 0; i < toolFactories.length; i++)
-		{
-			templatingContext.put(toolFactories[i].getKey(), 
-								  toolFactories[i].getTool());
-		}
-	}
-	
-	/**
-	 * Recycle all populated tools.
-	 * 
-	 * @param templatingContext the templating context.
-	 */
-	public void recycleTools(TemplatingContext templatingContext)
-	{
-		for(int i = 0; i < toolFactories.length; i++)
-		{
-			Object tool = templatingContext.get(toolFactories[i].getKey());
-			toolFactories[i].recycleTool(tool);
-		}
-	}
-	
-	/**
-	 * Get the factories.
-	 * 
-	 * @return the registered factories.
-	 */
-	public ContextToolFactory[] getToolFactories()
-	{
-		return toolFactories;
+		TemplatingContext templatingContext = (TemplatingContext)context
+			.getAttribute(TemplatingContext.CONTEXT_KEY);
+		contextTools.populateTools(templatingContext);
 	}
 }

@@ -31,12 +31,12 @@
     <component class-key="org.objectledge.templating.Templating"
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
     <component class="org.objectledge.templating.TemplatingContextLoader"/>
-    <component class="org.objectledge.templating.ContextToolPopulator"/>
+    <component class="org.objectledge.templating.tools.ContextToolPopulator"/>
     
     <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
     <component class="org.objectledge.i18n.WebI18nToolFactory"/>
-    <component class="org.objectledge.templating.ContextTools">
-	  <sequence-parameter class="[Lorg.objectledge.templating.ContextToolFactory;">
+    <component class="org.objectledge.templating.tools.ContextTools">
+	  <sequence-parameter class="[Lorg.objectledge.templating.tools.ContextToolFactory;">
         <component-parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
       </sequence-parameter>
     </component>      
@@ -50,7 +50,7 @@
         <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderTestValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.MVCContextInitializator"/>
         <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
-        <component-parameter class-key="org.objectledge.templating.ContextToolPopulator"/>
+        <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulator"/>
       </sequence-parameter>
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
       </sequence-parameter>

@@ -26,16 +26,17 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.templating;
+package org.objectledge.templating.tools;
 
 import org.objectledge.context.Context;
+import org.objectledge.templating.TemplatingContext;
 
 /**
  * Context tools populator.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class ContextToolPopulator implements Runnable
+public class ContextToolRecycler implements Runnable
 {
 	/** tool component */
 	private ContextTools contextTools;
@@ -49,19 +50,19 @@ public class ContextToolPopulator implements Runnable
 	 * @param context the context.
 	 * @param contextTools the context tool component.
 	 */
-	public ContextToolPopulator(Context context, ContextTools contextTools)
+	public ContextToolRecycler(Context context, ContextTools contextTools)
 	{
 		this.context = context;
 		this.contextTools = contextTools;
 	}
 	
 	/**
-	 * Borrow the tools and put them into the context. 
+	 * Recycle previously populated context tools. 
 	 */
 	public void run()
 	{
 		TemplatingContext templatingContext = (TemplatingContext)context
 			.getAttribute(TemplatingContext.CONTEXT_KEY);
-		contextTools.populateTools(templatingContext);
+		contextTools.recycleTools(templatingContext);
 	}
 }

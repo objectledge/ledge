@@ -29,7 +29,7 @@
 package org.objectledge.web.mvc;
 
 import org.objectledge.context.Context;
-import org.objectledge.templating.ContextToolFactory;
+import org.objectledge.templating.tools.ContextToolFactory;
 
 /**
  * Context tool factory component to build the link tool.
