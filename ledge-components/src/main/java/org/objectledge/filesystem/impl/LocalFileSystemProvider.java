@@ -24,9 +24,9 @@ import org.objectledge.filesystem.RandomAccessFile;
  * considererd to be relative the the running user's current directory.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LocalFileProvider.java,v 1.1 2003-11-25 11:01:39 fil Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.1 2003-11-25 14:56:08 fil Exp $
  */
-public class LocalFileProvider 
+public class LocalFileSystemProvider 
 	implements FileSystemProvider
 {
 	// constants ////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ public class LocalFileProvider
      * @param name the name of the provider.
      * @param root directory.
      */
-    public LocalFileProvider(String name, String root)
+    public LocalFileSystemProvider(String name, String root)
     {
         this.name = name;
         if(root.startsWith("~"+fs))
