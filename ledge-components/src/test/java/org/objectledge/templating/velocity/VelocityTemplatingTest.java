@@ -42,15 +42,22 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.impl.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.impl.LocalFileSystemProvider;
+import org.objectledge.pipeline.Pipeline;
+import org.objectledge.templating.ContextToolFactory;
+import org.objectledge.templating.ContextToolPopulator;
+import org.objectledge.templating.ContextToolRecycler;
+import org.objectledge.templating.ContextTools;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.templating.TemplatingContextLoader;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -123,6 +130,13 @@ public class VelocityTemplatingTest extends TestCase
         assertNotNull(templating);
         TemplatingContext context = templating.createContext();
         assertNotNull(context);
+        context.put("foo","bar");
+        assertEquals("bar",context.get("foo"));
+        assertTrue(context.containsKey("foo"));
+        assertEquals(1, context.getKeys().length);
+        context.remove("foo");
+        assertNull(context.get("foo"));
+		assertEquals(0, context.getKeys().length);
     }
 
     /**
@@ -142,11 +156,22 @@ public class VelocityTemplatingTest extends TestCase
     	try
     	{
     		assertNotNull(templating.getTemplate("bar"));
+    		// cache test
+			assertNotNull(templating.getTemplate("bar"));
     	}
     	catch(TemplateNotFoundException e)
     	{
     		fail(e.getMessage());
     	}
+		try
+		{
+			templating.getTemplate("foo");
+			fail("Should throw TemplateNotFoundException");
+		}
+		catch(TemplateNotFoundException e)
+		{
+			//do nothing
+		}
     }
 
     /**
@@ -197,5 +222,28 @@ public class VelocityTemplatingTest extends TestCase
     public void testGetTemplateEncoding()
     {
     	assertEquals("ISO-8859-2", templating.getTemplateEncoding());
+    }
+    
+	public void testPipelineComponents()
+	{
+		try
+		{
+		    Context context = Context.getContext();
+	    	Runnable[] runnable = new Runnable[0];
+	    	Runnable[] tryValves = new Runnable[3];
+	    	ContextTools contextTools = new ContextTools(new ContextToolFactory[0]);
+	    	tryValves[0] = new TemplatingContextLoader(context, templating);
+			tryValves[1] = new ContextToolPopulator(context, contextTools);
+			tryValves[2] = new ContextToolRecycler(context, contextTools);
+		
+			Logger logger = Logger.getLogger(Pipeline.class);
+			Pipeline pipe = new Pipeline(context, new Log4JLogger(logger), 
+										tryValves, runnable, runnable);
+			pipe.run();
+		}
+		catch(Exception e)
+		{
+			fail(e.getMessage());
+		}
     }
 }
