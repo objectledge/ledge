@@ -16,7 +16,7 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.1 2003-11-28 15:51:23 fil Exp $
+ * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.2 2003-12-01 09:18:32 fil Exp $
  */
 public class CustomizingConstructorComponentAdapter extends ConstructorComponentAdapter
 {
@@ -64,7 +64,7 @@ public class CustomizingConstructorComponentAdapter extends ConstructorComponent
             if(adapterDependency instanceof CustomizedComponentAdapter)
             {
                 result[i] = ((CustomizedComponentAdapter)adapterDependency).
-                    getComponentInstance(picoContainer, getComponentKey());                                
+                    getComponentInstance(picoContainer, getComponentKey(), getComponentImplementation());                                
             }
             else
             {

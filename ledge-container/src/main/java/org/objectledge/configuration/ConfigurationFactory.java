@@ -27,7 +27,7 @@ import org.xml.sax.XMLReader;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.2 2003-11-28 15:51:45 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.3 2003-12-01 09:18:33 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizationProvider
@@ -98,10 +98,11 @@ public class ConfigurationFactory
     /**
      * {@inheritDoc}
      */
-    public Object getCustomizedInsatnce(MutablePicoContainer dependenciesContainer, Object target)
+    public Object getCustomizedInsatnce(MutablePicoContainer dependenciesContainer, 
+        Object componentKey, Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException
     {
-        return getConfig(target);
+        return getConfig(componentKey);
     }
 
     /**

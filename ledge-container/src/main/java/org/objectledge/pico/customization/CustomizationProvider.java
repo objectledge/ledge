@@ -15,11 +15,12 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationProvider.java,v 1.1 2003-11-28 15:51:23 fil Exp $
+ * @version $Id: CustomizationProvider.java,v 1.2 2003-12-01 09:18:32 fil Exp $
  */
 public interface CustomizationProvider
 {
-    public Object getCustomizedInsatnce(MutablePicoContainer dependenciesContainer, Object target)
+    public Object getCustomizedInsatnce(MutablePicoContainer dependenciesContainer, 
+        Object componentKey, Class componentImplementaion)
         throws PicoInitializationException, PicoIntrospectionException;
     
     public void verify(PicoContainer container) 

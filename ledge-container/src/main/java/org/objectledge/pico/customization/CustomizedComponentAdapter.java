@@ -16,7 +16,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.1 2003-11-28 15:51:23 fil Exp $
+ * @version $Id: CustomizedComponentAdapter.java,v 1.2 2003-12-01 09:18:32 fil Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
@@ -50,17 +50,17 @@ public class CustomizedComponentAdapter
         return null;
     }
     
-    public Object getComponentInstance(MutablePicoContainer dependencyContainer, Object target)
+    public Object getComponentInstance(MutablePicoContainer dependencyContainer, Object componentKey, Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException
     {
-        String marker = ((Class)target).getName();
+        String marker = ((Class)componentKey).getName();
         if(customizedInstanceContainer.hasComponent(marker))
         {
             return customizedInstanceContainer.getComponentInstance(marker);
         }
         else
         {
-            Object instance = customizationProvider.getCustomizedInsatnce(dependencyContainer, target);
+            Object instance = customizationProvider.getCustomizedInsatnce(dependencyContainer, componentKey, componentImplementation);
             customizedInstanceContainer.registerComponentInstance(marker, instance);
             return instance;
         }
