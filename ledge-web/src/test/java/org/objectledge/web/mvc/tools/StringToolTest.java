@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringToolTest.java,v 1.2 2004-07-01 11:42:14 zwierzem Exp $
+ * @version $Id: StringToolTest.java,v 1.3 2004-08-20 10:37:03 zwierzem Exp $
  */
 public class StringToolTest extends TestCase
 {
@@ -45,7 +45,7 @@ public class StringToolTest extends TestCase
 		assertNotSame(stringTool1, stringTool2);
 		stringToolFactory.recycleTool(stringTool1);
 		stringToolFactory.recycleTool(stringTool2);
-		assertEquals(stringToolFactory.getKey(), "string_tool");
+		assertEquals(stringToolFactory.getKey(), "stringTool");
 	}
 
     public void testShorten()
