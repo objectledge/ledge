@@ -108,6 +108,7 @@ public class XMLI18n extends AbstractI18n
 		localeFilePattern = Pattern.
 			compile("[a-zA-Z0-9]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.xml");
 		SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setNamespaceAware(true);
 		parser = factory.newSAXParser();
 		handler = new SAXEventHandler();
 		reload();
