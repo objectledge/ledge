@@ -10,7 +10,7 @@
       <p>Components</p>
       <ul>
         <li>FileSystem component, FileSystemProvider interface with Local and Classpath 
-          implmentations</li>
+          implementations</li>
         <li>XMLValidator component</li>  
       </ul>
       <p>Container</p>
@@ -46,6 +46,37 @@
         <li>view components mapper</li>
       </ul>      
     </subsection>
+    
+   
+    <subsection name="0.3 release">
+      <p>Components</p>
+      <ul>
+        <li>i18n</li>
+        <li>Database access</li>
+        <li>Authentication</li>
+        <li>User information storage</li>
+        <li>Web console access</li>
+        <li>Event handling</li>
+        <li>Static security policies</li>
+        <li>XML parsing</li>
+        <li>Tabular data presentation</li>
+        <li>Caching services</li>
+        <li>Mail handling services</li>
+        <li>Upload handling</li>
+        <li>Persistence</li>
+        <li>Scheduled actions</li>
+        <li>String toolset</li>
+        <li>User agent toolset</li>
+      </ul>      
+    </subsection>
+    
+    <subsection name="0.4 release">
+      <p>Components</p>
+      <ul>
+        <li>OR mapping component</li>
+      </ul>      
+    </subsection>    
+    
     </section>
   </body>
 </document>
