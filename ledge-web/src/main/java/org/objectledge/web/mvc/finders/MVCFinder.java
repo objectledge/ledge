@@ -41,7 +41,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.7 2004-01-19 14:21:55 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.8 2004-01-19 14:44:28 zwierzem Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -108,7 +108,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	 */
     public Template findBuilderTemplate(String name)
     {
-        
+		// TODO Auto-generated method stub
         return null;
     }
 

@@ -38,7 +38,7 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.2 2004-01-19 14:21:55 zwierzem Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.3 2004-01-19 14:44:27 zwierzem Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
@@ -90,7 +90,7 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
      * @param locale locale to find template for
      * @return found template or null
      */
-    private Template resolveTemplate(Template template, Locale locale)
+    Template resolveTemplate(Template template, Locale locale)
     {
 		if(locale == null)
 		{
