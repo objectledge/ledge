@@ -34,7 +34,7 @@ addEventHandler(window, 'load', function() {
             scrolling="auto">
       </iframe>
       <textarea class="kupu-editor-textarea" id="kupu-editor-${field.name}-textarea" style="display: none"
-      >$!html_entity_encoder.encodeHTML($field.getValue($instance))</textarea>
+      >$!htmlEncoder.encodeHTML($field.getValue($instance))</textarea>
     </div>
   </kupu:part>
 

@@ -31,9 +31,9 @@
       <class>data</class>
     </table_classes>
     <filtersourceedit>1</filtersourceedit>
-    <documentsel_popup_url>$!html_entity_encoder.encodeAttribute($documentSelPopupUrl)</documentsel_popup_url>
-    <filesel_popup_url>$!html_entity_encoder.encodeAttribute($fileSelPopupUrl)</filesel_popup_url>
-    <imagesel_popup_url>$!html_entity_encoder.encodeAttribute($imageSelPopupUrl)</imagesel_popup_url>
+    <documentsel_popup_url>$!htmlEncoder.encodeAttribute($documentSelPopupUrl)</documentsel_popup_url>
+    <filesel_popup_url>$!htmlEncoder.encodeAttribute($fileSelPopupUrl)</filesel_popup_url>
+    <imagesel_popup_url>$!htmlEncoder.encodeAttribute($imageSelPopupUrl)</imagesel_popup_url>
   </kupu:part>
 
 </kupu:feature>

@@ -76,9 +76,9 @@ addEventHandler(window, 'load', function() {
       <class>data</class>
     </table_classes>
     <filtersourceedit>1</filtersourceedit>
-    <documentsel_popup_url>$!html_entity_encoder.encodeAttribute($documentSelPopupUrl)</documentsel_popup_url>
-    <filesel_popup_url>$!html_entity_encoder.encodeAttribute($fileSelPopupUrl)</filesel_popup_url>
-    <imagesel_popup_url>$!html_entity_encoder.encodeAttribute($imageSelPopupUrl)</imagesel_popup_url>
+    <documentsel_popup_url>$!htmlEncoder.encodeAttribute($documentSelPopupUrl)</documentsel_popup_url>
+    <filesel_popup_url>$!htmlEncoder.encodeAttribute($fileSelPopupUrl)</filesel_popup_url>
+    <imagesel_popup_url>$!htmlEncoder.encodeAttribute($imageSelPopupUrl)</imagesel_popup_url>
   
     
   
@@ -413,7 +413,7 @@ addEventHandler(window, 'load', function() {
       ## TODO: Add a proper link to a document with skin's CSS appended
       <iframe class="kupu-editor" id="kupu-editor-$field.name" frameborder="0" src="$documentTemplateUrl" scrolling="auto">
       </iframe>
-      <textarea class="kupu-editor-textarea" id="kupu-editor-${field.name}-textarea" style="display: none">$!html_entity_encoder.encodeHTML($field.getValue($instance))</textarea>
+      <textarea class="kupu-editor-textarea" id="kupu-editor-${field.name}-textarea" style="display: none">$!htmlEncoder.encodeHTML($field.getValue($instance))</textarea>
     </div>
   
   
