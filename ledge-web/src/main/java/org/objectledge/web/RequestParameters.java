@@ -35,14 +35,14 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.objectledge.parameters.impl.ParametersImpl;
+import org.objectledge.parameters.DefaultParameters;
 
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.4 2003-12-29 13:02:08 fil Exp $
+ * @version $Id: RequestParameters.java,v 1.5 2004-01-08 15:58:50 fil Exp $
  */
-public class RequestParameters extends ParametersImpl
+public class RequestParameters extends DefaultParameters
 {
     /** The context key under wich the request parameters are stored. */
 	public static final String CONTEXT_KEY = "objectledge.web.parameters";
