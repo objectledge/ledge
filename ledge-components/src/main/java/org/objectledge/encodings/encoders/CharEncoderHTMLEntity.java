@@ -8,7 +8,7 @@ import org.objectledge.encodings.MappingEntry;
  * HTMLEntity encoder.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CharEncoderHTMLEntity.java,v 1.2 2004-02-03 13:47:02 zwierzem Exp $
+ * @version $Id: CharEncoderHTMLEntity.java,v 1.3 2004-02-12 10:09:36 zwierzem Exp $
  */
 public class CharEncoderHTMLEntity
          extends CharEncoder
@@ -16,9 +16,9 @@ public class CharEncoderHTMLEntity
     //---------------------------------------------------------------------
     // static fields
 
-    private static final HashMap entitiesByName = new HashMap();
+    private static final HashMap ENTITIES_BY_NAME = new HashMap();
 
-    private static final MappingEntry[] entities =
+    private static final MappingEntry[] ENTITIES =
             {
             new MappingEntry(34, "quot"),
             new MappingEntry(38, "amp"),
@@ -671,10 +671,10 @@ null,null,null,null,null,null,null,null
 
     static
     {
-        for(int i = 0; i < entities.length; i++)
+        for(int i = 0; i < ENTITIES.length; i++)
         {
-            String key = new String(entities[i].getValue());
-            entitiesByName.put(key, entities[i]);
+            String key = new String(ENTITIES[i].getValue());
+            ENTITIES_BY_NAME.put(key, ENTITIES[i]);
         }
     }
 
@@ -728,7 +728,7 @@ null,null,null,null,null,null,null,null
         }
 
         /* Named entity: name ="&" followed by a name */
-        MappingEntry ent = (MappingEntry)entitiesByName.get(name.substring(1));
+        MappingEntry ent = (MappingEntry)ENTITIES_BY_NAME.get(name.substring(1));
         if(ent != null)
         {
             return ent.getUnicodeCode();
