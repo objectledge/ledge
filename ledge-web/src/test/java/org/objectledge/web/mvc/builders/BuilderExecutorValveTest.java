@@ -49,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.8 2004-01-22 08:20:58 fil Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.9 2004-01-22 15:15:11 fil Exp $
  */
 public class BuilderExecutorValveTest extends TestCase
 {
@@ -107,7 +107,7 @@ public class BuilderExecutorValveTest extends TestCase
     {
         setUp("builders");
         mvcContext.setView("foo.Bar");
-        executor.run();
+        executor.process(context);
         assertEquals("Default(foo/Default(foo/Bar()))", mvcContext.getBuildResult());
     }
     
@@ -116,7 +116,7 @@ public class BuilderExecutorValveTest extends TestCase
     {
         setUp("builders");
         mvcContext.setView("Router");
-        executor.run();
+        executor.process(context);
         assertEquals("Default(RoutedTo())", mvcContext.getBuildResult());
     }
     
@@ -125,7 +125,7 @@ public class BuilderExecutorValveTest extends TestCase
     {
         setUp("builders");
         mvcContext.setView("Overrider");
-        executor.run();
+        executor.process(context);
         assertEquals("Default(OverridenTo())", mvcContext.getBuildResult());
     }
     
@@ -136,7 +136,7 @@ public class BuilderExecutorValveTest extends TestCase
         mvcContext.setView("RouteToSelf");
         try
         {
-            executor.run();
+            executor.process(context);
             fail("exception expected");
         }
         catch(Exception e)
@@ -152,7 +152,7 @@ public class BuilderExecutorValveTest extends TestCase
         mvcContext.setView("EncloseSelf");
         try
         {
-            executor.run();
+            executor.process(context);
             fail("exception expected");
         }
         catch(Exception e)
@@ -168,7 +168,7 @@ public class BuilderExecutorValveTest extends TestCase
         mvcContext.setView("Failing");
         try
         {
-            executor.run();
+            executor.process(context);
             fail("exception expected");
         }
         catch(Exception e)
@@ -183,7 +183,7 @@ public class BuilderExecutorValveTest extends TestCase
     {
         setUp("builders-templateonly");
         mvcContext.setView("foo.Bar");
-        executor.run();
+        executor.process(context);
         assertEquals("Default(foo/Default(foo/Bar()))", mvcContext.getBuildResult());
     }
 }

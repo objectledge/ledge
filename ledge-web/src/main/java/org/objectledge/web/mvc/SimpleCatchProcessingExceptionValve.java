@@ -33,6 +33,7 @@ import java.io.PrintWriter;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Pipeline;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 
@@ -40,29 +41,25 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SimpleCatchProcessingExceptionValve.java,v 1.1 2004-01-21 13:23:43 pablo Exp $
+ * @version $Id: SimpleCatchProcessingExceptionValve.java,v 1.2 2004-01-22 15:15:11 fil Exp $
  */
-public class SimpleCatchProcessingExceptionValve implements Runnable
+public class SimpleCatchProcessingExceptionValve 
+    implements Valve
 {
-	/** context */
-	protected Context context;
-	
 	/**
 	 * Component constructor.
-	 * 
-     * @param context used application context 
 	 */
-	public SimpleCatchProcessingExceptionValve(Context context)
+	public SimpleCatchProcessingExceptionValve()
 	{
-		this.context = context;
 	}
 	
 	/**
 	 * Run view building starting from a view builder chosen in request parameters.
+     * 
+     * @param context used application context 
 	 */
-	public void run()
+	public void process(Context context)
 	{
-		MVCContext mvcContext = MVCContext.getMVCContext(context);
 		HttpContext httpContext = HttpContext.getHttpContext(context);
         Throwable t = (Throwable)context.getAttribute(Pipeline.PIPELINE_EXCEPTION);
         if(t instanceof PipelineProcessingException)

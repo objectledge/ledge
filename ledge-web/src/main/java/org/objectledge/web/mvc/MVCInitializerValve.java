@@ -30,6 +30,7 @@ package org.objectledge.web.mvc;
 
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.parameters.RequestParameters;
 
@@ -37,32 +38,30 @@ import org.objectledge.web.parameters.RequestParameters;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.2 2004-01-15 14:01:21 fil Exp $
+ * @version $Id: MVCInitializerValve.java,v 1.3 2004-01-22 15:15:11 fil Exp $
  */
-public class MVCInitializerValve implements Runnable
+public class MVCInitializerValve 
+    implements Valve
 {
-	/** the context */
-	private Context context;
-	
 	/** the web configuration component */
 	private WebConfigurator webConfigurator;
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param context the context.
 	 * @param webConfigurator the web configuration component.
 	 */
-	public MVCInitializerValve(Context context, WebConfigurator webConfigurator)
+	public MVCInitializerValve(WebConfigurator webConfigurator)
 	{
-		this.context = context;		
 		this.webConfigurator = webConfigurator;
 	}
 	
     /**
      * Run the pipeline valve - initialize and store the pipeline context.
+     * 
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
     	MVCContext mvcContext = new MVCContext();
     	mvcContext.setLocale(webConfigurator.getDefaultLocale());

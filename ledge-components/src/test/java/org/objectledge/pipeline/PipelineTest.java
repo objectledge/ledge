@@ -53,10 +53,10 @@ public class PipelineTest extends TestCase
     public void testRun()
     {
     	Context context = new Context();
-    	Runnable[] runnable = new Runnable[0];
+    	Valve[] runnable = new Valve[0];
     	Logger logger = Logger.getLogger(Pipeline.class);
-    	Pipeline pipe = new Pipeline(context, new Log4JLogger(logger), 
+    	Pipeline pipe = new Pipeline(new Log4JLogger(logger), 
     								 runnable, runnable, runnable);
-		pipe.run();
+		pipe.process(context);
     }
 }

@@ -28,11 +28,15 @@
 
 package org.objectledge.example;
 
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
+
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class TestingValve implements Runnable
+public class TestingValve 
+    implements Valve
 {
 	private String test;
 	
@@ -41,9 +45,8 @@ public class TestingValve implements Runnable
 		test = "test";
 	}
 	
-	public void run()
+	public void process(Context context)
 	{
 		//do nothing
-	}
-	
+    }
 }

@@ -29,36 +29,35 @@
 package org.objectledge.templating;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
 
 /**
  * Context tools populator.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class TemplatingContextLoaderValve implements Runnable
+public class TemplatingContextLoaderValve 
+    implements Valve
 {
 	/** tool component */
 	private Templating templating;
 	
-	/** context */
-	private Context context;
-	
 	/**
 	 * Component constructor.
 	 * 
-	 * @param context the context.
 	 * @param templating the templating.
 	 */
-	public TemplatingContextLoaderValve(Context context, Templating templating)
+	public TemplatingContextLoaderValve(Templating templating)
 	{
-		this.context = context;
 		this.templating = templating;
 	}
 	
 	/**
 	 * Load the new templating context into the context.
+     * 
+     * @param context the context.
 	 */
-	public void run()
+	public void process(Context context)
 	{
 		TemplatingContext templatingContext = templating.createContext(); 
 		context.setAttribute(TemplatingContext.class, templatingContext);

@@ -31,6 +31,7 @@ package org.objectledge.authentication;
 import java.security.Principal;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
@@ -39,32 +40,30 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.5 2004-01-14 14:13:10 fil Exp $
+ * @version $Id: AuthenticationValve.java,v 1.6 2004-01-22 15:15:10 fil Exp $
  */
-public class AuthenticationValve implements Runnable, WebConstants
+public class AuthenticationValve 
+    implements Valve, WebConstants
 {
-	/** the context */
-	private Context context;
-	
 	/** the authentication component */
 	private Authentication authentication;
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param context the context.
      * @param authentication the authentication component.
 	 */
-	public AuthenticationValve(Context context, Authentication authentication)
+	public AuthenticationValve(Authentication authentication)
 	{
-		this.context = context;		
 		this.authentication = authentication;
 	}
 	
     /**
      * Run the pipeline valve - authenticate user.
+     * 
+     * @param context the thread's processing context.
      */
-    public void run()
+    public void process(Context context)
     {
     	HttpContext httpContext = HttpContext.getHttpContext(context);
 		MVCContext mvcContext = MVCContext.getMVCContext(context);

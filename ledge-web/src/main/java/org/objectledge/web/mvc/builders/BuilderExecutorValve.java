@@ -29,6 +29,7 @@ package org.objectledge.web.mvc.builders;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.MVCConstants;
@@ -40,12 +41,11 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.14 2004-01-21 15:36:14 fil Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.15 2004-01-22 15:15:11 fil Exp $
  */
-public class BuilderExecutorValve implements Runnable
+public class BuilderExecutorValve 
+    implements Valve
 {
-	/** context */
-	protected Context context;
 	/** Finder for builder objects. */
 	protected MVCClassFinder classFinder;
 	/** Finder for template objects. */
@@ -72,7 +72,6 @@ public class BuilderExecutorValve implements Runnable
 	public BuilderExecutorValve(Context context, MVCClassFinder classFinder, 
         MVCTemplateFinder templateFinder, int maxRouteCalls, int maxEnclosures)
 	{
-		this.context = context;
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
 		this.maxRouteCalls = maxRouteCalls;
@@ -84,8 +83,10 @@ public class BuilderExecutorValve implements Runnable
 	
 	/**
 	 * Run view building starting from a view builder chosen in request parameters.
+     * 
+     * @param context the thread's processing context.
 	 */
-	public void run()
+	public void process(Context context)
 	{
 		// setup used contexts
 		MVCContext mvcContext = MVCContext.getMVCContext(context);

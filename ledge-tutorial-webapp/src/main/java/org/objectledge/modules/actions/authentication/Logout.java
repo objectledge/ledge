@@ -40,28 +40,29 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.2 2004-01-22 10:54:51 pablo Exp $ 
+ * @version $Id: Logout.java,v 1.3 2004-01-22 15:15:13 fil Exp $ 
  */
 public class Logout 
     extends BaseAuthenticationAction
-        implements Runnable
+    implements Valve
 {
     /**
      * Action constructor.
      * 
      * @param logger the logger.
      * @param authentication the authentication.
-     * @param context the context.
      */
-    public Logout(Logger logger, Authentication authentication, Context context)
+    public Logout(Logger logger, Authentication authentication)
     {
-        super(logger, authentication, context);
+        super(logger, authentication);
     }
 
     /**
-     *  
+     * Runns the valve.
+     *   
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);

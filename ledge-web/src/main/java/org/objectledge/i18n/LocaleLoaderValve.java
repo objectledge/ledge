@@ -35,6 +35,7 @@ import javax.servlet.http.Cookie;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
@@ -46,32 +47,30 @@ import org.objectledge.web.mvc.MVCContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * 
- * @version $Id: LocaleLoaderValve.java,v 1.4 2004-01-14 14:13:09 fil Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.5 2004-01-22 15:15:12 fil Exp $
  */
-public class LocaleLoaderValve implements Runnable, WebConstants
+public class LocaleLoaderValve 
+    implements Valve, WebConstants
 {
-    /** the context */
-    private Context context;
-
 	/** the logger */
 	private Logger logger;
 
     /**
      * Constructor
      * 
-     * @param context the context.
      * @param logger the logger.
      */
-    public LocaleLoaderValve(Context context, Logger logger)
+    public LocaleLoaderValve(Logger logger)
     {
-        this.context = context;
         this.logger = logger;
     }
 
     /**
      * Run the pipeline valve - authenticate user.
+     * 
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
         //TODO Take those values from configuration, somehow... 
         Locale defaultLocale = StringUtils.getLocale("en_US");

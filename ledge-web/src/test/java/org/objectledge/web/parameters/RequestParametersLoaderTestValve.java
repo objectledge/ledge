@@ -33,33 +33,31 @@ import java.io.PrintWriter;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 
 /**
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderTestValve.java,v 1.6 2004-01-15 09:05:51 fil Exp $
+ * @version $Id: RequestParametersLoaderTestValve.java,v 1.7 2004-01-22 15:15:11 fil Exp $
  */
-public class RequestParametersLoaderTestValve implements Runnable
+public class RequestParametersLoaderTestValve 
+    implements Valve
 {
-	/** the context */
-	private Context context;
-	
 	/**
 	 * Constructor
-	 * 
-	 * @param context the context.
 	 */
-	public RequestParametersLoaderTestValve(Context context)
+	public RequestParametersLoaderTestValve()
 	{
-		this.context = context;		
 	}
 	
     /**
      * Run the pipeline valve - parse and load the parameters into the context.
+     * 
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
     	Parameters parameters = RequestParameters.getRequestParameters(context);
 		HttpContext httpContext = HttpContext.getHttpContext(context);

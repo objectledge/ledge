@@ -28,6 +28,7 @@
 package org.objectledge.web.mvc.finders;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
@@ -39,7 +40,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.21 2004-01-21 14:39:59 fil Exp $
+ * @version $Id: MVCFinder.java,v 1.22 2004-01-22 15:15:12 fil Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -138,9 +139,9 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	/**
 	 * {@inheritDoc}
 	 */
-	public Runnable getAction(String actionName)
+	public Valve getAction(String actionName)
 	{
-		return (Runnable)findObject(ACTIONS, actionName, false, "getAction");
+		return (Valve)findObject(ACTIONS, actionName, false, "getAction");
 	}
 
     // builders /////////////////////////////////////////////////////////////////////////////////

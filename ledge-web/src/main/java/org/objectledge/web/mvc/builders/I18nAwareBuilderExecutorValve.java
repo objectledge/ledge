@@ -40,12 +40,13 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.5 2004-01-20 17:27:18 pablo Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.6 2004-01-22 15:15:11 fil Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
 	private Locale defaultLocale;
 	private Templating templating;
+    private Context context;
 	
     /**
      * {@inheritDoc}
@@ -69,6 +70,7 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
         super(context, classFinder, templateFinder, maxRouteCalls, maxEnclosures);
 		this.defaultLocale = i18n.getDefaultLocale();
 		this.templating = templating;
+        this.context = context;
     }
     
     /**

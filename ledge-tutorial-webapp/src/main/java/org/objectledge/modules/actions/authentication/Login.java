@@ -34,6 +34,7 @@ import org.objectledge.authentication.Authentication;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.parameters.RequestParameters;
@@ -44,28 +45,29 @@ import org.objectledge.web.parameters.RequestParameters;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Login.java,v 1.2 2004-01-22 10:54:51 pablo Exp $
+ * @version $Id: Login.java,v 1.3 2004-01-22 15:15:13 fil Exp $
  */
 public class Login 
     extends BaseAuthenticationAction
-        implements Runnable
+    implements Valve
 {
     /**
      * Action constructor.
      * 
      * @param logger the logger.
      * @param authentication the authentication.
-     * @param context the context.
      */
-    public Login(Logger logger, Authentication authentication, Context context)
+    public Login(Logger logger, Authentication authentication)
     {
-        super(logger, authentication, context);
+        super(logger, authentication);
     }
 
     /**
-     *  
+     * Runns the valve.
+     *   
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);

@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 
@@ -39,27 +40,24 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.1 2004-01-15 09:44:37 fil Exp $
+ * @version $Id: MVCResultsValve.java,v 1.2 2004-01-22 15:15:11 fil Exp $
  */
-public class MVCResultsValve implements Runnable
+public class MVCResultsValve 
+    implements Valve
 {
-	/** context */
-	protected Context context;
-	
 	/**
 	 * Component constructor.
-	 * 
-     * @param context used application context 
 	 */
-	public MVCResultsValve(Context context)
+	public MVCResultsValve()
 	{
-		this.context = context;
 	}
 	
 	/**
 	 * Run view building starting from a view builder chosen in request parameters.
+     * 
+     * @param context used application context 
 	 */
-	public void run()
+	public void process(Context context)
 	{
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
 		HttpContext httpContext = HttpContext.getHttpContext(context);

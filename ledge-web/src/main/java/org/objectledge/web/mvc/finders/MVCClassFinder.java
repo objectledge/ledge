@@ -27,6 +27,7 @@
 // 
 package org.objectledge.web.mvc.finders;
 
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.components.Component;
 
@@ -34,7 +35,7 @@ import org.objectledge.web.mvc.components.Component;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.9 2004-01-21 14:39:59 fil Exp $
+ * @version $Id: MVCClassFinder.java,v 1.10 2004-01-22 15:15:12 fil Exp $
  */
 public interface MVCClassFinder
 {
@@ -47,7 +48,7 @@ public interface MVCClassFinder
      * @param actionName name of an action class
      * @return found runnable action instance
      */
-    public Runnable getAction(String actionName);
+    public Valve getAction(String actionName);
     
     // builders /////////////////////////////////////////////////////////////////////////////////
 

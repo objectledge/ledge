@@ -25,67 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.modules.actions.authentication;
+package org.objectledge.pipeline;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpSession;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.Authentication;
 import org.objectledge.context.Context;
 
 /**
+ * An element of the processing pipeline.  
  * 
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: BaseAuthenticationAction.java,v 1.2 2004-01-22 15:15:13 fil Exp $
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * @version $Id: Valve.java,v 1.1 2004-01-22 15:15:15 fil Exp $
  */
-public class BaseAuthenticationAction
+public interface Valve
 {
-    /** login parameter name */
-    public static final String LOGIN_PARAM = "login";
-
-    /** password parameter name */
-    public static final String PASSWORD_PARAM = "password";
-
-    /** the logger */
-    protected Logger logger;
-
-    /** the authentication component */
-    protected Authentication authentication;
-
     /**
-     * Action constructor.
+     * Processes the unit of work.
      * 
-     * @param logger the logger.
-     * @param authentication the authentication.
+     * @param context the thread's processing context.
+     * @throws PipelineProcessingException if there is an error during processing.
      */
-    public BaseAuthenticationAction(Logger logger, Authentication authentication)
-    {
-        this.logger = logger;
-        this.authentication = authentication;
-    }
-
-    /**
-     * Clear session to prevent the scenario that
-     * one user uses the session of another.
-     * 
-     * @param session the http session.
-     */
-    protected void clearSession(HttpSession session)
-    {
-        Enumeration attrNames = session.getAttributeNames();
-        ArrayList temp = new ArrayList();
-        while (attrNames.hasMoreElements())
-        {
-            String name = (String)attrNames.nextElement();
-            temp.add(name);
-        }
-        for (int i = 0; i < temp.size(); i++)
-        {
-            String name = (String)temp.get(i);
-            session.removeAttribute(name);
-        }
-    }
+    public void process(Context context)
+        throws PipelineProcessingException;
 }

@@ -34,21 +34,13 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
  * A test view.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Default.java,v 1.1 2004-01-20 13:05:55 fil Exp $
+ * @version $Id: Default.java,v 1.2 2004-01-22 15:15:11 fil Exp $
  */
-public class Default extends DefaultBuilder
+public class Default 
+    extends DefaultBuilder
 {
     public Default(Context context)
     {
         super(context);
-    }
-    
-    /* (non-Javadoc)
-     * @see java.lang.Runnable#run()
-     */
-    public void run()
-    {
-        // TODO Auto-generated method stub
-
     }
 }

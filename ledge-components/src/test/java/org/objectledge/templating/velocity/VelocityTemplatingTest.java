@@ -48,6 +48,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.pipeline.Pipeline;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
@@ -229,17 +230,17 @@ public class VelocityTemplatingTest extends TestCase
 		try
 		{
 		    Context context = new Context();
-	    	Runnable[] runnable = new Runnable[0];
-	    	Runnable[] tryValves = new Runnable[3];
+	    	Valve[] runnable = new Valve[0];
+	    	Valve[] tryValves = new Valve[3];
 	    	ContextTools contextTools = new ContextTools(new ContextToolFactory[0]);
-	    	tryValves[0] = new TemplatingContextLoaderValve(context, templating);
-			tryValves[1] = new ContextToolPopulatorValve(context, contextTools);
-			tryValves[2] = new ContextToolRecyclerValve(context, contextTools);
+	    	tryValves[0] = new TemplatingContextLoaderValve(templating);
+			tryValves[1] = new ContextToolPopulatorValve(contextTools);
+			tryValves[2] = new ContextToolRecyclerValve(contextTools);
 		
 			Logger logger = Logger.getLogger(Pipeline.class);
-			Pipeline pipe = new Pipeline(context, new Log4JLogger(logger), 
+			Pipeline pipe = new Pipeline(new Log4JLogger(logger), 
 										tryValves, runnable, runnable);
-			pipe.run();
+			pipe.process(context);
 		}
 		catch(Exception e)
 		{

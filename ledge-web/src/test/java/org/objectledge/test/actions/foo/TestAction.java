@@ -27,18 +27,21 @@
 // 
 package org.objectledge.test.actions.foo;
 
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
+
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: TestAction.java,v 1.1 2004-01-20 12:37:35 fil Exp $
+ * @version $Id: TestAction.java,v 1.2 2004-01-22 15:15:12 fil Exp $
  */
-public class TestAction implements Runnable
+public class TestAction 
+    implements Valve
 {
-    /* (non-Javadoc)
-     * @see java.lang.Runnable#run()
+    /**
+     * {@inheritDoc}
      */
-    public void run()
+    public void process(Context context)
     {
-        // TODO Auto-generated method stub
     }
 }

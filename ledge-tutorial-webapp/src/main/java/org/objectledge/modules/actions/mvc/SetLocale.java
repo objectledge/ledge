@@ -35,6 +35,7 @@ import javax.servlet.http.Cookie;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
@@ -46,27 +47,24 @@ import org.objectledge.web.parameters.RequestParameters;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetLocale.java,v 1.1 2004-01-21 16:20:57 pablo Exp $
+ * @version $Id: SetLocale.java,v 1.2 2004-01-22 15:15:14 fil Exp $
  */
-public class SetLocale implements Runnable, WebConstants
+public class SetLocale 
+    implements Valve, WebConstants
 {
-    /** the context */
-    private Context context;
-
     /**
      * Action constructor.
-     * 
-     * @param context the context.
      */
     public SetLocale(Context context)
     {
-        this.context = context;
     }
 
     /**
-     *  run the valve.
+     * Run the valve.
+     * 
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);

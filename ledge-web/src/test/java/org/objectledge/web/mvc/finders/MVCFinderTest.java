@@ -35,13 +35,12 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.actions.foo.TestAction;
 import org.objectledge.web.mvc.builders.Builder;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
-import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.components.Component;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -50,7 +49,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.6 2004-01-21 14:39:59 fil Exp $
+ * @version $Id: MVCFinderTest.java,v 1.7 2004-01-22 15:15:12 fil Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -130,7 +129,7 @@ public class MVCFinderTest extends TestCase
     public void testFindAction()
         throws Exception
     {
-        Runnable action = finder.getAction("foo.TestAction");
+        Valve action = finder.getAction("foo.TestAction");
         assertEquals(TestAction.class, action.getClass());
         action = finder.getAction("foo.NonExistentAction");
         assertNull(action);

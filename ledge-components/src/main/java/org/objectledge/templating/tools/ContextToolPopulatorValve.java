@@ -29,6 +29,7 @@
 package org.objectledge.templating.tools;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
 
 /**
@@ -36,30 +37,28 @@ import org.objectledge.templating.TemplatingContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class ContextToolPopulatorValve implements Runnable
+public class ContextToolPopulatorValve 
+    implements Valve
 {
 	/** tool component */
 	private ContextTools contextTools;
 	
-	/** context */
-	private Context context;
-	
 	/**
 	 * Component constructor.
 	 * 
-	 * @param context the context.
 	 * @param contextTools the context tool component.
 	 */
-	public ContextToolPopulatorValve(Context context, ContextTools contextTools)
+	public ContextToolPopulatorValve(ContextTools contextTools)
 	{
-		this.context = context;
 		this.contextTools = contextTools;
 	}
 	
 	/**
-	 * Borrow the tools and put them into the context. 
+	 * Borrow the tools and put them into the context.
+     *  
+     * @param context the thread's processing context.
 	 */
-	public void run()
+	public void process(Context context)
 	{
 		TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
 		contextTools.populateTools(templatingContext);

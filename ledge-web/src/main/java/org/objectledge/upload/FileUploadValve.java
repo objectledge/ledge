@@ -20,6 +20,7 @@ import org.objectledge.context.Context;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.WebConstants;
@@ -29,9 +30,10 @@ import org.objectledge.web.parameters.RequestParameters;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.3 2004-01-14 14:06:54 fil Exp $
+ * @version $Id: FileUploadValve.java,v 1.4 2004-01-22 15:15:12 fil Exp $
  */
-public class FileUploadValve implements Runnable, WebConstants
+public class FileUploadValve 
+    implements Valve, WebConstants
 {
 	/** web configurator */
 	private WebConfigurator config; 
@@ -42,31 +44,27 @@ public class FileUploadValve implements Runnable, WebConstants
     /** the mail system */
     private MailSystem mailSystem;
     
-    /** the context */
-    private Context context;
-
     /**
      * Constructs the component.
      * 
      * @param config the config.
      * @param logger the logger.
      * @param mailSystem the mailSystem.
-     * @param context the context.
      */
     public FileUploadValve(WebConfigurator config, Logger logger,  
-     				    MailSystem mailSystem, Context context)
+     				    MailSystem mailSystem)
     {
     	this.config = config;
     	this.logger = logger;
     	this.mailSystem = mailSystem;
-    	this.context = context;
     }
     
     /**
      * Run the valve.
      *
+     * @param context the context.
      */
-    public void run()
+    public void process(Context context)
     {
         Map uploadMap = new HashMap();
         HttpContext httpContext = HttpContext.getHttpContext(context);

@@ -32,41 +32,38 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 
 /**
- * An implementation of the <code>Runnable</code> interface that delegates it's run() method
- * to a number of "Valves", and provides error handling along the lines of Java try/catch/finally.
+ * An implementation of the <code>Valve</code> interface that delegates it's run() method
+ * to a number of other Valves, and provides error handling along the lines of Java 
+ * try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.12 2004-01-21 13:22:02 pablo Exp $
+ * @version $Id: Pipeline.java,v 1.13 2004-01-22 15:15:15 fil Exp $
  */
 public class Pipeline
-    implements Runnable
+    implements Valve
 {
     /** key to store the exception in the context */
     public static final String PIPELINE_EXCEPTION = "org.objectledge.pipeline.Pipeline.exception";
     
-    private Context context;
-    
     private Logger logger;
     
-    private Runnable[] tryValves;
+    private Valve[] tryValves;
     
-    private Runnable[] catchValves;
+    private Valve[] catchValves;
     
-    private Runnable[] finallyValves;
+    private Valve[] finallyValves;
     
     /**
      * Constructs a new instance of the pipeline.
      * 
-     * @param context the context.
      * @param logger the logger.
      * @param tryValves the valves to be used in the try stage.
      * @param catchValves the valves to be used in the catch stage.
      * @param finallyValves the valves to be used in the finaly stage.
      */
-    public Pipeline(Context context, Logger logger, Runnable[] tryValves, Runnable[] catchValves, 
-        Runnable[] finallyValves)
+    public Pipeline(Logger logger, Valve[] tryValves, Valve[] catchValves, 
+        Valve[] finallyValves)
     {
-        this.context = context;
         this.logger = logger;
         this.tryValves = tryValves;
         this.catchValves = catchValves;
@@ -75,14 +72,16 @@ public class Pipeline
 
     /**
      * Runs the connected valves.
+     * 
+     * @param context the context.
      */    
-    public void run()
+    public void process(Context context)
     {
     	try
         {
         	for(int i = 0; i < tryValves.length; i++)
         	{
-		   		tryValves[i].run();
+		   		tryValves[i].process(context);
         	}
         }
         ///CLOVER:OFF
@@ -103,7 +102,7 @@ public class Pipeline
             {
                 for(int i = 0; i < catchValves.length; i++)
                 {
-                    catchValves[i].run();
+                    catchValves[i].process(context);
                 }
             }
             ///CLOVER:OFF
@@ -127,7 +126,7 @@ public class Pipeline
 			{
                 try
                 {
-                    finallyValves[i].run();
+                    finallyValves[i].process(context);
                 }
                 ///CLOVER:OFF
                 catch(VirtualMachineError ee)

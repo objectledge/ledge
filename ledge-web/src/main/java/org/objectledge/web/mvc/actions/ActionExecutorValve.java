@@ -29,6 +29,7 @@ package org.objectledge.web.mvc.actions;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.PipelineProcessingException;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 
@@ -36,31 +37,30 @@ import org.objectledge.web.mvc.finders.MVCClassFinder;
  * Pipeline component for executing MVC actions.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.8 2004-01-21 14:40:00 fil Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.9 2004-01-22 15:15:12 fil Exp $
  */
-public class ActionExecutorValve implements Runnable
+public class ActionExecutorValve 
+    implements Valve
 {
-	/** context */
-	protected Context context;
 	/** Finder for builder objects. */
 	protected MVCClassFinder classFinder;
 
 	/**
 	 * Component constructor.
 	 * 
-	 * @param context used application context
 	 * @param classFinder finder for runnable action objects
 	 */
-	public ActionExecutorValve(Context context, MVCClassFinder classFinder)
+	public ActionExecutorValve(MVCClassFinder classFinder)
 	{
-		this.context = context;
 		this.classFinder = classFinder;
 	}
 	
     /**
      * Finds and executes an action for current request.
+     * 
+     * @param context the thread's processing context.
      */
-    public void run()
+    public void process(Context context)
     {
 		// setup used contexts
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
@@ -68,14 +68,14 @@ public class ActionExecutorValve implements Runnable
         if(actionName != null)
         {
             // get and execute action
-            Runnable action = classFinder.getAction(actionName);
+            Valve action = classFinder.getAction(actionName);
             if(action == null)
             {
                 throw new PipelineProcessingException("unavailable action "+actionName);
             }
             
             // TODO access control
-            action.run();
+            action.process(context);
         }
     }
 }

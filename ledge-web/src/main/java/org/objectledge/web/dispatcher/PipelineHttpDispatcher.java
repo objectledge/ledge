@@ -46,7 +46,7 @@ import org.objectledge.web.WebConfigurator;
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
- * @version $Id: PipelineHttpDispatcher.java,v 1.8 2004-01-14 14:47:18 fil Exp $
+ * @version $Id: PipelineHttpDispatcher.java,v 1.9 2004-01-22 15:15:09 fil Exp $
  */
 public class PipelineHttpDispatcher 
     implements HttpDispatcher
@@ -86,7 +86,7 @@ public class PipelineHttpDispatcher
         HttpContext httpContext = new HttpContext(request,response);
         httpContext.setEncoding(webConfigurator.getDefaultEncoding());
         context.setAttribute(HttpContext.class, httpContext);
-        pipeline.run();
+        pipeline.process(context);
         context.removeAttribute(HttpContext.class);
         return httpContext.getDirectResponse();
     }
