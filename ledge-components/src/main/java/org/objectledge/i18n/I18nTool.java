@@ -38,20 +38,20 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.4 2004-06-17 11:59:28 zwierzem Exp $
+ * @version $Id: I18nTool.java,v 1.5 2004-08-19 13:43:30 zwierzem Exp $
  */
 public class I18nTool
 {
-	/** i18n component */
-	private I18n i18n;
+    private I18n i18n;
+
+    /** buffer used to build keys. */
+    protected StringBuffer b;
+    protected int prefixLength;
 	
 	/** i18n tool factory - for recycling */
 	private ContextToolFactory factory;
 	
-	/** prefix */
-	private String prefix;
-	
-	/** locale */
+	/** current locale */
 	private Locale locale;
 	
 	/**
@@ -67,7 +67,14 @@ public class I18nTool
 		this.i18n = i18n;
 		this.factory = factory;
 		this.locale = locale;
-		this.prefix = prefix;
+
+        if(prefix == null)
+        {
+            prefix = "";
+        }
+        b = new StringBuffer();
+        b.append(prefix);
+        prefixLength = prefix.length();
 	}
 	
 	/**
@@ -79,20 +86,16 @@ public class I18nTool
 	 */
 	public I18nTool usePrefix(String prefix)
 	{
-		String newPrefix = null;
 		if(prefix.length() > 0)
 		{
-			newPrefix = this.prefix;
-			if(newPrefix != null)
+			if(prefixLength > 0)
 			{
-				newPrefix = newPrefix + "."+ prefix;
+				b.append('.');
 			}
-			else
-			{
-				newPrefix = prefix;
-			}
+			b.append(prefix);
 		}
-		I18nTool child = new I18nTool(i18n, factory, locale, newPrefix);
+		I18nTool child = new I18nTool(i18n, factory, locale, b.toString());
+        b.setLength(prefixLength);
         return child;
 	}
 	
@@ -104,7 +107,7 @@ public class I18nTool
 	 */
 	public I18nTool useLocale(String locale)
 	{
-		return new I18nTool(i18n, factory, StringUtils.getLocale(locale), prefix); 
+		return new I18nTool(i18n, factory, StringUtils.getLocale(locale), b.toString()); 
 	}
 	
 	/** 
@@ -115,11 +118,13 @@ public class I18nTool
 	 */
 	public String get(String key)
 	{
-		if(prefix == null || prefix.length()==0)
+		if(prefixLength == 0)
 		{
 			return i18n.get(locale, key);
 		}
-		return i18n.get(locale, prefix + "." + key);
+        String newKey = b.append('.').append(key).toString();
+        b.setLength(prefixLength);
+		return i18n.get(locale, newKey);
 	}
 
     /** 
@@ -132,11 +137,13 @@ public class I18nTool
      */
     public String get(String key, String defaultValue)
     {
-        if(prefix == null || prefix.length()==0)
+        if(prefixLength == 0)
         {
             return i18n.get(locale, key, defaultValue);
         }
-        return i18n.get(locale, prefix + "." + key, defaultValue);
+        String newKey = b.append('.').append(key).toString();
+        b.setLength(prefixLength);
+        return i18n.get(locale, newKey, defaultValue);
     }
 
     /**
@@ -148,10 +155,12 @@ public class I18nTool
 	 */
 	public String get(String key, String[] values)
 	{
-		if(prefix == null || prefix.length()==0)
+		if(prefixLength == 0)
 		{
 			return i18n.get(locale, key, values);
 		}
-		return i18n.get(locale, prefix + "." + key, values);
+        String newKey = b.append('.').append(key).toString();
+        b.setLength(prefixLength);
+		return i18n.get(locale, newKey, values);
 	}
 }
