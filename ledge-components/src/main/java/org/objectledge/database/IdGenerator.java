@@ -40,7 +40,7 @@ import org.picocontainer.Startable;
  * A component that generates unique, monotonous ids for table rows in a relational database. 
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGenerator.java,v 1.5 2004-02-23 14:23:43 fil Exp $
+ * @version $Id: IdGenerator.java,v 1.6 2004-03-11 12:52:40 fil Exp $
  */
 public class IdGenerator
     implements Startable
@@ -103,11 +103,12 @@ public class IdGenerator
         conn = dataSource.getConnection();
         conn.setAutoCommit(false);
         fetchStmt = conn.
-            prepareStatement("SELECT next_id FROM id_table WHERE table = ?");
+            prepareStatement("SELECT next_id FROM ledge_id_table WHERE table_name = ?");
         insertStmt = conn.
-            prepareStatement("INSERT INTO id_table(table,next_id) VALUES(?, 1)");
+            prepareStatement("INSERT INTO ledge_id_table(table_name, next_id) VALUES(?, 1)");
         updateStmt = conn.
-            prepareStatement("UPDATE id_table SET next_id = next_id + 1 WHERE table = ?");
+            prepareStatement("UPDATE ledge_id_table SET next_id = next_id + 1 "+
+            "WHERE table_name = ?");
     }
     
     /**
