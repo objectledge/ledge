@@ -29,7 +29,7 @@ package org.objectledge.database;
 
 import javax.sql.DataSource;
 
-import org.hsqldb.jdbcDataSource;
+import org.hsqldb.jdbc.jdbcDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.database.impl.DelegatingDataSource;
@@ -38,7 +38,7 @@ import org.objectledge.database.impl.DelegatingDataSource;
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: HsqldbDataSource.java,v 1.4 2004-02-04 16:09:11 fil Exp $
+ * @version $Id: HsqldbDataSource.java,v 1.5 2004-05-27 11:35:14 fil Exp $
  */
 public class HsqldbDataSource extends DelegatingDataSource
 {

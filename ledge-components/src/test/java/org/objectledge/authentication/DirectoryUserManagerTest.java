@@ -39,7 +39,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.xml.DOMConfigurator;
-import org.hsqldb.jdbcDataSource;
+import org.hsqldb.jdbc.jdbcDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
