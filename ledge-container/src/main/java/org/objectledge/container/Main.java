@@ -47,7 +47,7 @@ import org.realityforge.cli.CLUtil;
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.3 2004-01-14 11:44:48 fil Exp $
+ * @version $Id: Main.java,v 1.4 2004-01-14 12:06:29 fil Exp $
  */
 public class Main
 {
@@ -67,7 +67,7 @@ public class Main
     protected static final int HELP_OPTION = 'h';
     
     /** recognized command line options. */
-    protected static CLOptionDescriptor[] options =
+    private static final CLOptionDescriptor[] OPTIONS =
     { 
         new CLOptionDescriptor("root", CLOptionDescriptor.ARGUMENT_REQUIRED, 
             ROOT_OPTION, "set local file system root directory"),
@@ -93,7 +93,7 @@ public class Main
      */
     public static void main(String[] args)
     {
-        CLArgsParser parser = new CLArgsParser(args, options);
+        CLArgsParser parser = new CLArgsParser(args, OPTIONS);
 
         if( null != parser.getErrorString() ) 
         {
@@ -180,7 +180,7 @@ public class Main
         msg.append("Usage: java "+Main.class.getName()+
             " [options] componentClass [componentOptions]").append(nl).append(nl);
         msg.append("Options: ").append(nl);
-        msg.append(CLUtil.describeOptions(options).toString());
+        msg.append(CLUtil.describeOptions(OPTIONS).toString());
         System.out.println(msg.toString());
     }
 
