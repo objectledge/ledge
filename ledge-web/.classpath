@@ -22,6 +22,6 @@
 	<classpathentry sourcepath="MAVEN_REPO/dna/sources/dna-api-1.1-rc2-src.zip" kind="var" path="MAVEN_REPO/dna/jars/dna-api-1.1-rc2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/picocontainer/jars/picocontainer-1.0-RC-1-SNAPSHOT.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/dna/sources/dna-impl-1.1-rc2-src.zip" kind="var" path="MAVEN_REPO/dna/jars/dna-impl-1.1-rc2.jar"/>
-	<classpathentry sourcepath="MAVEN_REPO/jmock/sources/jmock-20040220-211330-src.zip" kind="var" path="MAVEN_REPO/jmock/jars/jmock-20030324-104648.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/jmock/jars/jmock-20040324-104648.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
