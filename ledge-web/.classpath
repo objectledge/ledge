@@ -9,9 +9,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/httpunit/jars/httpunit-1.5.4.jar"/>
 	<classpathentry kind="src" path="/ledge-container"/>
-	<classpathentry kind="var" path="MAVEN_REPO/nekohtml/jars/nekohtml-0.8.1.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xercesImpl-2.6.0.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xmlParserAPIs-2.6.0.jar"/>
 	<classpathentry sourcepath="MAVEN_REPO/log4j/sources/log4j-1.2.8-source.zip" kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/jaf/jars/activation-1.0.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/javamail/jars/mailapi-1.3.1.jar"/>

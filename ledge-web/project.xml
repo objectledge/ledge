@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.30 2004-05-27 11:40:05 fil Exp $ -->
+<!-- $Id: project.xml,v 1.31 2004-05-27 13:00:17 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -130,24 +130,6 @@
       <version>1.5.4</version>
       <url>http://httpunit.sourceforge.net</url>
     </dependency>
-    <dependency>
-      <groupId>nekohtml</groupId>
-      <artifactId>nekohtml</artifactId>
-      <version>0.8.1</version>
-      <url>http://www.apache.org/~andyc/neko/doc/html/</url>
-    </dependency>
-    <dependency>
-      <groupId>xerces</groupId>
-      <artifactId>xercesImpl</artifactId>
-      <version>2.6.0</version>
-      <url>http://xml.apache.org/xerces2-j/index.html</url>
-    </dependency>    
-    <dependency>
-      <groupId>xerces</groupId>
-      <artifactId>xmlParserAPIs</artifactId>
-      <version>2.6.0</version>
-      <url>http://xml.apache.org/xerces2-j/index.html</url>
-    </dependency>    
     <dependency>
       <groupId>javamail</groupId>
       <artifactId>mailapi</artifactId>
