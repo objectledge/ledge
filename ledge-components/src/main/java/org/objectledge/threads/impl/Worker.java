@@ -37,7 +37,7 @@ import org.picocontainer.lifecycle.Stoppable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Worker.java,v 1.1 2004-01-30 15:52:27 fil Exp $
+ * @version $Id: Worker.java,v 1.2 2004-02-02 09:54:23 fil Exp $
  */
 public class Worker 
     implements Runnable, Stoppable
@@ -49,8 +49,6 @@ public class Worker
     private Logger log;
     
     private Task task; 
-    
-    private Task currentTask;
     
     private Context context;
     
@@ -115,16 +113,17 @@ public class Worker
                     }
                     catch(InterruptedException e)
                     {
-                        log.warn(name+" was interrupted while waiting tasks");
+                        if(!shutdown)
+                        {
+                            log.warn(name+" was interrupted while waiting for tasks");
+                        }
                         break loop;
                     }
                 }
-                currentTask = task;
-                task = null;
             }
             if(!shutdown)
             {
-                thread.setName(currentTask.getName());
+                thread.setName(task.getName());
                 
                 try
                 {
@@ -138,12 +137,12 @@ public class Worker
                 }
                 catch(ThreadDeath e)
                 {
-                    log.warn(name+" was forcibly stopped while running "+currentTask.getName());
+                    log.warn(name+" was forcibly stopped while running "+task.getName());
                     throw e;
                 }
                 catch(Throwable e)
                 {
-                    log.error("uncaught exception in "+currentTask.getName(), e);
+                    log.error(name+": uncaught exception in "+task.getName(), e);
                 }
                 
                 if(cleanup != null)
@@ -158,17 +157,17 @@ public class Worker
                     }
                     catch(ThreadDeath e)
                     {
-                        log.warn(name+" was forcibly stopped while during cleanup", e);
+                        log.warn(name+" was forcibly stopped while performing cleanup", e);
                         throw e;
                     }
                     catch(Throwable e)
                     {
-                        log.error("uncaught exception in cleanup", e);
+                        log.error(name+": uncaught exception in cleanup", e);
                     }
                 }
                 
                 thread.setName(name);
-                currentTask = null;
+                task = null;
                 try
                 {
                     pool.returnObject(this);
@@ -189,7 +188,7 @@ public class Worker
      */
     public Task getCurrentTask()
     {
-        return currentTask;
+        return task;
     }
     
     /**
@@ -197,6 +196,23 @@ public class Worker
      */
     public void stop()
     {
-        
+        shutdown = true;
+        log.info(name+" shutting down");
+        if(task == null)
+        {
+            try
+            {
+                log.info(name+" attempting to terminate "+task.getName());
+                task.terminate(thread);
+            }
+            catch(NullPointerException e)
+            {
+                // task might have just been finished asynchronously
+            }
+        }
+        else
+        {
+            thread.interrupt();
+        }
     }
 }
