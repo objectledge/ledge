@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.1 2003-11-24 10:25:14 fil Exp $ -->
+<!-- $Id: project.xml,v 1.2 2003-12-05 14:08:53 mover Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
   <!-- project info -->
 
   <organization>
-    <name>ledgecontainer.org</name>
-    <url>http://ledgecontainer.org/</url>
+    <name>objectledge.org</name>
+    <url>http://objectledge.org/</url>
     <logo>http://caltha.pl/content/cms/sites/caltha/caltha_css/images/caltha-box-trebuchet.gif</logo>
   </organization>
   <!-- logo -->
   <inceptionYear>2003</inceptionYear>
-  <package>org.ledgecontainer</package>
+  <package>org.objectledge</package>
   <!-- issue tracking url -->
    
-  <url>http://dev.caltha.pl/wiki/ab</url>
+  <url>http://dev.caltha.pl/wiki/ledge</url>
 
   <repository>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/ledge:${pom.artifactId}</developerConnection>
@@ -33,6 +33,33 @@
       <roles>
         <role>project leader</role>
         <role>release engineer</role>
+        <role>java developer</role>
+      </roles>
+    </developer>
+    
+    <developer>
+      <name>Pawe? Potempski</name>
+      <id>pablo</id>
+      <email>pablo@caltha.pl</email>
+      <roles>
+        <role>java developer</role>
+      </roles>
+    </developer>
+    
+    <developer>
+      <name>Damian Gajda</name>
+      <id>damian</id>
+      <email>damian@caltha.pl</email>
+      <roles>
+        <role>java developer</role>
+      </roles>
+    </developer>
+    
+    <developer>
+      <name>Micha? Mach</name>
+      <id>mover</id>
+      <email>mover@caltha.pl</email>
+      <roles>
         <role>java developer</role>
       </roles>
     </developer>
