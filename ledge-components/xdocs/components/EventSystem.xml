@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>EventSystem</title>
+  </properties>
+
+  <body>
+    <section name="EventSystem">
+    
+      <subsection name="Description">
+        <p>Provides a common facility for associating event generators with receivers.</p>
+ 
+		<p>This component was created to remove the burden of managing listener lists
+		   from objects that generate events.</p>
+ 
+		<p>'Events' that are dealt with here are experssed with method calls on
+		   concrete objects. Propagating these events to other JVMs will usually
+           require some additional effort, like <code>java.rmi.Remote</code>
+           listeners, or listeners generating messages and propagating them to other
+           JVMs using i.e. <code>Notification</code>, with notification listeners
+           parsing messages, and firing events on the other local <code>EventSystem</code>.</p>
+ 
+        <p>The 'EventSystem' implements 'EventForwarder'
+           interface, thus this component acts as the ledge instance wide event
+           forwarder. If need arsises, you can create additional private event
+           forwarders separate from the global one. See also 'InboundEventForwarder' and
+           'OutboundEventForwarder'.</p>
+      </subsection>
+
+	  <subsection name="Browse">
+        <p>
+          <ul>
+            <li>EventSystem <a href="../apidocs/org/objectledge/event/EventSystem.html">JavaDoc</a></li>
+            <li>EventSystem <a href="../apidocs/org/objectledge/event/EventSystem.html">XRef</a></li>
+            <li>EventSystem <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/event/EventSystem.java">CVS log</a></li>
+	        <li>EventSystem configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/event/EventSystem.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>            
+          </ul>
+        </p>	    
+	  </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="ThreadPool.html">ThreadPool</a>, 
+                <a href="../../../ledge-container/docs/container-subsystems/LoggerFactory.html">LoggerFactory</a>, 
+                <a href="../../../ledge-container/docs/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+    				   
+      <subsection name="Constructor parameters">		
+  	    <p>
+	      <table>
+	        <tr>
+              <th>position</th>
+	          <th>type</th>
+	          <th widht="100%">description</th>
+            </tr>
+            <tr>
+	          <td>1</td>
+	          <td><code>org.jcontainer.dna.Configuration</code></td>
+	          <td>the configuration</td>
+	        </tr>
+		    <tr>
+		      <td>2</td>
+		      <td><code>import org.jcontainer.dna.Logger</code></td>
+		      <td>the logger</td>
+		    </tr>
+		    <tr>
+		      <td>3</td>
+		      <td><code>org.objectledge.threads.ThreadsPool</code></td>
+		      <td>the threads pool component</td>
+		    </tr>
+		  </table>
+	    </p>
+	  </subsection>
+    </section>
+  </body>
+</document>  
+ 

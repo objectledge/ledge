@@ -42,9 +42,10 @@ import java.util.WeakHashMap;
 import org.jcontainer.dna.Logger;
 
 /**
+ * Default event forwarder implementation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultEventForwarder.java,v 1.1 2004-02-02 09:41:04 pablo Exp $
+ * @version $Id: DefaultEventForwarder.java,v 1.2 2004-02-02 10:17:20 pablo Exp $
  */
 public class DefaultEventForwarder implements EventForwarder
 {

@@ -28,7 +28,8 @@
         <item name="Templating"			   href="/components/Templating.html" collapse="true">
           <item name="Context tools"    href="/components/templating/ContextTools.html"/>
           <item name="Velocity Templating" href="/components/templating/VelocityTemplating.html"/>
-        </item>        
+        </item>   
+        <item name="EventSystem"		   href="/components/EventSystem.html"/>             
         <item name="MailSystem"			   href="/components/MailSystem.html"/>
         <item name="ContextFactory"		   href="/components/ContextFactory.html"/>        
         <item name="Scheduler"			   href="/components/Scheduler.html" collapse="true">

@@ -39,10 +39,28 @@ import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
 
 /**
- * Routes adminstrative events.
+ * Provides a common facility for associating event generators with
+ * receivers. 
+ *
+ * <p>This component was created to remove the burden of managing listener lists
+ * from objects that generate events.</p>
+ *
+ * <p>'Events' that are dealt with here are experssed with method calls on
+ * concrete objects. Propagating these events to other JVMs will usually
+ * require some additional effort, like <code>java.rmi.Remote</code>
+ * listeners, or listeners generating messages and propagating them to other
+ * JVMs using <code>NotificationService</code>, with notification listeners
+ * parsing messages, and firing events on the other local
+ * <code>EventSystem</code>.</p>
+ *
+ * <p>The {@link EventSystem} implements {@link EventForwarder}
+ * interface, thus this component acts as the ledge instance wide event
+ * forwarder. If need arsises, you can create additional private event
+ * forwarders separate from the global one. See also {@link
+ * InboundEventForwarder} and {@link OutboundEventForwarder}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventSystem.java,v 1.1 2004-02-02 09:41:04 pablo Exp $
+ * @version $Id: EventSystem.java,v 1.2 2004-02-02 10:17:20 pablo Exp $
  */
 public class EventSystem implements EventForwarder
 {
