@@ -53,7 +53,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * size, or a no-argument constructor) or be Java array type.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameter.java,v 1.2 2004-01-09 14:15:51 fil Exp $
+ * @version $Id: SequenceParameter.java,v 1.3 2004-01-12 10:50:33 fil Exp $
  */
 public class SequenceParameter implements Parameter
 {
@@ -89,7 +89,7 @@ public class SequenceParameter implements Parameter
         }
         for (int i = 0; i < elements.length; i++)
         {
-            adapters[i] = elements[i].resolveAdapter(componentRegistry, null);
+            adapters[i] = elements[i].resolveAdapter(componentRegistry, elementType);
             if(adapters[i] == null)
             {
                 return null; 
@@ -111,7 +111,7 @@ public class SequenceParameter implements Parameter
      *
      * <p>Created on Dec 8, 2003</p>
      * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
-     * @version $Id: SequenceParameter.java,v 1.2 2004-01-09 14:15:51 fil Exp $
+     * @version $Id: SequenceParameter.java,v 1.3 2004-01-12 10:50:33 fil Exp $
      */
     private static class SequenceComponentAdapter
         implements ComponentAdapter
