@@ -35,7 +35,7 @@ import org.objectledge.templating.Template;
  * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.1 2003-12-29 14:07:03 zwierzem Exp $
+ * @version $Id: AbstractBuilder.java,v 1.2 2003-12-30 14:16:44 zwierzem Exp $
  */
 public abstract class AbstractBuilder implements Builder
 {
@@ -69,9 +69,10 @@ public abstract class AbstractBuilder implements Builder
     public String build(Template template, String embeddedBuildResults)
     throws BuildException
     {
+    	// TODO: insert embedded into context
     	try
     	{
-			return template.merge(MVCUtil.getContext(context));
+			return template.merge(MVCUtil.getTemplatingContext(context));
     	}
         catch(MergingException e)
         {
@@ -82,8 +83,16 @@ public abstract class AbstractBuilder implements Builder
     /**
      * @see org.objectledge.web.mvc.Builder#nextViewPair()
      */
-    public ViewPair nextViewPair()
+    public ViewPair getEnclosingViewPair()
     {
         return new ViewPair(null, null);
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public Template getTemplate()
+    {
+        return null;
     }
 }

@@ -31,8 +31,9 @@ package org.objectledge.web.mvc;
  *
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildException.java,v 1.1 2003-12-29 14:07:03 zwierzem Exp $
+ * @version $Id: BuildException.java,v 1.2 2003-12-30 14:16:44 zwierzem Exp $
  */
+///CLOVER:OFF
 public class BuildException extends Exception
 {
     /**

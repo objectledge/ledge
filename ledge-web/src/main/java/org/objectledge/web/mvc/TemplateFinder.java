@@ -6,13 +6,13 @@
 // are permitted provided that the following conditions are met: 
 //  
 // * Redistributions of source code must retain the above copyright notice,  
-//   this list of conditions and the following disclaimer. 
+//	 this list of conditions and the following disclaimer. 
 // * Redistributions in binary form must reproduce the above copyright notice,  
-//   this list of conditions and the following disclaimer in the documentation  
-//   and/or other materials provided with the distribution. 
+//	 this list of conditions and the following disclaimer in the documentation  
+//	 and/or other materials provided with the distribution. 
 // * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-//   nor the names of its contributors may be used to endorse or promote products  
-//   derived from this software without specific prior written permission. 
+//	 nor the names of its contributors may be used to endorse or promote products  
+//	 derived from this software without specific prior written permission. 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
@@ -25,38 +25,27 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
+package org.objectledge.web.mvc;
 
-package org.objectledge.web;
-
-import org.objectledge.context.Context;
+import org.objectledge.templating.Template;
 
 /**
- * Pipeline processing valve that initialize pipeline context.
  *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineContextInitializator.java,v 1.1 2003-12-23 23:40:23 pablo Exp $
+ *
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: TemplateFinder.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
  */
-public class PipelineContextInitializator implements Runnable
+public interface TemplateFinder
 {
-	/** the context */
-	private Context context;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param context the context.
-	 */
-	public PipelineContextInitializator(Context context)
-	{
-		this.context = context;		
-	}
-	
     /**
-     * Run the pipeline valve - initialize and store the pipeline context.
+     * @param name
+     * @return
      */
-    public void run()
-    {
-    	PipelineContext pipelineContext = new PipelineContextImpl();
-    	context.setAttribute(PipelineContext.CONTEXT_KEY, pipelineContext);
-    }
+    public Template findTemplate(String name);
+
+    /**
+     * @param builder
+     */
+	public Template findEnclosingTemplate(Template builder);
+
 }

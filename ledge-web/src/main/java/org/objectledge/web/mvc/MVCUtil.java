@@ -34,7 +34,7 @@ import org.objectledge.templating.TemplatingContext;
  * Utitlity methods for MVC components. 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCUtil.java,v 1.1 2003-12-29 14:07:03 zwierzem Exp $
+ * @version $Id: MVCUtil.java,v 1.2 2003-12-30 14:16:44 zwierzem Exp $
  */
 public class MVCUtil
 {
@@ -49,7 +49,7 @@ public class MVCUtil
 	 * @param context application context
 	 * @return templating context
 	 */
-	public static TemplatingContext getContext(Context context)
+	public static TemplatingContext getTemplatingContext(Context context)
 	{
 		return (TemplatingContext) context.getAttribute(TemplatingContext.CONTEXT_KEY);
 	}

@@ -32,7 +32,7 @@ package org.objectledge.web;
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineProcessingException.java,v 1.2 2003-12-29 13:30:23 fil Exp $
+ * @version $Id: PipelineProcessingException.java,v 1.3 2003-12-30 14:16:44 zwierzem Exp $
  */
 ///CLOVER:OFF
 public class PipelineProcessingException
@@ -56,6 +56,16 @@ public class PipelineProcessingException
         super(message);
     }
     
+    /**
+     * Constructs a new PipelineProcessingException with a nested exception.
+     * 
+     * @param t the nested exception.
+     */
+    public PipelineProcessingException(Throwable t)
+    {
+        super(t);
+    }
+
 	/**
 	 * Constructs a new PipelineProcessingException with a custom message.
 	 * 

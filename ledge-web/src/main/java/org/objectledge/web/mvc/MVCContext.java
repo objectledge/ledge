@@ -26,37 +26,36 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web;
+package org.objectledge.web.mvc;
 
 import java.security.Principal;
 import java.util.Locale;
-
-import org.objectledge.templating.Template;
 
 /**
  * The pieline context contains all needed information for pipeline processing.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineContext.java,v 1.1 2003-12-23 23:40:23 pablo Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: MVCContext.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
  */
-public interface PipelineContext
+public interface MVCContext
 {
 	/** key to store this context in thread context */
 	public static final String CONTEXT_KEY = "objectledge.web.pipeline_context";
 	
 	/**
-	 * Returns the view Template.
+	 * Returns the view paremeter.
 	 *
-	 * @return the Screen Template.
+	 * @return the value of view parameter.
 	 */
-	public Template getScreenTemplate();
+	public String getView();
 	
 	/**
-	 * Sets the Screen Template.
+	 * Sets the view parameter.
 	 *
-	 * @param template the Screen Template.
+	 * @param view the view parameter.
 	 */
-	public void setScreenTemplate(Template template);
+	public void setView(String view);
 	
 	/**
 	 * Returns the locale.
@@ -121,4 +120,18 @@ public interface PipelineContext
 	 * @param authenticated <code>true</code> if named user is authenticated.
 	 */
 	public void setUserPrincipal(Principal user, boolean authenticated);
+
+	/**
+	 * Gets the result of building the view part of MVC pipeline.
+	 * 
+	 * @return the result of building the MVC view
+	 */
+	public String getBuildResult();
+
+    /**
+     * Sets the result of building the view part of MVC pipeline.
+     * 
+     * @param buildResult a string representing built view which should be sent to the browser
+     */
+    public void setBuildResult(String buildResult);
 }

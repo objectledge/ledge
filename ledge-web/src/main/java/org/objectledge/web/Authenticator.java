@@ -32,12 +32,14 @@ import java.security.Principal;
 
 import org.objectledge.authentication.Authentication;
 import org.objectledge.context.Context;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.MVCContextImpl;
 
 /**
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Authenticator.java,v 1.2 2003-12-29 13:02:08 fil Exp $
+ * @version $Id: Authenticator.java,v 1.3 2003-12-30 14:16:44 zwierzem Exp $
  */
 public class Authenticator implements Runnable, WebConstants
 {
@@ -65,7 +67,7 @@ public class Authenticator implements Runnable, WebConstants
     public void run()
     {
     	HttpContext httpContext = HttpContextImpl.retrieve(context);
-		PipelineContext pipelineContext = PipelineContextImpl.retrieve(context);
+		MVCContext mvcContext = MVCContextImpl.retrieve(context);
     	Principal principal = (Principal)httpContext.getRequest().
 			getSession().getAttribute(PRINCIPAL_SESSION_KEY);
 		Principal anonymous = authentication.getAnonymousUser();
@@ -78,7 +80,7 @@ public class Authenticator implements Runnable, WebConstants
 		{
 			authenticated = !principal.equals(anonymous);
 		}
-		pipelineContext.setUserPrincipal(principal, authenticated);
+		mvcContext.setUserPrincipal(principal, authenticated);
     	httpContext.getRequest().getSession().setAttribute(PRINCIPAL_SESSION_KEY, principal);
     }
 }

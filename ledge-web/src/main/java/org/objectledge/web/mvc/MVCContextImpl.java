@@ -26,22 +26,21 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web;
+package org.objectledge.web.mvc;
 
 import java.security.Principal;
 import java.util.Locale;
 
 import org.objectledge.context.Context;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplatingContext;
 
 /**
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineContextImpl.java,v 1.2 2003-12-29 13:09:29 pablo Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: MVCContextImpl.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
  */
-public class PipelineContextImpl implements PipelineContext
+public class MVCContextImpl implements MVCContext
 {
 	/**
 	 *  Usefull method to retrieve http context from context.
@@ -49,16 +48,16 @@ public class PipelineContextImpl implements PipelineContext
 	 * @param context the context.
 	 * @return the http context.
 	 */
-	public static PipelineContext retrieve(Context context)
+	public static MVCContext retrieve(Context context)
 	{
-		return (PipelineContext)context.getAttribute(CONTEXT_KEY);
+		return (MVCContext)context.getAttribute(CONTEXT_KEY);
 	}
-
-	/** The screen template. */
-	private Template screenTemplate;
 
 	/** The Action for this request */
 	//protected Action action;
+
+	/** the view paramter. */
+	private String view;
 
 	/** the locale */
 	private Locale locale;
@@ -75,36 +74,36 @@ public class PipelineContextImpl implements PipelineContext
     /** is the user authenticated */
 	private boolean authenticated;
 
-	/** The name of the view paramter. */
-	private String viewToken;
-	 
+	/** the view build result */
+	private String buildResult;
+
+
 	/**
 	 * Construct new pipeline context.
 	 */
-	public PipelineContextImpl()
+	public MVCContextImpl()
 	{
 		user = null;
 		authenticated = false;
 		// TODO load some default values - but from?
 		locale = new Locale("pl","PL");
 		encoding = "ISO-8859-2";
-		viewToken = "Default";
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public Template getScreenTemplate()
+	public String getView()
 	{
-		return screenTemplate;
+		return view;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void setScreenTemplate(Template template)
+	public void setView(String view)
 	{
-		screenTemplate = template;
+		this.view = view;
 	}
 	
 	/**
@@ -178,5 +177,21 @@ public class PipelineContextImpl implements PipelineContext
     {
     	this.user = user;
     	this.authenticated = authenticated;
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public String getBuildResult()
+    {
+        return buildResult;
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public void setBuildResult(String buildResult)
+    {
+    	this.buildResult = buildResult;
     }
 }

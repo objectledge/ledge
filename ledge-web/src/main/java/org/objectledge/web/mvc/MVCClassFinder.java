@@ -27,53 +27,37 @@
 // 
 package org.objectledge.web.mvc;
 
-import org.objectledge.templating.Template;
-
 /**
- * Builder of a single view element.
+ * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.2 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: MVCClassFinder.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
  */
-///CLOVER:OFF
-public interface Builder
-{	
-	/**
-	 * This method is called to allow the view builder to redirect the control to another builder
-	 * without executing the build method.
-	 * 
-     * @return the builder which will be executed instead of current builder.
-     */
-    public Builder route();
-    
-	/**
-	 * Build method executes builder logic which should return rendered <code>String</code>.
-	 * 
-     * @param template template to be used during building
-     * @param embeddedBuildResults string containing results of embedded builder build (it will be
-     * 	fit into templating context under <code>$embedded_placeholder</code> key).
+public interface MVCClassFinder
+{
+    /**
+     * Returns a builder instance based on a given name. If no builder is found, a
+     * {@link org.objectledge.web.mvc.DefaultBuilder} is returned.
      * 
-     * @return string containing rendered view element
-     * @throws BuildException on problems with view element building
+     * @param builderName part of a name of a builder class to be found/instantiated
+     * @return found builder instance
      */
-    public String build(Template template, String embeddedBuildResults)
-	throws BuildException;
-    
-     
+    public Builder findBuilder(String builderName);
+
 	/**
-	 * Returns a manually chosen builder and template in which currently executed builder will be
-	 * embedded in. Both builder and template may be chosen separately - if <code>null</code> is\
-	 * returned for either template or builder, finder component is used to search for a proper
-	 * template and/or builder for embedded builder.
+	 * Returns an enclosing builder for a given builder. If no builder is found, a
+	 * {@link org.objectledge.web.mvc.DefaultBuilder} is returned.
 	 * 
-	 * @return view pair
+	 * @param builder a builder for which an eclosing builder must be found 
+     * @return found builder instance
 	 */
-	public ViewPair getEnclosingViewPair();
+	public Builder findEnclosingBuilder(Builder builder);
 
     /**
-     * Gets a template chosen by this builder.
+     * Creates an MVC compoment name for a given class object.
      * 
-     * @return template used by this builder
+     * @param clazz class to find MVC component name for
+     * @return finder usable MVC compoment name
      */
-    public Template getTemplate(); 
+    public String findName(Class clazz);
 }
