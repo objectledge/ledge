@@ -35,7 +35,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ExtendedTableModel.java,v 1.1 2004-02-10 17:17:46 zwierzem Exp $
+ * @version $Id: ExtendedTableModel.java,v 1.2 2004-02-12 13:46:06 zwierzem Exp $
  */
 public interface ExtendedTableModel extends TableModel
 {
@@ -48,7 +48,7 @@ public interface ExtendedTableModel extends TableModel
     public Object[] getChildren(Object parent);
 
     /**
-     * Returns the model dependent object by its id, may return null.
+     * Returns the model dependent object by its id, may return <code>null</code>.
      *
      * @param objectId the id of the object
      * @return model object
