@@ -32,10 +32,11 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 
 /**
- *
+ * An implementation of the <code>Runnable</code> interface that delegates it's run() method
+ * to a number of "Valves", and provides error handling along the lines of Java try/catch/finally.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Pipeline.java,v 1.9 2004-01-12 09:27:23 fil Exp $
+ * @version $Id: Pipeline.java,v 1.10 2004-01-12 10:29:48 fil Exp $
  */
 public class Pipeline
     implements Runnable
