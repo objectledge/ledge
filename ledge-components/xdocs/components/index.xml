@@ -6,17 +6,6 @@
   
   <body>
     <section name="Components">
-      <subsection name="Context">
-        <p>Provides dependant components with a nontion of <em>thread context</em>, that is a set
-		of name - value pairs (boths elements are arbitrary Java objectss) that is specific
-		to the currently executing thread. This allows passing information across the method
-		call stack without actually pushing it through formal arguments. Servlet Request and
-		Response objects, authentication and transactiotion managment objects are conveniently
-		passed around using thread context.</p>
-
-		<p class="more"><a href="Context.html">more</a></p>
-      </subsection>
-      
       <subsection name="FileSystem">
         <p>FileSystem component provides a set of operations that are performed on files, directories
         and abstract pathnames, including: file reading, writing (streams, byte[], String), random 
@@ -50,6 +39,25 @@
         moment XML based schema languages supported by Jing and thus by XMLValidator are W3C XSD, 
         Scheamtron and Namespace Routing Language.</p>
 		<p class="more"><a href="XMLValidator.html">more</a></p>
+      </subsection>
+      
+      <subsection name="Context">
+        <p>Provides dependant components with a nontion of <em>thread context</em>, that is a set
+		of name - value pairs (boths elements are arbitrary Java objectss) that is specific
+		to the currently executing thread. This allows passing information across the method
+		call stack without actually pushing it through formal arguments. Servlet Request and
+		Response objects, authentication and transactiotion managment objects are conveniently
+		passed around using thread context.</p>
+
+		<p class="more"><a href="Context.html">more</a></p>
+      </subsection>
+
+      <subsection name="Pipeline">
+        <p>A pipeline component can be considered a composite <code>java.lang.Runnable</code>
+        implementation. It delegates the invocation of it's <code>run()</code> to a number of
+        dependant components called <em>Valves</em>. The "units of work" are passed between the
+        Valves using thread <a href="Context.html">Context</a>.</p>
+        <p class="more"><a href="Pipeline.html">more</a></p>
       </subsection>
       
       <subsection name="I18n">

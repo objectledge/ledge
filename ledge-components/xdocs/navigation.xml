@@ -15,11 +15,12 @@
     <menu name="Reference">
 
       <item name="Components"            href="/components/index.html" collapse="true">
-        <item name="Context"               href="/components/Context.html"/>
         <item name="FileSystem"            href="/components/FileSystem.html"/>
         <item name="Local FS provider"     href="/components/LocalFileSystemProvider.html"/>
         <item name="Classpath FS provider" href="/components/ClasspathFileSystemProvider.html"/>
         <item name="XMLValidator"          href="/components/XMLValidator.html"/>
+        <item name="Context"               href="/components/Context.html"/>
+        <item name="Pipeline"			   href="/components/Pipeline.html"/>
         <item name="I18n"				   href="/components/I18n.html" collapse="true">
           <item name="XMLI18n"             href="/components/i18n/XMLI18n.html"/>
         </item>
