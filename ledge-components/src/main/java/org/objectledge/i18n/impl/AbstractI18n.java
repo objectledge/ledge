@@ -43,6 +43,8 @@ import org.objectledge.utils.StringUtils;
  * Base implementation of I18n component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: AbstractI18n.java,v 1.4 2004-06-17 11:59:25 zwierzem Exp $
  */
 public abstract class AbstractI18n implements I18n, ContextToolFactory
 {
@@ -115,31 +117,56 @@ public abstract class AbstractI18n implements I18n, ContextToolFactory
      */
     public String get(Locale locale, String key)
     {
-		Map bundle = (Map)localeMap.get(locale.toString());
-		String value = null;
-		if(bundle != null)
-		{
-			value = (String)bundle.get(key);
-			if(value != null)
-			{
-				return value;
-			}
-			if(locale.equals(defaultLocale) || !useDefaultLocale)
-			{
-				return useKeyIfUndefined ? key : undefinedValue;
-			}
-		}
-		bundle = (Map)localeMap.get(defaultLocale.toString());
-		if(bundle != null)
-		{
-			value = (String)bundle.get(key);
-		}
-		if(value != null)
-		{
-			return value;
-		}
-		return useKeyIfUndefined ? key : undefinedValue;
+        String value = getInternal(locale, key);
+        if(value == null)
+        {
+            value = useKeyIfUndefined ? key : undefinedValue;
+        }
+        return value;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String get(Locale locale, String key, String defaultValue)
+    {
+        String value = getInternal(locale, key);
+        if(value == null)
+        {
+            value = defaultValue;
+        }
+        return value;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected String getInternal(Locale locale, String key)
+    {
+        String value = null;
+        // get selected bundle
+        Map bundle = (Map)localeMap.get(locale.toString());
+        if(bundle != null)
+        {
+            value = (String)bundle.get(key);
+            if(value != null)
+            {
+                return value;
+            }
+            if(locale.equals(defaultLocale) || !useDefaultLocale)
+            {
+                return null;
+            }
+        }
+        // get default bundle
+        bundle = (Map)localeMap.get(defaultLocale.toString());
+        if(bundle != null)
+        {
+            value = (String)bundle.get(key);
+        }
+        return value;
+    }
+    
     
 	/**
 	 * {@inheritDoc}

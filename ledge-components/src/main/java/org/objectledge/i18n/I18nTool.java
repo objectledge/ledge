@@ -37,6 +37,8 @@ import org.objectledge.utils.StringUtils;
  * The I18n contex tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: I18nTool.java,v 1.4 2004-06-17 11:59:28 zwierzem Exp $
  */
 public class I18nTool
 {
@@ -120,7 +122,24 @@ public class I18nTool
 		return i18n.get(locale, prefix + "." + key);
 	}
 
-	/**
+    /** 
+     * Get the string value with given default value if the string is missing in
+     * both current and default locale.
+     * 
+     * @param key the key.
+     * @param defaultValue the default value in case key mapping is missing.
+     * @return the string value.
+     */
+    public String get(String key, String defaultValue)
+    {
+        if(prefix == null || prefix.length()==0)
+        {
+            return i18n.get(locale, key, defaultValue);
+        }
+        return i18n.get(locale, prefix + "." + key, defaultValue);
+    }
+
+    /**
 	 * Get the string and replace $[1..n] variables with given values.
 	 *
 	 * @param key the key.

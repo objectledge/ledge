@@ -34,6 +34,8 @@ import java.util.Locale;
  * Common interface for i18n various i18n implementations.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: I18n.java,v 1.5 2004-06-17 11:59:28 zwierzem Exp $
  */
 public interface I18n
 {
@@ -53,7 +55,18 @@ public interface I18n
 	 */
 	String get(Locale locale, String key);
 	
-	/**
+    /** 
+     * Get the string value with given default value if the string is missing in
+     * both given and default locale.
+     * 
+     * @param locale the locale.
+     * @param key the key.
+     * @param defaultValue the default value in case key mapping is missing.
+     * @return the string value.
+     */
+    String get(Locale locale, String key, String defaultValue);
+
+    /**
 	 * Get the string and replace $[1..n] variables with given values.
 	 *
 	 * @param locale the locale.
