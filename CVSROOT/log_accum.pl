@@ -1,6 +1,6 @@
 #! /usr/bin/perl -w
 #
-# $Id: log_accum.pl.in,v 1.30 2002/12/16 05:37:35 coar Exp $
+# $Id: log_accum.pl,v 1.1 2003/09/10 11:40:13 rafal Exp $
 #
 # Copyright (c) 2002 by Ken A L Coar.  All rights reserved.
 #
@@ -44,7 +44,7 @@ use constant DEBUG => 0;
 #
 # Set some default values for overridable options.
 #
-my $maintainer_email = $sc->param('Maintainer_Email') || 'nobody';
+my $maintainer_email = $sc->param('Maintainer_Email') || 'rafal';
 my $IncludeRCSinfo   = $sc->param('IncludeRCSinfo') || 3;
 
 #
@@ -465,7 +465,7 @@ my $mlist = mlist_map($files[0]);
 # to the default owner if nowhere else.
 #
 if ((! defined($MAIL_TO)) && ($mlist eq 'CVSROOT')) {
-    $MAIL_TO = ('nobody' || 'Ken.Coar@Golux.Com');
+    $MAIL_TO = ('rafal' || 'Ken.Coar@Golux.Com');
 }
 
 ##########################
