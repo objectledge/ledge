@@ -52,7 +52,7 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  * HttpDispatcher component to handle requests.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.16 2004-12-27 05:18:28 rafal Exp $
+ * @version $Id: LedgeServlet.java,v 1.17 2005-02-03 23:26:02 pablo Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -120,7 +120,7 @@ public class LedgeServlet extends HttpServlet
         ServletFileSystemProvider sfs = new ServletFileSystemProvider("servlet", context);
         ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
             getClass().getClassLoader());
-        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4096);
+        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4194304);
         try
         {
             container = new LedgeContainer(fs, config, getClass().getClassLoader());    
