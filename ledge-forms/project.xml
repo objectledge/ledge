@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.2 2005-01-27 04:50:44 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.3 2005-03-23 10:40:48 zwierzem Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -55,7 +55,8 @@
         <directory>src/main/java</directory>
         <includes>
           <include>**/*.rng</include>
-          <include>**/*.sql</include>
+          <include>**/*.xsd</include>
+          <include>**/*.properties</include>
         </includes>
       </resource>
     </resources>
