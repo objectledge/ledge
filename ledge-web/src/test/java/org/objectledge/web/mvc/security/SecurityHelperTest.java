@@ -57,9 +57,10 @@ public class SecurityHelperTest extends LedgeTestCase
         AuthenticationContext authenticationContext = new AuthenticationContext();
         HttpContext httpContext = new HttpContext(request, response);
         Object obj = new SecureObject(true, true, true);
+        SecurityHelper securityHelper = new SecurityHelper();
         try
         {
-            SecurityHelper.checkSecurity(obj, context);
+            securityHelper.checkSecurity(obj, context);
             fail("should throw the exception");
         }
         catch (IllegalStateException e)
@@ -70,7 +71,7 @@ public class SecurityHelperTest extends LedgeTestCase
         try
         {
             requestMock.expects(once()).method("isSecure").will(returnValue(true));
-            SecurityHelper.checkSecurity(obj, context);
+            securityHelper.checkSecurity(obj, context);
             fail("should throw the exception");
         }
         catch (IllegalStateException e)
@@ -81,7 +82,7 @@ public class SecurityHelperTest extends LedgeTestCase
         requestMock.expects(once()).method("isSecure").will(returnValue(true));
         try
         {
-            SecurityHelper.checkSecurity(obj, context);
+            securityHelper.checkSecurity(obj, context);
             fail("should throw the exception");
         }
         catch (LoginRequiredException e)
@@ -91,12 +92,12 @@ public class SecurityHelperTest extends LedgeTestCase
         
         authenticationContext.setUserPrincipal(null, true);
         requestMock.expects(once()).method("isSecure").will(returnValue(true));
-        SecurityHelper.checkSecurity(obj, context);
+        securityHelper.checkSecurity(obj, context);
         
         requestMock.expects(once()).method("isSecure").will(returnValue(false));
         try
         {
-            SecurityHelper.checkSecurity(obj, context);
+            securityHelper.checkSecurity(obj, context);
             fail("should throw the exception");
         }
         catch (InsecureChannelException e)
@@ -106,7 +107,7 @@ public class SecurityHelperTest extends LedgeTestCase
         obj = new SecureObject(false, false, false);
         try
         {
-            SecurityHelper.checkSecurity(obj, context);
+            securityHelper.checkSecurity(obj, context);
             fail("should throw the exception");
         }
         catch (AccessDeniedException e)

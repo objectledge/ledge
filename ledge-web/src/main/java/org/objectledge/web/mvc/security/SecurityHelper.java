@@ -37,14 +37,15 @@ import org.objectledge.web.HttpContext;
  * Util class used to check components security.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SecurityHelper.java,v 1.6 2004-08-03 09:47:18 pablo Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: SecurityHelper.java,v 1.7 2004-08-20 10:05:18 zwierzem Exp $
  */
-public abstract class SecurityHelper
+public class SecurityHelper
 {
     /**
-     * A private constructor to prevent instantiation of this static method only class.
+     * The constructor.
      */
-    private SecurityHelper()
+    public SecurityHelper()
     {
         
     }
@@ -58,7 +59,7 @@ public abstract class SecurityHelper
      * @throws LoginRequiredException if authenticated user was required.
      * @throws AccessDeniedException if user has no rights to access the object.
      */
-    public static void checkSecurity(Object obj, Context context)
+    public void checkSecurity(Object obj, Context context)
         throws InsecureChannelException, LoginRequiredException, 
         	   AccessDeniedException, ProcessingException
     {
