@@ -34,8 +34,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.objectledge.configuration.ConfigurationFactory;
+import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.Startable;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -45,27 +47,31 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.5 2004-03-09 14:47:16 fil Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.6 2004-06-16 11:03:10 fil Exp $
  */
 public class LoggingConfigurator
     implements Startable
 {
     private Document config;
-
+    
+    private DOMConfigurator configurator;
+    
     /**
      * Creates a new LoggingConfigurator.
      * 
      * @param configurationFactory the configuration factory.
+     * @param fileSystem the file system component.
      * @throws ParserConfigurationException if the JAXP system is not configured properly.
      * @throws IOException if the configuration cannot be loaded.
      * @throws SAXException if the configuration cannot be parsed.
      */
-    public LoggingConfigurator(ConfigurationFactory configurationFactory)
+    public LoggingConfigurator(ConfigurationFactory configurationFactory, FileSystem fileSystem)
         throws ParserConfigurationException, IOException, SAXException
     {
         InputSource source = configurationFactory.getConfigurationSource(LoggingConfigurator.class);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         config = builder.parse(source);
+        configurator = new LedgeDOMConfigurator(fileSystem);
     }
     
     /**
@@ -73,7 +79,7 @@ public class LoggingConfigurator
      */
     public void start()
     {
-        DOMConfigurator.configure(config.getDocumentElement());
+        configurator.doConfigure(config.getDocumentElement(),  LogManager.getLoggerRepository());
     }
     
     /**
