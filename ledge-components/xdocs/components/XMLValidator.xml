@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>XMLValidator</title>
+  </properties>
+
+  <body>
+    <section name="XMLValidator">
+      <p>
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%"><code>org.objectledge.filesystem.FileSystem</code></td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>none</td>
+          </tr>
+        </table>
+      </p>
+        
+      <p>Validates XML files against schemata using Jing library.</p>
+
+      <p>The primary schema language used throughout ObjectLedge project is RelaxNG, but the Jing
+      library determines the schema languague using XML namespace of the top level element. At the
+      moment XML based schema languages supported by Jing and thus by XMLValidator are W3C XSD, 
+      Scheamtron and Namespace Routing Language.</p>
+
+      <p>Constructor parameters
+        <table>
+          <tr>
+            <th>position</th>
+	        <th>type</th>
+	        <th widht="100%">descritpion</th>
+	      </tr>
+	      <tr>
+	        <td>1</td>
+	        <td><code>org.objectledge.filesystem.FileSystem</code></td>
+	        <td>The file system to load data from.</td>
+	      </tr>
+        </table>
+      </p>        
+    </section>
+  </body>
+</document>

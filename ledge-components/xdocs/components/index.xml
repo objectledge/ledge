@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Overview of components</title>
+  </properties>
+  
+  <body>
+    <section name="Components">
+      <subsection name="Context">
+        <p>Provides dependant components with a nontion of <em>thread context</em>, that is a set
+		of name - value pairs (boths elements are arbitrary Java objectss) that is specific
+		to the currently executing thread. This allows passing information across the method
+		call stack without actually pushing it through formal arguments. Servlet Request and
+		Response objects, authentication and transactiotion managment objects are conveniently
+		passed around using thread context.</p>
+
+		<p class="more"><a href="Context.html">more</a></p>
+      </subsection>
+      
+      <subsection name="FileSystem">
+        <p>FileSystem component provides a set of operations that are performed on files, directories
+        and abstract pathnames, including: file reading, writing (streams, byte[], String), random 
+        access (read, write, rewinding), atomic creation, deletion and renaming; directory creation, 
+        deletion, renaming and listings; path name normalisation and basename / directory name 
+        splitting and creation of java.net.URL objects that can be used to access the component's
+        functionality.</p>
+
+		<p class="more"><a href="FileSystem.html">more</a></p>
+      </subsection> 
+      
+      <subsection name="LocalFileSystemProvider">
+        <p>This is the basic implementation of the <code>FileSystemProvider</code> interaface 
+        operating over local file system. It supports read and write operations. Stat operations
+        (size, modification time) and directory listings are reported from actual data.</p>
+
+		<p class="more"><a href="LocalFileSystemProvider.html">more</a></p>
+      </subsection>
+      
+      <subsection name="ClasspathFileSystemProvider">
+        <p>This is an implementation of the FileSystemProvider that delegates it's functionality
+        to the <code>java.lang.Classloader.getResource(String)</code> calls. Stat operations,
+        directory existence checking and listings are supported only if there are listing files
+        available. The ObjectLedge Maven plugin is able to generate these files automatically.</p>
+		<p class="more"><a href="ClasspathFileSystemProvider.html">more</a></p>
+      </subsection>
+     
+      <subsection name="XMLValidator">
+        <p>The primary schema language used throughout ObjectLedge project is RelaxNG, but the Jing
+        library determines the schema languague using XML namespace of the top level element. At the
+        moment XML based schema languages supported by Jing and thus by XMLValidator are W3C XSD, 
+        Scheamtron and Namespace Routing Language.</p>
+		<p class="more"><a href="XMLValidator.html">more</a></p>
+      </subsection>
+    </section>
+  </body>
+</document>
+  

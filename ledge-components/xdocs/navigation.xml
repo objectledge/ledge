@@ -2,15 +2,31 @@
 <project name="ObjectLedge components">
 
   <title>ObjectLedge components</title>
+
   <body>
+
     <links>
-      <item name="home" href="../../index.html"/>
-      <item name="wiki" href="http://objectledge.org/wiki"/>
-      <item name="issues" href="http://objectledge.org/jira"/>
-      <item name="viewcvs" href="http://objectledge.org/viewcvs.cgi/ledge-components"/>
+      <item name="home"                  href="../../index.html"/>
+      <item name="wiki"                  href="http://objectledge.org/wiki"/>
+      <item name="issues"                href="http://objectledge.org/jira"/>
+      <item name="viewcvs"               href="http://objectledge.org/viewcvs.cgi/ledge-components"/>
     </links>
+
     <menu name="Reference">
-      <item name="Components" href="components.html" collapse="true"/>
+
+      <item name="Components"            href="/components/index.html" collapse="true">
+        <item name="Context"               href="/components/Context.html"/>
+        <item name="FileSystem"            href="/components/FileSystem.html"/>
+        <item name="Local FS provider"     href="/components/LocalFileSystemProvider.html"/>
+        <item name="Classpath FS provider" href="/components/ClasspathFileSystemProvider.html"/>
+        <item name="XMLValidator"          href="/components/XMLValidator.html"/>
+      </item>
+
+      <item name="Utilities"             href="/utilities/index.html" collapse="true">
+        <item name="Parameters"            href="/utilities/Parameters.html"/>
+        <item name="StringUtils"           href="/utilities/StringUtils.html"/>
+      </item>
+
     </menu>
   </body>
 </project>

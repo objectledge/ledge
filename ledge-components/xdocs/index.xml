@@ -8,7 +8,8 @@
     <section name="ObjectLedge components">
     <subsection name="Introduction">
       <p>
-         A few words about components in general.
+        A collection of reusable components for building applications for
+        both command line and J2EE servlet environments.
       </p>
     </subsection>
     </section>

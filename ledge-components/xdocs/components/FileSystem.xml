@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>FileSystem</title>
+  </properties>
+
+  <body>
+    <section name="FileSystem">
+      <p>
+        <table>
+          <tr>
+            <th>required components</th>
+            <td width="100%">one or more <a href="apidocs/org/objectledge/filesystem/FileSystemProvider.html">FileSystemProvider</a> implementations.</td>
+          </tr>
+          <tr>
+            <th>required libraries</th>
+            <td>none</td>
+          </tr>
+        </table>
+      </p>
+      <p>FileSystem component provides a set of operations that are performed on files, directories
+      and abstract pathnames, including: file reading, writing (streams, byte[], String), random 
+      access (read, write, rewinding), atomic creation, deletion and renaming; directory creation, 
+      deletion, renaming and listings; path name normalisation and basename / directory name 
+      splitting and creation of java.net.URL objects that can be used to access the component's
+      functionality.</p>
+
+      <p>The biggest strength of this component is that it's functionality is delegated to one
+      or more <em>providers</em> that are specific to particural kind of storage media. The providers
+      are accessed in order of registration, and the first one that has the requested file or
+      directory performs the operation. For consistency reasons it is recommended that only
+      the first registered provider is write-enabled.</p>
+      <p>These are the two typical setups of the component:
+        <ol>
+          <li><code>LocalFileSystemProvider, ClasspathFileSystemProvider</code></li>
+          <li><code>LocalFileSystemProvider, ServletFileSystemProvider, 
+            ClasspathFileSystemProvider</code></li>
+        </ol>
+      </p>
+      <p>The first setup is used in command line applications. It allows them to write logs and
+      teporary files to the local disk, and read their configuration data from the jar files.
+      The user may override the configuration settings present in the jar files by copying 
+      relevant files out of the jar onto the disk and modyfiing them as necessary.</p> 
+      <p>The second setup is used in web applications (the ServletFileSystemProvideris hosted in 
+      ObjectLedge web module). A web application is typically composed of a number of jar files.
+      A jar file with application components can contain configuration files with factory default
+      settings. The Application Assembler (as defined by J2EE) extracts configuration files
+      that need to be customized and puts them into the war archive. Further, the Application
+      Deployer may extract configuration files from the war archive, and jar archives within,
+      customized them and put them into a directory on the server machine, should deployment
+      time adjustments prove necessary.</p>
+
+      <p><a href="apidocs/org/objectledge/filesystem/FileSystem.html">View JavaDoc</a></p>
+		
+	  <p>Constructor parameters
+	    <table>
+	      <tr>
+	        <th>position</th>
+	        <th>type</th>
+	        <th widht="100%">descritpion</th>
+	      </tr>
+	      <tr>
+	        <td>1</td>
+	        <td><code>org.objectledge.filesystem.FileSystemProvider[]</code></td>
+	        <td>an array of FileSystemProvider components to use</td>
+	      </tr>
+		  <tr>
+		    <td>2</td>
+		    <td><code>int</code></td>
+		    <td>the size of buffers (in bytes) used for reading and writing files. Value between 4k
+		    and 64k is recommended.</td>
+		  </tr>
+		  <tr>
+		    <td>3</td>
+		    <td><code>int</code></td>
+		    <td>the maximum size of the file that will be loaded into memory as a single chunk. 
+		    This is a security intensive setting, setting it too high may make the system 
+		    vulnerable to a DOS attack. A value between 16k and 1M is recommended, depending
+		    on the size of files you need.</td>
+		  </tr>
+		</table>
+	  </p>
+    </section>
+  </body>
+</document>  
+ 
