@@ -506,7 +506,6 @@ public class DirectoryUserManager extends UserManager
         try 
         {
             ctx = (DirContext)directory.getBaseContext().lookup("");
-            String[] attrIDs = {};
             Attributes matchAttrs = new BasicAttributes(false);
             matchAttrs.put(new BasicAttribute(attribute, value));
             NamingEnumeration answer = ctx.search("", matchAttrs, null);
@@ -539,7 +538,6 @@ public class DirectoryUserManager extends UserManager
         try 
         {
             ctx = (DirContext)directory.getBaseContext().lookup("");
-            String[] attrIDs = {};
             NamingEnumeration answer = ctx.search("", query, defaultSearchControls);
             List results = new ArrayList();
             while(answer.hasMore())
