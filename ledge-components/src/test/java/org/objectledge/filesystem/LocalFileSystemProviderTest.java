@@ -36,7 +36,7 @@ import junit.framework.TestCase;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.6 2004-10-13 10:33:29 rafal Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.7 2004-10-13 10:59:41 rafal Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {
@@ -124,11 +124,11 @@ public class LocalFileSystemProviderTest extends TestCase
     private static final String UNREADABLE_PATH = "src/test/resources/unreadablefile";
 
     public void testCanReadUnreadable()
-    	throws IOException
+    	throws Exception
     {
         if(System.getProperty("os.name").equals("Linux"))
         {
-            Runtime.getRuntime().exec("chmod u-r "+UNREADABLE_PATH);
+            Runtime.getRuntime().exec("chmod u-r "+UNREADABLE_PATH).waitFor();
             try
             {
         		assertTrue("The resource does not exist - check test resources!", 
@@ -154,11 +154,11 @@ public class LocalFileSystemProviderTest extends TestCase
     private static final String UNWRITABLE_PATH = "src/test/resources/unwritablefile";
     
     public void testCanWriteUnwritable()
-    	throws IOException
+    	throws Exception
     {
         if(System.getProperty("os.name").equals("Linux"))
         {
-            Runtime.getRuntime().exec("chmod u-w "+UNWRITABLE_PATH);
+            Runtime.getRuntime().exec("chmod u-w "+UNWRITABLE_PATH).waitFor();
             try
             {
 	    		assertTrue("The resource does not exist - check test resources!", 
