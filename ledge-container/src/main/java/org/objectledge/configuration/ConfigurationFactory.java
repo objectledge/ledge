@@ -61,7 +61,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.12 2003-12-05 08:42:25 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.13 2003-12-15 09:43:11 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -188,6 +188,14 @@ public class ConfigurationFactory
     {
         return new InstanceComponentAdapter(getComponentName(componentKey), 
             getConfig(componentKey));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Class getCustomizedComponentImplementation()
+    {
+        return Configuration.class;
     }
 
     /**
