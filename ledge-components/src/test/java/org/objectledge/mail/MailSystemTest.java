@@ -35,34 +35,27 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
 
-import junit.framework.TestCase;
-
-import org.apache.log4j.xml.DOMConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.objectledge.LedgeTestCase;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.threads.ThreadPool;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class MailSystemTest extends TestCase
+public class MailSystemTest extends LedgeTestCase
 {
     private FileSystem fs = null;
 
@@ -71,20 +64,16 @@ public class MailSystemTest extends TestCase
     public void setUp()
         throws Exception
     {
-        String root = System.getProperty("ledge.root");
-        fs = FileSystem.getStandardFileSystem(root);
-        InputSource source = new InputSource(fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
-        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document logConfig = builder.parse(source);
-        DOMConfigurator.configure(logConfig.getDocumentElement());
+        super.setUp();
+        fs = getFileSystem();
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(MailSystem.class));
-        
         Configuration config = getConfig("config/org.objectledge.templating.velocity.VelocityTemplating.xml");
         Templating templating = new VelocityTemplating(config, logger, fs);
         Context context = new Context();
         config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
         ThreadPool threadPool = new ThreadPool(null, context,config, logger);
         config = getConfig("config/org.objectledge.mail.MailSystem.xml");
+        checkSchema("config/org.objectledge.mail.MailSystem.xml","org/objectledge/mail/MailSystem.rng");
         mailSystem = new MailSystem(config, logger, fs, templating, threadPool);
     }
 
