@@ -31,26 +31,38 @@ package org.objectledge.web.mvc.builders;
  * Allows template designers to control view enclosures from template level.
  *  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ViewEnclosureTool.java,v 1.1 2005-02-17 17:11:34 zwierzem Exp $
+ * @version $Id: ViewEnclosureTool.java,v 1.2 2005-02-21 10:10:13 rafal Exp $
  */
 public class ViewEnclosureTool
 {
     private ViewEnclosureManager viewEnclosureManager;
     
     /**
-     * @param context 
+     * @param viewEnclosureManager the ViewEnclosureManager component. 
      */
     public ViewEnclosureTool(ViewEnclosureManager viewEnclosureManager)
     {
         this.viewEnclosureManager = viewEnclosureManager;
     }
     
+    /**
+     * Tell builder valve to terminate enclosure loop.
+     * 
+     * @return an empty string to avoid spoiling template output and warnings.
+     */
     public String top()
     {
         viewEnclosureManager.setTopEnclosingView();
         return "";
     }
     
+    
+    /**
+     * Tell builder valve to override the enclosing view.
+     *
+     * @param enclosingViewName the requested enclosing view name.
+     * @return an empty string to avoid spoiling template output and warnings.
+     */
     public String override(String enclosingViewName)
     {
         viewEnclosureManager.setEnclosingView(enclosingViewName);

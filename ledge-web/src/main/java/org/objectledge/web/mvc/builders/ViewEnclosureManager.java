@@ -35,7 +35,7 @@ import org.objectledge.templating.tools.ContextToolFactory;
  * enclosing view from templates.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ViewEnclosureManager.java,v 1.1 2005-02-17 17:11:35 zwierzem Exp $
+ * @version $Id: ViewEnclosureManager.java,v 1.2 2005-02-21 10:10:13 rafal Exp $
  */
 public class ViewEnclosureManager implements ContextToolFactory
 {
@@ -54,7 +54,7 @@ public class ViewEnclosureManager implements ContextToolFactory
     // enclosure management
 
     /**
-     * Sets the enclosing view to {@link EnclosingView.TOP}.   
+     * Sets the enclosing view to {@link EnclosingView#TOP}.   
      */
     public void setTopEnclosingView()
     {

@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.25 2005-02-17 17:04:20 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.26 2005-02-21 10:10:13 rafal Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -72,7 +72,8 @@ public class BuilderExecutorValve
 	 * @param templateFinder finder for template objects
 	 * @param securityHelper security helper for access checking
 	 * @param viewEnclosureManager the template based enclosure manager
-	 * @param maxRouteCalls maxmimal number of {@link Builder#route(String)} calls per {@link Builder}
+	 * @param maxRouteCalls maxmimal number of {@link Builder#route(String)} calls per {@link 
+     * Builder}
 	 * @param maxEnclosures maxmimal number of {@link Builder} enclosures
      * 	(also {@link Builder#getEnclosingView(String)} calls)
 	 */

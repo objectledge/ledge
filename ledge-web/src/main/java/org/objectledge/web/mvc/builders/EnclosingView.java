@@ -31,11 +31,14 @@ package org.objectledge.web.mvc.builders;
  * Contains information about the enclosing view.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EnclosingView.java,v 1.1 2005-02-17 17:04:20 zwierzem Exp $
+ * @version $Id: EnclosingView.java,v 1.2 2005-02-21 10:10:13 rafal Exp $
  */
 public class EnclosingView
 {
+    /** Tells the builder valve to terminate enclosure loop. */
     public static final EnclosingView TOP = new EnclosingView(true);
+    
+    /** Tells the builder valve to proceed with default lookup procedure. */
     public static final EnclosingView DEFAULT = new EnclosingView(false);
     
     private boolean top = false;
@@ -43,6 +46,7 @@ public class EnclosingView
 
     /**
      * Constructs the top or default enclosing view.
+     * 
      * @param top <code>true</code> if the constructed enclosing view is the top view.
      */
     private EnclosingView(boolean top)
@@ -53,6 +57,7 @@ public class EnclosingView
 
     /**
      * Constructs the overriding enclosing view.
+     * 
      * @param viewName Name of the enclosing view, cannot be <code>null</code>.
      */
     public EnclosingView(String viewName)
@@ -73,7 +78,11 @@ public class EnclosingView
     }
 
     /**
-     * @return
+     * If true, the builder valve should use view returned by {@link #getView()} as the enclosing 
+     * view.
+     * 
+     * @return <code>true</code> if the builder should use view returned by {@link #getView()} as 
+     * the enclosing view.
      */
     public boolean override()
     {
@@ -81,7 +90,9 @@ public class EnclosingView
     }
 
     /**
-     * @return
+     * If true, the builder valve should terminate the enclosure loop.
+     * 
+     * @return <code>true</code> if the builder valve should terminate the enclosure loop.
      */
     public boolean top()
     {
@@ -89,7 +100,9 @@ public class EnclosingView
     }
 
     /**
-     * @return
+     * If true, the builder valve should proceed with default lookup procedure.
+     * 
+     * @return <code>true</code> if the builder valve should proceed with default lookup procedure. 
      */
     public boolean defaultBehaviour()
     {
