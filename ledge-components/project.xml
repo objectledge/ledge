@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.9 2003-12-05 19:12:20 mover Exp $ -->
+<!-- $Id: project.xml,v 1.10 2003-12-09 12:36:28 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -76,12 +76,6 @@
       <artifactId>jing</artifactId>
       <version>20030619</version>
     </dependency>
-    <!-- runtime -->
-    <dependency>
-      <groupId>saxon</groupId>
-      <artifactId>saxon</artifactId>
-      <version>6.5.3</version>
-    </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
@@ -91,6 +85,17 @@
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
       <version>1.4-dev</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+    </dependency>
+    <!-- runtime -->
+    <dependency>
+      <groupId>saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <version>6.5.3</version>
     </dependency>
   </dependencies>
 </project>
