@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.11 2005-02-21 16:15:09 zwierzem Exp $
+ * @version $Id: Transaction.java,v 1.12 2005-04-04 11:38:08 rafal Exp $
  */
 public abstract class Transaction
 {
@@ -62,7 +62,13 @@ public abstract class Transaction
     private Context context;
         
     /** The tracing depth. */
-    private int tracing;        
+    private int tracing;   
+    
+    /** Requested transaction timeout. */
+    private int timeout = -1;
+    
+    /** Default timeout value. */
+    private int defaultTimeout = 60;
 
     /**
      * Constructs a Transaction component.
@@ -97,6 +103,19 @@ public abstract class Transaction
         throws SQLException;
     
     /**
+     * Sets the timeout value that is associated with transactions started by subsequent 
+     * invocations of the begin method.
+     * 
+     * @param seconds the requested length of timeout period in seconds.
+     * @throws SQLException if the timeout could not be set.
+     */
+    public void setTransactionTimeout(int seconds)
+        throws SQLException
+    {
+        timeout = seconds;
+    }
+    
+    /**
      * Begin the transaction, if there is none active.
      * 
      * @return <code>true</code> if the requestor become the controler.
@@ -129,6 +148,7 @@ public abstract class Transaction
             }
             try
             {
+                getUserTransaction().setTransactionTimeout(timeout > 0 ? timeout : defaultTimeout);
                 getUserTransaction().begin();
             }
             catch(Exception e)
@@ -152,6 +172,7 @@ public abstract class Transaction
         trace("commit");
         if(controler)
         {
+            timeout = -1; // reset timeout to default value
             try
             {
                 getUserTransaction().commit();
@@ -176,6 +197,7 @@ public abstract class Transaction
         trace("rollback");
         if(controler)
         {
+            timeout = -1; // reset timeout to default value
             try
             {
                 getUserTransaction().rollback();

@@ -36,7 +36,7 @@ import javax.sql.DataSource;
  * A generic implementaion of the {@Database} interface.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultDatabase.java,v 1.1 2004-02-26 11:51:20 fil Exp $
+ * @version $Id: DefaultDatabase.java,v 1.2 2005-04-04 11:38:08 rafal Exp $
  */
 public class DefaultDatabase implements Database
 {
@@ -90,6 +90,15 @@ public class DefaultDatabase implements Database
         return idGenerator.getNextId(table);
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public void setTransactionTimeout(int seconds)
+        throws SQLException
+    {
+        transaction.setTransactionTimeout(seconds);
+    }
+
     /**
      * {@inheritDoc}
      */ 

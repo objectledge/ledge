@@ -38,7 +38,7 @@ import java.sql.SQLException;
  * the ThreadDataSource decorator.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Database.java,v 1.6 2004-02-26 11:51:20 fil Exp $
+ * @version $Id: Database.java,v 1.7 2005-04-04 11:38:08 rafal Exp $
  */
 public interface Database
 {
@@ -69,6 +69,14 @@ public interface Database
      */
     public abstract long getNextId(String table) throws SQLException;
 
+    /**
+     * Sets the transaction timeout for the current transaction.
+     * 
+     * @param seconds the requested length of timeout period in seconds.
+     * @throws SQLException if the timeout could not be set.
+     */
+    public abstract void setTransactionTimeout(int seconds) throws SQLException; 
+    
     /**
      * Begin the transaction, if there is none active.
      * 
