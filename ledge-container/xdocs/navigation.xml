@@ -18,7 +18,7 @@
         <item name="Command line interface" href="/container-subsystems/Main.html"/>
       </item>
       <item name="Pico extenstions"        href="/pico-extensions/index.html" collapse="true">
-        <item name="SequenceParameter"       href="/pico-extensions/SequenceParamter.html"/>
+        <item name="SequenceParameter"       href="/pico-extensions/SequenceParameter.html"/>
         <item name="Component customization" href="/pico-extensions/ComponentCustomization.html"/>
         <item name="Enhanced XMLFrontEnd"    href="/pico-extensions/XMLFrontEnd.html"/>
       </item>
