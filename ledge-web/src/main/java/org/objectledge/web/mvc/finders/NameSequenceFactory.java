@@ -34,7 +34,7 @@ import org.objectledge.templating.Template;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactory.java,v 1.3 2004-01-19 12:39:45 zwierzem Exp $
+ * @version $Id: NameSequenceFactory.java,v 1.4 2004-01-19 12:47:46 zwierzem Exp $
  */
 public class NameSequenceFactory
 {
@@ -65,11 +65,11 @@ public class NameSequenceFactory
         Configuration classesConfig = config.getChild("classes");
         classSeparator = classesConfig.getAttribute("separator").trim().charAt(0);
         classDefaultSuffix = classesConfig.getAttribute("default-suffix", "Default");
-        classPrefices = getPrefices(classesConfig);
+        classPrefices = getPrefices(classesConfig, classSeparator);
         Configuration templatesConfig = config.getChild("templates");
         templateSeparator = templatesConfig.getAttribute("separator").trim().charAt(0);
         templateDefaultSuffix = templatesConfig.getAttribute("default-suffix", "Default");
-        templatePrefices = getPrefices(templatesConfig);
+        templatePrefices = getPrefices(templatesConfig, templateSeparator);
     }
     
     /**
@@ -78,14 +78,20 @@ public class NameSequenceFactory
      * @param config the configuration subtree to parse
      * @return an array of prefices.
      */
-    private String[] getPrefices(Configuration config)
+    private String[] getPrefices(Configuration config, char separator)
         throws ConfigurationException
     {
         Configuration[] children = config.getChildren("prefix");
         String[] result = new String[children.length];
         for (int i = 0; i < result.length; i++)
         {
-            result[i] = children[i].getValue();
+            String prefix = children[i].getValue();
+            // cut off separators at the end
+            if (prefix.charAt(prefix.length()-1) == separator)
+            {
+                prefix = prefix.substring(0, prefix.length()-1);
+            }
+			result[i] = prefix;
         }
         // check for overlaps
 		for (int i = 0; i < result.length; i++)
@@ -96,7 +102,8 @@ public class NameSequenceFactory
                 String prefix2 = result[j];
                 if (i != j
                 	&& prefix1.length() > prefix2.length()
-                	&& prefix1.startsWith(prefix2))
+                	&& prefix1.startsWith(prefix2)
+                	&& prefix1.charAt(prefix2.length()) == separator)
                 {
 					Configuration childConfig = children[i];
                 	throw new ConfigurationException("Prefix "+ prefix1 +" overlaps "+ prefix2,
