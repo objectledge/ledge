@@ -41,7 +41,7 @@ import org.objectledge.context.Context;
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.1 2004-01-30 18:06:28 zwierzem Exp $
+ * @version $Id: PageTool.java,v 1.2 2004-01-30 19:03:05 zwierzem Exp $
  */
 public class PageTool
 {
@@ -76,15 +76,19 @@ public class PageTool
 
 	/** 
 	 * Component constructor.
-	 * 
-	 * @param context the thread context.
 	 * @param parentLinkTool the link tool used to generate links to page resources.
 	 */
-	public PageTool(Context context, LinkTool parentLinkTool)
+	public PageTool(LinkTool parentLinkTool)
 	{
 		this.parentLinkTool = parentLinkTool;
         this.linkTool = parentLinkTool.sessionless();
     }
+
+	/** Used to recycle {@link LinkTool}s. */
+	LinkTool getLinkTool()
+	{
+		return parentLinkTool;
+	}
 
 	/** Should be used to reinitialize the page tool. */
     public void reset()
