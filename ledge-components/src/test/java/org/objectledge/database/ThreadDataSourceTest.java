@@ -33,6 +33,7 @@ import javax.sql.DataSource;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
@@ -42,7 +43,7 @@ import org.objectledge.pipeline.Valve;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSourceTest.java,v 1.2 2004-02-06 15:38:26 fil Exp $
+ * @version $Id: ThreadDataSourceTest.java,v 1.3 2004-02-09 09:03:21 fil Exp $
  */
 public class ThreadDataSourceTest extends TestCase
 {
@@ -61,9 +62,13 @@ public class ThreadDataSourceTest extends TestCase
     
     private Context context;
     
+    private Logger log;
+    
     public void setUp(int tracing)
         throws Exception
     {
+        BasicConfigurator.resetConfiguration();
+        BasicConfigurator.configure();
         DefaultConfiguration conf = new DefaultConfiguration("config","","/");
         DefaultConfiguration url = new DefaultConfiguration("url","","/config");
         url.setValue("jdbc:hsqldb:."); 
@@ -74,7 +79,7 @@ public class ThreadDataSourceTest extends TestCase
         DataSource dataSource = new HsqldbDataSource(conf);
         context = new Context();
         context.clearAttributes();
-        Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(ThreadDataSource.class));
+        log = new Log4JLogger(org.apache.log4j.Logger.getLogger(ThreadDataSource.class));
         threadDataSource = new ThreadDataSource(dataSource, tracing, context, log);
         guardValve = new ThreadDataSource.GuardValve(log);
     }
@@ -155,5 +160,27 @@ public class ThreadDataSourceTest extends TestCase
         assertSame(c1, c2);
         c2.close();
         guardValve.process(context);
+    }
+    
+    public void testOutOfOrderTransaction()
+        throws Exception
+    {
+        setUp(0);
+        Transaction transaction = new JotmTransaction(0,context, log);
+        Connection c1 = threadDataSource.getConnection();
+        try
+        {
+            transaction.begin();
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            assertEquals("Thread owns open database connection(s) " +
+                    "that would ignore global transaction (see log)", e.getMessage());
+        }
+        finally
+        {
+            DatabaseUtils.close(c1);
+        }
     }
 }
