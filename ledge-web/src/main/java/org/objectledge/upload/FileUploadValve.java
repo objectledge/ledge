@@ -30,7 +30,7 @@ import org.objectledge.web.WebConstants;
  * Analize the request and lookup the uploaded resources.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.8 2004-02-03 11:30:39 pablo Exp $
+ * @version $Id: FileUploadValve.java,v 1.9 2004-05-06 13:20:44 pablo Exp $
  */
 public class FileUploadValve 
     implements Valve, WebConstants
@@ -50,6 +50,7 @@ public class FileUploadValve
     /**
      * Constructs the component.
      * 
+     * @param webConfigurator the web configurator component.
      * @param logger the logger.
      * @param fileUpload the file upload component.
      * @param mailSystem the mailSystem.
