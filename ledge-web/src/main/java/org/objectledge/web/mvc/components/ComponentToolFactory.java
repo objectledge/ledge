@@ -70,7 +70,6 @@ public class ComponentToolFactory implements ContextToolFactory
 	 */
 	public Object getTool()
 	{
-		MVCContext pipelineContext = MVCContext.getMVCContext(context);
 		return new ComponentTool(context, classFinder, templateFinder);
 	}
 	
