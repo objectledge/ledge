@@ -27,9 +27,15 @@
 //
 package org.objectledge.web.mvc.components;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
@@ -40,7 +46,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * A template tool for embedding components in application UI.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.10 2004-12-27 05:18:22 rafal Exp $
+ * @version $Id: ComponentTool.java,v 1.11 2005-02-02 22:27:41 pablo Exp $
  */
 public class ComponentTool
 {
@@ -81,15 +87,45 @@ public class ComponentTool
         this.defaultTemplate = new DefaultTemplate();
     }
 
-	/**
+    /**
+     *  Embeds a component with a givemn name.
+     *
+     * @param componentName name of the component to be embedded.
+     * @return contents of a rendered component
+     * @throws BuildException on problems with component building
+     * @throws ProcessingException if processing fails.
+     */
+    public String embed(String componentName) 
+        throws BuildException, ProcessingException
+    {
+        return embed(componentName, (Map)null);
+    }
+    
+    /**
+     *  Embeds a component with a givemn name.
+     *
+     * @param componentName name of the component to be embedded.
+     * @param config localy scoped configuration in list form.
+     * @return contents of a rendered component
+     * @throws BuildException on problems with component building
+     * @throws ProcessingException if processing fails.
+     */
+    public String embed(String componentName, List config) 
+        throws BuildException, ProcessingException
+    {
+        return embed(componentName, listToMap(config));
+    }
+    
+    /**
 	 *  Embeds a component with a givemn name.
 	 *
 	 * @param componentName name of the component to be embedded.
+     * @param config localy scoped configuration.
 	 * @return contents of a rendered component
 	 * @throws BuildException on problems with component building
      * @throws ProcessingException if processing fails.
 	 */
-	public String embed(String componentName) 
+	public String embed(String componentName, Map config) 
         throws BuildException, ProcessingException
 	{
 		Component component = classFinder.getComponent(componentName);
@@ -117,7 +153,32 @@ public class ComponentTool
 			component = defaultComponent;
 		}		
         securityHelper.checkSecurity(component, context);
-		return component.build(template);
+        String result = null;
+        if(config != null)
+        {
+            Map store = new HashMap();
+            TemplatingContext tContext = 
+                 TemplatingContext.getTemplatingContext(context);
+            Iterator i = config.keySet().iterator();
+            while(i.hasNext())
+            {
+                String key = (String)i.next();
+                store.put(key, tContext.get(key));
+                tContext.put(key, config.get(key));
+            }
+            result = component.build(template);
+            i = config.keySet().iterator();
+            while(i.hasNext())
+            {
+                String key = (String)i.next();
+                tContext.put(key, store.get(key));
+            }
+        }
+        else
+        {
+            result = component.build(template);
+        }
+		return result; 
 	}
 	
     /**
@@ -127,4 +188,22 @@ public class ComponentTool
 	{
 	    return template;
 	}
+    
+    /**
+     * Converst a list of two element lists (key, value) into a map.
+     *
+     * @param list the list
+     * @return a map
+     */
+    private Map listToMap(List list)
+    {
+        Map map = new HashMap(list.size());
+        Iterator i = list.iterator();
+        while(i.hasNext())
+        {
+            List l = (List)i.next();
+            map.put(l.get(0), l.get(1));
+        }
+        return map;
+    }
 }
