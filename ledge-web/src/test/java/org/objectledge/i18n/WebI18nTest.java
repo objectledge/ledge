@@ -41,6 +41,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jmock.Mock;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
@@ -51,7 +52,6 @@ import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.utils.ReturnListValuesAsArray;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
-import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.MVCInitializerValve;
 
@@ -106,11 +106,15 @@ public class WebI18nTest extends LedgeTestCase
         mvcInitializer.process(context);
         LoggerFactory loggerFactory = new LoggerFactory(null);
         localeLoaderValve = new LocaleLoaderValve(logger, webConfigurator);
+        AuthenticationContext authenticationContext = new AuthenticationContext();
+        context.setAttribute(AuthenticationContext.class, authenticationContext);
     }
 
     public void testLocaleLoaderTest() throws Exception
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
+        AuthenticationContext authenticationContext = 
+            AuthenticationContext.getAuthenticationContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         List cookieList = new ArrayList();
         
@@ -126,7 +130,7 @@ public class WebI18nTest extends LedgeTestCase
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
         assertEquals(cookies.length, 2);
-        mvcContext.setUserPrincipal(new DefaultPrincipal("foo"), true);
+        authenticationContext.setUserPrincipal(new DefaultPrincipal("foo"), true);
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
         assertEquals(cookies.length, 4);

@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Mock;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
@@ -54,7 +55,7 @@ public class SecurityHelperTest extends LedgeTestCase
         requestMock.stubs().method("getContentType").will(returnValue("text/plain"));
         Context context = new Context();
         context.clearAttributes();
-        MVCContext mvcContext = new MVCContext();
+        AuthenticationContext authenticationContext = new AuthenticationContext();
         HttpContext httpContext = new HttpContext(request, response);
         Object obj = new SecureObject(true, true, true);
         try
@@ -77,7 +78,7 @@ public class SecurityHelperTest extends LedgeTestCase
         {
             //ok!        
         }
-        context.setAttribute(MVCContext.class, mvcContext);
+        context.setAttribute(AuthenticationContext.class, authenticationContext);
         requestMock.expects(once()).method("isSecure").will(returnValue(true));
         try
         {
@@ -89,7 +90,7 @@ public class SecurityHelperTest extends LedgeTestCase
             //ok!
         }
         
-        mvcContext.setUserPrincipal(null, true);
+        authenticationContext.setUserPrincipal(null, true);
         requestMock.expects(once()).method("isSecure").will(returnValue(true));
         SecurityHelper.checkSecurity(obj, context);
         

@@ -29,7 +29,6 @@
 package org.objectledge.web.mvc;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Vector;
 
 import javax.servlet.ServletOutputStream;
@@ -38,7 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Configuration;
 import org.jmock.Mock;
-import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
@@ -122,12 +120,6 @@ public class MVCTest extends LedgeTestCase
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         assertNotNull(mvcContext);
         assertNull(mvcContext.getAction());
-        Principal userPrincipal = new DefaultPrincipal("user");
-        mvcContext.setUserPrincipal(userPrincipal, true);
-        assertEquals(mvcContext.getUserPrincipal(),userPrincipal);
-        assertEquals(mvcContext.isUserAuthenticated(),true);
-        mvcContext.setMedia("PLAIN");
-        assertEquals(mvcContext.getMedia(),"PLAIN");
         MVCResultsValve mvcResult = new MVCResultsValve();
         mvcResult.process(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
