@@ -34,13 +34,14 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.objectledge.ComponentInitializationError;
 import org.picocontainer.Startable;
 
 /**
  * A component that generates unique, monotonous ids for table rows in a relational database. 
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: IdGenerator.java,v 1.6 2004-03-11 12:52:40 fil Exp $
+ * @version $Id: IdGenerator.java,v 1.7 2004-03-12 10:51:47 fil Exp $
  */
 public class IdGenerator
     implements Startable
@@ -116,6 +117,18 @@ public class IdGenerator
      */
     public void start()
     {
+        try
+        {
+            // handle blank database case. see also exception message near getNextId()'s commit.
+            if(DatabaseUtils.hasTable(dataSource, "ledge_id_table"))
+            {
+                init();
+            }
+        }
+        catch(SQLException e)
+        {
+            throw new ComponentInitializationError("failed to initailze", e);
+        }
     }
     
     /**
@@ -127,6 +140,7 @@ public class IdGenerator
         DatabaseUtils.close(fetchStmt);
         DatabaseUtils.close(updateStmt);
         DatabaseUtils.close(conn);
+        conn = null;
     }
     
     private long getNextIdInternal(String table)
@@ -147,7 +161,24 @@ public class IdGenerator
             updateStmt.execute();
             id = rs.getLong(1);
         }
-        conn.commit();
+        try
+        {
+            conn.commit();
+        }
+        catch(SQLException e)
+        {
+            if(e.getMessage().equals("StandardXAConnectionHandle:commit:"+
+                "This connection is part of a global transaction"))
+            {
+                throw (SQLException)new SQLException("when starting Ledge with blank database you"+
+                    " need to call getNextId() once after creating ledge_id_table, but before"+
+                    " starting a transaction").initCause(e);
+            }
+            else
+            {
+                throw e;
+            }
+        }
         DatabaseUtils.close(rs);
         return id;
     }
