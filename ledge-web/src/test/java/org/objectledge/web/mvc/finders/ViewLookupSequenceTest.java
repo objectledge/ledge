@@ -33,7 +33,7 @@ import junit.framework.TestCase;
  * Generates a view lookup sequence based on a prefix, and fallback sequence.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewLookupSequenceTest.java,v 1.2 2004-01-19 11:43:40 fil Exp $
+ * @version $Id: ViewLookupSequenceTest.java,v 1.3 2004-01-19 13:29:28 fil Exp $
  */
 public class ViewLookupSequenceTest extends TestCase
 {
@@ -61,6 +61,15 @@ public class ViewLookupSequenceTest extends TestCase
         assertEquals("two/a/Default", sequence.next());
         assertEquals("two/Default", sequence.next());
         assertEquals(false, sequence.hasNext());
+        try
+        {
+            sequence.next();
+            fail("exception expected");
+        }
+        catch(Exception e)
+        {
+            // success
+        }
         sequence.reset();
         assertEquals(true, sequence.hasNext());
     }
