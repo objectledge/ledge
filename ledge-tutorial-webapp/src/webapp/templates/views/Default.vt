@@ -3,7 +3,7 @@ Default($!embedded_placeholder)
 <br/>
 <a href="$link.view('foo.Bar').action('authentication.Login').set('login','foo').set('password','bar')">login</a>
 <br/>
-$mvc_context.getLocale() : $http_context.getEncoding()<br/>
+$mvc_context.getLocale() : $http_context.getEncoding() : $mvc_context.getUserPrincipal().getName()<br/>
 
 <form name="setlocale" method="post" action="$link.action("mvc.SetLocale")">
   <select name="locale" onChange="document.setlocale.submit()">
