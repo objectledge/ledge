@@ -41,6 +41,7 @@ import org.apache.velocity.runtime.resource.Resource;
 import org.apache.velocity.runtime.resource.loader.ResourceLoader;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.MergingException;
@@ -54,29 +55,39 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.1 2003-12-05 18:34:29 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.2 2003-12-05 22:50:06 pablo Exp $
  */
 public class VelocityTemplating extends ResourceLoader
    implements Templating, LogSystem
 {
+	/** file system */
     private FileSystem fileSystem;
 
+	/** component configuration */
     private Configuration config;
+    
+    /** logger */
+    private Logger logger;
 
+	/** velocity engine */
     private VelocityEngine engine;
     
+    /** template paths */
     private String[] paths;
     
+    /** template file extension */
 	private String extension = ".vt";
 
     /**
      * Creates a new instance of the templating system.
      * 
      * @param config the configuration.
+     * @param logger the logger.
      * @param fileSystem the filesystem to read files from.
      */
-    public VelocityTemplating(Configuration config, FileSystem fileSystem)
+    public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem)
     {
+    	this.logger = logger;
         this.fileSystem = fileSystem;
         this.config = config;
         engine = new VelocityEngine();
@@ -245,7 +256,7 @@ public class VelocityTemplating extends ResourceLoader
 		//TODO - adapt to ledge logging
 		if(level < 5)
 		{
-		//	log.log(verbosity[level], message);
+			logger.info(message);
 		}
 	}
 	
