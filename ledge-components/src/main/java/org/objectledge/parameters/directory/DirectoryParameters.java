@@ -199,10 +199,12 @@ public class DirectoryParameters extends DefaultParameters
         {
             ctx.modifyAttributes("", DirContext.REMOVE_ATTRIBUTE, ctx.getAttributes(""));
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove all parameter", e);
         }        
+        ///CLOVER:ON        
     }
 
     /**
@@ -218,10 +220,12 @@ public class DirectoryParameters extends DefaultParameters
             };
             ctx.modifyAttributes("", items);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove '"+name+"' parameter", e);
         }        
+        ///CLOVER:ON        
     }
 
     /**
@@ -235,10 +239,12 @@ public class DirectoryParameters extends DefaultParameters
             atts.put(new BasicAttribute(name, value));
             ctx.modifyAttributes("", DirContext.REMOVE_ATTRIBUTE, atts);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove '"+name+"' parameter", e);            
-        }        
+        }
+        ///CLOVER:ON                
     }
 
     /**
@@ -269,10 +275,12 @@ public class DirectoryParameters extends DefaultParameters
             }
             ctx.modifyAttributes("", items);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove some parameters", e);
         }
+        ///CLOVER:ON        
     }
 
     /**
@@ -303,10 +311,12 @@ public class DirectoryParameters extends DefaultParameters
             }
             ctx.modifyAttributes("", items);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove some parameters", e);
         }
+        ///CLOVER:ON        
     }
 
     /**
@@ -320,10 +330,12 @@ public class DirectoryParameters extends DefaultParameters
             atts.put(new BasicAttribute(name, value));
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, atts);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to set '"+name+"' parameter", e);            
         }        
+        ///CLOVER:ON        
     }
 
     /**
@@ -343,10 +355,12 @@ public class DirectoryParameters extends DefaultParameters
             }
             ctx.modifyAttributes("", items);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to add '"+name+" parameter", e);
         }
+        ///CLOVER:ON        
     }
 
     /**
@@ -408,14 +422,17 @@ public class DirectoryParameters extends DefaultParameters
     {
         try
         {
-            Attributes atts = new BasicAttributes();
-            atts.put(new BasicAttribute(name, value));
-            ctx.modifyAttributes("", DirContext.ADD_ATTRIBUTE, atts);
+            ModificationItem[] items = new ModificationItem[1];
+            items[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, 
+                       new BasicAttribute(name, value));
+            ctx.modifyAttributes("", items);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to add '"+name+"' parameter", e);            
         }        
+        ///CLOVER:ON        
     }
 
     /**
@@ -433,10 +450,12 @@ public class DirectoryParameters extends DefaultParameters
             }
             ctx.modifyAttributes("", items);
         }
+        ///CLOVER:OFF        
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to add '"+name+" parameter", e);
         }
+        ///CLOVER:ON        
     }
 
     /**
@@ -461,10 +480,13 @@ public class DirectoryParameters extends DefaultParameters
                 }
             }
         }
+        ///CLOVER:OFF
         catch(NamingException e)
         {
             throw new RuntimeException("failed to add parameters to the context",e);
         }
+        ///CLOVER:ON
+        
     }        
     
     /**

@@ -46,6 +46,7 @@ public class AllTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(DefaultParametersTest.class));
         suite.addTest(org.objectledge.parameters.db.AllTests.suite());
+        suite.addTest(org.objectledge.parameters.directory.AllTests.suite());
         //$JUnit-END$
         return suite;
     }

@@ -40,4 +40,8 @@
     <component-property name="net.sourceforge.dbnaming.dataSource" class-key="javax.sql.DataSource"/>
     <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
   </context>
+  <context name="foo" initial_factory="net.sourceforge.dbnaming.ldap.LdapDbInitialDirContextFactory">
+    <component-property name="net.sourceforge.dbnaming.dataSource" key="TestDS"/>
+    <property name="java.naming.provider.url" value="o=testcompany,c=pl"/>
+  </context>  
 </config>
