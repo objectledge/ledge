@@ -99,7 +99,7 @@ public class DBScheduler extends AbstractScheduler
      * {@inheritDoc}
      */
     public synchronized AbstractJobDescriptor createJobDescriptor(String name,
-                                             Schedule schedule, String jobSpec)
+                                             Schedule schedule, String jobClassName)
         throws JobModificationException
     {
         if (jobs.get(name) != null)
@@ -115,7 +115,7 @@ public class DBScheduler extends AbstractScheduler
         {
             throw new JobModificationException("failed to create instance", e);
         }
-        job.init(name, schedule, jobSpec);
+        job.init(name, schedule, jobClassName);
         jobs.put(name, job);
         try
         {
@@ -165,6 +165,7 @@ public class DBScheduler extends AbstractScheduler
         try
         {
             List jobList = persistence.load(null, this);
+            System.out.println("BYLO ZADAN WIELU: "+jobList.size());
             Iterator i = jobList.iterator();
             while (i.hasNext())
             {

@@ -26,11 +26,12 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.scheduler;
+package org.objectledge.scheduler.db;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -40,11 +41,26 @@ import junit.framework.TestCase;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
+import org.objectledge.database.Database;
+import org.objectledge.database.DatabaseUtils;
+import org.objectledge.database.DefaultDatabase;
+import org.objectledge.database.HsqldbDataSource;
+import org.objectledge.database.IdGenerator;
+import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.persistence.DefaultPersistence;
+import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.mail.MailSystem;
+import org.objectledge.scheduler.AbstractJobDescriptor;
+import org.objectledge.scheduler.AbstractScheduler;
+import org.objectledge.scheduler.AtScheduleFactory;
+import org.objectledge.scheduler.InvalidScheduleException;
+import org.objectledge.scheduler.Schedule;
+import org.objectledge.scheduler.ScheduleFactory;
 import org.objectledge.threads.ThreadPool;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
@@ -56,11 +72,11 @@ import org.xml.sax.XMLReader;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class TransientSchedulerTest extends TestCase
+public class DBSchedulerTest extends TestCase
 {
     private FileSystem fs = null;
 
-    private TransientScheduler scheduler;
+    private DBScheduler scheduler;
 
     /*
      * @see TestCase#setUp()
@@ -81,9 +97,14 @@ public class TransientSchedulerTest extends TestCase
         config = getConfig("config/org.objectledge.scheduler.TransientScheduler.xml");
         ScheduleFactory[] scheduleFactories = new ScheduleFactory[1];
         scheduleFactories[0] = new AtScheduleFactory();
-        //scheduleFactories[1] = new CronScheduleFactory(i18n);
+        DataSource dataSource = getDataSource();
+        IdGenerator idGenerator = new IdGenerator(dataSource);
+        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger);
+        Database database = new DefaultDatabase(dataSource, idGenerator, transaction);        
+        
+        Persistence persistence = new DefaultPersistence(database, logger);
         MutablePicoContainer container = new DefaultPicoContainer();
-        scheduler = new TransientScheduler(container, config, logger, threadPool, scheduleFactories);
+        scheduler = new DBScheduler(container, config, logger, threadPool, scheduleFactories, persistence);
         scheduler.start();
     }
 
@@ -91,49 +112,32 @@ public class TransientSchedulerTest extends TestCase
         throws Exception
     {
         assertNotNull(scheduler);
-        try
-        {
-            scheduler.createJobDescriptor("foo",null,null);
-            fail("should throw the exception");
-        }
-        catch(UnsupportedOperationException e)
-        {
-            //ok!
-        }        
+        Schedule schedule = scheduler.createSchedule("at","");
+        scheduler.createJobDescriptor("bar",schedule,"org.objectledge.scheduler.FooJob");
     }
     
 
     public void testDeleteJobDescriptor()
         throws Exception
     {
-        try
-        {
-            scheduler.deleteJobDescriptor(null);
-            fail("should throw the exception");
-        }
-        catch(UnsupportedOperationException e)
-        {
-            //ok!
-        }
+        AbstractJobDescriptor job = scheduler.getJobDescriptor("foo");
+        assertNotNull(job);
+        scheduler.deleteJobDescriptor(job);
     }
 
     public void testAllowsModifications()
     {
-        assertEquals(false,scheduler.allowsModifications());
-    }
-
-    public void testLoadJobs()
-    {
+        assertEquals(true,scheduler.allowsModifications());
     }
 
     
     public void testEnable()
         throws Exception
     {
-        AbstractJobDescriptor job = scheduler.getJobDescriptor("foo");
+        Schedule schedule = scheduler.createSchedule("at","");
+        scheduler.createJobDescriptor("bar2",schedule,"org.objectledge.scheduler.FooJob");        
+        AbstractJobDescriptor job = scheduler.getJobDescriptor("bar2");
         assertNotNull(job);
-        assertEquals(true, job.isEnabled());
-        scheduler.disable(job);
         assertEquals(false, job.isEnabled());
         scheduler.enable(job);
         assertEquals(true, job.isEnabled());
@@ -142,7 +146,7 @@ public class TransientSchedulerTest extends TestCase
     public void testGetJobDescriptors()
     {
         AbstractJobDescriptor[] jobs = scheduler.getJobDescriptors();
-        assertEquals(1, jobs.length);
+        assertEquals(2, jobs.length);
     }
 
     public void testGetScheduleTypes()
@@ -194,4 +198,26 @@ public class TransientSchedulerTest extends TestCase
         return handler.getConfiguration();
     }
 
+    private DataSource getDataSource() throws Exception
+    {
+        DefaultConfiguration conf = new DefaultConfiguration("config", "", "/");
+        DefaultConfiguration url = new DefaultConfiguration("url", "", "/config");
+        url.setValue("jdbc:hsqldb:.");
+        conf.addChild(url);
+        DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
+        user.setValue("sa");
+        conf.addChild(user);
+        DataSource ds = new HsqldbDataSource(conf);
+        FileSystem fs = FileSystem.getStandardFileSystem(".");
+        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
+        {
+            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGenerator.sql", "UTF-8"));
+        }
+        if(!DatabaseUtils.hasTable(ds, "ledge_scheduler"))
+        {        
+            DatabaseUtils.runScript(ds, fs.getReader("sql/scheduler/db/DBScheduler.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, fs.getReader("sql/scheduler/db/DBSchedulerTest.sql", "UTF-8"));
+        }
+        return ds;
+    }
 }

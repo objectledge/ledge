@@ -45,6 +45,7 @@ import org.objectledge.context.Context;
 import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.Startable;
 
 /**
  * Base class for scheduler components.
@@ -53,7 +54,7 @@ import org.picocontainer.MutablePicoContainer;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  */
-public abstract class AbstractScheduler
+public abstract class AbstractScheduler implements Startable
 {
     /** The default DateFormat pattern used by the UI (yyy-MM-dd HH:mm). */
     public static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm";
@@ -107,9 +108,14 @@ public abstract class AbstractScheduler
         {
             scheduleFactory.put(scheduleFactories[i].getName(), scheduleFactories[i]);
         }
-        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */   
+    public void start()
+    {
         loadJobs();
-        
         Iterator i = jobs.values().iterator();
         while(i.hasNext())
         {
@@ -120,12 +126,18 @@ public abstract class AbstractScheduler
             }
             schedule(job);
         }
-        
         threadPool.runDaemon(new SchedulerTask());
         String formatString = config.getChild("date_format").getValue(DATE_FORMAT_DEFAULT);
         format = new SimpleDateFormat(formatString);
     }
 
+    /**
+     * {@inheritDoc}
+     */   
+    public void stop()
+    {
+    }
+    
     // Scheduler interface ////////////////////////////////////////////
 
     /**

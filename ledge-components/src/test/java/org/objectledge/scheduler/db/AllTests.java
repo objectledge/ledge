@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.scheduler;
+package org.objectledge.scheduler.db;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -42,10 +42,9 @@ public class AllTests
 
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.scheduler");
+        TestSuite suite = new TestSuite("Test for org.objectledge.scheduler.db");
         //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(TransientSchedulerTest.class));
-        suite.addTest(org.objectledge.scheduler.db.AllTests.suite());
+        suite.addTest(new TestSuite(DBSchedulerTest.class));
         //$JUnit-END$
         return suite;
     }

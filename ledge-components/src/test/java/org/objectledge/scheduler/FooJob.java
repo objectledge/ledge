@@ -28,8 +28,9 @@
 
 package org.objectledge.scheduler;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.pipeline.Valve;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -37,16 +38,15 @@ import junit.framework.TestSuite;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class AllTests
+public class FooJob implements Valve
 {
 
-    public static Test suite()
+    /**
+     * {@inheritDoc}
+     */
+    public void process(Context context) throws ProcessingException
     {
-        TestSuite suite = new TestSuite("Test for org.objectledge.scheduler");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(TransientSchedulerTest.class));
-        suite.addTest(org.objectledge.scheduler.db.AllTests.suite());
-        //$JUnit-END$
-        return suite;
+        System.out.println("Foo Job Executed");     
     }
+
 }
