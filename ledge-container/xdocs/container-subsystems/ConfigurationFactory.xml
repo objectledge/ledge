@@ -17,7 +17,7 @@
           </tr>
           <tr>
             <th>required libraries</th>
-            <td>dna-impl</td>
+            <td>DNA implementation (dna:dna-impl)</td>
           </tr>
         </table>
       </p>
