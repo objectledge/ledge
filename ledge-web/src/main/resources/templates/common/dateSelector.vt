@@ -1,0 +1,90 @@
+#* /////////////////////////////////////////////////////////////////////////
+ * // Date selectors
+ * // @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ * // @version $Id: dateSelector.vt,v 1.5 2004/01/15 15:31:19 zwierzem Exp $
+ * //////////////////////////////////////////////////////////////////////// *#
+
+#**
+ * More sophisticated date selector backed with javascript.
+ *
+ * @param name the name of the field that will contain selected date in Unix
+ *        time format
+ * @param ds_current java.util.Date object with date to select initially.
+ * @param ds_enabled java.lang.Boolean tells if this date selector should be enabled
+ *#
+#macro(date_selector_base $name $ds_current $ds_enabled)
+  $pageTool.addScriptLink('script/DateSelector.js')
+  #set($monthNames = $i18n.usePrefix('calendar.ofmonths'))
+  #set($ds_current_fields = $format_date.getFields($ds_current))
+  <select name="${name}_day" onChange="dateElementChanged(this)"#if(!$ds_enabled) disabled#end>
+  <script language="javascript">
+     initDays($ds_current.getTime())
+  </script>
+  </select>
+  <select name="${name}_month" onChange="dateElementChanged(this)"#if(!$ds_enabled) disabled#end>
+  #foreach ($month in [0..11])
+    <option value="$month" #if ($month.intValue() == $ds_current_fields.get(1))selected #end>$monthNames.get($month.toString())</option>
+  #end
+  </select>
+  <select name="${name}_year" onChange="dateElementChanged(this)"#if(!$ds_enabled) disabled#end>
+  #foreach ($year in [2000..2020])
+    <option value="$year" #if ($year.intValue() == $ds_current_fields.get(0))selected #end>$year</option>
+  #end
+  </select>
+  <select name="${name}_hour" onChange="dateElementChanged(this)"#if(!$ds_enabled) disabled#end>
+  #foreach($hour in [0..23])
+    <option value="$hour" #if ($hour.intValue() == $ds_current_fields.get(3))selected #end>$hour</option>  
+  #end
+  </select>
+  <select name="${name}_minute" onChange="dateElementChanged(this)"#if(!$ds_enabled) disabled#end>
+  #foreach($minute in [0..59])
+    <option value="$minute" #if ($minute.intValue() == $ds_current_fields.get(4))selected #end>$minute</option>  
+  #end
+  </select>
+  #if($ds_enabled)
+  <input type="hidden" name="$name" value="$ds_current.getTime()">
+  #else
+  <input type="hidden" name="$name" value="">
+  #end
+#end
+
+
+#**
+ * More sophisticated date selector backed with javascript.
+ *
+ * @param name the name of the field that will contain selected date in Unix
+ *        time format
+ * @param current timestamp object with date to select initially.
+ *#
+#macro(date_selector $name $current)
+  #set($ds_enabled = true)
+  #if($current)
+    #set($ds_current = $format_date.getDate($current))
+  #else
+    #set($ds_current = $format_date.now())
+  #end
+  #date_selector_base($name $ds_current $ds_enabled)
+#end
+
+#**
+ * A date selector that supports a 'no date' option.
+ *
+ * @param form the name of the form the field is contained in.
+ * @param name the name of the field that will contain selected date in Unix
+ *        time format
+ * @param current java.util.Date object with date to select initially.
+ * @param disalbed_label the label for the 'no date' option.
+ *#
+#macro(date_selector_optional $name $current $disabled_label)
+  <input type="radio" name="${name}_enabled" value="false" id="${name}_enabled_false"#if(!$current) checked#end onChange="dateEnabled(this)">
+  <label for="${name}_enabled_false">$disabled_label</label>
+  <input type="radio" name="${name}_enabled" value="true"#if($current) checked#end onChange="dateEnabled(this)">
+  #if($current)
+  	#set($ds_enabled = true)
+  	#set($ds_current = $format_date.getDate($current))
+  #else
+  	#set($ds_enabled = false)
+  	#set($ds_current = $format_date.now())
+  #end
+  #date_selector_base($name $ds_current $ds_enabled)
+#end
