@@ -19,4 +19,5 @@ $CVSROOT/CVSROOT/collect_diffs.rb --from $USER --to objectledge-cvshtml@lists.ca
 #
 # clean up
 #
-rm $TEMPFILE
+echo ${1} ${2}
+#rm $TEMPFILE
