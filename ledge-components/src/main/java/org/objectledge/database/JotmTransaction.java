@@ -42,7 +42,7 @@ import org.picocontainer.Startable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.5 2004-06-25 11:21:25 fil Exp $
+ * @version $Id: JotmTransaction.java,v 1.6 2004-06-25 12:54:52 fil Exp $
  */
 public class JotmTransaction
     extends Transaction
@@ -64,6 +64,7 @@ public class JotmTransaction
         throws NamingException
     {
         super(tracing, context, log);
+        tmService = new Jotm(true, false);
     }
     
     /**
@@ -87,14 +88,6 @@ public class JotmTransaction
      */
     public void start()
     {
-        try
-        {
-	        tmService = new Jotm(true, false);
-	    }
-	    catch(Exception e)
-	    {
-	        throw new ComponentInitializationError("failed to initalize data source", e);
-	    }
     }
     
     /**
