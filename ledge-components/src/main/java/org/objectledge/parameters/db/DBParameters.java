@@ -37,9 +37,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.sql.DataSource;
-
 import org.jcontainer.dna.Logger;
+import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -48,7 +47,7 @@ import org.objectledge.parameters.Parameters;
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.3 2004-02-03 14:43:52 fil Exp $
+ * @version $Id: DBParameters.java,v 1.4 2004-02-10 12:00:13 fil Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -56,7 +55,7 @@ public class DBParameters implements Parameters
 	private Logger logger;
 
 	/** db access component */
-	private DataSource dataSource;
+	private Database database;
 	
 	/** container id */
 	private long id;
@@ -66,20 +65,19 @@ public class DBParameters implements Parameters
 
 	/** modified  */
 	private HashSet modified;
-	
     
     /**
      * Create the container.
      * 
      * @param parameters the initial parameters.
      * @param id the database identifier.
-     * @param dataSource the db access component
+     * @param database the db access component
      * @param logger the logger.
      */
-    public DBParameters(Parameters parameters, long id, DataSource dataSource, Logger logger)
+    public DBParameters(Parameters parameters, long id, Database database, Logger logger)
     {
     	this.logger = logger;
-    	this.dataSource = dataSource;
+    	this.database = database;
     	if(parameters != null)
     	{
     	   	container = new DefaultParameters(parameters);
@@ -549,7 +547,7 @@ public class DBParameters implements Parameters
 		Connection conn = null;
 		try
 		{
-			conn = dataSource.getConnection();
+			conn = database.getConnection();
 			Iterator iterator = modified.iterator();
 			PreparedStatement deleteStmt = conn.prepareStatement(
 				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = "+id+

@@ -35,26 +35,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.jcontainer.dna.Logger;
+import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
-import org.objectledge.database.IdGenerator;
 
 /**
  * Provides Object-Relational DB mapping.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Persistence.java,v 1.6 2004-02-10 10:42:15 pablo Exp $
+ * @version $Id: Persistence.java,v 1.7 2004-02-10 11:56:33 fil Exp $
  */
 public class Persistence
 {
-    /** The DataSource. */
-    private DataSource dataSource;
-
-    /** The IdGenerator. */
-    private IdGenerator idGenerator;
+    /** The Database. */
+    private Database database;
     
     /** The logger */
     private Logger logger;
@@ -63,14 +58,12 @@ public class Persistence
      * Component constructor.
      * 
      * @param database the database.
-     * @param idGenerator the id generator. 
      * @param logger the logger.
      */
-    public Persistence(DataSource database, IdGenerator idGenerator, Logger logger)
+    public Persistence(Database database, Logger logger)
     {
         this.logger = logger;
-        this.dataSource = database;
-        this.idGenerator = idGenerator;
+        this.database = database;
     }
 
     // PersistenceService interface //////////////////////////////////////////
@@ -88,7 +81,7 @@ public class Persistence
         Connection conn = null;
         try
         {
-            conn = dataSource.getConnection();
+            conn = database.getConnection();
             Persistent obj = factory.newInstance();
             PreparedStatement statement = InputRecord.getSelectStatement(id, obj, conn);
             ResultSet rs = statement.executeQuery();
@@ -128,7 +121,7 @@ public class Persistence
         Connection conn = null;
         try
         {
-            conn = dataSource.getConnection();
+            conn = database.getConnection();
             Persistent obj = factory.newInstance();
             PreparedStatement statement = InputRecord.getSelectStatement(where, obj, conn);
             ResultSet rs = statement.executeQuery();
@@ -171,7 +164,7 @@ public class Persistence
 
             try
             {
-                conn = dataSource.getConnection();
+                conn = database.getConnection();
                 PreparedStatement statement;
                 if (object.getSaved())
                 {
@@ -183,7 +176,7 @@ public class Persistence
                     long id;
                     if (keys.length == 1)
                     {
-                        id = idGenerator.getNextId(table);
+                        id = database.getNextId(table);
                         record.setLong(keys[0], id);
                     }
                     else
@@ -225,7 +218,7 @@ public class Persistence
             Connection conn = null;
             try
             {
-                conn = dataSource.getConnection();
+                conn = database.getConnection();
                 PreparedStatement statement = InputRecord.getSelectStatements(object, conn);
                 ResultSet rs = statement.executeQuery();
                 if (!rs.next())
@@ -263,7 +256,7 @@ public class Persistence
             Connection conn = null;
             try
             {
-                conn = dataSource.getConnection();
+                conn = database.getConnection();
                 OutputRecord record = new OutputRecord(object);
                 object.getData(record);
                 PreparedStatement statement = record.getDeleteStatement(conn); 
@@ -294,7 +287,7 @@ public class Persistence
         Connection conn = null;
         try
         {
-            conn = dataSource.getConnection();
+            conn = database.getConnection();
             Statement statement = conn.createStatement();
             ResultSet rs;
             if (where != null)
@@ -330,7 +323,7 @@ public class Persistence
         Connection conn = null;
         try
         {
-            conn = dataSource.getConnection();
+            conn = database.getConnection();
             Statement statement = conn.createStatement();
             ResultSet rs;
             if (where != null)

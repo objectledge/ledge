@@ -7,11 +7,9 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
 import org.jcontainer.dna.Logger;
+import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
-import org.objectledge.database.IdGenerator;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 
@@ -19,7 +17,7 @@ import org.objectledge.parameters.Parameters;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParametersManager.java,v 1.4 2004-02-03 14:43:52 fil Exp $
+ * @version $Id: DBParametersManager.java,v 1.5 2004-02-10 12:00:13 fil Exp $
  */
 public class DBParametersManager
 {
@@ -29,11 +27,8 @@ public class DBParametersManager
 	/** the logger */
 	private Logger logger;
 	
-    /** The db access component */
-    private DataSource dataSource;
-    
-    /** The id generator. */
-    private IdGenerator idGenerator;
+    /** the database */
+    private Database database;
     
     /** the parameters cache */
     private Map localCache;
@@ -41,14 +36,13 @@ public class DBParametersManager
     /**
      * Component cons
      * 
+     * @param database the database access component.
      * @param logger the logger.
-     * @param dbc the database access component.
      */
-    public DBParametersManager(DataSource dataSource, IdGenerator idGenerator, Logger logger)
+    public DBParametersManager(Database database, Logger logger)
     {
         this.logger = logger;
-        this.dataSource = dataSource;
-        this.idGenerator = idGenerator;
+        this.database = database;
         localCache = new HashMap();
     }
     
@@ -66,9 +60,9 @@ public class DBParametersManager
         Connection conn = null;
         try
         {
-        	conn = dataSource.getConnection();
+        	conn = database.getConnection();
             Statement statement = conn.createStatement();
-            id = idGenerator.getNextId(TABLE_NAME);
+            id = database.getNextId(TABLE_NAME);
             statement.execute("INSERT INTO "+TABLE_NAME+" values ("+id+",'','')");
         }
         catch(SQLException e)
@@ -79,7 +73,7 @@ public class DBParametersManager
         {
             DatabaseUtils.close(conn);
         }
-        DBParameters parameters = new DBParameters(null, id, dataSource, logger);
+        DBParameters parameters = new DBParameters(null, id, database, logger);
 		Long key = new Long(id);
 		localCache.put(key, parameters);
 		return parameters;
@@ -104,7 +98,7 @@ public class DBParametersManager
         Connection conn = null;
         try
         {
-            conn = dataSource.getConnection( );
+            conn = database.getConnection( );
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery("SELECT * from " + TABLE_NAME +
              										  " where parameters_id = " + id);
@@ -122,7 +116,7 @@ public class DBParametersManager
             {
                 throw new DBParametersException("DBParameters with id = " + id + " does not exist");
             }
-            parameters = new DBParameters(parameters, id, dataSource, logger);
+            parameters = new DBParameters(parameters, id, database, logger);
             localCache.put(key, parameters);
             return parameters;
         }
@@ -149,7 +143,7 @@ public class DBParametersManager
         Connection conn = null;
         try
         {
-        	conn = dataSource.getConnection();
+        	conn = database.getConnection();
             Statement statement = conn.createStatement();
             statement.execute("DELETE FROM "+TABLE_NAME+" where parameters_id = "+id);
             localCache.remove(key);
