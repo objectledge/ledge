@@ -130,16 +130,17 @@
   
   <define name="component-parameter">
     <element name="component-parameter">
-      <choice>
-        <attribute name="key"/>
-        <attribute name="class-key"/>
-      </choice>
+      <optional>
+        <choice>
+          <attribute name="key"/>
+          <attribute name="class-key"/>
+        </choice>
+      </optional>
     </element>
   </define>
   
   <define name="sequence-parameter">
     <element name="sequence-parameter">
-      <attribute name="class"/>
       <zeroOrMore>
         <ref name="parameter"/>
       </zeroOrMore>
