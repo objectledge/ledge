@@ -65,9 +65,6 @@ public class LinkTool
     /** configuration. */
     private LinkTool.Configuration config;
     
-	/** the configurator component */
-	//private WebConfigurator webConfig;
-	
 	/** the mvc context */
 	private MVCContext mvcContext;
 	
