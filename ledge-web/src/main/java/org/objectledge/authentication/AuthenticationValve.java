@@ -31,6 +31,7 @@ package org.objectledge.authentication;
 import java.security.Principal;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
@@ -40,36 +41,46 @@ import org.objectledge.web.mvc.MVCContext;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.6 2004-01-22 15:15:10 fil Exp $
+ * @version $Id: AuthenticationValve.java,v 1.7 2004-02-20 12:37:18 pablo Exp $
  */
 public class AuthenticationValve 
     implements Valve, WebConstants
 {
 	/** the authentication component */
-	private Authentication authentication;
+	private UserManager userManager;
 	
 	/**
 	 * Constructor
 	 * 
-     * @param authentication the authentication component.
+     * @param userManager the user manager component.
 	 */
-	public AuthenticationValve(Authentication authentication)
+	public AuthenticationValve(UserManager userManager)
 	{
-		this.authentication = authentication;
+		this.userManager = userManager;
 	}
 	
     /**
      * Run the pipeline valve - authenticate user.
      * 
      * @param context the thread's processing context.
+     * @throws ProcessingException if authentication failed.
      */
     public void process(Context context)
+        throws ProcessingException
     {
     	HttpContext httpContext = HttpContext.getHttpContext(context);
 		MVCContext mvcContext = MVCContext.getMVCContext(context);
     	Principal principal = (Principal)httpContext.getRequest().
 			getSession().getAttribute(PRINCIPAL_SESSION_KEY);
-		Principal anonymous = authentication.getAnonymousUser();
+		Principal anonymous = null;
+        try
+        {
+            userManager.getAnonymousAccount();
+        }
+        catch(AuthenticationException e)
+        {
+            throw new ProcessingException("Failed to retrive anonymous account");
+        }
 		boolean authenticated = false;
 		if(principal == null)
 		{
