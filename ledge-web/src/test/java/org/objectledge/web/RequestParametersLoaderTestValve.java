@@ -38,9 +38,9 @@ import org.objectledge.context.Context;
  * Pipeline processing valve that loads parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderTest.java,v 1.1 2003-12-29 09:46:13 pablo Exp $
+ * @version $Id: RequestParametersLoaderTestValve.java,v 1.1 2003-12-29 11:53:24 fil Exp $
  */
-public class RequestParametersLoaderTest implements Runnable
+public class RequestParametersLoaderTestValve implements Runnable
 {
 	/** the context */
 	private Context context;
@@ -50,7 +50,7 @@ public class RequestParametersLoaderTest implements Runnable
 	 * 
 	 * @param context the context.
 	 */
-	public RequestParametersLoaderTest(Context context)
+	public RequestParametersLoaderTestValve(Context context)
 	{
 		this.context = context;		
 	}

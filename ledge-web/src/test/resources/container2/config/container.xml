@@ -23,13 +23,13 @@
 
     <component class="org.objectledge.context.Context"/>
     <component class="org.objectledge.web.RequestParametersLoader"/>
-    <component class="org.objectledge.web.RequestParametersLoaderTest"/>
+    <component class="org.objectledge.web.RequestParametersLoaderTestValve"/>
     <component key="org.objectledge.pipeline.Pipeline"
                class="org.objectledge.pipeline.Pipeline">
       <component-parameter class-key="org.objectledge.context.Context"/>               
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
         <component-parameter class-key="org.objectledge.web.RequestParametersLoader"/>
-        <component-parameter class-key="org.objectledge.web.RequestParametersLoaderTest"/>
+        <component-parameter class-key="org.objectledge.web.RequestParametersLoaderTestValve"/>
       </sequence-parameter>
 	  <sequence-parameter class="[Ljava.lang.Runnable;">
       </sequence-parameter>
