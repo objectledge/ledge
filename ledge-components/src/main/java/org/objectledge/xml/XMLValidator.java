@@ -67,7 +67,7 @@ import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
  * 
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.5 2004-01-08 12:50:52 fil Exp $
+ * @version $Id: XMLValidator.java,v 1.6 2004-01-13 12:57:07 fil Exp $
  */
 public class XMLValidator
 {
@@ -105,6 +105,7 @@ public class XMLValidator
         RngProperty.CHECK_ID_IDREF.add(propertyMapBuilder);
         properties = propertyMapBuilder.toPropertyMap();
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        parserFactory.setNamespaceAware(true);
         saxParser = parserFactory.newSAXParser();
     }
     
