@@ -37,6 +37,7 @@
          xmlns:define="jelly:define"
          xmlns:velocity="jelly:velocity"
          xmlns:ant="jelly:ant"
+         xmlns:util="jelly:util"
          xmlns:ledge="ledge">
 
   <define:taglib uri="ledge">
@@ -46,7 +47,7 @@
      | @param @dir directory to index
      | @param @index the file to write index to. ${dir}/META-INF/files.lst if not set.
      -->
-    <define:tag name="index-files">
+    <define:tag name="indexFiles">
       <ant:echo>Creating file index...</ant:echo>
       <j:if test="${dir == null}">
         <ant:fail>required attribute directory is not set</ant:fail>
@@ -70,17 +71,36 @@
                       template="files.lst.vt"
                       outputEncoding="UTF-8"/>        
     </define:tag>
+    
+    <define:tag name="warVersionPage">
+      <ant:echo>Creating version page ${path}</ant:echo>
+      <j:new var="date" className="java.util.Date"/>
+      <j:new var="dateFormat" className="java.text.SimpleDateFormat">
+        <j:arg type="java.lang.String" value="yyyy-MM-dd HH:mm"/>
+      </j:new>
+      <j:set var="userName" value="${context.getVariable('maven.username')}"/>
+      <util:file var="pathFile" name="${path}"/>
+      ${pathFile.parentFile.mkdirs()}
+      <velocity:merge name="${path}"
+                      basedir="${plugin.dir}/plugin-resources/templates"
+                      template="version.html.vt"/>
+    </define:tag>
   </define:taglib>
 
   <goal name="ledge:index-jar"
         description="Generates a jar index in maven.build.dest/META-INF/files.lst">
-    <ledge:index-files dir="${maven.build.dest}"/>
+    <ledge:indexFiles dir="${maven.build.dest}"/>
   </goal>
   
   <goal name="ledge:index-war"
         description="Generates a war index in maven.war.webapp.dir/WEB-INF/files.lst">
     <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
-    <ledge:index-files dir="${webappDir}" index="${webappDir}/WEB-INF/files.lst"/>
+    <ledge:indexFiles dir="${webappDir}" index="${webappDir}/WEB-INF/files.lst"/>
   </goal> 
   
+  <goal name="ledge:version-war" prereqs="war:init"
+       description="Genereates version page in the web application home directory">
+    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
+    <ledge:warVersionPage path="${webappDir}/content/version.html"/>
+  </goal>
 </project>
