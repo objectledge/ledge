@@ -62,7 +62,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.17 2004-01-14 11:45:48 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.18 2004-01-14 11:57:39 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -293,7 +293,7 @@ public class ConfigurationFactory
         URL schemaUrl = fileSystem.getResource(schemaPath);
         try
         {
-            xmlValidator.validate(schemaUrl, fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA));
+            xmlValidator.validate(schemaUrl, relaxngUrl);
         }
         catch(Exception e)
         {
@@ -319,7 +319,7 @@ public class ConfigurationFactory
         URL schemaUrl = fileSystem.getResource(schemaPath);
         try
         {
-            xmlValidator.validate(schemaUrl, fileSystem.getResource(XMLValidator.RELAXNG_SCHEMA));
+            xmlValidator.validate(schemaUrl, relaxngUrl);
         }
         catch(Exception e)
         {
