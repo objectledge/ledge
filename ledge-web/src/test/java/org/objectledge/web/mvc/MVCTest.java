@@ -48,7 +48,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class MVCInitializerValveTest extends TestCase
+public class MVCTest extends TestCase
 {
     private Context context;
 
@@ -57,7 +57,7 @@ public class MVCInitializerValveTest extends TestCase
      * Constructor for MVCInitializerValveTest.
      * @param arg0
      */
-    public MVCInitializerValveTest(String arg0)
+    public MVCTest(String arg0)
     {
         super(arg0);
         try
