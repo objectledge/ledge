@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.18 2004-01-13 13:44:05 fil Exp $ -->
+<!-- $Id: project.xml,v 1.19 2004-01-22 11:47:54 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -101,6 +101,12 @@
       <artifactId>log4j</artifactId>
       <version>1.2.8</version>
       <url>http://jakarta.apache.org/log4j/docs/index.html</url>
+    </dependency>
+    <dependency>
+      <groupId>jta</groupId>
+      <artifactId>jta</artifactId>
+      <version>1.0.1</version>
+      <url>http://java.sun.com/products/jta/index.html</url>
     </dependency>
     <!-- runtime -->
     <dependency>
