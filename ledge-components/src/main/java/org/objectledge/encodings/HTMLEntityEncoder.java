@@ -31,7 +31,10 @@ package org.objectledge.encodings;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.encodings.encoders.CharEncoder;
 import org.objectledge.encodings.encoders.CharEncoderHTMLEntity;
+import org.objectledge.encodings.encoders.CharEncoderUTF;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.defaults.ConstructorInjectionComponentAdapterFactory;
+import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
  * Tool for encoding HTML text to a text which supports a chosen encoding using HTML entities.
@@ -39,7 +42,7 @@ import org.picocontainer.MutablePicoContainer;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.9 2004-04-22 12:54:00 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.10 2004-06-30 14:00:41 zwierzem Exp $
  */
 public class HTMLEntityEncoder
 {
@@ -50,11 +53,12 @@ public class HTMLEntityEncoder
 
 	/**
 	 * Constructs the entity encoder component.
-	 * @param container used to construct character set encoders.
 	 */
-	public HTMLEntityEncoder(MutablePicoContainer container)
+	public HTMLEntityEncoder()
 	{
-		this.container = container;
+        // non caching container
+        this.container =
+            new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory());
 		CharEncoder ref1 = getCharsetEncoder("UTF-16");
 		CharEncoder ref2 = getCharsetEncoder("UTF-16");
 		if(ref1 == null || ref2 == null)
@@ -102,7 +106,9 @@ public class HTMLEntityEncoder
             }
             else
             // try to encode using normal encoding
-            if(charsetEncoder != null && charsetEncoder.encode(c) == null)
+            if(charsetEncoder != null
+                            && !(charsetEncoder instanceof CharEncoderUTF)
+                            && charsetEncoder.encode(c) == null)
             {
                 // if not, encode it using entity encoding
                 encodeEntity(c, buf);
@@ -147,8 +153,8 @@ public class HTMLEntityEncoder
 
 		CharEncoder charsetEncoder = getCharsetEncoder(encodingName);
 
-        // pass for unknown encodings
-        if(charsetEncoder == null)
+        // pass for unknown and Unicode encodings
+        if(charsetEncoder == null || charsetEncoder instanceof CharEncoderUTF)
         {
             return htmlText;
         }

@@ -30,15 +30,11 @@ package org.objectledge.encodings.encoders;
 
 import junit.framework.TestCase;
 
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.encodings.HTMLEntityEncoder;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.defaults.ConstructorInjectionComponentAdapterFactory;
-import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoderTest.java,v 1.4 2004-03-22 10:45:31 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoderTest.java,v 1.5 2004-06-30 14:00:41 zwierzem Exp $
  */
 public class HTMLEntityEncoderTest extends TestCase
 {
@@ -97,37 +93,13 @@ public class HTMLEntityEncoderTest extends TestCase
         super(arg0);
     }
 
-    public void testHTMLEntityEncoder()
-    {
-    	// non caching container
-		MutablePicoContainer container = 
-			new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory());
-		HTMLEntityEncoder encoder = new HTMLEntityEncoder(container);
-        assertNotNull(encoder);
-
-		// caching container
-		container = new DefaultPicoContainer();
-		try
-		{
-			encoder = new HTMLEntityEncoder(container);
-			fail("should throw exception");
-		}
-		catch(ComponentInitializationError er)
-		{
-			// ok
-		}
-    }
-
     /*
      * Test for String encodeAttribute(String, String, boolean)
      * &amp; String encodeAttribute(String, String)
      */
     public void testEncodeAttribute()
     {
-		// non caching container
-		MutablePicoContainer container = 
-			new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory());
-		HTMLEntityEncoder encoder = new HTMLEntityEncoder(container);
+		HTMLEntityEncoder encoder = new HTMLEntityEncoder();
 
 		String src = srcPart1+srcPart2;
 		String outDblQuote1 = "&quot;&amp;'&lt;&gt; ";
@@ -155,10 +127,7 @@ public class HTMLEntityEncoderTest extends TestCase
 
     public void testEncodeHTML()
     {
-		// non caching container
-		MutablePicoContainer container = 
-			new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory());
-		HTMLEntityEncoder encoder = new HTMLEntityEncoder(container);
+		HTMLEntityEncoder encoder = new HTMLEntityEncoder();
 
 		String src = srcPart1+srcPart2;
 		String out = "\"&'<> "+outPart2Iso2;
