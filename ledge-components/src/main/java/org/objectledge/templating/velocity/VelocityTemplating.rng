@@ -30,7 +30,10 @@
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
   <optional>
     <element name="extension">
-     <text/>
+      <text/>
+    </element>
+    <element name="encoding">  
+      <text/>
     </element>
     <element name="paths">
       <zeroOrMore>

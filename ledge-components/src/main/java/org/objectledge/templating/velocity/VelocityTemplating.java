@@ -28,20 +28,15 @@
 
 package org.objectledge.templating.velocity;
 
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 
-import org.apache.commons.collections.ExtendedProperties;
+import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogSystem;
-import org.apache.velocity.runtime.resource.Resource;
-import org.apache.velocity.runtime.resource.loader.ResourceLoader;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.MergingException;
@@ -55,28 +50,30 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.2 2003-12-05 22:50:06 pablo Exp $
+ * @version $Id: VelocityTemplating.java,v 1.3 2003-12-08 10:34:42 pablo Exp $
  */
-public class VelocityTemplating extends ResourceLoader
-   implements Templating, LogSystem
+public class VelocityTemplating implements Templating, LogSystem
 {
-	/** file system */
+    /** file system */
     private FileSystem fileSystem;
 
-	/** component configuration */
+    /** component configuration */
     private Configuration config;
-    
+
     /** logger */
     private Logger logger;
 
-	/** velocity engine */
+    /** velocity engine */
     private VelocityEngine engine;
-    
+
     /** template paths */
     private String[] paths;
-    
+
     /** template file extension */
-	private String extension = ".vt";
+    private String extension = ".vt";
+
+    /** template encoding */
+    private String encoding = "ISO-8859-1";
 
     /**
      * Creates a new instance of the templating system.
@@ -87,31 +84,33 @@ public class VelocityTemplating extends ResourceLoader
      */
     public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem)
     {
-    	this.logger = logger;
+        this.logger = logger;
         this.fileSystem = fileSystem;
         this.config = config;
         engine = new VelocityEngine();
-		extension = config.getChild("extension").getValue("*.vt");
-		try
-		{
-			Configuration[] path = config.getChild("path").getChildren("paths");
-			paths = new String[path.length];
-			for(int i = 0; i < path.length; i++)
-			{
-				paths[i] = path[i].getValue();
-			}
-		}
-		catch(ConfigurationException e)
-		{
-			throw new ComponentInitializationError("failed to initialze Velocity", e);
-		}
-
-		engine.setProperty(VelocityEngine.RUNTIME_LOG_LOGSYSTEM, this);
-		engine.setProperty(VelocityEngine.RESOURCE_LOADER, "objectledge");
-		engine.setProperty("objectledge.resource.loader.class", this);
-		engine.setProperty(VelocityEngine.ENCODING_DEFAULT,
-						   config.getChild("encoding").getValue("ISO-8859-1"));
-	
+        extension = config.getChild("extension").getValue("*.vt");
+        encoding = config.getChild("encoding").getValue("ISO-8859-1");
+        try
+        {
+            Configuration[] path = config.getChild("paths").getChildren("path");
+            paths = new String[path.length];
+            for (int i = 0; i < path.length; i++)
+            {
+                paths[i] = path[i].getValue();
+            }
+        }
+        catch (ConfigurationException e)
+        {
+            throw new ComponentInitializationError("failed to initialze Velocity", e);
+        }
+        engine.setProperty(VelocityEngine.RUNTIME_LOG_LOGSYSTEM, this);
+        engine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
+        engine.setProperty(VelocityEngine.RESOURCE_LOADER, "objectledge");
+        engine.setProperty("objectledge.resource.loader.class",
+			"org.objectledge.templating.velocity.LedgeResourceLoader");
+        engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LEDGE_FILE_SYSTEM,
+        	 fileSystem);
+        engine.setProperty(VelocityEngine.ENCODING_DEFAULT, encoding);
         try
         {
             engine.init();
@@ -130,184 +129,145 @@ public class VelocityTemplating extends ResourceLoader
         }
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     public TemplatingContext createContext()
-    {    	
-    	// TODO use pooling here...
-		return new VelocityContext();
+    {
+        // TODO use pooling here...
+        return new VelocityContext();
     }
-    
-	/**
-	 * {@inheritDoc}
-	 */
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean templateExists(String name)
     {
         try
-		{
-			for(int i=0 ; i<paths.length; i++)
-			{
-				String path = paths[i]+name+extension;
-				if(engine.templateExists(path))
-				{
-				    return true;
-				}
-			}
-			return false;
-		}
-	    catch(Exception e)
-	    {
-		     throw new RuntimeException("Velocity internal error", e);
-	    }
+        {
+            for (int i = 0; i < paths.length; i++)
+            {
+                String path = paths[i] + name + extension;
+                if (engine.templateExists(path))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Velocity internal error", e);
+        }
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     public Template getTemplate(String name) throws TemplateNotFoundException
     {
-		VelocityTemplate template = null;
-		try
-		{
-			for(int i=0 ; i<paths.length; i++)
-			{
-				 String path = paths[i]+name+extension;
-				 if(engine.templateExists(path))
-				 {
-					 template = new VelocityTemplate(this, engine.getTemplate(path));
-				 }
-			 }
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException("Velocity internal error", e);
-		}
-		if(template != null)
-		{
-			 return template;
-		}
-		throw new TemplateNotFoundException("template "+name+extension+" not found");
+        VelocityTemplate template = null;
+        try
+        {
+            for (int i = 0; i < paths.length; i++)
+            {
+                String path = paths[i] + name + extension;
+                if (engine.templateExists(path))
+                {
+                    template = new VelocityTemplate(this, engine.getTemplate(path));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Velocity internal error", e);
+        }
+        if (template != null)
+        {
+            return template;
+        }
+        throw new TemplateNotFoundException("template " + name + extension + " not found");
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     public void evaluate(TemplatingContext context, Reader source, Writer target, String logTag)
     	throws MergingException
     {
-    	boolean success = false;
-    	try
-		{
-			success = engine.evaluate(((VelocityContext)context).getContext(),
-									  target, logTag, source);
-		}
-		catch(Exception e)
-		{
-		    throw new MergingException("failed to render template", e);
-		}			
-		if(!success)
-		{
-			throw new MergingException("failed to render template, cause in the log");
-		}
+        boolean success = false;
+        try
+        {
+            success = engine.evaluate(((VelocityContext)context).getContext(),
+            							target, logTag, source);
+        }
+        catch (Exception e)
+        {
+            throw new MergingException("failed to render template", e);
+        }
+        if (!success)
+        {
+            throw new MergingException("failed to render template, cause in the log");
+        }
     }
-    
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void merge(TemplatingContext context, Template template, Writer target) 
-		throws MergingException
-	{
-		boolean success = false;
-		try
-		{
-			((VelocityTemplate)template).getTemplate().
-				merge(((VelocityContext)context).getContext(), target);
-		}
-		catch(Exception e)
-		{
-			throw new MergingException("failed to render template", e);
-		}	
-	}
-    
-	/**
-	 * {@inheritDoc}
-	 */
+
+    /**
+     * {@inheritDoc}
+     */
+    public void merge(TemplatingContext context, Template template, Writer target)
+    	throws MergingException
+    {
+        boolean success = false;
+        try
+        {
+            ((VelocityTemplate)template).getTemplate().
+            	merge(((VelocityContext)context).getContext(), target);
+        }
+        catch (Exception e)
+        {
+            throw new MergingException("failed to render template", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getTemplateEncoding()
     {
-        return null;
+        return encoding;
     }
 
-	// Velocity logging interface implementation
+    // Velocity logging interface implementation
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void init(RuntimeServices services)
-	{   
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void init(RuntimeServices services)
+    {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void logVelocityMessage(int level, String message)
-	{
-		//TODO - adapt to ledge logging
-		if(level < 5)
-		{
-			logger.info(message);
-		}
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void init(ExtendedProperties properties)
-	{		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public InputStream getResourceStream(String name) 
-			throws ResourceNotFoundException
-	{
-		InputStream is = fileSystem.getInputStream(name);
-		if(is == null)
-		{
-			throw new ResourceNotFoundException("resource '"+name+"' not found");
-		}
-		return is;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isSourceModified(Resource resource)
-	{
-		if(fileSystem.exists(resource.getName()))
-		{
-			return fileSystem.lastModified(resource.getName()) > resource.getLastModified();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public long getLastModified(Resource resource)
-	{
-		if(fileSystem.exists(resource.getName()))
-		{
-			return fileSystem.lastModified(resource.getName());
-		}
-		else
-		{
-			return -1;
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void logVelocityMessage(int level, String message)
+    {
+        switch (level)
+        {
+            case LogSystem.DEBUG_ID :
+                logger.debug(message);
+                break;
+            case LogSystem.ERROR_ID :
+                logger.error(message);
+                break;
+            case LogSystem.WARN_ID :
+                logger.warn(message);
+                break;
+            case LogSystem.INFO_ID :
+                logger.info(message);
+                break;
+            default :
+                logger.debug(message);
+                break;
+        }
+    }
 }
