@@ -41,41 +41,41 @@
   
   <define name="expression">
     <choice>
-      <ref name="or-expression">
-      <ref name="condition">
-    <choice>
+      <ref name="or-expression"/>
+      <ref name="and-expression"/>
+      <ref name="not-expression"/>
+      <ref name="condition"/>
+    </choice>
   </define>
   
   <define name="or-expression">
     <choice>
       <element name="or">
-        <ref name="and-expression"/>
+        <ref name="expression"/>
         <oneOrMore>
-          <ref name="and-expression"/>
+          <ref name="expression"/>
         </oneOrMore>
       </element>
-      <ref name="condition"/>
     </choice>
   </define>
   
   <define name="and-expression">
     <choice>
       <element name="and">
-        <ref name="not-expression"/>
+        <ref name="expression"/>
         <oneOrMore>
-          <ref name="not-expression"/>
+          <ref name="expression"/>
         </oneOrMore>
       </element>
-      <ref name="condition"/>
     </choice>
   </define>
   
   <define name="not-expression">
     <choice>
       <element name="not">
-        <ref name="condition">
+        <ref name="condition"/>
       </element>
-      <ref name="condition">
+      <ref name="condition"/>
     </choice>
   </define>
 
@@ -112,14 +112,13 @@
   <!-- checks for reference identity -->
   <define name="same-condition">
     <element name="same">
-      <ref name="variable"/>
-      <ref name="variable"/>
+      <ref name="binary-condition-arguments"/>
     </element>
   </define>
   
   <!-- checks for Object.equals() equality -->
   <define name="equal-condition">
-    <element name="equals>
+    <element name="equal">
       <ref name="binary-condition-arguments"/>
     </element>
   </define>
@@ -150,16 +149,16 @@
   
   <define name="matches-condition">
     <element name="matches">
-      <ref name="variable"/>
       <ref name="string-literal"/>
+      <ref name="variable"/>
     </element>
   </define>
 
   <!-- // arguments ///////////////////////////////////////////////////////////////////////// -->
   
-  <define name="binary-condition-arguments"/>
-     <ref name="condition-argument"/>
-     <ref name="condition-argument"/>
+  <define name="binary-condition-arguments">
+   <ref name="condition-argument"/>
+   <ref name="condition-argument"/>
   </define>
   
   <define name="condition-argument">
@@ -193,7 +192,7 @@
     <element name="string">
       <ref name="literal-value"/>
     </element>
-  <define>
+  </define>
   
   <define name="int-literal">
     <element name="int">
@@ -217,7 +216,7 @@
     <choice>
       <element name="true">
         <empty/>
-      <element>
+      </element>
       <element name="false">
         <empty/>
       </element>
@@ -243,7 +242,7 @@
   <define name="literal-name">
     <choice>
       <group>
-        <attribute name="name">
+        <attribute name="name"/>
         <empty/>
       </group>
       <text/>
@@ -253,7 +252,7 @@
   <define name="literal-value">
     <choice>
       <group>
-        <attribute name="value">
+        <attribute name="value"/>
         <empty/>
       </group>
       <text/>
