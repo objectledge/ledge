@@ -15,9 +15,10 @@
     <component-parameter/>
     <constant-parameter value="/config"/>
   </component>
+  <component class="org.objectledge.configuration.CustomizedConfigurationProvider"/>
   <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
     <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
-    <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
+    <component-parameter class-key="org.objectledge.configuration.CustomizedConfigurationProvider"/>
   </component-adapter>
     
   <component class="org.objectledge.logging.LoggerFactory"/>

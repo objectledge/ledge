@@ -33,6 +33,7 @@ import junit.framework.TestCase;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.configuration.ConfigurationFactory;
+import org.objectledge.configuration.CustomizedConfigurationProvider;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
@@ -55,7 +56,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.16 2004-06-01 15:34:51 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.17 2004-06-25 11:15:47 fil Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -97,11 +98,12 @@ public class CustomizationTest extends TestCase
                 new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
             }).getComponentInstance();
-            
+        container.registerComponentImplementation(CustomizedConfigurationProvider.class,
+            CustomizedConfigurationProvider.class);    
         ComponentAdapter adapter = new CustomizedComponentAdapter(
             Configuration.class, 
             (CustomizedComponentProvider)container.
-                getComponentInstance(ConfigurationFactory.class));
+                getComponentInstance(CustomizedConfigurationProvider.class));
         adapter.verify();
         container.registerComponent(adapter);
         container.registerComponentImplementation(LoggingConfigurator.class, 
