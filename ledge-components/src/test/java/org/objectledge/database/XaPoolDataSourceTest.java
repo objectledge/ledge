@@ -46,6 +46,7 @@ import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
+import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.lifecycle.Stoppable;
@@ -55,7 +56,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.2 2004-02-06 11:17:24 fil Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.3 2004-02-06 15:38:26 fil Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -69,7 +70,7 @@ public class XaPoolDataSourceTest extends TestCase
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
-        transaction = new JotmTransaction(log);
+        transaction = new JotmTransaction(0, new Context(), log);
         
         DefaultConfiguration conf = new DefaultConfiguration("config","","");
         DefaultConfiguration conn = new DefaultConfiguration("connection","","config");

@@ -35,12 +35,13 @@ import junit.framework.TestCase;
 import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.context.Context;
 import org.picocontainer.lifecycle.Stoppable;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransactionTest.java,v 1.2 2004-02-06 11:16:53 fil Exp $
+ * @version $Id: JotmTransactionTest.java,v 1.3 2004-02-06 15:38:26 fil Exp $
  */
 public class JotmTransactionTest extends TestCase
 {
@@ -61,7 +62,7 @@ public class JotmTransactionTest extends TestCase
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
-        transaction = new JotmTransaction(log);
+        transaction = new JotmTransaction(0, new Context(), log);
     }
     
     public void tearDown()
