@@ -125,6 +125,7 @@ public class LinkTool
 		includeSession = true;
 		showProtocolName = false;
 		protocolName = ""; 
+        port = 0;
 		view = null;
 		action = "";
 		parameters = new DefaultParameters();
@@ -196,15 +197,21 @@ public class LinkTool
 	{
 	    LinkTool target = getLinkTool(this);
 		target.showProtocolName = true;
-		target.port = httpContext.getRequest().getServerPort();
-		if(httpContext.getRequest().isSecure())
-		{
-			target.protocolName = "https";
-		}
-		else
-		{
-			target.protocolName = "http";
-		}
+        if(target.port == 0)
+        {
+            target.port = httpContext.getRequest().getServerPort();    
+        }
+        if(target.protocolName == null || target.protocolName.length()==0)
+        {
+ 		    if(httpContext.getRequest().isSecure())
+		    {
+			    target.protocolName = "https";
+		    }
+		    else
+		    {
+			    target.protocolName = "http";
+		    }
+        }
 		return target;
     }
 
@@ -603,10 +610,13 @@ public class LinkTool
                     sb.append(servletPath);
                 }
 
-                if (view != null && !view.equals(""))
-                {
-                    sb.append('/').append(config.getViewToken());
-                    sb.append('/').append(view);
+                if (view != null)
+                { 
+                    if(view.length()>0)
+                    {
+                        sb.append('/').append(config.getViewToken());
+                        sb.append('/').append(view);
+                    }
                 }
                 else
                 {
@@ -621,7 +631,7 @@ public class LinkTool
                 String[] keys = parameters.getParameterNames();
                 List pathinfoParameterKeys = new ArrayList();
                 List queryParameterKeys;
-                if (config.hasPathInfoParamters())
+                if (!config.hasPathInfoParamters())
                 {
                     queryParameterKeys = Arrays.asList(keys);
                 }
@@ -707,10 +717,12 @@ public class LinkTool
                 return sb.toString();
             }
         }
+        ///CLOVER:OFF
         catch (UnsupportedEncodingException e)
         {
             throw new RuntimeException("Unsupported exception occurred", e);
         }
+        ///CLOVER:ON
     }
 
 	/**
@@ -830,10 +842,12 @@ public class LinkTool
                     pathinfoKeys.add(keys[i].getValue());
                 }
             }
+            ///CLOVER:OFF
             catch (ConfigurationException e)
             {
                 throw new ComponentInitializationError("failed to configure the component", e);
             }
+            ///CLOVER:ON
             querySeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
             externalContent = config.getChild("external_resource").getValueAsBoolean(false);
         }
@@ -856,17 +870,6 @@ public class LinkTool
         public boolean isContentExternal()
         {
             return externalContent;
-        }
-        
-        /**
-         * Check if a parameter is sticky.
-         * 
-         * @param paramName the parameter name.
-         * @return <code>true</code> if sticky.
-         */
-        public boolean isStickyParameter(String paramName)
-        {
-            return stickyKeys.contains(paramName);
         }
         
         /**
