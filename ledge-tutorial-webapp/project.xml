@@ -1,23 +1,19 @@
-<?xml version="1.0" encoding="ISO-8859-2"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project>
   <pomVersion>3</pomVersion>
   <extend>../ledge-common/project.xml</extend>
-
   <name>Ledge tutorial webapp</name>
   <id>ledge-tutorial-webapp</id>
   <groupId>objectledge</groupId>
-  <currentVersion>0.3-dev</currentVersion>
-  <shortDescription>
-  A simple web application that demonstrates some of ObjectLedge features.
-  </shortDescription>
-  
+  <currentVersion>0.3</currentVersion>
+  <shortDescription>A simple web application that demonstrates some of ObjectLedge features.</shortDescription>
   <dependencies>
     <dependency>
       <id>servletapi</id>
       <version>2.4</version>
       <url>http://jakarta.apache.org/builds/jakarta-servletapi/</url>
     </dependency>
-   
     <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-api</artifactId>
@@ -87,7 +83,7 @@
       <version>SNAPSHOT</version>
       <properties>
         <war.bundle>true</war.bundle>
-      </properties>      
+      </properties>
     </dependency>
     <dependency>
       <groupId>objectledge</groupId>
@@ -95,7 +91,7 @@
       <version>SNAPSHOT</version>
       <properties>
         <war.bundle>true</war.bundle>
-      </properties>      
+      </properties>
     </dependency>
     <dependency>
       <groupId>objectledge</groupId>
@@ -103,7 +99,7 @@
       <version>SNAPSHOT</version>
       <properties>
         <war.bundle>true</war.bundle>
-      </properties>      
+      </properties>
     </dependency>
     <dependency>
       <groupId>nanocontainer</groupId>
@@ -112,7 +108,7 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-       <url>http://nanocontainer.org/</url>
+      <url>http://nanocontainer.org/</url>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
@@ -121,7 +117,7 @@
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
-       <url>http://picocontainer.org/</url>
+      <url>http://picocontainer.org/</url>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
@@ -130,7 +126,7 @@
       <url>http://jakarta.apache.org./commons/collections</url>
       <properties>
         <war.bundle>true</war.bundle>
-      </properties>      
+      </properties>
     </dependency>
     <dependency>
       <id>velocity</id>
@@ -138,10 +134,9 @@
       <url>http://jakarta.apache.org/velocity</url>
       <properties>
         <war.bundle>true</war.bundle>
-      </properties>      
+      </properties>
     </dependency>
   </dependencies>
-
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -150,4 +145,11 @@
       </resource>
     </resources>
   </build>
-</project>  
+  <versions>
+    <version>
+      <id>0.3</id>
+      <name>0.3</name>
+      <tag>RELEASE-0_3</tag>
+    </version>
+  </versions>
+</project>

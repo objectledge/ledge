@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--  
  Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
@@ -25,26 +26,19 @@
  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
---> 
+-->
+<!-- $Id: project.xml,v 1.38 2004-09-03 13:54:50 rafal Exp $ -->
 
-<!-- $Id: project.xml,v 1.37 2004-08-20 09:04:58 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
-  
   <extend>../ledge-common/project.xml</extend>
-
   <!-- project info -->
-  
+
   <groupId>objectledge</groupId>
   <id>ledge-web</id>
-  <currentVersion>0.3-dev</currentVersion>
-  
+  <currentVersion>0.3</currentVersion>
   <name>Ledge Web</name>
-  <shortDescription>
-    Servlet environment bootstraper for the ObjectLedge container and a number of reusable
-    components for building J2EE servlet environment applications.
-  </shortDescription>
-
+  <shortDescription>Servlet environment bootstraper for the ObjectLedge container and a number of reusable components for building J2EE servlet environment applications.</shortDescription>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -70,7 +64,6 @@
       </resources>
     </unitTest>
   </build>
-
   <dependencies>
     <dependency>
       <groupId>objectledge</groupId>
@@ -112,6 +105,7 @@
       <url>http://logging.apache.org/log4j/docs/http://logging.apache.org/log4j/docs/</url>
     </dependency>
     <!-- testing -->
+
     <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-impl</artifactId>
@@ -179,6 +173,7 @@
       <url>http://jakarta.apache.org/commons/collections</url>
     </dependency>
     <!-- findbugs seems to need that -->
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -188,11 +183,18 @@
       <groupId>jmock</groupId>
       <artifactId>jmock</artifactId>
       <version>1.0.0.RC1</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>jmock</groupId>
       <artifactId>jmock-cglib</artifactId>
       <version>1.0.0.RC1</version>
-    </dependency>    
+    </dependency>
   </dependencies>
+  <versions>
+    <version>
+      <id>0.3</id>
+      <name>0.3</name>
+      <tag>RELEASE-0_3</tag>
+    </version>
+  </versions>
 </project>
