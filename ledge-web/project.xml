@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.11 2004-01-06 23:16:34 fil Exp $ -->
+<!-- $Id: project.xml,v 1.12 2004-01-13 13:42:30 pablo Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -166,6 +166,17 @@
       <version>2.6.0</version>
       <url>http://xml.apache.org/xerces2-j/index.html</url>
     </dependency>    
+    <dependency>
+      <groupId>javamail</groupId>
+      <artifactId>javamail</artifactId>
+      <version>1.2</version>
+      <url>http://java.sun.com/products/javamail/index.jsp</url>
+    </dependency>
+    <dependency>
+      <groupId>jaf</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.0.2</version>
+      <url>http://java.sun.com/products/javabeans/glasgow/jaf.html</url>
+    </dependency>
   </dependencies>
-
 </project>
