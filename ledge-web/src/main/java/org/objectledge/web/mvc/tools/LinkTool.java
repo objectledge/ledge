@@ -31,6 +31,9 @@ package org.objectledge.web.mvc.tools;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jcontainer.dna.Configurable;
@@ -64,7 +67,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.23 2005-03-10 12:11:51 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.24 2005-04-06 14:26:41 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -360,6 +363,52 @@ public class LinkTool
     }
 
     /**
+     * Sets multiple values parameter with values defined as a java.util.List.
+     *
+     * @param name the name of the parameter.
+     * @param list a set of parameter values.
+     * @return the link tool.
+     */
+    public LinkTool set(String name, List<String> list)
+    {
+        LinkTool target = getSetTargetLinkTool(name);
+        target.parameters.remove(name);
+        for (String value : list) 
+        {
+            target.parameters.add(name, value);
+        }
+        return target;
+    }
+
+    /**
+     * Adds a set of parameters defined as a java.util.Map to the request.
+     *
+     * @param map a set of parametres as a Map.
+     * @return the link tool.
+     */
+    public LinkTool set(Map<String, String> map)
+    {
+        if (map.containsKey(config.viewToken))
+        {
+            checkSetParamName(config.viewToken);
+        }
+        else if (map.containsKey(config.actionToken))
+        {
+            checkSetParamName(config.actionToken);
+        }
+        LinkTool target = getLinkTool(this);
+        for (Iterator<Map.Entry<String, String>> iter = map.entrySet().iterator(); iter.hasNext();)
+        {
+            Map.Entry<String, String> e = iter.next();
+            target.parameters.remove(e.getKey());
+            target.parameters.add(e.getKey(), e.getValue());
+        }
+        return target;
+    }
+
+    
+    
+    /**
      * Sets the request parameters to be equal to contents of the specified
      * parameter container.
      *
@@ -376,7 +425,6 @@ public class LinkTool
 		{
 			checkSetParamName(config.actionToken);
 		}
-		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
         target.parameters = new SortedParameters(parameters);
         return target;
@@ -428,7 +476,6 @@ public class LinkTool
      */
     public LinkTool fragment(String fragment)
     {
-		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
         target.fragment = fragment;
         return target;
@@ -541,6 +588,48 @@ public class LinkTool
     }
 
     /**
+     * Adds multiple values parameter with values defined as a java.util.List.
+     *
+     * @param name the name of the parameter.
+     * @param list a set of parameter values.
+     * @return the link tool.
+     */
+    public LinkTool add(String name, List<String> list)
+    {
+        LinkTool target = getAddTargetLinkTool(name);
+        for (String value : list) 
+        {
+            target.parameters.add(name, value);
+        }
+        return target;
+    }
+
+    /**
+     * Adds a set of parameters defined as a java.util.Map to the request.
+     *
+     * @param map a set of parametres as a Map.
+     * @return the link tool.
+     */
+    public LinkTool add(Map<String, String> map)
+    {
+        if (map.containsKey(config.viewToken))
+        {
+            checkAddParamName(config.viewToken);
+        }
+        else if (map.containsKey(config.actionToken))
+        {
+            checkAddParamName(config.actionToken);
+        }
+        LinkTool target = getLinkTool(this);
+        for (Iterator<Map.Entry<String, String>> iter = map.entrySet().iterator(); iter.hasNext();)
+        {
+            Map.Entry<String, String> e = iter.next();
+            target.parameters.add(e.getKey(), e.getValue());
+        }
+        return target;
+    }
+
+    /**
      * Adds a set of parameters to the request.
      *
      * @param parameters a set of paremteres.
@@ -556,7 +645,6 @@ public class LinkTool
 		{
 			checkAddParamName(config.actionToken);
 		}
-		// TODO: Add RFC characters check
         LinkTool target = getLinkTool(this);
         target.parameters.add(parameters, false);
         return target;
@@ -965,7 +1053,6 @@ public class LinkTool
     
     private void checkSetParamName(String name)
     {
-		// TODO: Add RFC characters check
 		if (name.equals(config.viewToken))
 		{
 			throw new IllegalArgumentException("to set the value of the view parameter, " +
@@ -980,17 +1067,16 @@ public class LinkTool
 
 	private void checkAddParamName(String name)
 	{
-		// TODO: Add RFC characters check
-		if (name.equals(config.viewToken))
-		{
-			throw new IllegalArgumentException(
-				"multiple values of the view parameter are not allowed");
-		}
-		else if (name.equals(config.actionToken))
-		{
-			throw new IllegalArgumentException(
-				"multiple values of the action parameter are not allowed");
-		}
+        if (name.equals(config.viewToken))
+        {
+            throw new IllegalArgumentException("to set the value of the view parameter, " +
+                "call the view(String) method");
+        }
+        else if (name.equals(config.actionToken))
+        {
+            throw new IllegalArgumentException("to set the value of the action parameter, " +
+                "call the action(String) method");
+        }
 	}
     
     /**
