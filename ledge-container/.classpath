@@ -15,5 +15,6 @@
     <classpathentry kind="src" path="/nano"/>
     <classpathentry kind="src" path="/picoextras-reflection"/>
     <classpathentry kind="src" path="/picoextras-script"/>
+    <classpathentry kind="var" path="MAVEN_REPO/spice/jars/spice-cli-1.0.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
