@@ -25,74 +25,25 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.builders;
 
 import org.objectledge.context.Context;
-import org.objectledge.templating.MergingException;
-import org.objectledge.templating.Template;
 
 /**
- * Abstract builder implementation, which does not route and only merges templates.
+ * Default builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.2 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: DefaultBuilder.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
  */
-public abstract class AbstractBuilder implements Builder
+public class DefaultBuilder extends AbstractBuilder
 {
 	/**
-	 * Application context used by this builder instance.
-	 */
-	protected Context context;
-	
-	/**
-	 * Builders only need context.
+	 * Constructs default builder.
 	 * 
-	 * @param context application context for use by this builder.
-	 */
-	public AbstractBuilder(Context context)
+     * @param context used application context
+     */
+    public DefaultBuilder(Context context)
 	{
-		this.context = context;
+		super(context);
 	}
-	
-    /**
-     * @see org.objectledge.web.mvc.Builder#route()
-     */
-    public Builder route()
-    {
-        return null;
-    }
-
-    /**
-     * @see org.objectledge.web.mvc.Builder#build(org.objectledge.templating.Template,
-     * 		java.lang.String)
-     */
-    public String build(Template template, String embeddedBuildResults)
-    throws BuildException
-    {
-    	// TODO: insert embedded into context
-    	try
-    	{
-			return template.merge(MVCUtil.getTemplatingContext(context));
-    	}
-        catch(MergingException e)
-        {
-        	throw new BuildException(e);
-        }
-    }
-
-    /**
-     * @see org.objectledge.web.mvc.Builder#nextViewPair()
-     */
-    public ViewPair getEnclosingViewPair()
-    {
-        return new ViewPair(null, null);
-    }
-
-	/**
-	 * {@inheritDoc}
-	 */
-    public Template getTemplate()
-    {
-        return null;
-    }
 }

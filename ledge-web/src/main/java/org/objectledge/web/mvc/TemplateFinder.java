@@ -33,19 +33,25 @@ import org.objectledge.templating.Template;
  *
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TemplateFinder.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: TemplateFinder.java,v 1.2 2003-12-30 14:41:37 zwierzem Exp $
  */
 public interface TemplateFinder
 {
-    /**
-     * @param name
-     * @return
+	/**
+	 * Returns an builder template for a given builder name. If no template is found, a
+	 * {@link org.objectledge.web.mvc.DefaultTemplate} is returned.
+	 * 
+     * @param name name of a builder for which a template must be found
+	 * @return found template
      */
-    public Template findTemplate(String name);
+    public Template findBuilderTemplate(String name);
 
-    /**
-     * @param builder
-     */
-	public Template findEnclosingTemplate(Template builder);
-
+	/**
+	 * Returns an enclosing builder template for a given builder. If no template is found, a
+	 * {@link org.objectledge.web.mvc.DefaultTemplate} is returned.
+	 * 
+	 * @param builder a builder for which an eclosing builder template must be found 
+	 * @return found template
+	 */
+	public Template findEnclosingBuilderTemplate(Template builder);
 }

@@ -29,13 +29,12 @@
 package org.objectledge.web.mvc;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.*;
 
 /**
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCContextInitializator.java,v 1.1 2003-12-30 14:18:55 zwierzem Exp $
+ * @version $Id: MVCContextInitializator.java,v 1.2 2003-12-30 14:41:37 zwierzem Exp $
  */
 public class MVCContextInitializator implements Runnable
 {

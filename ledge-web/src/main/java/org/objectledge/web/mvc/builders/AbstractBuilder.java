@@ -25,57 +25,74 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.builders;
 
+import org.objectledge.context.Context;
+import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
+import org.objectledge.web.mvc.BuildException;
+import org.objectledge.web.mvc.MVCUtil;
 
 /**
- * Contains a pair of view construction elements - a builder and template.
+ * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ViewPair.java,v 1.1 2003-12-29 14:07:03 zwierzem Exp $
+ * @version $Id: AbstractBuilder.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
  */
-public class ViewPair
+public abstract class AbstractBuilder implements Builder
 {
 	/**
-	 * Builder bound by this pair.
+	 * Application context used by this builder instance.
 	 */
-	private Builder builder;
+	protected Context context;
 	
 	/**
-	 * Template bound by this pair.
-	 */
-	private Template template;
-	
-	/**
-	 * Constructs a pair of view construction elements.
+	 * Builders only need context.
 	 * 
-     * @param builder builder bound by this pair - may be <code>null</code>.
-     * @param template template bound by this pair - may be <code>null</code>.
-     */
-    public ViewPair(Builder builder, Template template)
+	 * @param context application context for use by this builder.
+	 */
+	public AbstractBuilder(Context context)
 	{
-		this.builder = builder;
-		this.template = template;
+		this.context = context;
 	}
 	
-    /**
-     * Returns builder bound by this pair - may be <code>null</code>.
-     * 
-     * @return builder bound by this pair.
-     */
-    public Builder getBuilder()
+	/**
+	 * {@inheritDoc}
+	 */
+    public Builder route()
     {
-        return builder;
+        return null;
     }
 
-    /**
-     * Returns template bound by this pair - may be <code>null</code>.
-     * 
-     * @return template bound by this pair.
-     */
+	/**
+	 * {@inheritDoc}
+	 */
+    public String build(Template template, String embeddedBuildResults)
+    throws BuildException
+    {
+    	try
+    	{
+			return template.merge(MVCUtil.getTemplatingContext(context));
+    	}
+        catch(MergingException e)
+        {
+        	throw new BuildException(e);
+        }
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public ViewPair getEnclosingViewPair()
+    {
+        return new ViewPair(null, null);
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
     public Template getTemplate()
     {
-        return template;
+        return null;
     }
 }

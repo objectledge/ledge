@@ -25,25 +25,55 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.builders;
 
-import org.objectledge.context.Context;
+import org.objectledge.templating.Template;
+import org.objectledge.web.mvc.BuildException;
 
 /**
- * Default builder implementation, which does not route and only merges templates.
+ * Builder of a single view element.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultBuilder.java,v 1.1 2003-12-29 14:07:03 zwierzem Exp $
+ * @version $Id: Builder.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
  */
-public class DefaultBuilder extends AbstractBuilder
-{
+///CLOVER:OFF
+public interface Builder
+{	
 	/**
-	 * Constructs default builder.
+	 * This method is called to allow the view builder to redirect the control to another builder
+	 * without executing the build method.
 	 * 
-     * @param context used application context
+     * @return the builder which will be executed instead of current builder.
      */
-    public DefaultBuilder(Context context)
-	{
-		super(context);
-	}
+    public Builder route();
+    
+	/**
+	 * Build method executes builder logic which should return rendered <code>String</code>.
+	 * 
+     * @param template template to be used during building
+     * @param embeddedBuildResults string containing results of embedded builder build (it will be
+     * 	fit into templating context under <code>$embedded_placeholder</code> key).
+     * 
+     * @return string containing rendered view element
+     * @throws BuildException on problems with view element building
+     */
+    public String build(Template template, String embeddedBuildResults)
+	throws BuildException;
+    
+	/**
+	 * Returns a manually chosen builder and template in which currently executed builder will be
+	 * embedded in. Both builder and template may be chosen separately - if <code>null</code> is\
+	 * returned for either template or builder, finder component is used to search for a proper
+	 * template and/or builder for embedded builder.
+	 * 
+	 * @return view pair
+	 */
+	public ViewPair getEnclosingViewPair();
+
+    /**
+     * Gets a template chosen by this builder.
+     * 
+     * @return template used by this builder
+     */
+    public Template getTemplate(); 
 }

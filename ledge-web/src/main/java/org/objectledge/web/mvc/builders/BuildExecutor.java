@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 //
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.builders;
 
 import org.objectledge.context.Context;
 import org.objectledge.templating.Template;
@@ -33,12 +33,18 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.HttpContextImpl;
 import org.objectledge.web.PipelineProcessingException;
+import org.objectledge.web.mvc.BuildException;
+import org.objectledge.web.mvc.MVCClassFinder;
+import org.objectledge.web.mvc.MVCConstants;
+import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.MVCContextImpl;
+import org.objectledge.web.mvc.TemplateFinder;
 
 /**
- * Pipeline component for executing for MVC view building.
+ * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildExecutor.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: BuildExecutor.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
  */
 public class BuildExecutor implements Runnable
 {
@@ -58,6 +64,9 @@ public class BuildExecutor implements Runnable
      * @param context used application context
      * @param classFinder finder for builder objects
      * @param templateFinder finder for template objects
+     * @param maxRouteCalls maxmimal number of {@link Builder#route()} calls per builder
+     * @param maxEnclosures maxmimal number of {@link Builder} enclosures
+     * 	(also {@link Builder#getEnclosingViewPair()} calls)
 	 */
 	public BuildExecutor(Context context, MVCClassFinder classFinder, TemplateFinder templateFinder,
 		int maxRouteCalls, int maxEnclosures)
@@ -81,11 +90,9 @@ public class BuildExecutor implements Runnable
 			context.getAttribute(TemplatingContext.CONTEXT_KEY);
 	
 		// get initial builder, template and embedded result
-		// TODO may return DefaultBuilder
-		Builder builder = (Builder) classFinder.findBuilder(mvcContext.getView());
-		// TODO may return DefaultTemplate
-		Template template = templateFinder.findTemplate(mvcContext.getView());
 		String embeddedResult = null;
+		Builder builder = (Builder) classFinder.findBuilder(mvcContext.getView());
+		Template template = templateFinder.findBuilderTemplate(mvcContext.getView());
 		
 		// start processing
 		int enclosures;
@@ -113,7 +120,8 @@ public class BuildExecutor implements Runnable
 	        // find a template for this builder
 	        if(overrideTemplate == null && routeBuilder != null)
 	        {
-				template = templateFinder.findTemplate(classFinder.findName(builder.getClass()));
+				template = templateFinder.findBuilderTemplate(
+					classFinder.findName(builder.getClass()));
 	        }
 
 			// build view level
@@ -145,7 +153,7 @@ public class BuildExecutor implements Runnable
 				if(enclosingTemplate == null)
 				{
 					// shorten the builder path name, find new template	
-					enclosingTemplate = templateFinder.findEnclosingTemplate(template);
+					enclosingTemplate = templateFinder.findEnclosingBuilderTemplate(template);
 				}
 				template = enclosingTemplate;
 			}
@@ -159,7 +167,7 @@ public class BuildExecutor implements Runnable
 		// did not reach a closing builder
 		if(enclosures >= maxEnclosures)
 		{
-			throw new PipelineProcessingException("Builder eclosures maximal number exceeded");
+			throw new PipelineProcessingException("Maximal number of builder enclosures exceeded");
 		}
 
 		// store building result

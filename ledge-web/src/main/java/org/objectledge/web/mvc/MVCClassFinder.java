@@ -27,17 +27,19 @@
 // 
 package org.objectledge.web.mvc;
 
+import org.objectledge.web.mvc.builders.Builder;
+
 /**
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.1 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: MVCClassFinder.java,v 1.2 2003-12-30 14:41:37 zwierzem Exp $
  */
 public interface MVCClassFinder
 {
     /**
      * Returns a builder instance based on a given name. If no builder is found, a
-     * {@link org.objectledge.web.mvc.DefaultBuilder} is returned.
+     * {@link org.objectledge.web.mvc.builders.DefaultBuilder} is returned.
      * 
      * @param builderName part of a name of a builder class to be found/instantiated
      * @return found builder instance
@@ -46,7 +48,7 @@ public interface MVCClassFinder
 
 	/**
 	 * Returns an enclosing builder for a given builder. If no builder is found, a
-	 * {@link org.objectledge.web.mvc.DefaultBuilder} is returned.
+	 * {@link org.objectledge.web.mvc.builders.DefaultBuilder} is returned.
 	 * 
 	 * @param builder a builder for which an eclosing builder must be found 
      * @return found builder instance
