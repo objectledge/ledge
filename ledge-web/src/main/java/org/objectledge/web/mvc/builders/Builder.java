@@ -33,7 +33,7 @@ import org.objectledge.templating.Template;
  * Builder of a single view element.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.3 2004-01-15 10:30:31 fil Exp $
+ * @version $Id: Builder.java,v 1.4 2004-05-18 11:24:53 pablo Exp $
  */
 ///CLOVER:OFF
 public interface Builder
@@ -68,9 +68,11 @@ public interface Builder
      * builder for embedded builder. If <code>null</code> pair is returned the current builder is
      * the top level one, and the building process stops.</p>
 	 * 
+     * @param template the actual template used to build current 
+     *         builder (the one on which the method is called).
 	 * @return encosing view pair, or <code>null</code> if this is the top level builder.
 	 */
-	public ViewPair getEnclosingViewPair();
+	public ViewPair getEnclosingViewPair(Template template);
 
     /**
      * Selects a template for rendering the builder explicitly.
