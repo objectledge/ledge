@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ObjectLedge components">
+
+  <title>ObjectLedge components</title>
+  <body>
+    <links>
+      <item name="home" href="../../index.html"/>
+      <item name="wiki" href="http://objectledge.org/wiki"/>
+      
+      <item name="ledge components" href="../../modules/ledge-container/index.html"/>
+      <item name="ledge container" href="../../modules/ledge-container/index.html"/>
+      <item name="ledge web" href="../../modules/ledge-web/index.html"/>
+    </links>
+    <menu name="Reference">
+      <item name="Components" href="components.html" collapse="true"/>
+    </menu>
+  </body>
+</project>
+  
