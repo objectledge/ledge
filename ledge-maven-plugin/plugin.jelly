@@ -268,4 +268,28 @@
     <j:file name="${output}" omitXmlDeclaration="true">${buff.toString()}</j:file>
   </goal>
 
+  <goal name="ledge:repackage-content">
+    <maven:get var="contentDir" plugin="ledge-maven-plugin" property="ledge.content.dir"/>
+    <maven:get var="contentJars" plugin="ledge-maven-plugin" property="ledge.content.jars"/>
+    <maven:get var="webappDir" plugin="maven-war-plugin" property="maven.war.webapp.dir"/>
+    <delete quiet="true" includeEmptyDirs="true">
+      <fileset dir="${webappDir}/${contentDir}">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+    <unjar dest="${webappDir}">
+      <fileset dir="${webappDir}/WEB-INF/lib" includes="${contentJars}"/>
+      <patternset>
+        <include name="${contentDir}/*"/>
+        <include name="${contentDir}/**/*"/>
+      </patternset>
+    </unjar>
+    <copy todir="${webappDir}">
+      <fileset dir="${maven.war.src}">
+        <include name="${contentDir}/*"/>
+        <include name="${contentDir}/**/*"/>
+      </fileset>
+    </copy>
+  </goal>
+
 </project>
