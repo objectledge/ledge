@@ -17,6 +17,8 @@
   <component class="org.objectledge.authentication.AuthenticationValve"/>
   <component class="org.objectledge.parameters.RequestParametersLoaderValve"/>
 
+  <component class="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
+
   <component class="org.objectledge.web.mvc.security.SecurityHelper"/>
   <component class="org.objectledge.web.mvc.finders.NameSequenceFactory"/>
   <container key="org.objectledge.web.mvc.finders.MVCFinder.container"/>
@@ -28,6 +30,7 @@
   </component>
   <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
   <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
+    <parameter/>
     <parameter/>
     <parameter/>
     <parameter/>
@@ -50,6 +53,7 @@
     <sequence>
       <parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
       <parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
     </sequence>
   </component>      
   <component class="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
