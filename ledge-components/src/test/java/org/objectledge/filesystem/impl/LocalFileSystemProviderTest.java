@@ -28,13 +28,15 @@
 
 package org.objectledge.filesystem.impl;
 
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 /**
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LocalFileSystemProviderTest.java,v 1.2 2003-12-03 14:40:42 mover Exp $
+ * @version $Id: LocalFileSystemProviderTest.java,v 1.3 2003-12-04 13:00:24 mover Exp $
  */
 public class LocalFileSystemProviderTest extends TestCase
 {
@@ -63,6 +65,20 @@ public class LocalFileSystemProviderTest extends TestCase
         provider = new LocalFileSystemProvider("local", root);
     }
 
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+		String[] tab = new String[] { "var/new.file", "var/new.directory1", "var/new.directory2" }; 
+		for (int i = 0; i < tab.length; i++)
+        {
+            String element = tab[i];
+            if(provider.exists(element))
+            {
+				provider.delete(element);
+            }
+        }
+	}
+
     public void testGetName()
     {
         assertEquals(provider.getName(), "local");
@@ -70,56 +86,84 @@ public class LocalFileSystemProviderTest extends TestCase
 
     public void testIsReadOnly()
     {
-        assertEquals(provider.isReadOnly(), false);
+        assertFalse("Provider is not read only", provider.isReadOnly());
     }
 
     public void testExists()
     {
-        assertEquals(provider.exists("file"), true);
-        assertEquals(provider.exists("nofile"), false);
+        assertTrue("File does not exist - check test resources!", provider.exists("file"));
+        assertFalse("File exists - check test resources!", provider.exists("nofile"));
     }
 
     public void testIsFile()
     {
-        assertEquals(provider.isFile("file"), true);
-        assertEquals(provider.isFile("directory"), false);
+        assertTrue("The resource is not a file - check test resources!", 
+        			provider.isFile("file"));
+        assertFalse("The resource is a file - check test resources!", 
+        			provider.isFile("directory"));
     }
 
     public void testIsDirectory()
     {
-        assertEquals(provider.isDirectory("directory"), true);
-        assertEquals(provider.isDirectory("file"), false);
+        assertTrue("The resource is not a directory - check test resources!", 
+        			provider.isDirectory("directory"));
+        assertFalse("The resource is a directory - check test resources!", 
+        			provider.isDirectory("file"));
     }
 
     public void testCanRead()
     {
-		assertEquals(provider.canRead("file"), true);
-		assertEquals(provider.canRead("nofile"), false);
-		assertEquals(provider.exists("unreadablefile"), true);
-		assertEquals(provider.canRead("unreadablefile"), false);
+		assertTrue("The resource is not readable - check test resources!", 
+					provider.canRead("file"));
+		assertFalse("The resource is readable - check test resources!", 
+					provider.canRead("nofile"));
+		assertTrue("The resource does not exist - check test resources!", 
+					provider.exists("unreadablefile"));
+		assertFalse("The resource is readable - check test resources!", 
+					provider.canRead("unreadablefile"));
     }
 
     public void testCanWrite()
     {
-		assertEquals(provider.canWrite("file"), true);
-		assertEquals(provider.canWrite("nofile"), false);
-		assertEquals(provider.exists("unwritablefile"), true);
-		assertEquals(provider.canWrite("unwritablefile"), false);
+		assertTrue("The resource is not writable - check test resources!", 
+					provider.canWrite("file"));
+		assertFalse("The resource is writable - check test resources!", 
+					provider.canWrite("nofile"));
+		assertTrue("The resource does not exist - check test resources!", 
+					provider.exists("unwritablefile"));
+		assertFalse("The resource is writable - check test resources!", 
+					provider.canWrite("unwritablefile"));
     }
 
     public void testList()
     {
-        //TODO Implement list().
+		//TODO Implement list().
     }
 
     public void testCreateNewFile()
+    	throws Exception 
     {
-        //TODO Implement createNewFile().
-    }
-
+		assertTrue("This resource shouldn't exist - check test resources!", 
+					provider.createNewFile("var/new.file"));
+		assertFalse("This resource should exist - check test resources!", 
+					provider.createNewFile("file"));
+		try
+		{
+			provider.createNewFile("var/new.directory1/new.file");
+			fail("The directory shouldn't exist - check test resources!");
+		}
+		catch(IOException e)
+		{
+			// expected
+		}
+	}
+		
     public void testMkdirs()
+    throws IOException
     {
-        //TODO Implement mkdirs().
+		provider.mkdirs("var/new.directory2");
+		assertTrue("The directory should just have been created!", 
+		provider.exists("var/new.directory2"));
     }
 
     public void testDelete()
