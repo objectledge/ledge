@@ -37,7 +37,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.6 2004-08-19 15:19:10 zwierzem Exp $
+ * @version $Id: I18nTool.java,v 1.7 2004-08-19 16:39:27 zwierzem Exp $
  */
 public class I18nTool
 {
@@ -76,18 +76,20 @@ public class I18nTool
 	 */
 	public I18nTool usePrefix(String prefix)
 	{
-        int prefixLength = prefixBuf.length();        
 		if(prefix.length() > 0)
 		{
+            int prefixLength = prefixBuf.length();        
 			if(prefixLength > 0)
 			{
 				prefixBuf.append('.');
 			}
 			prefixBuf.append(prefix);
+
+            I18nTool target = createInstance(this); // the prefix buffer is extended
+            prefixBuf.setLength(prefixLength); // get back to previous prefix
+            return target;
 		}
-        I18nTool target = createInstance(this); // the prefix buffer is extended
-        prefixBuf.setLength(prefixLength); // get back to previous prefix
-        return target;
+        return this;
 	}
 	
 	/**
@@ -98,8 +100,13 @@ public class I18nTool
 	 */
 	public I18nTool useLocale(String locale)
 	{
+        Locale targetLocale = StringUtils.getLocale(locale);
+        if(targetLocale.equals(this.locale))
+        {
+            return this;
+        }
         I18nTool target = createInstance(this);
-        target.locale = StringUtils.getLocale(locale);
+        target.locale = targetLocale;
 		return target; 
 	}
 	
