@@ -42,7 +42,7 @@ import org.objectledge.threads.Task;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerTest.java,v 1.1 2004-02-02 13:07:07 fil Exp $
+ * @version $Id: WorkerTest.java,v 1.2 2004-02-10 11:56:19 fil Exp $
  */
 public class WorkerTest extends TestCase
 {
@@ -168,6 +168,7 @@ public class WorkerTest extends TestCase
             assertEquals(1, threadGroup.activeCount());
             threadGroup.enumerate(threads);
             threads[0].stop();
+            Thread.sleep(DELAY);
             worker.stop();
             Thread.sleep(DELAY);
             assertNotNull(whiteboard.get("started"));
