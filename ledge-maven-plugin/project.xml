@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<!-- $Id: project.xml,v 1.7 2004-09-01 09:24:51 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.8 2004-09-01 13:58:31 rafal Exp $ -->
 <project>
 
   <extend>../ledge-common/project.xml</extend>
@@ -69,4 +69,12 @@
       </resource>
     </resources>
   </build>
+
+  <reports>
+    <report>maven-license-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-tasklist-plugin</report>
+    <report>maven-faq-plugin</report>    
+  </reports>
+
 </project>
