@@ -5,7 +5,7 @@
 
   <name>Ledge tutorial webapp</name>
   <id>ledge-tutorial-webapp</id>
-  <groupId>ledge</groupId>
+  <groupId>objectledge</groupId>
   <currentVersion>0.3-dev</currentVersion>
   
   <dependencies>
