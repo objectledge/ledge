@@ -63,9 +63,12 @@ import org.objectledge.web.mvc.MVCContext;
  * /context/servlet/view/somepackage.SomeView?action=somepackage.SomeAction&amp;paramName=paramValue
  * </pre>
  * 
+ * <p>The links are encoded using UTF-8 encoding no matter what encoding is used in the generated
+ * HTML page. This is in line with JavaScript URI encoding and decoding functions.</p>
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.5 2004-03-28 09:36:05 pablo Exp $
+ * @version $Id: LinkTool.java,v 1.6 2004-07-01 11:46:18 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -582,36 +585,14 @@ public class LinkTool
         try
         {
             // prepare server part if needed
-            sb.setLength(0);
-            String serverPart = null;
-            if (showProtocolName)
-            {
-                sb.append(protocolName);
-                sb.append("://");
-                sb.append(httpContext.getRequest().getServerName());
-                if (((protocolName.length() == 0 || protocolName.equals("http")) && port != 80)
-                    || (protocolName.equals("https") && port != 443)
-                    || (protocolName.length() > 0 && 
-                       !protocolName.equals("https") && !protocolName.equals("http")))
-                {
-                    sb.append(':').append(port);
-                }
-                serverPart = sb.toString();
-                sb.setLength(0);
-            }
+            String serverPart = buildServerPart(sb);
 
+            // prepare address part
+            sb.setLength(0);
             sb.append(httpContext.getRequest().getContextPath());
             if (resourceLink)
             {
-                sb.append(config.getBaseResourcePath());
-                if (path.length() > 0)
-                {
-                    if (path.charAt(0) != '/')
-                    {
-                        sb.append('/');
-                    }
-                    sb.append(path);
-                }
+                appendResourceLink(sb);
             }
             else
             {
@@ -681,39 +662,7 @@ public class LinkTool
                     }
                 }
 
-                if (!action.equals("") || queryParameterKeys.size() > 0)
-                {
-                    sb.append('?');
-                    if (!action.equals(""))
-                    {
-                        sb.append(config.getActionToken());
-                        sb.append('=');
-                        sb.append(action);
-                        if (queryParameterKeys.size() > 0)
-                        {
-                            sb.append(config.getQuerySeparator());
-                        }
-                    }
-                    for (int i = 0; i < queryParameterKeys.size(); i++)
-                    {
-                        String key = (String)queryParameterKeys.get(i);
-                        String[] values = parameters.getStrings(key);
-                        for (int j = 0; j < values.length; j++)
-                        {
-                            sb.append(URLEncoder.encode(key, PARAMETER_ENCODING));
-                            sb.append('=');
-                            sb.append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
-                            if (j < values.length - 1)
-                            {
-                                sb.append(config.getQuerySeparator());
-                            }
-                        }
-                        if (i < queryParameterKeys.size() - 1)
-                        {
-                            sb.append(config.getQuerySeparator());
-                        }
-                    }
-                }
+                appendQueryString(sb, queryParameterKeys);
             }
             if (fragment != null)
             {
@@ -744,6 +693,80 @@ public class LinkTool
         ///CLOVER:ON
     }
 
+    private String buildServerPart(StringBuffer sb)
+    {
+        String serverPart = null;
+        if (showProtocolName)
+        {
+            sb.setLength(0);
+            sb.append(protocolName);
+            sb.append("://");
+            sb.append(httpContext.getRequest().getServerName());
+            if (((protocolName.length() == 0 || protocolName.equals("http")) && port != 80)
+                || (protocolName.equals("https") && port != 443)
+                || (protocolName.length() > 0 && 
+                   !protocolName.equals("https") && !protocolName.equals("http")))
+            {
+                sb.append(':').append(port);
+            }
+            serverPart = sb.toString();
+        }
+        return serverPart;
+    }
+
+    private void appendResourceLink(StringBuffer sb)
+    {
+        sb.append(config.getBaseResourcePath());
+        if (path.length() > 0)
+        {
+            if (path.charAt(0) != '/')
+            {
+                sb.append('/');
+            }
+            sb.append(path);
+        }
+    }
+
+    private void appendQueryString(StringBuffer sb, List queryParameterKeys)
+        throws UnsupportedEncodingException
+    {
+        if (!action.equals("") || queryParameterKeys.size() > 0)
+        {
+            String querySeparator = config.getQuerySeparator();
+            
+            sb.append('?');
+            if (!action.equals(""))
+            {
+                sb.append(config.getActionToken());
+                sb.append('=');
+                sb.append(action);
+                if (queryParameterKeys.size() > 0)
+                {
+                    sb.append(querySeparator);
+                }
+            }
+            for (int i = 0; i < queryParameterKeys.size(); i++)
+            {
+                String key = (String)queryParameterKeys.get(i);
+                String[] values = parameters.getStrings(key);
+                for (int j = 0; j < values.length; j++)
+                {
+                    sb.append(URLEncoder.encode(key, PARAMETER_ENCODING));
+                    sb.append('=');
+                    sb.append(URLEncoder.encode(values[j], PARAMETER_ENCODING));
+                    if (j < values.length - 1)
+                    {
+                        sb.append(querySeparator);
+                    }
+                }
+                if (i < queryParameterKeys.size() - 1)
+                {
+                    sb.append(querySeparator);
+                }
+            }
+        }
+    }
+    
 	/**
 	 * Clone the given LinkTool.
 	 * 
