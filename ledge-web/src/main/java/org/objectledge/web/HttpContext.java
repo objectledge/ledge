@@ -45,7 +45,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.9 2004-09-14 11:39:59 rafal Exp $
+ * @version $Id: HttpContext.java,v 1.10 2004-09-29 14:23:15 zwierzem Exp $
  */
 public class HttpContext
 {
@@ -226,7 +226,8 @@ public class HttpContext
         ///CLOVER:OFF
         catch (UnsupportedEncodingException e)
         {
-            throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
+            throw (IllegalArgumentException)
+                new IllegalArgumentException("Unsupported encoding").initCause(e);
         }
         ///CLOVER:ON
 	}
