@@ -4,8 +4,3 @@
 # $Id$
 
 maven.build.dir=WORKSPACE-targets/${pom.artifactId}
-
-maven.repo.Objectledge=http://objectledge.org
-maven.repo.Objectledge.directory=/maven
-maven.repo.list=Objectledge
-
