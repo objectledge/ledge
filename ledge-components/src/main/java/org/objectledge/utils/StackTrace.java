@@ -30,13 +30,12 @@ package org.objectledge.utils;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Captures a full stack trace in a multi-level <code>Throwable</code> sequence.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTrace.java,v 1.2 2004-06-24 12:43:18 fil Exp $
+ * @version $Id: StackTrace.java,v 1.3 2004-07-22 16:39:41 zwierzem Exp $
  */
 public class StackTrace
 {    

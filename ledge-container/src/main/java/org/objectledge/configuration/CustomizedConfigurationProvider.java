@@ -27,13 +27,7 @@
 // 
 package org.objectledge.configuration;
 
-import java.io.IOException;
-import java.net.URL;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.impl.SAXConfigurationSerializer;
 import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.UnsupportedKeyTypeException;
 import org.picocontainer.ComponentAdapter;
@@ -42,15 +36,12 @@ import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.PicoVerificationException;
 import org.picocontainer.defaults.InstanceComponentAdapter;
-import org.xml.sax.SAXException;
-
-import com.sun.msv.verifier.Verifier;
 
 /**
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CustomizedConfigurationProvider.java,v 1.1 2004-06-25 11:00:56 fil Exp $
+ * @version $Id: CustomizedConfigurationProvider.java,v 1.2 2004-07-22 16:40:02 zwierzem Exp $
  */
 public class CustomizedConfigurationProvider
 	implements CustomizedComponentProvider

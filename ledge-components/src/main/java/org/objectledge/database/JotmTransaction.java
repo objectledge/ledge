@@ -32,7 +32,6 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
 import org.objectledge.logging.LoggingConfigurator;
 import org.objectweb.jotm.Jotm;
@@ -42,7 +41,7 @@ import org.picocontainer.Startable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.6 2004-06-25 12:54:52 fil Exp $
+ * @version $Id: JotmTransaction.java,v 1.7 2004-07-22 16:39:41 zwierzem Exp $
  */
 public class JotmTransaction
     extends Transaction

@@ -35,7 +35,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
-import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 import org.jmock.cglib.CGLIBCoreMock;
 import org.jmock.core.Constraint;

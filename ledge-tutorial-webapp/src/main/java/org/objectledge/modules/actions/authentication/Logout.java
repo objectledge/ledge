@@ -37,14 +37,13 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Logout action.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.6 2004-07-09 10:32:40 rafal Exp $ 
+ * @version $Id: Logout.java,v 1.7 2004-07-22 16:40:01 zwierzem Exp $ 
  */
 public class Logout 
     extends BaseAuthenticationAction

@@ -28,7 +28,6 @@
 package org.objectledge.logging;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -41,7 +40,7 @@ import org.objectledge.filesystem.FileSystem;
  * A derivate of log4j.RollingFileAppender that accepts paths within Ledge file system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeRollingFileAppender.java,v 1.1 2004-06-16 14:33:00 fil Exp $
+ * @version $Id: LedgeRollingFileAppender.java,v 1.2 2004-07-22 16:39:42 zwierzem Exp $
  */
 public class LedgeRollingFileAppender
 	extends RollingFileAppender

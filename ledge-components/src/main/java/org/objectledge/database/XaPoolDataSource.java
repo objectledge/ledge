@@ -38,7 +38,6 @@ import org.enhydra.jdbc.pool.StandardXAPoolDataSource;
 import org.enhydra.jdbc.standard.StandardXADataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.database.impl.DelegatingDataSource;
 import org.objectledge.logging.LoggingConfigurator;
 import org.picocontainer.Startable;
@@ -47,7 +46,7 @@ import org.picocontainer.Startable;
  * An implementation of DataSource interface using HSQLDB.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSource.java,v 1.5 2004-06-25 12:54:52 fil Exp $
+ * @version $Id: XaPoolDataSource.java,v 1.6 2004-07-22 16:39:41 zwierzem Exp $
  */
 public class XaPoolDataSource extends DelegatingDataSource
     implements XADataSource, Startable

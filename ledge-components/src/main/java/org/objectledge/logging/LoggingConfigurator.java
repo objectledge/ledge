@@ -42,7 +42,6 @@ import org.apache.log4j.spi.RootCategory;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
-import org.picocontainer.Startable;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -51,7 +50,7 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.2 2004-06-25 12:53:04 fil Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.3 2004-07-22 16:39:42 zwierzem Exp $
  */
 public class LoggingConfigurator
 {

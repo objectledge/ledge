@@ -27,13 +27,12 @@
 // 
 package org.objectledge.utils;
 
-import java.util.StringTokenizer;
 
 /**
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTraceTest.java,v 1.2 2004-06-24 12:43:19 fil Exp $
+ * @version $Id: StackTraceTest.java,v 1.3 2004-07-22 16:39:42 zwierzem Exp $
  */
 public class StackTraceTest extends LedgeTestCase
 {
