@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.8 2004-02-09 12:09:53 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.9 2004-02-12 10:26:50 fil Exp $
  */
 public class DatabaseUtils
 {
@@ -196,7 +196,7 @@ public class DatabaseUtils
             {
                 buff.setLength(0);
                 String line = script.readLine();
-                if( line.trim().length() == 0 || line.charAt(0) == '#')
+                if( line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
                 {
                     continue;
                 }
@@ -205,7 +205,7 @@ public class DatabaseUtils
                 {
                     buff.append(line);
                     line = script.readLine();
-                    if(line.trim().length() == 0 || line.charAt(0) == '#')
+                    if(line.trim().length() == 0 || line.charAt(0) == '#' || line.startsWith("--"))
                     {
                         if(script.ready())
                         {
