@@ -44,7 +44,7 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.4 2004-01-13 15:48:39 pablo Exp $
+ * @version $Id: HttpContext.java,v 1.5 2004-01-14 13:01:04 fil Exp $
  */
 public class HttpContext
 {
@@ -74,6 +74,9 @@ public class HttpContext
 	/** response content type */
 	private String contentType;
 	
+    /** the output stream. */
+    private OutputStream outputStream;
+    
 	/** the output writer */
 	private PrintWriter writer;
 	
@@ -137,9 +140,13 @@ public class HttpContext
 	public OutputStream getOutputStream()
 		throws IOException
 	{
-		directResponse = true;
-		response.setContentType(getContentType());
-		return response.getOutputStream();
+        if(outputStream == null)
+        {
+            directResponse = true;
+            response.setContentType(getContentType());
+            outputStream = response.getOutputStream(); 
+        }
+		return outputStream;
 	}
 
 	/**
@@ -154,10 +161,8 @@ public class HttpContext
 		if(writer == null)
 		{
 			directResponse = true;
-			Writer osw = new OutputStreamWriter(response.getOutputStream(),
-												encoding);
+			Writer osw = new OutputStreamWriter(getOutputStream(), encoding);
 			writer = new PrintWriter(osw, false);
-			response.setContentType(getContentType());
 		}
 		return writer;
 	}
