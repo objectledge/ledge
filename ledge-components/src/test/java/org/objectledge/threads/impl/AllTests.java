@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AllTests.java,v 1.1 2004-01-30 14:40:05 fil Exp $
+ * @version $Id: AllTests.java,v 1.2 2004-02-02 13:07:07 fil Exp $
  */
 public class AllTests
 {
@@ -43,6 +43,7 @@ public class AllTests
         TestSuite suite = new TestSuite("Test for org.objectledge.threads.impl");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(DaemonTest.class));
+        suite.addTest(new TestSuite(WorkerTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -42,45 +42,24 @@ import org.objectledge.threads.Task;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DaemonTest.java,v 1.4 2004-02-02 13:07:07 fil Exp $
+ * @version $Id: WorkerTest.java,v 1.1 2004-02-02 13:07:07 fil Exp $
  */
-public class DaemonTest extends TestCase
+public class WorkerTest extends TestCase
 {
     private static final int DELAY = 200;
     
     private static Map whiteboard = new HashMap();
     
     private static Logger log = 
-        new Log4JLogger(org.apache.log4j.Logger.getLogger(DaemonTest.class));
+        new Log4JLogger(org.apache.log4j.Logger.getLogger(WorkerTest.class));
 
     /**
-     * Constructor for DaemonTest.
+     * Constructor for WorkerTest.
      * @param arg0
      */
-    public DaemonTest(String arg0)
+    public WorkerTest(String arg0)
     {
         super(arg0);
-    }
-
-    public void testLongRunning()
-        throws Exception
-    {
-        synchronized(whiteboard)
-        {
-            Task task = new LongRunningTask();
-            int priority = Thread.NORM_PRIORITY;
-            ThreadGroup threadGroup = new ThreadGroup("Test group");
-            Context context = new Context();
-            whiteboard.clear();
-            Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-            Thread.sleep(DELAY);
-            daemon.stop();
-            Thread.sleep(DELAY);
-            assertNotNull(whiteboard.get("started"));
-            assertNotNull(whiteboard.get("interrupted"));
-            assertNotNull(whiteboard.get("cleaned up"));
-        }
     }
     
     public void testShortRunning()
@@ -94,16 +73,42 @@ public class DaemonTest extends TestCase
             Context context = new Context();
             whiteboard.clear();
             Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Worker worker = new Worker("testShortRunning", priority, 
+                null, threadGroup, log, context, cleanup);
+            worker.dispatch(task);            
             Thread.sleep(DELAY);
-            daemon.stop();
+            worker.stop();
             Thread.sleep(DELAY);
             assertNotNull(whiteboard.get("started"));
             assertNull(whiteboard.get("interrupted"));
             assertNotNull(whiteboard.get("cleaned up"));
         }
     }
-    
+
+    public void testLongRunning()
+        throws Exception
+    {
+        synchronized(whiteboard)
+        {
+            Task task = new LongRunningTask();
+            int priority = Thread.NORM_PRIORITY;
+            ThreadGroup threadGroup = new ThreadGroup("Test group");
+            Context context = new Context();
+            whiteboard.clear();
+            Valve cleanup = new CleanupValve();
+            Worker worker = new Worker("testLongRunning", priority, 
+                null, threadGroup, log, context, cleanup);
+            worker.dispatch(task);  
+            worker.getCurrentTask();          
+            Thread.sleep(DELAY);
+            worker.stop();
+            Thread.sleep(DELAY);
+            assertNotNull(whiteboard.get("started"));
+            assertNotNull(whiteboard.get("interrupted"));
+            assertNotNull(whiteboard.get("cleaned up"));
+        }
+    }
+
     public void testFailing()
         throws Exception
     {
@@ -115,9 +120,11 @@ public class DaemonTest extends TestCase
             Context context = new Context();
             whiteboard.clear();
             Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Worker worker = new Worker("testFailing", priority, 
+                null, threadGroup, log, context, cleanup);
+            worker.dispatch(task);            
             Thread.sleep(DELAY);
-            daemon.stop();
+            worker.stop();
             Thread.sleep(DELAY);
             assertNotNull(whiteboard.get("started"));
             assertNull(whiteboard.get("interrupted"));
@@ -125,24 +132,20 @@ public class DaemonTest extends TestCase
         }
     }
 
-    public void testForcedStop()
+    public void testIdleStop()
         throws Exception
     {
         synchronized(whiteboard)
         {
-            Task task = new ForcedStopTask();
             int priority = Thread.NORM_PRIORITY;
             ThreadGroup threadGroup = new ThreadGroup("Test group");
             Context context = new Context();
             whiteboard.clear();
             Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Worker worker = new Worker("testLongRunning", priority, 
+                null, threadGroup, log, context, cleanup);
             Thread.sleep(DELAY);
-            daemon.stop();
-            Thread.sleep(DELAY);
-            assertNotNull(whiteboard.get("started"));
-            assertNull(whiteboard.get("interrupted"));
-            assertNull(whiteboard.get("cleaned up"));
+            worker.stop();
         }
     }
     
@@ -157,13 +160,15 @@ public class DaemonTest extends TestCase
             Context context = new Context();
             whiteboard.clear();
             Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Worker worker = new Worker("testExternalStop", priority, 
+                null, threadGroup, log, context, cleanup);
+            worker.dispatch(task);
             Thread.sleep(DELAY);
             Thread[] threads = new Thread[1];
             assertEquals(1, threadGroup.activeCount());
             threadGroup.enumerate(threads);
             threads[0].stop();
-            daemon.stop();
+            worker.stop();
             Thread.sleep(DELAY);
             assertNotNull(whiteboard.get("started"));
             assertNull(whiteboard.get("interrupted"));
@@ -171,50 +176,6 @@ public class DaemonTest extends TestCase
         }
     }
     
-    public void testDoubleStop()
-        throws Exception
-    {
-        synchronized(whiteboard)
-        {
-            Task task = new LongRunningTask();
-            int priority = Thread.NORM_PRIORITY;
-            ThreadGroup threadGroup = new ThreadGroup("Test group");
-            Context context = new Context();
-            whiteboard.clear();
-            Valve cleanup = new CleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-            Thread.sleep(DELAY);
-            daemon.stop();
-            Thread.sleep(DELAY);
-            daemon.stop();
-            Thread.sleep(DELAY);
-            assertNotNull(whiteboard.get("started"));
-            assertNotNull(whiteboard.get("interrupted"));
-            assertNotNull(whiteboard.get("cleaned up"));
-        }
-    }
-
-    public void testNoCleanup()
-        throws Exception
-    {
-        synchronized(whiteboard)
-        {
-            Task task = new LongRunningTask();
-            int priority = Thread.NORM_PRIORITY;
-            ThreadGroup threadGroup = new ThreadGroup("Test group");
-            Context context = new Context();
-            whiteboard.clear();
-            Valve cleanup = null;
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
-            Thread.sleep(DELAY);
-            daemon.stop();
-            Thread.sleep(DELAY);
-            assertNotNull(whiteboard.get("started"));
-            assertNotNull(whiteboard.get("interrupted"));
-            assertNull(whiteboard.get("cleaned up"));
-        }
-    }
-
     public void testFailedCleanup()
         throws Exception
     {
@@ -226,15 +187,19 @@ public class DaemonTest extends TestCase
             Context context = new Context();
             whiteboard.clear();
             Valve cleanup = new FailingCleanupValve();
-            Daemon daemon = new Daemon(task, priority, threadGroup, log, context, cleanup);
+            Worker worker = new Worker("testFailedCleanup", priority, 
+                null, threadGroup, log, context, cleanup);
+            worker.dispatch(task);
             Thread.sleep(DELAY);
-            daemon.stop();
+            worker.stop();
             Thread.sleep(DELAY);
             assertNotNull(whiteboard.get("started"));
             assertNotNull(whiteboard.get("interrupted"));
             assertNull(whiteboard.get("cleaned up"));
         }
     }
+    
+    // tasks & cleanup valves ///////////////////////////////////////////////////////////////////
 
     private class LongRunningTask
         extends Task
