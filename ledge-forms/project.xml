@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.1 2005-01-27 02:12:50 pablo Exp $ -->
+<!-- $Id: project.xml,v 1.2 2005-01-27 04:50:44 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -68,12 +68,6 @@
   </build>
   
   <dependencies>
-    <dependency>
-      <groupId>cyklotron</groupId>
-      <artifactId>ledge-cyklotron</artifactId>
-      <version>SNAPSHOT</version>
-      <url>http://coral.objectledge.org/modules/coral-api/</url>
-    </dependency>
     <dependency>
       <groupId>coral</groupId>
       <artifactId>coral-api</artifactId>
