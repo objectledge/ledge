@@ -71,6 +71,7 @@
       <component-parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
     </sequence-parameter>
   </component>      
+  <component class="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
 
   <!-- // pipeline //////////////////////////////////////////////////////////////////////// -->
     
