@@ -2,7 +2,7 @@
   Core set of macros.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: Framework.vt,v 1.3 2005-03-23 12:37:45 zwierzem Exp $
+  @version $Id: Framework.vt,v 1.4 2005-03-23 13:41:54 zwierzem Exp $
 *#
 #**
   Starts form processing.
@@ -45,7 +45,7 @@ function formtool_dispatch_event(formName, buttonName)
 ##
 #set($instance = $inputInstance)
 #set($formtool_form_id = $instance.getForm().getId())
-#set($formtool_form_i18n = $i18n.usePrefix($instance.getForm().getDefinitionURI()))
+#set($formtool_form_i18n = $i18n.usePrefix($instance.getForm().getId()))
 #set($treeDepth = 1)
 #set($form_page = $form.getPage($instance))
 ##

@@ -25,7 +25,7 @@ import pl.caltha.services.xml.XMLService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsServiceImpl.java,v 1.6 2005-03-24 06:33:45 zwierzem Exp $
+ * @version $Id: FormsServiceImpl.java,v 1.7 2005-03-23 13:41:55 zwierzem Exp $
  */
 public class FormsServiceImpl 
 implements FormsService
@@ -141,7 +141,8 @@ implements FormsService
             {
                 // WARN: This is the place in which we create formId's.
                 // FormId's need to be compliant with XML ID strings
-                String formId = formDefinitionURI.replace('/',':');
+                char o = '-';
+                String formId = formDefinitionURI.replace('/',o).replace(':',o).replace('.',o);
 
                 // create form
                 form = buildForm(formDefinitionURI, formId);
@@ -357,7 +358,7 @@ implements FormsService
     /** FormData is a container for storing form Instances in users session.
      *
      * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-     * @version $Id: FormsServiceImpl.java,v 1.6 2005-03-24 06:33:45 zwierzem Exp $
+     * @version $Id: FormsServiceImpl.java,v 1.7 2005-03-23 13:41:55 zwierzem Exp $
      */
     public class FormData
     {
