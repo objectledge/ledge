@@ -64,15 +64,15 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.21 2005-02-21 13:51:22 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.22 2005-03-03 16:30:17 zwierzem Exp $
  */
 public class LinkTool
 {
 	/** utf encoding. */
 	public static final String PARAMETER_ENCODING = "UTF-8";
 	
-    /** query string parameter values encoder. */
-    private static final org.objectledge.encodings.URLEncoder QUERY_STRING_ENCODER =
+    /** query string parameter values and content paths encoder. */
+    private static final org.objectledge.encodings.URLEncoder URL_ENCODER =
         new org.objectledge.encodings.URLEncoder();
     
     /** configuration. */
@@ -803,7 +803,7 @@ public class LinkTool
             {
                 sb.append('/');
             }
-            sb.append(QUERY_STRING_ENCODER.encodeQueryStringValue(pathTmp, PARAMETER_ENCODING));
+            sb.append(URL_ENCODER.encodeContentPath(pathTmp, PARAMETER_ENCODING));
         }
     }
     
@@ -906,7 +906,7 @@ public class LinkTool
                     
                     sb.append(URLEncoder.encode(key, PARAMETER_ENCODING));
                     sb.append('=');
-                    sb.append(QUERY_STRING_ENCODER
+                    sb.append(URL_ENCODER
                         .encodeQueryStringValue(values[j], PARAMETER_ENCODING));
 
                     querySeparator = querySeparator2;
