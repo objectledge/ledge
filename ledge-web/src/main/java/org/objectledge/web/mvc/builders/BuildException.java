@@ -25,13 +25,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.web.mvc;
+package org.objectledge.web.mvc.builders;
 
 /**
  *
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildException.java,v 1.2 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: BuildException.java,v 1.1 2004-01-15 09:40:28 fil Exp $
  */
 ///CLOVER:OFF
 public class BuildException extends Exception

@@ -31,13 +31,12 @@ import org.objectledge.context.Context;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.BuildException;
 
 /**
  * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.2 2004-01-14 14:13:10 fil Exp $
+ * @version $Id: AbstractBuilder.java,v 1.3 2004-01-15 09:40:28 fil Exp $
  */
 public abstract class AbstractBuilder implements Builder
 {

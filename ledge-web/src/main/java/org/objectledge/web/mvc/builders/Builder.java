@@ -28,13 +28,12 @@
 package org.objectledge.web.mvc.builders;
 
 import org.objectledge.templating.Template;
-import org.objectledge.web.mvc.BuildException;
 
 /**
  * Builder of a single view element.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.1 2003-12-30 14:41:37 zwierzem Exp $
+ * @version $Id: Builder.java,v 1.2 2004-01-15 09:40:28 fil Exp $
  */
 ///CLOVER:OFF
 public interface Builder
