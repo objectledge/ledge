@@ -10,7 +10,6 @@
     
     <component class="org.objectledge.xml.XMLValidator"/>
 
-    <container key="org.objectledge.configuration.ConfigurationFactory.container"/>
     <component class="org.objectledge.configuration.ConfigurationFactory">
       <component-parameter/>
       <component-parameter/>
@@ -18,17 +17,12 @@
     </component>
     <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
       <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
-      <component-parameter key="org.objectledge.configuration.ConfigurationFactory.container"/>
       <component-parameter class-key="org.objectledge.configuration.ConfigurationFactory"/>
     </component-adapter>
     
-    <container key="org.objectledge.logging.LoggerFactory.container"/>
-    <component class="org.objectledge.logging.LoggerFactory">
-      <component-parameter key="org.objectledge.logging.LoggerFactory.container"/>
-    </component>
+    <component class="org.objectledge.logging.LoggerFactory"/>
     <component-adapter class="org.objectledge.pico.customization.CustomizedComponentAdapter">
       <constant-parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
-      <component-parameter key="org.objectledge.logging.LoggerFactory.container"/>
       <component-parameter class-key="org.objectledge.logging.LoggerFactory"/>
     </component-adapter>
 
