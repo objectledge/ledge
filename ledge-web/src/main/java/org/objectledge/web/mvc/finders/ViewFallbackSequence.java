@@ -110,7 +110,7 @@ import java.util.StringTokenizer;
  * </p>
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ViewFallbackSequence.java,v 1.7 2005-02-16 18:39:32 rafal Exp $
+ * @version $Id: ViewFallbackSequence.java,v 1.8 2005-02-21 13:51:17 zwierzem Exp $
  */
 public class ViewFallbackSequence
     implements Sequence
@@ -121,9 +121,9 @@ public class ViewFallbackSequence
     
     private int position; 
     
-    private StringBuffer buff = new StringBuffer();
+    private StringBuilder buff = new StringBuilder();
     
-    private StringBuffer buff2 = new StringBuffer();
+    private StringBuilder buff2 = new StringBuilder();
     
     private char inSeparator;
     

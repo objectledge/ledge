@@ -15,7 +15,7 @@ import pl.caltha.services.xml.XMLDataReader;
  * Base class for XML builders.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.3 2005-02-10 17:49:42 rafal Exp $
+ * @version $Id: AbstractBuilder.java,v 1.4 2005-02-21 13:54:18 zwierzem Exp $
  */
 public abstract class AbstractBuilder 
     extends DefaultHandler
@@ -30,7 +30,7 @@ public abstract class AbstractBuilder
     /** Messages prefix, should be overriden. */
     protected String MSG_PREFIX = "";
 
-    protected java.lang.StringBuffer buffer;
+    protected java.lang.StringBuilder buffer;
     protected Stack context;
 
     public AbstractBuilder(String acceptedNamespace, String schemaURI)
@@ -38,7 +38,7 @@ public abstract class AbstractBuilder
         this.acceptedNamespace = acceptedNamespace;
         this.schemaURI = schemaURI;
 
-        buffer = new StringBuffer(111);
+        buffer = new StringBuilder(111);
         context = new Stack();
     }
 
@@ -77,7 +77,7 @@ public abstract class AbstractBuilder
 
     protected String getPathFromElementStack()
     {
-        StringBuffer sb = new StringBuffer(24);
+        StringBuilder sb = new StringBuilder(24);
         for(java.util.Iterator iter = context.iterator(); iter.hasNext();)
         {
             // {qName, new org.xml.sax.helpers.AttributesImpl(atts)}

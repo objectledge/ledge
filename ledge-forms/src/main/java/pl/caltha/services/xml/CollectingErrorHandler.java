@@ -11,7 +11,7 @@ import org.xml.sax.SAXParseException;
  * after calling {@link #init()}.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: CollectingErrorHandler.java,v 1.2 2005-02-10 17:50:27 rafal Exp $
+ * @version $Id: CollectingErrorHandler.java,v 1.3 2005-02-21 13:54:21 zwierzem Exp $
  */
 public class CollectingErrorHandler extends BaseErrorHandler
 {
@@ -121,7 +121,7 @@ public class CollectingErrorHandler extends BaseErrorHandler
 
     protected String dumpErrorsOrWarnings(List collection)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(java.util.Iterator iter = collection.iterator(); iter.hasNext();)
         {
             sb.append(iter.next().toString());
@@ -156,7 +156,7 @@ public class CollectingErrorHandler extends BaseErrorHandler
          */
         public String toString()
         {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(line);
             sb.append(':');
             sb.append(column);

@@ -15,7 +15,7 @@ import pl.caltha.services.xml.CollectingErrorHandler;
  * ErrorHandler that collects all errors.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DOM4JValidationErrorCollector.java,v 1.2 2005-02-10 17:46:50 rafal Exp $
+ * @version $Id: DOM4JValidationErrorCollector.java,v 1.3 2005-02-21 13:54:24 zwierzem Exp $
  */
 public class DOM4JValidationErrorCollector
      extends CollectingErrorHandler
@@ -203,7 +203,7 @@ implements DOM4JContentHandler, ExtendedContentHandler
 
     public String dumpErrorsOrWarnings(Map map)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(java.util.Iterator iter = map.keySet().iterator(); iter.hasNext();)
         {
             Node node = (Node)(iter.next());

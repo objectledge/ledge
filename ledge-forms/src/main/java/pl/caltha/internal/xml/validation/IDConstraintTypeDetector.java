@@ -42,7 +42,7 @@ import com.sun.msv.verifier.regexp.SimpleAcceptor;
 public class IDConstraintTypeDetector extends IDConstraintChecker {
 
     /** characters that were read (but not processed)  */
-    private StringBuffer text = new StringBuffer();
+    private StringBuilder text = new StringBuilder();
 
     protected TypedContentHandler handler;
     
@@ -86,7 +86,7 @@ public class IDConstraintTypeDetector extends IDConstraintChecker {
             // characters are validated. report to the handler.
             reportCharacterChunks( txt, characterType.types );
 
-            text = new StringBuffer();
+            text = new StringBuilder();
         }
     }
 

@@ -16,7 +16,7 @@ import pl.caltha.services.xml.validation.DOM4JValidator;
  * Container for user form data.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: InstanceImpl.java,v 1.3 2005-02-08 20:33:32 rafal Exp $
+ * @version $Id: InstanceImpl.java,v 1.4 2005-02-21 13:54:29 zwierzem Exp $
  */
 public class InstanceImpl extends AbstractInstance
     implements Instance, java.io.Serializable
@@ -60,7 +60,7 @@ public class InstanceImpl extends AbstractInstance
     protected HashMap bindPropertyCache = new HashMap();
 
     /** Value cache buffer is used for instance in Select controls. */
-    private StringBuffer valueCacheBuffer = new StringBuffer(1024);
+    private StringBuilder valueCacheBuffer = new StringBuilder(1024);
 
     /** Creates Instance from a given DOM4J Document and UI.
      */
@@ -224,7 +224,7 @@ public class InstanceImpl extends AbstractInstance
     // Value cache buffer access
     /** This method is used while setting the value for this instance, it marks
      * the instance dirty. */
-    public StringBuffer getValueBuffer()
+    public StringBuilder getValueBuffer()
     {
         this.isDirty = true;
 

@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.6 2005-02-08 19:11:31 rafal Exp $
+ * @version $Id: UserAgentTool.java,v 1.7 2005-02-21 13:51:22 zwierzem Exp $
  */
 public class UserAgentTool
 {
@@ -316,7 +316,7 @@ public class UserAgentTool
                 int i = 0;
                 while(i < version.length())
                 {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     while(i < version.length())
                     {
                         if(Character.isDigit(version.charAt(i)))

@@ -29,7 +29,7 @@ import com.sun.msv.verifier.identity.IDConstraintChecker;
 public class ExtendedVerifier extends IDConstraintChecker {
 
     /** characters that were read (but not processed)  */
-    private StringBuffer text = new StringBuffer();
+    private StringBuilder text = new StringBuilder();
 
     protected ExtendedContentHandler handler;
 

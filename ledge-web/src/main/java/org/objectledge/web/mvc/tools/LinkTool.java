@@ -64,7 +64,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.20 2005-01-13 15:10:56 rafal Exp $
+ * @version $Id: LinkTool.java,v 1.21 2005-02-21 13:51:22 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -121,7 +121,7 @@ public class LinkTool
 	private Parameters parameters;
     
 	/** the string buffer */
-	private StringBuffer sb;
+	private StringBuilder sb;
 	
 	/** 
 	 * Component constructor.
@@ -667,7 +667,7 @@ public class LinkTool
         }
         else
         {
-            sb = new StringBuffer();
+            sb = new StringBuilder();
         }
 
         try
@@ -728,7 +728,7 @@ public class LinkTool
         return parameters;
     }
     
-    private void appendServerPart(StringBuffer sb)
+    private void appendServerPart(StringBuilder sb)
     {
         if (showProtocolName)
         {
@@ -793,7 +793,7 @@ public class LinkTool
     }
     
     
-    private void appendContentLink(StringBuffer sb)
+    private void appendContentLink(StringBuilder sb)
         throws UnsupportedEncodingException
     {
         final String pathTmp = getPath();
@@ -817,7 +817,7 @@ public class LinkTool
         return path;
     }
 
-    private void appendPathInfo(StringBuffer sb, String[] keys, Parameters parametersTmp)
+    private void appendPathInfo(StringBuilder sb, String[] keys, Parameters parametersTmp)
         throws UnsupportedEncodingException
     {
         String outView = getView(); 
@@ -856,7 +856,7 @@ public class LinkTool
         return view;
     }
 
-    private void appendPathInfoSuffix(StringBuffer sb)
+    private void appendPathInfoSuffix(StringBuilder sb)
         throws UnsupportedEncodingException
     {
         final String pathInfoSuffixTmp = getPathInfoSuffix();
@@ -880,7 +880,7 @@ public class LinkTool
         return pathInfoSuffix;
     }
     
-    private void appendQueryString(StringBuffer sb, String[] keys, Parameters parametersTmp)
+    private void appendQueryString(StringBuilder sb, String[] keys, Parameters parametersTmp)
         throws UnsupportedEncodingException
     {
         String querySeparator = "?";

@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.9 2005-02-02 22:25:15 pablo Exp $
+ * @version $Id: StringTool.java,v 1.10 2005-02-21 13:51:22 zwierzem Exp $
  */
 public class StringTool
 {
@@ -56,7 +56,7 @@ public class StringTool
     {
         if(str.length() > maxLength)
         {
-            StringBuffer buf = new StringBuffer(str);
+            StringBuilder buf = new StringBuilder(str);
             buf.setLength(maxLength-1);
             buf.append('\u2026'); // the ellipsis character - ie. 3 dots ...
             return buf.toString();

@@ -15,7 +15,7 @@ import pl.caltha.forms.internal.util.Util;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UI.java,v 1.3 2005-02-08 20:33:30 rafal Exp $
+ * @version $Id: UI.java,v 1.4 2005-02-21 13:54:26 zwierzem Exp $
  */
 public class UI
 {
@@ -177,7 +177,7 @@ public class UI
             String valueFlat = null;
 
             // WARN: this call is very important - it makes the instance dirty.
-            StringBuffer value = instance.getValueBuffer();
+            StringBuilder value = instance.getValueBuffer();
 
             // Because there can be many values for one control name -
             // for instance for select fields (select and checkboxes)

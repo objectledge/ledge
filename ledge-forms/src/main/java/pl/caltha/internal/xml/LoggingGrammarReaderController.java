@@ -12,7 +12,7 @@ import com.sun.msv.reader.GrammarReaderController;
  * GrammarReaderController that logs all errors and warnings.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: LoggingGrammarReaderController.java,v 1.1 2005-01-20 16:44:47 pablo Exp $
+ * @version $Id: LoggingGrammarReaderController.java,v 1.2 2005-02-21 13:54:34 zwierzem Exp $
  */
 public class LoggingGrammarReaderController implements GrammarReaderController
 {
@@ -23,7 +23,7 @@ public class LoggingGrammarReaderController implements GrammarReaderController
     private Logger log;
 
     /** Used to compose information of location of errors and warnings. */
-    private StringBuffer locationMessage = new StringBuffer(64);
+    private StringBuilder locationMessage = new StringBuilder(64);
 
     public LoggingGrammarReaderController(Logger log, EntityResolver entityResolver)
     {

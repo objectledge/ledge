@@ -39,7 +39,7 @@ import java.util.Set;
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.8 2005-01-28 01:37:18 rafal Exp $
+ * @version $Id: PageTool.java,v 1.9 2005-02-21 13:51:22 zwierzem Exp $
  */
 public class PageTool
 {
@@ -47,7 +47,7 @@ public class PageTool
     // Page data fields
 
     /** Represents contents of title header tag. */
-    private StringBuffer title = new StringBuffer(100);
+    private StringBuilder title = new StringBuilder(100);
 
     /** Contains {@link StyleLink} objects. */
     protected ArrayList styleLinks = new ArrayList();
