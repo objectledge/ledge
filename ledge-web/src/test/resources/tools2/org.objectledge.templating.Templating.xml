@@ -28,10 +28,9 @@
 --> 
 
 <config>
-  <sticky>
-    <key>foo</key>
-  </sticky>
-  <pathinfo>
-    <key>bar</key>
-  </pathinfo>
+  <extension>.vt</extension>
+  <encoding>ISO-8859-2</encoding>
+  <paths>
+    <path>/templates/</path>
+  </paths>
 </config>

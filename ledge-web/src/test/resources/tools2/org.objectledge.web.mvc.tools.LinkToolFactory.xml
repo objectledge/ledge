@@ -28,10 +28,4 @@
 --> 
 
 <config>
-  <sticky>
-    <key>foo</key>
-  </sticky>
-  <pathinfo>
-    <key>bar</key>
-  </pathinfo>
 </config>
