@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.6 2004-06-30 10:07:37 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.7 2004-06-30 11:10:23 zwierzem Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
@@ -62,7 +62,6 @@ public class RequestParameters extends DefaultParameters
      * Create the parameter container with parameters found in http request.
      *
      * @param request the request
-     * @param encoding the encoding
      * @throws IllegalArgumentException if illegal escape sequences appears.
      */
     public RequestParameters(HttpServletRequest request)
