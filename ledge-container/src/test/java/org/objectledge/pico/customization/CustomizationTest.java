@@ -56,7 +56,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizationTest.java,v 1.18 2004-06-28 10:08:40 fil Exp $
+ * @version $Id: CustomizationTest.java,v 1.19 2005-02-04 02:29:34 rafal Exp $
  */
 public class CustomizationTest extends TestCase
 {
@@ -91,20 +91,20 @@ public class CustomizationTest extends TestCase
                 new ComponentParameter(FileSystem.class),
                 new ComponentParameter(XMLValidator.class),
                 new ConstantParameter("config")
-            }).getComponentInstance();
+            }).getComponentInstance(container);
         container.registerComponentImplementation(CustomizedConfigurationProvider.class,
             CustomizedConfigurationProvider.class);    
         ComponentAdapter adapter = new CustomizedComponentAdapter(
             Configuration.class, 
             (CustomizedComponentProvider)container.
                 getComponentInstance(CustomizedConfigurationProvider.class));
-        adapter.verify();
+        adapter.verify(container);
         container.registerComponent(adapter);
         container.registerComponentImplementation(LoggingConfigurator.class, 
-            LoggingConfigurator.class).getComponentInstance();
+            LoggingConfigurator.class).getComponentInstance(container);
             
         container.registerComponentImplementation(LoggerFactory.class, LoggerFactory.class).
-            getComponentInstance();
+            getComponentInstance(container);
         container.registerComponent(new CustomizedComponentAdapter(
             Logger.class, 
             (CustomizedComponentProvider)container.
