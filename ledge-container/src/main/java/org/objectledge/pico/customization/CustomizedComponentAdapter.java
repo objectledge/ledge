@@ -22,7 +22,7 @@ import org.picocontainer.defaults.NoSatisfiableConstructorsException;
  * of the managed component, depending on the customizedComponentProvider's semantics.</p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentAdapter.java,v 1.5 2003-12-01 15:55:07 fil Exp $
+ * @version $Id: CustomizedComponentAdapter.java,v 1.6 2003-12-02 15:23:33 fil Exp $
  */
 public class CustomizedComponentAdapter
     implements ComponentAdapter
@@ -73,10 +73,10 @@ public class CustomizedComponentAdapter
         }
         else
         {
-            Object instance = customizedComponentProvider.
-                getCustomizedInsatnce(dependencyContainer, componentKey, componentImplementation);
-            customizedComponentContainer.registerComponentInstance(marker, instance);
-            return instance;
+            ComponentAdapter adapter = customizedComponentProvider.
+                getCustomizedAdapter(dependencyContainer, componentKey, componentImplementation);
+            customizedComponentContainer.registerComponent(adapter);
+            return adapter.getComponentInstance(dependencyContainer);
         }
     }
 

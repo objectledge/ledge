@@ -24,6 +24,7 @@ import org.picocontainer.PicoContainer;
 import org.picocontainer.PicoInitializationException;
 import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.defaults.DefaultPicoContainer;
+import org.picocontainer.defaults.InstanceComponentAdapter;
 import org.picocontainer.defaults.NoSatisfiableConstructorsException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -37,7 +38,7 @@ import com.thaiopensource.validate.Validator;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.7 2003-12-02 14:06:41 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.8 2003-12-02 15:23:58 fil Exp $
  */
 public class ConfigurationFactory
     implements CustomizedComponentProvider
@@ -109,7 +110,7 @@ public class ConfigurationFactory
         catch(Exception e)
         {
             throw new ComponentInitializationError("configuration file "+
-                path+" for compoenent "+name+" does not fullfill schema constraints", e);
+                path+" for component "+name+" does not fullfill schema constraints", e);
         }
         return configuration;
     }
@@ -119,11 +120,12 @@ public class ConfigurationFactory
     /**
      * {@inheritDoc}
      */
-    public Object getCustomizedInsatnce(MutablePicoContainer dependenciesContainer, 
+    public ComponentAdapter getCustomizedAdapter(MutablePicoContainer dependenciesContainer, 
         Object componentKey, Class componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException
     {
-        return getConfig(componentKey);
+        return new InstanceComponentAdapter(getComponentName(componentKey), 
+            getConfig(componentKey));
     }
 
     /**
