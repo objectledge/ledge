@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: project.xml,v 1.6 2003-12-18 16:09:47 fil Exp $ -->
+<!-- $Id: project.xml,v 1.7 2003-12-18 16:12:02 fil Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
 
@@ -15,7 +15,7 @@
   <package>org.objectledge</package>
   <issueTrackingUrl>http://objectledge.org/jira</issueTrackingUrl>
    
-  <url>http://dev.caltha.pl/wiki/ledge</url>
+  <url>http://objectledge.org/</url>
 
   <repository>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/ledge:${pom.artifactId}</developerConnection>
