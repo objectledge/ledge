@@ -58,6 +58,7 @@ import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
 
 /**
  * Validates XML files against schemata using Jing library.
+ * TODO: implement MSV based validator using XMLGrammarCache
  *
  * <p>The primary schema language used throughout ObjectLedge project is RelaxNG, but the Jing
  * library determines the schema languague using XML namespace of the top level element. At the
@@ -66,7 +67,7 @@ import com.thaiopensource.xml.sax.Jaxp11XMLReaderCreator;
  * 
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: XMLValidator.java,v 1.8 2004-01-14 10:43:02 fil Exp $
+ * @version $Id: XMLValidator.java,v 1.9 2004-05-12 10:19:10 zwierzem Exp $
  */
 public class XMLValidator
 {
@@ -101,6 +102,7 @@ public class XMLValidator
         properties = propertyMapBuilder.toPropertyMap();
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         parserFactory.setNamespaceAware(true);
+        parserFactory.setValidating(false);
         saxParser = parserFactory.newSAXParser();
     }
     
