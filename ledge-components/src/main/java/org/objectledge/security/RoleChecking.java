@@ -26,7 +26,7 @@
 //POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package org.objectledge.policy;
+package org.objectledge.security;
 
 import java.security.Principal;
 
@@ -37,7 +37,7 @@ import org.objectledge.authentication.UserUnknownException;
  * with the capability to check the roles of an user. 
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RoleChecking.java,v 1.1 2004-02-02 13:53:05 pablo Exp $
+ * @version $Id: RoleChecking.java,v 1.1 2004-02-28 13:39:12 pablo Exp $
  */
 public interface RoleChecking
 {
