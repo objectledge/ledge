@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<kupu:feature
+    name="body"
+    implementation="cyklotron2"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
+    >
+
+  <kupu:part name="body">
+<script type="text/javascript">
+//<![CDATA[
+
+// TODO: Create a one KUPU initialisation function for many kupu instances in forms (?)!!!
+addEventHandler(window, 'load', function() {
+    kupu = startKupu('$formtool_form_id', '$field.name');
+  });
+//]]>
+</script>
+      <kupu:define-slot name="body" />
+  </kupu:part>
+
+  <kupu:part name="fulleditor">
+    <div class="kupu-fulleditor">
+      <kupu:define-slot name="fulleditor" />
+    </div>
+  </kupu:part>
+
+  <kupu:part name="editorframe">
+    <div class="kupu-editorframe">
+      ## TODO: Add a proper link to a document with skin's CSS appended
+      <iframe class="kupu-editor" id="kupu-editor-$field.name"
+            frameborder="0"
+            src="$documentTemplateUrl"
+            scrolling="auto">
+      </iframe>
+      <textarea class="kupu-editor-textarea" id="kupu-editor-${field.name}-textarea" style="display: none"
+      >$!html_entity_encoder.encodeHTML($field.getValue($instance))</textarea>
+    </div>
+  </kupu:part>
+
+</kupu:feature>
