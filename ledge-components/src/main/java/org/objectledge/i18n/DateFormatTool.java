@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DateFormatTool.java,v 1.2 2004-09-17 13:13:53 rafal Exp $
+ * @version $Id: DateFormatTool.java,v 1.3 2004-11-04 12:33:58 zwierzem Exp $
  */
 public class DateFormatTool
 {
@@ -125,6 +125,10 @@ public class DateFormatTool
      */
     public String format(Date date)
     {
+        if(date == null)
+        {
+            return null;
+        }
         return format.format(date);
     }
 
@@ -135,7 +139,7 @@ public class DateFormatTool
      */
     public String format(long date)
     {
-        return format.format(new Date(date));
+        return format(new Date(date));
     }
 
     /**
@@ -175,9 +179,13 @@ public class DateFormatTool
      */
     public List getFields(Date date, TimeZone zone)
     {
+        ArrayList list = new ArrayList(7);
+        if(date == null)
+        {
+            return list; 
+        }
         Calendar cal = Calendar.getInstance(zone);
         cal.setTime(date);
-        ArrayList list = new ArrayList(7);
         list.add(new Integer(cal.get(Calendar.YEAR)));
         list.add(new Integer(cal.get(Calendar.MONTH)));
         list.add(new Integer(cal.get(Calendar.DAY_OF_MONTH)));
