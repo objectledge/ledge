@@ -39,7 +39,7 @@ import org.picocontainer.PicoVerificationException;
  * class.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: CustomizedComponentProvider.java,v 1.8 2004-02-17 15:50:29 fil Exp $
+ * @version $Id: CustomizedComponentProvider.java,v 1.9 2004-05-06 13:38:18 pablo Exp $
  */
 public interface CustomizedComponentProvider
 {
@@ -82,7 +82,7 @@ public interface CustomizedComponentProvider
      * Verifies if the customized component can be instantiated using the dependencies present
      * in the associated container.
      * 
-     * @throws NoSatisfiableConstructorsException if the container does not contain required
+     * @throws PicoVerificationException if the container does not contain required
      *         dependencies.
      */
     public void verify() 

@@ -38,7 +38,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.5 2004-02-28 13:41:20 pablo Exp $
+ * @version $Id: ComponentTool.java,v 1.6 2004-05-06 13:40:21 pablo Exp $
  */
 public class ComponentTool
 {
@@ -80,6 +80,7 @@ public class ComponentTool
 	 * @param componentName name of the component to be embedded.
 	 * @return contents of a rendered component
 	 * @throws BuildException on problems with component building
+     * @throws ProcessingException if processing fails.
 	 */
 	public String embed(String componentName) 
         throws BuildException, ProcessingException
