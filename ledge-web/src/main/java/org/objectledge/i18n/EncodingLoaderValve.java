@@ -28,77 +28,74 @@
 
 package org.objectledge.i18n;
 
-import java.security.Principal;
-import java.util.Locale;
-
 import javax.servlet.http.Cookie;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
-import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.WebConfigurator;
 
 /**
- * Pipeline processing valve that sets the locale.
+ * Pipeline processing valve that sets the encoding.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocaleLoaderValve.java,v 1.8 2004-08-20 15:58:58 zwierzem Exp $
+ * @version $Id: EncodingLoaderValve.java,v 1.1 2004-08-20 15:58:58 zwierzem Exp $
  */
-public class LocaleLoaderValve 
+public class EncodingLoaderValve 
     extends AbstractI18nValve
 {
-    private Logger logger;
-    private I18n i18n;
+	private Logger logger;
+    private WebConfigurator webConfigurator;
     
     /**
      * Constructor
      * 
      * @param logger the logger.
-     * @param i18n the i18n component.
+     * @param webConfigurator the web configurator component.
      */
-    public LocaleLoaderValve(Logger logger, I18n i18n)
+    public EncodingLoaderValve(Logger logger, WebConfigurator webConfigurator)
     {
         this.logger = logger;
-        this.i18n = i18n;
+        this.webConfigurator = webConfigurator;
     }
 
     /**
-     * Run the pipeline valve.
+     * Run the pipeline valve - authenticate user.
      * 
      * @param context the context.
      */
     public void process(Context context)
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
         String cookieKey = getCookieKeyBase(context);
-        String localeCookieKey = "locale" + cookieKey;
+        String encodingCookieKey = "encoding" + cookieKey + "." + i18nContext.getLocale().toString();
         boolean setInCookie = false;
         boolean setInSession = false;
 
-        // get locale from session
-        Locale locale = (Locale)httpContext.getSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY);
+        // get encoding from session
+        String encoding = (String) httpContext.getSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY);
         
-        // get locale from cookie
-        if (locale == null)
+        // get encoding from cookie
+        if (encoding == null)
         {
             setInSession = true;
-            Cookie localeCookie = getCookie(httpContext, localeCookieKey);
-            if (localeCookie == null)
+            Cookie encodingCookie = getCookie(httpContext, encodingCookieKey);
+            if (encodingCookie == null)
             {
                 setInCookie = true;
             }
             else
             {
-                if(localeCookie.getMaxAge() <= 60 * 24 * 3600) // less then 60 days left
+                if(encodingCookie.getMaxAge() <= 60 * 24 * 3600) // less then 60 days left
                 {
                     setInCookie = true;
                 }
                 
-                String localeString = localeCookie.getValue();
-                if(localeString == null)
+                String encodingString = encodingCookie.getValue();
+                if(encodingString == null)
                 {
                     setInCookie = true;
                 }
@@ -106,80 +103,37 @@ public class LocaleLoaderValve
                 {
                     try
                     {
-                        locale = StringUtils.getLocale(localeString);
+                        encoding = encodingString;
                     }
                     catch (IllegalArgumentException e)
                     {
                         setInCookie = true;
-                        logger.error("malformed " + localeCookieKey + " cookie '" + 
-                        			 localeString + "' received from client " +
-                        			 httpContext.getRequest().getRemoteAddr());
+                        logger.error("malformed " + encodingCookieKey + " cookie '" + 
+                                     encodingString + "' received from client " +
+                                     httpContext.getRequest().getRemoteAddr());
                     }
                 }
             }
         }
 
-        // get default locale
-        if (locale == null)
+        // get default encoding
+        if (encoding == null)
         {
             setInSession = true;
             setInCookie = true;
-            locale = i18n.getDefaultLocale();
+            encoding = webConfigurator.getDefaultEncoding();
         }
         
         if (setInCookie)
         {
-            setCookie(httpContext, localeCookieKey, locale.toString());
+            setCookie(httpContext, encodingCookieKey, encoding);
         }
 
         if (setInSession)
         {
-            httpContext.setSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY, locale);
+            httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, encoding);
         }
         
-        I18nContext i18nContext = new I18nContext(locale);
-        context.setAttribute(I18nContext.class, i18nContext);
-    }
-
-    protected String getCookieKeyBase(Context context)
-    {
-        AuthenticationContext authenticationContext =
-            AuthenticationContext.getAuthenticationContext(context);
-
-        // set up cookie keys - neccessary for browsers with multiple
-        // users on a single user system - for instance Win95/98
-        String cookieKey = ".anonymous";
-        Principal principal = authenticationContext.getUserPrincipal();
-        if (principal != null && principal.getName() != null)
-        {
-            cookieKey = "." + StringUtils.cookieNameSafeString(principal.getName());
-        }
-        return cookieKey;
-    }
-
-    protected Cookie getCookie(HttpContext httpContext, String cookieName)
-    {
-        String value = null;
-        Cookie[] cookies = httpContext.getRequest().getCookies();
-        if (cookies != null)
-        {
-            for (int i = 0; i < cookies.length; i++)
-            {
-                if (cookies[i].getName().equals(cookieName))
-                {
-                    return cookies[i];
-                }
-            }
-        }
-        return null;
-    }
-
-    protected void setCookie(HttpContext httpContext, String name, String value)
-    {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(3600 * 24 * 365);
-        cookie.setPath(httpContext.getRequest().getContextPath() + 
-                       httpContext.getRequest().getServletPath());
-        httpContext.getResponse().addCookie(cookie);
+        httpContext.setEncoding(encoding);
     }
 }

@@ -29,118 +29,29 @@
 package org.objectledge.i18n;
 
 import java.security.Principal;
-import java.util.Locale;
 
 import javax.servlet.http.Cookie;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 
 /**
- * Pipeline processing valve that sets the locale.
+ * Base i18n processing valve with utility methods.
  *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocaleLoaderValve.java,v 1.8 2004-08-20 15:58:58 zwierzem Exp $
+ * @version $Id: AbstractI18nValve.java,v 1.1 2004-08-20 15:58:58 zwierzem Exp $
  */
-public class LocaleLoaderValve 
-    extends AbstractI18nValve
+public abstract class AbstractI18nValve 
+    implements Valve
 {
-    private Logger logger;
-    private I18n i18n;
-    
     /**
-     * Constructor
-     * 
-     * @param logger the logger.
-     * @param i18n the i18n component.
+     * Creates a base name of the cookie.
+     * @param context
+     * @return
      */
-    public LocaleLoaderValve(Logger logger, I18n i18n)
-    {
-        this.logger = logger;
-        this.i18n = i18n;
-    }
-
-    /**
-     * Run the pipeline valve.
-     * 
-     * @param context the context.
-     */
-    public void process(Context context)
-    {
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        String cookieKey = getCookieKeyBase(context);
-        String localeCookieKey = "locale" + cookieKey;
-        boolean setInCookie = false;
-        boolean setInSession = false;
-
-        // get locale from session
-        Locale locale = (Locale)httpContext.getSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY);
-        
-        // get locale from cookie
-        if (locale == null)
-        {
-            setInSession = true;
-            Cookie localeCookie = getCookie(httpContext, localeCookieKey);
-            if (localeCookie == null)
-            {
-                setInCookie = true;
-            }
-            else
-            {
-                if(localeCookie.getMaxAge() <= 60 * 24 * 3600) // less then 60 days left
-                {
-                    setInCookie = true;
-                }
-                
-                String localeString = localeCookie.getValue();
-                if(localeString == null)
-                {
-                    setInCookie = true;
-                }
-                else
-                {
-                    try
-                    {
-                        locale = StringUtils.getLocale(localeString);
-                    }
-                    catch (IllegalArgumentException e)
-                    {
-                        setInCookie = true;
-                        logger.error("malformed " + localeCookieKey + " cookie '" + 
-                        			 localeString + "' received from client " +
-                        			 httpContext.getRequest().getRemoteAddr());
-                    }
-                }
-            }
-        }
-
-        // get default locale
-        if (locale == null)
-        {
-            setInSession = true;
-            setInCookie = true;
-            locale = i18n.getDefaultLocale();
-        }
-        
-        if (setInCookie)
-        {
-            setCookie(httpContext, localeCookieKey, locale.toString());
-        }
-
-        if (setInSession)
-        {
-            httpContext.setSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY, locale);
-        }
-        
-        I18nContext i18nContext = new I18nContext(locale);
-        context.setAttribute(I18nContext.class, i18nContext);
-    }
-
     protected String getCookieKeyBase(Context context)
     {
         AuthenticationContext authenticationContext =
@@ -157,6 +68,12 @@ public class LocaleLoaderValve
         return cookieKey;
     }
 
+    /**
+     * Gets the cookie.
+     * @param httpContext
+     * @param cookieName
+     * @return
+     */
     protected Cookie getCookie(HttpContext httpContext, String cookieName)
     {
         String value = null;
@@ -174,6 +91,12 @@ public class LocaleLoaderValve
         return null;
     }
 
+    /**
+     * Sets the cookie for a year.
+     * @param httpContext
+     * @param name
+     * @param value
+     */
     protected void setCookie(HttpContext httpContext, String name, String value)
     {
         Cookie cookie = new Cookie(name, value);

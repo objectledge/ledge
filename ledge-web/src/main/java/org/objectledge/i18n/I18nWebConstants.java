@@ -28,60 +28,15 @@
 
 package org.objectledge.i18n;
 
-import java.util.Locale;
-
-import org.objectledge.context.Context;
-
 /**
- * The web context contains all needed information about mvc processing parameters.
- *
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nContext.java,v 1.2 2004-08-20 15:58:58 zwierzem Exp $
+ * The constants used by i18n web components 
  */
-public class I18nContext
+public interface I18nWebConstants
 {
-	/**
-	 *  Usefull method to retrieve http context from context.
-	 *
-	 * @param context the context.
-	 * @return the http context.
-	 */
-	public static I18nContext getI18nContext(Context context)
-	{
-		return (I18nContext)context.getAttribute(I18nContext.class);
-	}
-
-	/** the locale */
-	private Locale locale;
-
-	/**
-	 * Construct new pipeline context.
-     * 
-     * @param locale locale set for this context.
-	 */
-	public I18nContext(Locale locale)
-	{
-		this.locale = locale;
-	}
-	
-    /**
-     * Returns the locale.
-     *
-     * @return the locale
-     */
-	public Locale getLocale()
-	{
-		return locale;
-	}
-
-    /**
-     * Sets the locale.
-     *
-     * @param locale the locale.
-     */
-    public void setLocale(Locale locale)
-    {
-    	this.locale = locale;
-    }
+	/** Session key for the current locale. */
+	public static final String LOCALE_SESSION_KEY = "org.objectledge.web.Locale";
+    
+    /** Session key for the current encoding. */ 
+    public static final String ENCODING_SESSION_KEY = "org.objectledge.web.Encoding";
 }
+
