@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.12 2004-09-14 14:20:45 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.13 2004-09-15 10:07:31 zwierzem Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -112,7 +112,7 @@ public abstract class AbstractI18n implements I18n
 			    {
 			        defaultLocale = supportedLocales[i];
 			    }
-			    String localeName = locales[i].getAttribute(locales[i].getValue());
+			    String localeName = locales[i].getAttribute("name");
 			    localeNames.put(supportedLocales[i], localeName);
 			}
 			if(defaultLocale == null && supportedLocales.length > 0)
