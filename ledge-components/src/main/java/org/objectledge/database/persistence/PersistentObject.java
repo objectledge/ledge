@@ -31,7 +31,7 @@ package org.objectledge.database.persistence;
  * Implemented by objects that are made persistent using a relational
  * database.
  *
- * @version $Id: PersistentObject.java,v 1.1 2004-02-23 09:05:20 fil Exp $
+ * @version $Id: PersistentObject.java,v 1.2 2004-02-23 14:22:04 fil Exp $
  * @author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
  */
 public abstract class PersistentObject
@@ -45,51 +45,29 @@ public abstract class PersistentObject
     // Persistent interface //////////////////////////////////////////////////
 
     /**
-     * Returns the name of the table this type is mapped to.
-     *
-     * @return the name of the table.
+     * {@inheritDoc}
      */
     public abstract String getTable();
 
-    /** 
-     * Returns the names of the key columns.
-     *
-     * @return the names of the key columns.
+    /**
+     * {@inheritDoc}
      */
     public abstract String[] getKeyColumns();
 
     /**
-     * Stores the fields of the object into the specified record.
-     *
-     * <p>You need to call <code>getData</code> of your superclasses if they
-     * are <code>Persistent</code>.</p>
-     *
-     * @param record the record to store state into.
-     * @throws PersistenceException if there is a problem stroing field values.
+     * {@inheritDoc}
      */
     public abstract void getData(OutputRecord record)
         throws PersistenceException;
     
     /**
-     * Loads the fields of the object from the specified record.
-     *
-     * <p>You need to call <code>setData</code> of your superclasses if they
-     * are <code>Persistent</code>.</p>
-     * 
-     * @param record the record to read state from.
-     * @throws PersistenceException if there is a problem loading field values.
+     * {@inheritDoc}
      */
     public abstract void setData(InputRecord record)
         throws PersistenceException;
     
     /**
-     * Returns the 'saved' flag for the object.
-     *
-     * <p>The flag is off for objects that haven't been saved in the db yet,
-     * thus need <code>INSERT</code> statemets, and on for object that have
-     * already been saved, thus need <code>UPDATE</code> statements.</p>
-     *
-     * @return the state of 'saved' flag.
+     * {@inheritDoc}
      */
     public boolean getSaved()
     {
@@ -97,15 +75,7 @@ public abstract class PersistentObject
     }
     
     /**
-     * Sets the 'saved' flag for the object.
-     *
-     * <p>The id generation will take place only for objects that declare a
-     * single column primary key. Othre objects will receive a <code>-1</code>
-     * as the <code>id</code> parameter. After this call is made on an object,
-     * subsequent calls to {@link #getSaved()} on the same object should
-     * return true.</p> 
-     *
-     * @param id The generated value of the primary key.
+     * {@inheritDoc}
      */
     public void setSaved(long id)
     {
