@@ -42,7 +42,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.6 2004-08-19 15:40:34 zwierzem Exp $
+ * @version $Id: AbstractI18n.java,v 1.7 2004-08-24 12:44:14 pablo Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -76,6 +76,9 @@ public abstract class AbstractI18n implements I18n
 	/** the localization bundles map */
 	protected Map localeMap;
 	
+	/** supported locale */
+	protected Locale[] supportedLocale;
+	
 	/**
 	 * Component constructor.
 	 *
@@ -93,6 +96,9 @@ public abstract class AbstractI18n implements I18n
 		useKeyIfUndefined = config.getChild("use_key_if_undefined").
 			getValueAsBoolean(DEFAULT_USE_KEY_IF_UNDEFINED);
 		localeMap = new HashMap();
+
+	    //TODO add configuration here
+		supportedLocale =  new Locale[]{new Locale("pl","PL"), new Locale("en", "US")};
 	}
 	
 	/**
@@ -103,6 +109,14 @@ public abstract class AbstractI18n implements I18n
 		return defaultLocale;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Locale[] getSupportedLocale()
+	{
+	    return supportedLocale;
+	}
+	
     /**
      * {@inheritDoc}
      */

@@ -35,7 +35,7 @@ import java.util.Locale;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18n.java,v 1.5 2004-06-17 11:59:28 zwierzem Exp $
+ * @version $Id: I18n.java,v 1.6 2004-08-24 12:44:14 pablo Exp $
  */
 public interface I18n
 {
@@ -45,6 +45,13 @@ public interface I18n
 	 * @return the default locale object. 
 	 */
 	public Locale getDefaultLocale();
+	
+	/** 
+	 * Returns configured locales.
+	 * 
+	 * @return an array of defined locale. 
+	 */
+	public Locale[] getSupportedLocale();
 	
 	/** 
 	 * Get the string value.
