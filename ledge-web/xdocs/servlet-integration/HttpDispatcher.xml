@@ -20,6 +20,24 @@
           </ul>
         </p>
       </subsection>
+      
+      <subsection name="Implementations">
+        <p>
+          <ul>
+            <li>
+              <p>HttpMethodDispatcher is a directs the requests to other dispatchers, depending on 
+              HTTP method used in the request.</p>
+              <p class="more"><a href="dispatcher/HttpMethodDispatcher.html">more</a></p>
+            </li>
+            <li>
+              <p>StaticHttpDispatcher returns hard coded responses for URLs matching a regular expression.
+              Status code, content type and response body text can be configured.</p>
+              <p class="more"><a href="dispatcher/StaticHttpDispatcher.html">more</a></p>
+            </li>
+          </ul>
+        </p>
+      </subsection>
+      
     </section>
   </body>
 </document>
