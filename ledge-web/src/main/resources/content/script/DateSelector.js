@@ -1,7 +1,7 @@
 /**
  * Date selector support.
  *
- * @author <a href="mailto:rkrzewsk@ngo.pl">Rafa³ Krzewski</a>
+ * @author <a href="mailto:rkrzewsk@ngo.pl">Rafaï¿½ Krzewski</a>
  * @version $Id: DateSelector.js,v 1.3 2003/08/08 12:45:56 rkrzewsk Exp $
  */
 
@@ -18,7 +18,7 @@ function initDays(selectedTime)
         s = '    <option value=\''+date.getDate()+'\'';
         if(date.getDate() == selected.getDate())
         {
-            s += ' selected';
+            s += ' selected="selected"';
         }
         s += '>'+date.getDate()+'</option>\n';
 
@@ -81,11 +81,11 @@ function dateElementChanged(element)
     var dateElem = form.elements[base];
     var hourElem = form.elements[base+'_hour'];
     var minuteElem = form.elements[base+'_minute'];
-    var year = yearElem.options[yearElem.selectedIndex].value;
-    var month = monthElem.options[monthElem.selectedIndex].value;
-    var day = dayElem.options[dayElem.selectedIndex].value;
-    var hour = hourElem.options[hourElem.selectedIndex].value;
-    var minute = minuteElem.options[minuteElem.selectedIndex].value;
+    var year = yearElem.value;
+    var month = monthElem.value;
+    var day = dayElem.value;
+    var hour = hourElem.value;
+    var minute = minuteElem.value;
 
     if(changed == 'month' || (changed == 'year' && month == 1))
     {
@@ -159,3 +159,57 @@ function dateEnabled(element)
         minuteElem.disabled = true;
     }
 }
+function dateToggleMaxMin(element)
+{
+    var i = element.name.lastIndexOf('_');
+    var base = element.name.substring(0,i);
+    var form = element.form;
+
+    var yearElem = form.elements[base+'_year'];
+    var monthElem = form.elements[base+'_month'];
+    var dayElem = form.elements[base+'_day'];
+    var hourElem = form.elements[base+'_hour'];
+    var minuteElem = form.elements[base+'_minute'];
+    var dateElem = form.elements[base];
+
+    var limes = element.options[element.selectedIndex].value;
+
+    var year = yearElem.options[yearElem.selectedIndex].value;
+    var month = monthElem.options[monthElem.selectedIndex].value;
+    var day = dayElem.options[dayElem.selectedIndex].value;
+    var hour = hourElem.options[hourElem.selectedIndex].value;
+    var minute = minuteElem.options[minuteElem.selectedIndex].value;
+    var selected = new Date(year, month, day, hour, minute, 0, 0);
+
+	if(limes != 'date')
+	{
+        yearElem.disabled = true;
+        monthElem.disabled = true;
+        dayElem.disabled = true;
+        hourElem.disabled = true;
+        minuteElem.disabled = true;
+	}
+	else
+	{
+        dateElem.value = selected.getTime();
+        yearElem.disabled = false;
+        monthElem.disabled = false;
+        dayElem.disabled = false;
+        hourElem.disabled = false;
+        minuteElem.disabled = false;
+	}
+
+	if(limes == '-')
+	{
+        dateElem.value = 0;
+	}
+	else if(limes == '+')
+	{
+        dateElem.value = 128849018820000; // 6053-01-23 03:07
+	}
+	else if(limes == 'disabled')
+	{
+        dateElem.value = '';
+	}
+}
+
