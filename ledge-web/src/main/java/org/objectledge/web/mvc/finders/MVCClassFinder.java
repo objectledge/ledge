@@ -33,7 +33,7 @@ import org.objectledge.web.mvc.builders.Builder;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.1 2004-01-15 09:27:05 fil Exp $
+ * @version $Id: MVCClassFinder.java,v 1.2 2004-01-15 12:07:55 fil Exp $
  */
 public interface MVCClassFinder
 {
@@ -70,5 +70,5 @@ public interface MVCClassFinder
 	 * @param clazz class to find MVC component name for
 	 * @return finder usable MVC compoment name
 	 */
-	public String findName(Class clazz);
+	public String findName(Builder builder);
 }
