@@ -23,7 +23,7 @@ import org.objectledge.threads.ThreadPool;
  * Fax manager implementation based on gnu.hylafax.* library.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: HylafaxManager.java,v 1.1 2004-06-28 15:37:55 pablo Exp $
+ * @version $Id: HylafaxManager.java,v 1.2 2005-02-09 22:02:13 rafal Exp $
  */
 public class HylafaxManager implements FaxManager
 {
@@ -213,7 +213,7 @@ public class HylafaxManager implements FaxManager
      * 
      * @throws FaxManagerException
      */
-    private synchronized void prepare() throws FaxManagerException
+    synchronized void prepare() throws FaxManagerException
     {
         if(!connected)
         {
@@ -256,7 +256,7 @@ public class HylafaxManager implements FaxManager
      * 
      * @throws FaxManagerException
      */
-    private synchronized void destroy() throws FaxManagerException
+    synchronized void destroy() throws FaxManagerException
     {
         if(connected)
         {

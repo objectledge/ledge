@@ -64,7 +64,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.4 2005-02-08 00:35:46 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.5 2005-02-09 22:02:27 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -161,7 +161,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.4 2005-02-08 00:35:46 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.5 2005-02-09 22:02:27 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -189,7 +189,7 @@ public class ThreadDataSource
 
     // implementation ///////////////////////////////////////////////////////////////////////////
 
-    private void trace(boolean enter, String user, int refCount)
+    void trace(boolean enter, String user, int refCount)
     {
         if(tracing > 0)
         {
@@ -225,7 +225,7 @@ public class ThreadDataSource
     /**
      * @param conn a new connection for the thread.
      */
-    private void setCachedConnection(Connection conn, String user)
+    void setCachedConnection(Connection conn, String user)
     {
         Map threadMap = (Map)context.getAttribute(THREAD_MAP);
         if(threadMap == null)
@@ -316,7 +316,7 @@ public class ThreadDataSource
      *
      * @param context thread's processing context.
      */
-    private static void cleanupState(Context context, Logger log)
+    static void cleanupState(Context context, Logger log)
     {
         Map threadMap = (Map)context.getAttribute(THREAD_MAP);
         if(threadMap != null)
@@ -359,14 +359,14 @@ public class ThreadDataSource
         
         private String user;
         
-        private ThreadConnection(Connection conn, String user)
+        ThreadConnection(Connection conn, String user)
         {
             super(conn);
             this.user = user;
             trace(true, user, refCount);
         }
         
-        private void enter()
+        void enter()
         {
             refCount++;
             trace(true, user, refCount);
@@ -387,7 +387,7 @@ public class ThreadDataSource
             }
         }
         
-        private void closeConnection()
+        void closeConnection()
             throws SQLException
         {
             getDelegate().close();

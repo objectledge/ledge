@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Helps dealing with transactions in the application code.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Transaction.java,v 1.9 2005-02-08 00:35:46 rafal Exp $
+ * @version $Id: Transaction.java,v 1.10 2005-02-09 22:02:27 rafal Exp $
  */
 public abstract class Transaction
 {
@@ -238,7 +238,7 @@ public abstract class Transaction
     
     // implementation ///////////////////////////////////////////////////////////////////////////
     
-    private void cleanupState(Context context, Logger log)
+    void cleanupState(Context context, Logger log)
     {
         try
         {

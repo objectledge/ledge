@@ -52,7 +52,7 @@ import org.objectledge.cache.spi.LRUMap;
  * implement than put() LRU ordering ;-)</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LRUMapImpl.java,v 1.3 2004-02-26 11:34:28 fil Exp $
+ * @version $Id: LRUMapImpl.java,v 1.4 2005-02-09 22:02:24 rafal Exp $
  */
 public class LRUMapImpl
     extends DelegateMap
@@ -241,7 +241,7 @@ public class LRUMapImpl
     /**
      * {@inheritDoc}
      */
-    private Iterator getValueIterator()
+    Iterator getValueIterator()
     {
         if(delegate.isEmpty())
         {
@@ -273,7 +273,7 @@ public class LRUMapImpl
     /**
      * {@inheritDoc}
      */
-    private Iterator getEntryIterator()
+    Iterator getEntryIterator()
     {
         if(delegate.isEmpty())
         {

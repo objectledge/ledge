@@ -50,7 +50,7 @@ import org.objectledge.cache.spi.SoftMap;
  * occur only if dangling link number exceeds a defined threshold.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SoftMapImpl.java,v 1.3 2004-02-26 11:34:28 fil Exp $
+ * @version $Id: SoftMapImpl.java,v 1.4 2005-02-09 22:02:24 rafal Exp $
  */
 public class SoftMapImpl
     extends DelegateMap
@@ -301,7 +301,7 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    private Iterator getValueIterator()
+    Iterator getValueIterator()
     {
         if(delegate.isEmpty())
         {
@@ -337,7 +337,7 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    private Iterator getEntryIterator()
+    Iterator getEntryIterator()
     {
         if(delegate.isEmpty())
         {
@@ -374,7 +374,7 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    private void protectValue(Object o)
+    void protectValue(Object o)
     {
         if(protect > 0)
         {
@@ -386,7 +386,7 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    private void unprotectValue(Object o)
+    void unprotectValue(Object o)
     {
         if(o != null && protect > 0)
         {
@@ -403,7 +403,7 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    private void unprotectAll()
+    void unprotectAll()
     {
         for(int i=0; i<protect; i++)
         {

@@ -333,7 +333,7 @@ public abstract class AbstractScheduler
      * 
      * @param job the job.
      */
-    private void schedule(AbstractJobDescriptor job)
+    void schedule(AbstractJobDescriptor job)
     {
         if(job.isEnabled())
         {
@@ -402,7 +402,7 @@ public abstract class AbstractScheduler
      * 
      * @param job the job.
      */
-    private void run(AbstractJobDescriptor job)
+    void run(AbstractJobDescriptor job)
     {
         synchronized(job)
         {
@@ -421,7 +421,7 @@ public abstract class AbstractScheduler
      * @return the job object.
      * @throws JobNotFoundException if job class not found.
      */
-    private Job getJobObject(AbstractJobDescriptor job)
+    Job getJobObject(AbstractJobDescriptor job)
         throws JobNotFoundException
     {
         String className = job.getJobClassName();

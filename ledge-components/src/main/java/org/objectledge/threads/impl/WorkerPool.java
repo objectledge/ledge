@@ -45,7 +45,7 @@ import org.picocontainer.Startable;
  * Manages a pool of worker threads.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerPool.java,v 1.6 2004-12-23 07:17:16 rafal Exp $
+ * @version $Id: WorkerPool.java,v 1.7 2005-02-09 22:02:33 rafal Exp $
  */
 public class WorkerPool
 {
@@ -129,7 +129,7 @@ public class WorkerPool
         }
     }
     
-    private Worker getWorker()
+    Worker getWorker()
         throws Exception
     {
         synchronized(workerSet)
@@ -143,7 +143,7 @@ public class WorkerPool
     /**
      * Stops the worker threads.
      */    
-    private void stop()
+    void stop()
     {
         synchronized(workerSet)
         {
