@@ -27,10 +27,12 @@
 // 
 package org.objectledge.web.mvc.builders;
 
-import junit.framework.TestCase;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jmock.Mock;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
@@ -39,6 +41,8 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityTemplating;
+import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
@@ -51,9 +55,10 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.14 2004-08-20 10:05:48 zwierzem Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.15 2004-10-13 11:16:32 rafal Exp $
  */
-public class BuilderExecutorValveTest extends TestCase
+public class BuilderExecutorValveTest 
+	extends LedgeTestCase
 {
     private Templating templating;
     
@@ -63,15 +68,6 @@ public class BuilderExecutorValveTest extends TestCase
     
     private BuilderExecutorValve executor;
     
-    /**
-     * Constructor for MVCFinderTest.
-     * @param arg0
-     */
-    public BuilderExecutorValveTest(String arg0)
-    {
-        super(arg0);
-    }
-
     public void setUp(String base)
         throws Exception
     {
@@ -95,8 +91,13 @@ public class BuilderExecutorValveTest extends TestCase
         context.clearAttributes();
         executor = new BuilderExecutorValve(context, finder, finder, securityHelper, 8, 8);
         mvcContext = new MVCContext();
+        Mock mockServletRequest = mock(HttpServletRequest.class);
+        Mock mockServletResponse = mock(HttpServletResponse.class);
+        HttpContext httpContext = new HttpContext((HttpServletRequest)mockServletRequest.proxy(), 
+            (HttpServletResponse)mockServletResponse.proxy());
         context.setAttribute(MVCContext.class, mvcContext);
         context.setAttribute(TemplatingContext.class, templating.createContext());
+        context.setAttribute(HttpContext.class, httpContext);
     }
     
     public void testEnclosure()
