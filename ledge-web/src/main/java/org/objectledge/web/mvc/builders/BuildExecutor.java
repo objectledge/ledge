@@ -31,7 +31,6 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.PipelineProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.BuildException;
 import org.objectledge.web.mvc.MVCClassFinder;
 import org.objectledge.web.mvc.MVCConstants;
@@ -42,7 +41,7 @@ import org.objectledge.web.mvc.TemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildExecutor.java,v 1.7 2004-01-12 15:52:10 fil Exp $
+ * @version $Id: BuildExecutor.java,v 1.8 2004-01-12 15:53:10 fil Exp $
  */
 public class BuildExecutor implements Runnable
 {
@@ -82,7 +81,6 @@ public class BuildExecutor implements Runnable
 	public void run()
 	{
 		// setup used contexts
-		HttpContext httpContext = HttpContext.retrieve(context);
 		MVCContext mvcContext = MVCContext.retrieve(context);
 		TemplatingContext templatingContext = (TemplatingContext)
 			context.getAttribute(TemplatingContext.CONTEXT_KEY);
