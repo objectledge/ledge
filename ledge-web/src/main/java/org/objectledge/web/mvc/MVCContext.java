@@ -38,22 +38,19 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.4 2004-01-13 15:48:39 pablo Exp $
+ * @version $Id: MVCContext.java,v 1.5 2004-01-14 14:12:51 fil Exp $
  */
 public class MVCContext
 {
-    /** key to store this context in thread context */
-    public static final String CONTEXT_KEY = "objectledge.web.pipeline_context";
-    
 	/**
 	 *  Usefull method to retrieve http context from context.
 	 *
 	 * @param context the context.
 	 * @return the http context.
 	 */
-	public static MVCContext retrieve(Context context)
+	public static MVCContext getMVCContext(Context context)
 	{
-		return (MVCContext)context.getAttribute(CONTEXT_KEY);
+		return (MVCContext)context.getAttribute(MVCContext.class);
 	}
 
 	/** the action parameter. */

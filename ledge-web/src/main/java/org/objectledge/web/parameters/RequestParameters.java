@@ -42,22 +42,19 @@ import org.objectledge.parameters.Parameters;
 /**
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.1 2004-01-12 14:28:08 fil Exp $
+ * @version $Id: RequestParameters.java,v 1.2 2004-01-14 14:12:15 fil Exp $
  */
 public class RequestParameters extends DefaultParameters
 {
-    /** The context key under wich the request parameters are stored. */
-	public static final String CONTEXT_KEY = "objectledge.web.parameters";
-
 	/**
 	 * Usefull method to retrieve parameters from context.
 	 *
 	 * @param context the context.
 	 * @return the request parameters.
 	 */
-	public static Parameters retrieve(Context context)
+	public static Parameters getRequestParameters(Context context)
 	{
-		return (Parameters)context.getAttribute(CONTEXT_KEY);
+		return (Parameters)context.getAttribute(RequestParameters.class);
 	}
 	
     /**

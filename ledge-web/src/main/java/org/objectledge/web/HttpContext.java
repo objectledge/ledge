@@ -44,22 +44,19 @@ import org.objectledge.context.Context;
  * The web context contains all needed information about http request.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.5 2004-01-14 13:01:04 fil Exp $
+ * @version $Id: HttpContext.java,v 1.6 2004-01-14 14:12:04 fil Exp $
  */
 public class HttpContext
 {
-    /** the key that points the http context is thread context. */ 
-    public static final String CONTEXT_KEY = "objectledge.web.http_context";
-
 	/**
 	 *  Usefull method to retrieve http context from context.
 	 *
 	 * @param context the context.
 	 * @return the http context.
 	 */
-	public static HttpContext retrieve(Context context)
+	public static HttpContext getHttpContext(Context context)
 	{
-		return (HttpContext)context.getAttribute(CONTEXT_KEY);
+		return (HttpContext)context.getAttribute(HttpContext.class);
 	}
 	
 	/** http request */
