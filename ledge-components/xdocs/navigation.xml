@@ -15,9 +15,10 @@
     <menu name="Reference">
 
       <item name="Components"            href="/components/index.html" collapse="true">
-        <item name="FileSystem"            href="/components/FileSystem.html"/>
-        <item name="Local FS provider"     href="/components/LocalFileSystemProvider.html"/>
-        <item name="Classpath FS provider" href="/components/ClasspathFileSystemProvider.html"/>
+        <item name="FileSystem"            href="/components/FileSystem.html" collapse="true">
+          <item name="Local provider"     href="/components/LocalFileSystemProvider.html"/>
+          <item name="Classpath provider" href="/components/ClasspathFileSystemProvider.html"/>
+        </item>
         <item name="XMLValidator"          href="/components/XMLValidator.html"/>
         <item name="Context"               href="/components/Context.html"/>
         <item name="Pipeline"			   href="/components/Pipeline.html"/>
