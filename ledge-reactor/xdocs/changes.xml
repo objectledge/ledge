@@ -183,7 +183,7 @@
       <action dev="fil" type="update" issue="LEDGE-95">
         changes.xml files were reorganized and filled in from jira.
       </action>
-      <action dev="fil" dev="add" issue="LEDGE-96">
+      <action dev="fil" action="add" issue="LEDGE-96">
         New module ledge-lgpl was introduced to hold code that has compile time dependencies
         on LGPL licensed libraries.
       </action>
