@@ -28,10 +28,10 @@
 package org.objectledge.web.mvc.builders;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.PipelineProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.PipelineProcessingException;
 import org.objectledge.web.mvc.BuildException;
 import org.objectledge.web.mvc.MVCClassFinder;
 import org.objectledge.web.mvc.MVCConstants;
@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.TemplateFinder;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuildExecutor.java,v 1.5 2004-01-12 14:46:49 fil Exp $
+ * @version $Id: BuildExecutor.java,v 1.6 2004-01-12 15:00:57 fil Exp $
  */
 public class BuildExecutor implements Runnable
 {

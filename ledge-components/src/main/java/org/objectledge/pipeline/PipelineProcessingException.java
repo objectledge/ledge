@@ -26,13 +26,13 @@
 //POSSIBILITY OF SUCH DAMAGE.
 //
 
-package org.objectledge.web;
+package org.objectledge.pipeline;
 
 /**
  * 
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PipelineProcessingException.java,v 1.3 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: PipelineProcessingException.java,v 1.1 2004-01-12 15:00:59 fil Exp $
  */
 ///CLOVER:OFF
 public class PipelineProcessingException
