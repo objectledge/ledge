@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.27 2005-02-21 16:48:28 rafal Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.28 2005-02-28 10:07:50 rafal Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -142,12 +142,15 @@ public class BuilderExecutorValve
             // get template ------------------------------------------------------------------------
             template = templateFinder.findBuilderTemplate(viewName);
 
-			// build view level --------------------------------------------------------------------
+			// embedded results --------------------------------------------------------------------
 			embeddedResult = embeddedResult == null ? "": embeddedResult;
 			templatingContext.put(MVCConstants.EMBEDDED_PLACEHOLDER_KEY, embeddedResult);
+            
+            // default builder / template if not resolved up to this point -------------------------
             Builder actualBuilder = builder != null ? builder : defaultBuilder;
-            Template actualTemplate = template != null ? resolveTemplate(template)
-                 : defaultTemplate;
+            Template actualTemplate = template != null ? template : defaultTemplate;
+            
+            // perform actual build ----------------------------------------------------------------
 			try
 	        {
             	embeddedResult = actualBuilder.build(actualTemplate, embeddedResult);
@@ -157,26 +160,27 @@ public class BuilderExecutorValve
 	            throw new ProcessingException(e);
 	        }
 
-            // escape on direct response
+            // escape on direct response -----------------------------------------------------------
             if(httpContext.getDirectResponse())
             {
                 return;
             }
             
             // get next view build level -----------------------------------------------------------
-            // get enclosing builder
+            
+            // ask the builder about requested enclosure -------------------------------------------
             EnclosingView enclosingView = EnclosingView.DEFAULT;
             if(builder != null)
             {
                 enclosingView = builder.getEnclosingView(viewName);
             }
-
+            
+            // ask view enclosure manager that wraps viewEnclosureTool available in templates ------
             if(enclosingView.defaultBehaviour())
             {
                 enclosingView = viewEnclosureManager.getEnclosingView(enclosingView);
             }
             
-            // decide on enclosure type 
             if(enclosingView.override())
             {
                 viewName = enclosingView.getView();
@@ -185,32 +189,30 @@ public class BuilderExecutorValve
             {
                 break;
             }
-            else if(viewName != null) // enclosingView.defaultBehaviour()
+            else if(enclosingView.defaultBehaviour())
 			{
-				// shorten the builder path name, find new builder	
-                viewName = classFinder.findEnclosingViewName(viewName);
+                if(viewName != null) 
+                {
+                    viewName = classFinder.findEnclosingViewName(viewName);
+                }
+                else
+                {
+                    throw new ProcessingException("Top enclosing view not found");
+                }
 			}
+            else
+            {
+                throw new ProcessingException("Invalid enclosure specification for view "+viewName);
+            }
 		}
 
-		// did not reach a closing builder
+		// did not reach the top builder -----------------------------------------------------------
 		if(enclosures >= maxEnclosures)
 		{
 			throw new ProcessingException("Maximum number of builder enclosures exceeded");
 		}
 
-		// store building result
+		// store building result -------------------------------------------------------------------
 		mvcContext.setBuildResult(embeddedResult);
 	}
-
-    /**
-     * This method is to be overriden by BuilderExecutorValves which need a more specific template
-     * choosing. An example for such a valve is a I18nAwareBuilderExecutorValve.
-     * 
-     * @param template used as a base template.
-     * @return a template chosen upon the base template, in this case same template object.
-     */
-    protected Template resolveTemplate(Template template)
-    {
-        return template;
-    }
 }
