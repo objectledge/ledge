@@ -35,7 +35,7 @@ import org.objectledge.context.Context;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class TemplatingContextLoader implements Runnable
+public class TemplatingContextLoaderValve implements Runnable
 {
 	/** tool component */
 	private Templating templating;
@@ -49,7 +49,7 @@ public class TemplatingContextLoader implements Runnable
 	 * @param context the context.
 	 * @param templating the templating.
 	 */
-	public TemplatingContextLoader(Context context, Templating templating)
+	public TemplatingContextLoaderValve(Context context, Templating templating)
 	{
 		this.context = context;
 		this.templating = templating;

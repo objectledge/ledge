@@ -53,7 +53,7 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.templating.TemplatingContextLoader;
+import org.objectledge.templating.TemplatingContextLoaderValve;
 import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.templating.tools.ContextToolPopulatorValve;
 import org.objectledge.templating.tools.ContextToolRecyclerValve;
@@ -232,7 +232,7 @@ public class VelocityTemplatingTest extends TestCase
 	    	Runnable[] runnable = new Runnable[0];
 	    	Runnable[] tryValves = new Runnable[3];
 	    	ContextTools contextTools = new ContextTools(new ContextToolFactory[0]);
-	    	tryValves[0] = new TemplatingContextLoader(context, templating);
+	    	tryValves[0] = new TemplatingContextLoaderValve(context, templating);
 			tryValves[1] = new ContextToolPopulatorValve(context, contextTools);
 			tryValves[2] = new ContextToolRecyclerValve(context, contextTools);
 		

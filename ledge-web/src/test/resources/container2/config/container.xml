@@ -40,7 +40,7 @@
     <component class="org.objectledge.web.parameters.RequestParametersLoaderTestValve"/>
     <component class-key="org.objectledge.templating.Templating"
 		       class="org.objectledge.templating.velocity.VelocityTemplating"/>
-    <component class="org.objectledge.templating.TemplatingContextLoader"/>
+    <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
     <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
     <component class="org.objectledge.web.mvc.MVCResultsValve"/>
     
@@ -74,7 +74,7 @@
 	  <sequence-parameter>
         <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
-        <component-parameter class-key="org.objectledge.templating.TemplatingContextLoader"/>
+        <component-parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
         <component-parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
         <component-parameter class-key="org.objectledge.web.parameters.RequestParametersLoaderTestValve"/>
         <component-parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
