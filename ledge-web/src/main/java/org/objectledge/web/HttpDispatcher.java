@@ -35,10 +35,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * A dispatcher of HTTP requests.
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: HttpDispatcher.java,v 1.1 2003-12-22 15:16:25 fil Exp $
+ * @version $Id: HttpDispatcher.java,v 1.2 2003-12-23 16:55:36 fil Exp $
  */
 public interface HttpDispatcher
 {

@@ -43,10 +43,11 @@ import org.objectledge.web.HttpDispatcher;
 import org.picocontainer.PicoContainer;
 
 /**
+ * A dispatcher that delegates to other dispatchers, selected with HTTP method names.
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: HttpMethodDispatcher.java,v 1.1 2003-12-22 15:16:40 fil Exp $
+ * @version $Id: HttpMethodDispatcher.java,v 1.2 2003-12-23 16:55:36 fil Exp $
  */
 public class HttpMethodDispatcher
     implements HttpDispatcher
