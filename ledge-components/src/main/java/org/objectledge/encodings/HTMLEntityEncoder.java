@@ -28,24 +28,43 @@
 
 package org.objectledge.encodings;
 
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.encodings.encoders.CharEncoder;
 import org.objectledge.encodings.encoders.CharEncoderHTMLEntity;
+import org.picocontainer.MutablePicoContainer;
 
 /**
  * Tool for encoding HTML text to a text which supports a chosen encoding using HTML entities.
  * If an encoding does not support a character code, a HTML or numeric entity is being generated
  * for this character, if a character is supported it is not changed.
  *
- * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: HTMLEntityEncoder.java,v 1.1 2004-02-02 18:59:01 zwierzem Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: HTMLEntityEncoder.java,v 1.2 2004-02-03 13:48:08 zwierzem Exp $
  */
 public class HTMLEntityEncoder
 {
-    private static final CharEncoderHTMLEntity entityEncoder = new CharEncoderHTMLEntity();
-    private CharEncoder charsetEncoder;
+    private static final CharEncoderHTMLEntity HTML_ENTITY_ENCODER = new CharEncoderHTMLEntity();
+    private MutablePicoContainer container;
+	private static String encoderClassPrefix = "org.objectledge.encodings.encoders.CharEncoder";
 
-	public HTMLEntityEncoder()
+	/**
+	 * Constructs the entity encoder component.
+	 * @param container used to construct character set encoders.
+	 */
+	public HTMLEntityEncoder(MutablePicoContainer container)
 	{
+		this.container = container;
+		CharEncoder ref1 = getCharsetEncoder("Unicode");
+		CharEncoder ref2 = getCharsetEncoder("Unicode");
+		if(ref1 == null)
+		{
+			throw new ComponentInitializationError("cannot get basic Unicode encoder");
+		}
+		if(ref1 == ref2)
+		{
+			throw new ComponentInitializationError(
+				"container configured for component instance caching");
+		}
 	}
 
     /**
@@ -65,7 +84,7 @@ public class HTMLEntityEncoder
             return null;
         }
 
-        initEncoders(encodingName);
+		CharEncoder charsetEncoder = getCharsetEncoder(encodingName);
 
         // START: convert string
         StringBuffer buf = new StringBuffer(text.length());
@@ -111,7 +130,6 @@ public class HTMLEntityEncoder
         return encodeAttribute(text, encodingName, true);
     }
 
-
     /**
      * Encodes a given text with given encoding.
      *
@@ -126,7 +144,7 @@ public class HTMLEntityEncoder
             return null;
         }
 
-        initEncoders(encodingName);
+		CharEncoder charsetEncoder = getCharsetEncoder(encodingName);
 
         // pass for unknown encodings
         if(charsetEncoder == null)
@@ -157,21 +175,30 @@ public class HTMLEntityEncoder
         return buf.toString();
     }
 
-    private void initEncoders(String encodingName)
+	// implementation ----------------------------------------------------------------------------
+	
+    private CharEncoder getCharsetEncoder(String encodingName)
     {
-        // get charset encoder
-        encodingName = EncodingMap.getIANA2JavaMapping(encodingName);
-        if(charsetEncoder == null || !charsetEncoder.getEncoding().equals(encodingName))
-        {
-//            charsetEncoder = (CharEncoder)
-// TODO                ObjectUtils.instantiate("pl.caltha.encodings.encoders.CharEncoder"+encodingName);
-        }
+		try
+		{
+			encodingName = EncodingMap.getIANA2JavaMapping(encodingName);
+			if(!container.hasComponent(encodingName))
+			{
+				Class clazz = Class.forName(encoderClassPrefix + encodingName);
+				container.registerComponentImplementation(encodingName, clazz);
+			}
+			return (CharEncoder) container.getComponentInstance(encodingName);
+		}
+		catch (ClassNotFoundException e)
+		{
+			return null;
+		}
     }
 
     private void encodeEntity(StringBuffer buf, char c)
     {
         // encode it using entity encoding
-        char[] encodedChar = entityEncoder.encode(c);
+        char[] encodedChar = HTML_ENTITY_ENCODER.encode(c);
 
         buf.append('&');
         if(encodedChar != null)
@@ -186,15 +213,4 @@ public class HTMLEntityEncoder
         }
         buf.append(';');
     }
-
-    /**
-     * Resets the object's internal state. <p>
-     *
-     * This method prepares the object instance for reuse. After this method returns, the object
-     * should be equivalent to a newly created one. </p>
-     */
-    public void reset()
-    {
-    }
 }
-
