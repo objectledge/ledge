@@ -45,9 +45,9 @@ import org.jcontainer.dna.Logger;
  * Default event forwarder implementation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultEventForwarder.java,v 1.3 2004-02-12 11:43:05 pablo Exp $
+ * @version $Id: DefaultEventWhiteboard.java,v 1.1 2004-03-01 13:33:45 fil Exp $
  */
-public class DefaultEventForwarder implements EventForwarder
+public class DefaultEventWhiteboard implements EventWhiteboard
 {
     /** The logger. */
     private Logger logger;
@@ -60,12 +60,12 @@ public class DefaultEventForwarder implements EventForwarder
     /** Created proxies for <code>Remote</code> objects. */
     private Map proxies = new WeakHashMap();
 
-    /** The EventSystem */
-    private EventSystem eventSystem;
+    /** The EventWhiteboardFactory */
+    private EventWhiteboardFactory eventSystem;
 
     // Initailization ////////////////////////////////////////////////////////
 
-    DefaultEventForwarder(EventSystem eventSystem, Logger logger)
+    DefaultEventWhiteboard(EventWhiteboardFactory eventSystem, Logger logger)
     {
         this.logger = logger;
         this.eventSystem = eventSystem;

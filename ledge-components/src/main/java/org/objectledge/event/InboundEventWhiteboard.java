@@ -32,31 +32,32 @@ import java.lang.reflect.Method;
 import java.rmi.Remote;
 
 /**
- * Allows only event firing on an uderlying {@link EventForwarder}. 
+ * Allows only listener registration / deregistration on an uderlying {@link
+ * EventWhiteboard}. 
  *
  * <p>You can use this class to safeguard against an incorrect usage of an
  * unidirectional event forwarder. First, create a private forwarder ({@link
- * EventSystem#getForwarder()}, then register an event listener with it
- * (typically a NotificationService client), create {@link OutboundEventForwarder}
+ * EventWhiteboardFactory#getForwarder()}, then bind it to the event generator object
+ * (usually a NotificationReceiver), create {@link InboundEventWhiteboard}
  * proxy object upon your private forwarder, and pass the reference to the
- * proxy to the downstream code. Any attempt to register a listener on the
- * forwarder made by the downstream code will end up with an exception, and
- * thus unwanted local-echoing of events will be avoided.</p>
- * 
+ * proxy to the downstream code. Any attempt to fire an event on the forwarder
+ * made by the downstream code will end up with an exception, and thus
+ * unwanted local-echoing of events will be avoided.</p>
+ *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: OutboundEventForwarder.java,v 1.2 2004-02-12 11:43:05 pablo Exp $
+ * @version $Id: InboundEventWhiteboard.java,v 1.1 2004-03-01 13:33:45 fil Exp $
  */
-public class OutboundEventForwarder implements EventForwarder
+public class InboundEventWhiteboard implements EventWhiteboard
 {
-    /** The underlying EventForwarder */
-    private EventForwarder delegate;
+    /** The underlying EventWhiteboard */
+    private EventWhiteboard delegate;
 
     /**
-     * Contstructs an <code>OutboundEventForwarder</code>
+     * Contstructs an <code>InboundEventWhiteboard</code>
      *
-     * @param delegate the underlying <code>EventForwarder</code>
+     * @param delegate the underlying <code>EventWhiteboard</code>
      */
-    public OutboundEventForwarder(EventForwarder delegate)
+    public InboundEventWhiteboard(EventWhiteboard delegate)
     {
         this.delegate = delegate;
     }
@@ -67,7 +68,7 @@ public class OutboundEventForwarder implements EventForwarder
     public void addListener(Class iface, Object listener, Object object)
         throws IllegalArgumentException
     {
-        throw new IllegalStateException("can't register listeners with on an outbound forwarder");
+        delegate.addListener(iface, listener, object);
     }
 
     /**
@@ -75,7 +76,7 @@ public class OutboundEventForwarder implements EventForwarder
      */
     public void removeListener(Class iface, Object listener, Object object)
     {
-        throw new IllegalStateException("can't register listeners with on an outbound forwarder");
+        delegate.removeListener(iface, listener, object);
     }
 
     /**
@@ -84,7 +85,7 @@ public class OutboundEventForwarder implements EventForwarder
     public void addRemoteListener(Class iface, Remote listener, Object object)
         throws IllegalArgumentException
     {
-        throw new IllegalStateException("can't register listeners with on an outbound forwarder");
+        delegate.addRemoteListener(iface, listener, object);
     }
 
     /**
@@ -92,7 +93,7 @@ public class OutboundEventForwarder implements EventForwarder
      */
     public void removeRemoteListener(Class iface, Remote listener, Object object)
     {
-        throw new IllegalStateException("can't register listeners with on an outbound forwarder");
+        delegate.removeRemoteListener(iface, listener, object);
     }
 
     /**
@@ -100,6 +101,6 @@ public class OutboundEventForwarder implements EventForwarder
      */
     public void fireEvent(Method method, Object[] args, Object object)
     {
-        delegate.fireEvent(method, args, object);
+        throw new IllegalStateException("can't fire events on an inbound forwarder");
     }
 }

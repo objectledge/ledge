@@ -32,13 +32,13 @@ import java.lang.reflect.Method;
 import java.rmi.Remote;
 
 /**
- * This interface is implemented by both public (<code>EventSystem</code>)
+ * This interface is implemented by both public (<code>EventWhiteboardFactory</code>)
  * and private event forwarding objects.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventForwarder.java,v 1.1 2004-02-02 09:41:04 pablo Exp $
+ * @version $Id: EventWhiteboard.java,v 1.1 2004-03-01 13:33:45 fil Exp $
  */
-public interface EventForwarder
+public interface EventWhiteboard
 {
     /**
      * Adds an event listener.

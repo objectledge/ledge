@@ -51,18 +51,18 @@ import org.objectledge.threads.ThreadPool;
  * listeners, or listeners generating messages and propagating them to other
  * JVMs using <code>Notification</code>, with notification listeners
  * parsing messages, and firing events on the other local
- * <code>EventSystem</code>.</p>
+ * <code>EventWhiteboardFactory</code>.</p>
  *
- * <p>The {@link EventSystem} implements {@link EventForwarder}
+ * <p>The {@link EventWhiteboardFactory} implements {@link EventWhiteboard}
  * interface, thus this component acts as the ledge instance wide event
  * forwarder. If need arsises, you can create additional private event
  * forwarders separate from the global one. See also {@link
- * InboundEventForwarder} and {@link OutboundEventForwarder}.</p>
+ * InboundEventWhiteboard} and {@link OutboundEventWhiteboard}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventSystem.java,v 1.4 2004-03-01 11:40:55 fil Exp $
+ * @version $Id: EventWhiteboardFactory.java,v 1.1 2004-03-01 13:33:45 fil Exp $
  */
-public class EventSystem implements EventForwarder
+public class EventWhiteboardFactory implements EventWhiteboard
 {
     // Memeber objects ///////////////////////////////////////////////////////
 
@@ -70,7 +70,7 @@ public class EventSystem implements EventForwarder
     private Logger logger;
     
     /** The event forwarder. */
-    private EventForwarder forwarder;
+    private EventWhiteboard forwarder;
 
     /** Asynchronous mode flag. */
     private boolean asynchronous = false;
@@ -85,10 +85,10 @@ public class EventSystem implements EventForwarder
      * @param logger the logger.
      * @param threadPool the thread pool component.
      */
-    public EventSystem(Configuration config, Logger logger, ThreadPool threadPool)
+    public EventWhiteboardFactory(Configuration config, Logger logger, ThreadPool threadPool)
     {
         this.logger = logger;
-        forwarder = new DefaultEventForwarder(this, logger);
+        forwarder = new DefaultEventWhiteboard(this, logger);
         if(config != null)
         {
             asynchronous = config.getChild("asynchronous").getValueAsBoolean(false);
@@ -104,9 +104,9 @@ public class EventSystem implements EventForwarder
      *
      * @return a new event forwarder.
      */
-    public EventForwarder getForwarder()
+    public EventWhiteboard getForwarder()
     {
-        return new DefaultEventForwarder(this, logger);
+        return new DefaultEventWhiteboard(this, logger);
     }
 
 
@@ -173,7 +173,7 @@ public class EventSystem implements EventForwarder
     * @param args the argumentds.
     * @param object the trigger object. 
     */
-    void enqueueEvent(DefaultEventForwarder forwarder, Method method, Object[] args, Object object)
+    void enqueueEvent(DefaultEventWhiteboard forwarder, Method method, Object[] args, Object object)
     {
         if (!asynchronous)
         {
@@ -245,7 +245,7 @@ public class EventSystem implements EventForwarder
         // member objects ////////////////////////////////////////////////////////
 
         /** The forwarder that enqueued this event. */
-        private DefaultEventForwarder forwarder;
+        private DefaultEventWhiteboard forwarder;
 
         /** The method to call. */
         private Method method;
@@ -266,7 +266,7 @@ public class EventSystem implements EventForwarder
          * @param args the argumentds.
          * @param object the trigger object.
          */
-        public Event(DefaultEventForwarder forwarder, Method method, Object[] args, Object object)
+        public Event(DefaultEventWhiteboard forwarder, Method method, Object[] args, Object object)
         {
             this.forwarder = forwarder;
             this.method = method;
@@ -281,7 +281,7 @@ public class EventSystem implements EventForwarder
          *
          * @return the event forwarder.
          */
-        public DefaultEventForwarder getForwarder()
+        public DefaultEventWhiteboard getForwarder()
         {
             return this.forwarder;
         }

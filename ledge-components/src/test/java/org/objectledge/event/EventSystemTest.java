@@ -50,7 +50,7 @@ import org.objectledge.threads.ThreadPool;
 public class EventSystemTest extends TestCase
     implements FooInterface
 {
-    private EventSystem event;
+    private EventWhiteboardFactory event;
     
     private String testString;
     
@@ -68,12 +68,12 @@ public class EventSystemTest extends TestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         Valve cleanup = null;
         ThreadPool pool = new ThreadPool(cleanup, context, config, logger);
-        event = new EventSystem(config,logger,pool);
+        event = new EventWhiteboardFactory(config,logger,pool);
     }
 
     public void testGetForwarder()
     {
-        EventForwarder ef = event.getForwarder();
+        EventWhiteboard ef = event.getForwarder();
         assertNotNull(ef);
     }
 
@@ -112,9 +112,9 @@ public class EventSystemTest extends TestCase
     public void testInboundOutboundForwarder()
         throws Exception
     {
-        EventForwarder ef = event.getForwarder();
-        EventForwarder outF = new OutboundEventForwarder(ef);
-        EventForwarder inF = new InboundEventForwarder(ef);
+        EventWhiteboard ef = event.getForwarder();
+        EventWhiteboard outF = new OutboundEventWhiteboard(ef);
+        EventWhiteboard inF = new InboundEventWhiteboard(ef);
         try
         {
             outF.addListener(null,null,null);
