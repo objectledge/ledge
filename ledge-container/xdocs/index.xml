@@ -17,9 +17,9 @@
       </p>
       <p>
         ObjectLedge container builds on the excelent <a href="http://picocontainer.org">
-        PicoContainer</a> and <a href="http://nanocontainer.org">NanoContainer.org</a> packages.
+        PicoContainer</a> and <a href="http://nanocontainer.org">NanoContainer</a> packages.
 		Thanks to their flexible design, we were able to create a number of 
-		<a href="pico-extensions.html">extensions</a> necessary to implement configuration and
+		<a href="pico-extensions/index.html">extensions</a> necessary to implement configuration and
 		logging facilities of our container that can be seamlessly plugged into Pico/Nano.
       </p>
     </subsection>
@@ -28,7 +28,7 @@
         The composition of components is described using an XML file. We are using a custom
         implementation of the <code>org.picoextras.script.xml.XmlFrontEnd</code> that is 
         a bit more expressive than the one found in NanoContainer (but we'd love to see our changes
-        folded back to Nano!) See the <a href="pico-extensions.html">extensions</a> page for 
+        folded back to Nano!) See the <a href="pico-extensions/index.html">extensions</a> page for 
         more details.
       </p>
     </subsection>
