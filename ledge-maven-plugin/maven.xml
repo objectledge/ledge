@@ -28,20 +28,19 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: maven.xml,v 1.1 2004-05-17 15:04:03 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.2 2004-09-07 10:28:09 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:m="jelly:maven"
          xmlns:util="jelly:util">
 
-  <!--         
-  <postGoal name="plugin:install">
+  <!-- no tests ATM
+  <postGoal name="plugin:install-now">
     <exec 
       executable="maven"
       failOnError="true">
       <arg value="-d ${basedir}"/>
       <j:if test="${!maven.mode.online}">
         <arg value="-o"/>
-        <arg value="dummyGoal"/>
       </j:if>
       <arg value="plugin:testPluginFeatures"/>
     </exec>
@@ -54,14 +53,13 @@
       goals="clean,plugin:testPluginFeature"
       ignoreFailures="false"/>
   </goal>
-  
-  <goal name="dummyGoal">
-    <echo>A dummy goal, to make sure plugin:testPluginFeatures, see issue MAVEN-</echo>
-    <echo>It's time to remove this goal and it's invocation, if you see this message.</echo>
-  </goal>
   -->
   
   <goal name="plugin:install-snapshot">
+    <attainGoal name="plugin:install-now"/>
+  </goal>
+  
+  <goal name="plugin:install">
     <attainGoal name="plugin:install-now"/>
   </goal>
   
