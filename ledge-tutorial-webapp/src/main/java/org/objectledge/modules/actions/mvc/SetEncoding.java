@@ -34,6 +34,7 @@ import javax.servlet.http.Cookie;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18nContext;
+import org.objectledge.i18n.I18nWebConstants;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -47,7 +48,7 @@ import org.objectledge.web.WebConstants;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.6 2004-07-09 10:32:40 rafal Exp $
+ * @version $Id: SetEncoding.java,v 1.7 2004-08-20 15:57:51 zwierzem Exp $
  */
 public class SetEncoding 
     implements Valve, WebConstants
@@ -101,7 +102,7 @@ public class SetEncoding
         cookie.setPath(httpContext.getRequest().getContextPath()+
                        httpContext.getRequest().getServletPath());
         httpContext.getResponse().addCookie(cookie);
-        httpContext.getRequest().getSession().setAttribute(ENCODING_SESSION_KEY, encoding);
+        httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, encoding);
         httpContext.setEncoding(encoding);
     }
 }

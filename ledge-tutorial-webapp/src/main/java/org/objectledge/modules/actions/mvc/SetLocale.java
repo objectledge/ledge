@@ -35,23 +35,23 @@ import javax.servlet.http.Cookie;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18nContext;
+import org.objectledge.i18n.I18nWebConstants;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.WebConstants;
 
 /**
  * Set encoding action.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetLocale.java,v 1.7 2004-07-22 16:40:01 zwierzem Exp $
+ * @version $Id: SetLocale.java,v 1.8 2004-08-20 15:57:51 zwierzem Exp $
  */
 public class SetLocale 
-    implements Valve, WebConstants
+    implements Valve
 {
     /**
      * Action constructor.
@@ -99,7 +99,7 @@ public class SetLocale
         cookie.setPath(httpContext.getRequest().getContextPath() + 
                        httpContext.getRequest().getServletPath());
         httpContext.getResponse().addCookie(cookie);
-        httpContext.getRequest().getSession().setAttribute(LOCALE_SESSION_KEY, locale);
+        httpContext.setSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY, locale);
         i18nContext.setLocale(locale);
         Cookie[] cookies = httpContext.getRequest().getCookies();
         if (cookies != null)
@@ -108,7 +108,7 @@ public class SetLocale
             {
                 if (cookies[i].getName().equals(encodingCookieKey))
                 {
-                    httpContext.getRequest().getSession().setAttribute(ENCODING_SESSION_KEY, cookies[i].getValue());
+                    httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, cookies[i].getValue());
                     httpContext.setEncoding(cookies[i].getValue());
                 }
             }

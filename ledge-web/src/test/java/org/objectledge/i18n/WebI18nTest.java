@@ -30,6 +30,7 @@ package org.objectledge.i18n;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.servlet.http.Cookie;
@@ -70,6 +71,8 @@ public class WebI18nTest extends LedgeTestCase
     private HttpSession httpSession;
     private Mock mockHttpServletResponse;
     private HttpServletResponse httpServletResponse;
+    private Mock mockI18n;
+    private I18n i18n;
 
     public void setUp() throws Exception
     {
@@ -100,7 +103,11 @@ public class WebI18nTest extends LedgeTestCase
         
         mockHttpServletResponse = mock(HttpServletResponse.class);
         httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
-        
+
+        mockI18n = mock(I18n.class);
+        i18n = (I18n)mockI18n.proxy();
+        mockI18n.stubs().method("getDefaultLocale").will(returnValue(Locale.US));
+
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
         context.setAttribute(HttpContext.class, httpContext);
         
@@ -109,7 +116,7 @@ public class WebI18nTest extends LedgeTestCase
         MVCInitializerValve mvcInitializer = new MVCInitializerValve(webConfigurator);
         mvcInitializer.process(context);
         LoggerFactory loggerFactory = new LoggerFactory(null);
-        localeLoaderValve = new LocaleLoaderValve(logger, webConfigurator);
+        localeLoaderValve = new LocaleLoaderValve(logger, i18n);
         AuthenticationContext authenticationContext = new AuthenticationContext();
         context.setAttribute(AuthenticationContext.class, authenticationContext);
     }
@@ -130,13 +137,13 @@ public class WebI18nTest extends LedgeTestCase
         localeLoaderValve.process(context);
         Cookie[] cookies = httpContext.getRequest().getCookies();
         assertNotNull(cookies);
-        assertEquals(cookies.length, 2);
+        assertEquals(cookies.length, 1);
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
-        assertEquals(cookies.length, 2);
+        assertEquals(cookies.length, 1);
         authenticationContext.setUserPrincipal(new DefaultPrincipal("foo"), true);
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
-        assertEquals(cookies.length, 4);
+        assertEquals(cookies.length, 2);
     }
 }
