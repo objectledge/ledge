@@ -38,10 +38,10 @@ import org.objectledge.context.Context;
 public class TemplatingContextLoader implements Runnable
 {
 	/** tool component */
-	Templating templating;
+	private Templating templating;
 	
 	/** context */
-	Context context;
+	private Context context;
 	
 	/**
 	 * Component constructor.
@@ -57,8 +57,6 @@ public class TemplatingContextLoader implements Runnable
 	
 	/**
 	 * Load the new templating context into the context.
-	 * 
-	 * @param templatingContext the templating context.
 	 */
 	public void run()
 	{

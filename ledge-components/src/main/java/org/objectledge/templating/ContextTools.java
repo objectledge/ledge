@@ -36,7 +36,7 @@ package org.objectledge.templating;
 public class ContextTools
 {
 	/** tool factories list */
-	ContextToolFactory[] toolFactories;
+	private ContextToolFactory[] toolFactories;
 	
 	/**
 	 * Component constructor.
@@ -57,7 +57,8 @@ public class ContextTools
 	{
 		for(int i = 0; i < toolFactories.length; i++)
 		{
-			templatingContext.put(toolFactories[i].getKey(), toolFactories[i].getTool());
+			templatingContext.put(toolFactories[i].getKey(), 
+								  toolFactories[i].getTool());
 		}
 	}
 	
@@ -73,5 +74,15 @@ public class ContextTools
 			Object tool = templatingContext.get(toolFactories[i].getKey());
 			toolFactories[i].recycleTool(tool);
 		}
+	}
+	
+	/**
+	 * Get the factories.
+	 * 
+	 * @return the registered factories.
+	 */
+	public ContextToolFactory[] getToolFactories()
+	{
+		return toolFactories;
 	}
 }
