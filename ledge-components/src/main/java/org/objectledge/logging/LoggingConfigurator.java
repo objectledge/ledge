@@ -50,7 +50,7 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.3 2004-07-22 16:39:42 zwierzem Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.4 2004-12-21 06:24:27 rafal Exp $
  */
 public class LoggingConfigurator
 {
@@ -76,6 +76,7 @@ public class LoggingConfigurator
         configurator.doConfigure(config.getDocumentElement(), hierarchy);
         // We use ClassLoader local, but accessible object as the guard. This allows reinitializing 
         // Log4J from within the same sandbox.
-        LogManager.setRepositorySelector(new DefaultRepositorySelector(hierarchy), LogManager.class);
+        LogManager.setRepositorySelector(new DefaultRepositorySelector(hierarchy), 
+            LogManager.class);
     }
 }

@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
  * implementation.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeDOMConfigurator.java,v 1.1 2004-06-16 14:33:00 fil Exp $
+ * @version $Id: LedgeDOMConfigurator.java,v 1.2 2004-12-21 06:24:27 rafal Exp $
  */
 public class LedgeDOMConfigurator
 	extends DOMConfigurator
@@ -217,7 +217,8 @@ public class LedgeDOMConfigurator
                                     + refName
                                     + "] to appender named ["
                                     + appender.getName()
-                                    + "] which does not implement org.apache.log4j.spi.AppenderAttachable.");
+                                    + "] which does not implement " 
+                                    + "org.apache.log4j.spi.AppenderAttachable.");
                         }
                     }
                 }

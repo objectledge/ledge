@@ -51,7 +51,7 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.3 2004-06-25 11:01:01 fil Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.4 2004-12-21 06:24:33 rafal Exp $
  */
 public class ConfigurationFactory
 {
@@ -117,7 +117,8 @@ public class ConfigurationFactory
         catch(SAXParseException e)
         {
             throw new ComponentInitializationError("parse error in configuration of component "+
-                componentName+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+                componentName+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+
+                e.getLineNumber(), e);
         }
         catch(Exception e)
         {
@@ -167,7 +168,8 @@ public class ConfigurationFactory
         catch(SAXParseException e)
         {
             throw new ComponentInitializationError("parse error in configuration of component "+
-                componentName+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+e.getLineNumber(), e);
+                componentName+": "+e.getMessage()+" in "+e.getSystemId()+" at line "+
+                e.getLineNumber(), e);
         }
         catch(Exception e)
         {

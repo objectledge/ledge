@@ -80,7 +80,8 @@ public class XMLI18nTest extends TestCase
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
-            configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
+            configurator.doConfigure(logConfig.getDocumentElement(), 
+                LogManager.getLoggerRepository());
 
             source = new InputSource(fs.getInputStream("config/org.objectledge.i18n.I18n.xml"));
             SAXParserFactory parserFactory = SAXParserFactory.newInstance();

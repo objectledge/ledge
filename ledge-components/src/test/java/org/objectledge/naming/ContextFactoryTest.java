@@ -94,7 +94,8 @@ public class ContextFactoryTest extends TestCase
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document logConfig = builder.parse(source);
             LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
-            configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
+            configurator.doConfigure(logConfig.getDocumentElement(), 
+                LogManager.getLoggerRepository());
 
             log = new Log4JLogger(org.apache.log4j.Logger.
                 getLogger(ContextFactory.class));
