@@ -49,9 +49,9 @@
       
       <subsection name="Ledge container">
         <p>LedgeContainer is a NanoContainer flawor, that uses the
-        <a href="../../../ledge-components/components/FileSystem.xml">FileSystem</a> component for 
+        <a href="../../ledge-components/components/FileSystem.xml">FileSystem</a> component for 
         loading the composition file, and parses it using 
-        <a href="../pico-extension/XMLFrontEnd.html">Ledge XMLFrontEnd</a>. It also pre-feeds
+        <a href="../pico-extensions/XMLFrontEnd.html">Ledge XMLFrontEnd</a>. It also pre-feeds
         the internal PicoContainer with objects required by various container subsystems, including
         a <code>FileSystem</code>, <code>ClassLoader</code> and confiuration directory path.
         </p>

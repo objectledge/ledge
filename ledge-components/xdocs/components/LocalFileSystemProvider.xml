@@ -23,7 +23,7 @@
       operating over local file system. It supports read and write operations. Stat operations
       (size, modification time) and directory listings are reported from actual data.</p>
 
-	  <p><a href="apidocs/org/objectledge/filesystem/impl/LocalFileSystemProvider.html">View JavaDoc</a></p>
+	  <p><a href="../apidocs/org/objectledge/filesystem/impl/LocalFileSystemProvider.html">View JavaDoc</a></p>
 
 	  <p>Constructor parameters:
 		<table>

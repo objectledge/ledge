@@ -33,7 +33,7 @@
       
       <p>Log4j <a href="http://logging.apache.org/log4j">documentation</a>.</p>
       
-      <p>Configuration file <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.rng?rev=1.2&amp;content-type=text/vnd.viewcvs-markup">scheama</a>
+      <p>Configuration file <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.rng?rev=1.2&amp;content-type=text/vnd.viewcvs-markup">schema</a>
       generated from Log4j provided DTD.</p>
       
       <p>The above is rather complex, you may prefer to look at a configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/test/resources/container1/config/LoggingConfigurator.xml?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">example</a>.</p>
@@ -46,7 +46,7 @@
         </ul>
       </p>
       
-      <p><a href="apidocs/org/objectledge/logging/LoggingConfigurator.html">View JavaDoc</a></p>
+      <p><a href="../apidocs/org/objectledge/logging/LoggingConfigurator.html">View JavaDoc</a></p>
 		
 	  <p>Constructor parameters:
 	    <table>

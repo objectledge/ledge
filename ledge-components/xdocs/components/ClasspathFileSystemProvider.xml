@@ -24,7 +24,7 @@
       directory existence checking and listings are supported only if there are listing files
       available. The ObjectLedge Maven plugin is able to generate these files automatically.</p>
 
-      <p><a href="apidocs/org/objectledge/filesystem/impl/ClasspathFileSystemProvider.html">View JavaDoc</a></p>
+      <p><a href="../apidocs/org/objectledge/filesystem/impl/ClasspathFileSystemProvider.html">View JavaDoc</a></p>
         
       <p>Constructor parameters:
         <table>

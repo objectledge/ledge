@@ -12,7 +12,7 @@
             <th>required components</th>
             <td width="100%">
               <a href="FileSystem.html">FileSystem</a>,
-              <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>
+              <a href="../../ledge-container/container-subsystems/LoggerFactory.html">LoggerFactory</a>,
               <a href="../../ledge-container/container-subsystems/ConfigurationFactory.html">ConfigurationFactory</a>              
             </td>
           </tr>
