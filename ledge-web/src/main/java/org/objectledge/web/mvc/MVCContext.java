@@ -38,7 +38,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.5 2004-01-14 14:12:51 fil Exp $
+ * @version $Id: MVCContext.java,v 1.6 2004-01-16 15:10:36 zwierzem Exp $
  */
 public class MVCContext
 {
@@ -82,8 +82,7 @@ public class MVCContext
 	{
 		user = null;
 		authenticated = false;
-		// TODO load some default values - but from?
-		locale = new Locale("pl","PL");
+		locale = null;
 	}
 	
     /**
