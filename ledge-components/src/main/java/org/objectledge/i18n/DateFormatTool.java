@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DateFormatTool.java,v 1.5 2004-12-23 07:16:19 rafal Exp $
+ * @version $Id: DateFormatTool.java,v 1.6 2005-02-06 23:01:32 pablo Exp $
  */
 public class DateFormatTool
 {
@@ -79,9 +79,15 @@ public class DateFormatTool
      * @return new DateFormatTool instance.
      */
     public DateFormatTool style(String patternAlias)
+        throws Exception
     {
         DateFormatTool target = createInstance(this);
         target.format = dateFormater.getDateFormat(patternAlias, locale);
+        if(target.format == null)
+        {
+            throw new Exception("Pattern alias '"+patternAlias+
+                "' not defined in date formatter");
+        }
         return target;
     }
 
