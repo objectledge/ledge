@@ -41,7 +41,9 @@ import java.util.TreeMap;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
 import org.picocontainer.MutablePicoContainer;
@@ -100,6 +102,9 @@ public abstract class AbstractScheduler
                              Logger logger, ThreadPool threadPool,
                              ScheduleFactory[] scheduleFactories)
     {
+        try
+        {
+        
         this.config = config;
         this.logger = logger;
         this.threadPool = threadPool;
@@ -124,6 +129,11 @@ public abstract class AbstractScheduler
         threadPool.runDaemon(new SchedulerTask());
         String formatString = config.getChild("date_format").getValue(DATE_FORMAT_DEFAULT);
         format = new SimpleDateFormat(formatString);
+        }
+        catch(ProcessingException e)
+        {
+            throw new ComponentInitializationError("failed to initialize the component",e);
+        }
     }
 
     // SchedulerService interface ////////////////////////////////////////////
@@ -393,6 +403,7 @@ public abstract class AbstractScheduler
      * @param job the job.
      */
     private void run(AbstractJobDescriptor job)
+        throws ProcessingException
     {
         synchronized(job)
         {
@@ -554,6 +565,7 @@ public abstract class AbstractScheduler
         }
         
         public void process(Context context)
+            throws ProcessingException
         {
             synchronized(queue)
             {

@@ -37,7 +37,7 @@ import org.objectledge.pipeline.Valve;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPoolTest.java,v 1.1 2004-01-30 14:40:05 fil Exp $
+ * @version $Id: ThreadPoolTest.java,v 1.2 2004-02-02 09:03:50 pablo Exp $
  */
 public class ThreadPoolTest extends TestCase
 {
@@ -64,7 +64,7 @@ public class ThreadPoolTest extends TestCase
     }
 
     public void testWorker()
-        throws InterruptedException
+        throws Exception
     {
         Context context = new Context();
         Valve cleanup = null;
