@@ -26,12 +26,14 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web;
+package org.objectledge.authentication;
 
 import java.security.Principal;
 
-import org.objectledge.authentication.Authentication;
 import org.objectledge.context.Context;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.HttpContextImpl;
+import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.MVCContextImpl;
 
@@ -39,9 +41,9 @@ import org.objectledge.web.mvc.MVCContextImpl;
  * Pipeline processing valve that initialize pipeline context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Authenticator.java,v 1.3 2003-12-30 14:16:44 zwierzem Exp $
+ * @version $Id: AuthenticationValve.java,v 1.1 2004-01-12 14:13:20 fil Exp $
  */
-public class Authenticator implements Runnable, WebConstants
+public class AuthenticationValve implements Runnable, WebConstants
 {
 	/** the context */
 	private Context context;
@@ -55,7 +57,7 @@ public class Authenticator implements Runnable, WebConstants
 	 * @param context the context.
      * @param authentication the authentication component.
 	 */
-	public Authenticator(Context context, Authentication authentication)
+	public AuthenticationValve(Context context, Authentication authentication)
 	{
 		this.context = context;		
 		this.authentication = authentication;
