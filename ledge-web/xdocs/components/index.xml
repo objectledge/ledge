@@ -7,12 +7,21 @@
     <section name="Web components">
       <subsection name="ServletFileSystemProvider">
         <p>This is an implementation of the FileSystemProvider that delegates it's functionality
-        to the <code>java.langx.servlet.ServletContext.getResource(String)</code> calls. 
+        to the <code>javax.servlet.ServletContext.getResource(String)</code> calls. 
         Stat operations, directory existence checking and listings are supported only if there 
         are listing files available. The ObjectLedge Maven plugin is able to generate these files 
         automatically.</p>
         
         <p class="more"><a href="ServletFileSystemProvider.html">more</a></p>
+      </subsection>
+      
+      <subsection name="Upload">
+        <p>The Upload component is the implementation of the pipeline processing valve,
+        that is run at very early stage of the pipeline processing. When it discovers the
+        "multipart/form-data" it starts to process the request storing the uploaded items into 
+        the context.
+        </p>
+        <p class="more"><a href="UploadValve.html">more</a></p>
       </subsection>
     </section>
   </body>

@@ -30,6 +30,7 @@ package org.objectledge.web.mvc;
 
 import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
+import org.objectledge.web.WebConfigurator;
 
 /**
  * Context tool factory component to build the link tool.
@@ -42,7 +43,7 @@ public class LinkToolFactory implements ContextToolFactory
 	private Context context;
 	
 	/** configuration component */
-	private MVCConfigurator config;
+	private WebConfigurator config;
 	
 	/**
 	 * Component constructor.
@@ -50,7 +51,7 @@ public class LinkToolFactory implements ContextToolFactory
 	 * @param context the context.
 	 * @param config the config.
  	 */
-	public LinkToolFactory(Context context, MVCConfigurator config)
+	public LinkToolFactory(Context context, WebConfigurator config)
 	{
 		this.context = context;
 		this.config = config;

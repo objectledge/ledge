@@ -16,5 +16,7 @@
     <classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xmlParserAPIs-2.6.0.jar"/>
     <classpathentry kind="var"
         path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar" sourcepath="MAVEN_REPO/log4j/sources/log4j-1.2.8-source.zip"/>
+    <classpathentry kind="var" path="MAVEN_REPO/jaf/jars/activation-1.0.2.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/javamail/jars/javamail-1.2.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>

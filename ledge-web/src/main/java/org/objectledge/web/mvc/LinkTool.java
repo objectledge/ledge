@@ -39,6 +39,7 @@ import org.objectledge.context.Context;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.parameters.RequestParameters;
 
 /**
@@ -55,7 +56,7 @@ public class LinkTool
 	private Context context;
 	
 	/** the configurator component */
-	private MVCConfigurator config;
+	private WebConfigurator config;
 	
 	/** the mvc context */
 	private MVCContext mvcContext;
@@ -105,7 +106,7 @@ public class LinkTool
 	 * @param context the thread context.
 	 * @param config the configurator.
 	 */
-	public LinkTool(Context context, MVCConfigurator config)
+	public LinkTool(Context context, WebConfigurator config)
 	{
 		this.context = context;
 		this.config = config;

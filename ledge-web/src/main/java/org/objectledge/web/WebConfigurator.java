@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.web.mvc;
+package org.objectledge.web;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -41,9 +41,9 @@ import org.objectledge.utils.StringUtils;
  * Configuration component - it provide the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCConfigurator.java,v 1.1 2004-01-12 12:19:46 pablo Exp $
+ * @version $Id: WebConfigurator.java,v 1.1 2004-01-13 13:06:39 pablo Exp $
  */
-public class MVCConfigurator
+public class WebConfigurator
 {
 	/** the default locale if not */
 	public static final String DEFAULT_LOCALE = "en_US";
@@ -59,6 +59,9 @@ public class MVCConfigurator
 	
 	/** the default query separator */
 	public static final String DEFAULT_QUERY_SEPARATOR = "&";
+	
+	/** the default query separator */
+	public static final int DEFAULT_UPLOAD_LIMIT = 4194304;
 	
 	/** the default locale */
 	private Locale defaultLocale;
@@ -81,12 +84,15 @@ public class MVCConfigurator
 	/** the queryt separator */
 	private String querySeparator;
 	
+	/** the upload size limit */
+	private int uploadLimit;
+	
 	/**
 	 * Constructor
 	 * 
 	 * @param config the configuration.
 	 */
-	public MVCConfigurator(Configuration config)
+	public WebConfigurator(Configuration config)
 	{
 		String locale = config.getChild("default_locale").getValue(DEFAULT_LOCALE);
 		defaultLocale = StringUtils.getLocale(locale);
@@ -113,6 +119,7 @@ public class MVCConfigurator
 			throw new ComponentInitializationError("failed to configure the component", e);
 		}
 		querySeparator = config.getChild("query_separator").getValue(DEFAULT_QUERY_SEPARATOR);
+		uploadLimit = config.getChild("upload_limit").getValueAsInteger(DEFAULT_UPLOAD_LIMIT);
 	}
 	
     /**
@@ -184,5 +191,15 @@ public class MVCConfigurator
     {
     	return querySeparator;
     }
+    
+	/**
+	 *  Get the upload size limit. 
+	 *
+	 * @return the upload limit. 
+	 */
+	public int getUploadLimit()
+	{
+		return uploadLimit;
+	}    
      
 }
