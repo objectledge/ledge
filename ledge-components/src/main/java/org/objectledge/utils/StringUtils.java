@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.11 2004-01-27 16:59:31 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.12 2004-02-06 15:36:19 fil Exp $
  */
 public class StringUtils
 {
@@ -402,4 +402,21 @@ public class StringUtils
 			return count;
 		}
 	}  
+    
+    /**
+     * Appends the specified number of space charcter to a string buffer and returns it.
+     * 
+     * @param buffer the buffer.
+     * @param d number of spaces.
+     * @return the buffer.
+     */
+    public static StringBuffer indent(StringBuffer buffer, int d)
+    {
+        for(int i=0; i<d; i++)
+        {
+            buffer.append(' ');
+        }
+        return buffer;
+    }
+
 }
