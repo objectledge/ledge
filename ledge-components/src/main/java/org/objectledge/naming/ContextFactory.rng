@@ -48,7 +48,7 @@
         </choice>
       </zeroOrMore>
 	</element>	  
-  </start>
+  </define>
 
   <define name="property">
     <element name="property">

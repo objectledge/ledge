@@ -41,8 +41,8 @@
   <define name="syntax">
     <element name="syntax">
       <choice>
-        <element name="ldap-syntax"/>
-        <element name="custom-syntax"/>
+        <ref name="ldap-syntax"/>
+        <ref name="custom-syntax"/>
       </choice>
     </element>
   </define>  
