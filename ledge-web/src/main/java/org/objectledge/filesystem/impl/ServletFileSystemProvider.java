@@ -39,9 +39,9 @@ import javax.servlet.ServletContext;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileProvider.java,v 1.4 2003-12-23 16:56:19 fil Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.1 2003-12-29 12:35:49 fil Exp $
  */
-public class ServletFileProvider 
+public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider
 {
 	// instance variables /////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ public class ServletFileProvider
      * @param name the name of the provider.
      * @param context the servlet context to read resources from.
      */
-    public ServletFileProvider(String name, ServletContext context)
+    public ServletFileSystemProvider(String name, ServletContext context)
     {
         super(name);
         this.context = context;
