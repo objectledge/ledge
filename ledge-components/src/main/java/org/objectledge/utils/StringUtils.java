@@ -28,6 +28,9 @@
 
 package org.objectledge.utils;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -38,7 +41,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.4 2004-01-12 12:12:23 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.5 2004-01-13 14:53:53 pablo Exp $
  */
 public class StringUtils
 {
@@ -266,4 +269,70 @@ public class StringUtils
 												+"invalid string representation '"+name+"'");
 		}
 	}
+	
+	/**
+	 * Determines the number of bytes the string will ocuppy in a specifc 
+	 * character encoding.
+	 * 
+	 * @param string the string.
+	 * @param encoding the requested encoding.
+	 * @return the size of the string.
+	 * @throws IOException if happens.
+	 */
+	public static int getByteCount(String string, String encoding) 
+		throws IOException
+	{
+		if(encoding.startsWith("ISO-8859"))
+		{
+			return string.length();
+		}
+		if(encoding.equals("UTF-16"))
+		{
+			return string.length() * 2;
+		}
+		if(string.length() < 65536)
+		{
+			byte[] bytes = string.getBytes(encoding);
+			return bytes.length;
+		}
+		else
+		{
+			CountOutputStream counter = new CountOutputStream();
+			OutputStreamWriter writer = new OutputStreamWriter(counter, encoding);
+			writer.write(string);
+			return counter.getCount();
+		}
+	}
+	
+	/**
+	 * Helper class to count the string length. 
+	 */
+	private static class CountOutputStream
+		extends OutputStream
+	{
+		private int count;
+
+		/* overriden */
+		public void write(int b) throws IOException
+		{
+			count++;
+		}
+        
+		/* overiden */
+		public void write(byte[] b) throws IOException
+		{
+			count += b.length;
+		}
+
+		/* overiden */
+		public void write(byte[] b, int offset, int length) throws IOException
+		{
+			count += length;
+		}
+        
+		public int getCount()
+		{
+			return count;
+		}
+	}  
 }
