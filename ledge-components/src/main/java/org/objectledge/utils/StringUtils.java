@@ -44,7 +44,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.26 2005-02-21 16:27:24 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.27 2005-03-02 15:42:02 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -725,6 +725,10 @@ public class StringUtils
      */
     public static String htmlLineBreaks(String s)
     {
+        if(s == null)
+        {
+            return "";
+        }
         StringBuilder out = new StringBuilder();
         char[] chars = s.toCharArray();
         for(int i=0; i<chars.length; i++)
