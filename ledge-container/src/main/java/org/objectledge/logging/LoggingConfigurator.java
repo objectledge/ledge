@@ -36,6 +36,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.xml.DOMConfigurator;
 import org.objectledge.configuration.ConfigurationFactory;
+import org.picocontainer.Startable;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -44,10 +45,12 @@ import org.xml.sax.SAXException;
  *
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.4 2003-12-05 08:53:09 fil Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.5 2004-03-09 14:47:16 fil Exp $
  */
 public class LoggingConfigurator
+    implements Startable
 {
+    private Document config;
 
     /**
      * Creates a new LoggingConfigurator.
@@ -62,7 +65,21 @@ public class LoggingConfigurator
     {
         InputSource source = configurationFactory.getConfigurationSource(LoggingConfigurator.class);
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document config = builder.parse(source);
+        config = builder.parse(source);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void start()
+    {
         DOMConfigurator.configure(config.getDocumentElement());
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void stop()
+    {
     }
 }
