@@ -27,27 +27,21 @@
 //
 package org.objectledge.web.mvc.builders;
 
-import java.util.Locale;
-
 import org.objectledge.context.Context;
-import org.objectledge.i18n.I18n;
-import org.objectledge.i18n.I18nContext;
+import org.objectledge.i18n.I18nAwareTemplateResolver;
 import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplateNotFoundException;
-import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.7 2004-06-29 13:42:09 zwierzem Exp $
+ * @version $Id: I18nAwareBuilderExecutorValve.java,v 1.8 2004-08-19 13:40:05 pablo Exp $
  */
 public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
 {
-	private Locale defaultLocale;
-	private Templating templating;
-    private Context context;
-	
+	/** i18n aware template resolver */
+    private I18nAwareTemplateResolver resolver;
+    
     /**
      * {@inheritDoc}
      * 
@@ -65,12 +59,10 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
         MVCTemplateFinder templateFinder,
         int maxRouteCalls,
         int maxEnclosures,
-        I18n i18n, Templating templating)
+        I18nAwareTemplateResolver resolver)
     {
         super(context, classFinder, templateFinder, maxRouteCalls, maxEnclosures);
-		this.defaultLocale = i18n.getDefaultLocale();
-		this.templating = templating;
-        this.context = context;
+        this.resolver = resolver;
     }
     
     /**
@@ -78,50 +70,11 @@ public class I18nAwareBuilderExecutorValve extends BuilderExecutorValve
      */
     protected Template resolveTemplate(Template template)
     {
-    	// get current locale && try to get template
-    	I18nContext i18nContext = I18nContext.getI18nContext(context);
-		Template newTemplate = resolveTemplate(template, i18nContext.getLocale());
-		if(newTemplate != null)
-		{
-			return newTemplate;
-		}
-    	// get default locale && try to get template
-		newTemplate = resolveTemplate(template, defaultLocale);
-		if(newTemplate != null)
-		{
-			return newTemplate;
-		}
-		// return provided template if others failed 
+        Template newTemplate = resolver.resolveTemplate(template);
+        if(newTemplate != null)
+        {
+            return newTemplate;
+        }
         return super.resolveTemplate(template);
-    }
-
-    /**
-     * Gets a template for a given base template and locale.
-     * 
-     * @param template base template object
-     * @param locale locale to find template for
-     * @return found template or null
-     */
-    Template resolveTemplate(Template template, Locale locale)
-    {
-		if(locale == null)
-		{
-			return null;
-		}
-		
-    	String localeStr = locale.toString();
-    	if(localeStr.length() != 0)
-    	{
-            try
-            {
-				String templateName = template.getName() + "." + localeStr;
-                return templating.getTemplate(templateName);
-            }
-            catch (TemplateNotFoundException e)
-            {
-            	return null;
-            }
-    	}
-        return template;
     }
 }

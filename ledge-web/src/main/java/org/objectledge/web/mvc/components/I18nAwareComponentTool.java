@@ -28,96 +28,46 @@
 package org.objectledge.web.mvc.components;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.i18n.I18nAwareTemplateResolver;
 import org.objectledge.templating.Template;
-import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.DefaultTemplate;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
-import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.7 2004-08-19 13:40:05 pablo Exp $
+ * @version $Id: I18nAwareComponentTool.java,v 1.1 2004-08-19 13:40:05 pablo Exp $
  */
-public class ComponentTool
+public class I18nAwareComponentTool
+	extends ComponentTool
 {
-    /** The context */
-    protected Context context;
+    /** The template resolver */
+    protected I18nAwareTemplateResolver resolver;
     
-	/** The class finder for finding component objects. */
-	protected MVCClassFinder classFinder;
-    
-	/** The template finder for finding component templates. */
-	protected MVCTemplateFinder templateFinder;
-    
-    /** the default component implementation. */
-    protected Component defaultComponent;
-    
-    /** the default template. */
-    protected Template defaultTemplate;
-	
     /**
      * Construct a component tool.
      * 
      * @param context thread's processing context.
      * @param classFinder class finder for finding component objects.
      * @param templateFinder template finder for finding component templates.
+     * @param resolver the i18n aware temlplate resolver.
      */
-    public ComponentTool(Context context, MVCClassFinder classFinder, 
-        MVCTemplateFinder templateFinder)
+    public I18nAwareComponentTool(Context context, MVCClassFinder classFinder, 
+        MVCTemplateFinder templateFinder, I18nAwareTemplateResolver resolver)
     {
-        this.context = context;
-		this.classFinder = classFinder;
-		this.templateFinder = templateFinder;
-        this.defaultComponent = new DefaultComponent(context);
-        this.defaultTemplate = new DefaultTemplate();
+        super(context, classFinder, templateFinder);
+        this.resolver = resolver;
     }
 
-	/**
-	 *  Embeds a component with a givemn name.
-	 *
-	 * @param componentName name of the component to be embedded.
-	 * @return contents of a rendered component
-	 * @throws BuildException on problems with component building
-     * @throws ProcessingException if processing fails.
-	 */
-	public String embed(String componentName) 
-        throws BuildException, ProcessingException
-	{
-		Component component = classFinder.getComponent(componentName);
-		Template template = templateFinder.getComponentTemplate(componentName);
-        template = resolveTemplate(template);
-		if(component != null)
-		{
-			Template newTemplate = component.getTemplate();
-			if(newTemplate != null)
-			{
-				template = newTemplate;
-			}
-			if(template == null)
-			{
-				template = defaultTemplate;
-			}
-		}
-		else
-		{
-			if(template == null)
-			{
-				throw new IllegalArgumentException("No component nor template with name "
-					+ componentName);			
-			}
-			component = defaultComponent;
-		}		
-        SecurityHelper.checkSecurity(component, context);
-		return component.build(template);
-	}
-	
     /**
      * {@inheritDoc}
      */	
 	protected Template resolveTemplate(Template template)
 	{
-	    return template;
+        Template newTemplate = resolver.resolveTemplate(template);
+        if(newTemplate != null)
+        {
+            return newTemplate;
+        }
+        return super.resolveTemplate(template);
 	}
 }
