@@ -27,22 +27,45 @@
 //
 package org.objectledge.web.mvc.components;
 
+import org.objectledge.context.Context;
+import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.builders.BuildException;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultComponent.java,v 1.1 2004-01-20 11:59:38 zwierzem Exp $
+ * @version $Id: DefaultComponent.java,v 1.2 2004-01-20 13:32:24 zwierzem Exp $
  */
 public class DefaultComponent implements Component
 {
+	/** Application context used by this component instance. */
+	protected Context context;
+	
+	/**
+	 * Constructs a component instance.
+	 * 
+	 * @param context application context for use by this component.
+	 */
+	public DefaultComponent(Context context)
+	{
+		this.context = context;
+	}
+	
     /**
      * {@inheritDoc}
      */
     public String build(Template template)
     	throws BuildException
     {
-        return "";
+		try
+		{
+			return template.merge(TemplatingContext.getTemplatingContext(context));
+		}
+		catch(MergingException e)
+		{
+			throw new BuildException(e);
+		}
     }
 
     /**
