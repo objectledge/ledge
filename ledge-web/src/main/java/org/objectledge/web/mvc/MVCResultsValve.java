@@ -39,9 +39,9 @@ import org.objectledge.web.HttpContext;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ResponseWriterValve.java,v 1.2 2004-01-14 14:13:09 fil Exp $
+ * @version $Id: MVCResultsValve.java,v 1.1 2004-01-15 09:44:37 fil Exp $
  */
-public class ResponseWriterValve implements Runnable
+public class MVCResultsValve implements Runnable
 {
 	/** context */
 	protected Context context;
@@ -51,7 +51,7 @@ public class ResponseWriterValve implements Runnable
 	 * 
      * @param context used application context 
 	 */
-	public ResponseWriterValve(Context context)
+	public MVCResultsValve(Context context)
 	{
 		this.context = context;
 	}
