@@ -5,5 +5,7 @@
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
     <classpathentry kind="var" path="MAVEN_REPO/dna/jars/dna-api-1.0.jar"/>
     <classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/saxon/jars/saxon-6.5.3.jar"/>
+    <classpathentry kind="var" path="MAVEN_REPO/jing/jars/jing-20030619.jar"/>
     <classpathentry kind="output" path="target/classes"/>
 </classpath>
