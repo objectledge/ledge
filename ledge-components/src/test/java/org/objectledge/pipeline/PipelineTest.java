@@ -51,11 +51,12 @@ public class PipelineTest extends TestCase
     public void testRun()
     {
     	Context context = Context.getContext();
-		Pipeline pipe = new Pipeline(context, new Runnable[0], new Runnable[0] , new Runnable[0]);
+    	Runnable[] runnable = new Runnable[0];
+    	Pipeline pipe = new Pipeline(context, runnable, runnable, runnable);
 		pipe.run();
-		assertEquals(new Runnable[0], pipe.getCatchValves());
-		assertEquals(new Runnable[0], pipe.getTryValves());
-		assertEquals(new Runnable[0], pipe.getFinallyValves());
+		assertEquals(runnable, pipe.getCatchValves());
+		assertEquals(runnable, pipe.getTryValves());
+		assertEquals(runnable, pipe.getFinallyValves());
     }
 
 }
