@@ -45,7 +45,7 @@ import org.objectledge.utils.StringUtils;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DatabaseUtils.java,v 1.11 2004-03-11 12:51:52 fil Exp $
+ * @version $Id: DatabaseUtils.java,v 1.12 2004-03-11 14:45:37 fil Exp $
  */
 public class DatabaseUtils
 {
@@ -221,7 +221,7 @@ public class DatabaseUtils
                         }
                     }
                 }
-                if(line.length() == 0 || line.charAt(line.length()-1) != ';')
+                if(line.length() == 0 || line.trim().charAt(line.length()-1) != ';')
                 {
                     throw new SQLException("unterminated statement at line "+start);
                 }
