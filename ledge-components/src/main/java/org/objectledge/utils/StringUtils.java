@@ -34,16 +34,71 @@ import java.util.StringTokenizer;
 /**
  * This class contains various functions for manipulating Java Strings.
  *
+ * @author <a href="mailto:damian@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.3 2003-12-30 14:35:10 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.4 2004-01-12 12:12:23 pablo Exp $
  */
 public class StringUtils
 {
     /** private constructor */
     private StringUtils()
     {
+    }
+
+    /**
+     *  Prepares a given String to be used as a HTTP cookie name.
+   	 * 
+  	 *
+  	 * @see StringUtils.cookieNameSafeString(String, String)
+   	 * @param input Cookie name unsafe string.
+   	 * @return a modified string.
+   	 */
+    public static String cookieNameSafeString(String input)
+    {
+        return cookieNameSafeString(input, '.');
+    }
+
+    /** 
+     * Prepares a given String to be used as a HTTP cookie name.
+     *
+     * <p>It replaces characters used in cookies (exactly <code>;</code>
+     * semicolon, <code>,</code> comma, <code>=</code> equals, <code>$</code>
+     * and whitespace) with a given character.  If this character is equal to
+     * any of the unsafe characters <code>.</code> dot is used.</p>
+     *
+     * @param input Cookie name unsafe string.
+     * @param replaceChar Character to be used as a replacement for unsafe
+     *        characters.
+     * @return a modified string.
+     */
+    public static String cookieNameSafeString(String input, char replaceChar)
+    {
+        // check for unsafe replacement character
+        if (replaceChar == '=' || replaceChar == ',' || replaceChar == ';' || 
+            replaceChar == '$' || Character.isWhitespace(replaceChar))
+        {
+            replaceChar = '.';
+        }
+
+        if (input != null)
+        {
+            StringBuffer sb = new StringBuffer(input);
+            int length = sb.length();
+
+            for (int i = 0; i < length; i++)
+            {
+                char c = sb.charAt(i);
+                // replace unwanted chars
+                if (Character.isWhitespace(c) || c == '=' || c == ';' || c == ',' || c == '$')
+                {
+                    sb.setCharAt(i, replaceChar);
+                }
+            }
+            input = sb.toString();
+        }
+        return input;
     }
 
     /**
