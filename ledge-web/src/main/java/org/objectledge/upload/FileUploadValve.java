@@ -25,10 +25,14 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 
 /**
- * Analize the request and lookup the uploaded resources.
+ * Analyzes the multipart request and looks up the uploaded file data. This valve also parses post
+ * values embedded in the multipart request. If the request is too large (exceeds the upload size
+ * limit) no parameters, nor file contents are parsed. This causes unavaiability of post parameters
+ * from forms.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: FileUploadValve.java,v 1.12 2005-03-09 13:32:55 zwierzem Exp $
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: FileUploadValve.java,v 1.13 2005-03-14 13:16:40 zwierzem Exp $
  */
 public class FileUploadValve 
     implements Valve
@@ -67,14 +71,20 @@ public class FileUploadValve
         throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        if(httpContext.getRequest().getContentLength() > fileUpload.getUploadLimit())
+        int contentLength = httpContext.getRequest().getContentLength();
+        boolean limitExceeded = contentLength > fileUpload.getUploadLimit(); 
+        if(limitExceeded)
         {
-            // TOOD: Some error reporting for ohter parts of the application should be added here!! 
-            logger.warn("The request size exceeds upload limits");
+            // store the file upload failure info into the context
+            context.setAttribute(FileUpload.UPLOAD_CONTEXT_KEY,
+                new UploadLimitExceededException(Integer.toString(fileUpload.getUploadLimit()))); 
+            logger.warn("The request size exceeds upload limits "+
+                contentLength+" > "+fileUpload.getUploadLimit());
             return;
         }
+        
         String contentType = httpContext.getRequest().getContentType();
-        if (contentType!=null && contentType.startsWith("multipart/form-data")) 
+        if (contentType != null && contentType.startsWith("multipart/form-data")) 
         {
             try
             {
@@ -192,7 +202,7 @@ public class FileUploadValve
             UploadContainer container = new UploadContainer(name, filename, mimeType,
                 part.getSize(), part.getInputStream());
             uploadMap.put(name, container);
-            logger.debug("Upload Hook - craeted container "+name);
+            logger.debug("UploadValve - created an upload container '"+name+"'");
         }
     }    
 }

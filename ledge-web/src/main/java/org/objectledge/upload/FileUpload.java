@@ -34,19 +34,21 @@ import org.jcontainer.dna.Configuration;
 import org.objectledge.context.Context;
 
 /**
- * An application access point to the HTML form file upload functionality.
+ * An application access point to the HTML form file upload functionality. For more information
+ * see {@link org.objectledge.upload.FileUploadValve}.
  *
- * <p>Created on Jan 14, 2004</p>
- * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileUpload.java,v 1.6 2004-12-23 07:18:20 rafal Exp $
+ * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: FileUpload.java,v 1.7 2005-03-14 13:16:40 zwierzem Exp $
  */
 public class FileUpload
 {
     // constants ////////////////////////////////////////////////////////////////////////////////
     
     /** context key to store the upload map. */
-    public static final String UPLOAD_CONTEXT_KEY = "org.objectledge.upload.FileUpload.uploadMap";
-    
+    public static final String UPLOAD_CONTEXT_KEY =
+        "org.objectledge.upload.FileUpload.uploadMap";
+
     /** the default upload limit. */
     public static final int DEFAULT_UPLOAD_LIMIT = 4194304;
 
@@ -75,21 +77,39 @@ public class FileUpload
     // public API ///////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Retrieve the upload container.
+     * Retrieve the upload container, this method should be called in the first place by action
+     * valves before retrieving any multipart POST parameters from the request. This call will
+     * allow identification of file upload size limit exceeding problems.
      *
      * @param name the name of the item.
      * @return the upload container, or <code>null</code> if not available.
+     * @throws UploadLimitExceededException thrown on upload limit exceeding
      */
-    public UploadContainer getContainer(String name) 
+    public UploadContainer getContainer(String name)
+    throws UploadLimitExceededException
     {
-        Map map =(Map)context.getAttribute(UPLOAD_CONTEXT_KEY);
-        if (map == null) 
+        Object value = context.getAttribute(UPLOAD_CONTEXT_KEY);
+
+        // no upload performed
+        if(value == null)
         {
             return null;
         }
+        else if(value instanceof UploadLimitExceededException)
+        {
+            // upload limit exceeded - message is the limit value
+            throw (UploadLimitExceededException) value;
+        }
+        else if(value instanceof Map)
+        {
+            // upload successful - return a requested container
+            // (it may also be null for not uploaded items)
+            Map map = (Map) value;
+            return (UploadContainer) map.get(name);
+        }
         else
         {
-            return (UploadContainer)map.get(name);
+            throw new RuntimeException("Probably a valve conflicting with FileUploadValve exists");
         }
     }
     
@@ -101,6 +121,5 @@ public class FileUpload
     public int getUploadLimit()
     {
         return uploadLimit;
-    }    
-
+    }
 }
