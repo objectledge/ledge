@@ -42,7 +42,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.7 2004-08-24 12:44:14 pablo Exp $
+ * @version $Id: AbstractI18n.java,v 1.8 2004-08-24 13:17:01 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -112,7 +112,7 @@ public abstract class AbstractI18n implements I18n
 	/**
 	 * {@inheritDoc}
 	 */
-	public Locale[] getSupportedLocale()
+	public Locale[] getSupportedLocales()
 	{
 	    return supportedLocale;
 	}
