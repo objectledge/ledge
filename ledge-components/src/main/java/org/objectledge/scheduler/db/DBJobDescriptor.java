@@ -122,7 +122,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
         record.setInteger("run_count_limit", getRunCountLimit());
         if (getLastRunTime() != null)
         {
-            record.setDate("last_run_time", getLastRunTime());
+            record.setTimestamp("last_run_time", getLastRunTime());
         }
         else
         {
@@ -130,7 +130,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
         }
         if (getTimeLimitStart() != null)
         {
-            record.setDate("run_time_limit_start", getTimeLimitStart());
+            record.setTimestamp("run_time_limit_start", getTimeLimitStart());
         }
         else
         {
@@ -138,7 +138,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
         }
         if (getTimeLimitEnd() != null)
         {
-            record.setDate("run_time_limit_end", getTimeLimitEnd());
+            record.setTimestamp("run_time_limit_end", getTimeLimitEnd());
         }
         else
         {
