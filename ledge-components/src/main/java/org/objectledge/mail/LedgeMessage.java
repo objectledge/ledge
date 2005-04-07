@@ -31,7 +31,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.6 2005-04-05 10:57:05 zwierzem Exp $
+ * @version $Id: LedgeMessage.java,v 1.7 2005-04-07 09:22:19 zwierzem Exp $
  */
 public class LedgeMessage
 {
@@ -56,7 +56,7 @@ public class LedgeMessage
     private String media = "PLAIN";
 
     /** Message body character encoding. */
-    private String encoding = "";
+    private String encoding = "UTF-8";
 
     /** The logger. */
     private Logger logger;
