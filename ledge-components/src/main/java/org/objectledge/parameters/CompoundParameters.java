@@ -43,7 +43,7 @@ import java.util.TreeSet;
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.org">Rafal Krzewski</a>
- * @version $Id: CompoundParameters.java,v 1.3 2005-03-10 09:46:16 zwierzem Exp $
+ * @version $Id: CompoundParameters.java,v 1.4 2005-04-12 14:33:57 pablo Exp $
  */
 public class CompoundParameters implements Parameters
 {
@@ -64,7 +64,6 @@ public class CompoundParameters implements Parameters
         containers = new ArrayList(2);
         containers.add(sub);
         containers.add(sup);
-        Collections.reverse(containers);
     }
 
     /**
@@ -78,7 +77,6 @@ public class CompoundParameters implements Parameters
     public CompoundParameters(Parameters[] array)
     {
         containers = Arrays.asList(array);
-        Collections.reverse(containers);
     }
     
     /**
@@ -101,7 +99,6 @@ public class CompoundParameters implements Parameters
                 throw new ClassCastException(obj.getClass().getName());
             }
         }
-        Collections.reverse(containers);
     }
 
     
