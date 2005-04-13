@@ -40,7 +40,7 @@ import org.objectledge.web.mvc.MVCContext;
  * Give a read only access to request parameters.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ParametersTool.java,v 1.4 2005-04-06 14:27:14 zwierzem Exp $
+ * @version $Id: ParametersTool.java,v 1.5 2005-04-13 06:47:11 rafal Exp $
  */
 public class ParametersTool
 {
@@ -312,9 +312,9 @@ public class ParametersTool
      * 
      * @return the parameter names.
      */
-    public String[] getParameterNames()
+    public List<String> getParameterNames()
     {
-        return parameters.getParameterNames();
+        return Arrays.asList(parameters.getParameterNames());
     }
 
     /**
