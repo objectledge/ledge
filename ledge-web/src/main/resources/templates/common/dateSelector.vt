@@ -81,7 +81,7 @@ $monthNames.get($month.toString())</option>
  *         date value is extended with '/disabled' string
  *#
 #macro(dateSelectorMain $name $currentDate $showTimeControls $years $hours $minutes $enabled $saveDisabledString)
-$pageTool.addScriptLink('script/DateSelector.js')
+$pageTool.addScriptLink('script/DateSelector.js')##
 ## fix null date
 #if($currentDate)
 #set($currentDateParam = $currentDate)
