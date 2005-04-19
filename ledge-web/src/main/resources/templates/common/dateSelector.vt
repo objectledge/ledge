@@ -178,5 +178,5 @@ $pageTool.addScriptLink('script/DateSelector.js')##
  * Basic optional date selection macro with minutes choice.
  *# 
 #macro(dateSelectorOptionalM $name $currentDate $disabledLabel $minutes)
-#dateSelectorOptionalMain($name $currentDate true [2000..2020] [0..23] $minutes true false $disabledLabel)
+#dateSelectorOptionalMain($name $currentDate true [2000..2020] [0..23] $minutes $currentDate false $disabledLabel)
 #end
