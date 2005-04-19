@@ -1,4 +1,6 @@
+
 package org.objectledge.fax;
+
 
 import gnu.hylafax.HylaFAXClient;
 import gnu.hylafax.HylaFAXClientProtocol;
@@ -23,7 +25,7 @@ import org.objectledge.threads.ThreadPool;
  * Fax manager implementation based on gnu.hylafax.* library.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: HylafaxManager.java,v 1.3 2005-02-11 13:54:19 rafal Exp $
+ * @version $Id: HylafaxManager.java,v 1.4 2005-04-19 11:26:22 pablo Exp $
  */
 public class HylafaxManager implements FaxManager
 {
@@ -156,7 +158,14 @@ public class HylafaxManager implements FaxManager
     public void sendFax(String destinationAddress, String from, InputStream content,
         Parameters parameters) throws FaxManagerException
     {
+        destroy();
         prepare();
+        sendFaxSave(destinationAddress, from, content, parameters);
+    }
+    
+    private void sendFaxSave(String destinationAddress, String from, InputStream content,
+        Parameters parameters) throws FaxManagerException
+    {
         try
         {
             String remoteFilename = client.putTemporary(content);
@@ -185,6 +194,12 @@ public class HylafaxManager implements FaxManager
             job.setChopThreshold(parameters.getInt("chopthreshold", chopthreshold));
             client.submit(job);
         }
+        /**
+        catch(SocketException e)
+        {
+            throw e;
+        }
+        */
         catch(Exception e)
         {
             throw new FaxManagerException("Failed to queue fax", e);
@@ -264,11 +279,18 @@ public class HylafaxManager implements FaxManager
             try
             {
                 client.quit();
+            }
+            catch(Exception e)
+            {
+                //
+            }
+            try
+            {
                 ftpClient.quit();
             }
             catch(Exception e)
             {
-                throw new FaxManagerException("Couldn't disconnect from server", e);
+                //
             }
         }
     }
