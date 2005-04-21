@@ -43,8 +43,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-
-import org.objectledge.database.DatabaseUtils;
+import java.util.Set;
 
 /**
  * An implementation of {@link DefaultOutputRecord}.
@@ -203,7 +202,7 @@ public class DefaultOutputRecord implements OutputRecord
             setNull(field);
             return;
         }        
-        fields.put(field,"'"+DatabaseUtils.escapeSqlString(value)+"'");
+        fields.put(field, value);
     }
 
     /**
@@ -442,14 +441,7 @@ public class DefaultOutputRecord implements OutputRecord
             Object value = fields.get(field);
             if(value != null)
             {
-                if(value instanceof String)
-                {
-                    buff2.append(value);
-                }
-                else
-                {
-                    buff2.append('?');
-                }
+                buff2.append('?');
             }
             else
             {
@@ -465,7 +457,7 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(buff2.toString());
         buff.append(")");
         PreparedStatement stmt = conn.prepareStatement(buff.toString());
-        setValues(stmt);
+        setValues(stmt, true);
         return stmt;
     }
     
@@ -480,35 +472,23 @@ public class DefaultOutputRecord implements OutputRecord
     public PreparedStatement getUpdateStatement(Connection conn)
         throws PersistenceException, SQLException
     {
-        String[] keys = object.getKeyColumns();
-        HashSet keySet = new HashSet();
-        for(int i=0; i<keys.length; i++)
-        {
-            keySet.add(keys[i]);
-        }
+        Set keyFields = getKeyFields();
         StringBuilder buff = new StringBuilder();
         buff.append("UPDATE ");
         buff.append(object.getTable());
         buff.append(" SET ");
-        Iterator i=fields.keySet().iterator();
+        Iterator i = fields.keySet().iterator();
         while(i.hasNext())
         {
             String field = (String)i.next();
-            if(!keySet.contains(field))
+            if(!keyFields.contains(field))
             {
                 buff.append(field);
                 buff.append(" = ");
                 Object value = fields.get(field);
                 if(value != null)
                 {
-                    if(value instanceof String)
-                    {
-                        buff.append(value);
-                    }
-                    else
-                    {
-                        buff.append('?');
-                    }
+                    buff.append('?');
                 }
                 else
                 {
@@ -522,8 +502,22 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(" WHERE ");
         buff.append(getWhereClause());
         PreparedStatement stmt = conn.prepareStatement(buff.toString()); 
-        setValues(stmt);
+        setValues(stmt, false);
         return stmt;
+    }
+
+    /**
+     * @return set of key field names.
+     */
+    private Set getKeyFields()
+    {
+        String[] keys = object.getKeyColumns();
+        HashSet keySet = new HashSet();
+        for(int i=0; i<keys.length; i++)
+        {
+            keySet.add(keys[i]);
+        }
+        return keySet;
     }
 
     /**
@@ -568,16 +562,18 @@ public class DefaultOutputRecord implements OutputRecord
      * @param stmt the statement.
      * @throws SQLException if a value couldn't be set.
      */
-    private void setValues(PreparedStatement stmt)
+    private void setValues(PreparedStatement stmt, boolean includeKeys)
         throws SQLException
     {
+        Set keyFields = getKeyFields();
         int pos = 1;
-        for(Iterator i = fields.values().iterator(); i.hasNext();)
+        for(Iterator i = fields.keySet().iterator(); i.hasNext();)
         {
-            Object value = i.next();
-            if(value != null)
+            Object field = i.next();
+            if(includeKeys || !keyFields.contains(field))
             {
-                if(!(value instanceof String))
+                Object value = fields.get(field);
+                if(value != null)
                 {
                     setValue(pos++, value, stmt);
                 }
@@ -626,6 +622,10 @@ public class DefaultOutputRecord implements OutputRecord
         else if(value instanceof URL)
         {
             stmt.setURL(pos, (URL)value);
+        }
+        else if(value instanceof String)
+        {
+            stmt.setString(pos, (String)value);
         }
         else
         {
