@@ -33,7 +33,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.12 2005-03-02 15:42:42 zwierzem Exp $
+ * @version $Id: StringTool.java,v 1.13 2005-04-22 03:54:01 pablo Exp $
  */
 public class StringTool
 {
@@ -74,7 +74,7 @@ public class StringTool
      */
     public String shortenString(String source, int length, String suffix)
     {
-        if(length >= source.length())
+        if(source == null || length >= source.length())
         {
             return source;
         }
