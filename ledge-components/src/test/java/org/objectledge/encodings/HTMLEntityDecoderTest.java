@@ -39,7 +39,7 @@ import org.xml.sax.ext.DefaultHandler2;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityDecoderTest.java,v 1.1 2005-03-22 04:43:57 zwierzem Exp $
+ * @version $Id: HTMLEntityDecoderTest.java,v 1.2 2005-04-26 13:33:54 zwierzem Exp $
  */
 public class HTMLEntityDecoderTest extends TestCase
 {
@@ -67,6 +67,22 @@ public class HTMLEntityDecoderTest extends TestCase
         String src1 = "<meta> &amp; &egrave; &#8222; &#x22AB; &amp; </meta>";
         String src2 = entParser.decodeXML(src1); 
         assertEquals("<meta> &amp; \u00E8 \u201E \u22AB &amp; </meta>", src2);
+
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setValidating( false );
+        factory.setNamespaceAware( true );
+        SAXParser parser = factory.newSAXParser();
+        DefaultHandler2 dhandler = new DefaultHandler2();
+        InputSource is = new InputSource(new StringReader(src2));
+        parser.parse(is, dhandler);
+    }
+
+    public void testDecodeAndFixXML()
+    throws Exception
+    {
+        String src1 = "<meta> &amp; &egrave; &#8222; & word &#x22AB; &amp; &broken &egrave &&& </meta>";
+        String src2 = entParser.decodeAndFixXML(src1); 
+        assertEquals("<meta> &amp; \u00E8 \u201E &amp; word \u22AB &amp; &amp;broken &amp;egrave &amp;&amp;&amp; </meta>", src2);
 
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setValidating( false );

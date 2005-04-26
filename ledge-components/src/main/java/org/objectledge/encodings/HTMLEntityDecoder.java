@@ -43,7 +43,7 @@ import org.objectledge.encodings.encoders.CharEncoderHTMLEntity;
  * <p>This tool is completely thread safe and does not keep any internal state.</p> 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityDecoder.java,v 1.4 2005-02-21 16:26:33 zwierzem Exp $
+ * @version $Id: HTMLEntityDecoder.java,v 1.5 2005-04-26 13:33:52 zwierzem Exp $
  */
 public class HTMLEntityDecoder
 {
@@ -82,7 +82,7 @@ public class HTMLEntityDecoder
 	 */
 	public String decode(String input)
 	{
-		return decode(input, false);
+		return decode(input, false, false);
 	}
 
 	/** 
@@ -101,15 +101,28 @@ public class HTMLEntityDecoder
 	 */
 	public String decodeXML(String input)
 	{
-		return decode(input, true);
+		return decode(input, true, false);
 	}
 
-	private String decode(String input, boolean keepXmlEntities)
+    /** 
+     * Decodes a string and returns a string with entities converted to unicode
+     * characters, avoids converting core XML entities and tries to fix broken
+     * enitites by inserting <code>&amp;amp;</code> string instead of <code>&amp;</code> character.
+     * 
+     * @param input input string with characters encoded as named or numeric entities.
+     * @return string with entities converted to single unicode characters.
+     */
+    public String decodeAndFixXML(String input)
+    {
+        return decode(input, true, true);
+    }
+    
+	private String decode(String input, boolean keepXmlEntities, boolean fixAmps)
 	{
 		try
 		{
 			StringWriter writer = new StringWriter(input.length());
-			decode(new StringReader(input), writer, keepXmlEntities);
+			decode(new StringReader(input), writer, keepXmlEntities, fixAmps);
 			return writer.toString();
 		}
 		catch (IOException e)
@@ -132,11 +145,11 @@ public class HTMLEntityDecoder
 	public void decode(Reader inputReader, Writer outputWriter)
 		throws IOException
 	{
-		decode(inputReader, outputWriter, false);
+		decode(inputReader, outputWriter, false, false);
 	}
 
 	/** 
-	 * Deodes a given character stream and writes a string with entities converted to unicode
+	 * Decodes a given character stream and writes a string with entities converted to unicode
 	 * characters into the given writer, avoids converting core XML entities.
 	 * 
 	 * @param inputReader input character stream with characters encoded as named or numeric
@@ -148,10 +161,28 @@ public class HTMLEntityDecoder
 	public void decodeXML(Reader inputReader, Writer outputWriter)
 		throws IOException
 	{
-		decode(inputReader, outputWriter, true);
+		decode(inputReader, outputWriter, true, false);
 	}
 
-	private void decode(Reader inputReader, Writer outputWriter, boolean keepXmlEntities)
+    /** 
+     * Decodes a given character stream and writes a string with entities converted to unicode
+     * characters into the given writer, avoids converting core XML entities and tries to fix broken
+     * enitites by inserting <code>&amp;amp;</code> string instead of <code>&amp;</code> character.
+     * 
+     * @param inputReader input character stream with characters encoded as named or numeric
+     *  entities, this method CLOSES the given reader.
+     * @param outputWriter output character stream with entities converted to single unicode
+     *  characters.
+     * @throws IOException on errors in reading or writing characters
+     */
+    public void decodeAndFixXML(Reader inputReader, Writer outputWriter)
+        throws IOException
+    {
+        decode(inputReader, outputWriter, true, true);
+    }
+
+	private void decode(Reader inputReader, Writer outputWriter, boolean keepXmlEntities,
+        boolean fixAmps)
 		throws IOException 
 	{
 		StringBuilder entity = new StringBuilder(16); // sufficient for all entities
@@ -187,7 +218,7 @@ public class HTMLEntityDecoder
 					}
 					else
 					{
-						state = notAnEntity(reader, c, entity, outputWriter);
+						state = notAnEntity(reader, c, entity, outputWriter, fixAmps);
 					}
 				break;
 				case MAYBE_START_NUMERIC_ENTITY:
@@ -202,42 +233,42 @@ public class HTMLEntityDecoder
 					}
 					else
 					{
-						state = notAnEntity(reader, c, entity, outputWriter);
+						state = notAnEntity(reader, c, entity, outputWriter, fixAmps);
 					}
 				break;
 				case MAYBE_IN_NUMDEC_ENTITY:
 					entity.append(c);
 					if(c == ';')
 					{
-						state = dumpEntity(reader, c, entity, outputWriter, keepXmlEntities);
+						state = dumpEntity(reader, c, entity, outputWriter, keepXmlEntities, fixAmps);
 					}
 					else if(entity.length() > 8 || !(c >= '0' && c <= '9'))
 					{
-						state = notAnEntity(reader, c, entity, outputWriter);
+						state = notAnEntity(reader, c, entity, outputWriter, fixAmps);
 					}
 				break;
 				case MAYBE_IN_NUMHEX_ENTITY:
 					entity.append(c);
 					if(c == ';')
 					{
-						state = dumpEntity(reader, c, entity, outputWriter, keepXmlEntities);
+						state = dumpEntity(reader, c, entity, outputWriter, keepXmlEntities, fixAmps);
 					}
 					else if(entity.length() > 8 || 
 						!(c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F'))
 					{
-						state = notAnEntity(reader, c, entity, outputWriter);
+						state = notAnEntity(reader, c, entity, outputWriter, fixAmps);
 					}
 				break;
 				case MAYBE_IN_NAMED_ENTITY:
 					entity.append(c);
 					if(c == ';')
 					{
-						state = dumpEntity(reader, c, entity, outputWriter, keepXmlEntities);
+						state = dumpEntity(reader, c, entity, outputWriter, keepXmlEntities, fixAmps);
 					}
 					else if(entity.length() > 12 || // should be 10
 						!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z'))
 					{
-						state = notAnEntity(reader, c, entity, outputWriter);
+						state = notAnEntity(reader, c, entity, outputWriter, fixAmps);
 					}
 				break;
 				default:
@@ -253,18 +284,30 @@ public class HTMLEntityDecoder
 		inputReader.close(); // TODO should we do it?
 	}
 
-	private int notAnEntity(PushbackReader reader, char c, StringBuilder entity, Writer writer)
+	private int notAnEntity(PushbackReader reader, char c, StringBuilder entity, Writer writer,
+        boolean fixAmps)
 		throws IOException
 	{
 		reader.unread(c);
 		entity.setLength(entity.length()-1);
-		writer.append(entity);
+        if(fixAmps)
+        {
+            writer.append("&amp;");
+            if(entity.length() > 1)
+            {
+                writer.append(entity.deleteCharAt(0));
+            }
+        }
+        else
+        {
+            writer.append(entity);
+        }
 		entity.setLength(0);  // clear out entity buffer
 		return DEFAULT;
 	}
 
 	private int dumpEntity(PushbackReader reader, char c, StringBuilder entity, Writer writer,
-		boolean keepXmlEntities)
+		boolean keepXmlEntities, boolean fixAmps)
 		throws IOException
 	{
 		int eC = HTML_ENTITY_ENCODER.entityCode(entity.toString());
@@ -272,15 +315,15 @@ public class HTMLEntityDecoder
 		{
 			if(keepXmlEntities && (eC == '"' || eC == '\'' || eC == '&' || eC == '<' || eC == '>'))
 			{
-				return notAnEntity(reader, c, entity, writer);
+				return notAnEntity(reader, c, entity, writer, false);
 			}
 			writer.write((char)eC);
 			entity.setLength(0); // clear out entity buffer
-			return DEFAULT;                        
+			return DEFAULT;
 		}
 		else
 		{
-			return notAnEntity(reader, c, entity, writer);
+			return notAnEntity(reader, c, entity, writer, fixAmps);
 		}
 	}
 }
