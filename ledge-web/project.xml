@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.45 2005-04-06 14:20:06 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.46 2005-04-28 05:54:53 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -46,6 +46,7 @@
         <directory>src/main/java</directory>
         <includes>
           <include>**/*.rng</include>
+          <include>**/*.vm</include>
         </includes>
       </resource>
       <resource>
