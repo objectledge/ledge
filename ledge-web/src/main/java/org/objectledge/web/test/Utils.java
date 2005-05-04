@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  * Utilities shared by classs from this package.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Utils.java,v 1.1 2005-03-17 08:14:37 rafal Exp $
+ * @version $Id: Utils.java,v 1.2 2005-05-04 06:52:30 rafal Exp $
  */
 class Utils
 {
@@ -71,7 +71,7 @@ class Utils
         }
         else
         {
-            return null;
+            return "";
         }
     }
 
@@ -90,7 +90,7 @@ class Utils
         }
         else
         {
-            return null;
+            return "";
         }
     }
 }
