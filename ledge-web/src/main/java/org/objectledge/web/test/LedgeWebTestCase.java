@@ -29,13 +29,16 @@ package org.objectledge.web.test;
 
 import junit.framework.Assert;
 
+import com.meterware.httpunit.WebImage;
+import com.meterware.httpunit.WebLink;
+
 import net.sourceforge.jwebunit.WebTestCase;
 
 /**
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.4 2005-05-04 09:54:59 rafal Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.5 2005-05-04 10:55:40 pablo Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -62,7 +65,7 @@ public class LedgeWebTestCase
         String actualView = Utils.getActualView(getTester().getDialog().getResponseText());
         if(actualView == null)
         {
-            Assert.fail("unable to determine current view");
+            Assert.fail("unable to determine current view, expected: "+expectedView);
         }
         if(!actualView.equals(expectedView))
         {
@@ -99,5 +102,53 @@ public class LedgeWebTestCase
         {
             Assert.fail("exected no result but action reported "+actionResult);
         }
-    }       
+    }      
+    
+    
+    // some usefull methods..
+    protected WebLink getLinkWithString(String text)
+        throws Exception
+    {
+        WebLink[] links = getTester().getDialog().getResponse().getLinks();
+        WebLink link = null;
+        for(WebLink l: links)
+        {
+            if(l.getURLString().contains(text))
+            {
+                return l;
+            }
+        }
+        return null;
+    }
+    
+    protected int countLinksWithString(String text)
+        throws Exception
+    {
+        int i = 0;
+        WebLink[] links = getTester().getDialog().getResponse().getLinks();
+        for(WebLink l: links)
+        {
+            if(l.getText().contains(text))
+            {
+                i++;
+            }
+        }
+        return i;
+    }
+    
+    protected int countImagesWithSource(String text)
+        throws Exception
+    {
+        int i = 0;
+        WebImage[] images = getTester().getDialog().getResponse().getImages();
+        for(WebImage l: images)
+        {
+            if(l.getSource().contains(text))
+            {
+                i++;
+            }
+        }
+        return i;
+    }
+     
 }
