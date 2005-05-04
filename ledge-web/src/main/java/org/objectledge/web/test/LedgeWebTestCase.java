@@ -27,20 +27,15 @@
 // 
 package org.objectledge.web.test;
 
-import org.xml.sax.SAXException;
-
 import junit.framework.Assert;
 
 import net.sourceforge.jwebunit.WebTestCase;
-
-import com.meterware.httpunit.WebLink;
-import com.meterware.httpunit.parsing.HTMLParserFactory;
 
 /**
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.3 2005-03-17 10:53:27 rafal Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.4 2005-05-04 09:54:59 rafal Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -64,7 +59,7 @@ public class LedgeWebTestCase
      */
     public void assertActualView(String expectedView)
     {
-        String actualView = Utils.getActualView(tester.getDialog().getResponseText());
+        String actualView = Utils.getActualView(getTester().getDialog().getResponseText());
         if(actualView == null)
         {
             Assert.fail("unable to determine current view");
@@ -82,7 +77,7 @@ public class LedgeWebTestCase
      */
     public void assertActionResult(String expectedResult)
     {
-        String actionResult = Utils.getActionResult(tester.getDialog().getResponseText());
+        String actionResult = Utils.getActionResult(getTester().getDialog().getResponseText());
         if(actionResult == null)
         {
             Assert.fail("unable to determine action result");
@@ -99,7 +94,7 @@ public class LedgeWebTestCase
      */
     public void assertNoActionResult()
     {
-        String actionResult = Utils.getActionResult(tester.getDialog().getResponseText());
+        String actionResult = Utils.getActionResult(getTester().getDialog().getResponseText());
         if(actionResult != null)
         {
             Assert.fail("exected no result but action reported "+actionResult);
