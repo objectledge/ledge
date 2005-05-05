@@ -29,8 +29,12 @@ package org.objectledge.web.test;
 
 import junit.framework.Assert;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import com.meterware.httpunit.WebImage;
 import com.meterware.httpunit.WebLink;
+import com.meterware.httpunit.WebResponse;
 
 import net.sourceforge.jwebunit.WebTestCase;
 
@@ -38,7 +42,7 @@ import net.sourceforge.jwebunit.WebTestCase;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.5 2005-05-04 10:55:40 pablo Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.6 2005-05-05 08:45:35 pablo Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -150,5 +154,14 @@ public class LedgeWebTestCase
         }
         return i;
     }
-     
+    
+    
+    protected int countElements(String tagName)
+        throws Exception
+    {
+        Document doc = getTester().getDialog().getResponse().getDOM();
+        DOMTreeWalker walker = new DOMTreeWalker(doc.getDocumentElement());
+        return walker.countTags(tagName);
+    }
+
 }
