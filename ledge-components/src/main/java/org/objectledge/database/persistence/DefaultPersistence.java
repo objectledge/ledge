@@ -44,7 +44,7 @@ import org.objectledge.database.DatabaseUtils;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DefaultPersistence.java,v 1.4 2004-03-12 13:07:16 fil Exp $
+ * @version $Id: DefaultPersistence.java,v 1.5 2005-05-05 11:13:02 rafal Exp $
  */
 public class DefaultPersistence implements Persistence
 {
@@ -257,9 +257,17 @@ public class DefaultPersistence implements Persistence
                 object.getData(record);
                 PreparedStatement statement = record.getDeleteStatement(conn); 
                 statement.execute();
+                if(statement.getUpdateCount() != 1)
+                {
+                    throw new PersistenceException("unsuccessful DELETE statement");
+                }
             }
             catch (Exception e)
             {
+                if(e instanceof PersistenceException)
+                {
+                    throw (PersistenceException)e;
+                }
                 throw new PersistenceException("Failed to delete object", e);
             }
             finally
