@@ -459,8 +459,10 @@ public class DefaultInputRecord implements InputRecord
     {
         DefaultOutputRecord out = new DefaultOutputRecord(object);
         object.getData(out);
-        return conn.prepareStatement("SELECT * FROM " + object.getTable() + 
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + object.getTable() + 
             " WHERE " + out.getWhereClause());
+        out.setValues(stmt, true, false);
+        return stmt;
     }
     
     /**

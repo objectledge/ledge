@@ -80,7 +80,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setBoolean(String field, boolean value)
         throws PersistenceException
     {
-        fields.put(field, value ? "1" : "0");
+        fields.put(field, value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
@@ -94,7 +94,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setByte(String field, byte value)
         throws PersistenceException
     {
-        fields.put(field, Byte.toString(value));
+        fields.put(field, new Byte(value));
     }
 
     /**
@@ -108,7 +108,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setShort(String field, short value)
         throws PersistenceException
     {
-        fields.put(field, Short.toString(value));
+        fields.put(field, new Short(value));
     }
 
     /**
@@ -122,7 +122,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setInteger(String field, int value)
         throws PersistenceException
     {
-        fields.put(field, Integer.toString(value));
+        fields.put(field, new Integer(value));
     }
 
     /**
@@ -136,7 +136,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setLong(String field, long value)
         throws PersistenceException
     {
-        fields.put(field, Long.toString(value));
+        fields.put(field, new Long(value));
     }        
 
     /**
@@ -155,7 +155,7 @@ public class DefaultOutputRecord implements OutputRecord
             setNull(field);
             return;
         }
-        fields.put(field, value.toString());
+        fields.put(field, value);
     }
 
     /**
@@ -169,7 +169,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setFloat(String field, float value)
         throws PersistenceException
     {
-        fields.put(field, Float.toString(value));
+        fields.put(field, new Float(value));
     }
 
     /**
@@ -183,7 +183,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setDouble(String field, double value)
         throws PersistenceException
     {
-        fields.put(field, Double.toString(value));
+        fields.put(field, new Double(value));
     }
 
     /**
@@ -223,7 +223,7 @@ public class DefaultOutputRecord implements OutputRecord
         {
             sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
             String encoded = encoder.encodeBuffer(value);
-            fields.put(field,"'"+encoded+"'");
+            fields.put(field, encoded);
         }
         catch(Exception e)
         {
@@ -396,25 +396,22 @@ public class DefaultOutputRecord implements OutputRecord
     public String getWhereClause()
         throws PersistenceException
     {
-        String[] keys = object.getKeyColumns();
+        Set keyFields = getKeyFields();
         StringBuilder buff = new StringBuilder();
-        for(int i=0; i<keys.length; i++)
+        for(Iterator i = fields.keySet().iterator(); i.hasNext();)
         {
-            buff.append(keys[i]);
-            String value = (String)fields.get(keys[i]);
-            if(value == null)
+            String field = (String)i.next();
+            if(keyFields.contains(field))
             {
-                buff.append(" IS NULL");
-            }
-            else
-            {
-                buff.append(" = ").append(value);
-            }
-            if(i < keys.length - 1)
-            {    
+                buff.append(field);
+                Object value = fields.get(field);
+                buff.append(value == null ? " IS " : " = ");
+                appendValueString(buff, value);
                 buff.append(" AND ");
             }
         }
+        // remove trailing " AND "
+        buff.setLength(buff.length() - 5);
         return buff.toString();
     }
 
@@ -439,14 +436,7 @@ public class DefaultOutputRecord implements OutputRecord
             String field = (String)i.next();
             buff.append(field);
             Object value = fields.get(field);
-            if(value != null)
-            {
-                buff2.append('?');
-            }
-            else
-            {
-                buff2.append("NULL");
-            }
+            appendValueString(buff2, value);
             if(i.hasNext())
             {
                 buff.append(", ");
@@ -457,7 +447,7 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(buff2.toString());
         buff.append(")");
         PreparedStatement stmt = conn.prepareStatement(buff.toString());
-        setValues(stmt, true);
+        setValues(stmt, true, true);
         return stmt;
     }
     
@@ -486,14 +476,7 @@ public class DefaultOutputRecord implements OutputRecord
                 buff.append(field);
                 buff.append(" = ");
                 Object value = fields.get(field);
-                if(value != null)
-                {
-                    buff.append('?');
-                }
-                else
-                {
-                    buff.append("NULL");
-                }
+                appendValueString(buff, value);
                 buff.append(", ");
             }
         }
@@ -501,8 +484,11 @@ public class DefaultOutputRecord implements OutputRecord
         buff.setLength(buff.length() - 2);
         buff.append(" WHERE ");
         buff.append(getWhereClause());
-        PreparedStatement stmt = conn.prepareStatement(buff.toString()); 
-        setValues(stmt, false);
+        PreparedStatement stmt = conn.prepareStatement(buff.toString());
+        // set non-key values first
+        setValues(stmt, false, true);
+        // set key values
+        setValues(stmt, true, false);
         return stmt;
     }
 
@@ -518,6 +504,31 @@ public class DefaultOutputRecord implements OutputRecord
             keySet.add(keys[i]);
         }
         return keySet;
+    }
+    
+    /**
+     * Appends string token apropriate for the value in the statement body to a given buffer.
+     *
+     * @param buff the buffer to append to.
+     * @param object the object.
+     */
+    private void appendValueString(StringBuilder buff, Object object)
+    {
+        if(object == null)
+        {
+            buff.append("NULL");
+        }
+        else
+        {
+            if(object instanceof Number)
+            {
+                buff.append(object.toString());
+            }
+            else
+            {
+                buff.append('?');
+            }
+        }        
     }
 
     /**
@@ -537,7 +548,9 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(object.getTable());
         buff.append(" WHERE ");
         buff.append(getWhereClause());
-        return conn.prepareStatement(buff.toString());
+        PreparedStatement stmt = conn.prepareStatement(buff.toString());
+        setValues(stmt, true, false);
+        return stmt;
     }
 
     /**
@@ -560,9 +573,11 @@ public class DefaultOutputRecord implements OutputRecord
      * Sets prepared statement's positional parameters to non-string field values.
      * 
      * @param stmt the statement.
+     * @param includeKeys <code>true</code> to set key values.
+     * @param includeNonKeys <code>true</code> to set non-key values.
      * @throws SQLException if a value couldn't be set.
      */
-    private void setValues(PreparedStatement stmt, boolean includeKeys)
+    public void setValues(PreparedStatement stmt, boolean includeKeys, boolean includeNonKeys)
         throws SQLException
     {
         Set keyFields = getKeyFields();
@@ -570,12 +585,16 @@ public class DefaultOutputRecord implements OutputRecord
         for(Iterator i = fields.keySet().iterator(); i.hasNext();)
         {
             Object field = i.next();
-            if(includeKeys || !keyFields.contains(field))
+            boolean isKey = keyFields.contains(field);
+            if((isKey && includeKeys) || (!isKey && includeNonKeys))
             {
                 Object value = fields.get(field);
                 if(value != null)
                 {
-                    setValue(pos++, value, stmt);
+                    if(!(value instanceof Number))
+                    {
+                        setValue(pos++, value, stmt);
+                    }
                 }
             }
         }
@@ -622,6 +641,10 @@ public class DefaultOutputRecord implements OutputRecord
         else if(value instanceof URL)
         {
             stmt.setURL(pos, (URL)value);
+        }
+        else if(value instanceof Boolean)
+        {
+            stmt.setInt(pos, ((Boolean)value).booleanValue() ? 1 : 0);
         }
         else if(value instanceof String)
         {
