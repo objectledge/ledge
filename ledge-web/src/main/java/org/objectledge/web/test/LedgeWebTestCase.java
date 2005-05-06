@@ -42,7 +42,7 @@ import net.sourceforge.jwebunit.WebTestCase;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.6 2005-05-05 08:45:35 pablo Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.7 2005-05-06 06:12:11 pablo Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -102,7 +102,7 @@ public class LedgeWebTestCase
     public void assertNoActionResult()
     {
         String actionResult = Utils.getActionResult(getTester().getDialog().getResponseText());
-        if(actionResult != null)
+        if(actionResult != null && actionResult.length() > 0)
         {
             Assert.fail("exected no result but action reported "+actionResult);
         }

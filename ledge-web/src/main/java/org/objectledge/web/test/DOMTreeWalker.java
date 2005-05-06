@@ -1,5 +1,7 @@
 package org.objectledge.web.test;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -9,79 +11,140 @@ public class DOMTreeWalker
 {
     private Element root;
 
-    private Element lastVisited;
+    private ArrayList<Object> elements;
     
-    private boolean textFound;
+    private int currentIndex;
     
     public DOMTreeWalker(Element root)
     {
         this.root = root;
-        this.lastVisited = root;
-        this.textFound = false;
+        this.elements = new ArrayList<Object>();
+        this.currentIndex = 0;
+        loadList();
     }
 
     public void reset()
     {
-        lastVisited = root;
-        this.textFound = false;
+        currentIndex = 0;
+    }
+    
+    public void loadList()
+    {
+        loadNode(root);
+    }
+    
+    private void loadNode(Node node)
+    {
+        if(node instanceof CharacterData)        
+        {
+            String data = ((CharacterData)node).getData();
+            elements.add(data);
+        }
+        if(node instanceof Element)
+        {
+            elements.add(node);
+            NodeList children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++)
+            {
+                loadNode(children.item(i));
+            }
+        }
     }
     
     public Element findElementAfterText(String text, String tagName)
     {
-        return findElementAfterText(lastVisited, text, tagName);
-    }
-    
-    private Element findElementAfterText(Node node, String text, String tagName)
-    {
-        if(node instanceof CharacterData && !textFound)
+        for(; currentIndex < elements.size(); currentIndex++)
         {
-            String data = ((CharacterData)node).getData();
-            if(data != null && data.indexOf(text) > -1)
+            Object ob = elements.get(currentIndex);
+            if(ob instanceof String)
             {
-                textFound = true;
+                if(((String)ob).contains(text))
+                {
+                    break;
+                }
             }
         }
-        if(node instanceof Element)
+        for(; currentIndex < elements.size(); currentIndex++)
         {
-            lastVisited = (Element)node;
-            String tag = node.getNodeName();
-            if(textFound && tagName.equals(tag.toLowerCase()))
+            Object ob = elements.get(currentIndex);
+            if(ob instanceof Element)
             {
-                return (Element)node;
-            }
-            NodeList children = node.getChildNodes();
-            for (int i = 0; i < children.getLength(); i++)
-            {
-                Element el = findElementAfterText(children.item(i), text, tagName);
-                if(el != null)
+                if(tagName != null)
                 {
-                    return el;
+                    String tag = ((Element)ob).getNodeName();
+                    if(tagName.equals(tag.toLowerCase()))
+                    {
+                        return (Element)ob;
+                    }
+                }
+                else
+                {
+                    return (Element)ob;
                 }
             }
         }
         return null;
     }
     
-    public int countTags(String tagName)
-    {   
-        return countTags(lastVisited, tagName);
+    public String getNextText()
+    {
+        return getNextText(0);
     }
     
-    public int countTags(Node node, String tagName)
+    public String getNextText(int skip)
     {
-        int counter = 0;
-        if(node instanceof Element)
+        currentIndex = currentIndex + skip + 1;
+        for(; currentIndex < elements.size(); currentIndex++)
         {
-            lastVisited = (Element)node;
-            String tag = node.getNodeName();
-            if(tagName.equals(tag.toLowerCase()))
+            Object ob = elements.get(currentIndex);
+            if(ob instanceof String)
             {
-                counter++;
+                return (String)ob;
             }
-            NodeList children = node.getChildNodes();
-            for (int i = 0; i < children.getLength(); i++)
+        }
+        return null;
+    }
+    
+    public Element getNextElement()
+    {
+        return getNextElement(0);
+    }
+    
+    public Element getNextElement(int skip)
+    {
+        currentIndex = currentIndex + skip + 1;
+        for(; currentIndex < elements.size(); currentIndex++)
+        {
+            Object ob = elements.get(currentIndex);
+            if(ob instanceof Element)
             {
-                counter = counter + countTags(children.item(i), tagName);
+                return (Element)ob;
+            }
+        }
+        return null;
+    }
+  
+    public int countTags(String tagName)
+    {
+        int i = 0;
+        int counter = 0;
+        for(; i < elements.size(); i++)
+        {
+            Object ob = elements.get(i);
+            if(ob instanceof Element)
+            {
+                if(tagName != null)
+                {
+                    String tag = ((Element)ob).getNodeName();
+                    if(tagName.equals(tag.toLowerCase()))
+                    {
+                        counter++;
+                    }
+                }
+                else
+                {
+                    counter++;
+                }
             }
         }
         return counter;
