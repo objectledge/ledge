@@ -51,7 +51,7 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.7 2005-05-06 05:21:10 rafal Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.8 2005-05-06 05:40:35 rafal Exp $
  */
 public class ConfigurationFactory
 {
@@ -127,7 +127,7 @@ public class ConfigurationFactory
     {
         return getConfig(componentRole.getName(), componentImplementation);
     }
-    
+
     /**
      * Returns an input source for reading in the configuration file.
      * 
@@ -138,12 +138,8 @@ public class ConfigurationFactory
     public InputSource getConfigurationSource(String componentName, Class componentClass)
     {
         String path = getComponentConfigurationPath(componentName);
+        InputSource source = getRawConfigurationSource(componentName);
         String schema = getComponentConfigurationSchemaPath(componentClass);
-        if(!fileSystem.exists(path))
-        {
-            throw new ComponentInitializationError("configuration file "+path+" for component "+
-                componentName+" not found");
-        }
         if(!fileSystem.exists(schema))
         {
             throw new ComponentInitializationError("schema file "+schema+" for component "+
@@ -164,9 +160,26 @@ public class ConfigurationFactory
             throw new ComponentInitializationError("configuration file "+
                 path+" for component "+componentName+" is malformed", e);
         }
-        return new InputSource(fileSystem.getInputStream(path));
+        return source;
     }
 
+    /**
+     * Return a raw (unchecked) configuration source for a component.
+     * 
+     * @param componentName the name of the component.
+     * @return an InputSource for reading the configuration.
+     */
+    public InputSource getRawConfigurationSource(String componentName)
+    {
+        String path = getComponentConfigurationPath(componentName);
+        if(!fileSystem.exists(path))
+        {
+            throw new ComponentInitializationError("configuration file "+path+" for component "+
+                componentName+" not found");
+        }
+        return new InputSource(fileSystem.getInputStream(path));
+    }
+    
     /**
      * Returns an input source for reading in the configuration file.
      * 
@@ -178,7 +191,6 @@ public class ConfigurationFactory
     {
         return getConfigurationSource(componentRole.getName(), componentClass);
     }
-    
     
     // implemnetation /////////////////////////////////////////////////////////////////////////////
 
