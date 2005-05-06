@@ -38,6 +38,7 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.ProcessingStage;
 
 
 /**
@@ -76,14 +77,14 @@ public class PolicyCheckingValve implements Valve
      */
     public void process(Context context) throws ProcessingException
     {
-        // TODO Get the stage from ???
-        String stage = "";
+        MVCContext mvcContext = MVCContext.getMVCContext(context);
+        ProcessingStage stage = mvcContext.getStage();
         logger.debug("Policy Hook fired at "+stage+" stage");
-        if(stage.equals("preProcessing"))
+        if(stage != ProcessingStage.POST_AUTHENTICATION)
         {
             Parameters parameters = RequestParameters.getRequestParameters(context);
             String action = parameters.get(webConfigurator.getActionToken(),"");    
-            if(action.startsWith("authentication,"))
+            if(action.startsWith("authentication."))
             {
                 logger.debug("authentication context switching action "+action+
                              " skipping policy check");
@@ -92,7 +93,6 @@ public class PolicyCheckingValve implements Valve
         }
         AuthenticationContext authenticationContext =
             AuthenticationContext.getAuthenticationContext(context);
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         Policy policy = policySystem.getPolicy(mvcContext.getView(), mvcContext.getAction());
         if(policy == null)
