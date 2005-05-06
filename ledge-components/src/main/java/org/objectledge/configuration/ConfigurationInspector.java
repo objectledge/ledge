@@ -28,18 +28,29 @@
 package org.objectledge.configuration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import org.objectledge.ComponentInitializationError;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Provides information about components deployed in the system and their configuration. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConfigurationInspector.java,v 1.1 2005-05-06 10:27:34 rafal Exp $
+ * @version $Id: ConfigurationInspector.java,v 1.2 2005-05-06 11:03:11 rafal Exp $
  */
 public class ConfigurationInspector
 {
     private final ConfigurationFactory configurationFactory;
+
+    private final SAXParserFactory parserFactory;
 
     /**
      * Creates new ConfigurationViewer instance.
@@ -49,6 +60,15 @@ public class ConfigurationInspector
     public ConfigurationInspector(ConfigurationFactory configurationFactoryArg)
     {
         this.configurationFactory = configurationFactoryArg;
+        try
+        {
+            parserFactory = SAXParserFactory.newInstance();
+            parserFactory.setNamespaceAware(true);
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError(e);
+        }
     }
 
     /**
@@ -60,16 +80,25 @@ public class ConfigurationInspector
     {
         List<ComponentConfiguration> list = new ArrayList<ComponentConfiguration>();
         
-        // fake it
-        String[] params = { "parm1", "param2" };
-        String[] configs = { "a/b = 1", "a/c = 2" };
-        ComponentConfiguration config = new ComponentConfiguration("fakeKey", "fakeClass",
-            Arrays.asList(params), Arrays.asList(configs));
-        list.add(config);
-        list.add(config);
+        InputSource composition = configurationFactory.getCompositionSource();
+        try
+        {
+            XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+            reader.setContentHandler(new CompositionHandler(list));
+            reader.parse(composition);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("composition parsing failed", e);
+        }
         
         return list;
     }    
+    
+    List<String> getComponentConfig(String key)
+    {
+        return Collections.EMPTY_LIST;
+    }
     
     /**
      * Describes a component's configuration.
@@ -143,6 +172,53 @@ public class ConfigurationInspector
         public List<String> getParameters()
         {
             return parameters;
+        }
+    }
+    
+    private class CompositionHandler 
+        extends DefaultHandler
+    {
+        private final List<ComponentConfiguration> list;
+
+        public CompositionHandler(List<ComponentConfiguration> listArg)
+        {
+            this.list = listArg;
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+            throws SAXException
+        {
+            if(localName.equals("component"))
+            {
+                String key = null;
+                boolean classKey = false;
+                if(attributes.getValue("key") != null)
+                {
+                    key = attributes.getValue("key");
+                }
+                if(key == null && attributes.getValue("class-key") != null)
+                {
+                    key = attributes.getValue("class-key");
+                    classKey = true;
+                }
+                if(key == null && attributes.getValue("anon") != null)
+                {
+                    key = "anon";
+                }
+                if(key == null)
+                {
+                    key = attributes.getValue("class");
+                    classKey = true;
+                }
+                String impl = attributes.getValue("class");
+                
+                List<String> params = Collections.EMPTY_LIST;
+                List<String> config = getComponentConfig(key);
+                list.add(new ComponentConfiguration(key, impl, params, config));
+             }
         }
     }
 }
