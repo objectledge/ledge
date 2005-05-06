@@ -51,7 +51,7 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.6 2004-12-23 01:54:51 rafal Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.7 2005-05-06 05:21:10 rafal Exp $
  */
 public class ConfigurationFactory
 {
@@ -90,17 +90,7 @@ public class ConfigurationFactory
     public Configuration getConfig(String componentName, Class componentClass)
     {
         String path = getComponentConfigurationPath(componentName);
-        String schema = getComponentConfigurationSchemaPath(componentClass);
-        if(!fileSystem.exists(path))
-        {
-            throw new ComponentInitializationError("configuration file "+path+" for component "+
-                componentName+" not found");
-        }
-        if(!fileSystem.exists(schema))
-        {
-            throw new ComponentInitializationError("schema file "+schema+" for component "+
-                componentName+" not found");
-        }
+        InputSource source = getConfigurationSource(componentName, componentClass);
         Configuration configuration;
         try
         {
@@ -109,10 +99,8 @@ public class ConfigurationFactory
             SAXConfigurationHandler handler = new SAXConfigurationHandler();
             reader.setContentHandler(handler);
             reader.setErrorHandler(handler);
-            InputSource source = new InputSource(fileSystem.getInputStream(path));
             reader.parse(source);
             configuration = handler.getConfiguration();
-            checkSchema(path, schema);
         }
         catch(SAXParseException e)
         {
