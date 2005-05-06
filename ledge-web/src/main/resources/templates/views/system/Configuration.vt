@@ -16,7 +16,7 @@ $pageTool.appendTitleSuffix('System configuration')
 <div class="component">
 <a name="$component.componentKey"></a>
 <strong>$component.componentKey</strong> ($component.componentClass) <br/>
-#if($component.parameters && $component.parametrs.size() > 0)
+#if($component.parameters && $component.parameters.size() > 0)
 parameters
 <div class="parameters">
 #foreach($param in $component.parameters)
