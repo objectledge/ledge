@@ -51,7 +51,7 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.8 2005-05-06 05:40:35 rafal Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.9 2005-05-06 09:42:07 rafal Exp $
  */
 public class ConfigurationFactory
 {
@@ -190,6 +190,21 @@ public class ConfigurationFactory
     public InputSource getConfigurationSource(Class componentRole, Class componentClass)
     {
         return getConfigurationSource(componentRole.getName(), componentClass);
+    }
+    
+    /**
+     * Returns an InputSource for reading the container composition file.
+     * 
+     * @return an InputSource for reading the container composition file. 
+     */
+    public InputSource getCompositionSource()
+    {
+        String path = directory + "/container.xml";
+        if(!fileSystem.exists(path))
+        {
+            throw new ComponentInitializationError("composition file " + path + " not found");
+        }
+        return new InputSource(fileSystem.getInputStream(path));
     }
     
     // implemnetation /////////////////////////////////////////////////////////////////////////////
