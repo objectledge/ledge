@@ -85,6 +85,40 @@ public class DOMTreeWalker
         }
         return null;
     }
+
+    public Element findElementWithText(String text, String tagName)
+    {
+        Element matchedElement = null;
+        Element currentElement = null;
+        
+        for(; currentIndex < elements.size(); currentIndex++)
+        {
+            Object ob = elements.get(currentIndex);
+            if(ob instanceof Element)
+            {
+                if(tagName != null)
+                {
+                    String tag = ((Element)ob).getNodeName();
+                    if(tagName.equals(tag.toLowerCase()))
+                    {
+                        currentElement = (Element)ob;
+                    }
+                }
+                else
+                {
+                    currentElement = (Element)ob;
+                }
+            }
+            if(ob instanceof String)
+            {
+                if(((String)ob).contains(text))
+                {
+                    matchedElement = currentElement;
+                }
+            }
+        }
+        return matchedElement;
+    }
     
     public String getNextText()
     {
@@ -112,18 +146,53 @@ public class DOMTreeWalker
     
     public Element getNextElement(int skip)
     {
+        return getNextElement(skip, null);
+    }
+    
+    public Element getNextElement(int skip, String tagName)
+    {
         currentIndex = currentIndex + skip + 1;
         for(; currentIndex < elements.size(); currentIndex++)
         {
             Object ob = elements.get(currentIndex);
             if(ob instanceof Element)
             {
-                return (Element)ob;
+                if(tagName != null)
+                {
+                    String tag = ((Element)ob).getNodeName();
+                    if(tagName.equals(tag.toLowerCase()))
+                    {
+                        return (Element)ob;
+                    }
+                }
+                else
+                {
+                    return (Element)ob;
+                }
             }
         }
         return null;
     }
-  
+    
+    public void gotoElement(Element element)
+    {
+        for(currentIndex = 0; currentIndex < elements.size(); currentIndex++)
+        {
+            Object node = elements.get(currentIndex);
+            if(node instanceof Element)
+            {
+                Element el = (Element)node;
+                if(el.getNodeName().equals(element.getNodeName()))
+                {
+                    if(el.equals(element))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
     public int countTags(String tagName)
     {
         int i = 0;
@@ -136,6 +205,33 @@ public class DOMTreeWalker
                 if(tagName != null)
                 {
                     String tag = ((Element)ob).getNodeName();
+                    if(tagName.equals(tag.toLowerCase()))
+                    {
+                        counter++;
+                    }
+                }
+                else
+                {
+                    counter++;
+                }
+            }
+        }
+        return counter;
+    }
+    
+    
+    public static int countElements(Node node, String tagName)
+    {
+        int counter = 0;
+        NodeList list = node.getChildNodes();
+        for(int i = 0; i< list.getLength(); i++)
+        {
+            Node child = list.item(i);
+            if(child instanceof Element)
+            {
+                if(tagName != null)
+                {
+                    String tag = ((Element)child).getNodeName();
                     if(tagName.equals(tag.toLowerCase()))
                     {
                         counter++;

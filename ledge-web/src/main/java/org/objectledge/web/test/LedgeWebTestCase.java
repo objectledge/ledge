@@ -32,9 +32,10 @@ import junit.framework.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.meterware.httpunit.HTMLElementPredicate;
 import com.meterware.httpunit.WebImage;
 import com.meterware.httpunit.WebLink;
-import com.meterware.httpunit.WebResponse;
+import com.meterware.httpunit.WebTable;
 
 import net.sourceforge.jwebunit.WebTestCase;
 
@@ -42,7 +43,7 @@ import net.sourceforge.jwebunit.WebTestCase;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.7 2005-05-06 06:12:11 pablo Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.8 2005-05-06 10:47:01 pablo Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -164,4 +165,56 @@ public class LedgeWebTestCase
         return walker.countTags(tagName);
     }
 
+    public Element getTableWithText(String text)
+        throws Exception
+    {
+        Document doc = getTester().getDialog().getResponse().getDOM();
+        DOMTreeWalker walker = new DOMTreeWalker(doc.getDocumentElement());
+        return getTableWithText(walker, text);
+    }
+    
+    public Element getTableWithText(DOMTreeWalker walker, String text)
+    {
+        return walker.findElementWithText(text,"table");
+    }
+    
+    public String getTableCellText(Element table, int row, int cell)
+        throws Exception
+    {
+        Document doc = getTester().getDialog().getResponse().getDOM();
+        DOMTreeWalker walker = new DOMTreeWalker(doc.getDocumentElement());
+        return getTableRowText(walker, table, row, cell);
+    }
+    
+    public String getTableRowText(DOMTreeWalker walker, Element table, int row, int cell)
+    {
+        walker.gotoElement(table);
+        for(int i = 0; i < row+1; i++)
+        {
+            walker.getNextElement(0,"tr");
+        }
+        for(int i = 0; i < cell+1; i++)
+        {
+            walker.getNextElement(0,"td");
+        }
+        return walker.getNextText();
+    }
+    
+    public class TableContentPredicate implements HTMLElementPredicate
+    {
+        public boolean matchesCriteria(Object htmlElement, Object criteria)
+        {
+            if(!(htmlElement instanceof WebTable))
+            {
+                return false;
+            }
+            WebTable table = (WebTable)htmlElement;
+            String value = table.getText();
+            if(value != null && value.contains((String)criteria))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 }
