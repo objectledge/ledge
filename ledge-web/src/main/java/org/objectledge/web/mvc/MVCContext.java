@@ -35,7 +35,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCContext.java,v 1.11 2005-03-03 13:26:59 zwierzem Exp $
+ * @version $Id: MVCContext.java,v 1.12 2005-05-06 09:31:13 rafal Exp $
  */
 public class MVCContext
 {
@@ -62,6 +62,8 @@ public class MVCContext
 	/** the view build result */
 	private String buildResult;
 
+    /** the current processing stage. */
+    private ProcessingStage stage = ProcessingStage.PROCESSING;
 
 	/**
 	 * Construct new pipeline context.
@@ -132,5 +134,25 @@ public class MVCContext
     public void setBuildResult(String buildResult)
     {
     	this.buildResult = buildResult;
+    }
+
+    /**
+     * Returns the processing stage.
+     *
+     * @return the stage.
+     */
+    public ProcessingStage getStage()
+    {
+        return stage;
+    }
+
+    /**
+     * Sets the processing stage.
+     *
+     * @param stage The stage to set.
+     */
+    public void setStage(ProcessingStage stage)
+    {
+        this.stage = stage;
     }
 }
