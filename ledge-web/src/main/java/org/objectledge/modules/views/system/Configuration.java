@@ -27,7 +27,7 @@
 // 
 package org.objectledge.modules.views.system;
 
-import org.objectledge.configuration.ConfigurationViewer;
+import org.objectledge.configuration.ConfigurationInspector;
 import org.objectledge.context.Context;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
@@ -39,12 +39,12 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Configuration.java,v 1.1 2005-05-06 10:25:22 rafal Exp $
+ * @version $Id: Configuration.java,v 1.2 2005-05-06 10:26:44 rafal Exp $
  */
 public class Configuration
     extends PolicyProtectedBuilder
 {
-    private final ConfigurationViewer configurationViewer;
+    private final ConfigurationInspector configurationViewer;
 
     /**
      * Creates new Configuration view instance.
@@ -54,7 +54,7 @@ public class Configuration
      * @param configurationViewerArg the ConfigurationViewer component.
      */
     public Configuration(Context context, PolicySystem policySystemArg, 
-        ConfigurationViewer configurationViewerArg)
+        ConfigurationInspector configurationViewerArg)
     {
         super(context, policySystemArg);
         this.configurationViewer = configurationViewerArg;
