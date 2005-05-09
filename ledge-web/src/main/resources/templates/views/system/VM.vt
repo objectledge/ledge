@@ -1,0 +1,104 @@
+$pageTool.appendTitleSuffix('Virtual machine')
+#macro(memoryUsage $usage)
+#if($usage)
+init: $usage.init committed: $usage.committed max: $usage.max used: $usage.used
+#else
+unknown
+#end
+#end
+
+#macro(strings $array)
+#foreach($pool in $array)$pool | #end
+#end
+<style type="text/css">
+<!--
+div.d1 {
+ padding: 5px;
+}
+-->
+</style>
+
+<h3>Class loading</h3>
+<div class="d1">
+loaded classes = $classLoading.loadedClassCount <br/>
+total loaded classes = $classLoading.totalLoadedClassCount<br/>
+unloaded class count = $classLoading.unloadedClassCount
+</div>
+
+<h3>Compilation</h3>
+<div class="d1">
+jit compiler = $compilation.name <br/>
+#if($compilation.compilationTimeMonitoringSupported)
+total compilation time = $compilation.totalCompilationTime
+#end
+</div>
+
+<h3>Garbage collectors</h3>
+<div class="d1">
+#foreach($garbageCollector in $garbageCollectors)
+<h4>$garbageCollector.name</h4>
+<div class="d1">
+collection count = $garbageCollector.collectionCount <br/>
+total collection time = $garbageCollector.collectionTime ms
+</div>
+#end
+</div>
+
+<h3>Memory managers</h3>
+<div class="d1">
+#foreach($memoryManager in $memoryManagers)
+<h4>$memoryManager.name</h4>
+<div class="d1">
+vaild = $memoryManager.valid <br/>
+managed pools = #strings($memoryManager.memoryPoolNames)
+</div>
+#end
+</div>
+
+<h3>Memory</h3>
+<div class="d1">
+heap memory = #memoryUsage($memory.heapMemoryUsage) <br/>
+non-heap memory = #memoryUsage($memory.nonHeapMemoryUsage) <br/>
+object pending finalization count = $memory.objectPendingFinalizationCount
+</div>
+
+<h3>Memory pools</h3>
+<div class="d1">
+#foreach($memoryPool in $memoryPools)
+<h4>$memoryPool.name</h4>
+<div class="d1">
+type = $memoryPool.type <br/>
+valid = $memoryPool.valid <br/>
+memory managers = #strings($memoryPool.memoryManagerNames) <br/>
+collection usage = #memoryUsage($memoryPool.collectionUsage) <br/>
+#if($memoryPool.collectionUsageThresholdSupported)
+collection usage threshold = $memoryPool.collectionUsageThreshold <br/>
+collectoin usage threshold count = $memoryPool.collectionUsageThresholdCount <br/>
+collection usage threshold exceeded = $memoryPool.collectionUsageThresholdExceeded <br/>
+#end
+peak usage = #memoryUsage($memoryPool.peakUsage) <br/>
+current usage = #memoryUsage($memoryPool.usage) <br/>
+#if($memoryPool.usageThresholdSupported)
+usage threshold = $memoryPool.usageThreshold <br/>
+usage threshold count = $memoryPool.usageThresholdCount <br/>
+usage threshold exceeded = $memoryPool.usageThresholdExceeded <br/>
+#end
+</div>
+#end
+</div>
+
+<h3>Operating system</h3>
+<div class="d1">
+arch = $operatingSystem.arch <br/>
+available processors = $operatingSystem.availableProcessors <br/>
+name = $operatingSystem.name <br/>
+version = $operatingSystem.version <br/>
+</div>
+
+<h3>Runtime</h3>
+$runtime
+
+<h3>Thread</h3>
+$thread
+
+	
