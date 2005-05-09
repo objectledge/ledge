@@ -1,0 +1,49 @@
+<h3>Installed packages</h3>
+
+<pre>
+#foreach($item in $versions)
+$item
+#end</pre>
+
+#set($javaSpec = "Java Platform API Specification")
+
+<h3>Java Platform</h3>
+<table width="100%">
+<tr>
+  <th width="30%">package</th>
+  <th width="30%">specification title</th>
+  <th>specification version</th>
+  <th>implementation version</th>
+</tr>
+#foreach($package in $packages)
+#if($package.specificationTitle.equals($javaSpec))
+<tr>
+<td>$package.name</td>
+<td>$!package.specificationTitle</td>
+<td>$!package.specificationVersion</td>
+<td>#if($package.implementationVersion && !$package.specificationVersion.equals($package.implementationVersion))$package.implementationVersion#end</td>
+</tr>
+#end
+#end
+</table>
+
+<h3>Java Extensions</h3>
+<table width="100%">
+<tr>
+  <th width="30%">package</th>
+  <th width="30%">specification title</th>
+  <th>specification version</th>
+  <th>implementation version</th>
+</tr>
+#foreach($package in $packages)
+#if(!$package.specificationTitle.equals($javaSpec))
+<tr>
+<td>$package.name</td>
+<td>$!package.specificationTitle</td>
+<td>$!package.specificationVersion</td>
+<td>#if($package.implementationVersion && !$package.specificationVersion.equals($package.implementationVersion))$package.implementationVersion#end</td>
+</tr>
+#end
+#end
+
+</table>
