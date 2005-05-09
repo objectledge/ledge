@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.6 2004-11-25 12:40:19 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.7 2005-05-09 07:18:10 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
 
   <j:if test="${pom.artifactId != 'ledge-maven-plugin'}">
     <preGoal name="jar:jar">
+      <attainGoal name="ledge:version-jar"/>
 	  <attainGoal name="ledge:index-jar"/>
-	</preGoal>         
+	</preGoal>   
+	
+	<postGoal name="jar:install-snapshot">
+	  <attainGoal name="ledge:ci-rename"/>
+	</postGoal>      
 	
 	<preGoal name="war:war">
       <attainGoal name="ledge:repackage-content"/>
       <attainGoal name="ledge:version-war"/>
+      <attainGoal name="ledge:version-war-html"/>
       <attainGoal name="ledge:index-war"/>
 	</preGoal>
+
+	<postGoal name="war:install-snapshot">
+	  <attainGoal name="ledge:ci-rename"/>
+	</postGoal>      
   </j:if>
 
   <!-- reports -->
