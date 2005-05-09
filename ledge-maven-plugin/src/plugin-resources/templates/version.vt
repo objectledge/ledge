@@ -1,0 +1,2 @@
+${pom.groupId}:${pom.artifactId} version ${pom.currentVersion}#if($buildLabel) / b$buildLabel#end built on $dateFormat.format($date)#if($userName) by $userName#end
+

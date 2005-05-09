@@ -38,7 +38,7 @@
          xmlns:velocity="jelly:velocity"
          xmlns:ant="jelly:ant"
          xmlns:util="jelly:util"
-	 xmlns:maven="jelly:maven"
+         xmlns:maven="jelly:maven"
          xmlns:ledge="ledge">
 
   <define:taglib uri="ledge">
@@ -73,19 +73,20 @@
                       outputEncoding="UTF-8"/>        
     </define:tag>
     
-    <define:tag name="warVersionPage">
-      <ant:echo>Creating version page ${path}</ant:echo>
+    <define:tag name="versionPage">
+      <ant:echo>Creating version page ${path} using ${template}</ant:echo>
       <j:new var="date" className="java.util.Date"/>
       <j:new var="dateFormat" className="java.text.SimpleDateFormat">
         <j:arg type="java.lang.String" value="yyyy-MM-dd HH:mm"/>
       </j:new>
       <j:set var="userName" value="${context.getVariable('maven.username')}"/>
-      <util:file var="pathFile" name="${path}"/>
-      ${pathFile.parentFile.mkdirs()}
+      <j:set var="buildLabel" value="${context.getVariable('build.label')}"/>
       <velocity:merge name="${path}"
                       basedir="${plugin.dir}/plugin-resources/templates"
-                      template="version.html.vt"/>
+                      template="${template}"/>
     </define:tag>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
     
     <!--
      | @param srcDir java.io.File
@@ -159,6 +160,8 @@
     
   </define:taglib>
 
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+
   <goal name="ledge:index-jar"
         description="Generates a jar index in maven.build.dest/META-INF/files.lst">
     <ledge:indexFiles dir="${maven.build.dest}"/>
@@ -170,11 +173,42 @@
     <ledge:indexFiles dir="${webappDir}" index="${webappDir}/WEB-INF/files.lst"/>
   </goal> 
   
-  <goal name="ledge:version-war" prereqs="war:init"
-       description="Genereates version page in the web application home directory">
-    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
-    <ledge:warVersionPage path="${webappDir}/content/version.html"/>
+  <goal name="ledge:version-jar">
+    <util:file var="versionDir" name="${maven.build.dest}/META-INF/versions/${pom.groupId}"/>
+    <j:invoke method="mkdirs" on="${versionDir}"/>
+    <ledge:versionPage path="${versionDir}/${pom.artifactId}" template="version.vt"/>  
   </goal>
+  
+  <goal name="ledge:version-war">
+    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
+    <util:file var="versionDir" name="${webappDir}/META-INF/versions/${pom.groupId}"/>
+    <j:invoke method="mkdirs" on="${versionDir}"/>
+    <ledge:versionPage path="${versionDir}/${pom.artifactId}" template="version.vt"/>  
+  </goal>
+  
+  <goal name="ledge:version-war-html" prereqs="war:init">
+    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
+    <ledge:versionPage path="${webappDir}/content/version.html" template="version.html.vt"/>
+  </goal>
+  
+  <goal name="ledge:ci-rename">
+    <j:set var="buildLabel" value="${context.getVariable('build.label')}"/>
+    <j:set var="type" value="${context.getVariable('maven.multiproject.type')}"/>
+    <j:if test="${!empty(buildLabel)}">
+       <j:choose>
+         <j:when test="${type.equals('war')}">
+           <j:set var="source" value="${maven.build.dir}/${pom.artifactId}.war"/>
+         </j:when>
+         <j:otherwise>
+           <j:set var="source" value="${maven.build.dir}/${maven.final.name}.${type}"/>
+         </j:otherwise>
+       </j:choose>
+       <j:set var="target" value="${maven.build.dir}/${pom.artifactId}-b${buildLabel}.${type}"/>
+       <ant:move file="${source}" tofile="${target}"/>
+    </j:if>
+  </goal>
+  
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
   
   <goal name="ledge:javacc">
     <util:file var="srcDir" name="${pom.build.sourceDirectory}"/>
@@ -257,6 +291,8 @@
     </j:forEach>
   </goal>
 
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+
   <goal name="ledge:workspace-dependencies">
     <!-- prepare includes -->
     <maven:reactor 
@@ -336,6 +372,8 @@
     <echo>Writing dependency information to ${output}</echo>
     <j:file name="${output}" omitXmlDeclaration="true">${buff.toString()}</j:file>
   </goal>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
 
   <goal name="ledge:repackage-content">
     <maven:get var="contentDir" plugin="ledge-maven-plugin" property="ledge.content.dir"/>
