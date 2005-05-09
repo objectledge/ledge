@@ -46,7 +46,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Versions.java,v 1.1 2005-05-09 08:32:14 rafal Exp $
+ * @version $Id: Versions.java,v 1.2 2005-05-09 09:22:54 rafal Exp $
  */
 public class Versions
     extends PolicyProtectedBuilder
@@ -92,8 +92,9 @@ public class Versions
                         Arrays.sort(artifacts);
                         for(int j = 0; j < artifacts.length; j++)
                         {
-                            temp.add(fileSystem.read(dir + groups[i] + "/" + artifacts[j], 
-                                "UTF-8"));
+                            String versionString = fileSystem.read(dir + groups[i] + "/"
+                                + artifacts[j], "UTF-8"); 
+                            temp.add(Arrays.asList(versionString.split("/")));
                         }
                     }
                 }
