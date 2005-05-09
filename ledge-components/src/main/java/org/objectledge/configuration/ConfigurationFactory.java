@@ -51,7 +51,7 @@ import com.sun.msv.verifier.Verifier;
  * Returns a configuration for the specific component.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.9 2005-05-06 09:42:07 rafal Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.10 2005-05-09 05:19:41 rafal Exp $
  */
 public class ConfigurationFactory
 {
@@ -178,6 +178,18 @@ public class ConfigurationFactory
                 componentName+" not found");
         }
         return new InputSource(fileSystem.getInputStream(path));
+    }
+
+    /**
+     * Checks if a given component has a configration file available.
+     * 
+     * @param componentName the name of the component.
+     * @return <code>true</code> if the component has a configration file available.
+     */
+    public boolean hasConfig(String componentName)
+    {
+        String path = getComponentConfigurationPath(componentName);
+        return fileSystem.exists(path);
     }
     
     /**
