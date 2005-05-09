@@ -54,7 +54,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.15 2005-03-14 13:03:02 zwierzem Exp $
+ * @version $Id: RequestParameters.java,v 1.16 2005-05-09 07:46:16 rafal Exp $
  */
 public class RequestParameters extends SortedParameters
 {
@@ -69,6 +69,14 @@ public class RequestParameters extends SortedParameters
 		return (RequestParameters)context.getAttribute(RequestParameters.class);
 	}
 	
+    /**
+     * No arg constructor for mocking.
+     */
+    protected RequestParameters()
+    {
+        // intentionally left blank
+    }
+    
     /**
      * Create the parameter container with parameters found in http request.
      * 
