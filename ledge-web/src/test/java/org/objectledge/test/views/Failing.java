@@ -28,6 +28,7 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.builders.BuildException;
@@ -36,7 +37,7 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Failing.java,v 1.1 2004-01-22 09:44:32 fil Exp $
+ * @version $Id: Failing.java,v 1.2 2005-05-09 08:11:49 rafal Exp $
  */
 public class Failing extends DefaultBuilder
 {
@@ -46,7 +47,7 @@ public class Failing extends DefaultBuilder
     }
     
     public String build(Template template, String embeddedResults)
-        throws BuildException
+        throws BuildException, ProcessingException
     {
         TemplatingContext tContext = TemplatingContext.getTemplatingContext(context);
         tContext.put("object", new FailingObject());

@@ -34,7 +34,7 @@ import org.objectledge.templating.Template;
  * Builder of a single view element.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.8 2005-03-11 09:37:33 pablo Exp $
+ * @version $Id: Builder.java,v 1.9 2005-05-09 08:11:39 rafal Exp $
  */
 ///CLOVER:OFF
 public interface Builder
@@ -75,7 +75,8 @@ public interface Builder
      * 
      * @return string containing rendered view element.
      * @throws BuildException on problems with view element building.
+     * @throws ProcessingException on problems while preparing information to be shown.
      */
     public String build(Template template, String embeddedBuildResults)
-       throws BuildException;    
+       throws BuildException, ProcessingException;    
 }

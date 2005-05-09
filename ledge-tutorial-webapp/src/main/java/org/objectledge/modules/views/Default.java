@@ -29,6 +29,7 @@ package org.objectledge.modules.views;
 
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18nContext;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -40,7 +41,7 @@ import org.objectledge.web.mvc.builders.DefaultBuilder;
  * A default view.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Default.java,v 1.4 2005-02-11 13:53:52 rafal Exp $
+ * @version $Id: Default.java,v 1.5 2005-05-09 08:08:46 rafal Exp $
  */
 public class Default extends DefaultBuilder
 {
@@ -58,7 +59,7 @@ public class Default extends DefaultBuilder
      * {@inheritDoc}
      */
     public String build(Template template, String embeddedBuildResults) 
-        throws BuildException
+        throws BuildException, ProcessingException
     {
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("i18nContext", I18nContext.getI18nContext(context));
