@@ -42,6 +42,9 @@ import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.LocaleLoaderValve;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.security.RoleChecking;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
@@ -87,6 +90,7 @@ public class PolicyCheckingValveTest extends LedgeWebTestCase
         requestMock.stubs().method("getContentType").will(returnValue("text/plain"));
         MVCContext mvcContext = new MVCContext();
         HttpContext httpContext = new HttpContext(request, response);
+        context.setAttribute(RequestParameters.class, new MockRequestParameters());
         context.setAttribute(MVCContext.class, mvcContext);
         context.setAttribute(HttpContext.class, httpContext);
         
@@ -100,5 +104,15 @@ public class PolicyCheckingValveTest extends LedgeWebTestCase
         throws Exception
     {
         policyValve.process(context);        
+    }
+    
+    /**
+     * CGLIB fails for this type, beacuse of non-static method called from the constructor
+     * so we need to resort to this.
+     */
+    private class MockRequestParameters
+        extends RequestParameters
+    {
+        
     }
 }
