@@ -29,6 +29,8 @@ package org.objectledge.configuration;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.SAXParserFactory;
@@ -44,7 +46,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * Provides information about components deployed in the system and their configuration. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConfigurationInspector.java,v 1.2 2005-05-06 11:03:11 rafal Exp $
+ * @version $Id: ConfigurationInspector.java,v 1.3 2005-05-09 05:28:49 rafal Exp $
  */
 public class ConfigurationInspector
 {
@@ -79,7 +81,6 @@ public class ConfigurationInspector
     public List<ComponentConfiguration> getComponentConfigurations()
     {
         List<ComponentConfiguration> list = new ArrayList<ComponentConfiguration>();
-        
         InputSource composition = configurationFactory.getCompositionSource();
         try
         {
@@ -97,7 +98,24 @@ public class ConfigurationInspector
     
     List<String> getComponentConfig(String key)
     {
-        return Collections.EMPTY_LIST;
+        if(!configurationFactory.hasConfig(key))
+        {
+            return Collections.EMPTY_LIST;
+        }
+        List<String> entries = new ArrayList<String>();
+        InputSource config = configurationFactory.getRawConfigurationSource(key);
+        try
+        {
+            XMLReader reader = parserFactory.newSAXParser().getXMLReader();
+            reader.setContentHandler(new ConfigurationHandler(entries));
+            reader.parse(config);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("composition parsing failed", e);
+        }
+        
+        return entries;
     }
     
     /**
@@ -175,6 +193,9 @@ public class ConfigurationInspector
         }
     }
     
+    /**
+     * A SAX2 DocumentHandler for parsing the composition file.
+     */
     private class CompositionHandler 
         extends DefaultHandler
     {
@@ -219,6 +240,102 @@ public class ConfigurationInspector
                 List<String> config = getComponentConfig(key);
                 list.add(new ComponentConfiguration(key, impl, params, config));
              }
+        }
+    }
+
+    /**
+     * 
+     * 
+     *
+     * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+     * @version $Id: ConfigurationInspector.java,v 1.3 2005-05-09 05:28:49 rafal Exp $
+     */
+    private class ConfigurationHandler 
+        extends DefaultHandler
+    {
+        private final List<String> entries;
+        
+        private final StringBuilder buff = new StringBuilder();
+        
+        private final StringBuilder charContent = new StringBuilder();
+        
+        private final LinkedList<String> elementStack = new LinkedList<String>();
+        
+        public ConfigurationHandler(List<String> entriesArg)
+        {
+            entries = entriesArg;
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public void characters(char[] ch, int start, int length)
+            throws SAXException
+        {
+            String s = new String(ch, start, length);
+            if(s.trim().length() > 0)
+            {
+                charContent.append(s);
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+            throws SAXException
+        {
+            elementStack.add(localName);
+            if(attributes.getLength() > 0)
+            {
+                String elementPath = getElementPath();
+                for(int i = 0; i < attributes.getLength(); i++)
+                {
+                    buff.append(elementPath);
+                    buff.append('.');
+                    buff.append(attributes.getQName(i));
+                    buff.append(" = ");
+                    buff.append(attributes.getValue(i));
+                    commitEntry();
+                }
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void endElement(String uri, String localName, String qName)
+            throws SAXException
+        {
+            if(charContent.length() > 0)
+            {
+                buff.append(getElementPath());
+                buff.append(" = ");
+                buff.append(charContent.toString().trim());
+                commitEntry();
+                charContent.setLength(0);
+            }
+            elementStack.removeLast();
+        }
+        
+        private String getElementPath()
+        {
+            StringBuilder pathBuff = new StringBuilder();
+            for(Iterator<String> element = elementStack.iterator(); element.hasNext();)
+            {
+                pathBuff.append(element.next());
+                if(element.hasNext())
+                {
+                    pathBuff.append('/');
+                }
+            }
+            return pathBuff.toString();
+        }
+        
+        private void commitEntry()
+        {
+            entries.add(buff.toString());
+            buff.setLength(0);
         }
     }
 }
