@@ -27,13 +27,21 @@
 //
 package org.objectledge.web.mvc.tools;
 
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
 import org.objectledge.utils.StringUtils;
 
 /**
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.13 2005-04-22 03:54:01 pablo Exp $
+ * @version $Id: StringTool.java,v 1.14 2005-05-10 06:49:21 rafal Exp $
  */
 public class StringTool
 {
@@ -220,5 +228,64 @@ public class StringTool
     public String htmlLineBreaks(String s)
     {
         return StringUtils.htmlLineBreaks(s);
+    }
+ 
+    /**
+     * Converts a string array into a list which is more useful in Velocity. 
+     * 
+     * @param strings a String array.
+     * @return a List of Strings.
+     */
+    public List<String> arrayToList(String[] strings)
+    {
+        return Arrays.asList(strings);
+    }
+    
+    /**
+     * Returns a copy of the String list sorted according to the given locale.
+     * 
+     * @param input a list of string.
+     * @param locale to use for sorting. 
+     * @return a sorted copy
+     */
+    public List<String> sort(Collection<String> input, Locale locale)
+    {
+        Collator collator = Collator.getInstance(locale);
+        List<String> result = new ArrayList<String>(input);
+        Collections.sort(result, collator);
+        return result;
+    }
+
+    /**
+     * Formats interval as a human readable string.
+     * 
+     * @param interval the interval in seconds.
+     * @return a human readable string.
+     */
+    public String secondsInterval(long interval)
+    {
+        return StringUtils.formatInterval(interval);
+    }
+
+    /**
+     * Formats interval as a human readable string.
+     * 
+     * @param interval the interval in seconds.
+     * @return a human readable string.
+     */
+    public String millisecondsInterval(long interval)
+    {
+        return StringUtils.formatInterval(interval/1000);
+    }
+
+    /**
+     * Formats interval as a human readable string.
+     * 
+     * @param interval the interval in seconds.
+     * @return a human readable string.
+     */
+    public String nanosecondsInterval(long interval)
+    {
+        return StringUtils.formatInterval(interval/1000000000);
     }
 }
