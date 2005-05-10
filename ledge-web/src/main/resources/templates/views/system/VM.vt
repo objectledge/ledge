@@ -1,15 +1,35 @@
 $pageTool.appendTitleSuffix('Virtual machine')
+
+#macro(memSize $bytes)
+$stringTool.bytesSize($bytes)
+#end
+
 #macro(memoryUsage $usage)
 #if($usage)
-init: $usage.init committed: $usage.committed max: $usage.max used: $usage.used
+init: #memSize($usage.init) committed: #memSize($usage.committed) max: #memSize($usage.max) used: #memSize($usage.used)
 #else
 unknown
 #end
 #end
 
 #macro(strings $array)
-#foreach($pool in $array)$pool | #end
+#set($list = $stringTool.arrayToList($array))
+#foreach($s in $list)$s#if($velocityCount < $list.size()), #end#end
 #end
+
+#macro(interval $ms)
+$stringTool.millisecondsInterval($ms)
+#end
+
+#macro(nanoInterval $ns)
+$stringTool.nanosecondsInterval($ns)
+#end
+
+#macro(splitPath $path)
+#set($tokens = $stringTool.arrayToList($path.split($runtime.systemProperties.get('path.separator'))))
+#foreach($token in $tokens)$token#if($velocityCount < $tokens.size()), #end#end
+#end
+
 <style type="text/css">
 <!--
 div.d1 {
@@ -18,6 +38,8 @@ div.d1 {
 -->
 </style>
 
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
 <h3>Class loading</h3>
 <div class="d1">
 loaded classes = $classLoading.loadedClassCount <br/>
@@ -25,13 +47,17 @@ total loaded classes = $classLoading.totalLoadedClassCount<br/>
 unloaded class count = $classLoading.unloadedClassCount
 </div>
 
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
 <h3>Compilation</h3>
 <div class="d1">
 jit compiler = $compilation.name <br/>
 #if($compilation.compilationTimeMonitoringSupported)
-total compilation time = $compilation.totalCompilationTime
+total compilation time = #interval($compilation.totalCompilationTime)
 #end
 </div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
 
 <h3>Garbage collectors</h3>
 <div class="d1">
@@ -39,10 +65,12 @@ total compilation time = $compilation.totalCompilationTime
 <h4>$garbageCollector.name</h4>
 <div class="d1">
 collection count = $garbageCollector.collectionCount <br/>
-total collection time = $garbageCollector.collectionTime ms
+total collection time = #interval($garbageCollector.collectionTime)
 </div>
 #end
 </div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
 
 <h3>Memory managers</h3>
 <div class="d1">
@@ -55,12 +83,16 @@ managed pools = #strings($memoryManager.memoryPoolNames)
 #end
 </div>
 
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
 <h3>Memory</h3>
 <div class="d1">
 heap memory = #memoryUsage($memory.heapMemoryUsage) <br/>
 non-heap memory = #memoryUsage($memory.nonHeapMemoryUsage) <br/>
 object pending finalization count = $memory.objectPendingFinalizationCount
 </div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
 
 <h3>Memory pools</h3>
 <div class="d1">
@@ -87,6 +119,8 @@ usage threshold exceeded = $memoryPool.usageThresholdExceeded <br/>
 #end
 </div>
 
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
 <h3>Operating system</h3>
 <div class="d1">
 arch = $operatingSystem.arch <br/>
@@ -95,10 +129,106 @@ name = $operatingSystem.name <br/>
 version = $operatingSystem.version <br/>
 </div>
 
-<h3>Runtime</h3>
-$runtime
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
 
-<h3>Thread</h3>
-$thread
+<h3>Runtime</h3>
+<div class="d1">
+#if($runtime.bootClassPathSupported)
+boot classpath = #splitPath($runtime.bootClassPath) <br/>
+#end
+classpath = #splitPath($runtime.classPath) <br/>
+library path = #splitPath($runtime.libraryPath) <br/>
+<br/>
+specification name = $runtime.specName <br/>
+specification vendor = $runtime.specVendor <br/>
+specification version = $runtime.specVersion <br/>
+<br/>
+implementation name = $runtime.vmName <br/>
+implementation vendor = $runtime.vmVendor <br/>
+implementation version = $runtime.vmVersion <br/>
+<br/>
+management specification version = $runtime.managementSpecVersion <br/>
+<br/>
+VM name = $runtime.name <br/>
+input arguments = #foreach($arg in $runtime.inputArguments)$arg #end <br/>
+<br/>
+start time = $format_date.format($runtime.startTime) <br/>
+uptime = #interval($runtime.uptime) <br/>
+<br/>
+system properties:
+<div class="d1">
+#set($props = $runtime.systemProperties)
+#set($filtered = ['java.name','java.vendor','java.version','java.vm.specification.name','java.vm.specification.vendor','java.vm.specification.version','java.specification.name','java.specification.version','java.specification.vendor','java.vm.name','java.vm.vendor','java.vm.version','java.runtime.name','java.runtime.vendor','java.runtime.version','java.class.path','java.boot.class.path','sun.boot.class.path','java.library.path','os.arch','os.name','os.version'])
+#foreach($prop in $stringTool.sort($props.keySet(),$i18n.locale))
+#if(!$filtered.contains($prop))
+$prop = $props.get($prop) <br/>
+#end
+#end
+</div>
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Threads</h3>
+<div class="d1">
+daemon thread count = $thread.daemonThreadCount <br/>
+peak thread count = $thread.peakThreadCount <br/>
+thread count = $thread.threadCount <br/>
+total started thred count = $thread.totalStartedThreadCount <br/>
+#if($thread.threadCpuTimeSupported)
+thread cpu time enabled = $thread.threadCpuTimeEnabled <br/>
+#end
+#if($thread.threadContentionMonitoringSupported)
+thread contention monitoring enabled = $thread.threadContentionMonitoringEnabled <br/>
+#end
+#if($stringTool.getArraySize($thread.findMonitorDeadlockedThreads()) > 0)
+<h1>Deadlock</h1>
+#foreach($threadInfo in $thread.getThereadInfo($thread.findMonitorDeadlockedThreads(), 65535))
+<h4>$threadInfo.threadName</h4>
+#if($threadInfo.lockName)
+lock name = $threadInfo.lockName <br/>
+#end
+#if($threadInfo.lockOwnerId != -1)
+lock owner = $!thread.getThreadInfo($threadInfo.lockOwnerId).threadName <br/>
+#end
+<div class="d1">
+#foreach($frame in $threadInfo.stackTrace)
+$frame <br/>
+#end
+</div>
+#end
+#end
+#foreach($threadInfo in $thread.getThreadInfo($thread.allThreadIds, 65535))
+<h4>$threadInfo.threadName</h4>
+<div class="d1">
+suspended = $threadInfo.suspended <br/>
+state = $threadInfo.threadState <br/>
+#if($threadInfo.lockName)
+lock name = $threadInfo.lockName <br/>
+#end
+#if($threadInfo.lockOwnerId != -1)
+lock owner = $!thread.getThreadInfo($threadInfo.lockOwnerId).threadName <br/>
+#end
+blocked count = $threadInfo.blockedCount <br/>
+#if($thread.threadContentionMonitoringSupported && $thread.threadContentionMonitoringEnabled)
+blocked time = #interval($threadInfo.blockedTime) <br/>
+#end
+waited count = $threadInfo.waitedCount <br/>
+#if($thread.threadContentionMonitoringSupported && $thread.threadContentionMonitoringEnabled)
+waited time = #interval($threadInfo.waitedTime) <br/>
+#end
+#if($thread.threadCpuTimeSupported && $thread.threadCpuTimeEnabled)
+cpu time = #nanoInterval($thread.getThreadCpuTime($threadInfo.threadId)) <br/>
+cpu user time = #nanoInterval($thread.getThreadUserTime($threadInfo.threadId)) <br/>
+#end
+native = $threadInfo.inNative <br/>
+<div class="d1">
+#foreach($frame in $threadInfo.stackTrace)
+$frame <br/>
+#end
+</div>
+</div>
+#end
+</div>
 
 	
