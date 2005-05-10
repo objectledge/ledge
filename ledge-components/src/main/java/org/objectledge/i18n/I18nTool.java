@@ -38,7 +38,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.13 2005-02-21 16:27:54 zwierzem Exp $
+ * @version $Id: I18nTool.java,v 1.14 2005-05-10 06:48:35 rafal Exp $
  */
 public class I18nTool
 {
@@ -190,5 +190,15 @@ public class I18nTool
         String newKey = prefixBuf.append('.').append(key).toString();
         prefixBuf.setLength(bLength);
         return newKey;
+    }
+    
+    /**
+     * Returns the current locale.
+     * 
+     * @return the current locale.
+     */
+    public Locale getLocale()
+    {
+        return locale;
     }
 }
