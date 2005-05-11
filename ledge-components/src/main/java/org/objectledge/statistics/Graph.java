@@ -36,7 +36,7 @@ import org.jcontainer.dna.ConfigurationException;
  * Describes a statistics graph, modeled after Munin tool.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Graph.java,v 1.2 2005-05-11 05:24:55 rafal Exp $
+ * @version $Id: Graph.java,v 1.3 2005-05-11 07:17:02 rafal Exp $
  */
 public class Graph
 {
@@ -121,6 +121,37 @@ public class Graph
                             .getChildren("notScaled").length > 0,
                         config.getChildren("notDrawn").length > 0,
                         config.getChildren("notUpdated").length > 0);
+    }
+
+    /**
+     * Creates new Graph instance.
+     * 
+     * @param base base graph configuration.
+     * @param override override graph configuration.
+     */
+    public Graph(Graph base, Graph override)
+    {
+        this(base.getName(),
+            override.getTitle() != null ? override.getTitle() : base.getTitle(),
+            override.getCreateArgs() != null ? override.getCreateArgs() : base.getCreateArgs(),
+            override.getGraphArgs() != null ? override.getGraphArgs() : base.getGraphArgs(),
+            override.getOrder() != null ? override.getOrder() : base.getOrder(),
+            override.getVLabel() != null ? override.getVLabel() : base.getVLabel(),
+            override.getTotalLabel() != null ? override.getTotalLabel() : base.getTotalLabel(),
+            override.isNotScaled() ? true : base.isNotScaled(),
+            override.isNotDrawn() ? true : base.isNotDrawn(),
+            override.isNotUpdated() ? true : base.isNotUpdated()
+            );
+    }
+    
+    /**
+     * Returns the graph name.
+     * 
+     * @return the graph name.
+     */
+    public String getName()
+    {
+        return name;
     }
 
     /**
