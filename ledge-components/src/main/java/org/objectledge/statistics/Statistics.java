@@ -27,24 +27,75 @@
 // 
 package org.objectledge.statistics;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jcontainer.dna.Configuration;
+
 /**
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.1 2005-05-10 11:02:48 rafal Exp $
+ * @version $Id: Statistics.java,v 1.2 2005-05-11 05:25:08 rafal Exp $
  */
 public class Statistics
 {
+    private Configuration config;
+    
+    private final List<StatisticsProvider> providers = new ArrayList<StatisticsProvider>();
+    
     /**
      * Creates new Statistics instance.
-     * 
+     *
+     * @param config the component configuration.
      */
-    public Statistics()
+    public Statistics(Configuration config)
     {
-        super();
-        // TODO Auto-generated constructor stub
+        this.config = config;
+    }
+
+    /**
+     * Register a statistics provider instance.
+     *
+     * <p>It's a good idea to make components that implement that interface (directly or through a 
+     * helper class) Startable, so that full set of providers is register upon system startup.</p>
+     * 
+     * @param provider the statistics provider.
+     */
+    public void registerProvider(StatisticsProvider provider)
+    {
+        providers.add(provider);
     }
     
+    /**
+     * Returns the registered graphs.
+     * 
+     * @return the registered graphs.
+     */
+    public String[] getGraphNames()
+    {
+        return new String[0];
+    }
     
-
+    /**
+     * Returns graph configuration for the specified graph
+     * 
+     * @param name the graph name.
+     * @return graph configuration.
+     */
+    public Graph getGraph(String name)
+    {
+        return null;
+    }
+    
+    /**
+     * Returns graph's data samples.
+     * 
+     * @param name the graph name.
+     * @return the graph's data samples.
+     */
+    public Number[] getValues(String name)
+    {
+        return null;
+    }
 }
