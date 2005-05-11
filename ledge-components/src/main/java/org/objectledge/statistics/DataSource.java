@@ -27,11 +27,16 @@
 // 
 package org.objectledge.statistics;
 
+import java.math.BigDecimal;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+
 /**
  * Describes a data source used for statistics computation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DataSource.java,v 1.1 2005-05-10 11:02:48 rafal Exp $
+ * @version $Id: DataSource.java,v 1.2 2005-05-11 05:24:55 rafal Exp $
  */
 public class DataSource
 {
@@ -102,7 +107,54 @@ public class DataSource
     {
         this(label, cdef, type, graph, null, null, null, null, null, null, info);
     }
-
+    
+    /**
+     * Creates new DataSource instance.
+     * 
+     * @param config DNA configuration object.
+     * @throws ConfigurationException if the configuraiton object contains invalid data.
+     */
+    public DataSource(Configuration config)
+        throws ConfigurationException
+    {
+        this(
+            config.getChild("label").getValue(),
+            config.getChild("cdef").getValue(null),
+            getType(config.getChild("type").getValue(null)),
+            getGraph(config.getChild("graph").getValue(null)),
+            getNumber(config.getChild("min").getValue(null)),
+            getNumber(config.getChild("max").getValue(null)),
+            getNumber(config.getChild("min").getValue(null)),
+            getNumber(config.getChild("max").getValue(null)),
+            getNumber(config.getChild("min").getValue(null)),
+            getNumber(config.getChild("max").getValue(null)),
+            config.getChild("info").getValue(null)
+            );
+    }
+    
+    /**
+     * Creates new DataSource instance.
+     * 
+     * @param base base data source configuraiton.
+     * @param override overriding data source configuration.
+     */
+    public DataSource(DataSource base, DataSource override)
+    {
+        this(
+            base.getLabel(),
+            override.getCdef() != null ? override.getCdef() : base.getCdef(),
+            override.getType() != null ? override.getType() : base.getType(),
+            override.getGraph() != null ? override.getGraph() : base.getGraph(),
+            override.getMin() != null ? override.getMin() : base.getMin(),
+            override.getMax() != null ? override.getMax() : base.getMax(),
+            override.getMinWarning() != null ? override.getMinWarning() : base.getMinWarning(),
+            override.getMaxWarning() != null ? override.getMaxWarning() : base.getMaxWarning(),
+            override.getMinCritical() != null ? override.getMinCritical() : base.getMinCritical(),
+            override.getMaxCritical() != null ? override.getMaxCritical() : base.getMaxCritical(),
+            override.getInfo() != null ? override.getInfo() : base.getInfo()
+            );
+    }
+    
     /**
      * Returns the label.
      *
@@ -212,7 +264,42 @@ public class DataSource
     {
         return info;
     }
-    
+
+    private static Type getType(String type)
+    {
+        if(type == null)
+        {
+            return null;
+        }
+        else
+        {
+            return Type.valueOf(type);
+        }
+    }
+
+    private static Graph getGraph(String graph)
+    {
+        if(graph == null)
+        {
+            return null;
+        }
+        else
+        {
+            return Graph.valueOf(graph);
+        }
+    }
+
+    private static Number getNumber(String number)
+    {
+        if(number == null)
+        {
+            return null;
+        }
+        else
+        {
+            return new BigDecimal(number);
+        }
+    }
 
     /**
      * Types of data sources modeled after RRDTool.

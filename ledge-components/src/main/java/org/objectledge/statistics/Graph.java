@@ -27,37 +27,42 @@
 // 
 package org.objectledge.statistics;
 
+import java.util.Map;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+
 /**
  * Describes a statistics graph, modeled after Munin tool.
- *
+ * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Graph.java,v 1.1 2005-05-10 11:02:48 rafal Exp $
+ * @version $Id: Graph.java,v 1.2 2005-05-11 05:24:55 rafal Exp $
  */
 public class Graph
 {
     private final String name;
-    
+
     private final String title;
-    
+
     private final String createArgs;
-    
+
     private final String graphArgs;
-    
+
     private final DataSource[] order;
-    
+
     private final String vLabel;
-    
+
     private final String totalLabel;
-    
+
     private final boolean notScaled;
-    
+
     private final boolean notDrawn;
-    
+
     private final boolean notUpdated;
-    
+
     /**
      * Creates new Graph instance.
-     *
+     * 
      * @param name the graph name.
      * @param title graph title
      * @param createArgs additional args passed to rrdcreate.
@@ -69,8 +74,8 @@ public class Graph
      * @param notDrawn <code>true</code> to disable drawing the graph.
      * @param notUpdated <code>true</code> to disable updating graph data values.
      */
-    public Graph(String name, String title, String createArgs, String graphArgs, 
-        DataSource[] order, String vLabel, String totalLabel, boolean notScaled, boolean notDrawn, 
+    public Graph(String name, String title, String createArgs, String graphArgs,
+        DataSource[] order, String vLabel, String totalLabel, boolean notScaled, boolean notDrawn,
         boolean notUpdated)
     {
         this.name = name;
@@ -84,7 +89,7 @@ public class Graph
         this.notDrawn = notDrawn;
         this.notUpdated = notUpdated;
     }
-    
+
     /**
      * Creates new Graph instance.
      * 
@@ -100,8 +105,27 @@ public class Graph
     }
 
     /**
+     * Creates new Graph instance.
+     * 
+     * @param config DNA congfiuration object
+     * @param dataSources the registered dataSources.
+     * @throws ConfigurationException if the configuration contains invalid data.
+     */
+    public Graph(Configuration config, Map<String, DataSource> dataSources)
+        throws ConfigurationException
+    {
+        this(config.getChild("name").getValue(), config.getChild("title").getValue(null), config
+            .getChild("createArgs").getValue(null), config.getChild("graphArgs").getValue(null),
+                        getOrder(config, dataSources), config.getChild("vLabel").getValue(null),
+                        config.getChild("totalLabel").getValue(null), config
+                            .getChildren("notScaled").length > 0,
+                        config.getChildren("notDrawn").length > 0,
+                        config.getChildren("notUpdated").length > 0);
+    }
+
+    /**
      * Returns the title.
-     *
+     * 
      * @return the title.
      */
     public String getTitle()
@@ -111,7 +135,7 @@ public class Graph
 
     /**
      * Returns the createArgs.
-     *
+     * 
      * @return the createArgs.
      */
     public String getCreateArgs()
@@ -121,7 +145,7 @@ public class Graph
 
     /**
      * Returns the graphArgs.
-     *
+     * 
      * @return the graphArgs.
      */
     public String getGraphArgs()
@@ -131,7 +155,7 @@ public class Graph
 
     /**
      * Returns the data source order.
-     *
+     * 
      * @return the data source order.
      */
     public DataSource[] getOrder()
@@ -141,7 +165,7 @@ public class Graph
 
     /**
      * Returns the vLabel.
-     *
+     * 
      * @return the vLabel.
      */
     public String getVLabel()
@@ -151,7 +175,7 @@ public class Graph
 
     /**
      * Returns the total label.
-     *
+     * 
      * @return the total label.
      */
     public String getTotalLabel()
@@ -161,7 +185,7 @@ public class Graph
 
     /**
      * Returns the notScaled flag.
-     *
+     * 
      * @return the notScaled flag.
      */
     public boolean isNotScaled()
@@ -171,7 +195,7 @@ public class Graph
 
     /**
      * Returns the notDrawn flag.
-     *
+     * 
      * @return the notDrawn flag.
      */
     public boolean isNotDrawn()
@@ -181,11 +205,38 @@ public class Graph
 
     /**
      * Returns the notUpdated flag.
-     *
+     * 
      * @return the notUpdated flag.
      */
     public boolean isNotUpdated()
     {
         return notUpdated;
+    }
+
+    private static DataSource[] getOrder(Configuration config, Map<String, DataSource> dataSources)
+        throws ConfigurationException
+    {
+        String graphName = config.getChild("name").getValue();
+        Configuration orderCfg = config.getChild("order");
+        String order = orderCfg.getValue(null);
+        if(order == null)
+        {
+            return null;
+        }
+        String[] names = order.split("\\s*,\\s");
+        DataSource[] result = new DataSource[names.length];
+        int i = 0;
+        for(String name : names)
+        {
+            DataSource ds = dataSources.get(name);
+            if(ds == null)
+            {
+                throw new ConfigurationException("unknown dataSource " + name
+                    + " referenced in graph " + graphName, orderCfg.getPath(), orderCfg
+                    .getLocation());
+            }
+            result[i++] = ds;
+        }
+        return result;
     }
 }
