@@ -33,6 +33,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,7 +50,7 @@ import org.objectledge.parameters.Parameters;
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.7 2005-03-10 09:46:20 zwierzem Exp $
+ * @version $Id: DBParameters.java,v 1.8 2005-05-11 07:16:41 pablo Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -64,9 +65,12 @@ public class DBParameters implements Parameters
 
 	/** internal container */
 	private DefaultParameters container;
-
+    
+    /** internal container */
+    private DefaultParameters shadow;
+    
 	/** modified  */
-	private HashSet modified;
+	private HashSet<String> modified;
     
     /**
      * Create the container.
@@ -78,16 +82,18 @@ public class DBParameters implements Parameters
      */
     public DBParameters(Parameters parameters, long id, Database database, Logger logger)
     {
-        modified = new HashSet();
+        modified = new HashSet<String>();
     	this.logger = logger;
     	this.database = database;
     	if(parameters != null)
     	{
     	   	container = new DefaultParameters(parameters);
+            shadow = new DefaultParameters(parameters);
     	}
     	else
     	{
 			container = new DefaultParameters();
+            shadow = new DefaultParameters();
     	}
     	this.id = id;
     }
@@ -259,7 +265,7 @@ public class DBParameters implements Parameters
     public void remove()
     {
     	container.remove();
-		List all = Arrays.asList(container.getParameterNames());
+		List<String> all = Arrays.asList(container.getParameterNames());
 		modified.addAll(all);
 		update();
     }
@@ -329,7 +335,7 @@ public class DBParameters implements Parameters
 	 *
 	 * @param keys the set of keys.
 	 */
-	public void remove(Set keys)
+	public void remove(Set<String> keys)
 	{
 		container.remove(keys);
 		modified.addAll(keys);
@@ -341,10 +347,10 @@ public class DBParameters implements Parameters
 	 *
 	 * @param keys the set of names.
 	 */
-	public void removeExcept(Set keys)
+	public void removeExcept(Set<String> keys)
 	{
 		container.removeExcept(keys);
-		List all = new ArrayList(Arrays.asList(container.getParameterNames()));
+		List<String> all = new ArrayList<String>(Arrays.asList(container.getParameterNames()));
 		all.removeAll(keys);
 		modified.addAll(all);
 		update();    	
@@ -470,6 +476,25 @@ public class DBParameters implements Parameters
 		update();    	
     }
 
+	/**
+     * {@inheritDoc}
+     */
+	public void set(Parameters parameters)
+	{
+		String[] names = container.getParameterNames();
+		for(String name:names)
+		{
+			modified.add(name);
+		}
+		container.set(parameters);
+		names = parameters.getParameterNames();
+		for(String name:names)
+		{
+			modified.add(name);
+		}
+		update();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -624,6 +649,7 @@ public class DBParameters implements Parameters
 	{
 		Connection conn = null;
         boolean isInsert = false;
+        boolean doDelete = false;
 		try
 		{
 			conn = database.getConnection();
@@ -637,23 +663,31 @@ public class DBParameters implements Parameters
 			while(iterator.hasNext())
 			{
 				String name = (String)iterator.next();
-				String[] values = container.getStrings(name);
-				name = DatabaseUtils.escapeSqlString(name);
-				deleteStmt.setString(1,name);
-				deleteStmt.addBatch();
-				for(int j = 0; j < values.length; j++)
-				{
-                    isInsert = true;
-					insertStmt.setString(1,name);
-					insertStmt.setString(2,DatabaseUtils.escapeSqlString(values[j]));
-					insertStmt.addBatch();
-				}
+                if(!areValuesEqual(name))
+                {
+    				String[] values = container.getStrings(name);
+    				name = DatabaseUtils.escapeSqlString(name);
+    				deleteStmt.setString(1,name);
+    				deleteStmt.addBatch();
+                    doDelete = true;
+    				for(int j = 0; j < values.length; j++)
+    				{
+                        isInsert = true;
+    					insertStmt.setString(1,name);
+    					insertStmt.setString(2,DatabaseUtils.escapeSqlString(values[j]));
+    					insertStmt.addBatch();
+    				}
+                }
 			}
-			deleteStmt.executeBatch();
+            if(doDelete)
+            {
+                deleteStmt.executeBatch();
+            }
             if(isInsert)
             {
     			insertStmt.executeBatch();
             }
+            shadow = new DefaultParameters(container);
 		}
         ///CLOVER:OFF
 		catch(SQLException e)
@@ -666,6 +700,46 @@ public class DBParameters implements Parameters
 			DatabaseUtils.close(conn);
 		}
 	}
+    
+    
+    private boolean areValuesEqual(String name)
+    {
+        String[] current = container.getStrings(name);
+        String[] previous = shadow.getStrings(name);
+        if(current.length != previous.length)
+        {
+            return false;
+        }
+        if(current.length == 0)
+        {
+            return true;
+        }
+        if(current.length == 1)
+        {
+            return current[0].equals(previous[0]);
+        }
+        ArrayList<String> currentList = new ArrayList<String>();
+        ArrayList<String> previousList = new ArrayList<String>();
+        for(String temp: current)
+        {
+            currentList.add(temp);
+        }
+        for(String temp: previous)
+        {
+            previousList.add(temp);
+        }
+        Collections.sort(currentList);
+        Collections.sort(previousList);
+        for(int i = 0; i < currentList.size(); i++)
+        {
+            if(!currentList.get(i).equals(previousList.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
 
     /**
      * Get the parameters identifier in database.

@@ -257,7 +257,7 @@ public class DirectoryParameters extends DefaultParameters
         try
         {
             Attributes attrs = ctx.getAttributes("");
-            List filteredKeys = new ArrayList(keys.size());
+            List<String> filteredKeys = new ArrayList<String>(keys.size());
             NamingEnumeration e = attrs.getIDs();
             while(e.hasMore())
             {
@@ -293,7 +293,7 @@ public class DirectoryParameters extends DefaultParameters
         try
         {
             Attributes attrs = ctx.getAttributes("");
-            List filteredKeys = new ArrayList(keys.size());
+            List<String> filteredKeys = new ArrayList<String>(keys.size());
             NamingEnumeration e = attrs.getIDs();
             while(e.hasMore())
             {

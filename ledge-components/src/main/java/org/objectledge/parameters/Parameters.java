@@ -36,7 +36,7 @@ import java.util.Set;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.12 2005-03-10 09:46:16 zwierzem Exp $
+ * @version $Id: Parameters.java,v 1.13 2005-05-11 07:16:42 pablo Exp $
  */
 public interface Parameters
 {
@@ -279,7 +279,7 @@ public interface Parameters
 	 *
 	 * @param keys the set of names.
 	 */
-	public void removeExcept(Set keys);
+	public void removeExcept(Set<String> keys);
     
     /**
      * Set the parameter.
@@ -297,7 +297,14 @@ public interface Parameters
 	 */
 	public void set(String name, String[] values);
     
-    /**
+	/**
+	 * Reset state to equal with given parameters.
+	 * 
+	 * @param parameters the source parameters.
+	 */
+	public void set(Parameters parameters);
+	
+	/**
      * Set the parameter.
      * 
      * @param name the parameter name.

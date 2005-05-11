@@ -30,7 +30,6 @@ package org.objectledge.parameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -43,13 +42,13 @@ import java.util.TreeSet;
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.org">Rafal Krzewski</a>
- * @version $Id: CompoundParameters.java,v 1.4 2005-04-12 14:33:57 pablo Exp $
+ * @version $Id: CompoundParameters.java,v 1.5 2005-05-11 07:16:42 pablo Exp $
  */
 public class CompoundParameters implements Parameters
 {
     
     /** The underylying containers. */
-    private List containers;
+    private List<Parameters> containers;
 
     /**
      * Constructs a copound parameter container.
@@ -61,7 +60,7 @@ public class CompoundParameters implements Parameters
      */
     public CompoundParameters(Parameters sub, Parameters sup)
     {
-        containers = new ArrayList(2);
+        containers = new ArrayList<Parameters>(2);
         containers.add(sub);
         containers.add(sup);
     }
@@ -87,7 +86,7 @@ public class CompoundParameters implements Parameters
      *
      * @param list the containers.
      */
-    public CompoundParameters(List list)
+    public CompoundParameters(List<Parameters> list)
     {
         containers = list;
         Iterator i = list.iterator();
@@ -124,7 +123,7 @@ public class CompoundParameters implements Parameters
      */
     public String[] getParameterNames()
     {
-        SortedSet keys = new TreeSet();
+        SortedSet<String> keys = new TreeSet<String>();
         Iterator i = containers.iterator();
         while(i.hasNext())
         {
@@ -447,7 +446,7 @@ public class CompoundParameters implements Parameters
      */
     public Parameters getChild(String prefix)
     {
-        List list = new ArrayList();
+        List<Parameters> list = new ArrayList<Parameters>();
         Iterator i = containers.iterator();
         while(i.hasNext())
         {
@@ -631,6 +630,14 @@ public class CompoundParameters implements Parameters
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+	public void set(Parameters parameters)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
     /**
      * {@inheritDoc}
      */

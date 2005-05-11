@@ -17,7 +17,7 @@ import org.objectledge.parameters.Parameters;
  * Manages the parameters stored in database.
  * 
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultDBParametersManager.java,v 1.3 2005-01-26 08:06:25 rafal Exp $
+ * @version $Id: DefaultDBParametersManager.java,v 1.4 2005-05-11 07:16:41 pablo Exp $
  */
 public class DefaultDBParametersManager implements DBParametersManager
 {
@@ -28,7 +28,7 @@ public class DefaultDBParametersManager implements DBParametersManager
     private Database database;
     
     /** the parameters cache */
-    private Map localCache;
+    private Map<Long, Parameters> localCache;
     
     /**
      * Component cons.
@@ -40,7 +40,7 @@ public class DefaultDBParametersManager implements DBParametersManager
     {
         this.logger = logger;
         this.database = database;
-        localCache = new HashMap();
+        localCache = new HashMap<Long, Parameters>();
     }
     
     /**

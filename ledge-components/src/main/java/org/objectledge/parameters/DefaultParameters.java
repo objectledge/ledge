@@ -49,7 +49,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.20 2005-03-23 12:40:05 zwierzem Exp $
+ * @version $Id: DefaultParameters.java,v 1.21 2005-05-11 07:16:42 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -92,7 +92,7 @@ public class DefaultParameters implements Parameters
     }
     
     /** The main parameters map. */
-    protected Map map;
+    protected Map<String, String[]> map;
 
 	/**
      * Method used in constructors to choose backing <code>Map</code> implementation. 
@@ -100,7 +100,7 @@ public class DefaultParameters implements Parameters
      */
     protected void setupMap()
     {
-        map = new HashMap();
+        map = new HashMap<String, String[]>();
     }
     
     /**
@@ -162,7 +162,7 @@ public class DefaultParameters implements Parameters
      */
     public String get(String name)
     {
-        String[] values = (String[])map.get(name);
+        String[] values = map.get(name);
         if (values == null || values.length == 0)
         {
             throw new UndefinedParameterException("Parameter '" + name + "'is undefined");
@@ -176,7 +176,7 @@ public class DefaultParameters implements Parameters
 
     protected String getDataType(String name)
     {
-        String[] values = (String[])map.get(name);
+        String[] values = map.get(name);
         if (values == null || values.length == 0)
         {
             return null;
@@ -198,7 +198,7 @@ public class DefaultParameters implements Parameters
      */
     public String get(String name, String defaultValue)
     {
-        String[] values = (String[])map.get(name);
+        String[] values = map.get(name);
         if (values == null || values.length == 0)
         {
             return defaultValue;
@@ -215,7 +215,7 @@ public class DefaultParameters implements Parameters
      */
     public String[] getStrings(String name)
     {
-        String[] values = (String[])map.get(name);
+        String[] values = map.get(name);
         if (values == null)
         {
             return new String[0];
@@ -397,7 +397,7 @@ public class DefaultParameters implements Parameters
      */
     public boolean isDefined(String name)
     {
-        String[] values = (String[])map.get(name);
+        String[] values = map.get(name);
         if (values != null && values.length > 0)
         {
             return true;
@@ -426,12 +426,12 @@ public class DefaultParameters implements Parameters
      */
     public void remove(String name, String value)
     {
-        String[] values = (String[])map.get(name);
+        String[] values = map.get(name);
         if (values == null || values.length == 0)
         {
             return;
         }
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < values.length; i++)
         {
             if (!((values[i] == null && value == null) || 
@@ -541,7 +541,7 @@ public class DefaultParameters implements Parameters
         }
         if(list.size() > 0)
         {
-            map.put(name, (String[]) list.toArray(new String[list.size()]));
+            map.put(name, list.toArray(new String[list.size()]));
         }
         else
         {
@@ -679,9 +679,18 @@ public class DefaultParameters implements Parameters
     /**
      * {@inheritDoc}
      */
+	public void set(Parameters parameters)
+	{
+		remove();
+		add(parameters, true);
+	}
+	
+    /**
+     * {@inheritDoc}
+     */
     public void add(String name, String value)
     {
-        String[] values = (String[])map.get(name);
+        String[] values = map.get(name);
         if (values == null || values.length == 0)
         {
             String[] target = new String[] { value };
@@ -701,7 +710,7 @@ public class DefaultParameters implements Parameters
      */
     public void add(String name, String[] values)
     {
-        String[] prevValues = (String[])map.get(name);
+        String[] prevValues = map.get(name);
         if (prevValues == null || prevValues.length == 0)
         {
             set(name, values);
@@ -719,7 +728,7 @@ public class DefaultParameters implements Parameters
             }
             if(list.size() > 0)
             {
-                map.put(name, (String[]) list.toArray(new String[list.size()]));
+                map.put(name, list.toArray(new String[list.size()]));
             }
             else
             {
@@ -960,7 +969,7 @@ public class DefaultParameters implements Parameters
                 continue;
             }
             StringTokenizer st = new StringTokenizer(value, ",");
-            ArrayList values = new ArrayList();
+            ArrayList<String> values = new ArrayList<String>();
             while (st.hasMoreTokens())
             {
                 String v = st.nextToken();

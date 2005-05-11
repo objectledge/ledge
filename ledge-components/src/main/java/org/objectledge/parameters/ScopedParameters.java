@@ -37,7 +37,7 @@ import java.util.Set;
  * An implementation of parameters decorator class to scope parameters key names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ScopedParameters.java,v 1.4 2005-03-10 09:46:15 zwierzem Exp $
+ * @version $Id: ScopedParameters.java,v 1.5 2005-05-11 07:16:42 pablo Exp $
  */
 public class ScopedParameters implements Parameters
 {
@@ -339,7 +339,7 @@ public class ScopedParameters implements Parameters
             return parameters.getParameterNames();
         }
         String[] keys = parameters.getParameterNames();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         for(int i=0; i<keys.length; i++)
         {
             if(keys[i].startsWith(prefix))
@@ -397,7 +397,7 @@ public class ScopedParameters implements Parameters
             parameters.remove(keys);
             return;
         }
-        HashSet temp = new HashSet(keys.size());
+        HashSet<String> temp = new HashSet<String>(keys.size());
         for(String key: keys)
         {
             temp.add(prefix+key);
@@ -456,7 +456,7 @@ public class ScopedParameters implements Parameters
     /**
      * {@inheritDoc}
      */
-    public void removeExcept(Set keys)
+    public void removeExcept(Set<String> keys)
     {
         if(prefix.length() == 0)
         {
@@ -464,7 +464,7 @@ public class ScopedParameters implements Parameters
             return;
         }
         String[] names = getParameterNames();
-        HashSet temp = new HashSet(keys.size());
+        HashSet<String> temp = new HashSet<String>(keys.size());
         for(String key:names)
         {
             if (!keys.contains(key))
@@ -570,6 +570,30 @@ public class ScopedParameters implements Parameters
     {
         parameters.set(prefix+name, values);
     }
+	
+    /**
+     * {@inheritDoc}
+     */
+	public void set(Parameters parameters)
+	{
+	    if(prefix.length() == 0)
+	    {
+	        this.parameters.set(parameters);
+	    }
+	    else
+	    {
+			this.parameters.remove();
+            String[] keys = parameters.getParameterNames();
+            for(int i=0; i<keys.length; i++)
+            {
+                String[] values = parameters.getStrings(keys[i]);
+				for(int j=0; j<values.length; j++)
+                {
+                    this.parameters.add(prefix+keys[i], values[j]);
+                }
+            }
+	    }
+	}
     
     /**
      * {@inheritDoc}
