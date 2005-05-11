@@ -28,30 +28,44 @@
 package org.objectledge.statistics;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 
 /**
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.2 2005-05-11 05:25:08 rafal Exp $
+ * @version $Id: Statistics.java,v 1.3 2005-05-11 07:18:13 rafal Exp $
  */
 public class Statistics
 {
     private Configuration config;
     
+    private final Logger log;
+    
     private final List<StatisticsProvider> providers = new ArrayList<StatisticsProvider>();
+    
+    private long lastConfigTime = -1L;
+    
+    private long lastProvidersCount = 0;
     
     /**
      * Creates new Statistics instance.
      *
      * @param config the component configuration.
+     * @param log the logger.
      */
-    public Statistics(Configuration config)
+    public Statistics(Configuration config, Logger log)
     {
         this.config = config;
+        this.log = log;
     }
 
     /**
@@ -64,7 +78,11 @@ public class Statistics
      */
     public void registerProvider(StatisticsProvider provider)
     {
-        providers.add(provider);
+        log.info("registering provider " + provider.getName());
+        synchronized(providers)
+        {
+            providers.add(provider);
+        }
     }
     
     /**
@@ -74,7 +92,14 @@ public class Statistics
      */
     public String[] getGraphNames()
     {
-        return new String[0];
+        synchronized(providers)
+        {
+            reconfigureIfNeeded();
+            List<String> l = new ArrayList<String>(graphs.size());
+            l.addAll(graphs.keySet());
+            Collections.sort(l);
+            return l.toArray(new String[l.size()]);
+        }
     }
     
     /**
@@ -85,7 +110,16 @@ public class Statistics
      */
     public Graph getGraph(String name)
     {
-        return null;
+        synchronized(providers)
+        {
+            reconfigureIfNeeded();
+            Graph g = graphs.get(name);
+            if(g == null)
+            {
+                throw new IllegalArgumentException("unknown graph "+name);
+            }
+            return g;
+        }
     }
     
     /**
@@ -96,6 +130,114 @@ public class Statistics
      */
     public Number[] getValues(String name)
     {
-        return null;
+        synchronized(providers)
+        {
+            reconfigureIfNeeded();
+            Graph g = getGraph(name);
+            Number[] values = new Number[g.getOrder().length];
+            int i = 0;
+            for(DataSource ds : g.getOrder())
+            {
+                StatisticsProvider provider = dataSourceOwners.get(ds.getLabel());
+                values[i++] = provider.getDataValue(ds.getLabel());
+            }
+            return values;
+        }
+    }
+    
+    private Map<String,DataSource> dataSources = new HashMap<String,DataSource>();
+    
+    private Map<DataSource, StatisticsProvider> dataSourceOwners = 
+        new HashMap<DataSource,StatisticsProvider>();
+    
+    private Map<String,Graph> graphs = new HashMap<String,Graph>();
+    
+    private void configure(Configuration config)
+        throws ConfigurationException
+    {
+        // declared data sources
+        for(StatisticsProvider provider : providers)
+        {
+            DataSource[] providerDataSources = provider.getDataSources();
+            for(DataSource dataSource : providerDataSources)
+            {
+                DataSource registered = dataSources.get(dataSource.getLabel());
+                if(registered != null)
+                {
+                    throw new ComponentInitializationError("statistics providers " + 
+                        provider.getName() + " and " + dataSourceOwners.get(registered) + 
+                        " declare data source with name " + dataSource.getLabel());
+                }
+                dataSources.put(dataSource.getLabel(), dataSource);
+            }
+        }
+        // data source overrides
+        Configuration[] overrideCfgs = config.getChildren("dataSource");
+        for(Configuration overrideCfg : overrideCfgs)
+        {
+            DataSource override = new DataSource(overrideCfg);
+            DataSource registered = dataSources.get(override.getLabel());
+            if(registered == null)
+            {
+                throw new ConfigurationException("found override for not registered data source "+
+                    override.getLabel(), overrideCfg.getPath(), overrideCfg.getLocation());
+            }
+            dataSources.put(override.getLabel(), new DataSource(registered, override));
+        }
+        // declared graphs
+        Map<Graph, StatisticsProvider> graphOwner = new HashMap<Graph, StatisticsProvider>();
+        for(StatisticsProvider provider : providers)
+        {
+            Graph[] providerGraphs = provider.getGraphs();
+            for(Graph graph : providerGraphs)
+            {
+                Graph registered = graphs.get(graph.getName());
+                if(registered != null)
+                {
+                    throw new ComponentInitializationError("statistics providers " + 
+                        provider.getName() + " and " + dataSourceOwners.get(registered) + 
+                        " declare graph with name " + graph.getName());
+                }
+                graphs.put(graph.getName(), graph);
+            }
+        }
+        // graph overrides
+        overrideCfgs = config.getChildren("graph");
+        for(Configuration overrideCfg : overrideCfgs)
+        {
+            Graph override = new Graph(overrideCfg, dataSources);
+            Graph registered = graphs.get(override.getName());
+            if(registered == null)
+            {
+                throw new ConfigurationException("found override for not registered graph "+
+                    override.getName(), overrideCfg.getPath(), overrideCfg.getLocation());
+            }
+            graphs.put(override.getName(), new Graph(registered, override));
+        }
+        lastConfigTime = System.currentTimeMillis();
+        lastProvidersCount = providers.size();
+    }
+    
+    private void reconfigureIfNeeded()
+    {
+        synchronized(providers)
+        {
+            if(lastConfigTime == -1L || providers.size() != lastProvidersCount)
+            {
+                if(lastConfigTime != -1L)
+                {
+                   log.warn("statistics providers registered after system startup: reconfiguring"); 
+                }
+                try
+                {
+                    configure(config);
+                }
+                catch(ConfigurationException e)
+                {
+                    throw new ComponentInitializationError("failed to configure " +
+                            "Statistics component", e);
+                }
+            }
+        }
     }
 }
