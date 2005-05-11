@@ -32,7 +32,7 @@ package org.objectledge.statistics;
  * A statistics data provider. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsProvider.java,v 1.1 2005-05-10 11:02:48 rafal Exp $
+ * @version $Id: StatisticsProvider.java,v 1.2 2005-05-11 07:16:36 rafal Exp $
  */
 public interface StatisticsProvider
 {
@@ -44,16 +44,24 @@ public interface StatisticsProvider
     String getName();
     
     /**
+     * Returns graphs in this provider.
+     * 
+     * @return graphs in this provider.
+     */
+    Graph[] getGraphs();
+    
+    /**
      * Returns the data sources in this provider.
      * 
-     * @return the provider name.
+     * @return data sources in this provider.
      */
     DataSource[] getDataSources();
     
     /**
      * Return the data probes.
      * 
+     * @param name of the data source.
      * @return a vector of data probes.
      */
-    Number[] getValues();
+    Number getDataValue(String name);
 }
