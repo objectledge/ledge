@@ -36,10 +36,12 @@ import org.jcontainer.dna.ConfigurationException;
  * Describes a data source used for statistics computation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DataSource.java,v 1.2 2005-05-11 05:24:55 rafal Exp $
+ * @version $Id: DataSource.java,v 1.3 2005-05-12 02:07:24 rafal Exp $
  */
 public class DataSource
 {
+    private final String name;
+    
     private final String label;
     
     private final String cdef;
@@ -65,6 +67,7 @@ public class DataSource
     /**
      * Creates new ValueDescription instance.
      * 
+     * @param name the name of the data source. 
      * @param label the data source label.
      * @param cdef the data transformation RPN expression.
      * @param type the data source type.
@@ -77,10 +80,11 @@ public class DataSource
      * @param maxCritical the maximal critical warning value, null to disable.
      * @param info the additional description string.
      */
-    public DataSource(String label, String cdef, Type type, Graph graph,
+    public DataSource(String name, String label, String cdef, Type type, Graph graph,
         Number min, Number max, Number minWarning, Number maxWarning, 
         Number minCritical, Number maxCritical, String info)
     {
+        this.name = name;
         this.label = label;
         this.cdef = cdef;
         this.type = type;
@@ -97,15 +101,16 @@ public class DataSource
     /**
      * Creates new DataSource instance.
      * 
+     * @param name the name of the data source. 
      * @param label the data source label.
      * @param cdef the data transformation RPN expression.
      * @param type the data source type.
      * @param graph the graph type for the data source.
      * @param info the additional description string.
      */
-    public DataSource(String label, String cdef, Type type, Graph graph, String info)
+    public DataSource(String name, String label, String cdef, Type type, Graph graph, String info)
     {
-        this(label, cdef, type, graph, null, null, null, null, null, null, info);
+        this(name, label, cdef, type, graph, null, null, null, null, null, null, info);
     }
     
     /**
@@ -118,7 +123,8 @@ public class DataSource
         throws ConfigurationException
     {
         this(
-            config.getChild("label").getValue(),
+            config.getChild("name").getValue(),
+            config.getChild("label").getValue(null),
             config.getChild("cdef").getValue(null),
             getType(config.getChild("type").getValue(null)),
             getGraph(config.getChild("graph").getValue(null)),
@@ -141,7 +147,8 @@ public class DataSource
     public DataSource(DataSource base, DataSource override)
     {
         this(
-            base.getLabel(),
+            base.getName(),
+            override.getLabel() != null ? override.getLabel() : base.getLabel(),
             override.getCdef() != null ? override.getCdef() : base.getCdef(),
             override.getType() != null ? override.getType() : base.getType(),
             override.getGraph() != null ? override.getGraph() : base.getGraph(),
@@ -153,6 +160,16 @@ public class DataSource
             override.getMaxCritical() != null ? override.getMaxCritical() : base.getMaxCritical(),
             override.getInfo() != null ? override.getInfo() : base.getInfo()
             );
+    }
+    
+    /**
+     * Returns the name.
+     * 
+     * @return the name.
+     */
+    public String getName()
+    {
+        return name;
     }
     
     /**
