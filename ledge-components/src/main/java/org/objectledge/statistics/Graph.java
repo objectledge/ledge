@@ -36,7 +36,7 @@ import org.jcontainer.dna.ConfigurationException;
  * Describes a statistics graph, modeled after Munin tool.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Graph.java,v 1.4 2005-05-12 04:46:27 rafal Exp $
+ * @version $Id: Graph.java,v 1.5 2005-05-12 05:55:33 rafal Exp $
  */
 public class Graph
 {
@@ -270,5 +270,19 @@ public class Graph
             result[i++] = ds;
         }
         return result;
+    }
+
+    /**
+     * Update dataSources in this graph in case their properties were altered through Statitics
+     * component configuration.
+     * 
+     * @param dataSources the up-to-data data source descriptors keyed by name.
+     */
+    void updateDataSources(Map<String,DataSource> dataSources)
+    {
+        for(int i = 0; i < order.length; i++)
+        {
+            order[i] = dataSources.get(order[i].getName());
+        }
     }
 }

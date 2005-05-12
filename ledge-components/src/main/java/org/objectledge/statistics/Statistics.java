@@ -42,7 +42,7 @@ import org.objectledge.ComponentInitializationError;
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.5 2005-05-12 04:22:51 rafal Exp $
+ * @version $Id: Statistics.java,v 1.6 2005-05-12 05:55:33 rafal Exp $
  */
 public class Statistics
 {
@@ -206,6 +206,11 @@ public class Statistics
                     override.getName(), overrideCfg.getPath(), overrideCfg.getLocation());
             }
             graphs.put(override.getName(), new Graph(registered, override));
+        }
+        // update DataSource references inside Graph objects
+        for(Graph graph : graphs.values())
+        {
+            graph.updateDataSources(dataSources);
         }
         lastConfigTime = System.currentTimeMillis();
         lastProvidersCount = providers.size();
