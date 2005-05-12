@@ -41,7 +41,7 @@ import org.picocontainer.Startable;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.2 2005-05-12 04:25:19 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.3 2005-05-12 04:46:08 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
@@ -52,8 +52,8 @@ public class VMStatisticsProvider
         new DataSource("vm_memory_heap_max", "Heap max", null, GAUGE, LINE1, null),
         new DataSource("vm_memory_nonheap_used", "Non-heap used", null, GAUGE, LINE1, null),
         new DataSource("vm_memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1, null),
-        new DataSource("vm_gc_count", null, "GC count", COUNTER, LINE1, null),
-        new DataSource("vm_gc_time", null, "Total GC time", COUNTER, LINE1, null)
+        new DataSource("vm_gc_count", "GC count", null, COUNTER, LINE1, null),
+        new DataSource("vm_gc_time", "Total GC time", null, COUNTER, LINE1, null)
     };
     
     private static final Graph[] GRAPHS = {
