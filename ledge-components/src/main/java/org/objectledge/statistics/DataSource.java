@@ -36,7 +36,7 @@ import org.jcontainer.dna.ConfigurationException;
  * Describes a data source used for statistics computation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DataSource.java,v 1.4 2005-05-12 05:55:05 rafal Exp $
+ * @version $Id: DataSource.java,v 1.5 2005-05-12 06:08:42 rafal Exp $
  */
 public class DataSource
 {
@@ -62,8 +62,6 @@ public class DataSource
     
     private final Number maxCritical;
     
-    private final String info;
-    
     /**
      * Creates new ValueDescription instance.
      * 
@@ -78,11 +76,10 @@ public class DataSource
      * @param maxWarning the maximal warning value, null to disable.
      * @param minCritical the minimal critical warning value, null to disable.
      * @param maxCritical the maximal critical warning value, null to disable.
-     * @param info the additional description string.
      */
     public DataSource(String name, String label, String cdef, Type type, Graph graph,
         Number min, Number max, Number minWarning, Number maxWarning, 
-        Number minCritical, Number maxCritical, String info)
+        Number minCritical, Number maxCritical)
     {
         this.name = name;
         this.label = label;
@@ -95,7 +92,6 @@ public class DataSource
         this.maxWarning = maxWarning;
         this.minCritical = minCritical;
         this.maxCritical = maxCritical;
-        this.info = info;
     }
 
     /**
@@ -106,11 +102,10 @@ public class DataSource
      * @param cdef the data transformation RPN expression.
      * @param type the data source type.
      * @param graph the graph type for the data source.
-     * @param info the additional description string.
      */
-    public DataSource(String name, String label, String cdef, Type type, Graph graph, String info)
+    public DataSource(String name, String label, String cdef, Type type, Graph graph)
     {
-        this(name, label, cdef, type, graph, null, null, null, null, null, null, info);
+        this(name, label, cdef, type, graph, null, null, null, null, null, null);
     }
     
     /**
@@ -133,8 +128,7 @@ public class DataSource
             getNumber(config.getChild("minWarning").getValue(null)),
             getNumber(config.getChild("maxWarning").getValue(null)),
             getNumber(config.getChild("minCritical").getValue(null)),
-            getNumber(config.getChild("maxCritical").getValue(null)),
-            config.getChild("info").getValue(null)
+            getNumber(config.getChild("maxCritical").getValue(null))
             );
     }
     
@@ -157,8 +151,7 @@ public class DataSource
             override.getMinWarning() != null ? override.getMinWarning() : base.getMinWarning(),
             override.getMaxWarning() != null ? override.getMaxWarning() : base.getMaxWarning(),
             override.getMinCritical() != null ? override.getMinCritical() : base.getMinCritical(),
-            override.getMaxCritical() != null ? override.getMaxCritical() : base.getMaxCritical(),
-            override.getInfo() != null ? override.getInfo() : base.getInfo()
+            override.getMaxCritical() != null ? override.getMaxCritical() : base.getMaxCritical()
             );
     }
     
@@ -270,16 +263,6 @@ public class DataSource
     public Number getMaxCritical()
     {
         return maxCritical;
-    }
-
-    /**
-     * Returns the info.
-     *
-     * @return the info.
-     */
-    public String getInfo()
-    {
-        return info;
     }
 
     private static Type getType(String type)

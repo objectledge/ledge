@@ -87,11 +87,6 @@
                 <text/>
               </element>
             </optional>
-            <optional>
-              <element name="info">
-                <text/>
-              </element>
-            </optional>
           </interleave>
         </element>
       </zeroOrMore>
