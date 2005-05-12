@@ -1,0 +1,44 @@
+#macro(EOL)
+	
+#end
+#if($parametersTool.isDefined('config'))
+#set($graph = $statistics.getGraph($parametersTool.config))
+graph_tile $graph.title
+#if($graph.graphArgs)create_args $create.args#EOL()#end
+#if($graph.graphArgs)graph_args $graph.args#EOL()#end
+graph_order #foreach($dataSource in $graph.order)$dataSource.name #end#EOL()
+#if($graph.vLabel)graph_vlabel $graph.vLabel#EOL()#end
+#if($graph.totalLabel)graph_total $graph.totalLabel#EOL()#end
+scale#if($graph.notScaled) no#else yes#end#EOL()
+graph#if($graph.notDrawn) no#else yes#end#EOL()
+update#if($graph.notUpdated) no#else yes#end#EOL()
+#foreach($ds in $graph.order)
+${ds.name}.label $ds.label
+#if($ds.cDef)${ds.name}.cdef $ds.cDef#EOL()#end
+#if($ds.notDrawn)
+${ds.name}.graph no
+#else
+${ds.name}.draw $ds.graph
+#end
+#if($ds.max)${ds.name}.max $ds.max#EOL()#end
+#if($ds.min)${ds.name}.min $ds.min#EOL()#end
+${ds.name}.type $ds.type
+#if($ds.minWarning || $ds.maxWarning)
+${ds.name}.warning ${!ds.minWarning}:${!ds.maxWarning}
+#end
+#if($ds.minCritical || $ds.maxCritical)
+${ds.name}.critical ${!ds.minCritical}:${!ds.maxCritical}
+#end
+#if($ds.info)${ds.name}.info $ds.info#EOL()#end
+#end
+#elseif($parametersTool.isDefined('data'))
+#set($graph = $statistics.getGraph($parametersTool.data))
+#foreach($ds in $graph.order)
+$ds.name $statistics.getDataValue($ds) 
+#end
+#else
+#foreach($name in $statistics.graphNames)
+$name
+#end
+#end
+(end)
