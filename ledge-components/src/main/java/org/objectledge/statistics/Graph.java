@@ -36,7 +36,7 @@ import org.jcontainer.dna.ConfigurationException;
  * Describes a statistics graph, modeled after Munin tool.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Graph.java,v 1.3 2005-05-11 07:17:02 rafal Exp $
+ * @version $Id: Graph.java,v 1.4 2005-05-12 04:46:27 rafal Exp $
  */
 public class Graph
 {
@@ -259,10 +259,11 @@ public class Graph
         int i = 0;
         for(String name : names)
         {
-            DataSource ds = dataSources.get(name);
+            String trimmedName = name.trim();
+            DataSource ds = dataSources.get(trimmedName);
             if(ds == null)
             {
-                throw new ConfigurationException("unknown dataSource " + name
+                throw new ConfigurationException("unknown dataSource " + trimmedName
                     + " referenced in graph " + graphName, orderCfg.getPath(), orderCfg
                     .getLocation());
             }
