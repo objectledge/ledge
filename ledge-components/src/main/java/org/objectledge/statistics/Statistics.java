@@ -42,7 +42,7 @@ import org.objectledge.ComponentInitializationError;
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.3 2005-05-11 07:18:13 rafal Exp $
+ * @version $Id: Statistics.java,v 1.4 2005-05-12 02:07:49 rafal Exp $
  */
 public class Statistics
 {
@@ -138,8 +138,8 @@ public class Statistics
             int i = 0;
             for(DataSource ds : g.getOrder())
             {
-                StatisticsProvider provider = dataSourceOwners.get(ds.getLabel());
-                values[i++] = provider.getDataValue(ds.getLabel());
+                StatisticsProvider provider = dataSourceOwners.get(ds.getName());
+                values[i++] = provider.getDataValue(ds.getName());
             }
             return values;
         }
@@ -161,14 +161,14 @@ public class Statistics
             DataSource[] providerDataSources = provider.getDataSources();
             for(DataSource dataSource : providerDataSources)
             {
-                DataSource registered = dataSources.get(dataSource.getLabel());
+                DataSource registered = dataSources.get(dataSource.getName());
                 if(registered != null)
                 {
                     throw new ComponentInitializationError("statistics providers " + 
                         provider.getName() + " and " + dataSourceOwners.get(registered) + 
-                        " declare data source with name " + dataSource.getLabel());
+                        " declare data source with name " + dataSource.getName());
                 }
-                dataSources.put(dataSource.getLabel(), dataSource);
+                dataSources.put(dataSource.getName(), dataSource);
             }
         }
         // data source overrides
@@ -176,13 +176,13 @@ public class Statistics
         for(Configuration overrideCfg : overrideCfgs)
         {
             DataSource override = new DataSource(overrideCfg);
-            DataSource registered = dataSources.get(override.getLabel());
+            DataSource registered = dataSources.get(override.getName());
             if(registered == null)
             {
                 throw new ConfigurationException("found override for not registered data source "+
-                    override.getLabel(), overrideCfg.getPath(), overrideCfg.getLocation());
+                    override.getName(), overrideCfg.getPath(), overrideCfg.getLocation());
             }
-            dataSources.put(override.getLabel(), new DataSource(registered, override));
+            dataSources.put(override.getName(), new DataSource(registered, override));
         }
         // declared graphs
         Map<Graph, StatisticsProvider> graphOwner = new HashMap<Graph, StatisticsProvider>();
