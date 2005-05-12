@@ -36,7 +36,7 @@ import org.jcontainer.dna.ConfigurationException;
  * Describes a data source used for statistics computation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DataSource.java,v 1.3 2005-05-12 02:07:24 rafal Exp $
+ * @version $Id: DataSource.java,v 1.4 2005-05-12 05:55:05 rafal Exp $
  */
 public class DataSource
 {
@@ -130,10 +130,10 @@ public class DataSource
             getGraph(config.getChild("graph").getValue(null)),
             getNumber(config.getChild("min").getValue(null)),
             getNumber(config.getChild("max").getValue(null)),
-            getNumber(config.getChild("min").getValue(null)),
-            getNumber(config.getChild("max").getValue(null)),
-            getNumber(config.getChild("min").getValue(null)),
-            getNumber(config.getChild("max").getValue(null)),
+            getNumber(config.getChild("minWarning").getValue(null)),
+            getNumber(config.getChild("maxWarning").getValue(null)),
+            getNumber(config.getChild("minCritical").getValue(null)),
+            getNumber(config.getChild("maxCritical").getValue(null)),
             config.getChild("info").getValue(null)
             );
     }
