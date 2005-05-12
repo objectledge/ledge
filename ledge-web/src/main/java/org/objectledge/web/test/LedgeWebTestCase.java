@@ -43,7 +43,7 @@ import net.sourceforge.jwebunit.WebTestCase;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.9 2005-05-12 05:11:51 pablo Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.10 2005-05-12 09:28:03 pablo Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -56,6 +56,7 @@ public class LedgeWebTestCase
         String url = System.getProperty("base.url", "http://localhost:8080");
         String baseUrl = url.endsWith("/") ? url.substring(0, url.length()-1) : url;
         getTestContext().setBaseUrl(baseUrl);
+		beginAt("/action/i18n.SetLocale/locale/pl_PL");
     }
 
     // -- ObjectLedge specific asserts ----------------------------------------------------------
@@ -111,7 +112,7 @@ public class LedgeWebTestCase
     
     
     // some usefull methods..
-    protected WebLink getLinkWithString(String text)
+    protected WebLink getLinkWithURL(String text)
         throws Exception
     {
         WebLink[] links = getTester().getDialog().getResponse().getLinks();
