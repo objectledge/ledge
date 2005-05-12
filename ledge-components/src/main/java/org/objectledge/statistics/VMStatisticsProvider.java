@@ -41,7 +41,7 @@ import org.picocontainer.Startable;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.1 2005-05-12 02:10:16 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.2 2005-05-12 04:25:19 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
@@ -117,7 +117,7 @@ public class VMStatisticsProvider
      * 
      * @return the size of used heap memory.
      */
-    public Number getVmMemoryHeapUsed()
+    public Number getVmMemoryHeapUsedValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getHeapMemoryUsage().getUsed());
@@ -128,7 +128,7 @@ public class VMStatisticsProvider
      * 
      * @return the maximum size of heap memory.
      */
-    public Number getVmMemoryHeapMax()
+    public Number getVmMemoryHeapMaxValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getHeapMemoryUsage().getMax());
@@ -139,7 +139,7 @@ public class VMStatisticsProvider
      * 
      * @return the size of used non-heap memory.
      */
-    public Number getVmMemoryNonheapUsed()
+    public Number getVmMemoryNonheapUsedValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getNonHeapMemoryUsage().getUsed());
@@ -150,7 +150,7 @@ public class VMStatisticsProvider
      * 
      * @return the maximum size of non-heap memory.
      */
-    public Number getVmMemoryNonheapMax()
+    public Number getVmMemoryNonheapMaxValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getNonHeapMemoryUsage().getMax());
@@ -161,7 +161,7 @@ public class VMStatisticsProvider
      * 
      * @return the total number of garbage collections.
      */
-    public Number getVmGcCount()
+    public Number getVmGcCountValue()
     {
         List<GarbageCollectorMXBean> garbageCollectors = 
             ManagementFactory.getGarbageCollectorMXBeans();
@@ -178,7 +178,7 @@ public class VMStatisticsProvider
      * 
      * @return the approximate accumulated garbage collection elapsed time in milliseconds.
      */
-    public Number getVmGcTime()
+    public Number getVmGcTimeValue()
     {
         List<GarbageCollectorMXBean> garbageCollectors = 
             ManagementFactory.getGarbageCollectorMXBeans();
