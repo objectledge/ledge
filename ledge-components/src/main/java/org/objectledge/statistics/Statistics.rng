@@ -34,9 +34,14 @@
       <zeroOrMore>
         <element name="dataSource">
           <interleave>
-            <element name="label">
+            <element name="name">
               <text/>
             </element>
+            <optional>
+              <element name="label">
+                <text/>
+              </element>
+            </optional>
             <optional>
               <element name="cdef">
                 <text/>
@@ -105,6 +110,11 @@
             <optional>
               <element name="createArgs">
                 <text/>  
+              </element>
+            </optional>
+            <optional>
+              <element name="order">
+                <text/>
               </element>
             </optional>
             <optional>
