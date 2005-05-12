@@ -42,7 +42,7 @@ import org.objectledge.ComponentInitializationError;
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.4 2005-05-12 02:07:49 rafal Exp $
+ * @version $Id: Statistics.java,v 1.5 2005-05-12 04:22:51 rafal Exp $
  */
 public class Statistics
 {
@@ -125,23 +125,15 @@ public class Statistics
     /**
      * Returns graph's data samples.
      * 
-     * @param name the graph name.
+     * @param ds the DataSource.
      * @return the graph's data samples.
      */
-    public Number[] getValues(String name)
+    public Number getDataValue(DataSource ds)
     {
         synchronized(providers)
         {
-            reconfigureIfNeeded();
-            Graph g = getGraph(name);
-            Number[] values = new Number[g.getOrder().length];
-            int i = 0;
-            for(DataSource ds : g.getOrder())
-            {
-                StatisticsProvider provider = dataSourceOwners.get(ds.getName());
-                values[i++] = provider.getDataValue(ds.getName());
-            }
-            return values;
+            StatisticsProvider provider = dataSourceOwners.get(ds);
+            return provider.getDataValue(ds.getName());
         }
     }
     
@@ -169,6 +161,7 @@ public class Statistics
                         " declare data source with name " + dataSource.getName());
                 }
                 dataSources.put(dataSource.getName(), dataSource);
+                dataSourceOwners.put(dataSource, provider);
             }
         }
         // data source overrides
