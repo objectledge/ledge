@@ -43,7 +43,7 @@ import net.sourceforge.jwebunit.WebTestCase;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.8 2005-05-06 10:47:01 pablo Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.9 2005-05-12 05:11:51 pablo Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -140,7 +140,23 @@ public class LedgeWebTestCase
         }
         return i;
     }
-    
+
+    protected int countLinksWithExactString(String text)
+	    throws Exception
+	{
+	    int i = 0;
+	    WebLink[] links = getTester().getDialog().getResponse().getLinks();
+	    for(WebLink l: links)
+	    {
+	        if(l.getText().equals(text))
+	        {
+	            i++;
+	        }
+	    }
+	    return i;
+	}
+
+	
     protected int countImagesWithSource(String text)
         throws Exception
     {
@@ -157,6 +173,19 @@ public class LedgeWebTestCase
     }
     
     
+	protected int countString(String text)
+	{
+		String response = getTester().getDialog().getResponseText();
+		int counter = 0;
+		int index = response.indexOf(text);
+		while(index >= 0)
+		{
+			counter++;
+			index = response.indexOf(text, index + text.length());
+		}
+		return counter;
+	}
+	
     protected int countElements(String tagName)
         throws Exception
     {
