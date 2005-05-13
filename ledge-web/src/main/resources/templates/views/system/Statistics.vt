@@ -1,0 +1,22 @@
+$pageTool.appendTitleSuffix('Statistics')
+<style type="text/css">
+<!--
+div.d1 {
+ padding: 5px;
+}
+-->
+</style>
+#macro(EOL)
+
+#end
+#foreach($graphName in $statistics.graphNames)
+#set($graph = $statistics.getGraph($graphName))
+<h3>$graph.title</h3>
+<div class="d1">
+#foreach($ds in $graph.order)
+#set($value = $statistics.getDataValue($ds))
+$ds.label =#if($value) $value#else U#end <br/>
+#end
+</div>
+#end
+
