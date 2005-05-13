@@ -41,19 +41,19 @@ import org.picocontainer.Startable;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.4 2005-05-12 06:08:42 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.5 2005-05-13 08:30:36 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
     implements Startable
 {
     private static final DataSource[] DATA_SOURCES = { 
-        new DataSource("vm_memory_heap_used", "Heap used", null, GAUGE, LINE1),
-        new DataSource("vm_memory_heap_max", "Heap max", null, GAUGE, LINE1),
-        new DataSource("vm_memory_nonheap_used", "Non-heap used", null, GAUGE, LINE1),
-        new DataSource("vm_memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1),
-        new DataSource("vm_gc_count", "GC count", null, COUNTER, LINE1),
-        new DataSource("vm_gc_time", "Total GC time", null, COUNTER, LINE1)
+        new DataSource("memory_heap_used", "Heap used", null, GAUGE, LINE1),
+        new DataSource("memory_heap_max", "Heap max", null, GAUGE, LINE1),
+        new DataSource("memory_nonheap_used", "Non-heap used", null, GAUGE, LINE1),
+        new DataSource("memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1),
+        new DataSource("gc_count", "GC count", null, COUNTER, LINE1),
+        new DataSource("gc_time", "Total GC time", null, COUNTER, LINE1)
     };
     
     private static final Graph[] GRAPHS = {
@@ -117,7 +117,7 @@ public class VMStatisticsProvider
      * 
      * @return the size of used heap memory.
      */
-    public Number getVmMemoryHeapUsedValue()
+    public Number getMemoryHeapUsedValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getHeapMemoryUsage().getUsed());
@@ -128,7 +128,7 @@ public class VMStatisticsProvider
      * 
      * @return the maximum size of heap memory.
      */
-    public Number getVmMemoryHeapMaxValue()
+    public Number getMemoryHeapMaxValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getHeapMemoryUsage().getMax());
@@ -139,7 +139,7 @@ public class VMStatisticsProvider
      * 
      * @return the size of used non-heap memory.
      */
-    public Number getVmMemoryNonheapUsedValue()
+    public Number getMemoryNonheapUsedValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getNonHeapMemoryUsage().getUsed());
@@ -150,7 +150,7 @@ public class VMStatisticsProvider
      * 
      * @return the maximum size of non-heap memory.
      */
-    public Number getVmMemoryNonheapMaxValue()
+    public Number getMemoryNonheapMaxValue()
     {
         MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
         return new Long(memory.getNonHeapMemoryUsage().getMax());
@@ -161,7 +161,7 @@ public class VMStatisticsProvider
      * 
      * @return the total number of garbage collections.
      */
-    public Number getVmGcCountValue()
+    public Number getGcCountValue()
     {
         List<GarbageCollectorMXBean> garbageCollectors = 
             ManagementFactory.getGarbageCollectorMXBeans();
@@ -178,7 +178,7 @@ public class VMStatisticsProvider
      * 
      * @return the approximate accumulated garbage collection elapsed time in milliseconds.
      */
-    public Number getVmGcTimeValue()
+    public Number getGcTimeValue()
     {
         List<GarbageCollectorMXBean> garbageCollectors = 
             ManagementFactory.getGarbageCollectorMXBeans();
