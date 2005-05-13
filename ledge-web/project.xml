@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.46 2005-04-28 05:54:53 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.47 2005-05-13 04:35:33 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -202,12 +202,12 @@
     <dependency>
       <groupId>httpunit</groupId>
       <artifactId>httpunit</artifactId>
-      <version>1.6.1-ledge1</version>
+      <version>1.6.1-ledge2</version>
     </dependency>
     <dependency>
       <groupId>jwebunit</groupId>
       <artifactId>jwebunit</artifactId>
-      <version>1.2-ledge1</version>
+      <version>1.2-ledge2</version>
     </dependency>
     <dependency>
       <groupId>maxq</groupId>
