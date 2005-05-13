@@ -33,10 +33,10 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 
 /**
- * Describes a data source used for statistics computation.
+ * Describes a data source used for statistics computation, modeled after Munin tool.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DataSource.java,v 1.5 2005-05-12 06:08:42 rafal Exp $
+ * @version $Id: DataSource.java,v 1.6 2005-05-13 06:44:35 rafal Exp $
  */
 public class DataSource
 {
