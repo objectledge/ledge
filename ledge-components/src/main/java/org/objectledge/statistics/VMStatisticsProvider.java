@@ -41,23 +41,38 @@ import org.picocontainer.Startable;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.5 2005-05-13 08:30:36 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.6 2005-05-13 09:16:21 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
     implements Startable
 {
-    private static final DataSource[] DATA_SOURCES = { 
+    private static final DataSource[] MEMORY_DATA_SOURCES = { 
         new DataSource("memory_heap_used", "Heap used", null, GAUGE, LINE1),
         new DataSource("memory_heap_max", "Heap max", null, GAUGE, LINE1),
         new DataSource("memory_nonheap_used", "Non-heap used", null, GAUGE, LINE1),
-        new DataSource("memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1),
+        new DataSource("memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1)
+    };
+    
+    private static final DataSource[] GC_DATA_SOURCES = {
         new DataSource("gc_count", "GC count", null, COUNTER, LINE1),
         new DataSource("gc_time", "Total GC time", null, COUNTER, LINE1)
     };
     
+    private static final DataSource[] DATA_SOURCES;
+    
+    static
+    {
+        DATA_SOURCES = new DataSource[MEMORY_DATA_SOURCES.length + GC_DATA_SOURCES.length];
+        System.arraycopy(MEMORY_DATA_SOURCES, 0, 
+            DATA_SOURCES, 0, MEMORY_DATA_SOURCES.length);
+        System.arraycopy(GC_DATA_SOURCES, 0, 
+            DATA_SOURCES, MEMORY_DATA_SOURCES.length, GC_DATA_SOURCES.length);
+    }
+    
     private static final Graph[] GRAPHS = {
-        new Graph("vm", "Virtual Machine statisitcs", null, DATA_SOURCES, null)
+        new Graph("memory", "Memory", null, MEMORY_DATA_SOURCES, null),
+        new Graph("gc", "Garbage collection", null, GC_DATA_SOURCES, null),        
     };
     
     /**
