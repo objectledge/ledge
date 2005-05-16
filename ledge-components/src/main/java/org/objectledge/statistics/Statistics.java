@@ -42,7 +42,7 @@ import org.objectledge.ComponentInitializationError;
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.6 2005-05-12 05:55:33 rafal Exp $
+ * @version $Id: Statistics.java,v 1.7 2005-05-16 05:53:19 rafal Exp $
  */
 public class Statistics
 {
@@ -147,6 +147,9 @@ public class Statistics
     private void configure(Configuration config)
         throws ConfigurationException
     {
+        dataSources.clear();
+        dataSourceOwners.clear();
+        graphs.clear();
         // declared data sources
         for(StatisticsProvider provider : providers)
         {
@@ -157,7 +160,7 @@ public class Statistics
                 if(registered != null)
                 {
                     throw new ComponentInitializationError("statistics providers " + 
-                        provider.getName() + " and " + dataSourceOwners.get(registered) + 
+                        provider.getName() + " and " + dataSourceOwners.get(registered).getName() + 
                         " declare data source with name " + dataSource.getName());
                 }
                 dataSources.put(dataSource.getName(), dataSource);
@@ -188,7 +191,7 @@ public class Statistics
                 if(registered != null)
                 {
                     throw new ComponentInitializationError("statistics providers " + 
-                        provider.getName() + " and " + dataSourceOwners.get(registered) + 
+                        provider.getName() + " and " + dataSourceOwners.get(registered).getName() + 
                         " declare graph with name " + graph.getName());
                 }
                 graphs.put(graph.getName(), graph);
