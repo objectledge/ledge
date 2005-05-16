@@ -38,7 +38,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * Base class of Component interface implementations.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DefaultComponent.java,v 1.4 2005-02-08 20:57:52 rafal Exp $
+ * @version $Id: DefaultComponent.java,v 1.5 2005-05-16 09:17:39 pablo Exp $
  */
 public class DefaultComponent implements Component
 {
@@ -67,7 +67,7 @@ public class DefaultComponent implements Component
 		}
 		catch(MergingException e)
 		{
-			throw new BuildException(e);
+			throw new BuildException("failed to merge template: "+template.getName(), e);
 		}
     }
 

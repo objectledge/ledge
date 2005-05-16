@@ -47,7 +47,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * A template tool for embedding components in application UI.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.12 2005-02-25 10:36:29 pablo Exp $
+ * @version $Id: ComponentTool.java,v 1.13 2005-05-16 09:17:39 pablo Exp $
  */
 public class ComponentTool
 {
@@ -155,31 +155,38 @@ public class ComponentTool
 		}		
         securityHelper.checkSecurity(component, context);
         String result = null;
-        if(config != null)
-        {
-            Map store = new HashMap();
-            TemplatingContext tContext = 
-                 TemplatingContext.getTemplatingContext(context);
-            Iterator i = config.keySet().iterator();
-            while(i.hasNext())
-            {
-                String key = (String)i.next();
-                store.put(key, tContext.get(key));
-                tContext.put(key, config.get(key));
-            }
-            result = component.build(template);
-            i = config.keySet().iterator();
-            while(i.hasNext())
-            {
-                String key = (String)i.next();
-                tContext.put(key, store.get(key));
-            }
-        }
-        else
-        {
-            result = component.build(template);
-        }
-		return result; 
+		try
+		{
+	        if(config != null)
+	        {
+	            Map store = new HashMap();
+	            TemplatingContext tContext = 
+	                 TemplatingContext.getTemplatingContext(context);
+	            Iterator i = config.keySet().iterator();
+	            while(i.hasNext())
+	            {
+	                String key = (String)i.next();
+	                store.put(key, tContext.get(key));
+	                tContext.put(key, config.get(key));
+	            }
+	            result = component.build(template);
+	            i = config.keySet().iterator();
+	            while(i.hasNext())
+	            {
+	                String key = (String)i.next();
+	                tContext.put(key, store.get(key));
+	            }
+	        }
+	        else
+	        {
+	            result = component.build(template);
+	        }
+			return result;
+		}
+		catch(Exception e)
+		{
+			throw new ProcessingException("Failed to build component with template: "+template.getName(), e);
+		}
 	}
 	
     /**
