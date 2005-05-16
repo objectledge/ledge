@@ -37,40 +37,49 @@ import java.lang.management.MemoryMXBean;
 import java.util.List;
 
 /**
- * 
+ * A Statistics provider for the VM using JDK 5 java.lang.management interface.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.8 2005-05-16 09:37:25 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.9 2005-05-16 09:49:42 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
 {
-    private static final DataSource[] MEMORY_DATA_SOURCES = { 
-        new DataSource("memory_heap_used", "Heap used", null, GAUGE, LINE1),
-        new DataSource("memory_heap_max", "Heap max", null, GAUGE, LINE1),
-        new DataSource("memory_nonheap_used", "Non-heap used", null, GAUGE, LINE1),
-        new DataSource("memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1)
+    private static final DataSource MEMORY_HEAP_USED_DS =
+        new DataSource("memory_heap_used", "Heap used", null, GAUGE, LINE1);
+    
+    private static final DataSource MEMORY_HEAP_MAX_DS =
+        new DataSource("memory_heap_max", "Heap max", null, GAUGE, LINE1);
+    
+    private static final DataSource MEMORY_NONHEAP_USED_DS =
+        new DataSource("memory_nonheap_used", "Non-heap used", null, GAUGE, LINE1);
+    
+    private static final DataSource MEMORY_NONHEAP_MAX_DS =
+        new DataSource("memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1);
+
+    private static final Graph MEMORY_GRAPH = new Graph("memory", "Memory", null, new DataSource[] {
+                    MEMORY_HEAP_USED_DS, MEMORY_HEAP_MAX_DS, MEMORY_NONHEAP_USED_DS,
+                    MEMORY_NONHEAP_MAX_DS }, null);        
+    
+    private static final DataSource GC_COUNT_VALUE_DC =
+        new DataSource("gc_count_value", "GC run count", null, COUNTER, LINE1);
+    
+    private static final DataSource GC_TIME_VALUE_DC = 
+        new DataSource("gc_time_value", "Total GC time", null, COUNTER, LINE1);
+
+    private static final Graph GC_COUNT_GRAPH = new Graph("gc_count", "Garbage collection runns",
+        null, new DataSource[] { GC_COUNT_VALUE_DC }, null);
+
+    private static final Graph GC_TIME_GRAPH = new Graph("gc_time", "Garbage collection time",
+        null, new DataSource[] { GC_TIME_VALUE_DC }, null);
+    
+    private static final DataSource[] DATA_SOURCES = {
+        MEMORY_HEAP_USED_DS, MEMORY_HEAP_MAX_DS, MEMORY_NONHEAP_USED_DS,
+        MEMORY_NONHEAP_MAX_DS, GC_COUNT_VALUE_DC, GC_TIME_VALUE_DC          
     };
-    
-    private static final DataSource[] GC_DATA_SOURCES = {
-        new DataSource("gc_count", "GC count", null, COUNTER, LINE1),
-        new DataSource("gc_time", "Total GC time", null, COUNTER, LINE1)
-    };
-    
-    private static final DataSource[] DATA_SOURCES;
-    
-    static
-    {
-        DATA_SOURCES = new DataSource[MEMORY_DATA_SOURCES.length + GC_DATA_SOURCES.length];
-        System.arraycopy(MEMORY_DATA_SOURCES, 0, 
-            DATA_SOURCES, 0, MEMORY_DATA_SOURCES.length);
-        System.arraycopy(GC_DATA_SOURCES, 0, 
-            DATA_SOURCES, MEMORY_DATA_SOURCES.length, GC_DATA_SOURCES.length);
-    }
     
     private static final Graph[] GRAPHS = {
-        new Graph("memory", "Memory", null, MEMORY_DATA_SOURCES, null),
-        new Graph("gc", "Garbage collection", null, GC_DATA_SOURCES, null),        
+        MEMORY_GRAPH, GC_COUNT_GRAPH, GC_TIME_GRAPH
     };
     
     /**
@@ -148,7 +157,7 @@ public class VMStatisticsProvider
      * 
      * @return the total number of garbage collections.
      */
-    public Number getGcCount()
+    public Number getGcCountValue()
     {
         List<GarbageCollectorMXBean> garbageCollectors = 
             ManagementFactory.getGarbageCollectorMXBeans();
@@ -165,7 +174,7 @@ public class VMStatisticsProvider
      * 
      * @return the approximate accumulated garbage collection elapsed time in milliseconds.
      */
-    public Number getGcTime()
+    public Number getGcTimeValue()
     {
         List<GarbageCollectorMXBean> garbageCollectors = 
             ManagementFactory.getGarbageCollectorMXBeans();
