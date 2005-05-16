@@ -38,7 +38,7 @@ import org.objectledge.statistics.ReflectiveStatisticsProvider;
  * A valve that provides control over the number of threads executing another valve.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConcurrencyControlValve.java,v 1.5 2005-05-16 09:37:26 rafal Exp $
+ * @version $Id: ConcurrencyControlValve.java,v 1.6 2005-05-16 09:51:56 rafal Exp $
  */
 public class ConcurrencyControlValve
     extends ReflectiveStatisticsProvider
@@ -115,10 +115,10 @@ public class ConcurrencyControlValve
     }
     
     private static final DataSource[] DATA_SOURCES = {
-                    new DataSource("concurrency_threads_running", "Running threads", null,
-                        DataSource.Type.GAUGE, DataSource.Graph.LINE1),
-                    new DataSource("concurrency_threads_waiting", "Waiting threads", null,
-                        DataSource.Type.GAUGE, DataSource.Graph.LINE1) };
+                    new DataSource("concurrency_threads_running", "Running threads", DataSource.Type.GAUGE,
+                        DataSource.Graph.LINE1),
+                    new DataSource("concurrency_threads_waiting", "Waiting threads", DataSource.Type.GAUGE,
+                        DataSource.Graph.LINE1) };
 
     private static final Graph[] GRAPHS = {
         new Graph("concurrency", "Execution concurrency", null, DATA_SOURCES, "number of threads")

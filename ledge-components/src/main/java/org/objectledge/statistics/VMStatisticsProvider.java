@@ -40,32 +40,32 @@ import java.util.List;
  * A Statistics provider for the VM using JDK 5 java.lang.management interface.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.9 2005-05-16 09:49:42 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.10 2005-05-16 09:51:55 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
 {
     private static final DataSource MEMORY_HEAP_USED_DS =
-        new DataSource("memory_heap_used", "Heap used", null, GAUGE, LINE1);
+        new DataSource("memory_heap_used", "Heap used", GAUGE, LINE1);
     
     private static final DataSource MEMORY_HEAP_MAX_DS =
-        new DataSource("memory_heap_max", "Heap max", null, GAUGE, LINE1);
+        new DataSource("memory_heap_max", "Heap max", GAUGE, LINE1);
     
     private static final DataSource MEMORY_NONHEAP_USED_DS =
-        new DataSource("memory_nonheap_used", "Non-heap used", null, GAUGE, LINE1);
+        new DataSource("memory_nonheap_used", "Non-heap used", GAUGE, LINE1);
     
     private static final DataSource MEMORY_NONHEAP_MAX_DS =
-        new DataSource("memory_nonheap_max", "Non-heap max", null, GAUGE, LINE1);
+        new DataSource("memory_nonheap_max", "Non-heap max", GAUGE, LINE1);
 
     private static final Graph MEMORY_GRAPH = new Graph("memory", "Memory", null, new DataSource[] {
                     MEMORY_HEAP_USED_DS, MEMORY_HEAP_MAX_DS, MEMORY_NONHEAP_USED_DS,
                     MEMORY_NONHEAP_MAX_DS }, null);        
     
     private static final DataSource GC_COUNT_VALUE_DC =
-        new DataSource("gc_count_value", "GC run count", null, COUNTER, LINE1);
+        new DataSource("gc_count_value", "GC run count", COUNTER, LINE1);
     
     private static final DataSource GC_TIME_VALUE_DC = 
-        new DataSource("gc_time_value", "Total GC time", null, COUNTER, LINE1);
+        new DataSource("gc_time_value", "Total GC time", COUNTER, LINE1);
 
     private static final Graph GC_COUNT_GRAPH = new Graph("gc_count", "Garbage collection runns",
         null, new DataSource[] { GC_COUNT_VALUE_DC }, null);

@@ -36,7 +36,7 @@ import org.jcontainer.dna.ConfigurationException;
  * Describes a data source used for statistics computation, modeled after Munin tool.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DataSource.java,v 1.6 2005-05-13 06:44:35 rafal Exp $
+ * @version $Id: DataSource.java,v 1.7 2005-05-16 09:51:55 rafal Exp $
  */
 public class DataSource
 {
@@ -96,16 +96,14 @@ public class DataSource
 
     /**
      * Creates new DataSource instance.
-     * 
      * @param name the name of the data source. 
      * @param label the data source label.
-     * @param cdef the data transformation RPN expression.
      * @param type the data source type.
      * @param graph the graph type for the data source.
      */
-    public DataSource(String name, String label, String cdef, Type type, Graph graph)
+    public DataSource(String name, String label, Type type, Graph graph)
     {
-        this(name, label, cdef, type, graph, null, null, null, null, null, null);
+        this(name, label, null, type, graph, null, null, null, null, null, null);
     }
     
     /**

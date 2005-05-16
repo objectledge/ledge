@@ -48,7 +48,7 @@ import org.objectledge.utils.StringUtils;
  * A valve that counts processed HTTP requests and sessions.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RequestTrackingValve.java,v 1.2 2005-05-16 09:37:28 rafal Exp $
+ * @version $Id: RequestTrackingValve.java,v 1.3 2005-05-16 09:51:57 rafal Exp $
  */
 public class RequestTrackingValve
     extends ReflectiveStatisticsProvider
@@ -204,27 +204,26 @@ public class RequestTrackingValve
     }
 
     private static final DataSource REQUESTS_DS = new DataSource("requests_count",
-        "Served requests", null, DataSource.Type.COUNTER, DataSource.Graph.LINE1);
+        "Served requests", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
     
     private static final Graph REQUESTS_GRAPH = new Graph("requests", "Served requests", 
         null, new DataSource[] { REQUESTS_DS }, "number of requests");
 
     private static final DataSource REQUESTS_DURATION_DS = new DataSource("requests_duration_value",
-        "Requests processing time", null, DataSource.Type.COUNTER, DataSource.Graph.LINE1);
+        "Requests processing time", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
     
     private static final Graph REQUESTS_DURATION_GRAPH = new Graph("requests_duration",
         "Requests processing time", null, new DataSource[] { REQUESTS_DURATION_DS },
         "milliseconds");
 
     private static final DataSource SESSIONS_DS = new DataSource("sessions_count",
-        "Served sessions", null, DataSource.Type.COUNTER, DataSource.Graph.LINE1);
+        "Served sessions", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
     
     private static final Graph SESSIONS_GRAPH = new Graph("sessions", "Served sessions", 
         null, new DataSource[] { SESSIONS_DS }, "number of sessions");
 
     private static final DataSource CONCURRENT_SESSIONS_DS = new DataSource(
-        "concurrent_sessions_count", "Concurrent sessions", null, DataSource.Type.GAUGE,
-        DataSource.Graph.LINE1);
+        "concurrent_sessions_count", "Concurrent sessions", DataSource.Type.GAUGE, DataSource.Graph.LINE1);
 
     private static final Graph CONCURRENT_SESSIONS_GRAPH = new Graph("concurrent_sessions",
         "Concurrent sessions", null, new DataSource[] { CONCURRENT_SESSIONS_DS },
