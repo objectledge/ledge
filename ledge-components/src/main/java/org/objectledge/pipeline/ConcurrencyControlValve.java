@@ -36,20 +36,20 @@ import org.objectledge.statistics.ReflectiveStatisticsProvider;
 
 /**
  * A valve that provides control over the number of threads executing another valve.
- *
+ * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConcurrencyControlValve.java,v 1.6 2005-05-16 09:51:56 rafal Exp $
+ * @version $Id: ConcurrencyControlValve.java,v 1.7 2005-05-16 09:55:06 rafal Exp $
  */
 public class ConcurrencyControlValve
     extends ReflectiveStatisticsProvider
     implements Valve
 {
     private final Valve nestedValve;
-    
+
     private final Semaphore semaphore;
-    
+
     private final int limit;
-    
+
     private volatile int threadCount = 0;
 
     /**
@@ -113,17 +113,16 @@ public class ConcurrencyControlValve
     {
         return "Concurrency control";
     }
-    
-    private static final DataSource[] DATA_SOURCES = {
-                    new DataSource("concurrency_threads_running", "Running threads", DataSource.Type.GAUGE,
-                        DataSource.Graph.LINE1),
-                    new DataSource("concurrency_threads_waiting", "Waiting threads", DataSource.Type.GAUGE,
-                        DataSource.Graph.LINE1) };
 
-    private static final Graph[] GRAPHS = {
-        new Graph("concurrency", "Execution concurrency", null, DATA_SOURCES, "number of threads")
-    };
-    
+    private static final DataSource[] DATA_SOURCES = {
+                    new DataSource("concurrency_threads_running", "Running threads",
+                        DataSource.Type.GAUGE, DataSource.Graph.LINE1),
+                    new DataSource("concurrency_threads_waiting", "Waiting threads",
+                        DataSource.Type.GAUGE, DataSource.Graph.LINE1) };
+
+    private static final Graph[] GRAPHS = { new Graph("concurrency", "Execution concurrency", null,
+        DATA_SOURCES, "threads") };
+
     /**
      * {@inheritDoc}
      */
@@ -139,7 +138,7 @@ public class ConcurrencyControlValve
     {
         return DATA_SOURCES;
     }
-    
+
     /**
      * Returns the number of concurrently executing threads.
      * 
@@ -156,7 +155,7 @@ public class ConcurrencyControlValve
             return threadCount;
         }
     }
-    
+
     /**
      * Returns the number of threads waiting for execution.
      * 

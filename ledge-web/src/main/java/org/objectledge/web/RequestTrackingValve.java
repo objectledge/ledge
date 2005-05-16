@@ -48,7 +48,7 @@ import org.objectledge.utils.StringUtils;
  * A valve that counts processed HTTP requests and sessions.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RequestTrackingValve.java,v 1.3 2005-05-16 09:51:57 rafal Exp $
+ * @version $Id: RequestTrackingValve.java,v 1.4 2005-05-16 09:55:07 rafal Exp $
  */
 public class RequestTrackingValve
     extends ReflectiveStatisticsProvider
@@ -207,7 +207,7 @@ public class RequestTrackingValve
         "Served requests", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
     
     private static final Graph REQUESTS_GRAPH = new Graph("requests", "Served requests", 
-        null, new DataSource[] { REQUESTS_DS }, "number of requests");
+        null, new DataSource[] { REQUESTS_DS }, "requests");
 
     private static final DataSource REQUESTS_DURATION_DS = new DataSource("requests_duration_value",
         "Requests processing time", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
@@ -220,14 +220,15 @@ public class RequestTrackingValve
         "Served sessions", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
     
     private static final Graph SESSIONS_GRAPH = new Graph("sessions", "Served sessions", 
-        null, new DataSource[] { SESSIONS_DS }, "number of sessions");
+        null, new DataSource[] { SESSIONS_DS }, "sessions");
 
     private static final DataSource CONCURRENT_SESSIONS_DS = new DataSource(
-        "concurrent_sessions_count", "Concurrent sessions", DataSource.Type.GAUGE, DataSource.Graph.LINE1);
+        "concurrent_sessions_count", "Concurrent sessions", DataSource.Type.GAUGE,
+        DataSource.Graph.LINE1);
 
     private static final Graph CONCURRENT_SESSIONS_GRAPH = new Graph("concurrent_sessions",
         "Concurrent sessions", null, new DataSource[] { CONCURRENT_SESSIONS_DS },
-        "number of sessions");
+        "sessions");
 
     private static final Graph[] GRAPHS = {
         REQUESTS_GRAPH,

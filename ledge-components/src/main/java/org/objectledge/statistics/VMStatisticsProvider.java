@@ -40,7 +40,7 @@ import java.util.List;
  * A Statistics provider for the VM using JDK 5 java.lang.management interface.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.10 2005-05-16 09:51:55 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.11 2005-05-16 09:55:05 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
@@ -59,7 +59,7 @@ public class VMStatisticsProvider
 
     private static final Graph MEMORY_GRAPH = new Graph("memory", "Memory", null, new DataSource[] {
                     MEMORY_HEAP_USED_DS, MEMORY_HEAP_MAX_DS, MEMORY_NONHEAP_USED_DS,
-                    MEMORY_NONHEAP_MAX_DS }, null);        
+                    MEMORY_NONHEAP_MAX_DS }, "bytes");        
     
     private static final DataSource GC_COUNT_VALUE_DC =
         new DataSource("gc_count_value", "GC run count", COUNTER, LINE1);
@@ -68,10 +68,10 @@ public class VMStatisticsProvider
         new DataSource("gc_time_value", "Total GC time", COUNTER, LINE1);
 
     private static final Graph GC_COUNT_GRAPH = new Graph("gc_count", "Garbage collection runns",
-        null, new DataSource[] { GC_COUNT_VALUE_DC }, null);
+        null, new DataSource[] { GC_COUNT_VALUE_DC }, "runns");
 
     private static final Graph GC_TIME_GRAPH = new Graph("gc_time", "Garbage collection time",
-        null, new DataSource[] { GC_TIME_VALUE_DC }, null);
+        null, new DataSource[] { GC_TIME_VALUE_DC }, "milliseconds");
     
     private static final DataSource[] DATA_SOURCES = {
         MEMORY_HEAP_USED_DS, MEMORY_HEAP_MAX_DS, MEMORY_NONHEAP_USED_DS,
