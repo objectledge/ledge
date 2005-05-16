@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
  * reflectively invoking get<em>name</em>Value() methods. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ReflectiveStatisticsProvider.java,v 1.2 2005-05-12 04:22:18 rafal Exp $
+ * @version $Id: ReflectiveStatisticsProvider.java,v 1.3 2005-05-16 09:37:25 rafal Exp $
  */
 public abstract class ReflectiveStatisticsProvider
     implements StatisticsProvider
@@ -77,7 +77,6 @@ public abstract class ReflectiveStatisticsProvider
             buff.append(Character.toUpperCase(tokens[i].charAt(0)));
             buff.append(tokens[i].substring(1).toLowerCase());
         }
-        buff.append("Value");
         return buff.toString();
     }
 }

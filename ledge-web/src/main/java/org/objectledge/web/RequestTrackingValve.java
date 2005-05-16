@@ -48,7 +48,7 @@ import org.objectledge.utils.StringUtils;
  * A valve that counts processed HTTP requests and sessions.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RequestTrackingValve.java,v 1.1 2005-05-16 09:33:03 rafal Exp $
+ * @version $Id: RequestTrackingValve.java,v 1.2 2005-05-16 09:37:28 rafal Exp $
  */
 public class RequestTrackingValve
     extends ReflectiveStatisticsProvider
@@ -265,7 +265,7 @@ public class RequestTrackingValve
      * 
      * @return the total number of served requests.
      */
-    public Number getRequestsCountValue()
+    public Number getRequestsCount()
     {
         return new Integer(totalRequests);
     }
@@ -275,7 +275,7 @@ public class RequestTrackingValve
      * 
      * @return the total duration of request processing.
      */
-    public Number getRequestsDurationValueValue()
+    public Number getRequestsDurationValue()
     {
         return new Long(totalDuration);
     }
@@ -285,7 +285,7 @@ public class RequestTrackingValve
      * 
      * @return the total number of served sessions.
      */
-    public Number getSessionsCountValue()
+    public Number getSessionsCount()
     {
         return new Integer(totalSessions);
     }
@@ -295,7 +295,7 @@ public class RequestTrackingValve
      * 
      * @return the current number of concurrently active sessions.
      */
-    public Number getConcurrentSessionsCountValue()
+    public Number getConcurrentSessionsCount()
     {
         return new Integer(concurrentSessions);
     }
