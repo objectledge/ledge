@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.29 2005-05-10 06:47:24 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.30 2005-05-16 09:30:49 rafal Exp $
  */
 public class StringUtils
 {
@@ -788,6 +788,23 @@ public class StringUtils
             buff.append(minutes).append(" minutes, ");
         }
         buff.append(seconds).append(" seconds");
+        return buff.toString();
+    }
+
+    /**
+     * Format a millisecond interval as number of seconds (with fracitonal part).
+     * 
+     * @param interval interval in milliseconds. 
+     * @return interval as number of seconds (with fracitonal part).
+     */
+    public static String formatMilliIntervalAsSeconds(long interval)
+    {
+        long seconds = interval / 1000;
+        long millis = interval - seconds * 1000;
+        
+        StringBuilder buff = new StringBuilder();
+        buff.append(seconds).append(".");
+        buff.append(millis).append("s");
         return buff.toString();
     }
     
