@@ -38,7 +38,7 @@ import org.objectledge.statistics.ReflectiveStatisticsProvider;
  * A valve that provides control over the number of threads executing another valve.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConcurrencyControlValve.java,v 1.2 2005-05-16 06:14:25 rafal Exp $
+ * @version $Id: ConcurrencyControlValve.java,v 1.3 2005-05-16 07:05:06 rafal Exp $
  */
 public class ConcurrencyControlValve
     extends ReflectiveStatisticsProvider
@@ -64,7 +64,7 @@ public class ConcurrencyControlValve
         this.limit = limit;
         if(limit > 0)
         {
-            semaphore = new Semaphore(limit, false);
+            semaphore = new Semaphore(limit, true);
         }
         else
         {
