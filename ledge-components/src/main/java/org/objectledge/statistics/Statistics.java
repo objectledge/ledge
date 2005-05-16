@@ -43,7 +43,7 @@ import org.objectledge.ComponentInitializationError;
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.8 2005-05-16 06:14:23 rafal Exp $
+ * @version $Id: Statistics.java,v 1.9 2005-05-16 09:31:10 rafal Exp $
  */
 public class Statistics
 {
@@ -118,6 +118,9 @@ public class Statistics
     
     private Map<String,Graph> graphs = new HashMap<String,Graph>();
     
+    private Map<Graph, StatisticsProvider> graphOwners = 
+        new HashMap<Graph, StatisticsProvider>();
+    
     private void configure(Configuration config)
         throws ConfigurationException
     {
@@ -165,10 +168,11 @@ public class Statistics
                 if(registered != null)
                 {
                     throw new ComponentInitializationError("statistics providers " + 
-                        provider.getName() + " and " + dataSourceOwners.get(registered).getName() + 
+                        provider.getName() + " and " + graphOwners.get(registered).getName() + 
                         " declare graph with name " + graph.getName());
                 }
                 graphs.put(graph.getName(), graph);
+                graphOwners.put(graph, provider);
             }
         }
         // graph overrides
