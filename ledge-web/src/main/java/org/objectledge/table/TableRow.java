@@ -32,7 +32,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableRow.java,v 1.5 2005-05-16 09:17:08 pablo Exp $
+ * @version $Id: TableRow.java,v 1.6 2005-05-16 09:24:41 zwierzem Exp $
  */
 public class TableRow
 {
@@ -63,7 +63,10 @@ public class TableRow
      */
     public TableRow(String id, Object object, int depth, int childCount, int visibleChildCount)
     {
-        this.id = id;
+        if(id != null)
+        {
+            this.id = id;
+        }
         this.object = object;
         this.depth = depth;
         this.childCount = childCount;
@@ -144,10 +147,6 @@ public class TableRow
 	 */
 	public int hashCode()
 	{
-		if(id == null)
-		{
-			return 0;
-		}
 		return id.hashCode();
 	}
 	
