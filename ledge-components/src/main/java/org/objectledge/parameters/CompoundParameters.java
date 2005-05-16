@@ -42,7 +42,7 @@ import java.util.TreeSet;
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.org">Rafal Krzewski</a>
- * @version $Id: CompoundParameters.java,v 1.5 2005-05-11 07:16:42 pablo Exp $
+ * @version $Id: CompoundParameters.java,v 1.6 2005-05-16 08:38:24 pablo Exp $
  */
 public class CompoundParameters implements Parameters
 {
@@ -265,7 +265,7 @@ public class CompoundParameters implements Parameters
             Parameters c = (Parameters)i.next();
             if(c.isDefined(name))
             {
-                return c.getDate(name);
+                return c.getDate(name, defaultValue);
             }
         }
         return defaultValue;
@@ -316,7 +316,7 @@ public class CompoundParameters implements Parameters
             Parameters c = (Parameters)i.next();
             if(c.isDefined(name))
             {
-                return c.getInt(name);
+                return c.getInt(name, defaultValue);
             }
         }
         return defaultValue;
@@ -367,7 +367,7 @@ public class CompoundParameters implements Parameters
             Parameters c = (Parameters)i.next();
             if(c.isDefined(name))
             {
-                return c.getLong(name);
+                return c.getLong(name, defaultValue);
             }
         }
         return defaultValue;
@@ -418,7 +418,7 @@ public class CompoundParameters implements Parameters
             Parameters c = (Parameters)i.next();
             if(c.isDefined(name))
             {
-                return c.getFloat(name);
+                return c.getFloat(name, defaultValue);
             }
         }
         return defaultValue;
