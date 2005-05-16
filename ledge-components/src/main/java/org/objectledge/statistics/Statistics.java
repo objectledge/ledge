@@ -28,6 +28,7 @@
 package org.objectledge.statistics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ import org.objectledge.ComponentInitializationError;
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.7 2005-05-16 05:53:19 rafal Exp $
+ * @version $Id: Statistics.java,v 1.8 2005-05-16 06:14:23 rafal Exp $
  */
 public class Statistics
 {
@@ -50,39 +51,23 @@ public class Statistics
     
     private final Logger log;
     
-    private final List<StatisticsProvider> providers = new ArrayList<StatisticsProvider>();
-    
-    private long lastConfigTime = -1L;
-    
-    private long lastProvidersCount = 0;
+    private final List<StatisticsProvider> providers;
     
     /**
      * Creates new Statistics instance.
      *
+     * @param providers the statistics providers to use.
      * @param config the component configuration.
      * @param log the logger.
+     * @throws ConfigurationException if the configuration contains invalid entries.
      */
-    public Statistics(Configuration config, Logger log)
+    public Statistics(StatisticsProvider[] providers, Configuration config, Logger log)
+        throws ConfigurationException
     {
+        this.providers = new ArrayList<StatisticsProvider>(Arrays.asList(providers));
         this.config = config;
         this.log = log;
-    }
-
-    /**
-     * Register a statistics provider instance.
-     *
-     * <p>It's a good idea to make components that implement that interface (directly or through a 
-     * helper class) Startable, so that full set of providers is register upon system startup.</p>
-     * 
-     * @param provider the statistics provider.
-     */
-    public void registerProvider(StatisticsProvider provider)
-    {
-        log.info("registering provider " + provider.getName());
-        synchronized(providers)
-        {
-            providers.add(provider);
-        }
+        configure(config);
     }
     
     /**
@@ -92,14 +77,10 @@ public class Statistics
      */
     public String[] getGraphNames()
     {
-        synchronized(providers)
-        {
-            reconfigureIfNeeded();
-            List<String> l = new ArrayList<String>(graphs.size());
-            l.addAll(graphs.keySet());
-            Collections.sort(l);
-            return l.toArray(new String[l.size()]);
-        }
+        List<String> l = new ArrayList<String>(graphs.size());
+        l.addAll(graphs.keySet());
+        Collections.sort(l);
+        return l.toArray(new String[l.size()]);
     }
     
     /**
@@ -110,16 +91,12 @@ public class Statistics
      */
     public Graph getGraph(String name)
     {
-        synchronized(providers)
+        Graph g = graphs.get(name);
+        if(g == null)
         {
-            reconfigureIfNeeded();
-            Graph g = graphs.get(name);
-            if(g == null)
-            {
-                throw new IllegalArgumentException("unknown graph "+name);
-            }
-            return g;
+            throw new IllegalArgumentException("unknown graph "+name);
         }
+        return g;
     }
     
     /**
@@ -130,11 +107,8 @@ public class Statistics
      */
     public Number getDataValue(DataSource ds)
     {
-        synchronized(providers)
-        {
-            StatisticsProvider provider = dataSourceOwners.get(ds);
-            return provider.getDataValue(ds.getName());
-        }
+        StatisticsProvider provider = dataSourceOwners.get(ds);
+        return provider.getDataValue(ds.getName());
     }
     
     private Map<String,DataSource> dataSources = new HashMap<String,DataSource>();
@@ -214,31 +188,6 @@ public class Statistics
         for(Graph graph : graphs.values())
         {
             graph.updateDataSources(dataSources);
-        }
-        lastConfigTime = System.currentTimeMillis();
-        lastProvidersCount = providers.size();
-    }
-    
-    private void reconfigureIfNeeded()
-    {
-        synchronized(providers)
-        {
-            if(lastConfigTime == -1L || providers.size() != lastProvidersCount)
-            {
-                if(lastConfigTime != -1L)
-                {
-                   log.warn("statistics providers registered after system startup: reconfiguring"); 
-                }
-                try
-                {
-                    configure(config);
-                }
-                catch(ConfigurationException e)
-                {
-                    throw new ComponentInitializationError("failed to configure " +
-                            "Statistics component", e);
-                }
-            }
         }
     }
 }

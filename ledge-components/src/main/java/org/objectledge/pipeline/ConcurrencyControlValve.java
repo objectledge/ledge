@@ -33,13 +33,12 @@ import org.objectledge.context.Context;
 import org.objectledge.statistics.DataSource;
 import org.objectledge.statistics.Graph;
 import org.objectledge.statistics.ReflectiveStatisticsProvider;
-import org.objectledge.statistics.Statistics;
 
 /**
  * A valve that provides control over the number of threads executing another valve.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConcurrencyControlValve.java,v 1.1 2005-05-16 05:53:52 rafal Exp $
+ * @version $Id: ConcurrencyControlValve.java,v 1.2 2005-05-16 06:14:25 rafal Exp $
  */
 public class ConcurrencyControlValve
     extends ReflectiveStatisticsProvider
@@ -56,12 +55,10 @@ public class ConcurrencyControlValve
     /**
      * Creates new ConcurrencyControlValve instance.
      * 
-     * @param statistics the Statistics component;
      * @param nestedValve the valve to control.
      * @param limit the maximum number of threads allowed to execute, or 0 for unlimited.
      */
-    public ConcurrencyControlValve(final Statistics statistics, 
-        final Valve nestedValve, final int limit)
+    public ConcurrencyControlValve(final Valve nestedValve, final int limit)
     {
         this.nestedValve = nestedValve;
         this.limit = limit;
@@ -73,7 +70,6 @@ public class ConcurrencyControlValve
         {
             semaphore = null;
         }
-        statistics.registerProvider(this);
     }
 
     /**

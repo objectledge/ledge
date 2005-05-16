@@ -27,25 +27,23 @@
 // 
 package org.objectledge.statistics;
 
+import static org.objectledge.statistics.DataSource.Graph.LINE1;
+import static org.objectledge.statistics.DataSource.Type.COUNTER;
+import static org.objectledge.statistics.DataSource.Type.GAUGE;
+
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.util.List;
-import static org.objectledge.statistics.DataSource.Type.COUNTER;
-import static org.objectledge.statistics.DataSource.Type.GAUGE;
-import static org.objectledge.statistics.DataSource.Graph.LINE1;
-
-import org.picocontainer.Startable;
 
 /**
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VMStatisticsProvider.java,v 1.6 2005-05-13 09:16:21 rafal Exp $
+ * @version $Id: VMStatisticsProvider.java,v 1.7 2005-05-16 06:14:23 rafal Exp $
  */
 public class VMStatisticsProvider
     extends ReflectiveStatisticsProvider
-    implements Startable
 {
     private static final DataSource[] MEMORY_DATA_SOURCES = { 
         new DataSource("memory_heap_used", "Heap used", null, GAUGE, LINE1),
@@ -75,32 +73,6 @@ public class VMStatisticsProvider
         new Graph("gc", "Garbage collection", null, GC_DATA_SOURCES, null),        
     };
     
-    /**
-     * Creates new VMStatisticsProvider instance.
-     * 
-     * @param statistics the statistics component.
-     */
-    public VMStatisticsProvider(Statistics statistics)
-    {
-        statistics.registerProvider(this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void start()
-    {
-        // Startable should be a marker interface
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public void stop()
-    {
-        // and stop() should live in a Stoppable interface
-    }
-
     /**
      * {@inheritDoc}
      */
