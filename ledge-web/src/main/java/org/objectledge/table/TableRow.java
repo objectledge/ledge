@@ -32,7 +32,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableRow.java,v 1.4 2004-12-23 07:17:47 rafal Exp $
+ * @version $Id: TableRow.java,v 1.5 2005-05-16 09:17:08 pablo Exp $
  */
 public class TableRow
 {
@@ -144,6 +144,10 @@ public class TableRow
 	 */
 	public int hashCode()
 	{
+		if(id == null)
+		{
+			return 0;
+		}
 		return id.hashCode();
 	}
 	
