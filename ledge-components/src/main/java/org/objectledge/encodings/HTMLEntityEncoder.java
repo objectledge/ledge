@@ -38,7 +38,7 @@ import org.objectledge.encodings.encoders.CharEncoderUTF;
  * for this character, if a character is supported it is not changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoder.java,v 1.13 2005-02-21 16:26:34 zwierzem Exp $
+ * @version $Id: HTMLEntityEncoder.java,v 1.14 2005-05-17 07:40:12 zwierzem Exp $
  */
 public class HTMLEntityEncoder extends AbstractEncoder
 {
@@ -56,9 +56,13 @@ public class HTMLEntityEncoder extends AbstractEncoder
      */
     public String encodeAttribute( String text, String encodingName, boolean doubleQuoteQuote )
     {
-        if(text == null || text.length() == 0)
+        if(text == null)
         {
             return null;
+        }
+        if(text.length() == 0)
+        {
+            return text;
         }
 
 		CharEncoder charsetEncoder = getCharsetEncoder(encodingName);
@@ -118,7 +122,11 @@ public class HTMLEntityEncoder extends AbstractEncoder
      */
     public String encodeHTML( String htmlText, String encodingName )
     {
-        if(htmlText == null || htmlText.length() == 0)
+        if(htmlText == null)
+        {
+            return null;
+        }
+        if(htmlText.length() == 0)
         {
             return htmlText;
         }

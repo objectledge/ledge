@@ -39,7 +39,7 @@ import java.io.Writer;
  * values, what is useful for putting path values in Query String fields.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: URLEncoder.java,v 1.5 2005-03-03 16:29:32 zwierzem Exp $
+ * @version $Id: URLEncoder.java,v 1.6 2005-05-17 07:40:12 zwierzem Exp $
  */
 public class URLEncoder
 {
@@ -112,9 +112,13 @@ public class URLEncoder
     private String encode(String text, String encodingName, boolean isQSValue)
         throws UnsupportedEncodingException
     {
-        if(text == null || text.length() == 0)
+        if(text == null)
         {
             return null;
+        }
+        if(text.length() == 0)
+        {
+            return text;
         }
 
         int length = text.length();
