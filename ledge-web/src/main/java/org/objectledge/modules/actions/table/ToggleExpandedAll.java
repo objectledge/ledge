@@ -29,16 +29,19 @@
 package org.objectledge.modules.actions.table;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 
 /**
- * Toggles expanded all state flag.
+ * Toggles expanded-all table state flag.
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleExpandedAll.java,v 1.1 2004-05-18 13:59:31 pablo Exp $
+ * @version $Id: ToggleExpandedAll.java,v 1.2 2005-05-17 10:44:51 zwierzem Exp $
  */
 public class ToggleExpandedAll
     extends BaseToggleAction
@@ -57,12 +60,17 @@ public class ToggleExpandedAll
 	public void process(Context context)
 		throws ProcessingException
 	{
-        TableState state = getTableState(context);
-        // null pointer exception protection
-        if(state == null)
+        Parameters parameters = RequestParameters.getRequestParameters(context); 
+        String[] ids = parameters.getStrings(TableConstants.TABLE_ID_PARAM_KEY);
+        for(int i = 0; i<ids.length; i++)
         {
-            return;
+            TableState state = tableStateManager.getState(context, new Integer(ids[i]));
+            // null pointer exception protection
+            if(state == null)
+            {
+                continue;
+            }
+            state.setAllExpanded(!state.getAllExpanded());
         }
-        state.setAllExpanded(!state.getAllExpanded());
     }
 }
