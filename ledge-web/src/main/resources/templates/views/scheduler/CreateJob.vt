@@ -1,0 +1,55 @@
+<h3>Job scheduler: create job</h3>
+
+#set($format = $date_format.pattern("yyyy-MM-dd HH:mm"))
+
+<form name="form0" action="$link.view("scheduler.Jobs").action("scheduler.CreateJob")" method="post">
+<script language="javascript">
+  function send()
+  {
+     document.form0.submit();
+  }
+</script>
+<table border="0">
+  <tr>
+    <td align="right">Name: </td>
+    <td><input type="text" name="name"></td>
+  </tr>
+  <tr>
+    <td align="right">Schedule type: </td>
+    <td><input type="text" name="scheduleType"></td>
+  </tr>
+  <tr>
+    <td align="right">Schedule config: </td>
+    <td><input type="text" name="scheduleConfig"></td>
+  </tr>
+  <tr>
+    <td align="right">Job: </td>
+    <td><input type="text" name="jobClassName"></td>
+  </tr>    
+  <tr>
+    <td align="right">Run count limit: </td>
+    <td><input type="text" name="runCountLimit"></td>
+  </tr>    
+  <tr>
+    <td align="right">Run time limit start: </td>
+    <td><input type="text" name="runTimeLimitStart">
+  </tr>    
+  <tr>
+    <td align="right">Run time limit end: </td>
+    <td><input type="text" name="runTimeLimitEnd">
+  </tr>    
+  <tr>
+    <td align="right">Reentrant: </td>
+    <td><input type="checkbox" name="reentrant" value="true"></td>
+  </tr>
+  <tr>
+    <td align="right">Enabled: </td>
+    <td><input type="checkbox" name="enabled" value="true" checked></td>
+  </tr>    
+</table>
+</form>
+
+<a href="$link.view("scheduler.Jobs")">Back to list</a>
+#if($allowsModifications)
+<a href="javascript:send()">Create job</a>
+#end
