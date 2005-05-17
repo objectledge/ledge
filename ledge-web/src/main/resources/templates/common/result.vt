@@ -1,0 +1,13 @@
+#**
+ * Displays a result of a performed action. Uses $result and $errorResult context keys.
+ *
+ *#
+#macro(result)
+#if($errorResult)
+<!-- actionResult:$errorResult -->
+<div class="action-error-result">$errorResult</div>
+#elseif($result)
+<!-- actionResult:$result -->
+<div class="action-result">$result</div>
+#end
+#end
