@@ -1,0 +1,16 @@
+$pageTool.appendTitleSuffix('Logging system')##
+
+<h3>Active loggers</h3>
+
+#set($tableLink = $link.set('tableId',$table.id))
+#foreach ($row in $table.rows)
+## compute even/odd table row
+#set($odd = $velocityCount%2)
+<div class="row$odd tree-lines-and-folders">#tableView_linesAndFolders($table $row $tableLink)
+#if($row.object.level)
+  <a href="$link.view('logging.EditLogger').set('id',$row.object.id)">$row.object.name</a> $row.object.level
+#else
+  <a href="$link.view('logging.CreateLogger').set('id',$row.object.id)">$row.object.name</a>
+#end
+</div>
+#end

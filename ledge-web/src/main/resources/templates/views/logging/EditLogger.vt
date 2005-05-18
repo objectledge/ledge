@@ -1,0 +1,52 @@
+$pageTool.appendTitleSuffix('Logger properties')##
+#macro(level_selector)
+<select name="level">
+#foreach($level in ['OFF', 'FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'ALL'])
+<option value="$level"#if($level.equals($logger.effectiveLevel.toString())) selected="selected"#end>$level</option>
+#end
+</select>
+#end
+<style type="text/css">
+div.frame {
+  border: solid 1px gray;
+}
+div.panel {
+  padding: 5px;
+}
+</style>
+<div class="panel frame">
+<h3>Properties</h3>
+<form name="form1" method="post" action="$link.view('logging.Loggers').action('logging.UpdateLogger')">
+<input type="hidden" name="id" value="$parametersTool.get('id')"/>
+name: $logger.name <br/> 
+<br/>
+level: #level_selector()
+<br/>
+additive: <input name="additivity" value="true" type="checkbox"#if($logger.additivity) checked="true"#end/> <br/>
+<input type="submit" value="Update"/>
+</form>
+</div>
+<br/> 
+<div class="panel frame">
+<h3>Appenders</h3>
+<div class="panel">
+#foreach($appender in $appenders)
+$appender.name ($appender.class.name) <br/>
+#end	
+</div>
+<h3>Inherited appenders</h3>
+<div class="panel">
+#foreach($appender in $inheritedAppenders)
+$appender.name ($appender.class.name) <br/>
+#end	
+</div>
+</div>
+<br/>
+<div class="panel frame">
+<h3>Test</h3>
+<form name="form2" method="POST" action="$link.action('logging.TestLogger')">
+<input type="hidden" name="id" value="$parametersTool.get('id')"/>
+#level_selector() <input type="text" name="message"/> <input type="submit" value="Go"/>
+</form>
+</div>
+<a href="$link.view('logging.Loggers')">back</a>
