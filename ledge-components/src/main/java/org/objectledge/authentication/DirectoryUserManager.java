@@ -99,13 +99,16 @@ public class DirectoryUserManager extends UserManager
     protected ContextHelper directory;
 
     /** The principal by name cache */
-    private Map loginByName;
+    private Map<String, String> loginByName;
     
     /** The name by login cache */
-    private Map nameByLogin;
+    private Map<String, String> nameByLogin;
     
     /** The default search controls */
     private SearchControls defaultSearchControls;
+	
+	/** The list of user management participants */
+	private UserManagementParticipant[] participants;
     
     /**
      * Creates an instance of the user manager.
@@ -126,13 +129,14 @@ public class DirectoryUserManager extends UserManager
         LoginVerifier loginVerifier,
         PasswordGenerator passwordGenerator,
         PasswordDigester passwordDigester,
-        ContextFactory factory)
+        ContextFactory factory,
+        UserManagementParticipant[] participants)
         throws NamingException
     {
         super(namingPolicy, loginVerifier, passwordGenerator, passwordDigester);
         this.logger = logger;
-        loginByName = new HashMap();
-        nameByLogin = new HashMap();
+        loginByName = new HashMap<String, String>();
+        nameByLogin = new HashMap<String, String>();
         defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").
             getValue(LOGIN_ATTRIBUTE_DEFAULT);
@@ -154,6 +158,7 @@ public class DirectoryUserManager extends UserManager
         {
             objectClass = OBJECT_CLASS_DEFAULT;
         }
+		this.participants = participants;
     }
 
     /** 
@@ -213,7 +218,12 @@ public class DirectoryUserManager extends UserManager
         {
             closeContext(ctx);
         }
-        return new DefaultPrincipal(dn);
+		Principal principal = new DefaultPrincipal(dn);
+		for(UserManagementParticipant p: participants)
+		{
+			p.createAccount(principal);
+		}
+		return principal;
     }
 
     /**
@@ -242,7 +252,14 @@ public class DirectoryUserManager extends UserManager
         finally 
         {
             closeContext(ctx);
-        }        
+        }    
+		for(UserManagementParticipant p: participants)
+		{
+			if(p.supportsRemoval())
+			{
+				p.createAccount(account);
+			}
+		}
     }
 
     /**
@@ -510,7 +527,7 @@ public class DirectoryUserManager extends UserManager
             Attributes matchAttrs = new BasicAttributes(false);
             matchAttrs.put(new BasicAttribute(attribute, value));
             NamingEnumeration answer = ctx.search("", matchAttrs, null);
-            List results = new ArrayList();
+            List<String> results = new ArrayList<String>();
             while(answer.hasMore())
             {
                 SearchResult result = (SearchResult)answer.next();
@@ -539,7 +556,7 @@ public class DirectoryUserManager extends UserManager
         {
             ctx = (DirContext)directory.getBaseContext().lookup("");
             NamingEnumeration answer = ctx.search("", query, defaultSearchControls);
-            List results = new ArrayList();
+            List<String> results = new ArrayList<String>();
             while(answer.hasMore())
             {
                 SearchResult result = (SearchResult)answer.next();
