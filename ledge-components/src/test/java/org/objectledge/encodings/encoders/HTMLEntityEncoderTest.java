@@ -34,7 +34,7 @@ import org.objectledge.encodings.HTMLEntityEncoder;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLEntityEncoderTest.java,v 1.6 2004-08-24 14:15:46 rafal Exp $
+ * @version $Id: HTMLEntityEncoderTest.java,v 1.7 2005-05-18 04:59:34 rafal Exp $
  */
 public class HTMLEntityEncoderTest extends TestCase
 {
@@ -119,7 +119,7 @@ public class HTMLEntityEncoderTest extends TestCase
 		assertNull(realDblQuote);
 
 		realDblQuote = encoder.encodeAttribute("", "ISO-8859-2");
-		assertNull(realDblQuote);
+		assertEquals("", realDblQuote);
 
 		realDblQuote = encoder.encodeAttribute(src, null);
 		assertEquals(realDblQuote, outDblQuote1+srcPart2);
