@@ -1,7 +1,7 @@
 
 <h3>Job scheduler: modify job</h3>
 
-#result_inline_message("scheduler")
+#i18nResult()
 
 #set($format = $date_format.pattern("yyyy-MM-dd HH:mm"))
 

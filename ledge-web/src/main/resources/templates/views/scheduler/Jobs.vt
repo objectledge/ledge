@@ -1,6 +1,6 @@
 <h3>Job scheduler</h3>
 
-#result()
+#i18nResult()
 
 #macro(yesno $flag)
 #if($flag)
