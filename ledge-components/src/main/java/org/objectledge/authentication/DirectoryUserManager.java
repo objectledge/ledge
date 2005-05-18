@@ -400,12 +400,12 @@ public class DirectoryUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Parameters getPersonalData(Principal account) throws AuthenticationException
+    public DirContext getPersonalData(Principal account) throws AuthenticationException
     {
         try
         {
             DirContext ctx = directory.lookupDirContext(account.getName());
-            return new DirectoryParameters(ctx);
+            return ctx;
         }
         catch(NamingException e)
         {

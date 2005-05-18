@@ -31,6 +31,7 @@ import java.security.Principal;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
 
 import org.objectledge.parameters.Parameters;
 
@@ -38,7 +39,7 @@ import org.objectledge.parameters.Parameters;
  * A base implementation of the UserManager interface.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.3 2004-02-24 15:50:51 pablo Exp $
+ * @version $Id: UserManager.java,v 1.4 2005-05-18 08:08:05 pablo Exp $
  */
 public abstract class UserManager
 {
@@ -255,7 +256,7 @@ public abstract class UserManager
      * @return Parameters view of the account's owner personal data. 
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract Parameters getPersonalData(Principal account)
+    public abstract DirContext getPersonalData(Principal account)
         throws AuthenticationException;
         
     /**

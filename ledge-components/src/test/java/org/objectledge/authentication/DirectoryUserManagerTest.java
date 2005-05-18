@@ -57,6 +57,7 @@ import org.objectledge.logging.LedgeDOMConfigurator;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.directory.DirectoryParameters;
 import org.objectledge.utils.LedgeTestCase;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
@@ -110,7 +111,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         LoginVerifier loginVerifier = new LoginVerifier(config);
         config = getConfig("config/org.objectledge.authentication.DirectoryUserManager.xml");
         userManager = new DirectoryUserManager(config, logger, namingPolicy, loginVerifier, 
-            passwordGenerator, passwordDigester, contextFactory);
+            passwordGenerator, passwordDigester, contextFactory, new UserManagementParticipant[]{});
     }
 
     public void testUserExists()
@@ -189,7 +190,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         params.set("uid","foo");
         String dn = userManager.createDN(params);
         Principal principal = userManager.createAccount("foo",dn, "bar");
-        Parameters parameters = userManager.getPersonalData(principal);
+        Parameters parameters = new DirectoryParameters(userManager.getPersonalData(principal));
         assertEquals(parameters.get("uid"),"foo");
         Principal principal2 = userManager.getUserByLogin("foo");
         try
@@ -247,7 +248,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         params.set("uid","foo");
         String dn = userManager.createDN(params);
         Principal principal = userManager.createAccount("foo",dn, "bar");
-        params = userManager.getPersonalData(principal);
+        params = new DirectoryParameters(userManager.getPersonalData(principal));
         assertEquals(params.get("uid"),"foo");
         try
         {
