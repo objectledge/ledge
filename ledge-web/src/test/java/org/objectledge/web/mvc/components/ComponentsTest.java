@@ -36,12 +36,12 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.TemplatingContextLoaderValve;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.finders.MVCFinder;
 import org.objectledge.web.mvc.finders.NameSequenceFactory;
 import org.objectledge.web.mvc.security.SecurityHelper;
@@ -139,7 +139,7 @@ public class ComponentsTest extends TestCase
             System.out.println("RES:"+componentTool.embed("Exc"));
             fail("should throw the exception");
         }
-        catch(BuildException e)
+        catch(ProcessingException e)
         {
             //ok!
         }
