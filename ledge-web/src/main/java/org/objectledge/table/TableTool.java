@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.9 2005-03-08 13:08:32 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.10 2005-05-19 03:08:55 zwierzem Exp $
  */
 public class TableTool
 {
@@ -338,6 +338,16 @@ public class TableTool
         return state.isExpanded(row.getId());
     }
     
+    /**
+     * Checks if the tree is forced to expand completely.
+     * 
+     * @return <code>true</code> if the tree is forced to expand completely.
+     */
+    public boolean isAllExpanded()
+    {
+        return state.getAllExpanded();
+    }
+
     /**
      * Returns a list of {@link LinesAndFoldersBox} objects for a given row to help building tree 
      * like structures. 
