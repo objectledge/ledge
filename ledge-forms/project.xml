@@ -28,11 +28,11 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.4 2005-04-06 14:19:34 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.5 2005-05-19 07:16:25 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
-  <extend>${ledgeCyklotronCommon}/project.xml</extend>
+  <extend>${ledgeCommon}/project.xml</extend>
   <package>pl.caltha</package>
   <!-- project info -->
   
