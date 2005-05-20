@@ -49,7 +49,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.21 2005-05-11 07:16:42 pablo Exp $
+ * @version $Id: DefaultParameters.java,v 1.22 2005-05-20 02:04:04 rafal Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -174,7 +174,22 @@ public class DefaultParameters implements Parameters
         return values[0];
     }
 
-    protected String getDataType(String name)
+    /**
+     * Returns the value of the parameter, or null if it is undefined.
+     * 
+     * <p>This method will return <code>null</code> in any of the following situations:
+     * <ul>
+     * <li>the internal map contains no value array for the specified name</li>
+     * <li>the internal map contains an empty value array for the specified name</li>
+     * <li>the internal map contains a single value array for the specified name, and the 
+     * value in the array is an empty string</li>
+     * </ul>
+     * @param name the name of the parameter.
+     * @return value of the parameter if undefined (see above).
+     * @throws AmbiguousParameterException if the parameter has more than one value.
+     */
+    protected String getSingleValue(String name)
+        throws AmbiguousParameterException
     {
         String[] values = map.get(name);
         if (values == null || values.length == 0)
@@ -239,7 +254,7 @@ public class DefaultParameters implements Parameters
      */
     public boolean getBoolean(String name, boolean defaultValue)
     {
-        String value = getDataType(name);
+        String value = getSingleValue(name);
         return value != null ? value.equals(TRUE) : defaultValue;
     }
 
@@ -271,7 +286,7 @@ public class DefaultParameters implements Parameters
      */
     public Date getDate(String name, Date defaultValue)
     {
-        String value = getDataType(name);
+        String value = getSingleValue(name);
         return value != null ? new Date(Long.parseLong(value)) : defaultValue;
     }
 
@@ -302,7 +317,7 @@ public class DefaultParameters implements Parameters
      */
     public float getFloat(String name, float defaultValue)
     {
-        String value = getDataType(name);
+        String value = getSingleValue(name);
         return value != null ? Float.parseFloat(value) : defaultValue;
     }
 
@@ -333,7 +348,7 @@ public class DefaultParameters implements Parameters
      */
     public int getInt(String name, int defaultValue)
     {
-        String value = getDataType(name);
+        String value = getSingleValue(name);
         return value != null ? Integer.parseInt(value) : defaultValue;
     }
 
@@ -364,7 +379,7 @@ public class DefaultParameters implements Parameters
      */
     public long getLong(String name, long defaultValue)
     {
-        String value = getDataType(name);
+        String value = getSingleValue(name);
         return value != null ? Long.parseLong(value) : defaultValue;
     }
 
