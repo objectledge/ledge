@@ -47,7 +47,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * A template tool for embedding components in application UI.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.13 2005-05-16 09:17:39 pablo Exp $
+ * @version $Id: ComponentTool.java,v 1.14 2005-05-20 05:28:07 pablo Exp $
  */
 public class ComponentTool
 {
@@ -159,7 +159,7 @@ public class ComponentTool
 		{
 	        if(config != null)
 	        {
-	            Map store = new HashMap();
+	            Map<String, Object> store = new HashMap<String, Object>();
 	            TemplatingContext tContext = 
 	                 TemplatingContext.getTemplatingContext(context);
 	            Iterator i = config.keySet().iterator();
