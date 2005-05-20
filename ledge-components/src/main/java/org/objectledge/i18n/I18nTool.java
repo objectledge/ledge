@@ -38,7 +38,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.15 2005-05-18 04:34:11 pablo Exp $
+ * @version $Id: I18nTool.java,v 1.16 2005-05-20 05:28:53 pablo Exp $
  */
 public class I18nTool
 {
@@ -148,6 +148,19 @@ public class I18nTool
 		return i18n.get(locale, getKey(key), values);
 	}
 
+    /**
+	 * Usefull method for 2 variables substitution.
+	 *
+	 * @param key the key.
+	 * @param value1 the first values use for substitution.
+	 * @param value1 the second values use for substitution.
+	 * @return the output string.
+	 */
+	public String get(String key, String value1, String value2)
+	{
+		return get(key, new String[]{value1, value2});
+	}
+	
     /**
 	 * Get the string and replace $[1..n] variables with given values.
 	 *
