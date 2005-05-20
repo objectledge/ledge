@@ -33,7 +33,7 @@ import org.objectledge.templating.Template;
  * Finds templates that should be used for rendering specific views.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCTemplateFinder.java,v 1.11 2005-03-30 11:20:19 zwierzem Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.12 2005-05-20 00:47:13 rafal Exp $
  */
 public interface MVCTemplateFinder
 {
@@ -70,6 +70,13 @@ public interface MVCTemplateFinder
         private final Template template;
         private final String actualView;
         
+        /**
+         * Creates a new Result instance.
+         * 
+         * @param originalView originally requested template.
+         * @param builder resolved template.
+         * @param actualView the actual view associated with the resolved template.
+         */
         public Result(String originalView, Template template, String actualView)
         {
             this.originalView = originalView;

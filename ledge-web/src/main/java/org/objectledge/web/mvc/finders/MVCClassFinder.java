@@ -35,7 +35,7 @@ import org.objectledge.web.mvc.components.Component;
  * A class finder for finding MVC model classes.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCClassFinder.java,v 1.15 2005-03-30 11:20:19 zwierzem Exp $
+ * @version $Id: MVCClassFinder.java,v 1.16 2005-05-20 00:47:13 rafal Exp $
  */
 public interface MVCClassFinder
 {
@@ -92,6 +92,13 @@ public interface MVCClassFinder
         private final Builder builder;
         private final String actualView;
         
+        /**
+         * Creates a new Result instance.
+         * 
+         * @param originalView originally requested builder.
+         * @param builder resolved builder.
+         * @param actualView the actual view associated with the resolved builder.
+         */
         public Result(String originalView, Builder builder, String actualView)
         {
             this.originalView = originalView;

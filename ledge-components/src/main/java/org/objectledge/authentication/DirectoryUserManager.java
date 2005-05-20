@@ -52,8 +52,6 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.naming.ContextHelper;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.directory.DirectoryParameters;
 
 /**
  * The user manager implementation based on ldap.

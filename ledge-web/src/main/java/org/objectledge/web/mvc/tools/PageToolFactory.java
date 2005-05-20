@@ -43,6 +43,7 @@ public class PageToolFactory implements ContextToolFactory
     /** The linktool factory. */
 	protected LinkToolFactory linkToolFactory;
 
+    /** The context component. */
     protected Context context;
     
 	/**

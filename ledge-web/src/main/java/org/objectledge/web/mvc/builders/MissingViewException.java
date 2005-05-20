@@ -33,10 +33,15 @@ import org.objectledge.pipeline.ProcessingException;
  * Indicates a wrong view name parameter.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MissingViewException.java,v 1.1 2005-03-30 11:20:34 zwierzem Exp $
+ * @version $Id: MissingViewException.java,v 1.2 2005-05-20 00:47:16 rafal Exp $
  */
 public class MissingViewException extends ProcessingException
 {
+    /**
+     * Creates a new MissingViewException instance.
+     * 
+     * @param message detail message.
+     */
     public MissingViewException(String message)
     {
         super(message);

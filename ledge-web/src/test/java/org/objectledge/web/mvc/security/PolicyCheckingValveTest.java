@@ -42,8 +42,6 @@ import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.LocaleLoaderValve;
-import org.objectledge.parameters.DefaultParameters;
-import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.security.RoleChecking;
 import org.objectledge.web.HttpContext;

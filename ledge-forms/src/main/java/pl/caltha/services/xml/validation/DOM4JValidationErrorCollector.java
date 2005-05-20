@@ -8,14 +8,13 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.xml.sax.SAXException;
 
-import com.sun.msv.verifier.ErrorInfo;
-
 import pl.caltha.services.xml.CollectingErrorHandler;
+
 /**
  * ErrorHandler that collects all errors.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: DOM4JValidationErrorCollector.java,v 1.3 2005-02-21 13:54:24 zwierzem Exp $
+ * @version $Id: DOM4JValidationErrorCollector.java,v 1.4 2005-05-20 00:46:27 rafal Exp $
  */
 public class DOM4JValidationErrorCollector
      extends CollectingErrorHandler

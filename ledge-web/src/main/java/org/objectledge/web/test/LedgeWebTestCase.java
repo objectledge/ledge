@@ -43,7 +43,7 @@ import net.sourceforge.jwebunit.WebTestCase;
  * Base class for ObjectLedge Web functional testcases
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeWebTestCase.java,v 1.11 2005-05-17 06:24:16 zwierzem Exp $
+ * @version $Id: LedgeWebTestCase.java,v 1.12 2005-05-20 00:47:22 rafal Exp $
  */
 public class LedgeWebTestCase
     extends WebTestCase
@@ -112,7 +112,15 @@ public class LedgeWebTestCase
     }      
     
     
-    // some usefull methods..
+    // -- utiltity methods ----------------------------------------------------------------------
+    
+    /**
+     * Retruns the first link that contains the specified text in it's href attribute.
+     * 
+     * @param text the text to find.
+     * @return first matching link, or null if not found.
+     * @throws Exception if document traversal fails. 
+     */
     protected WebLink getLinkWithURL(String text)
         throws Exception
     {
@@ -127,7 +135,14 @@ public class LedgeWebTestCase
         }
         return null;
     }
-    
+
+    /**
+     * Returns the count of the links that contain the specified text in their body.
+     * 
+     * @param text the text to find.
+     * @return the number of matching links.
+     * @throws Exception if document traversal fails.
+     */
     protected int countLinksWithString(String text)
         throws Exception
     {
@@ -143,6 +158,13 @@ public class LedgeWebTestCase
         return i;
     }
 
+    /**
+     * Returns the count of the links with specified text in their body.
+     * 
+     * @param text the text to find.
+     * @return the number of matching links.
+     * @throws Exception if document traversal fails.
+     */
     protected int countLinksWithExactString(String text)
 	    throws Exception
 	{
@@ -158,7 +180,13 @@ public class LedgeWebTestCase
 	    return i;
 	}
 
-	
+    /**
+     * Returns the count of images with source URL containing the specified text.
+     * 
+     * @param text text to find.
+     * @return nubmer of matching images.
+     * @throws Exception if document traversal fails.
+     */
     protected int countImagesWithSource(String text)
         throws Exception
     {
@@ -174,7 +202,12 @@ public class LedgeWebTestCase
         return i;
     }
     
-    
+    /**
+     * Returns the count of occurances of a specified string in the page body.
+     * 
+     * @param text the text to find.
+     * @return the number of occurances.
+     */
 	protected int countString(String text)
 	{
 		String response = getTester().getDialog().getResponseText();
@@ -187,7 +220,14 @@ public class LedgeWebTestCase
 		}
 		return counter;
 	}
-	
+
+    /**
+     * Returns the nubmer of occurances of a specified tag in the page body.
+     * 
+     * @param tagName name of the tag.
+     * @return the number of occurances.
+     * @throws Exception if document traversal fails.
+     */
     protected int countElements(String tagName)
         throws Exception
     {
@@ -196,6 +236,13 @@ public class LedgeWebTestCase
         return walker.countTags(tagName);
     }
 
+    /**
+     * Returns the table element that contains the specified text.  
+     * 
+     * @param text the text to find.
+     * @return matching table element.
+     * @throws Exception if tree traversal fails.
+     */
     public Element getTableWithText(String text)
         throws Exception
     {
@@ -204,11 +251,27 @@ public class LedgeWebTestCase
         return getTableWithText(walker, text);
     }
     
+    /**
+     * Returns the table element that contains the specified text.  
+     *
+     * @param walker the DOMTreeWalker component instance.
+     * @param text the text to find.
+     * @return matching table element.
+     */
     public Element getTableWithText(DOMTreeWalker walker, String text)
     {
         return walker.findElementWithText(text,"table");
     }
     
+    /**
+     * Returns the contents of a table cell.
+     * 
+     * @param table table element.
+     * @param row row number.
+     * @param cell cell number.
+     * @return the cell content.
+     * @throws Exception if document travelsal fails.
+     */
     public String getTableCellText(Element table, int row, int cell)
         throws Exception
     {
@@ -217,6 +280,15 @@ public class LedgeWebTestCase
         return getTableRowText(walker, table, row, cell);
     }
     
+    /**
+     * Returns the contents of a table row.
+     * 
+     * @param walker DOMTreeWalker component.
+     * @param table table element.
+     * @param row row number.
+     * @param cell starting cell number.
+     * @return contents of the table row.
+     */
     public String getTableRowText(DOMTreeWalker walker, Element table, int row, int cell)
     {
         walker.gotoElement(table);
@@ -230,9 +302,15 @@ public class LedgeWebTestCase
         }
         return walker.getNextText();
     }
-    
+
+    /**
+     * A predicate for picking out table element that contains the specified string.  
+     */
     public class TableContentPredicate implements HTMLElementPredicate
     {
+        /**
+         * {@inheritDoc}
+         */
         public boolean matchesCriteria(Object htmlElement, Object criteria)
         {
             if(!(htmlElement instanceof WebTable))

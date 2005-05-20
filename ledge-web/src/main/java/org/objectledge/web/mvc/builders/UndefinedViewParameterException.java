@@ -33,10 +33,13 @@ import org.objectledge.pipeline.ProcessingException;
  * Indicates a non existing or empty view name parameter.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UndefinedViewParameterException.java,v 1.1 2005-04-06 09:11:02 zwierzem Exp $
+ * @version $Id: UndefinedViewParameterException.java,v 1.2 2005-05-20 00:47:16 rafal Exp $
  */
 public class UndefinedViewParameterException extends ProcessingException
 {
+    /**
+     * Creates new UndefinedViewParameterException instance.
+     */
     public UndefinedViewParameterException()
     {
     }

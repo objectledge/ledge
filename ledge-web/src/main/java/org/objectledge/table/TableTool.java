@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.10 2005-05-19 03:08:55 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.11 2005-05-20 00:47:19 rafal Exp $
  */
 public class TableTool
 {
@@ -529,6 +529,11 @@ public class TableTool
             return type;
         }
         
+        /**
+         * Checks if the box contains a folder or file icon.
+         * 
+         * @return <code>true</code> if the box contains a folder or file icon.
+         */
         public boolean isIcon()
         {
             return type.equals("folder") || type.equals("file") || type.equals("folderopen");
