@@ -7,6 +7,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * An utility class for traversig DOM trees.
+ * 
+ * @author <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
+ * @version $Id: DOMTreeWalker.java,v 1.4 2005-05-20 02:04:20 rafal Exp $
+ */
 public class DOMTreeWalker
 {
     private Element root;
@@ -14,7 +20,12 @@ public class DOMTreeWalker
     private ArrayList<Object> elements;
     
     private int currentIndex;
-    
+
+    /**
+     * Create a DOMTreeWalker instance.
+     * 
+     * @param root the traversal root.
+     */
     public DOMTreeWalker(Element root)
     {
         this.root = root;
@@ -23,16 +34,27 @@ public class DOMTreeWalker
         loadList();
     }
 
+    /**
+     * Resets the traversal back to origin.
+     */
     public void reset()
     {
         currentIndex = 0;
     }
-    
+
+    /**
+     * Loads all elements to the lookup buffer. 
+     */
     public void loadList()
     {
         loadNode(root);
     }
-    
+
+    /**
+     * Loads the specified element and it's descendants to the lookup buffer.
+     * 
+     * @param node the node to be loaded.
+     */
     private void loadNode(Node node)
     {
         if(node instanceof CharacterData)        
@@ -50,7 +72,15 @@ public class DOMTreeWalker
             }
         }
     }
-    
+
+    /**
+     * Looks up element of a specified type that occurs after specific text in documents's 
+     * character data.
+     * 
+     * @param text the text preceeding the element.
+     * @param tagName the element type to find.
+     * @return the first matching element.
+     */
     public Element findElementAfterText(String text, String tagName)
     {
         for(; currentIndex < elements.size(); currentIndex++)
@@ -86,6 +116,13 @@ public class DOMTreeWalker
         return null;
     }
 
+    /**
+     * Finds the element that contains the specific text in it's character data.
+     * 
+     * @param text the text to find.
+     * @param tagName the type of element to find.
+     * @return the matching element.
+     */
     public Element findElementWithText(String text, String tagName)
     {
         Element matchedElement = null;
@@ -119,12 +156,24 @@ public class DOMTreeWalker
         }
         return matchedElement;
     }
-    
+
+    /**
+     * Returns next character data block in the lookup buffer.
+     * 
+     * @return next character data block in the lookup buffer.
+     */
     public String getNextText()
     {
         return getNextText(0);
     }
-    
+
+    /**
+     * Returns character data block in the lookup buffer in specific distance from current 
+     * position.
+     * 
+     * @param skip number of character data blocks to skip.
+     * @return the charcter data block.
+     */
     public String getNextText(int skip)
     {
         currentIndex = currentIndex + skip + 1;
@@ -138,17 +187,35 @@ public class DOMTreeWalker
         }
         return null;
     }
-    
+
+    /**
+     * Returns the next element in the lookup buffer.
+     * 
+     * @return the next element in the lookup buffer.
+     */
     public Element getNextElement()
     {
         return getNextElement(0);
     }
     
+    /**
+     * Returns element in the lookup buffer in specific distance from current position.
+     * 
+     * @param skip number of elements to skip.
+     * @return the element.
+     */
     public Element getNextElement(int skip)
     {
         return getNextElement(skip, null);
     }
     
+    /**
+     * Returns element in the lookup buffer in specific distance from current position.
+     * 
+     * @param skip number of elements to skip.
+     * @param tagName the expected tag name.
+     * @return matched element, or null.
+     */
     public Element getNextElement(int skip, String tagName)
     {
         currentIndex = currentIndex + skip + 1;
@@ -173,7 +240,12 @@ public class DOMTreeWalker
         }
         return null;
     }
-    
+
+    /**
+     * Go to the specific element in the lookup buffer.
+     * 
+     * @param element the element.
+     */
     public void gotoElement(Element element)
     {
         for(currentIndex = 0; currentIndex < elements.size(); currentIndex++)
@@ -193,6 +265,12 @@ public class DOMTreeWalker
         }
     }
     
+    /**
+     * Count elements of specific type in the lookup buffer.
+     * 
+     * @param tagName the element type.
+     * @return the count of elements of specific type in the lookup buffer.
+     */
     public int countTags(String tagName)
     {
         int i = 0;
@@ -219,7 +297,13 @@ public class DOMTreeWalker
         return counter;
     }
     
-    
+    /**
+     * Count child elements of a specified element of the specific types. 
+     * 
+     * @param node the node. 
+     * @param tagName types of the child nodes.
+     * @return the count of child elements of a specified element of the specific types.
+     */
     public static int countElements(Node node, String tagName)
     {
         int counter = 0;
