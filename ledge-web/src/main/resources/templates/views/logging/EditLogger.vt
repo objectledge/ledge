@@ -1,7 +1,7 @@
 $pageTool.appendTitleSuffix('Logger properties')##
-#macro(level_selector)
+#macro(level_selector $levels)
 <select name="level">
-#foreach($level in ['OFF', 'FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'ALL'])
+#foreach($level in $levels)
 <option value="$level"#if($level.equals($logger.effectiveLevel.toString())) selected="selected"#end>$level</option>
 #end
 </select>
@@ -20,7 +20,7 @@ div.panel {
 <input type="hidden" name="id" value="$parametersTool.get('id')"/>
 name: $logger.name <br/> 
 <br/>
-level: #level_selector()
+level: #level_selector(['OFF', 'FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'ALL'])
 <br/>
 additive: <input name="additivity" value="true" type="checkbox"#if($logger.additivity) checked="true"#end/> <br/>
 <input type="submit" value="Update"/>
@@ -46,7 +46,7 @@ $appender.name ($appender.class.name) <br/>
 <h3>Test</h3>
 <form name="form2" method="POST" action="$link.action('logging.TestLogger')">
 <input type="hidden" name="id" value="$parametersTool.get('id')"/>
-#level_selector() <input type="text" name="message"/> <input type="submit" value="Go"/>
+#level_selector(['FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG']) <input type="text" name="message"/> <input type="submit" value="Go"/>
 </form>
 </div>
 <a href="$link.view('logging.Loggers')">back</a>

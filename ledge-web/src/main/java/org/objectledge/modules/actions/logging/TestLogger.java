@@ -39,7 +39,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * Tests the logger settings by emmiting a message.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: TestLogger.java,v 1.1 2005-05-18 05:33:30 rafal Exp $
+ * @version $Id: TestLogger.java,v 1.2 2005-05-20 04:19:01 rafal Exp $
  */
 public class TestLogger
     extends PolicyProtectedAction
@@ -79,6 +79,10 @@ public class TestLogger
         String level = requestParameters.get("level", "ERROR");
         String message = requestParameters.get("message", "");
 
+        if("FATAL".equals(level))
+        {
+            logger.fatal(message);
+        }
         if("ERROR".equals(level))
         {
             logger.error(message);
@@ -94,10 +98,6 @@ public class TestLogger
         else if("DEBUG".equals(level))
         {
             logger.debug(message);
-        }
-        else
-        {
-            // invalid log level
         }
     }
 }
