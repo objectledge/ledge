@@ -173,7 +173,10 @@ public class CreateAppender
             {
                 SMTPAppender a = new SMTPAppender();
                 a.setBufferSize(parameters.getInt("SMTP_bufferSize"));
-                a.setEvaluatorClass(parameters.get("STMP_evaluatorClass"));
+                if(parameters.isDefined("STMP_evaluatorClass"))
+                {
+                    a.setEvaluatorClass(parameters.get("STMP_evaluatorClass"));
+                }
                 a.setLocationInfo(parameters.getBoolean("SMTP_locationInfo", false));
                 a.setSMTPHost(parameters.get("SMTP_smtpHost"));
                 a.setSubject(parameters.get("SMTP_subject"));
