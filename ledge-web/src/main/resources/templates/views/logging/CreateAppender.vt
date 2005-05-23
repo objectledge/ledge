@@ -93,7 +93,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 <div id="Pattern" style="display: block;">
 <h4>Pattern layout</h4>
 <table>
-<tr><td width="10%">conversion pattern</td><td><input type="text" name="Pattern_conversionPattern" value="%r [%t] %-5p %c %x - %m\n"/></td></tr>
+<tr><td width="10%">conversion pattern</td><td><input type="text" name="Pattern_conversionPattern" value="%r [%t] %-5p %c %x - %m%n"/></td></tr>
 </table>
 </div>
 
