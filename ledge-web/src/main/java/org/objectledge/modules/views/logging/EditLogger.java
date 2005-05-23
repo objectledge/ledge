@@ -47,7 +47,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditLogger.java,v 1.1 2005-05-18 05:33:29 rafal Exp $
+ * @version $Id: EditLogger.java,v 1.2 2005-05-23 01:58:24 rafal Exp $
  */
 public class EditLogger
     extends PolicyProtectedBuilder
@@ -88,8 +88,13 @@ public class EditLogger
         }
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("logger", logger);
-        templatingContext.put("appenders", getAppenders(logger));
-        templatingContext.put("inheritedAppenders", getInheritedAppenders(logger));
+        List<Appender> appenders = new ArrayList<Appender>();
+        getAppenders(logger, appenders);
+        List<Appender> inheritedAppenders = new ArrayList<Appender>();
+        getInheritedAppenders(logger, inheritedAppenders);
+        inheritedAppenders.removeAll(appenders);
+        templatingContext.put("appenders", appenders);
+        templatingContext.put("inheritedAppenders", inheritedAppenders);
         return super.build(template, embeddedBuildResults);
     }
 
@@ -99,15 +104,13 @@ public class EditLogger
      * @param logger the logger.
      * @return appenders attached to the logger.
      */
-    private List<Appender> getAppenders(Logger logger)
+    private void getAppenders(Logger logger, List<Appender> appenders)
     {
         Enumeration<Appender> appenderEnumeration = logger.getAllAppenders();
-        List<Appender> appenders = new ArrayList<Appender>();
         while(appenderEnumeration.hasMoreElements())
         {
             appenders.add(appenderEnumeration.nextElement());
         }
-        return appenders;
     }
     
     /**
@@ -116,18 +119,12 @@ public class EditLogger
      * @param logger the logger.
      * @return appenders inherited by the logger.
      */
-    private List<Appender> getInheritedAppenders(Logger logger)
+    private void getInheritedAppenders(Logger logger, List<Appender> appenders)
     {
-        List<Appender> appenders = new ArrayList<Appender>();
-        Logger parent = (Logger)logger.getParent();
-        while(parent != null)
+        getAppenders(logger, appenders);
+        if(logger.getAdditivity() && logger.getParent() != null)
         {
-            if(parent.getAdditivity())
-            {
-                appenders.addAll(getAppenders(parent));
-            }
-            parent = (Logger)parent.getParent();
+            getInheritedAppenders((Logger)logger.getParent(), appenders);
         }
-        return appenders;
     }
 }
