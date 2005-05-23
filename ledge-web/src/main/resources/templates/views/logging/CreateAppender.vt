@@ -81,8 +81,8 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 <tr><td width="10%">buffer size</td><td><input type="text" name="SMTP_bufferSize" value="10"/> events </td></tr>
 <tr><td>evaluator class</td><td><input type="text" name="SMTP_evaluatorClass"/></td></tr>
 <tr><td>location info</td><td><input type="checkbox" value="true" name="SMTP_locationInfo"/></td></tr>
-<tr><td>stmp host</td><td><input type="text" name="STMP_smptHost" value="localhost"></td></tr>
-<tr><td>subject</td><td><input type="text" name="STMP_subject"/></td></tr>
+<tr><td>stmp host</td><td><input type="text" name="SMTP_smtpHost" value="localhost"></td></tr>
+<tr><td>subject</td><td><input type="text" name="SMTP_subject"/></td></tr>
 <tr><td>from</td><td><input type="text" name="SMTP_from"/></td></tr>
 <tr><td>to</td><td><input type="text" name="SMTP_to"/> comma separated</td></tr>
 </table>
