@@ -1,4 +1,4 @@
-$pageTool.appendTitleSuffix('Logger properties')##
+$pageTool.appendTitleSuffix('Logging system : Logger properties')##
 #macro(level_selector $levels)
 <select name="level">
 #foreach($level in $levels)
@@ -32,7 +32,7 @@ additive: <input name="additivity" value="true" type="checkbox"#if($logger.addit
 <div class="panel">
 #foreach($appender in $appenders)
 $appender.name ($appender.class.name) <br/>
-#end	
+#end
 </div>
 <h3>Inherited appenders</h3>
 <div class="panel">
@@ -40,6 +40,7 @@ $appender.name ($appender.class.name) <br/>
 $appender.name ($appender.class.name) <br/>
 #end	
 </div>
+<a href="$link.view('logging.CreateAppender').set('id', $logger.name)">Add appender</a>
 </div>
 <br/>
 <div class="panel frame">
