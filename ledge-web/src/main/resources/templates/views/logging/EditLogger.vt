@@ -30,14 +30,22 @@ additive: <input name="additivity" value="true" type="checkbox"#if($logger.addit
 <div class="panel frame">
 <h3>Appenders</h3>
 <div class="panel">
+#if($appenders.empty)
+<em>none</em>
+#else
 #foreach($appender in $appenders)
-$appender.name ($appender.class.name) <br/>
+$appender.name ($appender.class.name) <a href="$link.action('logging.DeleteAppender').set('id',$parametersTool.get('id')).set('appender', $appender.name)">delete</a><br/>
+#end
 #end
 </div>
 <h3>Inherited appenders</h3>
 <div class="panel">
+#if($inheritedAppenders.empty)
+<em>none</em>
+#else
 #foreach($appender in $inheritedAppenders)
 $appender.name ($appender.class.name) <br/>
+#end
 #end	
 </div>
 <a href="$link.view('logging.CreateAppender').set('id', $logger.name)">Add appender</a>
