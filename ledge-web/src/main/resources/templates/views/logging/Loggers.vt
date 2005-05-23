@@ -10,7 +10,7 @@ $pageTool.appendTitleSuffix('Logging system')##
 #if($row.object.level)
   <a href="$link.view('logging.EditLogger').set('id',$row.object.id)">$row.object.name</a> $row.object.level
 #else
-  <a href="$link.view('logging.CreateLogger').set('id',$row.object.id)">$row.object.name</a>
+  <a href="$link.view('logging.EditLogger').action('logging.CreateLogger').set('id',$row.object.id)">$row.object.name</a>
 #end
 </div>
 #end
