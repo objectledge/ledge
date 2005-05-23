@@ -47,8 +47,8 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 <h4>File appender</h4>
 <table>
 <tr><td width="10%">file name</td><td><input type="text" name="File_file"/></td></tr>
-<tr><td>append to file</td><td><input type="checkbox" name="File_append"/></td></tr>
-<tr><td>buffered I/O</td><td><input type="checkbox" name="File_bufferedIO" checked="true"/></td></tr>
+<tr><td>append to file</td><td><input type="checkbox" value="true" name="File_append"/></td></tr>
+<tr><td>buffered I/O</td><td><input type="checkbox" value="true" name="File_bufferedIO" checked="true"/></td></tr>
 <tr><td>buffer size</td><td><input type="text" name="File_bufferSize" value="512"/></td></tr>
 </table>
 </div>
@@ -57,8 +57,8 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 <h4>Rolling file appender</h4>
 <table>
 <tr><td width="10%">file name</td><td><input type="text" name="RollingFile_file"/></td></tr>
-<tr><td>append to file</td><td><input type="checkbox" name="RollingFile_append" checked="true"/></td></tr>
-<tr><td>buffered I/O</td><td><input type="checkbox" name="RollingFile_bufferedIO" checked="true"/></td></tr>
+<tr><td>append to file</td><td><input type="checkbox" value="true" name="RollingFile_append" checked="true"/></td></tr>
+<tr><td>buffered I/O</td><td><input type="checkbox" value="true" name="RollingFile_bufferedIO" checked="true"/></td></tr>
 <tr><td>buffer size</td><td><input type="text" name="RollingFile_bufferSize" value="512"/></td></tr>
 <tr><td>max backup index</td><td><input type="text" name="RollingFile_maxBackupIndex" value="8"/></td></tr>
 <tr><td>max file size</td><td><input type="text" name="RollingFile_maxFileSize" value="1MB"/></td></tr>
@@ -80,7 +80,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 <table>
 <tr><td width="10%">buffer size</td><td><input type="text" name="SMTP_bufferSize" value="10"/> events </td></tr>
 <tr><td>evaluator class</td><td><input type="text" name="SMTP_evaluatorClass"/></td></tr>
-<tr><td>location info</td><td><input type="checkbox" name="SMTP_locationInfo"/></td></tr>
+<tr><td>location info</td><td><input type="checkbox" value="true" name="SMTP_locationInfo"/></td></tr>
 <tr><td>stmp host</td><td><input type="text" name="STMP_smptHost" value="localhost"></td></tr>
 <tr><td>subject</td><td><input type="text" name="STMP_subject"/></td></tr>
 <tr><td>from</td><td><input type="text" name="SMTP_from"/></td></tr>
@@ -106,7 +106,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 <div id="XML" style="display: none;">
 <h4>XML layout</h4>
 <table>
-<tr><td width="10%">location info</td><td><input type="checkbox" name="XML_locationInfo"/></td></tr>
+<tr><td width="10%">location info</td><td><input type="checkbox" value="true" name="XML_locationInfo"/></td></tr>
 </table>
 </div>
 
