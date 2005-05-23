@@ -143,12 +143,12 @@ public class CreateAppender
             public Appender getAppender(Parameters parameters, FileSystem fileSystem)
             {
                 LedgeRollingFileAppender a = new LedgeRollingFileAppender(fileSystem);
-                a.setFile(parameters.get("File_file"));
-                a.setAppend(parameters.getBoolean("File_append", false));
-                a.setBufferedIO(parameters.getBoolean("File_bufferedIO", false));
-                a.setBufferSize(parameters.getInt("File_bufferSize"));
-                a.setMaxBackupIndex(parameters.getInt("File_maxBackupIndex"));
-                a.setMaxFileSize(parameters.get("File_maxFileSize"));
+                a.setFile(parameters.get("RollingFile_file"));
+                a.setAppend(parameters.getBoolean("RollingFile_append", false));
+                a.setBufferedIO(parameters.getBoolean("RollingFile_bufferedIO", false));
+                a.setBufferSize(parameters.getInt("RollingFile_bufferSize"));
+                a.setMaxBackupIndex(parameters.getInt("RollingFile_maxBackupIndex"));
+                a.setMaxFileSize(parameters.get("RollingFile_maxFileSize"));
                 a.setName(parameters.get("name"));
                 a.activateOptions();
                 return a;
