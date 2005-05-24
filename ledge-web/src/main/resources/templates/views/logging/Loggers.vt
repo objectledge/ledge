@@ -1,4 +1,5 @@
 $pageTool.appendTitleSuffix('Logging system')##
+$viewEnclosureTool.override('system.Default')##
 
 <h3>Active loggers</h3>
 
