@@ -43,7 +43,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Pipeline component for executing MVC view building.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.33 2005-04-06 09:11:02 zwierzem Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.34 2005-05-24 04:29:34 rafal Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -130,7 +130,7 @@ public class BuilderExecutorValve
             {
                 // route builder -------------------------------------------------------------------
                 int routeCalls;
-                for (routeCalls = 0; routeCalls < maxRouteCalls; routeCalls++)
+                for (routeCalls = 0; routeCalls < maxRouteCalls && builder != null; routeCalls++)
                 {
                     
                     String routeBuilderName = builder.route(viewName);
