@@ -1,0 +1,12 @@
+$pageTool.appendTitleSuffix('System administration')##
+
+<ul>
+<li><a href="$link.view('system.Versions')">Deployed package versions</a></li>
+<li><a href="$link.view('system.Configuration')">Components configuration</a></li>
+<li><a href="$link.view('logging.Loggers')">Logging system administration</a></li>
+<li><a href="$link.view('system.VM')">Virtual Machine monitoring</a></li>
+<li><a href="$link.view('system.Statistics')">System statistics</a></li>
+<li><a href="$link.view('scheduler.Jobs')">Job scheduling administration</a></li>
+</ul>
+
+	
