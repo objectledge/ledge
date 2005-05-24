@@ -3,6 +3,7 @@ $pageTool.appendTitleSuffix('Logging system')##
 <h3>Active loggers</h3>
 
 #set($tableLink = $link.set('tableId',$table.id))
+<div class="genericItemList">
 #foreach ($row in $table.rows)
 ## compute even/odd table row
 #set($odd = $velocityCount%2)
@@ -14,4 +15,5 @@ $pageTool.appendTitleSuffix('Logging system')##
 #end
 </div>
 #end
+</div>
 <a href="$link.action('logging.SaveConfiguration')">save configuration</a>

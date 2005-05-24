@@ -1,4 +1,10 @@
 $pageTool.appendTitleSuffix('Logging system : Create appender')##
+<style type="text/css">
+div.frame {
+  border: 1px solid black;
+  padding: 5px;
+}
+</style>
 #macro(EOL)
 	
 #end
@@ -26,6 +32,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
   }
 </script>
 <form name="form1" method="post" action="$link.view('logging.EditLogger').action('logging.CreateAppender').set('id',$parametersTool.get('id'))">
+<div class="frame">
 <h4>Appender</h4>
 <table>	
 <tr><td width="10%">appender name</td> <td><input type="text" name="name"/></td></tr>
@@ -40,10 +47,10 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 #end
 </select></td></tr>
 </table>
-
+</div>
 <br/>
 
-<div id="File" style="display: block;">
+<div id="File" class="frame" style="display: block;">
 <h4>File appender</h4>
 <table>
 <tr><td width="10%">file name</td><td><input type="text" name="File_file"/></td></tr>
@@ -53,7 +60,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 </table>
 </div>
 
-<div id="RollingFile" style="display: none;">
+<div id="RollingFile" class="frame" style="display: none;">
 <h4>Rolling file appender</h4>
 <table>
 <tr><td width="10%">file name</td><td><input type="text" name="RollingFile_file"/></td></tr>
@@ -65,7 +72,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 </table>
 </div>
 
-<div id="Console" style="display: none;">
+<div id="Console" class="frame" style="display: none;">
 <h4>Console appender</h4>
 <table>
 <tr><td width="10%">target</td><td><select name="Console_target">
@@ -75,7 +82,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 </table>
 </div>
 
-<div id="SMTP" style="display: none;">
+<div id="SMTP" class="frame" style="display: none;">
 <h4>SMTP appender</h4>
 <table>
 <tr><td width="10%">buffer size</td><td><input type="text" name="SMTP_bufferSize" value="512"/> events </td></tr>
@@ -90,7 +97,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 
 <br/>
 
-<div id="Pattern" style="display: block;">
+<div id="Pattern" class="frame" style="display: block;">
 <h4>Pattern layout</h4>
 <table>
 <tr><td width="10%">conversion pattern</td><td><input type="text" name="Pattern_conversionPattern" value="%r [%t] %-5p %c %x - %m%n"/></td></tr>
@@ -100,7 +107,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 <div id="Simple" style="display: none;">
 </div>
 
-<div id="TTCC" style="display: none;">
+<div id="TTCC" class="frame" style="display: none;">
 <h4>TTCC layout</h4>
 <table>
 <tr><td width="10%">thread printing</td><td><input type="checkbox" value="true" name="TTCC_threadPrinting" checked="true"/></td></tr>
@@ -109,7 +116,7 @@ $pageTool.appendTitleSuffix('Logging system : Create appender')##
 </table>
 </div>
 
-<div id="XML" style="display: none;">
+<div id="XML" class="frame" style="display: none;">
 <h4>XML layout</h4>
 <table>
 <tr><td width="10%">location info</td><td><input type="checkbox" value="true" name="XML_locationInfo"/></td></tr>
