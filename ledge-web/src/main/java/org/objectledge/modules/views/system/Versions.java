@@ -46,7 +46,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Versions.java,v 1.2 2005-05-09 09:22:54 rafal Exp $
+ * @version $Id: Versions.java,v 1.3 2005-05-24 03:29:58 rafal Exp $
  */
 public class Versions
     extends PolicyProtectedBuilder
@@ -80,21 +80,24 @@ public class Versions
         {
             List temp = new ArrayList();
             String dir = "/META-INF/versions/";
-            String[] groups = fileSystem.list(dir);
-            if(groups != null)
+            if(fileSystem.exists(dir) && fileSystem.isDirectory(dir) && fileSystem.canRead(dir))
             {
-                Arrays.sort(groups);
-                for(int i = 0; i < groups.length; i++)
+                String[] groups = fileSystem.list(dir);
+                if(groups != null)
                 {
-                    String[] artifacts = fileSystem.list(dir + groups[i]);
-                    if(artifacts != null)
+                    Arrays.sort(groups);
+                    for(int i = 0; i < groups.length; i++)
                     {
-                        Arrays.sort(artifacts);
-                        for(int j = 0; j < artifacts.length; j++)
+                        String[] artifacts = fileSystem.list(dir + groups[i]);
+                        if(artifacts != null)
                         {
-                            String versionString = fileSystem.read(dir + groups[i] + "/"
-                                + artifacts[j], "UTF-8"); 
-                            temp.add(Arrays.asList(versionString.split("/")));
+                            Arrays.sort(artifacts);
+                            for(int j = 0; j < artifacts.length; j++)
+                            {
+                                String versionString = fileSystem.read(dir + groups[i] + "/"
+                                    + artifacts[j], "UTF-8"); 
+                                temp.add(Arrays.asList(versionString.split("/")));
+                            }
                         }
                     }
                 }
