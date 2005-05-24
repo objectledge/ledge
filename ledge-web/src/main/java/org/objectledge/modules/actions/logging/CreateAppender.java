@@ -91,6 +91,9 @@ public class CreateAppender
             public Layout getLayout(Parameters parameters)
             {
                 TTCCLayout l = new TTCCLayout();
+                l.setThreadPrinting(parameters.getBoolean("TTCC_threadPrinting", false));
+                l.setCategoryPrefixing(parameters.getBoolean("TTCC_categoryPrefixing", false));
+                l.setContextPrinting(parameters.getBoolean("TTCC_contextPrinting", false));
                 l.activateOptions();
                 return l;
             }
