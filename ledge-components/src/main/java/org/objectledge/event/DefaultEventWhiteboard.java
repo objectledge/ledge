@@ -29,6 +29,7 @@
 package org.objectledge.event;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.rmi.Remote;
@@ -45,7 +46,7 @@ import org.jcontainer.dna.Logger;
  * Default event forwarder implementation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultEventWhiteboard.java,v 1.3 2005-01-26 03:46:41 rafal Exp $
+ * @version $Id: DefaultEventWhiteboard.java,v 1.4 2005-05-25 15:16:49 pablo Exp $
  */
 public class DefaultEventWhiteboard implements EventWhiteboard
 {
@@ -198,6 +199,10 @@ public class DefaultEventWhiteboard implements EventWhiteboard
                     catch(VirtualMachineError t)
                     {
                         throw t;
+                    }
+                    catch(InvocationTargetException e)
+                    {
+                        logger.error("Failed to invoke handler", e.getTargetException());
                     }
                     catch(Throwable t)
                     {
