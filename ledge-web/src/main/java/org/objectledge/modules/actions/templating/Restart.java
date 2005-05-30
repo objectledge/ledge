@@ -29,17 +29,18 @@ package org.objectledge.modules.actions.templating;
 
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.builders.PolicyProtectedAction;
+import org.objectledge.web.mvc.security.PolicySystem;
 
 /**
- * Restart .
+ * An action for restarting the templating component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Restart.java,v 1.2 2005-01-28 04:13:41 rafal Exp $
+ * @version $Id: Restart.java,v 1.3 2005-05-30 05:19:06 rafal Exp $
  */
 public class Restart 
-    implements Valve
+    extends PolicyProtectedAction
 {
     private Templating templating;
     
@@ -47,9 +48,11 @@ public class Restart
      * Action constructor.
      * 
      * @param templating the Templating component.
+     * @param policySystem the PolicySystem component.
      */
-    public Restart(Templating templating)
+    public Restart(Templating templating, PolicySystem policySystem)
     {
+        super(policySystem);
         this.templating = templating;
     }
 
