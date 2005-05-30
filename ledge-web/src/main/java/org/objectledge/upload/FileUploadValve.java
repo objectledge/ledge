@@ -32,7 +32,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileUploadValve.java,v 1.13 2005-03-14 13:16:40 zwierzem Exp $
+ * @version $Id: FileUploadValve.java,v 1.14 2005-05-30 07:59:14 rafal Exp $
  */
 public class FileUploadValve 
     implements Valve
@@ -49,7 +49,6 @@ public class FileUploadValve
     /**
      * Constructs the component.
      * 
-     * @param webConfigurator the web configurator component.
      * @param logger the logger.
      * @param fileUpload the file upload component.
      * @param mailSystem the mailSystem.
