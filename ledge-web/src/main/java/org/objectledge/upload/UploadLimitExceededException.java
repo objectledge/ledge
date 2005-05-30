@@ -27,14 +27,16 @@
 //
 package org.objectledge.upload;
 
+import org.objectledge.pipeline.ProcessingException;
+
 /**
  * Indicates if the upload size limit has been exceeded.
  *  
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UploadLimitExceededException.java,v 1.1 2005-03-14 13:16:40 zwierzem Exp $
+ * @version $Id: UploadLimitExceededException.java,v 1.2 2005-05-30 08:16:51 rafal Exp $
  */
 ///CLOVER:OFF
-public class UploadLimitExceededException extends Exception
+public class UploadLimitExceededException extends ProcessingException
 {
     /**
      * Creates new UploadLimitExceededException instance.
