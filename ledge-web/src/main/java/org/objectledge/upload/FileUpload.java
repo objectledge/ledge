@@ -39,7 +39,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileUpload.java,v 1.7 2005-03-14 13:16:40 zwierzem Exp $
+ * @version $Id: FileUpload.java,v 1.8 2005-05-30 09:10:13 pablo Exp $
  */
 public class FileUpload
 {
@@ -104,8 +104,8 @@ public class FileUpload
         {
             // upload successful - return a requested container
             // (it may also be null for not uploaded items)
-            Map map = (Map) value;
-            return (UploadContainer) map.get(name);
+            Map<String, UploadContainer> map = (Map<String, UploadContainer>) value;
+            return map.get(name);
         }
         else
         {
