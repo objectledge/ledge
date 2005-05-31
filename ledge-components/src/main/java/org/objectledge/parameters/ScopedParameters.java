@@ -37,7 +37,7 @@ import java.util.Set;
  * An implementation of parameters decorator class to scope parameters key names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ScopedParameters.java,v 1.5 2005-05-11 07:16:42 pablo Exp $
+ * @version $Id: ScopedParameters.java,v 1.6 2005-05-31 14:54:14 pablo Exp $
  */
 public class ScopedParameters implements Parameters
 {
@@ -582,7 +582,7 @@ public class ScopedParameters implements Parameters
 	    }
 	    else
 	    {
-			this.parameters.remove();
+			remove();
             String[] keys = parameters.getParameterNames();
             for(int i=0; i<keys.length; i++)
             {
