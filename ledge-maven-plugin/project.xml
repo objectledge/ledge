@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.14 2005-04-06 14:20:03 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.15 2005-06-01 07:33:41 rafal Exp $ -->
 
 <project>
   <extend>${ledgeCommon}/project.xml</extend>
@@ -65,6 +65,7 @@
         <targetPath>plugin-resources</targetPath>
       </resource>
       <resource>
+        <directory>${basedir}</directory>
         <includes>
           <include>plugin.*</include>
           <include>project.xml</include>
