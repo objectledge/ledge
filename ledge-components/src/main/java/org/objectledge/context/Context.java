@@ -45,12 +45,12 @@ import java.util.Map;
  * being otherwise being eligible to collection.</p>  
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Context.java,v 1.5 2004-01-14 14:04:43 fil Exp $
+ * @version $Id: Context.java,v 1.6 2005-06-02 10:28:08 rafal Exp $
  */
 public class Context
 {
     /** storage of the context attributes, specific to a thread. */
-    private static InheritableThreadLocal threadAttributes = new InheritableThreadLocal();
+    private static ThreadLocal threadAttributes = new ThreadLocal();
 
     /**
      * Return the value of a context attribute.
