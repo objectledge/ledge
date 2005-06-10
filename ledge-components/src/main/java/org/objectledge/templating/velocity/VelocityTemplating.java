@@ -30,6 +30,8 @@ package org.objectledge.templating.velocity;
 
 import java.io.Reader;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
@@ -52,7 +54,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.20 2005-02-21 22:59:04 zwierzem Exp $
+ * @version $Id: VelocityTemplating.java,v 1.21 2005-06-10 11:45:37 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -71,9 +73,21 @@ public class VelocityTemplating implements Templating, LogSystem
     /** template encoding */
     private String encoding = "ISO-8859-1";
 
+    /** config */
     private Configuration config;
     
+    /** file system */
     private FileSystem fileSystem;
+    
+    /** template objects/nulls keyed by name strings. */
+    private Map<String, Template> templateCache = new HashMap<String, Template>();
+    
+    /** boolean objects/nulls keyed by name strings. */
+    private Map<String, Boolean> templateExistsCache = new HashMap<String, Boolean>();
+    
+    /** Caching flag. */
+    protected boolean cache = false;
+
     
     /**
      * Creates a new instance of the templating system.
@@ -101,6 +115,7 @@ public class VelocityTemplating implements Templating, LogSystem
         engine = new VelocityEngine();
         extension = config.getChild("extension").getValue(".vt");
         encoding = config.getChild("encoding").getValue("ISO-8859-1");
+        cache = config.getChild("cache").getValueAsBoolean(false);
         try
         {
             Configuration[] path = config.getChild("paths").getChildren("path");
@@ -157,6 +172,8 @@ public class VelocityTemplating implements Templating, LogSystem
             throw new ComponentInitializationError("failed to initialze Velocity", t);
         }
 		///CLOVER:ON
+        templateCache = new HashMap<String, Template>();
+        templateExistsCache = new HashMap<String, Boolean>();
     }
 
     /**
@@ -173,6 +190,18 @@ public class VelocityTemplating implements Templating, LogSystem
      */
     public boolean templateExists(String name)
     {
+        if(cache)
+        {
+            synchronized(templateCache)
+            {
+                Boolean exists = (Boolean)templateExistsCache.get(name);
+                if(exists != null)
+                {
+                    return exists.booleanValue();
+                }
+            }
+        }
+        boolean exists = false;
         try
         {
             for (int i = 0; i < paths.length; i++)
@@ -180,10 +209,10 @@ public class VelocityTemplating implements Templating, LogSystem
                 String path = paths[i] + name + extension;
                 if (engine.templateExists(path))
                 {
-                    return true;
+                    exists = true;
+                    break;
                 }
             }
-            return false;
         }
         ///CLOVER OFF
         catch (Exception e)
@@ -191,6 +220,14 @@ public class VelocityTemplating implements Templating, LogSystem
             throw new RuntimeException("Velocity internal error", e);
         }
 		///CLOVER ON
+        if(cache)
+        {
+            synchronized(templateCache)
+            {
+                templateExistsCache.put(name, exists ? Boolean.TRUE : Boolean.FALSE);
+            }
+        }
+        return exists;
     }
 
     /**
@@ -198,7 +235,30 @@ public class VelocityTemplating implements Templating, LogSystem
      */
     public Template getTemplate(String name) throws TemplateNotFoundException
     {
-        VelocityTemplate template = null;
+        if(cache)
+        {
+            synchronized(templateCache)
+            {
+                Boolean exists = (Boolean)templateExistsCache.get(name);
+                if(exists != null)
+                {
+                    if(exists.booleanValue())
+                    {
+                        Template template = (Template)templateCache.get(name);
+                        if(template != null)
+                        {
+                            return template;
+                        }
+                    }
+                    else
+                    {
+                        throw new TemplateNotFoundException("template "+name+extension+" not found");
+                    }
+                }
+            }
+        }
+
+        Template template = null;
         String path = null;
         try
         {
@@ -219,6 +279,14 @@ public class VelocityTemplating implements Templating, LogSystem
 		///CLOVER:ON
         if (template != null)
         {
+            if(cache)
+            {
+                synchronized(templateCache)
+                {
+                    templateExistsCache.put(name, Boolean.TRUE);
+                    templateCache.put(name, template);
+                }
+            }
             return template;
         }
         throw new TemplateNotFoundException("template " + name + extension + " not found");
@@ -322,6 +390,13 @@ public class VelocityTemplating implements Templating, LogSystem
      */
     public void invalidateTemplate(String name)
     {
-        //do nothing
+        if(cache)
+        {
+            synchronized(templateCache)
+            {
+                templateCache.remove(name);
+                templateExistsCache.remove(name);
+            }
+        }
     }
 }

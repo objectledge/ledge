@@ -38,6 +38,11 @@
       <text/>
     </element>
   </optional>    
+  <optional>    
+    <element name="cache">  
+      <text/>
+    </element>
+  </optional>
   <optional>
     <element name="paths">
       <zeroOrMore>
