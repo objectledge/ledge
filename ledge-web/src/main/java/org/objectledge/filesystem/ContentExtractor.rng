@@ -29,12 +29,12 @@
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
   <element name="providers">
-    <oneOrMore>
+    <zeroOrMore>
       <!-- source FileSystemProvider -->
       <element name="source">  
         <text/>
       </element>
-    </oneOrMore>
+    </zeroOrMore>
     <!-- target FileSystemProvider -->
     <element name="target">  
       <text/>
