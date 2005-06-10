@@ -44,7 +44,7 @@ import org.picocontainer.Startable;
  * server.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ContentExtractor.java,v 1.3 2005-02-10 17:46:23 rafal Exp $
+ * @version $Id: ContentExtractor.java,v 1.4 2005-06-10 14:52:07 zwierzem Exp $
  */
 public class ContentExtractor
 	implements Startable
@@ -101,7 +101,10 @@ public class ContentExtractor
                 in = fileSystem.getProvider(extractContentFrom[i]);
                 extractDirectory(extractContentDirectory, in, out, buffer);
             }
-            fileSystem.write(updateMarker, new byte[0]);
+            if(extractContentFrom.length > 0)
+            {
+                fileSystem.write(updateMarker, new byte[0]);
+            }
         }
         catch(Exception e)
         {
