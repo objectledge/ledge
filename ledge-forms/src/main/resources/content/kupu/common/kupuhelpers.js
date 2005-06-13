@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupuhelpers.js 8658 2005-01-28 11:22:05Z duncan $
+// $Id: kupuhelpers.js 9585 2005-03-02 15:15:08Z guido $
 
 /*
 
@@ -231,7 +231,7 @@ function NodeIterator(node, continueatnextsibling) {
     
     this.next = function() {
         /* return the next node */
-        if (this.current == false) {
+        if (this.current === false) {
             // restart
             this.current = this.node;
         };
@@ -378,23 +378,6 @@ function MozillaSelection(document) {
         /* select the contents of a node */
         this.selection.removeAllRanges();
         this.selection.selectAllChildren(node);
-    };
-
-    this.getSelectedNode = function() {
-        /* return the selected node (or the node containing the selection) */
-        var selection = this.selection;
-        var selectedNode = selection.anchorNode;
-
-        var n = selectedNode;
-        // Get next sibling at any level
-        while (n.parentNode) {
-            if ((n.previousSibling && selection.containsNode(n.previousSibling, true)) ||
-                (n.nextSibling && selection.containsNode(n.nextSibling, true))) {
-                selectedNode = n.parentNode;
-            }
-            n = n.parentNode;
-        }
-        return selectedNode;
     };
 
     this.collapse = function(collapseToEnd) {
@@ -684,13 +667,59 @@ function MozillaSelection(document) {
     };
 
     this.parentElement = function() {
+        /* return the selected node (or the node containing the selection) */
         // XXX this should be on a range object
-        var parent = this.selection.getRangeAt(0).commonAncestorContainer;
-        if (parent.nodeType == 3) {
+        if (this.selection.rangeCount == 0) {
+            var parent = this.document.getDocument().body;
+            while (parent.firstChild) {
+                parent = parent.firstChild;
+            };
+        } else {
+            var range = this.selection.getRangeAt(0);
+            var parent = range.commonAncestorContainer;
+
+            // the following deals with cases where only a single child is
+            // selected, e.g. after a click on an image
+            var inv = range.compareBoundaryPoints(Range.START_TO_END, range) < 0;
+            var startNode = inv ? range.endContainer : range.startContainer;
+            var startOffset = inv ? range.endOffset : range.startOffset;
+            var endNode = inv ? range.startContainer : range.endContainer;
+            var endOffset = inv ? range.startOffset : range.endOffset;
+
+            var selectedChild = null;
+            var child = parent.firstChild;
+            while (child) {
+                // XXX the additional conditions catch some invisible
+                // intersections, but still not all of them
+                if (range.intersectsNode(child) &&
+                    !(child == startNode && startOffset == child.length) &&
+                    !(child == endNode && endOffset == 0)) {
+                    if (selectedChild) {
+                        // current child is the second selected child found
+                        selectedChild = null;
+                        break;
+                    } else {
+                        // current child is the first selected child found
+                        selectedChild = child;
+                    };
+                } else if (selectedChild) {
+                    // current child is after the selection
+                    break;
+                };
+                child = child.nextSibling;
+            };
+            if (selectedChild) {
+                parent = selectedChild;
+            };
+        };
+        if (parent.nodeType == Node.TEXT_NODE) {
             parent = parent.parentNode;
         };
         return parent;
     };
+
+    // deprecated alias of parentElement
+    this.getSelectedNode = this.parentElement;
 
     this.moveStart = function(offset) {
         // XXX this should be on a range object
@@ -818,24 +847,6 @@ function IESelection(document) {
         range.select();
         this.selection = this.document.getDocument().selection;
     };
-
-    this.getSelectedNode = function() {
-        /* return the selected node (or the node containing the selection) */
-        range = null;
-        switch (this.selection.type) {
-            case "None":
-            case "Text":
-                range = this.selection.createRange();
-                selectedNode = range.parentElement();
-                break;
-            case "Control":
-                // return img itself instead of its parent
-                selectedNode = this.selection.createRange().item(0);
-                break;
-        };
-        return selectedNode;
-    };
-
 
     this.collapse = function(collapseToEnd) {
         var range = this.selection.createRange();
@@ -1047,8 +1058,17 @@ function IESelection(document) {
     };
 
     this.parentElement = function() {
-        return this.selection.createRange().parentElement();
+        /* return the selected node (or the node containing the selection) */
+        // XXX this should be on a range object
+        if (this.selection.type == 'Control') {
+            return this.selection.createRange().item(0);
+        } else {
+            return this.selection.createRange().parentElement();
+        };
     };
+
+    // deprecated alias of parentElement
+    this.getSelectedNode = this.parentElement;
 
     this.moveStart = function(offset) {
         /* move the start of the selection */
@@ -1079,16 +1099,26 @@ function IESelection(document) {
 
     this.containsNode = function(node) {
         var selected = this.selection.createRange();
+        
+        if (this.selection.type.toLowerCase()=='text') {
+            var range = doc.body.createTextRange();
+            range.moveToElementText(node);
 
-        var range = doc.body.createTextRange();
-        range.moveToElementText(node);
-
-        if (selected.compareEndPoints('StartToEnd', range) >= 0 ||
-            selected.compareEndPoints('EndToStart', range) <= 0) {
+            if (selected.compareEndPoints('StartToEnd', range) >= 0 ||
+                selected.compareEndPoints('EndToStart', range) <= 0) {
+                return false;
+            }
+            return true;
+        } else {
+            for (var i = 0; i < selected.length; i++) {
+                if (selected.item(i).contains(node)) {
+                    return true;
+                }
+            }
             return false;
         }
-        return true;
-    }
+    };
+    
     this.toString = function() {
         return this.selection.createRange().htmlText;
     };

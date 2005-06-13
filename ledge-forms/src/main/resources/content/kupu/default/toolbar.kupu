@@ -6,7 +6,7 @@
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     >
-  <kupu:id>$Id: toolbar.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+  <kupu:id>$Id: toolbar.kupu 10851 2005-04-19 12:14:24Z guido $</kupu:id>
 
   <kupu:part name="toolbar">
     <div class="kupu-tb" id="toolbar">
@@ -41,9 +41,16 @@
     </select>
   </kupu:part>
 
+  <kupu:part name="zoom">
+    <span class="kupu-tb-buttongroup" style="float: right" id="kupu-zoom">
+      <button type="button" class="kupu-zoom" id="kupu-zoom-button"
+                title="zoom: alt-x" accesskey="x">&#160;</button>
+    </span>
+  </kupu:part>
+
   <kupu:part name="logo">
     <span class="kupu-tb-buttongroup" style="float: right" id="kupu-logo">
-      <button type="button" class="kupu-logo" title="Kupu 1.2rc1" accesskey="k"
+      <button type="button" class="kupu-logo" title="Kupu 1.2" accesskey="k"
               onclick="window.open('http://kupu.oscom.org');">&#160;</button>
     </span>
   </kupu:part>

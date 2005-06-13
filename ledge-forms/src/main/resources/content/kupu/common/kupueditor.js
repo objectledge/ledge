@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupueditor.js 9268 2005-02-17 12:25:15Z duncan $
+// $Id: kupueditor.js 11449 2005-04-26 09:57:16Z guido $
 
 //----------------------------------------------------------------------------
 // Main classes
@@ -214,6 +214,20 @@ function KupuEditor(document, config, logger) {
         // set the window status so people can see we're actually saving
         window.status= "Please wait while saving document...";
 
+        // call (optional) beforeSave() method on all tools
+        for (var id in this.tools) {
+            var tool = this.tools[id];
+            if (tool.beforeSave) {
+                try {
+                    tool.beforeSave();
+                } catch(e) {
+                    alert(e);
+                    this._initialized = true;
+                    return;
+                };
+            };
+        };
+        
         // pass the content through the filters
         this.logMessage("Starting HTML cleanup");
         var transform = this._filterContent(this.getInnerDocument().documentElement);
@@ -240,7 +254,7 @@ function KupuEditor(document, config, logger) {
         };
     };
     
-    this.prepareForm = function(form, id) {
+    this.prepareForm = function(form, textAreaName) {
         /* add a field to the form and place the contents in it
 
             can be used for simple POST support where Kupu is part of a
@@ -258,9 +272,23 @@ function KupuEditor(document, config, logger) {
         // set the window status so people can see we're actually saving
         window.status= "Please wait while saving document...";
 
-        // set a default id
-        if (!id) {
-            id = 'kupu';
+        // call (optional) beforeSave() method on all tools
+        for (var tid in this.tools) {
+            var tool = this.tools[tid];
+            if (tool.beforeSave) {
+                try {
+                    tool.beforeSave();
+                } catch(e) {
+                    alert(e);
+                    this._initialized = true;
+                    return;
+                };
+            };
+        };
+        
+        // set a default textAreaName
+        if (!textAreaName) {
+            textAreaName = 'kupu';
         };
         
         // pass the content through the filters
@@ -282,7 +310,7 @@ function KupuEditor(document, config, logger) {
         ta.style.visibility = 'hidden';
         var text = document.createTextNode(contents);
         ta.appendChild(text);
-        ta.setAttribute('name', id);
+        ta.setAttribute('name', textAreaName);
         
         // and add it to the form
         form.appendChild(ta);

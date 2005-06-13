@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupubasetools.js 8658 2005-01-28 11:22:05Z duncan $
+// $Id: kupubasetools.js 12013 2005-05-06 12:04:23Z duncan $
 
 
 //----------------------------------------------------------------------------
@@ -483,8 +483,19 @@ function PropertyTool(titlefieldid, descfieldid) {
             title.appendChild(text);
             head.appendChild(title);
         } else {
-            titles[0].childNodes[0].nodeValue = this.titlefield.value;
+            var title = titles[0];
+            // IE6 title has no children, and refuses appendChild.
+            // Delete and recreate the title.
+            if (title.childNodes.length == 0) {
+                title.removeNode(true);
+                title = doc.createElement('title');
+                title.innerText = this.titlefield.value;
+                head.appendChild(title);
+            } else {
+                title.childNodes[0].nodeValue = this.titlefield.value;
+            }
         }
+        document.title = this.titlefield.value;
 
         // let's just fulfill the usecase, not think about more properties
         // set the description
@@ -536,7 +547,11 @@ function LinkTool() {
                 var doc = this.editor.getInnerDocument();
                 linkel.appendChild(doc.createTextNode(title || url));
             }
-            linkel.title = title;
+            if (title) {
+                linkel.title = title;
+            } else {
+                linkel.removeAttribute('title');
+            }
             if (target && target != '') {
                 linkel.setAttribute('target', target);
             }
@@ -1582,14 +1597,20 @@ function ShowPathTool() {
     this.updateState = function(selNode) {
         /* calculate and display the path */
         var path = '';
+        var url = null; // for links we want to display the url too
         var currnode = selNode;
         while (currnode != null && currnode.nodeName != '#document') {
+            if (currnode.nodeName.toLowerCase() == 'a') {
+                url = currnode.getAttribute('href');
+            };
             path = '/' + currnode.nodeName.toLowerCase() + path;
             currnode = currnode.parentNode;
         }
         
         try {
-            window.status = path;
+            window.status = url ? 
+                    (path.toString() + ' - contains link to \'' + url.toString() + '\'') :
+                    path;
         } catch (e) {
             this.editor.logMessage('Could not set status bar message, ' +
                                     'check your browser\'s security settings.', 
@@ -2023,7 +2044,7 @@ KupuZoomTool.prototype.onresize = function() {
     }
     width = width + 'px';
     var offset = iframe.offsetTop;
-    if (sourceArea && !offset) offset = sourceArea.offsetTop-1;
+    if (sourceArea) offset = sourceArea.offsetTop-1;
     height = height - offset -1/*top border*/ + 'px';
     fulleditor.style.width = width; /*IE needs this*/
     iframe.style.width = width;
@@ -2052,11 +2073,13 @@ KupuZoomTool.prototype.commandfunc = function(button, editor) {
         html.style.overflow = 'hidden';
         window.scrollTo(0, 0);
         editor.setClass(zoomClass);
+        body.className += ' '+zoomClass;
         this.onresize();
     } else {
         html.style.overflow = '';
         var fulleditor = iframe.parentNode;
         fulleditor.style.width = '';
+        body.className = body.className.replace(' '+zoomClass, '');
         editor.clearClass(zoomClass);
 
         iframe.style.width = '';

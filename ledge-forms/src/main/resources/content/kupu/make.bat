@@ -99,6 +99,7 @@ goto :eof
 :target_clean
     SET FILES=common\kupumacros.html common\kupu.html common\kupuform.html
     SET FILES=%FILES% plone\kupu_plone_layer\kupu_wysiwyg_support.html silva\kupumacros.html
+    SET FILES=%FILES% apache-lenya\kupu\kupumacros.html    
     SET FILES=%FILES% common\kupumulti.html common\kupucnf.html
     for %%F in (%FILES%) DO (
         IF EXIST %%F ( %X%echo del %%F && %X%del %%F )

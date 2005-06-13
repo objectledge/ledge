@@ -5,7 +5,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     >
-  <kupu:id>$Id: head.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+  <kupu:id>$Id: head.kupu 9585 2005-03-02 15:15:08Z guido $</kupu:id>
 
   <kupu:part name="head">
     <head>
@@ -29,6 +29,7 @@
     <script type="text/javascript" src="kupubasetools.js"> </script>
     <script type="text/javascript" src="kupuloggers.js"> </script>
     <script type="text/javascript" src="kupucontentfilters.js"> </script>
+    <script type="text/javascript" src="kupucleanupexpressions.js"> </script>
   </kupu:part>
 
   <!-- XXX this could be a separate feature, maybe -->

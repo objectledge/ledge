@@ -8,7 +8,7 @@
 #
 ##############################################################################
 
-# $Id: Makefile 7619 2004-11-23 14:48:17Z duncan $
+# $Id: Makefile 9691 2005-03-07 16:02:20Z guido $
 
 XSLTPROC = /usr/bin/env xsltproc
 XSL_DEBUG = --param debug true\(\)
@@ -41,6 +41,9 @@ silvamacros:
 lenyamacros:
 	$(XSLTPROC) $(XSLTPROC_PARAMS) -o apache-lenya/kupu/kupumacros.html $(XSL_FILE) dist-apache-lenya.kupu
 
+kupu_experimental:
+	$(XSLTPROC) $(XSLTPROC_PARAMS) -o common/kupu_experimental.html $(XSL_FILE) dist-experimental.kupu
+
 cyklotronmacros:
 	$(XSLTPROC) $(XSLTPROC_PARAMS) -o cyklotron/kupumacros.html $(XSL_FILE) dist-cyklotron.kupu
 
@@ -55,6 +58,7 @@ clean:
 	rm -f silva/kupumacros.html
 	rm -f common/kupumulti.html
 	rm -f common/kupucnf.html
+	rm -f common/kupu_experimental.html
 	rm -f cyklotron/kupumacros.html
 	rm -f cyklotron2/kupumacros.html
 

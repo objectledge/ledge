@@ -5,7 +5,7 @@
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     >
-  <kupu:id>$Id: toolboxes.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+  <kupu:id>$Id: toolboxes.kupu 9585 2005-03-02 15:15:08Z guido $</kupu:id>
 
   <kupu:part name="toolboxes">
     <div class="kupu-toolboxes">
@@ -143,6 +143,25 @@
       <div id="kupu-toolbox-debuglog"
            class="kupu-toolbox-label">
       </div>
+    </div>
+  </kupu:part>
+
+  <kupu:part name="cleanupexpressions">
+    <div class="kupu-toolbox" id="kupu-toolbox-cleanupexpressions">
+            <h1 i18n:translate="">Cleanup expressions</h1>
+
+            <div class="kupu-toolbox-label">
+              <span i18n:translate="">
+                Select a cleanup action:
+              </span>
+            </div>
+
+            <select id="kupucleanupexpressionselect" class="kupu-toolbox-st">
+            </select>
+            <div style="text-align: center">
+              <button type="button" id="kupucleanupexpressionbutton"
+                      class="kupu-toolbox-action">Perform action</button>
+            </div>
     </div>
   </kupu:part>
 

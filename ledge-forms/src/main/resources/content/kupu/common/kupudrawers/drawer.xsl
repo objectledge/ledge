@@ -13,7 +13,7 @@
 XSL transformation from Kupu Library XML to HTML for the image library
 drawer.
 
-$Id: drawer.xsl,v 1.2 2005/02/02 03:24:18 zwierzem Exp $
+$Id: drawer.xsl,v 1.3 2005/04/11 16:03:55 zwierzem Exp $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns="http://www.w3.org/1999/xhtml"
@@ -120,7 +120,7 @@ $Id: drawer.xsl,v 1.2 2005/02/02 03:24:18 zwierzem Exp $
                 </xsl:choose>
             </xsl:attribute>
             <xsl:apply-templates select="icon"/>
-            <xsl:apply-templates select="title"/>
+            <xsl:apply-templates select="(label|title)[1]"/>
         </div>
     </xsl:template>
     <xsl:template match="uploadbutton" mode="currentpanel">
@@ -137,7 +137,7 @@ $Id: drawer.xsl,v 1.2 2005/02/02 03:24:18 zwierzem Exp $
             </xsl:attribute>
         </img>
     </xsl:template>
-    <xsl:template match="title">
+    <xsl:template match="label|title">
         <span class="drawer-item-title">
             <xsl:if test="../@selected">
                 <xsl:attribute name="style">background-color: #C0C0C0</xsl:attribute>
@@ -270,7 +270,7 @@ $Id: drawer.xsl,v 1.2 2005/02/02 03:24:18 zwierzem Exp $
         </form>
 
         <iframe id="kupu-upload-form-target" name="kupu_upload_form_target"
-                src="" scrolling="off" frameborder="0" width="0px" height="0px" display="None">
+                src="kupublank.html" scrolling="off" frameborder="0" width="0px" height="0px" display="None">
         </iframe>
     </xsl:template>
     

@@ -12,6 +12,7 @@
   <xi:include href="zope2/include.kupu" />
   <xi:include href="silva/include.kupu" />
   <xi:include href="plone/include.kupu" />
+  <xi:include href="experimental/include.kupu" />
   <xi:include href="apache-lenya/kupu/include.kupu" />
   <xi:include href="cnf/include.kupu" />
   <xi:include href="cyklotron2/include.kupu" />

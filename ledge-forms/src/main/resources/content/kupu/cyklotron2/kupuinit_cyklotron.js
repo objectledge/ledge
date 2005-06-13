@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupuinit_cyklotron.js,v 1.1 2005-03-22 06:28:08 zwierzem Exp $
+// $Id: kupuinit_cyklotron.js,v 1.2 2005-06-13 13:08:29 zwierzem Exp $
 
 
 //----------------------------------------------------------------------------
@@ -268,8 +268,14 @@ function initKupu(iframe, kupuForm, controlName) {
 
     // register some cleanup filter
     // remove tags that aren't in the XHTML DTD
-    var nonxhtmltagfilter = new NonXHTMLTagFilter();
-    kupu.registerFilter(nonxhtmltagfilter);
+    //var nonxhtmltagfilter = new NonXHTMLTagFilter();
+    //kupu.registerFilter(nonxhtmltagfilter);
+
+    // WARN: Hack for keeping div element styles
+    var s = ['margin', 'margin-left', 'margin-top', 'margin-right', 'margin-bottom'];
+    for (var i = 0; i < s.length; i++) {
+        kupu.xhtmlvalid.styleWhitelist[s[i]] = 1;
+    }
 
 	var togglerManager = new ToolboxTogglerManager();
 	for(toolId in kupu.tools)	{

@@ -5,7 +5,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     >
-  <kupu:id>$Id: xmlconfig.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+  <kupu:id>$Id: xmlconfig.kupu 11430 2005-04-25 15:46:33Z guido $</kupu:id>
 
   <kupu:part name="xmlconfig">
     <div style="display: none;">
@@ -31,6 +31,47 @@
       <class>grid</class>
       <class>data</class>
     </table_classes>
+
+    <cleanup_expressions>
+      <set>
+        <name>Convert single quotes to curly ones</name>
+        <expression>
+          <reg>
+            (\W)'
+          </reg>
+          <replacement>
+            \1‘
+          </replacement>
+        </expression>
+        <expression>
+          <reg>
+            '
+          </reg>
+          <replacement>
+            ’
+          </replacement>
+        </expression>
+      </set>
+      <set>
+        <name>Reduce whitespace</name>
+        <expression>
+          <reg>
+            [\n\r\t]
+          </reg>
+          <replacement>
+            \x20
+          </replacement>
+        </expression>
+        <expression>
+          <reg>
+            [ ]{2}
+          </reg>
+          <replacement>
+            \x20
+          </replacement>
+        </expression>
+      </set>
+    </cleanup_expressions>
   </kupu:part>
  
 </kupu:feature>

@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupuinit.js 6741 2004-09-27 09:52:44Z duncan $
+// $Id: kupuinit.js 9585 2005-03-02 15:15:08Z guido $
 
 
 //----------------------------------------------------------------------------
@@ -156,6 +156,9 @@ function initKupu(iframe) {
     var linktoolbox = new LinkToolBox("kupu-link-input", "kupu-link-button", 'kupu-toolbox-links', 'kupu-toolbox', 'kupu-toolbox-active');
     linktool.registerToolBox('linktoolbox', linktoolbox);
 
+    var zoom = new KupuZoomTool('kupu-zoom-button');
+    kupu.registerTool('zoomtool', zoom);
+
     var imagetool = new ImageTool();
     kupu.registerTool('imagetool', imagetool);
     var imagetoolbox = new ImageToolBox('kupu-image-input', 'kupu-image-addbutton', 
@@ -236,6 +239,10 @@ function initKupu(iframe) {
 
     var tabledrawer = new TableDrawer('kupu-tabledrawer', tabletool);
     drawertool.registerDrawer('tabledrawer', tabledrawer);
+
+    var cleanupexpressions = new CleanupExpressionsTool(
+            'kupucleanupexpressionselect', 'kupucleanupexpressionbutton');
+    kupu.registerTool('cleanupexpressions', cleanupexpressions);
 
     // register some cleanup filter
     // remove tags that aren't in the XHTML DTD

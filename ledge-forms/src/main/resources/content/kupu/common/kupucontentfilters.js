@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupucontentfilters.js 9268 2005-02-17 12:25:15Z duncan $
+// $Id: kupucontentfilters.js 12013 2005-05-06 12:04:23Z duncan $
 
 
 //----------------------------------------------------------------------------
@@ -260,7 +260,7 @@ function XhtmlValidation(editor) {
             'cellspacing','char','charoff','charset','checked','cite','class',
             'classid','clear','code','codebase','codetype','color','cols','colspan',
             'compact','content','coords','data','datetime','declare','defer','dir',
-            'disabled','enctype','face','for','frame','frameborder','halign','headers',
+            'disabled','enctype','face','for','frame','frameborder','headers',
             'height','href','hreflang','hspace','http-equiv','id','ismap','label',
             'lang','language','link','longdesc','marginheight','marginwidth',
             'maxlength','media','method','multiple','name','nohref','noshade','nowrap',
@@ -375,8 +375,8 @@ function XhtmlValidation(editor) {
         this.isindex = el.coreattrs.concat('prompt', el.i18n);
         this.table = el.attrs.concat('summary','width','border','frame','rules','cellspacing','cellpadding','align','bgcolor');
         this.caption = el.attrs.concat('align');
-        this.col = this.colgroup = el.attrs.concat('span','width','halign','char','charoff','valign');
-        this.thead =  el.attrs.concat('halign','char','charoff','valign');
+        this.col = this.colgroup = el.attrs.concat('span','width','align','char','charoff','valign');
+        this.thead =  el.attrs.concat('align','char','charoff','valign');
         this.tfoot = this.tbody = this.thead;
         this.tr = this.thead.concat('bgcolor');
         this.td = this.th = this.tr.concat('abbr','axis','headers','scope','rowspan','colspan','nowrap','width','height');
@@ -463,6 +463,16 @@ function XhtmlValidation(editor) {
             if (val) val = validation.classFilter(val);
             if (val) xhtmlnode.setAttribute('class', val);
         }
+        // allow a * wildcard to make all attributes valid in the filter
+        // note that this is pretty slow on IE
+        this['*'] = function(name, htmlnode, xhtmlnode) {
+            for (var i=0; i < htmlnode.attributes.length; i++) {
+                var attr = htmlnode.attributes[i];
+                if (attr.value !== null && attr.value !== undefined) {
+                    xhtmlnode.setAttribute(attr.name, attr.value);
+                };
+            };
+        }
         if (editor.getBrowserName()=="IE") {
             this['class'] = function(name, htmlnode, xhtmlnode) {
                 var val = htmlnode.className;
@@ -539,6 +549,11 @@ function XhtmlValidation(editor) {
 
     // Copy all valid attributes from htmlnode to xhtmlnode.
     this._copyAttributes = function(htmlnode, xhtmlnode, valid) {
+        if (valid.contains('*')) {
+            // allow all attributes on this tag
+            this.attrFilters['*'](name, htmlnode, xhtmlnode);
+            return;
+        };
         for (var i = 0; i < valid.length; i++) {
             var name = valid[i];
             var filter = this.attrFilters[name];
@@ -570,9 +585,6 @@ function XhtmlValidation(editor) {
         }
 
         var kids = htmlnode.childNodes;
-        if (kids && /base|meta|link|hr|param|img|area|input|br|basefont|isindex|col/.exec(nodename)) {
-            kids = []; // IE bug: base can think it has children
-        }
         var permittedChildren = this.States[parentnode.tagName] || permitted;
 
         if (kids.length == 0) {
@@ -585,6 +597,15 @@ function XhtmlValidation(editor) {
         } else {
             for (var i = 0; i < kids.length; i++) {
                 var kid = kids[i];
+
+                if (kid.parentNode !== htmlnode) {
+                    if (kid.tagName == 'BODY') {
+                        if (nodename != 'html') continue;
+                    } else if (kid.parentNode.tagName === htmlnode.tagName) {
+                        continue; // IE bug: nodes appear multiple places
+                    }
+                }
+                
                 if (kid.nodeType == 1) {
                     var newkid = this._convertNodes(ownerdoc, kid, parentnode, permittedChildren);
                     if (newkid != null) {
