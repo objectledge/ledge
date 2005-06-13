@@ -27,6 +27,8 @@
 //
 package org.objectledge.web.mvc.finders;
 
+import java.util.HashMap;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
@@ -40,7 +42,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.31 2005-03-30 11:20:19 zwierzem Exp $
+ * @version $Id: MVCFinder.java,v 1.32 2005-06-13 14:19:19 pablo Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -92,6 +94,9 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     /** The name sequence factory. */
     private NameSequenceFactory nameSequenceFactory;
     
+    /** The class instances cache */
+    private HashMap<String, Object> classInstanceCache;
+    
     /**
      * Creates a MVCFinder component.
      * 
@@ -107,6 +112,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         this.logger = logger;
         this.templating = templating;
         this.nameSequenceFactory = nameSequenceFactory;
+        classInstanceCache = new HashMap<String, Object>();
 	}
 
 	// templates ////////////////////////////////////////////////////////////////////////////////
@@ -342,11 +348,26 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 	private Object getClassInstance(String className)
         throws ClassNotFoundException
 	{
+        Object instance = null;
+        synchronized(classInstanceCache)
+        {
+            instance = classInstanceCache.get(className);
+        }
+        if(instance != null)
+        {
+            return instance;
+        }
         Class clazz = Class.forName(className);
-        if(container.getComponentInstance(clazz) == null)
+        instance = container.getComponentInstance(clazz); 
+        if(instance == null)
         {
             container.registerComponentImplementation(clazz);
         }
-        return container.getComponentInstance(clazz);
+        instance = container.getComponentInstance(clazz);
+        synchronized(classInstanceCache)
+        {
+            classInstanceCache.put(className, instance);
+        }
+        return instance;
 	}
 }
