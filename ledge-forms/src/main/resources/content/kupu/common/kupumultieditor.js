@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupumultieditor.js,v 1.1.2.3 2005/01/19 13:35:19 zwierzem Exp $
+// $Id: kupumultieditor.js 3450 2004-03-28 11:07:30Z guido $
 
 function KupuMultiEditor(documents, config, logger) {
     /* multiple kupus in one form */

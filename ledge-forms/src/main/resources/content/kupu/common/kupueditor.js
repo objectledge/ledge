@@ -254,7 +254,7 @@ function KupuEditor(document, config, logger) {
         };
     };
     
-    this.prepareForm = function(form, textAreaName) {
+    this.prepareForm = function(form, id) {
         /* add a field to the form and place the contents in it
 
             can be used for simple POST support where Kupu is part of a
@@ -286,9 +286,9 @@ function KupuEditor(document, config, logger) {
             };
         };
         
-        // set a default textAreaName
-        if (!textAreaName) {
-            textAreaName = 'kupu';
+        // set a default id
+        if (!id) {
+            id = 'kupu';
         };
         
         // pass the content through the filters
@@ -310,7 +310,7 @@ function KupuEditor(document, config, logger) {
         ta.style.visibility = 'hidden';
         var text = document.createTextNode(contents);
         ta.appendChild(text);
-        ta.setAttribute('name', textAreaName);
+        ta.setAttribute('name', id);
         
         // and add it to the form
         form.appendChild(ta);

@@ -413,7 +413,7 @@ addEventHandler(window, 'load', function() {
       ## TODO: Add a proper link to a document with skin's CSS appended
       <iframe class="kupu-editor" id="kupu-editor-$field.name" frameborder="0" src="$documentTemplateUrl" scrolling="auto">
       </iframe>
-      <textarea class="kupu-editor-textarea" id="kupu-editor-${field.name}-textarea" style="display: none">$!htmlEncoder.encodeHTML($field.getValue($instance))</textarea>
+      <textarea class="kupu-editor-textarea" id="kupu-editor-${field.name}-textarea">$!htmlEncoder.encodeHTML($field.getValue($instance))</textarea>
     </div>
   
   

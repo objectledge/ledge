@@ -13,7 +13,7 @@
 XSL transformation from Kupu Library XML to HTML for the image library
 drawer.
 
-$Id: drawer.xsl,v 1.3 2005/04/11 16:03:55 zwierzem Exp $
+$Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns="http://www.w3.org/1999/xhtml"

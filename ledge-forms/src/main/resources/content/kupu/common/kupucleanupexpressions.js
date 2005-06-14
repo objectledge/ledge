@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupucleanupexpressions.js,v 1.1 2005/04/11 15:31:11 zwierzem Exp $
+// $Id: kupueditor.js 7951 2004-12-21 15:06:38Z guido $
 
 // WARNING: this file can contain non-ascii characters, *always* make sure your
 // text-editor uses 'UTF-8' as the character encoding!!

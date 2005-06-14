@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupucontentfilters.js 12013 2005-05-06 12:04:23Z duncan $
+// $Id: kupucontentfilters.js 11481 2005-04-26 15:38:08Z duncan $
 
 
 //----------------------------------------------------------------------------
@@ -601,7 +601,7 @@ function XhtmlValidation(editor) {
                 if (kid.parentNode !== htmlnode) {
                     if (kid.tagName == 'BODY') {
                         if (nodename != 'html') continue;
-                    } else if (kid.parentNode.tagName === htmlnode.tagName) {
+                    } else if (kid.parentNode.tagName !== htmlnode.tagName) {
                         continue; // IE bug: nodes appear multiple places
                     }
                 }

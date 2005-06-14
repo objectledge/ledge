@@ -1,4 +1,4 @@
-/* $Id: kupucyklotronstyles.css,v 1.1 2005-03-22 06:28:08 zwierzem Exp $ */
+/* $Id: kupucyklotronstyles.css,v 1.2 2005-06-14 11:09:07 zwierzem Exp $ */
 
 .kupu-pagebreak {background-image: url("pagebreak.gif");}
 .kupu-removeformat {background-image: url("../../icons/edit/clear.gif");}
@@ -9,21 +9,15 @@
 
 .kupu-editor { /* #kupu-editor */
   height: 450px;
-  width: 100%;
+  width: 99%;
 }
 
-textarea.kupu-editor-textarea {
-  height: 450px;
-  width: 99%;
-  display: none;
-}
+.kupu-sourcemode .kupu-toolboxes { display: none; }
 
 div.kupu-toolboxes {
   margin-right: 0;
   margin-bottom: 0;
 }
-
-div.kupu-sourcemode div.kupu-toolboxes { display: none; }
 
 input.kupu-toolbox-nr {
   width: 4em;

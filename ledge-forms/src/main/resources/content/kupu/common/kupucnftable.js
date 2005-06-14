@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupucnftable.js,v 1.1.2.2 2005/01/19 13:35:19 zwierzem Exp $
+// $Id: kupubasetools.js 6120 2004-08-22 23:23:42Z roku $
 
 TableTool.prototype.setTableRowRepeat = function() {
     var selNode = this.editor.getSelectedNode();

@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupustart_multi.js,v 1.1.2.2 2005/01/19 13:35:19 zwierzem Exp $
+// $Id$
 
 function startKupu() {
     var iframeids = new Array('kupu_1', 'kupu_2', 'kupu_3');
