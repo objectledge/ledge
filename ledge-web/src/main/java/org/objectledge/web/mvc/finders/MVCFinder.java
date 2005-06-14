@@ -43,7 +43,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.33 2005-06-14 05:49:30 pablo Exp $
+ * @version $Id: MVCFinder.java,v 1.34 2005-06-14 07:53:21 rafal Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {
@@ -96,10 +96,10 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
     private NameSequenceFactory nameSequenceFactory;
     
     /** The class instances cache */
-    private HashMap<String, Object> classInstanceCache;
-    
-    /** The class instances cache */
-    private HashSet<String> classNotFound;
+    private HashMap<String, Object> classInstanceCache = new HashMap<String, Object>();
+
+    /** Special marker object for the classInstanceCache */
+    private static final Object MISSING = new Object();    
     
     /**
      * Creates a MVCFinder component.
@@ -116,8 +116,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         this.logger = logger;
         this.templating = templating;
         this.nameSequenceFactory = nameSequenceFactory;
-        classInstanceCache = new HashMap<String, Object>();
-        classNotFound = new HashSet<String>();
 	}
 
 	// templates ////////////////////////////////////////////////////////////////////////////////
@@ -181,14 +179,9 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
                 String templateName = templateSequence.next();
                 logger.debug("findEnclosingViewName: trying "+className+" and "+templateName);
 
-                try
+                if(getClassInstance(className) != null)
                 {
-                    Object builder = getClassInstance(className);
                     break;
-                }
-                catch(ClassNotFoundException e)
-                {
-                    // go on
                 }
 
                 if(templating.templateExists(templateName))
@@ -307,15 +300,11 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 			{
 				String name = sequence.next();
 				logger.debug(methodName+": trying "+name);
-				try
-				{
-					Object obj = getClassInstance(name);
+				Object obj = getClassInstance(name);
+                if(obj != null)
+                {
                     return obj;
-				}
-				catch(ClassNotFoundException e)
-				{
-					// go on
-				}
+                }
 			}
 		}
 		return null;
@@ -331,15 +320,11 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
             {
                 String name = sequence.next();
                 logger.debug(methodName+": trying "+name);
-                try
+                Object obj = getClassInstance(name);
+                if(obj != null)
                 {
-                    Object obj = getClassInstance(name);
-                    return new MVCClassFinder.Result(
-                        className, (Builder) obj, sequence.currentView());
-                }
-                catch(ClassNotFoundException e)
-                {
-                    // go on
+                    return new MVCClassFinder.Result(className, (Builder)obj, sequence
+                        .currentView());
                 }
             }
             return new MVCClassFinder.Result(className, (Builder) null, sequence.currentView());
@@ -347,45 +332,32 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         return new MVCClassFinder.Result(className, (Builder) null, null);
     }
     
-	/**
-	 * Gets an instance of an object depending on it's finder name and type
-	 */
-	private Object getClassInstance(String className)
-        throws ClassNotFoundException
-	{
-        Object instance = null;
+    private Object getClassInstance(String className)
+    {
+        Object instance;
         synchronized(classInstanceCache)
         {
             instance = classInstanceCache.get(className);
-        }
-        if(instance != null)
-        {
+            if(instance == MISSING)
+            {
+                return null;
+            }
+            if(instance == null)
+            {
+                try
+                {
+                    Class clazz = Class.forName(className);
+                    container.registerComponentImplementation(clazz);
+                    instance = container.getComponentInstance(clazz);
+                    classInstanceCache.put(className, instance);
+                }
+                catch(ClassNotFoundException e)
+                {
+                    classInstanceCache.put(className, MISSING);
+                    return null;
+                }
+            }
             return instance;
         }
-        if(classNotFound.contains(className))
-        {
-            throw new ClassNotFoundException("class name '"+className+"' not found");
-        }
-        Class clazz = null;
-        try
-        {
-            clazz = Class.forName(className);
-        }
-        catch(ClassNotFoundException e)
-        {
-            classNotFound.add(className);
-            throw e;
-        }
-        instance = container.getComponentInstance(clazz); 
-        if(instance == null)
-        {
-            container.registerComponentImplementation(clazz);
-        }
-        instance = container.getComponentInstance(clazz);
-        synchronized(classInstanceCache)
-        {
-            classInstanceCache.put(className, instance);
-        }
-        return instance;
-	}
+    }
 }
