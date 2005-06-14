@@ -35,10 +35,10 @@ import java.util.Map;
  * implementations.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsMap.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
+ * @version $Id: StatisticsMap.java,v 1.2 2005-06-14 05:35:12 rafal Exp $
  */
 public interface StatisticsMap
-    extends Map, LayeredMap
+    extends LayeredMap
 {
     /**
      * Returns the request/hit/miss statistics.
