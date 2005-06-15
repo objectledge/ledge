@@ -28,7 +28,6 @@
 package org.objectledge.web.mvc.finders;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.pipeline.Valve;
@@ -43,7 +42,7 @@ import org.picocontainer.MutablePicoContainer;
  * Implementation of MVC finding services.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCFinder.java,v 1.34 2005-06-14 07:53:21 rafal Exp $
+ * @version $Id: MVCFinder.java,v 1.35 2005-06-15 13:17:49 zwierzem Exp $
  */
 public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 {

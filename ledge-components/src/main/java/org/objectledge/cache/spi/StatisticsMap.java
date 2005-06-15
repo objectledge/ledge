@@ -28,14 +28,13 @@
 
 package org.objectledge.cache.spi;
 
-import java.util.Map;
 
 /**
  * Specifies Service Provider Interface for <code>StatisticsMap</code>
  * implementations.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsMap.java,v 1.2 2005-06-14 05:35:12 rafal Exp $
+ * @version $Id: StatisticsMap.java,v 1.3 2005-06-15 13:17:38 zwierzem Exp $
  */
 public interface StatisticsMap
     extends LayeredMap
