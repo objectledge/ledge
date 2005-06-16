@@ -60,3 +60,7 @@ fi
 if [ -d $WEBAPP_SRC ]; then
     cp -a $WEBAPP_SRC/* $WEBAPP_DIR >/dev/null 2>&1
 fi
+
+if [ -d $WEBAPP_SRC/config.local ]; then
+    cp $WEBAPP_SRC/config.local/*.xml $WEBAPP_DIR/config >/dev/null 2>&1
+fi
