@@ -588,7 +588,13 @@ function XhtmlValidation(editor) {
         var permittedChildren = this.States[parentnode.tagName] || permitted;
 
         if (kids.length == 0) {
-            if (htmlnode.text && htmlnode.text != "" &&
+            if(nodename == 'body')
+            {
+                var text = htmlnode.textContent;
+                var tnode = ownerdoc.createTextNode(text);
+                parentnode.appendChild(tnode);
+            }
+            else if (htmlnode.text && htmlnode.text != "" &&
                 (nostructure || permittedChildren['#PCDATA'])) {
                 var text = htmlnode.text;
                 var tnode = ownerdoc.createTextNode(text);
