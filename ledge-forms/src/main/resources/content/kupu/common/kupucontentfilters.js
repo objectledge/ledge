@@ -607,7 +607,7 @@ function XhtmlValidation(editor) {
                 if (kid.parentNode !== htmlnode) {
                     if (kid.tagName == 'BODY') {
                         if (nodename != 'html') continue;
-                    } else if (kid.parentNode.tagName !== htmlnode.tagName) {
+                    } else if (kid.parentNode.tagName === htmlnode.tagName) {
                         continue; // IE bug: nodes appear multiple places
                     }
                 }
