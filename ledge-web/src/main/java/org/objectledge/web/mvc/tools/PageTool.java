@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  * A context tool for applications using JavaScript and CSS files..
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.11 2005-03-30 13:23:54 rafal Exp $
+ * @version $Id: PageTool.java,v 1.12 2005-06-24 08:34:38 zwierzem Exp $
  */
 public class PageTool
 {
@@ -49,27 +49,34 @@ public class PageTool
     // Page data fields
 
     /** Represents contents of title header tag. */
-    private StringBuilder title = new StringBuilder(100);
+    protected StringBuilder title = new StringBuilder(100);
 
     /** Contains {@link StyleLink} objects. */
-    protected ArrayList styleLinks = new ArrayList();
+    protected ArrayList<StyleLink> styleLinks = new ArrayList<StyleLink>();
     
     /** Contains {@link StyleLink} objects' signatures, it is used to prevent multiple additions of
      * the same style link. */
-    protected Set styleLinksSet = new HashSet();
+    protected Set<ContentLink> styleLinksSet = new HashSet<ContentLink>();
 
+    /** Contains {@link ScriptLink} objects autoloaded on addition of script links. */
+    protected ArrayList<ScriptLink> autoLoadScriptLinks = new ArrayList<ScriptLink>();
+
+    /** Contains autoload {@link ScriptLink} objects' signatures, it is used to prevent multiple additions of
+     * the same autoload script link. */
+    protected Set<ContentLink> autoLoadScriptLinksSet = new HashSet<ContentLink>();
+    
     /** Contains {@link ScriptLink} objects. */
-    protected ArrayList scriptLinks = new ArrayList();
+    protected ArrayList<ScriptLink> scriptLinks = new ArrayList<ScriptLink>();
     
     /** Contains {@link ScriptLink} objects' signatures, it is used to prevent multiple additions of
      * the same script link. */
-    protected Set scriptLinksSet = new HashSet();
+    protected Set<ContentLink> scriptLinksSet = new HashSet<ContentLink>();
 
     /** Contains {@link Meta} objects. */
-    protected ArrayList nameMetas = new ArrayList();
+    protected ArrayList<Meta> nameMetas = new ArrayList<Meta>();
     
     /** Contains {@link Meta} objects. */
-    protected ArrayList httpEquivMetas = new ArrayList();
+    protected ArrayList<Meta> httpEquivMetas = new ArrayList<Meta>();
 
     /** Parent of LinkTool used to generate content resource links. */
     protected LinkTool parentLinkTool;
@@ -248,7 +255,7 @@ public class PageTool
      * links are sorted according to their priorities.
      * @return a list of {@link StyleLink} objects
      */
-    public List getStyleLinks()
+    public List<StyleLink> getStyleLinks()
     {
         Collections.sort(styleLinks, new Comparator()
 	        {
@@ -301,6 +308,39 @@ public class PageTool
     // SCRIPT LINKS
 
     /** 
+     * Adds an autoload script link, with no charset attribute defined.
+     * @param src a link to the script source
+     */
+    public void addAutoLoadScriptLink(String src)
+    {
+        this.addAutoLoadScriptLink(src, null);
+    }
+
+    /**
+     * Adds an autoload script link, with charset attribute defined.
+     * @param src a link to the script source
+     * @param charset charset of a linked source file
+     */
+    public void addAutoLoadScriptLink(String src, String charset)
+    {
+        this.addAutoLoadScriptLink(new ContentLink(src), charset);
+    }
+
+    /**
+     * Adds an autoload script link with a given type and charset attribute defined.
+     * @param srcLink a link to the script source
+     * @param charset charset of a linked source file
+     */
+    protected void addAutoLoadScriptLink(ContentLink srcLink, String charset)
+    {
+        if(!autoLoadScriptLinksSet.contains(srcLink))
+        {
+            autoLoadScriptLinksSet.add(srcLink);
+            autoLoadScriptLinks.add(new ScriptLink(srcLink, charset));
+        }
+    }
+    
+    /** 
      * Adds a script link, with no charset attribute defined.
      * @param src a link to the script source
      */
@@ -317,6 +357,16 @@ public class PageTool
     public void addScriptLink(String src, String charset)
     {
         this.addScriptLink(new ContentLink(src), charset);
+    }
+
+    /** 
+     * Checks if any scripts have been added. This is useful for including template code
+     * for scripts configuration.
+     * @return <code>true</code> if any scripts have been added.
+     */
+    public boolean hasScripts()
+    {
+        return this.scriptLinksSet.size() > 0;
     }
 
     /**
@@ -336,11 +386,17 @@ public class PageTool
     /**
      * Returns a collection of <code>&lt;script&gt;</code> tag definitions,
      * with <b>defined sources</b> (<code>src</code> attribute).
-     * @return a list of script links added to this page tool 
+     * @return a list of script links added to this page tool including added autoload scripts 
      */
-    public List getScriptLinks()
+    public List<ScriptLink> getScriptLinks()
     {
-        return scriptLinks;
+        ArrayList returnScriptLinks = new ArrayList();
+        if(scriptLinks.size() > 0)
+        {
+            returnScriptLinks.addAll(autoLoadScriptLinks);
+            returnScriptLinks.addAll(scriptLinks);
+        }
+        return returnScriptLinks;
     }
 
     /**
@@ -402,7 +458,7 @@ public class PageTool
      * with <b>defined names</b> (<code>name</code> attribute).
      * @return a list of <i>name</i> meta tags added to this page tool 
      */
-    public List getNameMetas()
+    public List<Meta> getNameMetas()
     {
         return nameMetas;
     }
@@ -422,7 +478,7 @@ public class PageTool
      * with <b>defined http-equivs</b> (<code>http-equiv</code> attribute).
      * @return a list of <i>http-equiv</i> meta tags added to this page tool 
      */
-    public List getHttpEquivMetas()
+    public List<Meta> getHttpEquivMetas()
     {
         return httpEquivMetas;
     }
