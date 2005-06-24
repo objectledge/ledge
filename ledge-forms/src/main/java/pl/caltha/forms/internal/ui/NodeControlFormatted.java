@@ -16,10 +16,12 @@ import pl.caltha.forms.internal.util.Util;
  * </ul>
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NodeControlFormatted.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: NodeControlFormatted.java,v 1.2 2005-06-24 10:33:07 zwierzem Exp $
  */
 public class NodeControlFormatted extends NodeControl
 {
+    private int maxLength;
+
     public NodeControlFormatted(String type, Attributes atts)
     throws ConstructionException
     {
@@ -34,6 +36,7 @@ public class NodeControlFormatted extends NodeControl
             // MessageFormat ??
             //
         }
+        maxLength = Util.createIntAttribute(atts, "maxLength", -1);
     }
 
     private String format;
@@ -49,5 +52,13 @@ public class NodeControlFormatted extends NodeControl
 			//TODO: use a format
 		//}
         return value;
+    }
+
+    /**
+     * @return Returns the maxLength.
+     */
+    public int getMaxLength()
+    {
+        return maxLength;
     }
 }

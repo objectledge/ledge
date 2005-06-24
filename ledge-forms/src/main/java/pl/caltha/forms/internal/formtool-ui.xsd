@@ -135,6 +135,7 @@ User Interface form controls
       <xsd:attribute name="id" type="xsd:ID" use="optional"/>
       <xsd:attributeGroup ref="formtool:bindFirstAttributes"/>
       <xsd:attributeGroup ref="formtool:commonUIAttributes"/>
+      <xsd:attribute name="maxLength" type="xsd:nonNegativeInteger" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
