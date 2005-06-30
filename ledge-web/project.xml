@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.47 2005-05-13 04:35:33 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.48 2005-06-30 06:54:05 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -154,7 +154,7 @@
     <dependency>
       <groupId>javamail</groupId>
       <artifactId>mailapi</artifactId>
-      <version>1.3.1</version>
+      <version>1.3.2</version>
       <url>http://java.sun.com/products/javamail/index.jsp</url>
     </dependency>
     <dependency>
