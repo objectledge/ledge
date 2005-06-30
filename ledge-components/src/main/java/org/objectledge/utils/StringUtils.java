@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.30 2005-05-16 09:30:49 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.31 2005-06-30 08:52:06 pablo Exp $
  */
 public class StringUtils
 {
@@ -97,12 +97,12 @@ public class StringUtils
         {
             StringBuilder sb = new StringBuilder(input);
             int length = sb.length();
-
             for (int i = 0; i < length; i++)
             {
                 char c = sb.charAt(i);
                 // replace unwanted chars
-                if (Character.isWhitespace(c) || c == '=' || c == ';' || c == ',' || c == '$')
+                if (Character.isWhitespace(c) || c == '=' || c == ';' || c == ',' || c == '$' 
+                    || !(( c >= 'a' && c <= 'z') || ( c >= 'A' && c <= 'Z') || ( c >= '0' && c <= '9')))
                 {
                     sb.setCharAt(i, replaceChar);
                 }
