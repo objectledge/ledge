@@ -45,12 +45,13 @@ import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.ScopedParameters;
 
 /**
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.8 2005-05-11 07:16:41 pablo Exp $
+ * @version $Id: DBParameters.java,v 1.9 2005-07-01 04:07:03 pablo Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -638,7 +639,7 @@ public class DBParameters implements Parameters
 	 */
     public Parameters getChild(String prefix)
     {
-		return container.getChild(prefix);
+        return new ScopedParameters(this, prefix);
     }
     
 	/**
