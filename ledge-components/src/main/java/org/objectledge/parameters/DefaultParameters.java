@@ -36,9 +36,11 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -49,7 +51,7 @@ import org.objectledge.database.DatabaseUtils;
  * A simple implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.22 2005-05-20 02:04:04 rafal Exp $
+ * @version $Id: DefaultParameters.java,v 1.23 2005-07-05 07:04:53 rafal Exp $
  */
 public class DefaultParameters implements Parameters
 {
@@ -900,13 +902,13 @@ public class DefaultParameters implements Parameters
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        Iterator it = map.keySet().iterator();
-        while (it.hasNext())
+        List<String> keys = new ArrayList<String>(map.keySet());
+        Collections.sort(keys);
+        for(String key : keys)
         {
-            String name = (String)it.next();
-            sb.append(name);
+            sb.append(key);
             sb.append('=');
-            String[] values = getStrings(name);
+            String[] values = getStrings(key);
             sb.append(toString(values));
             sb.append('\n');
         }
