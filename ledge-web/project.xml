@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.48 2005-06-30 06:54:05 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.49 2005-07-07 06:53:19 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -36,7 +36,7 @@
 
   <groupId>objectledge</groupId>
   <id>ledge-web</id>
-  <currentVersion>0.4-dev</currentVersion>
+  <currentVersion>SNAPSHOT</currentVersion>
   <name>Ledge Web</name>
   <shortDescription>Servlet environment bootstraper for the ObjectLedge container and a number of reusable components for building J2EE servlet environment applications.</shortDescription>
   <build>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.33 2005-02-04 02:30:45 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.34 2005-07-07 06:53:37 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -9,7 +9,7 @@
 
   <groupId>objectledge</groupId>
   <id>ledge-container</id>
-  <currentVersion>0.4-dev</currentVersion>
+  <currentVersion>SNAPSHOT</currentVersion>
   <name>Ledge Container</name>
   <shortDescription>A container based on Pico/Nano packages with added value of more expressive composition file syntax, and providing components with XML based schema checked configuration and externally configured loggers.</shortDescription>
   <build>

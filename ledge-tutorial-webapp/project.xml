@@ -6,7 +6,7 @@
   <name>Ledge tutorial webapp</name>
   <id>ledge-tutorial-webapp</id>
   <groupId>objectledge</groupId>
-  <currentVersion>0.4-dev</currentVersion>
+  <currentVersion>SNAPSHOT</currentVersion>
   <shortDescription>A simple web application that demonstrates some of ObjectLedge features.</shortDescription>
   <dependencies>
     <dependency>
