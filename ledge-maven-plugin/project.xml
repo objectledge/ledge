@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.15 2005-06-01 07:33:41 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.16 2005-07-07 02:52:53 rafal Exp $ -->
 
 <project>
   <extend>${ledgeCommon}/project.xml</extend>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>commons-jelly</groupId>
       <artifactId>commons-jelly-tags-velocity</artifactId>
-      <version>20030303.205659</version>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <id>velocity</id>
