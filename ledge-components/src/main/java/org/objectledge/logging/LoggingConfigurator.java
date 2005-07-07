@@ -49,12 +49,45 @@ import org.xml.sax.SAXException;
 /**
  * A component that initializes Log4J using a configuration file.
  * 
- * <p>The configuration file conforms to the Log4J DOMConfigurator schema. This package provides
- * specialized Log4J objects, aware of ObjectLedge features that can be used in the configuration.
+ * <p>
+ * This component was introduced so that log system configufration were preformed in a way uniform 
+ * with other parts of the system. The configuration file conforms to the Log4J
+ * <code>DOMConfigurator</code> schema. 
+ * This package provides specialized Log4J objects, aware of ObjectLedge features that can be 
+ * used in the configuration.
  * </p>
+ * 
+ * <p>
+ * At this point the configurator retrieves a configuration <code>InputSource</code> from
+ * the configuration factory (it will get validated agains apropriate schema), parses it and 
+ * passes on to Log4j <code>DomConfigurator</code>. In the future we may want to iterate over 
+ * the configuration ourselves and instantiate the needed objects (appenders etc. The Pico Way).
+ * This will allow a number of neat things, including Appenders wrinting to Ledge
+ * {@link org.objectledge.filesystem.FileSystem}.
+ * Until then paths in the conifguration files need to be either absolute in the machine's FS,
+ * or relative to the container's working directory.
+ * </p>
+ * 
+ * <h3>Functionality anticipated in the future</h3>
+ * <ul>
+ * <li>runtime modification of logging configuration, most notably logger verbosities</li>
+ * <li>management of loggers through textual interaction, and possibly JMX</li>
+ * <li>customized log4j file appenders working over Ledge
+ *  {@link org.objectledge.filesystem.FileSystem}</li>
+ * </ul>
+ * 
+ * <h3>Related documentation</h3>
+ * <ul>
+ * <li><a href="http://logging.apache.org/log4j">Log4J documentation</a></li>
+ * </ul>
+ * 
+ * <h3>Dependencies</h3>
+ * <ul>
+ * <li><a href="http://logging.apache.org/log4j">Log4J</a></li>
+ * </ul>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.5 2004-12-27 05:17:38 rafal Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.6 2005-07-07 08:21:38 zwierzem Exp $
  */
 public class LoggingConfigurator
 {

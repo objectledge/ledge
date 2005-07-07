@@ -60,7 +60,8 @@ public class PasswordDigester
     }
 
     /**
-     * {@inheritDoc}
+     * Digests a given password using a chosen algorithm.
+     * @param password the password to be digested.
      */
     public String digestPassword(String password)
     {

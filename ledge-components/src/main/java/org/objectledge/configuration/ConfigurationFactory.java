@@ -49,9 +49,30 @@ import com.sun.msv.verifier.Verifier;
 
 /**
  * Returns a configuration for the specific component.
+ * 
+ * <p>
+ * Configuration factory plugs into the container using 
+ * {@link org.objectledge.pico.customization component customization} mechanism,
+ * and provides components that declare a dependency on a DNA Configuration (using a
+ * <code>org.jcontainer.dna.Configuration</code> component parameter) with an initialized
+ * configuration object.
+ * </p>
+ *  
+ * <p>
+ * The contents of the configuration object are read from an XML file,
+ * and verified against a RelaxNG schema.
+ * </p>
+ *
+ * <h3>Functionality anticipated in the future</h3>
+ * <ul>
+ * <li>Detecting of components that support runtime reconfiguration (possibly by extending
+ *  <code>org.jcontainer.dna.Configurable</code>interface.</li>
+ * <li>Triggering of re-reading configuration from files on reconfigurable components</li>
+ * <li>Programmatic setting of configuration of reconfigurable components.</li>
+ * </ul>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.10 2005-05-09 05:19:41 rafal Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.11 2005-07-07 08:21:39 zwierzem Exp $
  */
 public class ConfigurationFactory
 {

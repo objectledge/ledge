@@ -63,7 +63,7 @@ public class PasswordGenerator
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a random password.
      */
     public String createRandomPassword(int min, int max)
     {

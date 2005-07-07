@@ -466,7 +466,7 @@ public class DirectoryUserManager extends UserManager
      * Map full user name to login name.
      *
      * @param name full user name.
-     * @returns the login name, or <code>null</code> if not found.
+     * @return the login name, or <code>null</code> if not found.
      */
     private synchronized String getLoginName(String name)
         throws AuthenticationException
