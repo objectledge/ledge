@@ -42,15 +42,16 @@ import org.picocontainer.PicoIntrospectionException;
 import org.picocontainer.PicoVisitor;
 
 /**
- * A Parameter that is a sequence of nested Parameter objects.
+ * Allows hinting the component's constructor arguments of aggregated types.
  * 
- * The <code>componentImplementation</code> class is the actual type excpected by the target 
- * component's constructor. The class must either implement {@link java.util.Collection} interface
- * (it has to be non-abstract, have a constructor accepting a single <code>int</code> parameter -
- * size, or a no-argument constructor) or be Java array type.
+ * <p>
+ * Both Java arrays and <code>java.util.Collection</code> objects are supported.
+ * The elements of the sequence are <code>org.picocontainer.Parameter</code> objects
+ * - they may resolve to constants, component references, or nested sequences.
+ * </p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: SequenceParameter.java,v 1.5 2005-02-04 02:28:13 rafal Exp $
+ * @version $Id: SequenceParameter.java,v 1.6 2005-07-07 08:30:04 zwierzem Exp $
  */
 public class SequenceParameter implements Parameter
 {

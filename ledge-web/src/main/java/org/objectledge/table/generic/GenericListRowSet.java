@@ -43,12 +43,16 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as list.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericListRowSet.java,v 1.5 2004-12-23 07:17:41 rafal Exp $
+ * @version $Id: GenericListRowSet.java,v 1.6 2005-07-07 08:29:30 zwierzem Exp $
  */
 public class GenericListRowSet extends BaseGenericRowSet
 {
     /**
-     * {@inheritDoc}
+     * Constructs the rowset.
+     *
+     * @param state the state of the table instance.
+     * @param filters a list of filters to be used while creating the rows set.
+     * @param model the table model.
      */
     public GenericListRowSet(TableState state, TableFilter[] filters, ExtendedTableModel model)
     {

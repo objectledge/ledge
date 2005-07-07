@@ -44,7 +44,7 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.11 2004-12-23 07:17:41 rafal Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.12 2005-07-07 08:29:30 zwierzem Exp $
  */
 public abstract class BaseGenericRowSet extends BaseRowSet
 {
@@ -69,7 +69,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
     protected HashMap rowsByChild = new HashMap();
 
     /**
-     * construct the object.
+     * Constructs the rowset.
      *
      * @param state the state of the table instance.
      * @param filters a list of filters to be used while creating the rows set.

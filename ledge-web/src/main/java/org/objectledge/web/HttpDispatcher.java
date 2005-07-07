@@ -35,11 +35,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * A dispatcher of HTTP requests.
+ * Dispatches HTTP requests.
+ * 
+ * <p>
+ * HttpDispatcher is a straightforward interface that the LedgeServlet uses to delegate request 
+ * processing to components. Note that dispatchers can be easily chained/multiplexed.
+ * </p>
  *
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: HttpDispatcher.java,v 1.2 2003-12-23 16:55:36 fil Exp $
+ * @version $Id: HttpDispatcher.java,v 1.3 2005-07-07 08:29:27 zwierzem Exp $
  */
 public interface HttpDispatcher
 {

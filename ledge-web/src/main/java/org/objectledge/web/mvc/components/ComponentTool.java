@@ -47,7 +47,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * A template tool for embedding components in application UI.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.14 2005-05-20 05:28:07 pablo Exp $
+ * @version $Id: ComponentTool.java,v 1.15 2005-07-07 08:29:35 zwierzem Exp $
  */
 public class ComponentTool
 {
@@ -190,7 +190,8 @@ public class ComponentTool
 	}
 	
     /**
-     * {@inheritDoc}
+     * Allows overriding of the used template.
+     * @param template the template to be overriden.
      */	
 	protected Template resolveTemplate(Template template)
 	{

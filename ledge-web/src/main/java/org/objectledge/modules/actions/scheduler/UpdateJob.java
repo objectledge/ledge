@@ -47,7 +47,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * Update job.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: UpdateJob.java,v 1.1 2005-05-17 08:52:50 pablo Exp $
+ * @version $Id: UpdateJob.java,v 1.2 2005-07-07 08:29:26 zwierzem Exp $
  */
 public class UpdateJob 
     extends PolicyProtectedAction
@@ -56,8 +56,6 @@ public class UpdateJob
     
     /**
      * Action constructor.
-     * 
-     * @param i18n the I18n component.
      */
     public UpdateJob(PolicySystem policySystemArg, AbstractScheduler scheduler)
     {

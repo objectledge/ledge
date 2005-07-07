@@ -48,11 +48,70 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.filesystem.ServletFileSystemProvider;
 
 /**
- * The entry point to ObjectLedge web application, that initializes the container, and uses 
- * HttpDispatcher component to handle requests.
- *
+ * LedgeServlet is the entry point of a Ledge application in the servlet environment.
+ * 
+ * <p>
+ * It performs startup and shutdown of the system and forwards HTTP requests to designated
+ * components through {@link org.objectledge.web.HttpDispatcher} interface.
+ * </p>
+ * 
+ * <h3>Configuration parameters</h3>
+ * <table>
+ * <tr>
+ * <th>name</th>
+ * <th>default</th>
+ * <th width="100%">description</th>
+ * </tr>
+ * <tr>
+ * <td>root</td>
+ * <td><code>javax.servlet.context.tempdir</code> context attribute, or <code>user.dir</code>
+ * system property if the former is not available.</td>
+ * <td>The root directory of the local file system td use.</td>
+ * </tr>
+ * <tr>
+ * <td>config</td>
+ * <td>/config</td>
+ * <td>The base path of system configuration, within Ledge FileSystem.</td>
+ * </tr>
+ * </table>
+ * 
+ * <p>
+ * The configuration parameters may be given as servlet initailizaion parameters in the
+ * <code>web.xml</code> file, or as servlet context attributes. In the latter case the actual name
+ * of the attribute is composed of the servlet-name under which LedgeServlet is registered, a dot
+ * and the actual parameter name. Consider the following <code>web.xml</code> file:
+ * </p>
+ * <pre>
+ * &lt;?xml version="1.0"?&gt;
+ * &lt;web-app&gt;
+ *   &lt;servlet&gt;
+ *     &lt;servlet-name&gt;ledge&lt;/servlet-name&gt;
+ *     &lt;servlet-class&gt;org.objectledge.web.LedgeServlet&lt;/servlet-class&gt;
+ *   &lt;/servlet&gt;
+ *   &lt;servlet-mapping&gt;
+ *     &lt;servlet-name&gt;ledge&lt;/servlet-name&gt;
+ *     &lt;url-pattern&gt;/ledge/*&lt;/url-pattern&gt;
+ *   &lt;/servlet-mapping&gt;
+ * &lt;/web-app&gt;
+ * </pre>
+ * 
+ * <p>
+ * The root directory can be used at deployment time with the following Tomcat application
+ * definition file:
+ * </p>
+ * <pre>
+ * &lt;?xml version="1.0"?&gt;
+ * &lt;Context path="/app"
+ *       docBase="/home/app/production/app.war"
+ *       reloadable="false"&gt;
+ *   &lt;Parameter name="ledge.root" 
+ *       value="/home/app/production/work" 
+ *       override="false"/&gt;
+ * &lt;/Context&gt;
+ * </pre>
+ * 
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.18 2005-02-11 12:08:04 rafal Exp $
+ * @version $Id: LedgeServlet.java,v 1.19 2005-07-07 08:29:27 zwierzem Exp $
  */
 public class LedgeServlet extends HttpServlet
 {

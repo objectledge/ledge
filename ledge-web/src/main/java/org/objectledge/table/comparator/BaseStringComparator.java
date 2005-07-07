@@ -36,7 +36,7 @@ import java.util.Locale;
  * It provides localisation for string comparisons.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseStringComparator.java,v 1.2 2005-02-08 21:19:28 rafal Exp $
+ * @version $Id: BaseStringComparator.java,v 1.3 2005-07-07 08:29:32 zwierzem Exp $
  */
 public abstract class BaseStringComparator
     implements Comparator
@@ -45,7 +45,8 @@ public abstract class BaseStringComparator
     protected Collator collator;
     
     /**
-     * {@inheritDoc}
+     * Constructs a base string comparator.
+     * @param locale the locale based on which the comparisons are performed.
      */
     public BaseStringComparator(Locale locale)
     {

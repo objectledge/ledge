@@ -37,10 +37,10 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.web.mvc.MVCContext;
 
 /**
- * Give a read only access to request parameters.
+ * Give a read only access to request parameters including MVC parameters.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ParametersTool.java,v 1.5 2005-04-13 06:47:11 rafal Exp $
+ * @version $Id: ParametersTool.java,v 1.6 2005-07-07 08:29:29 zwierzem Exp $
  */
 public class ParametersTool
 {
@@ -50,8 +50,8 @@ public class ParametersTool
     /**
      * Creates the parameters tool for a given set of parameters and mvc context.
      * 
-     * @param mvcContext
-     * @param requestParameters
+     * @param mvcContext the MVC context providing info about currenlty selected action and view.
+     * @param parameters the parameters to be represented by the tool
      */
     public ParametersTool(MVCContext mvcContext, Parameters parameters)
     {

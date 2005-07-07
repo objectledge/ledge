@@ -42,7 +42,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * Delete job.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DeleteJob.java,v 1.1 2005-05-17 08:52:50 pablo Exp $
+ * @version $Id: DeleteJob.java,v 1.2 2005-07-07 08:29:26 zwierzem Exp $
  */
 public class DeleteJob 
     extends PolicyProtectedAction
@@ -51,8 +51,6 @@ public class DeleteJob
     
     /**
      * Action constructor.
-     * 
-     * @param i18n the I18n component.
      */
     public DeleteJob(PolicySystem policySystemArg, AbstractScheduler scheduler)
     {

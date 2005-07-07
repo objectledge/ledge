@@ -61,10 +61,15 @@ import org.picocontainer.defaults.ObjectReference;
 import org.picocontainer.defaults.SimpleReference;
 
 /**
- * A customized NanoContainer that uses {@link FileSystem} to load the composition file.
+ * <code>LedgeContainer</code> is a NanoContainer flawor, that uses the
+ * {@link org.objectledge.filesystem.FileSystem} component for loading the composition file.
+ * The composition file is parsed using Ledge XmlFrontEnd.
+ * <code>LedgeContainer</code> also pre-feeds the internal PicoContainer with objects
+ * required by various container subsystems, including a FileSystem, ClassLoader and 
+ * confiuration directory path.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeContainer.java,v 1.13 2005-02-04 02:29:46 rafal Exp $
+ * @version $Id: LedgeContainer.java,v 1.14 2005-07-07 08:30:02 zwierzem Exp $
  */
 public class LedgeContainer
 {

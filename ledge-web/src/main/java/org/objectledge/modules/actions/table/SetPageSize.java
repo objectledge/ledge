@@ -41,14 +41,15 @@ import org.objectledge.parameters.RequestParameters;
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetPageSize.java,v 1.1 2004-05-18 13:59:31 pablo Exp $
+ * @version $Id: SetPageSize.java,v 1.2 2005-07-07 08:29:28 zwierzem Exp $
  */
 public class SetPageSize
     extends BaseTableAction
 {
-	/** 
-	 * {@inheritDoc}
-	 */
+    /**
+     * Constructs the table action.
+     * @param tableStateManager used to get currently modified table state.
+     */
 	public SetPageSize(TableStateManager tableStateManager)
 	{
 		super(tableStateManager);

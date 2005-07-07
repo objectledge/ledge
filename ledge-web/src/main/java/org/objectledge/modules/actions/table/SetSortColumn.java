@@ -41,13 +41,14 @@ import org.objectledge.parameters.RequestParameters;
  * If the same column is set, sorting direction is changed.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetSortColumn.java,v 1.1 2004-05-18 13:59:31 pablo Exp $
+ * @version $Id: SetSortColumn.java,v 1.2 2005-07-07 08:29:28 zwierzem Exp $
  */
 public class SetSortColumn extends BaseTableAction
 {
-	/** 
-	 * {@inheritDoc}
-	 */
+    /**
+     * Constructs the table action.
+     * @param tableStateManager used to get currently modified table state.
+     */
 	public SetSortColumn(TableStateManager tableStateManager)
 	{
 		super(tableStateManager);

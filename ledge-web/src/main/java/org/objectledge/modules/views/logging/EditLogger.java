@@ -47,7 +47,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditLogger.java,v 1.2 2005-05-23 01:58:24 rafal Exp $
+ * @version $Id: EditLogger.java,v 1.3 2005-07-07 08:29:34 zwierzem Exp $
  */
 public class EditLogger
     extends PolicyProtectedBuilder
@@ -102,7 +102,7 @@ public class EditLogger
      * Returns appenders attached to the logger.
      * 
      * @param logger the logger.
-     * @return appenders attached to the logger.
+     * @param appenders attached to the logger.
      */
     private void getAppenders(Logger logger, List<Appender> appenders)
     {
@@ -117,7 +117,7 @@ public class EditLogger
      * Returns appenders inherited by the logger.
      * 
      * @param logger the logger.
-     * @return appenders inherited by the logger.
+     * @param appenders inherited by the logger.
      */
     private void getInheritedAppenders(Logger logger, List<Appender> appenders)
     {

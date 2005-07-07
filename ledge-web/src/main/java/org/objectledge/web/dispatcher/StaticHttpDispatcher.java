@@ -42,11 +42,22 @@ import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.web.HttpDispatcher;
 
 /**
- * Returns pre-configured static strings as http responses.
+ * A HTTP dispatcher that returns hard coded responses for URLs matching a regular expression.
+ * 
+ * <p>
+ * Status code, content type and response body text can be configured.
+ * </p>
+ * 
+ * <ul>
+ * <li><a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/dispatcher/StaticHttpDispatcher.rng?rev=HEAD&content-type=text/vnd.viewcvs-markup">
+ * the configuration file schema</a></li>
+ * <li><a href="returns hard coded responses for URLs matching a regular expression. Status code, content type and response body text can be configured.">
+ * a configuration example</a></li> 
+ * </ul>
  *
  * <p>Created on Dec 23, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: StaticHttpDispatcher.java,v 1.2 2004-01-14 14:47:18 fil Exp $
+ * @version $Id: StaticHttpDispatcher.java,v 1.3 2005-07-07 08:29:25 zwierzem Exp $
  */
 public class StaticHttpDispatcher 
     implements HttpDispatcher

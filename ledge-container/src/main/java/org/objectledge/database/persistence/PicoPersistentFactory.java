@@ -32,11 +32,12 @@ import org.picocontainer.ComponentAdapter;
 import org.picocontainer.PicoContainer;
 
 /**
- * An implementation of the {@link PersistentFactory} interface that uses a PicoContainer and
- * {@link CustomizingConstructorComponentAdapter}.
+ * An implementation of the {@link org.objectledge.database.persistence.PersistentFactory}
+ * interface that uses a PicoContainer and
+ * {@link org.objectledge.pico.customization.CustomizingConstructorComponentAdapter}.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PicoPersistentFactory.java,v 1.2 2005-02-04 02:28:02 rafal Exp $
+ * @version $Id: PicoPersistentFactory.java,v 1.3 2005-07-07 08:30:03 zwierzem Exp $
  */
 public class PicoPersistentFactory implements PersistentFactory
 {
@@ -48,7 +49,7 @@ public class PicoPersistentFactory implements PersistentFactory
      * Crates an instantiator instance.
      * 
      * @param container the pico container to resolve dependencies from.
-     * @param type an implmentation of {@link Persistent} interface.
+     * @param type an implmentation of {@link org.objectledge.database.persistence.Persistent} interface.
      * @throws IllegalArgumentException if the clazz does not implement required interface.
      */
     public PicoPersistentFactory(PicoContainer container, Class type)

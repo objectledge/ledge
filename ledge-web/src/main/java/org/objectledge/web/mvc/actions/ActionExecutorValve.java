@@ -37,8 +37,14 @@ import org.objectledge.web.mvc.security.SecurityHelper;
 /**
  * Pipeline component for executing MVC actions.
  * 
+ * <p>
+ * This component is required to be placed before
+ * {@link org.objectledge.web.mvc.builders.BuilderExecutorValve} in the request processing pipeline.
+ * Such a configuration ensures that changes introduced by the action are visible for the user.
+ * </p>
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ActionExecutorValve.java,v 1.12 2004-08-20 10:03:28 zwierzem Exp $
+ * @version $Id: ActionExecutorValve.java,v 1.13 2005-07-07 08:29:33 zwierzem Exp $
  */
 public class ActionExecutorValve 
     implements Valve
@@ -46,14 +52,14 @@ public class ActionExecutorValve
 	/** Finder for builder objects. */
 	protected MVCClassFinder classFinder;
 
-    /** SecurityHelper for access checking. */
+    /** SecurityHelper for action access checking. */
     protected SecurityHelper securityHelper;
 
 	/**
 	 * Component constructor.
 	 * 
 	 * @param classFinder finder for runnable action objects
-     * @param securityHelper security helper for access checking
+     * @param securityHelper security helper for action access checking
 	 */
 	public ActionExecutorValve(MVCClassFinder classFinder, SecurityHelper securityHelper)
 	{
@@ -63,6 +69,12 @@ public class ActionExecutorValve
 	
     /**
      * Finds and executes an action for current request.
+     * 
+     * <p>
+     * The action is identified using the configured action token
+     * ({@link org.objectledge.web.WebConfigurator#getActionToken()})
+     * and found using the {@link MVCClassFinder#getAction(String)} method.
+     * </p>
      * 
      * @param context the thread's processing context.
      * @throws ProcessingException if the processing fails.

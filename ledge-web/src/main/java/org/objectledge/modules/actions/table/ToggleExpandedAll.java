@@ -41,14 +41,15 @@ import org.objectledge.table.TableStateManager;
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleExpandedAll.java,v 1.2 2005-05-17 10:44:51 zwierzem Exp $
+ * @version $Id: ToggleExpandedAll.java,v 1.3 2005-07-07 08:29:28 zwierzem Exp $
  */
 public class ToggleExpandedAll
     extends BaseToggleAction
 {
-	/** 
-	 * {@inheritDoc}
-	 */
+    /**
+     * Constructs the table action.
+     * @param tableStateManager used to get currently modified table state.
+     */
 	public ToggleExpandedAll(TableStateManager tableStateManager)
 	{
 		super(tableStateManager);

@@ -44,8 +44,28 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 /**
+ * <code>LedgeContainerBuilder</code> has the same functionality as the Nano-provided
+ * <code>XMLFrontEnd</code> but with a few changes and additions.
+ *  
+ * <ul>
+ * <li>{@link org.picocontainer.defaults.ComponentAdapterFactory}
+ *  may be declared for the top level container</li>
+ * <li>{@link org.picocontainer.defaults.ComponentAdapterFactory}
+ *  may be declared using tags, with nesting (DecoratingComponentAdapterFactoryPatern)</li>
+ * <li>for both components and component-parameters, both string and class keys may be used</li>
+ * <li>{@link org.objectledge.pico.SequenceParameter}s are supported</li>
+ * <li>The composition definition (file) is checked against a
+ *  <a href="http://relaxng.org/">RelaxNG schema</a>.</li>
+ * </ul>
+ * 
+ * <h3>Related</h3>
+ * <ul>
+ * <li>{@link ./container.rng}</li>
+ * <li><a href="http://objectledge.org/viewcvs.cgi/ledge-container/src/test/resources/container1/config/container.xml?rev=HEAD&content-type=text/vnd.viewcvs-markup">Example configuration file</a></li>
+ * </ul>
+ * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski </a>
- * @version $Id: LedgeContainerBuilder.java,v 1.1 2005-02-04 02:28:34 rafal Exp $
+ * @version $Id: LedgeContainerBuilder.java,v 1.2 2005-07-07 08:30:01 zwierzem Exp $
  */
 public class LedgeContainerBuilder
     extends ScriptedContainerBuilder
@@ -58,15 +78,15 @@ public class LedgeContainerBuilder
     private final SAXParserFactory parserFactory;
 
     /**
-     * Creates new StreamingLedgeContainerBuilder instance.
+     * Creates new LedgeContainerBuilder instance.
      * 
-     * @param scriptURL the script URL
+     * @param configURL the URL of XML based container configuration file
      * @param classLoader the class loader.
      */
-    public LedgeContainerBuilder(final URL scriptURL, final ClassLoader classLoader)
+    public LedgeContainerBuilder(final URL configURL, final ClassLoader classLoader)
     {
-        super(scriptURL, classLoader);
-        this.scriptURL = scriptURL;
+        super(configURL, classLoader);
+        this.scriptURL = configURL;
         this.classLoader = classLoader;
         try
         {

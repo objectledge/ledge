@@ -42,9 +42,30 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
  * Provides Logger objects to the components being initialized using Log4J.
+ * 
+ * <p>
+ * Logger factory plugs into the container using 
+ * {@link org.objectledge.pico.customization component customization} mechanism,
+ * and provides components that declare a dependency on a DNA Logger (using a
+ * <code>org.jcontainer.dna.Logger</code> component parameter) with an initialized
+ * and ready to go logger instance.
+ * </p>
+ * 
+ * <p>
+ * The default implementation creates Log4j loggers, but it can be easily extended to work
+ * with any other type of logger compatible with DNA.
+ * </p>
+ * 
+ * <p>
+ * The <code>LoggerFactory</code> component has the ability to transparently replace
+ * the logger used by a component with another logger.
+ * (This is done using Pico's <code>ImplementationHidingComponentAdapter</code>).
+ * This might be useful for run-time administraiton, especially in case of Logger
+ * objects that are immutable.
+ * </p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.16 2005-02-04 02:28:55 rafal Exp $
+ * @version $Id: LoggerFactory.java,v 1.17 2005-07-07 08:30:05 zwierzem Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider

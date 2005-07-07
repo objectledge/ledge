@@ -43,11 +43,70 @@ import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.PicoContainer;
 
 /**
- * An entry point to ObjectLedge in command line environment.
- *
+ * Allows running Ledge applications from the command line.
+ * 
+ * <p>
+ * After the container is started and components are composed and configured,
+ * a designated component is looked up and method 
+ * <code>void main(String[])</code> is invoked on it. 
+ * Note that it this mehtod should be non-static so it may take advantage of the actual
+ * component instance composed by the container.
+ * </p>
+ * 
+ * <h3>Recognized commandline options</h3>
+ * <p>
+ * <table class="bodyTable">
+ * <tr class="b">
+ * <th>syntax</th>
+ * <th>required</th>
+ * <th>default</th>
+ * <th width="100%">description</th>
+ * </tr>
+ * <tr class="a">
+ * <td>-h</td>
+ * <td>no</td>
+ * <td>n/a</td>
+ * <td>Display usage information and exit</td>
+ * </tr>
+ * <tr class="b">
+ * <td>-v</td>
+ * <td>no</td>
+ * <td>n/a</td>
+ * <td>Display version information on startup</td>
+ * </tr>
+ * <tr class="a">
+ * <td>-r &lt;root&gt;</td>
+ * <td>no</td>
+ * <td>current working directory</td>
+ * <td>Root directory of Ledge FileSystem</td>
+ * </tr>
+ * <tr class="b">
+ * <td>-c &lt;config&gt;</td>
+ * <td>no</td>
+ * <td>/config</td>
+ * <td>Base directory of the system's configuration</td>
+ * </tr>
+ * <tr class="a">
+ * <td>&lt;class-name&gt;</td>
+ * <td>yes</td>
+ * <td>none</td>
+ * <td>Class name of the component to be invoked</td>
+ * </tr>
+ * </table>
+ * 
+ * <p>
+ * Any command line arguments following the componen class name will be passed verbatim 
+ * to the component's main method.
+ * </p>
+ * 
+ * <h3>Dependencies</h3>
+ * <ul>
+ * <li><a href="http://jakarta.apache.org/commons/cli/">Jakarta Commons CLI</a></li>
+ * </ul>
+ * 
  * <p>Created on Dec 22, 2003</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Main.java,v 1.10 2005-02-10 17:46:46 rafal Exp $
+ * @version $Id: Main.java,v 1.11 2005-07-07 08:30:02 zwierzem Exp $
  */
 public class Main
 {
