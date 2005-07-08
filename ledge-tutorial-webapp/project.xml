@@ -144,6 +144,7 @@
         <directory>src/jar-resources</directory>
       </resource>
     </resources>
+   <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
   </build>
   <versions>
     <version>
