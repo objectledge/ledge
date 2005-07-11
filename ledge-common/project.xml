@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.12 2005-07-08 10:00:46 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.12.2.1 2005-07-11 09:26:03 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -8,7 +8,7 @@
 
   <id>ledge-common</id>
   <groupId>objectledge</groupId>
-  <currentVersion>SNAPSHOT</currentVersion>
+  <currentVersion>0.3.1</currentVersion>
   <organization>
     <name>objectledge.org</name>
     <url>http://objectledge.org/</url>

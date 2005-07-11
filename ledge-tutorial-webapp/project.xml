@@ -6,7 +6,7 @@
   <name>Ledge tutorial webapp</name>
   <id>ledge-tutorial-webapp</id>
   <groupId>objectledge</groupId>
-  <currentVersion>SNAPSHOT</currentVersion>
+  <currentVersion>0.3.1</currentVersion>
   <shortDescription>A simple web application that demonstrates some of ObjectLedge features.</shortDescription>
   <dependencies>
     <dependency>
@@ -80,7 +80,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -88,7 +88,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-container</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -96,7 +96,7 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>

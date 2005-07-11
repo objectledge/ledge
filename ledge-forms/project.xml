@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.7 2005-07-07 06:53:23 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.7.2.1 2005-07-11 09:26:13 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -38,7 +38,7 @@
   
   <groupId>cyklotron</groupId>
   <id>ledge-forms</id>
-  <currentVersion>SNAPSHOT</currentVersion>
+  <currentVersion>0.3.1</currentVersion>
   
   <name>Ledge Cyklotron CMS</name>
   <shortDescription>
@@ -72,13 +72,13 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <url>http://objectledge.org/modules/ledge-components/</url>
     </dependency>
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>0.3.1</version>
       <url>http://objectledge.org/modules/ledge-web/</url>
     </dependency>
     <dependency>
