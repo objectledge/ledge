@@ -402,39 +402,17 @@
   <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
   
   <goal name="ledge:dist-aggregate">
-    <attainGoal name="dist:build"/>
-    
-    <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
-
-    <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
-    <j:set var="srcDist" value="${maven.build.dir}/${maven.final.name}/src/${maven.final.name}"/>
-    <j:set var="srcDistTarget" value="${distAggregationDir}/src/${maven.final.name}"/>
-    <copy todir="${srcDistTarget}">
-      <fileset dir="${srcDist}"/>
-    </copy>
-
-    <j:set var="binDist" value="${maven.build.dir}/${maven.final.name}/bin/${maven.final.name}"/>
-    <j:set var="binDistTarget" value="${distAggregationDir}/bin/${maven.final.name}"/>
-    <copy todir="${binDistTarget}">
-      <fileset dir="${binDist}" excludes="docs/**"/>
-    </copy>
-  </goal>
-
-  <goal name="ledge:dist-aggregate-src">
-    <attainGoal name="dist:build-src"/>
-    <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
-    <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
-    <j:set var="srcDist" value="${maven.build.dir}/${maven.final.name}/src/${maven.final.name}"/>
-    <j:set var="srcDistTarget" value="${distAggregationDir}/src/${maven.final.name}"/>
-    <copy todir="${srcDistTarget}">
-      <fileset dir="${srcDist}"/>
-    </copy>
-  </goal>
-
-  <goal name="ledge:dist-aggregate-bin">
     <attainGoal name="${maven.multiproject.type}:${maven.multiproject.type}"/>  
     <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
     <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
+
+    <attainGoal name="dist:prepare-src-filesystem"/>
+    <j:set var="srcDist" value="${maven.build.dir}/${maven.final.name}/src/${maven.final.name}"/>
+    <j:set var="srcDistTarget" value="${distAggregationDir}/src/${maven.final.name}"/>
+    <copy todir="${srcDistTarget}">
+      <fileset dir="${srcDist}"/>
+    </copy>
+
     <j:set var="binDistTarget" value="${distAggregationDir}/bin/${maven.final.name}"/>
     <copy file="LICENSE.txt" toDir="${binDistTarget}"/>
     <j:set var="artifactType" value="${maven.multiproject.type}"/>
@@ -448,7 +426,7 @@
     <copy file="${maven.build.dir}/${artifactName}.${artifactType}" toDir="${binDistTarget}"/>
   </goal>
   
-  <goal name="ledge:dist-multiproject-src">
+  <goal name="ledge:dist">
     <maven:get var="distAggregationDir" plugin="maven-dist-plugin" property="maven.dist.assembly.dir"/>
     <j:file omitXmlDeclaration="true" name="/tmp/ledge-maven-plugin.tmp">${distAggregationDir}</j:file>
 
@@ -456,28 +434,53 @@
       basedir="${maven.multiproject.basedir}"
       includes="${maven.multiproject.includes}"
       excludes="${maven.multiproject.excludes}"
-      banner="Building source distribution of"
+      banner="Building distribution of"
       postProcessing="false"
       collectOnly="false"
       ignoreFailures="false"
-      goals="ledge:dist-aggregate-src"
+      goals="ledge:dist-aggregate"
     />
-  </goal>
-
-  <goal name="ledge:dist-multiproject-bin">
-    <maven:get var="distAggregationDir" plugin="maven-dist-plugin" property="maven.dist.assembly.dir"/>
-    <j:file omitXmlDeclaration="true" name="/tmp/ledge-maven-plugin.tmp">${distAggregationDir}</j:file>
-
-    <maven:reactor
-      basedir="${maven.multiproject.basedir}"
-      includes="${maven.multiproject.includes}"
-      excludes="${maven.multiproject.excludes}"
-      banner="Building binary distribution of"
-      postProcessing="false"
-      collectOnly="false"
-      ignoreFailures="false"
-      goals="ledge:dist-aggregate-bin"
+    
+    <j:set var="distName" value="${pom.groupId}-all-${pom.currentVersion}"/>
+    
+    <ant:tar longfile="gnu" tarfile="${maven.dist.dir}/${distName}-bin.tar">
+      <ant:tarfileset dir="${maven.dist.bin.archive.dir}"/>
+    </ant:tar>
+    <ant:bzip2
+      destfile="${maven.dist.dir}/${distName}-bin.tar.bz2"
+      src="${maven.dist.dir}/${distName}-bin.tar"
     />
+    <ant:delete file="${maven.dist.dir}/${distName}-bin.tar"/>
+    <ant:zip zipfile="${maven.dist.dir}/${distName}-bin.zip">
+      <ant:zipfileset dir="${maven.dist.bin.archive.dir}"/>
+    </ant:zip>
+
+    <ant:tar longfile="gnu" tarfile="${maven.dist.dir}/${distName}-src.tar">
+      <ant:tarfileset dir="${maven.dist.src.archive.dir}"/>
+    </ant:tar>
+    <ant:bzip2
+      destfile="${maven.dist.dir}/${distName}-src.tar.bz2"
+      src="${maven.dist.dir}/${distName}-src.tar"
+    />
+    <ant:delete file="${maven.dist.dir}/${distName}-src.tar"/>
+    <ant:zip zipfile="${maven.dist.dir}/${distName}-src.zip">
+      <ant:zipfileset dir="${maven.dist.src.archive.dir}"/>
+    </ant:zip>
+    
+    
+    <attainGoal name="multiproject:site"/>
+    <ant:tar longfile="gnu" tarfile="${maven.dist.dir}/${distName}-doc.tar">
+      <ant:tarfileset dir="${maven.build.dir}/docs"/>
+    </ant:tar>
+    <ant:bzip2
+      destfile="${maven.dist.dir}/${distName}-doc.tar.bz2"
+      src="${maven.dist.dir}/${distName}-doc.tar"
+    />
+    <ant:delete file="${maven.dist.dir}/${distName}-doc.tar"/>
+    <ant:zip zipfile="${maven.dist.dir}/${distName}-doc.zip">
+      <ant:zipfileset dir="${maven.build.dir}/docs"/>
+    </ant:zip>
+    
   </goal>
 
 </project>
