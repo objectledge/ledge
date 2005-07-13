@@ -398,5 +398,86 @@
       </fileset>
     </copy>
   </goal>
+  
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+  
+  <goal name="ledge:dist-aggregate">
+    <attainGoal name="dist:build"/>
+    
+    <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
+
+    <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
+    <j:set var="srcDist" value="${maven.build.dir}/${maven.final.name}/src/${maven.final.name}"/>
+    <j:set var="srcDistTarget" value="${distAggregationDir}/src/${maven.final.name}"/>
+    <copy todir="${srcDistTarget}">
+      <fileset dir="${srcDist}"/>
+    </copy>
+
+    <j:set var="binDist" value="${maven.build.dir}/${maven.final.name}/bin/${maven.final.name}"/>
+    <j:set var="binDistTarget" value="${distAggregationDir}/bin/${maven.final.name}"/>
+    <copy todir="${binDistTarget}">
+      <fileset dir="${binDist}" excludes="docs/**"/>
+    </copy>
+  </goal>
+
+  <goal name="ledge:dist-aggregate-src">
+    <attainGoal name="dist:build-src"/>
+    <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
+    <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
+    <j:set var="srcDist" value="${maven.build.dir}/${maven.final.name}/src/${maven.final.name}"/>
+    <j:set var="srcDistTarget" value="${distAggregationDir}/src/${maven.final.name}"/>
+    <copy todir="${srcDistTarget}">
+      <fileset dir="${srcDist}"/>
+    </copy>
+  </goal>
+
+  <goal name="ledge:dist-aggregate-bin">
+    <attainGoal name="${maven.multiproject.type}:${maven.multiproject.type}"/>  
+    <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
+    <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
+    <j:set var="binDistTarget" value="${distAggregationDir}/bin/${maven.final.name}"/>
+    <copy file="LICENSE.txt" toDir="${binDistTarget}"/>
+    <j:set var="artifactType" value="${maven.multiproject.type}"/>
+    <j:if test="${artifactType == 'plugin'}">
+      <j:set var="artifactType" value="jar"/>
+    </j:if>
+    <j:set var="artifactName" value="${maven.final.name}"/>
+    <j:if test="${artifactType == 'war'}">
+      <j:set var="artifactName" value="${pom.artifactId}"/>
+    </j:if>
+    <copy file="${maven.build.dir}/${artifactName}.${artifactType}" toDir="${binDistTarget}"/>
+  </goal>
+  
+  <goal name="ledge:dist-multiproject-src">
+    <maven:get var="distAggregationDir" plugin="maven-dist-plugin" property="maven.dist.assembly.dir"/>
+    <j:file omitXmlDeclaration="true" name="/tmp/ledge-maven-plugin.tmp">${distAggregationDir}</j:file>
+
+    <maven:reactor
+      basedir="${maven.multiproject.basedir}"
+      includes="${maven.multiproject.includes}"
+      excludes="${maven.multiproject.excludes}"
+      banner="Building source distribution of"
+      postProcessing="false"
+      collectOnly="false"
+      ignoreFailures="false"
+      goals="ledge:dist-aggregate-src"
+    />
+  </goal>
+
+  <goal name="ledge:dist-multiproject-bin">
+    <maven:get var="distAggregationDir" plugin="maven-dist-plugin" property="maven.dist.assembly.dir"/>
+    <j:file omitXmlDeclaration="true" name="/tmp/ledge-maven-plugin.tmp">${distAggregationDir}</j:file>
+
+    <maven:reactor
+      basedir="${maven.multiproject.basedir}"
+      includes="${maven.multiproject.includes}"
+      excludes="${maven.multiproject.excludes}"
+      banner="Building binary distribution of"
+      postProcessing="false"
+      collectOnly="false"
+      ignoreFailures="false"
+      goals="ledge:dist-aggregate-bin"
+    />
+  </goal>
 
 </project>
