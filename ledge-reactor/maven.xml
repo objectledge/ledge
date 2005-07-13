@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
  
-<!-- $Id: maven.xml,v 1.6 2004-05-17 15:03:54 fil Exp $ -->
+<!-- $Id: maven.xml,v 1.6.4.1 2005-07-13 09:37:07 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:ant="jelly:ant">
 
@@ -36,5 +36,12 @@
        <attainGoal name="maven-linkcheck-plugin:register"/>
      </postGoal>
    </j:if>
+   
+   <goal name="dist:prepare-src-filesystem">
+     <attainGoal name="ledge:dist-multiproject-src"/>
+   </goal>
 
+   <goal name="dist:prepare-bin-filesystem">
+     <attainGoal name="ledge:dist-multiproject-bin"/>
+   </goal>
 </project>
