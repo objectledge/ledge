@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.7 2005-07-07 06:53:23 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.8 2005-07-14 05:58:46 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -40,9 +40,9 @@
   <id>ledge-forms</id>
   <currentVersion>SNAPSHOT</currentVersion>
   
-  <name>Ledge Cyklotron CMS</name>
+  <name>Ledge Forms</name>
   <shortDescription>
-    A ledge port of Cyklotron.
+    A HTML forms processing package.
   </shortDescription>
   
   <build>
