@@ -456,7 +456,7 @@
     />
 
     <j:set var="distName" value="${pom.groupId}-all-${pom.currentVersion}"/>
-    
+    <mkdir dir="${maven.dist.dir}"/>
     <copy file="LICENSE.txt" toDir="${maven.dist.bin.archive.dir}"/>
     <copy file="README.txt" toDir="${maven.dist.bin.archive.dir}"/>
     <tar longfile="gnu" tarfile="${maven.dist.dir}/${distName}-bin.tar">
