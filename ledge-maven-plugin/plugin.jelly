@@ -402,7 +402,6 @@
   <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
   
   <goal name="ledge:dist-aggregate">
-    <attainGoal name="${maven.multiproject.type}:${maven.multiproject.type}"/>  
     <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
     <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
 
@@ -416,13 +415,16 @@
 
     <j:set var="binDistTarget" value="${distAggregationDir}/bin/${maven.final.name}"/>
     <j:set var="artifactType" value="${maven.multiproject.type}"/>
+    <j:set var="installGoal" value="install"/>
     <j:if test="${artifactType == 'plugin'}">
       <j:set var="artifactType" value="jar"/>
+      <j:set var="installGoal" value="repository-install"/>
     </j:if>
     <j:set var="artifactName" value="${maven.final.name}"/>
     <j:if test="${artifactType == 'war'}">
       <j:set var="artifactName" value="${pom.artifactId}"/>
     </j:if>
+    <attainGoal name="${maven.multiproject.type}:${installGoal}"/>      
     <copy file="${maven.build.dir}/${artifactName}.${artifactType}" 
       toFile="${distAggregationDir}/bin/${maven.multiproject.type}s/${maven.final.name}.${artifactType}"/>
       
