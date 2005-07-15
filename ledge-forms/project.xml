@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.8 2005-07-14 05:58:46 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.9 2005-07-15 05:00:12 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -36,7 +36,7 @@
   <package>pl.caltha</package>
   <!-- project info -->
   
-  <groupId>cyklotron</groupId>
+  <groupId>objectledge</groupId>
   <id>ledge-forms</id>
   <currentVersion>SNAPSHOT</currentVersion>
   
