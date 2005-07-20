@@ -22,3 +22,20 @@
 <option value="$elem.get(1)"#if($elem.get(1).equals($selected)) selected="selected"#end>$elem.get(0)</option>
 #end
 #end
+
+#macro(option $value $label $selected)
+<option value="$value"#if($value.equals($selected)) selected="selected"#end>$label</option>
+#end
+
+#macro(options $list $selected)
+#foreach($elem in $list)
+#option($elem.get(1) $elem.get(0) $selected)
+#end
+#end
+
+#macro(time_options $list $selected)
+#foreach($elem in $list)
+#set($minutes = $elem*1440)
+#option($minutes $elem $selected)
+#end
+#end
