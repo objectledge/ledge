@@ -50,6 +50,7 @@ import org.objectledge.parameters.UndefinedParameterException;
  * Parameters implementation based on directory context.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: DirectoryParameters.java,v 1.6 2005-07-22 17:19:41 pablo Exp $
  */
 public class DirectoryParameters extends DefaultParameters
 {

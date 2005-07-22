@@ -34,9 +34,10 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
 
 /**
- * Context tools populator.
+ * The pipeline processing valve that populates the templating context with configured tool objects.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: ContextToolPopulatorValve.java,v 1.5 2005-07-22 17:19:43 pablo Exp $
  */
 public class ContextToolPopulatorValve 
     implements Valve
@@ -55,7 +56,7 @@ public class ContextToolPopulatorValve
 	}
 	
 	/**
-	 * Borrow the tools and put them into the context.
+	 * Get the tools from factory objects and put them into the context.
      *  
      * @param context the thread's processing context.
 	 */

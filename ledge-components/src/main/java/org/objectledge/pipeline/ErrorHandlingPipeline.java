@@ -32,11 +32,28 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 
 /**
- * A Pipeline composed of sequences of Valves that provides error handling along the lines of Java 
- * try/catch/finally.
+ * A Pipeline composed of three sequences of {@link org.objectledge.pipeline.Valve}s that provides
+ * error handling along the lines of Java try/catch/finally rules.
+ * 
+ * <p>
+ * The pipeline is constructed from three subpipelines
+ * (arrays of {@link org.objectledge.pipeline.Valve} objects). The subpiplines serve three
+ * functions:
+ * </p>
+ * <ol>
+ * <li>The <b>try</b> pipeline is used for normal execution of processing.</li>
+ * <li>The <b>catch</b> pipline is executed in case of an uncatched exception thrown in the
+ * <code>try</code> pipeline. It is basically used to handle problems which may occure in normal
+ * processing. An example problem to be handled, is the discovery of an unathorized access to the
+ * webapplication. In this case the <code>catch</code> pipeline should redirect the user to a view
+ * containing the description of the problem and a login form.</li>
+ * <li>The <b>finally</b> pipeline is executed always. It is used to execute cleanup actions after
+ * both successfull execution of the <code>try</code> pipeline and the errorneous execution of the
+ * <code>try</code> pipeline which triggered the <code>catch</code> pipeline.</li>
+ * </ol>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ErrorHandlingPipeline.java,v 1.4 2005-02-14 18:12:36 pablo Exp $
+ * @version $Id: ErrorHandlingPipeline.java,v 1.5 2005-07-22 17:19:44 pablo Exp $
  */
 public class ErrorHandlingPipeline
     implements Valve

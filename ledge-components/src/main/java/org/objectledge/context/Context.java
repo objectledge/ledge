@@ -34,9 +34,9 @@ import java.util.Map;
 /**
  * Context gives the application an ability to reference arbitrary objects using String names.
  * 
- * <p>The bindings are local the calling thread. This is a convinient way of passing data 
+ * <p>The bindings are local to the calling thread. This is a convenient way of passing data 
  * associated with a stream of processing without putting them into method attributes. This is 
- * especialy convinient with data that are not needed at a specific stage of processing, but may 
+ * especialy convenient with data that are not needed at a specific stage of processing, but may 
  * be needed by the nested stages - for example security credentials.</p>
  * 
  * <p><b>Note!</b>It is important to clear the context before the thread departs from within 
@@ -45,7 +45,7 @@ import java.util.Map;
  * being otherwise being eligible to collection.</p>  
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Context.java,v 1.6 2005-06-02 10:28:08 rafal Exp $
+ * @version $Id: Context.java,v 1.7 2005-07-22 17:19:53 pablo Exp $
  */
 public class Context
 {

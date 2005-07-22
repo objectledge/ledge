@@ -32,20 +32,22 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 
 /**
- * Context tools populator.
+ * The pipeline valve which prepares the {@link org.objectledge.templating.TemplatingContext}
+ * for use by other valves.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+ * @version $Id: TemplatingContextLoaderValve.java,v 1.3 2005-07-22 17:19:50 pablo Exp $
  */
 public class TemplatingContextLoaderValve 
     implements Valve
 {
-	/** tool component */
+	/** templating component */
 	private Templating templating;
 	
 	/**
 	 * Component constructor.
 	 * 
-	 * @param templating the templating.
+	 * @param templating the templating component.
 	 */
 	public TemplatingContextLoaderValve(Templating templating)
 	{

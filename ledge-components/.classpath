@@ -30,5 +30,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/cglib/jars/cglib-full-2.0.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/isorelax/jars/isorelax-20040506.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/xsdlib/jars/xsdlib-20040506.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/hibernate/jars/hibernate-3.0.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

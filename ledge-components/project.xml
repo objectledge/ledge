@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE.
 -->
-<!-- $Id: project.xml,v 1.65 2005-07-07 06:53:17 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.66 2005-07-22 17:19:40 pablo Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -144,6 +144,12 @@
       <artifactId>relaxngDatatype</artifactId>
       <version>20040506</version>
       <url>https://sourceforge.net/projects/relaxng</url>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate</artifactId>
+      <version>3.0.5</version>
+      <url>https://hibernate.org/</url>
     </dependency>
     <!-- runtime -->
 
