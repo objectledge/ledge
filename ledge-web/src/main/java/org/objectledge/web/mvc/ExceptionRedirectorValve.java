@@ -43,7 +43,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 
 /**
- * The valve that in case of exception redirect to appropriate view.
+ * The valve that redirects to a configured view in case of exception.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */

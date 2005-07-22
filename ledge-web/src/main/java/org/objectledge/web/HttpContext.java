@@ -42,10 +42,10 @@ import org.objectledge.context.Context;
 
 
 /**
- * The web context contains all needed information about http request.
+ * The http context encapsulates the http request and response.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.13 2005-03-09 13:33:59 zwierzem Exp $
+ * @version $Id: HttpContext.java,v 1.14 2005-07-22 17:25:46 pablo Exp $
  */
 public class HttpContext
 {

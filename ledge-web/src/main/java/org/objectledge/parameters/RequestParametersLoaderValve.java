@@ -33,10 +33,10 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 
 /**
- * Pipeline processing valve that loads parameters into the context.
+ * Pipeline processing valve that loads request parameters into the context.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParametersLoaderValve.java,v 1.5 2005-02-10 17:49:08 rafal Exp $
+ * @version $Id: RequestParametersLoaderValve.java,v 1.6 2005-07-22 17:25:49 pablo Exp $
  */
 public class RequestParametersLoaderValve 
     implements Valve

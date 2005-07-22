@@ -32,10 +32,10 @@ import org.objectledge.templating.tools.ContextToolFactory;
 
 
 /**
- * The interface for indication link tool context tool factory component implementation.
+ * The interface to indicate link tool context tool factory component implementation.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkToolFactory.java,v 1.7 2005-02-10 17:46:26 rafal Exp $
+ * @version $Id: LinkToolFactory.java,v 1.8 2005-07-22 17:25:44 pablo Exp $
  */
 public interface LinkToolFactory extends ContextToolFactory
 {

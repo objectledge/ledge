@@ -32,11 +32,11 @@ import org.objectledge.encodings.HTMLEntityEncoder;
 
 /**
  * Tool for encoding HTML text to a text which supports a chosen encoding using HTML entities.
- * If an encoding does not support a character code, a HTML or numeric entity is being generated
+ * If an encoding does not support a character code, an HTML or numeric entity is being generated
  * for this character, if a character is supported it is not changed.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: HTMLEntityEncoderTool.java,v 1.1 2004-02-03 13:51:42 zwierzem Exp $
+ * @version   $Id: HTMLEntityEncoderTool.java,v 1.2 2005-07-22 17:25:45 pablo Exp $
  */
 public class HTMLEntityEncoderTool
 {

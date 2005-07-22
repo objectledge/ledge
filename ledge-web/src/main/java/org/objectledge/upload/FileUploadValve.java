@@ -27,12 +27,12 @@ import org.objectledge.web.HttpContext;
 /**
  * Analyzes the multipart request and looks up the uploaded file data. This valve also parses post
  * values embedded in the multipart request. If the request is too large (exceeds the upload size
- * limit) no parameters, nor file contents are parsed. This causes unavaiability of post parameters
+ * limit) no parameters, no file contents are parsed. This causes unavailability of post parameters
  * from forms.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileUploadValve.java,v 1.14 2005-05-30 07:59:14 rafal Exp $
+ * @version $Id: FileUploadValve.java,v 1.15 2005-07-22 17:25:58 pablo Exp $
  */
 public class FileUploadValve 
     implements Valve

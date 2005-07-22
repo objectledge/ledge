@@ -31,16 +31,26 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 
 /**
- * Builder of a single view element.
+ * Builder class represents a builder of a single view element.
+ * 
+ * <p>
+ * The builder may:
+ * </p>
+ * <ul>
+ * <li>redirect the control to another view - {@link #route(String)}</li>
+ * <li>build the contents of a view - {@link #build(Template, String)} and,</li>
+ * <li>choose to embed the generated contents in an enclosing view -
+ * {@link #getEnclosingView(String)}</li>
+ * </ul>  
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.9 2005-05-09 08:11:39 rafal Exp $
+ * @version $Id: Builder.java,v 1.10 2005-07-22 17:25:48 pablo Exp $
  */
 ///CLOVER:OFF
 public interface Builder
 {	
 	/**
-	 * This method is called to allow the view builder to redirect the control to another builder
+	 * This method is called to allow the view builder to redirect the control to another view
 	 * without executing the build method.
 	 * 
      * @param thisViewName the name of currently processed view (builder)
@@ -58,7 +68,7 @@ public interface Builder
      * 
      * <p>Three options are available: returning {@link EnclosingView#DEFAULT} to proceed with 
      * default behaviour, returning {@link EnclosingView#TOP} to terminate enclosure loop, or 
-     * returing an EnlosigView object created using {@link EnclosingView#EnclosingView(String)} to
+     * returing an EnclosingView object created using {@link EnclosingView#EnclosingView(String)} to
      * request enclosing withing a specific view.</p>    
      * 
      * @param thisViewName the actual template used to build current builder (the one on which the 
@@ -71,10 +81,11 @@ public interface Builder
      * Build method executes builder logic which should return rendered <code>String</code>.
      * 
      * @param template template to be used during building.
-     * @param embeddedBuildResults string containing results of embedded builder's rendering.
+     * @param embeddedBuildResults string containing results of embedded view's rendering (results
+     *  of enclosed view rendering).
      * 
-     * @return string containing rendered view element.
-     * @throws BuildException on problems with view element building.
+     * @return string containing rendered view.
+     * @throws BuildException on problems with view building.
      * @throws ProcessingException on problems while preparing information to be shown.
      */
     public String build(Template template, String embeddedBuildResults)

@@ -31,10 +31,10 @@ package org.objectledge.web;
 import org.jcontainer.dna.Configuration;
 
 /**
- * Configuration component - it provide the access to common MVC configuration.
+ * MVC configuration component - it provides the access to common MVC configuration.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: WebConfigurator.java,v 1.8 2004-12-23 07:17:51 rafal Exp $
+ * @version $Id: WebConfigurator.java,v 1.9 2005-07-22 17:25:46 pablo Exp $
  */
 public class WebConfigurator
 {
@@ -76,7 +76,7 @@ public class WebConfigurator
 	}
     
 	/**
-	 * Get the default encoding.
+	 * Get the default encoding of MVC created pages.
 	 * 
 	 * @return the default encoding.
 	 */
@@ -86,7 +86,7 @@ public class WebConfigurator
 	}
 
 	/**
-	 * Get the default content type.
+	 * Get the default content type of MVC created pages.
 	 * 
 	 * @return the default content type.
 	 */
@@ -96,9 +96,9 @@ public class WebConfigurator
 	}
 	
 	/**
-	 * Get the view token.
+	 * Get the view choice request parameter name.
 	 * 
-	 * @return the view token.
+	 * @return the view parameter name.
 	 */
 	public String getViewToken()
 	{
@@ -106,9 +106,9 @@ public class WebConfigurator
 	}
 
 	/**
-	 * Get the action token.
+	 * Get the action choice request parameter name.
 	 * 
-	 * @return the action token.
+	 * @return the action parameter name.
 	 */
 	public String getActionToken()
 	{

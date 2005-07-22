@@ -44,10 +44,10 @@ import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 import org.objectledge.web.mvc.security.SecurityHelper;
 
 /**
- * A template tool for embedding components in application UI.
+ * A templating context tool for embedding components in application UI.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ComponentTool.java,v 1.15 2005-07-07 08:29:35 zwierzem Exp $
+ * @version $Id: ComponentTool.java,v 1.16 2005-07-22 17:25:52 pablo Exp $
  */
 public class ComponentTool
 {

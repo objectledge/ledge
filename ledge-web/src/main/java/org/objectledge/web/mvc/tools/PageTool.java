@@ -38,10 +38,19 @@ import java.util.Set;
 import org.objectledge.web.HttpContext;
 
 /**
- * A context tool for applications using JavaScript and CSS files..
+ * A context tool for management of head section of generated webpages.
+ * <p>It provides support for:</p>
+ * <ul>
+ * <li>Inclusion of JavaScript files.</li>
+ * <li>Inclusion of CSS files.</li>
+ * <li>Control of auto included JavaScript files
+ *   (included on a condition that any other JS file has been included).</li> 
+ * <li>Meta tags creation.</li>
+ * <li>Control of the <code>&lt;title&gt;</code> tag content.</li>
+ * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.12 2005-06-24 08:34:38 zwierzem Exp $
+ * @version $Id: PageTool.java,v 1.13 2005-07-22 17:25:45 pablo Exp $
  */
 public class PageTool
 {
@@ -151,7 +160,7 @@ public class PageTool
 
     /**
      * Inserts a string at the begining of title tag content.
-     * @param titlePrefix a prefix to be inserted befor current title.
+     * @param titlePrefix a prefix to be inserted before currently set title.
      */
     public void insertTitlePrefix(String titlePrefix)
     {
@@ -159,7 +168,7 @@ public class PageTool
     }
 
     /**
-     * Returns a title tag content.
+     * Returns a title tag content, used in HTML head section in top level layout view.
      * @return contents of a set title.
      */
     public String getTitle()
@@ -431,7 +440,7 @@ public class PageTool
             return resLink.toString();
         }
 
-        /** Getter for charset attribute.
+        /** Getter for charset attribute, <code>UTF-8</code> by default.
          * @return Value of charset attribute value.
          */
         public String getCharset()
@@ -530,7 +539,8 @@ public class PageTool
     }
 
     /**
-     * Returns the content type of the current response. 
+     * Returns the content type of the current response, useful for generation of HTML content
+     * headers. 
      * 
      * @return the content type.
      */
@@ -540,7 +550,8 @@ public class PageTool
     }
     
     /**
-     * Returns the character encoding of the current reponse.
+     * Returns the character encoding of the current reponse, useful for generation of HTML
+     * content headers and XML declaration.
      * 
      * @return the encoding.
      */

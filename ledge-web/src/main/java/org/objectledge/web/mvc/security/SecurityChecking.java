@@ -31,15 +31,15 @@ package org.objectledge.web.mvc.security;
 import org.objectledge.context.Context;
 
 /**
- * The interface of all mvc security objects.
+ * The interface of all security aware MVC objects.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SecurityChecking.java,v 1.5 2004-12-22 08:58:35 rafal Exp $
+ * @version $Id: SecurityChecking.java,v 1.6 2005-07-22 17:25:56 pablo Exp $
  */
 public interface SecurityChecking
 {
     /**
-     * Check if the component requires secure channel. 
+     * Check if the module requires secure channel. 
      * 
      * @param context the context.
      * @return <code>true</code>if requires.
@@ -49,7 +49,7 @@ public interface SecurityChecking
     	throws Exception;
 
     /**
-     * Check if the component requires authenticated user. 
+     * Check if the module requires authenticated user. 
      * 
      * @param context the context.
      * @return <code>true</code>if requires.

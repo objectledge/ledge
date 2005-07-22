@@ -41,7 +41,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.14 2005-05-10 06:49:21 rafal Exp $
+ * @version $Id: StringTool.java,v 1.15 2005-07-22 17:25:44 pablo Exp $
  */
 public class StringTool
 {
@@ -54,11 +54,11 @@ public class StringTool
     }
 
     /**
-     * Trims the string to the specified lengtht.
+     * Trims the string to the specified length adding an ellipsis character (3 dots) at the end.
      * 
      * @param str the string.
      * @param maxLength maximum number of characters preserved.
-     * @return the trimmed string.
+     * @return the trimmed string with an ellipsis character (3 dots) at the end.
      */
     public String shorten(String str, int maxLength)
     {
@@ -73,7 +73,7 @@ public class StringTool
     }
 
     /**
-     * Trims the string to the specified lengtht.
+     * Trims the string to the specified length.
      * 
      * @param source the string.
      * @param length maximum number of characters preserved.
@@ -90,7 +90,7 @@ public class StringTool
     }
     
     /** 
-     * See the StringUtils class.
+     * See the {@link StringUtils} class.
      * 
      * @param input the input string.
      * @return the output.
@@ -101,10 +101,10 @@ public class StringTool
     }
     
     /**
-	 * Convert int to long value.
+	 * Convert <code>int</code> to <code>Long</code> value.
 	 *
 	 * @param value the integer value.
-	 * @return the long wrapper.
+	 * @return the <code>Long</code> wrapper.
      */
     public Long getLongValue(int value)
     {
@@ -112,10 +112,10 @@ public class StringTool
     }
 
     /**
-	 * Convert string to long value.
+	 * Convert <code>String</code> to <code>Long</code> value.
 	 *
 	 * @param value the string value.
-	 * @return the long wrapper.
+     * @return the <code>Long</code> wrapper.
      */
     public Long getLongValue(String value)
     {
@@ -123,7 +123,7 @@ public class StringTool
     }
     
     /**
-	 * Convert int to string value.
+	 * Convert <code>int</code> to <code>String</code> value.
 	 *
 	 * @param value the int value.
 	 * @return the string wrapper.
@@ -176,10 +176,10 @@ public class StringTool
     }
     
     /**
-     * Format size value in b, kb, Mb
+     * Format size value in <code>b</code>, <code>kb</code>, <code>Mb</code>.
      *
      * @param value the size in bytes.
-     * @return the size as string with a proper unit suffix
+     * @return the size as string with a proper unit suffix.
      */
     public String bytesSize(int value)
     {
@@ -187,10 +187,10 @@ public class StringTool
     }
     
     /**
-     * Format size value in b, kb, Mb
+     * Format size value in <code>b</code>, <code>kb</code>, <code>Mb</code>.
      *
      * @param value the size in bytes.
-     * @return the size as string with a proper unit suffix
+     * @return the size as string with a proper unit suffix.
      */
     public String bytesSize(long value)
     {
@@ -231,10 +231,10 @@ public class StringTool
     }
  
     /**
-     * Converts a string array into a list which is more useful in Velocity. 
+     * Converts a string array into a {@link List} which is more useful in Velocity. 
      * 
      * @param strings a String array.
-     * @return a List of Strings.
+     * @return a list of Strings.
      */
     public List<String> arrayToList(String[] strings)
     {
@@ -257,7 +257,7 @@ public class StringTool
     }
 
     /**
-     * Formats interval as a human readable string.
+     * Formats time interval as a human readable string, only English is supported.
      * 
      * @param interval the interval in seconds.
      * @return a human readable string.
@@ -268,7 +268,7 @@ public class StringTool
     }
 
     /**
-     * Formats interval as a human readable string.
+     * Formats interval as a human readable string, only English is supported.
      * 
      * @param interval the interval in seconds.
      * @return a human readable string.
@@ -279,7 +279,7 @@ public class StringTool
     }
 
     /**
-     * Formats interval as a human readable string.
+     * Formats interval as a human readable string, only English is supported.
      * 
      * @param interval the interval in seconds.
      * @return a human readable string.

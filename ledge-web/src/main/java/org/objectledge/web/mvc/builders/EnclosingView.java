@@ -28,17 +28,19 @@
 package org.objectledge.web.mvc.builders;
 
 /**
- * Contains information about the enclosing view.
+ * Contains information about the chosen enclosing view.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EnclosingView.java,v 1.2 2005-02-21 10:10:13 rafal Exp $
+ * @version $Id: EnclosingView.java,v 1.3 2005-07-22 17:25:48 pablo Exp $
  */
 public class EnclosingView
 {
-    /** Tells the builder valve to terminate enclosure loop. */
+    /** Tells the builder executor valve to terminate enclosure loop. */
     public static final EnclosingView TOP = new EnclosingView(true);
     
-    /** Tells the builder valve to proceed with default lookup procedure. */
+    /** Tells the builder executor valve to proceed with defaulting lookup procedure.
+     * @see org.objectledge.web.mvc.finders.ViewFallbackSequence
+     */
     public static final EnclosingView DEFAULT = new EnclosingView(false);
     
     private boolean top = false;
@@ -78,7 +80,7 @@ public class EnclosingView
     }
 
     /**
-     * If true, the builder valve should use view returned by {@link #getView()} as the enclosing 
+     * If true, the builder executor valve should use view returned by {@link #getView()} as the enclosing 
      * view.
      * 
      * @return <code>true</code> if the builder should use view returned by {@link #getView()} as 
@@ -90,7 +92,7 @@ public class EnclosingView
     }
 
     /**
-     * If true, the builder valve should terminate the enclosure loop.
+     * If true, the builder executor valve should terminate the enclosure loop.
      * 
      * @return <code>true</code> if the builder valve should terminate the enclosure loop.
      */
@@ -100,7 +102,7 @@ public class EnclosingView
     }
 
     /**
-     * If true, the builder valve should proceed with default lookup procedure.
+     * If true, the builder executor valve should proceed with default lookup procedure.
      * 
      * @return <code>true</code> if the builder valve should proceed with default lookup procedure. 
      */

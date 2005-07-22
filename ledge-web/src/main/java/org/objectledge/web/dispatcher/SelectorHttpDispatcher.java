@@ -43,9 +43,10 @@ import org.objectledge.web.HttpDispatcher;
 
 /**
  * A dispatcher that provides rule based selection of other dispatchers.
+ * The dispatchers are selected by means of the {@link org.objectledge.selector.Selector} component.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SelectorHttpDispatcher.java,v 1.2 2004-12-23 07:18:17 rafal Exp $
+ * @version $Id: SelectorHttpDispatcher.java,v 1.3 2005-07-22 17:25:57 pablo Exp $
  */
 public class SelectorHttpDispatcher
     implements HttpDispatcher

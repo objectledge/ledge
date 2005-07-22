@@ -39,10 +39,14 @@ import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 
 /**
- * Pipeline component for executing MVC view building.
+ * Pipeline component for putting the MVC view building results to the response.
+ * 
+ * <p>
+ * The build results are only put into the response if no direct response has been triggered.
+ * </p>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsValve.java,v 1.8 2005-03-08 13:08:00 zwierzem Exp $
+ * @version $Id: MVCResultsValve.java,v 1.9 2005-07-22 17:25:50 pablo Exp $
  */
 public class MVCResultsValve 
     implements Valve

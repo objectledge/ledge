@@ -32,11 +32,10 @@ import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.templating.Template;
 
 /**
- * A configurable factory of Sequence objects.
- * 
+ * A configurable factory of {@link org.objectledge.web.mvc.finders.Sequence} objects.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactory.java,v 1.9 2004-12-27 05:18:14 rafal Exp $
+ * @version $Id: NameSequenceFactory.java,v 1.10 2005-07-22 17:25:53 pablo Exp $
  */
 public class NameSequenceFactory
 {

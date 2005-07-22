@@ -34,11 +34,11 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 /**
- * This valve decodes characters represented as HTML entities sent in by the browser in parameter
- * values. This is very important for applications saving data into datatbases etc.
+ * This valve encodes characters represented as HTML entities sent to the browser in the response.
+ * It is used to present characters not handled by current encoding.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCResultsHTMLEntityEncoderValve.java,v 1.2 2004-12-22 08:58:09 rafal Exp $
+ * @version $Id: MVCResultsHTMLEntityEncoderValve.java,v 1.3 2005-07-22 17:25:43 pablo Exp $
  */
 public class MVCResultsHTMLEntityEncoderValve
     implements Valve
@@ -56,8 +56,8 @@ public class MVCResultsHTMLEntityEncoderValve
     }
     
     /**
-     * Run the pipeline valve - parse the parameters values and replaces them in
-     * <code>RequestParameters</code> container.
+     * Run the pipeline valve - encode the {@link MVCContext#getBuildResult()} using HTML
+     * entities.
      * 
      * @param context the context.
      */

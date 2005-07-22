@@ -38,16 +38,17 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.utils.StringUtils;
 
 /**
- * Pipeline component for executing MVC view building.
+ * Pipeline component for printing exceptions not handled by previous valves in
+ * the <code>catch</code> section of the {@link org.objectledge.pipeline.ErrorHandlingPipeline}.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PrintExceptionValve.java,v 1.5 2005-02-10 17:49:09 rafal Exp $
+ * @version $Id: PrintExceptionValve.java,v 1.6 2005-07-22 17:25:46 pablo Exp $
  */
 public class PrintExceptionValve 
     implements Valve
 {
 	/**
-	 * Run view building starting from a view builder chosen in request parameters.
+	 * Print the exception trace if it hasn't been handled.
      * 
      * @param context used application context 
      * @throws ProcessingException if the processing fails.

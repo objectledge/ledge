@@ -34,11 +34,11 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.web.HttpContext;
 
 /**
- * A context tool for retrieving user agent info.
+ * A context tool for retrieving user agent (web browser) info.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.7 2005-02-21 13:51:22 zwierzem Exp $
+ * @version $Id: UserAgentTool.java,v 1.8 2005-07-22 17:25:45 pablo Exp $
  */
 public class UserAgentTool
 {

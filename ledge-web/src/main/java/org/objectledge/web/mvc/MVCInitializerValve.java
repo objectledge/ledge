@@ -35,10 +35,11 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.web.WebConfigurator;
 
 /**
- * Pipeline processing valve that initialize pipeline context.
+ * Pipeline processing valve that initializes the MVC parameters (view and action) by means of the
+ * {@link org.objectledge.web.mvc.MVCContext} object.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MVCInitializerValve.java,v 1.8 2005-03-09 13:33:25 zwierzem Exp $
+ * @version $Id: MVCInitializerValve.java,v 1.9 2005-07-22 17:25:50 pablo Exp $
  */
 public class MVCInitializerValve 
     implements Valve

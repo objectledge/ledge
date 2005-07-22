@@ -38,6 +38,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * Component tools factory.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: ComponentToolFactory.java,v 1.7 2005-07-22 17:25:52 pablo Exp $
  */
 public class ComponentToolFactory implements ContextToolFactory
 {

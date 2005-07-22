@@ -34,9 +34,10 @@ import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.HttpContext;
 
 /**
- * Context tool factory component to build the link tool.
+ * Context tool factory component to build the page tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: PageToolFactory.java,v 1.9 2005-07-22 17:25:45 pablo Exp $
  */
 public class PageToolFactory implements ContextToolFactory
 {

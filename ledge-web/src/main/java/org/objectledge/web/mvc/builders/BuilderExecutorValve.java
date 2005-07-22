@@ -42,8 +42,61 @@ import org.objectledge.web.mvc.security.SecurityHelper;
 /**
  * Pipeline component for executing MVC view building.
  * 
+ * <p>
+ * The <code>BuilderExecutorValve</code> starts with a view name selected by the configured
+ * view request parameter ({@link org.objectledge.web.WebConfigurator#getViewToken()}).
+ * This parameter has to be defined and if not an
+ * {@link org.objectledge.web.mvc.builders.UndefinedViewParameterException} is thrown.
+ * At the same time the view name must point to either an existing
+ * {@link org.objectledge.web.mvc.builders.Builder} class or an existing template.
+ * If none of these exists a {@link org.objectledge.web.mvc.builders.MissingViewException}
+ * is thrown.
+ * If either the template or a builder has been found, the view building starts.
+ * </p>
+ * 
+ * <p>
+ * For a given view name either a builder class or a template may be found using the defaulting
+ * strategy. This is useful for instance for applications having a set of different templates for
+ * presenting the same data. But <b>be warned</b> - defaulting may cause a lot of trouble and You should
+ * be aware of it.
+ * </p>
+ * 
+ * <p>
+ * If the builder is found it is given the possiblity to route the processing to another builder.
+ * This is a rarely used functionality and has been introduced for similarity with older
+ * web application frameworks. Routing changes the currently selected view name and forces a new
+ * builder and template lookup.
+ * </p>
+ * 
+ * <p>
+ * Having the either a builder or a template or both at the same time the build method of the
+ * builder is executed (missing builders and templates are replaced with
+ * {@link org.objectledge.web.mvc.builders.DefaultBuilder} and
+ * {@link org.objectledge.web.mvc.builders.DefaultTemplate} objects).
+ * Building creates a <code>String</code> represenation of view contents. The only exception is
+ * in case of a Builder which creates a direct response and writes it's content directly to the
+ * response (via {@link org.objectledge.web.HttpContext}), in such case view processing is stopped.
+ * </p>
+ * 
+ * <p>Having the build results for a view, an enclosing view is looked up. The choice of the
+ * enclosing view is made upon:
+ * </p>
+ * <ul>
+ * <li>the {@link org.objectledge.web.mvc.builders.EnclosingView} object given by the current
+ * builder,</li>
+ * <li>or the choice made by the template designer using the
+ * {@link org.objectledge.web.mvc.builders.ViewEnclosureTool},</li>
+ * <li>or by means of defaulting strategy executed using
+ * {@link org.objectledge.web.mvc.finders.ViewFallbackSequence}.</li>
+ * </ul>
+ * <p>
+ * A detailed diagram of the enclosing view choice algorithm follows:
+ * </p>
+ * 
+ * <img src="doc-files/BuilderExecutorValve-1.gif" alt="Enclosing view choice algorithm" />
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.34 2005-05-24 04:29:34 rafal Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.35 2005-07-22 17:25:48 pablo Exp $
  */
 public class BuilderExecutorValve 
     implements Valve

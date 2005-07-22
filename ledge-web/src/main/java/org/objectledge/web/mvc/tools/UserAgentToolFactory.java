@@ -37,6 +37,7 @@ import org.objectledge.web.HttpContext;
  * Context tool factory component to build the user agent tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: UserAgentToolFactory.java,v 1.3 2005-07-22 17:25:45 pablo Exp $
  */
 public class UserAgentToolFactory implements ContextToolFactory
 {

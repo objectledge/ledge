@@ -30,10 +30,10 @@ package org.objectledge.web.mvc.finders;
 import org.objectledge.templating.Template;
 
 /**
- * Finds templates that should be used for rendering specific views.
+ * Finds templates that should be used for rendering specific views and web page components.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: MVCTemplateFinder.java,v 1.13 2005-07-07 08:29:31 zwierzem Exp $
+ * @version $Id: MVCTemplateFinder.java,v 1.14 2005-07-22 17:25:53 pablo Exp $
  */
 public interface MVCTemplateFinder
 {
@@ -42,6 +42,8 @@ public interface MVCTemplateFinder
 	/**
 	 * Returns a result object containing reference to the found builder template for a given view
      * name. If no template is found, a <code>null</code> template is returned in the result object.
+     * The <b>find</b>ing of the view tamplates uses the defaulting strategy based on
+     * the {@link ViewFallbackSequence} name sequence generation.
 	 * 
      * @param name view name to look up template for.
 	 * @return found template with accompanying info.

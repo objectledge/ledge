@@ -67,7 +67,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.24 2005-04-06 14:26:41 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.25 2005-07-22 17:25:44 pablo Exp $
  */
 public class LinkTool
 {
@@ -127,7 +127,7 @@ public class LinkTool
 	private StringBuilder sb;
 	
 	/** 
-	 * Component constructor.
+	 * Tool constructor.
 	 * 
 	 * @param httpContext the http context.
      * @param mvcContext the mvc context.
@@ -213,7 +213,7 @@ public class LinkTool
 	}
 
     /**
-     * Generate an absolute link including schema server, name and port.
+     * Generate an absolute link including protocol name (schema), server name and port number.
      * 
      * @return the link tool.
      */
@@ -240,7 +240,7 @@ public class LinkTool
     }
 
     /**
-     * Avoid session information in link.
+     * Avoid session information in link - useful for content served using external HTTP server. 
      *
      * @return the link tool. 
      */
@@ -253,6 +253,7 @@ public class LinkTool
 
     /**
      * Set link to point to the content stored in <code>/</code> directory of servlet context.
+     * May be used to generate relative content paths (not recommended).
      *
      * @param path the path to content.
      * @return the link tool.
@@ -267,10 +268,10 @@ public class LinkTool
     }
 
     /**
-     * Set link to point to the content stored in <code>/content</code> directory of servlet
-     * context.
+     * Set link to point to the content stored in configured content (<code>/content</code>)
+     * directory of servlet context. 
      *
-     * @param path the path to content.
+     * @param path the relative path to content.
      * @return the link tool.
      */
     public LinkTool content(String path)
@@ -293,7 +294,8 @@ public class LinkTool
     // parameter set methods ---------------------------------------------------------------------- 
     
     /**
-     * Sets a request parameter.
+     * Sets a request parameter, replacing previously set value.
+     * Unless configured differently it will be rendered in the link as query string parameter.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -307,7 +309,8 @@ public class LinkTool
     }
 
     /**
-     * Sets a request parameter.
+     * Sets a request parameter, replacing previously set value.
+     * Unless configured differently it will be rendered in the link as query string parameter.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -321,7 +324,8 @@ public class LinkTool
     }
 
     /**
-     * Sets a request parameter.
+     * Sets a request parameter, replacing previously set value.
+     * Unless configured differently it will be rendered in the link as query string parameter.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -335,7 +339,8 @@ public class LinkTool
     }
 
     /**
-     * Sets a request parameter.
+     * Sets a request parameter, replacing previously set value.
+     * Unless configured differently it will be rendered in the link as query string parameter.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -349,7 +354,8 @@ public class LinkTool
     }
 
     /**
-     * Sets a request parameter.
+     * Sets a request parameter, replacing previously set value.
+     * Unless configured differently it will be rendered in the link as query string parameter.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -363,10 +369,10 @@ public class LinkTool
     }
 
     /**
-     * Sets multiple values parameter with values defined as a java.util.List.
+     * Sets multiple values of a parameter using a {@link java.util.List}.
      *
      * @param name the name of the parameter.
-     * @param list a set of parameter values.
+     * @param list a list of parameter values.
      * @return the link tool.
      */
     public LinkTool set(String name, List<String> list)
@@ -381,7 +387,8 @@ public class LinkTool
     }
 
     /**
-     * Adds a set of parameters defined as a java.util.Map to the request.
+     * Adds a set of parameters defined as a {@link java.util.Map} to the request.
+     * Removes old values of the parameters.
      *
      * @param map a set of parametres as a Map.
      * @return the link tool.
@@ -447,6 +454,7 @@ public class LinkTool
     
     /**
      * Sets the path info suffix for this link.
+     * May be used for file download links.
      * 
      * @param pathInfoSuffix the path info suffix.
      * @return the link tool.
@@ -470,6 +478,7 @@ public class LinkTool
 
     /**
      * Sets the fragment for this link.
+     * Fragment is appended as <code>#fragment-value</code> to the rendered link.
      * 
      * @param fragment the fragment.
      * @return the link tool.
@@ -495,7 +504,7 @@ public class LinkTool
      * Sets the parameters to be equal to the paremeters of the
      * current request.
      * 
-     * <p>TODO: This method creates links different from the request URI if some of the parameters
+     * <p>WARN: This method creates links different from the request URI if some of the parameters
      * were passed as path info parameters and not configured as such.</p>  
      * 
      * @return the link tool.
@@ -518,7 +527,7 @@ public class LinkTool
     // parameter add methods ---------------------------------------------------------------------- 
     
     /**
-     * Adds a request parameter.
+     * Adds a request parameter, extending it's values set.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -532,7 +541,7 @@ public class LinkTool
     }
 
     /**
-     * Adds a request parameter.
+     * Adds a request parameter, extending it's values set.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -546,7 +555,7 @@ public class LinkTool
     }
 
     /**
-     * Adds a request parameter.
+     * Adds a request parameter, extending it's values set.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -560,7 +569,7 @@ public class LinkTool
     }
 
     /**
-     * Adds a request parameter.
+     * Adds a request parameter, extending it's values set.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -574,7 +583,7 @@ public class LinkTool
     }
 
     /**
-     * Adds a request parameter.
+     * Adds a request parameter, extending it's values set.
      *
      * @param name the name of the parameter.
      * @param value the value of the parameter.
@@ -588,7 +597,7 @@ public class LinkTool
     }
 
     /**
-     * Adds multiple values parameter with values defined as a java.util.List.
+     * Adds multiple parameter values using a {@link java.util.List}.
      *
      * @param name the name of the parameter.
      * @param list a set of parameter values.
@@ -605,7 +614,7 @@ public class LinkTool
     }
 
     /**
-     * Adds a set of parameters defined as a java.util.Map to the request.
+     * Adds a set of parameters defined as a {@link java.util.Map} to the request.
      *
      * @param map a set of parametres as a Map.
      * @return the link tool.
@@ -666,7 +675,7 @@ public class LinkTool
     // ---------------------------------------------------------------------------------------------
     
     /**
-     * Removes a request parameter.
+     * Removes all values of a request parameter.
      *
      * @param name the name of the parameter.
      * @return the link tool.
@@ -743,7 +752,7 @@ public class LinkTool
     // start toString() - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     
     /**
-     * Produces a String representation of this link.
+     * Produces a {@link java.lang.String} representation of this link.
      * 
      * @return the link.
      */

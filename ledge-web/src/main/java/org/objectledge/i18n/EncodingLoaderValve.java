@@ -40,12 +40,12 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 
 /**
- * Pipeline processing valve that sets the encoding.
+ * Pipeline processing valve that sets the generated page output encoding.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EncodingLoaderValve.java,v 1.4 2004-12-23 07:17:36 rafal Exp $
+ * @version $Id: EncodingLoaderValve.java,v 1.5 2005-07-22 17:25:54 pablo Exp $
  */
 public class EncodingLoaderValve 
     extends AbstractI18nValve

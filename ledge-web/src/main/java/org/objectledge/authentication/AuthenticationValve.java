@@ -37,10 +37,10 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 
 /**
- * Pipeline processing valve that initialize pipeline context.
+ * Pipeline processing valve that sets the context variable describing currently authenticated user.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: AuthenticationValve.java,v 1.12 2004-12-23 07:17:43 rafal Exp $
+ * @version $Id: AuthenticationValve.java,v 1.13 2005-07-22 17:25:47 pablo Exp $
  */
 public class AuthenticationValve 
     implements Valve
