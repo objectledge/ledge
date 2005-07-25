@@ -42,7 +42,7 @@ import org.objectledge.web.HttpContext;
  * Base i18n processing valve with utility methods.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18nValve.java,v 1.2 2004-12-22 08:58:32 rafal Exp $
+ * @version $Id: AbstractI18nValve.java,v 1.3 2005-07-25 12:51:43 rafal Exp $
  */
 public abstract class AbstractI18nValve 
     implements Valve
@@ -60,10 +60,13 @@ public abstract class AbstractI18nValve
         // set up cookie keys - neccessary for browsers with multiple
         // users on a single user system - for instance Win95/98
         String cookieKey = ".anonymous";
-        Principal principal = authenticationContext.getUserPrincipal();
-        if (principal != null && principal.getName() != null)
+        if(authenticationContext != null)
         {
-            cookieKey = "." + StringUtils.cookieNameSafeString(principal.getName());
+            Principal principal = authenticationContext.getUserPrincipal();
+            if (principal != null && principal.getName() != null)
+            {
+                cookieKey = "." + StringUtils.cookieNameSafeString(principal.getName());
+            }
         }
         return cookieKey;
     }
