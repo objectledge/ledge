@@ -32,11 +32,11 @@
   </tr>    
   <tr>
     <td align="right">Run time limit start: </td>
-    <td><input type="text" name="runTimeLimitStart">
+	<td><input type="text" name="runTimeLimitStart"></td>
   </tr>    
   <tr>
     <td align="right">Run time limit end: </td>
-    <td><input type="text" name="runTimeLimitEnd">
+	<td><input type="text" name="runTimeLimitEnd"></td>
   </tr>    
   <tr>
     <td align="right">Reentrant: </td>
