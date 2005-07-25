@@ -45,7 +45,7 @@ import org.objectledge.web.WebConfigurator;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: EncodingLoaderValve.java,v 1.5 2005-07-22 17:25:54 pablo Exp $
+ * @version $Id: EncodingLoaderValve.java,v 1.6 2005-07-25 12:52:02 rafal Exp $
  */
 public class EncodingLoaderValve 
     extends AbstractI18nValve
@@ -66,7 +66,8 @@ public class EncodingLoaderValve
     }
 
     /**
-     * Run the pipeline valve - authenticate user.
+     * Run the pipeline valve - set the encoding in the cookie (if needed), in the session
+     * and the request.
      * 
      * @param context the context.
      */
