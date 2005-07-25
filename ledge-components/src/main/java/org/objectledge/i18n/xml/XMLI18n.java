@@ -184,7 +184,9 @@ public class XMLI18n extends AbstractI18n
 		{
 			throw new ComponentInitializationError("error parsing "+file+
 				 " on line "+((SAXParseException)e).getLineNumber()+
-                 ", column "+((SAXParseException)e).getColumnNumber(), e);
+                 ", column "+((SAXParseException)e).getColumnNumber()+
+                 ", message '"+((SAXParseException)e).getMessage()+
+                 "'", e);
 		}
 	}
 	
