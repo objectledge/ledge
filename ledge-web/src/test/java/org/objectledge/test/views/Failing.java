@@ -31,28 +31,26 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Failing.java,v 1.2 2005-05-09 08:11:49 rafal Exp $
+ * @version $Id: Failing.java,v 1.3 2005-07-26 12:15:49 rafal Exp $
  */
-public class Failing extends DefaultBuilder
+public class Failing extends AbstractBuilder
 {
     public Failing(Context context)
     {
         super(context);
     }
     
-    public String build(Template template, String embeddedResults)
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        TemplatingContext tContext = TemplatingContext.getTemplatingContext(context);
-        tContext.put("object", new FailingObject());
-        return super.build(template, embeddedResults);
-    }
+        templatingContext.put("object", new FailingObject());        
+    }    
     
     public static class FailingObject
     {

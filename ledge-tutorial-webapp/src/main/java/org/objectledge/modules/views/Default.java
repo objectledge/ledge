@@ -29,21 +29,18 @@ package org.objectledge.modules.views;
 
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18nContext;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
-import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 
 /**
  * A default view.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Default.java,v 1.5 2005-05-09 08:08:46 rafal Exp $
+ * @version $Id: Default.java,v 1.6 2005-07-26 12:15:48 rafal Exp $
  */
-public class Default extends DefaultBuilder
+public class Default extends AbstractBuilder
 {
     /**
      * Creates new Default builder instance.
@@ -58,13 +55,11 @@ public class Default extends DefaultBuilder
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults) 
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("i18nContext", I18nContext.getI18nContext(context));
         templatingContext.put("mvcContext", MVCContext.getMVCContext(context));
         templatingContext.put("httpContext", HttpContext.getHttpContext(context));
-        return super.build(template, embeddedBuildResults);
-    }
+    }    
 }
