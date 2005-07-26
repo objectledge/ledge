@@ -44,7 +44,7 @@ import org.objectledge.templating.Template;
  * </ul>  
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Builder.java,v 1.10 2005-07-22 17:25:48 pablo Exp $
+ * @version $Id: Builder.java,v 1.11 2005-07-26 12:12:11 rafal Exp $
  */
 ///CLOVER:OFF
 public interface Builder
@@ -58,6 +58,7 @@ public interface Builder
 	 * 
      * @return the name of the view which will be executed instead of current builder, or
      *  <code>null</code> to execute this builder.
+     * @throws ProcessingException on problems while determinign destination view.
      */
     public String route(String thisViewName)
         throws ProcessingException;
