@@ -35,18 +35,16 @@ import java.util.Map;
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18n;
 import org.objectledge.i18n.I18nContext;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.components.DefaultComponent;
+import org.objectledge.web.mvc.components.AbstractComponent;
 
 /**
  * A component that displays available Locales.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Locales.java,v 1.3 2004-12-27 05:18:25 rafal Exp $
+ * @version $Id: Locales.java,v 1.4 2005-07-26 12:10:51 rafal Exp $
  */
-public class Locales extends DefaultComponent
+public class Locales extends AbstractComponent
 {
     private I18n i18n;
     
@@ -65,10 +63,9 @@ public class Locales extends DefaultComponent
     /**
      * {@inheritDoc}
      */
-    public String build(Template template)
-    	throws BuildException
+    @Override
+    public void process(TemplatingContext tContext)
     {
-        TemplatingContext tContext = TemplatingContext.getTemplatingContext(context);
         Locale[] locales = i18n.getSupportedLocales();
         tContext.put("locales", Arrays.asList(locales));
         Map localeNames = new HashMap(locales.length);
@@ -78,8 +75,6 @@ public class Locales extends DefaultComponent
         }
         tContext.put("localeNames", localeNames);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
-        tContext.put("currentLocale", i18nContext.getLocale());
-        
-        return super.build(template);
+        tContext.put("currentLocale", i18nContext.getLocale());        
     }
 }
