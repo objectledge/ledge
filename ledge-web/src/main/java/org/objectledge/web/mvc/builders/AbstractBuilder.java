@@ -37,7 +37,7 @@ import org.objectledge.templating.TemplatingContext;
  * Abstract builder implementation, which does not route and only merges templates.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractBuilder.java,v 1.11 2005-05-09 08:11:40 rafal Exp $
+ * @version $Id: AbstractBuilder.java,v 1.12 2005-07-26 12:13:11 rafal Exp $
  */
 public abstract class AbstractBuilder implements Builder
 {
@@ -62,6 +62,18 @@ public abstract class AbstractBuilder implements Builder
     {
         return null;
     }
+    
+    /**
+     * Perform processing and store values in the tmplating context.
+     * 
+     * @param templatingContext the TemplatingContext.
+     * @throws ProcessingException if the processing fails.
+     */
+    public void process(TemplatingContext templatingContext)
+        throws ProcessingException
+    {
+        // do nothing in base implementation
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -69,9 +81,11 @@ public abstract class AbstractBuilder implements Builder
     public String build(Template template, String embeddedBuildResults)
         throws BuildException, ProcessingException
     {
-    	try
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        process(templatingContext);
+        try
     	{
-			return template.merge(TemplatingContext.getTemplatingContext(context));
+			return template.merge(templatingContext);
     	}
         catch(MergingException e)
         {
