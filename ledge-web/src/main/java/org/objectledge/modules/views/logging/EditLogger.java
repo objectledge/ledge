@@ -37,9 +37,7 @@ import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.PolicyProtectedBuilder;
 import org.objectledge.web.mvc.security.PolicySystem;
 
@@ -47,7 +45,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EditLogger.java,v 1.3 2005-07-07 08:29:34 zwierzem Exp $
+ * @version $Id: EditLogger.java,v 1.4 2005-07-26 12:13:30 rafal Exp $
  */
 public class EditLogger
     extends PolicyProtectedBuilder
@@ -68,8 +66,8 @@ public class EditLogger
      * {@inheritDoc}
      */
     @Override
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    public void process(TemplatingContext templatingContext)
+        throws ProcessingException
     {
         RequestParameters requestParameters = RequestParameters.getRequestParameters(context);
         String id = requestParameters.get("id");
@@ -86,7 +84,6 @@ public class EditLogger
             }
             logger = LogManager.getLogger(id);
         }
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("logger", logger);
         List<Appender> appenders = new ArrayList<Appender>();
         getAppenders(logger, appenders);
@@ -95,8 +92,7 @@ public class EditLogger
         inheritedAppenders.removeAll(appenders);
         templatingContext.put("appenders", appenders);
         templatingContext.put("inheritedAppenders", inheritedAppenders);
-        return super.build(template, embeddedBuildResults);
-    }
+    }        
 
     /**
      * Returns appenders attached to the logger.

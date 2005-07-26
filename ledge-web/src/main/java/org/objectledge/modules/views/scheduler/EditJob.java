@@ -30,12 +30,9 @@ package org.objectledge.modules.views.scheduler;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.scheduler.AbstractJobDescriptor;
 import org.objectledge.scheduler.AbstractScheduler;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.PolicyProtectedBuilder;
 import org.objectledge.web.mvc.security.PolicySystem;
 
@@ -43,7 +40,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * Edit/view job.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: EditJob.java,v 1.1 2005-05-17 08:52:48 pablo Exp $
+ * @version $Id: EditJob.java,v 1.2 2005-07-26 12:13:28 rafal Exp $
  */
 public class EditJob
     extends PolicyProtectedBuilder
@@ -67,18 +64,16 @@ public class EditJob
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-		Parameters parameters = RequestParameters.getRequestParameters(context);
-		String name = parameters.get("name", "");
-		if(name.length() > 0)
-		{
-			AbstractJobDescriptor descriptor = scheduler.getJobDescriptor(name);
-			templatingContext.put("job", descriptor);
-		}
-		templatingContext.put("allowsModifications", new Boolean(scheduler.allowsModifications()));
-        return super.build(template, embeddedBuildResults);
-    }
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        String name = parameters.get("name", "");
+        if(name.length() > 0)
+        {
+            AbstractJobDescriptor descriptor = scheduler.getJobDescriptor(name);
+            templatingContext.put("job", descriptor);
+        }
+        templatingContext.put("allowsModifications", new Boolean(scheduler.allowsModifications()));
+    }        
 }

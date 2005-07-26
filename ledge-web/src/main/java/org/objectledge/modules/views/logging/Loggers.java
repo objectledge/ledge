@@ -44,9 +44,7 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
 import org.objectledge.table.generic.PathTreeTableModel;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.PolicyProtectedBuilder;
 import org.objectledge.web.mvc.security.PolicySystem;
 
@@ -54,7 +52,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * A view that displays loggers active in the system.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Loggers.java,v 1.1 2005-05-18 05:33:29 rafal Exp $
+ * @version $Id: Loggers.java,v 1.2 2005-07-26 12:13:30 rafal Exp $
  */
 public class Loggers
     extends PolicyProtectedBuilder
@@ -98,10 +96,9 @@ public class Loggers
      * {@inheritDoc}
      */
     @Override
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    public void process(TemplatingContext templatingContext)
+        throws ProcessingException
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         List<Logger> loggerList = getLoggers();
         try
         {
@@ -120,9 +117,8 @@ public class Loggers
             throw new ProcessingException("failed to build logger hierarchy model", e);
         }
         templatingContext.put("loggerList", loggerList);
-        return super.build(template, embeddedBuildResults);
-    }
-
+    }        
+    
     private List<Logger> getLoggers()
     {
         Enumeration<Logger> loggerEnumeration = LogManager.getCurrentLoggers();

@@ -28,11 +28,8 @@
 package org.objectledge.modules.views.scheduler;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.scheduler.AbstractScheduler;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.PolicyProtectedBuilder;
 import org.objectledge.web.mvc.security.PolicySystem;
 
@@ -40,7 +37,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * Jobs list view.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Jobs.java,v 1.1 2005-05-17 08:52:48 pablo Exp $
+ * @version $Id: Jobs.java,v 1.2 2005-07-26 12:13:28 rafal Exp $
  */
 public class Jobs
     extends PolicyProtectedBuilder
@@ -64,13 +61,11 @@ public class Jobs
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-		templatingContext.put("allowsModifications", new Boolean(scheduler.allowsModifications()));
+        templatingContext.put("allowsModifications", new Boolean(scheduler.allowsModifications()));
         templatingContext.put("format", scheduler.getDateFormat());
         templatingContext.put("jobs", scheduler.getJobDescriptors());
-        return super.build(template, embeddedBuildResults);
-    }
+    }            
 }

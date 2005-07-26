@@ -30,10 +30,7 @@ package org.objectledge.modules.views.system;
 import java.lang.management.ManagementFactory;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.PolicyProtectedBuilder;
 import org.objectledge.web.mvc.security.PolicySystem;
 
@@ -41,7 +38,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VM.java,v 1.1 2005-05-09 10:34:24 rafal Exp $
+ * @version $Id: VM.java,v 1.2 2005-07-26 12:13:29 rafal Exp $
  */
 public class VM
     extends PolicyProtectedBuilder
@@ -56,17 +53,14 @@ public class VM
     public VM(Context context, PolicySystem policySystemArg)
     {
         super(context, policySystemArg);
-        // TODO Auto-generated constructor stub
     }
-
+    
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        
         templatingContext.put("classLoading", ManagementFactory.getClassLoadingMXBean());
         templatingContext.put("compilation", ManagementFactory.getCompilationMXBean());        
         templatingContext.put("garbageCollectors", ManagementFactory.getGarbageCollectorMXBeans());
@@ -76,7 +70,5 @@ public class VM
         templatingContext.put("operatingSystem", ManagementFactory.getOperatingSystemMXBean());
         templatingContext.put("runtime", ManagementFactory.getRuntimeMXBean());
         templatingContext.put("thread", ManagementFactory.getThreadMXBean());
-        
-        return super.build(template, embeddedBuildResults);
-    }
+    }            
 }

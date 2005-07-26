@@ -29,10 +29,7 @@ package org.objectledge.modules.views.system;
 
 import org.objectledge.configuration.ConfigurationInspector;
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.PolicyProtectedBuilder;
 import org.objectledge.web.mvc.security.PolicySystem;
 
@@ -40,7 +37,7 @@ import org.objectledge.web.mvc.security.PolicySystem;
  * 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Configuration.java,v 1.3 2005-05-09 08:10:13 rafal Exp $
+ * @version $Id: Configuration.java,v 1.4 2005-07-26 12:13:29 rafal Exp $
  */
 public class Configuration
     extends PolicyProtectedBuilder
@@ -64,12 +61,9 @@ public class Configuration
     /**
      * {@inheritDoc}
      */
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    @Override
+    public void process(TemplatingContext templatingContext)
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         templatingContext.put("components", configurationViewer.getComponentConfigurations());
-        return super.build(template, embeddedBuildResults);
-    }
-
+    }        
 }
