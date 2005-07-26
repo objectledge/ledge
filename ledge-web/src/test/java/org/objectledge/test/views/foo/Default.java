@@ -28,16 +28,16 @@
 package org.objectledge.test.views.foo;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 
 /**
  * A test view.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Default.java,v 1.2 2004-01-22 15:15:11 fil Exp $
+ * @version $Id: Default.java,v 1.3 2005-07-26 12:15:34 rafal Exp $
  */
 public class Default 
-    extends DefaultBuilder
+    extends AbstractBuilder
 {
     public Default(Context context)
     {

@@ -28,14 +28,14 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RoutedTo.java,v 1.1 2004-01-20 15:27:10 fil Exp $
+ * @version $Id: RoutedTo.java,v 1.2 2005-07-26 12:15:35 rafal Exp $
  */
-public class RoutedTo extends DefaultBuilder
+public class RoutedTo extends AbstractBuilder
 {
     public RoutedTo(Context context)
     {

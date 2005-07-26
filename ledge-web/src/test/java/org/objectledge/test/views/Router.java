@@ -28,15 +28,15 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.builders.DefaultBuilder;
+import org.objectledge.web.mvc.builders.AbstractBuilder;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Router.java,v 1.2 2005-02-16 17:19:25 zwierzem Exp $
+ * @version $Id: Router.java,v 1.3 2005-07-26 12:15:35 rafal Exp $
  */
 public class Router
-    extends DefaultBuilder
+    extends AbstractBuilder
 {
     public Router(Context context)
     { 

@@ -39,10 +39,10 @@ import org.objectledge.web.mvc.security.SecurityChecking;
  * A builder that must be protected by a specific policy. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PolicyProtectedBuilder.java,v 1.1 2005-05-06 09:38:09 rafal Exp $
+ * @version $Id: PolicyProtectedBuilder.java,v 1.2 2005-07-26 12:15:36 rafal Exp $
  */
 public abstract class PolicyProtectedBuilder
-    extends DefaultBuilder
+    extends AbstractBuilder
     implements SecurityChecking
 {
     private final PolicySystem policySystem;
