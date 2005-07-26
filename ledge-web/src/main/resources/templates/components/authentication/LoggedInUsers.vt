@@ -1,0 +1,10 @@
+<div id="loggedInUsers">
+#foreach($user in $users)
+#set($pd = $personalData.get($user))
+<div>
+$logins.get($user) 
+($pd.get('givenName','') $pd.get('sn','')) 
+$stringTool.millisecondsInterval($idleTime.get($user))
+</div>
+#end
+</div>
