@@ -36,7 +36,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * the {@link org.objectledge.web.mvc.components.ComponentTool}.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: Component.java,v 1.4 2005-07-22 17:25:52 pablo Exp $
+ * @version $Id: Component.java,v 1.5 2005-07-26 12:08:23 rafal Exp $
  */
 public interface Component
 {
@@ -47,9 +47,10 @@ public interface Component
 	 * 
 	 * @return string containing rendered view element.
 	 * @throws BuildException on problems with view element building.
+     * @throws ProcessingException on problems while preparing information to be shown.
 	 */
 	public String build(Template template)
-	   throws BuildException;
+	   throws BuildException, ProcessingException;
 	   
 	/**
 	 * Selects a template for rendering the component explicitly.
