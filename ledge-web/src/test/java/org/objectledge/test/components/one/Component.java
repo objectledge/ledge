@@ -28,14 +28,14 @@
 package org.objectledge.test.components.one;
 
 import org.objectledge.context.Context;
-import org.objectledge.web.mvc.components.DefaultComponent;
+import org.objectledge.web.mvc.components.AbstractComponent;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Component.java,v 1.1 2004-01-20 13:39:48 fil Exp $
+ * @version $Id: Component.java,v 1.2 2005-07-26 12:10:41 rafal Exp $
  */
-public class Component extends DefaultComponent
+public class Component extends AbstractComponent
 {
     public Component(Context context)
     {
