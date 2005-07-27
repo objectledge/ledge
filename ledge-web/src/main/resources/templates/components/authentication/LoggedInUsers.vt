@@ -1,10 +1,19 @@
+#macro(interval $s)
+#set($m = $s / 60)
+#set($s60 = $s - $m * 60)
+$m:$s60
+#end
 <div id="loggedInUsers">
 #foreach($user in $users)
 #set($pd = $personalData.get($user))
+#set($gn = $pd.get('givenName',''))
+#set($sn = $pd.get('sn',''))
 <div>
-$logins.get($user) 
-($pd.get('givenName','') $pd.get('sn','')) 
-$stringTool.millisecondsInterval($idleTime.get($user))
+$login.get($user) 
+#if($gn.length() > 0 || $sn.length() > 0)
+($gn $sn) 
+#end
+#interval($idleTime.get($user))
 </div>
 #end
 </div>
