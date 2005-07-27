@@ -59,13 +59,14 @@ public class LoggedInUsers
             Map<Principal,String> login = new HashMap<Principal,String>(principals.size());
             Map<Principal, Parameters> personalData = new HashMap<Principal,Parameters>(
                 principals.size());
-            Map<Principal,Long> idleTime = new HashMap<Principal,Long>(principals.size());
+            Map<Principal,Integer> idleTime = new HashMap<Principal,Integer>(principals.size());
             Date now = new Date();
             for(Principal p : principals)
             {
                 login.put(p, userManager.getLogin(p));
                 personalData.put(p, new DirectoryParameters(userManager.getPersonalData(p)));
-                idleTime.put(p, now.getTime() - userTracker.getLastClickTime(p).getTime());
+                int idle = (int)((now.getTime() - userTracker.getLastClickTime(p).getTime())/1000);
+                idleTime.put(p, idle);
             }
             List<Principal> users = new ArrayList<Principal>(principals);
             Collections.sort(users, new Comparator<Principal>() {
