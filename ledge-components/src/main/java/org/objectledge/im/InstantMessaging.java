@@ -28,6 +28,7 @@
 
 package org.objectledge.im;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,16 +36,19 @@ import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Provides services related to Instant Messaging tools and protocols.
  * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: InstantMessaging.java,v 1.1 2005-07-28 12:08:08 rafal Exp $
+ * @version $Id: InstantMessaging.java,v 1.2 2005-07-28 13:10:48 rafal Exp $
  */
 public class InstantMessaging
 {
     private final Map<String,InstantMessagingProtocol> protocols;
+
+    private static final String IM_ATTRIBUTE = "instantMessaging";
 
     /**
      * Creates a new InstantMessaging instance.
@@ -92,5 +96,57 @@ public class InstantMessaging
     public InstantMessagingProtocol getProtocol(String id)
     {
         return protocols.get(id);
+    }
+    
+    /**
+     * Returns the the defined IM contacts for the user.
+     * 
+     * @param personalData user's personal data.
+     * @return the defined IM contatacs.
+     * @throws IllegalArgumentException if the personald data contains corrupted information.
+     */
+    public Collection<InstantMessagingContact> getContacts(Parameters personalData)
+        throws IllegalArgumentException
+    {
+        Collection<InstantMessagingContact> contacts = new ArrayList<InstantMessagingContact>();
+        for(String item : personalData.getStrings(IM_ATTRIBUTE))
+        {
+            int p = item.indexOf(':');
+            if(p < 0)
+            {
+                throw new IllegalArgumentException("malformed "+IM_ATTRIBUTE+" value: "+item);
+            }
+            String protocolId = item.substring(0, p);
+            String screenName = item.substring(p+1);
+            InstantMessagingProtocol protocol = protocols.get(protocolId);
+            if(protocol == null)
+            {
+                throw new IllegalArgumentException("unknonw protocol "+protocolId);
+            }
+            contacts.add(new InstantMessagingContact(protocol, screenName));
+        }
+        return contacts;
+    }
+    
+    /**
+     * Adds an IM contact to the user's personal data.
+     * 
+     * @param personalData the personal data to modify.
+     * @param contact contact to add.
+     */
+    public void addContact(Parameters personalData, InstantMessagingContact contact)
+    {
+        personalData.add(IM_ATTRIBUTE, contact.toString());
+    }
+    
+    /**
+     * Removes an IM contact from the user's personal data.
+     * 
+     * @param personalData the personal data to modify.
+     * @param contact contact to add.
+     */
+    public void removeContact(Parameters personalData, InstantMessagingContact contact)
+    {
+        personalData.remove(IM_ATTRIBUTE, contact.toString());        
     }
 }
