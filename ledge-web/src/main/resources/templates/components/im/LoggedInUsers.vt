@@ -1,0 +1,32 @@
+#macro(interval $s)
+	#set($m = $s / 60)
+	#set($s60 = $s - $m * 60)
+	$m:$s60
+#end
+<style type="text/css">
+	div#loggedInUsers img {
+	  border: none;
+	}
+</style>
+<div id="loggedInUsers">
+	<table width="100%">
+		#foreach($user in $users)
+			<tr>
+				<td width="36" align="right">#foreach($contact in $contacts.get($user))
+#if($contact.protocol.schema)##
+<a href="${contact.protocol.schema}:${contact.screenName}"><img src="$contact.statusUrl" title="$contact.screenName"/></a>##
+#else
+<img src="$contact.statusUrl" title="$contact.screenName"/>##
+#end
+#end</td>
+				<td valign="top">
+					#set($l = $login.get($user))
+					<a href="$link.self().set('user',$l)">$l</a> 
+				</td>
+				<td width="50" valign="top">
+					#interval(1799) ## $idleTime.get($user)
+				</td>
+			</tr>
+		#end
+	</table>
+</div>
