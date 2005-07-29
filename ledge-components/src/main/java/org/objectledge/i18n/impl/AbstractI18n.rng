@@ -44,6 +44,11 @@
               </attribute>
             </optional>
             <optional>
+              <attribute name="prefered">
+                <text/>
+              </attribute>
+            </optional>
+            <optional>
               <attribute name="name">
                 <text/>
               </attribute>

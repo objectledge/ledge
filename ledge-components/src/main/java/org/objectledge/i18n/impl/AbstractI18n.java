@@ -44,7 +44,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.18 2004-12-23 07:16:25 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.19 2005-07-29 12:45:48 pablo Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -53,6 +53,9 @@ public abstract class AbstractI18n implements I18n
 	
 	/** default locale. */
 	public static final String DEFAULT_LOCALE = "en_US";
+    
+    /** default locale. */
+    public static final String PREFERED_LOCALE = "en_US";
 	
 	/** default setting for locale defaulting. */
 	public static final boolean DEFAULT_USE_DEFAULT_LOCALE = true;
@@ -68,7 +71,10 @@ public abstract class AbstractI18n implements I18n
 
 	/** default locale */
 	private Locale defaultLocale;
-	
+    
+    /** prefered locale */
+    private Locale preferedLocale;
+    	
 	/** use default locale */
 	private boolean useDefaultLocale;
 	
@@ -114,18 +120,27 @@ public abstract class AbstractI18n implements I18n
 			    {
 			        defaultLocale = supportedLocales[i];
 			    }
-			    String localeName = locales[i].getAttribute("name", locales[i].getValue());
+                if(locales[i].getAttributeAsBoolean("prefered", false))
+                {
+                    preferedLocale = supportedLocales[i];
+                }
+                String localeName = locales[i].getAttribute("name", locales[i].getValue());
 			    localeNames.put(supportedLocales[i], localeName);
 			}
 			if(defaultLocale == null && supportedLocales.length > 0)
 			{
 			    defaultLocale = supportedLocales[0];
 			}
+            if(preferedLocale == null)
+            {
+                preferedLocale = defaultLocale;
+            }
 		}
 		else
 		{
 		    supportedLocales = new Locale[]{ StringUtils.getLocale(DEFAULT_LOCALE) };
 		    defaultLocale = StringUtils.getLocale(DEFAULT_LOCALE);
+            preferedLocale = StringUtils.getLocale(PREFERED_LOCALE);
 		}
 	}
 	
@@ -137,6 +152,14 @@ public abstract class AbstractI18n implements I18n
 		return defaultLocale;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+    public Locale getPreferedLocale()
+    {
+        return preferedLocale;
+    }
+    
 	/**
 	 * {@inheritDoc}
 	 */

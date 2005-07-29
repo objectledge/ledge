@@ -43,7 +43,7 @@ import org.objectledge.web.HttpContext;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocaleLoaderValve.java,v 1.12 2004-12-23 07:17:36 rafal Exp $
+ * @version $Id: LocaleLoaderValve.java,v 1.13 2005-07-29 12:45:46 pablo Exp $
  */
 public class LocaleLoaderValve 
     extends AbstractI18nValve
@@ -123,7 +123,7 @@ public class LocaleLoaderValve
         {
             setInSession = true;
             setInCookie = true;
-            locale = i18n.getDefaultLocale();
+            locale = i18n.getPreferedLocale();
         }
         
         if (setInCookie)
