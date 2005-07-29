@@ -42,13 +42,16 @@ import org.objectledge.parameters.Parameters;
  * Provides services related to Instant Messaging tools and protocols.
  * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: InstantMessaging.java,v 1.2 2005-07-28 13:10:48 rafal Exp $
+ * @version $Id: InstantMessaging.java,v 1.3 2005-07-29 05:32:33 rafal Exp $
  */
 public class InstantMessaging
 {
     private final Map<String,InstantMessagingProtocol> protocols;
 
-    private static final String IM_ATTRIBUTE = "instantMessaging";
+    /**
+     * The personal data attribute name for IM contact information.
+     */
+    private static final String IM_CONTACTS_ATTRIBUTE = "instantMessaging";
 
     /**
      * Creates a new InstantMessaging instance.
@@ -109,12 +112,12 @@ public class InstantMessaging
         throws IllegalArgumentException
     {
         Collection<InstantMessagingContact> contacts = new ArrayList<InstantMessagingContact>();
-        for(String item : personalData.getStrings(IM_ATTRIBUTE))
+        for(String item : personalData.getStrings(IM_CONTACTS_ATTRIBUTE))
         {
             int p = item.indexOf(':');
             if(p < 0)
             {
-                throw new IllegalArgumentException("malformed "+IM_ATTRIBUTE+" value: "+item);
+                throw new IllegalArgumentException("malformed "+IM_CONTACTS_ATTRIBUTE+" value: "+item);
             }
             String protocolId = item.substring(0, p);
             String screenName = item.substring(p+1);
@@ -136,7 +139,7 @@ public class InstantMessaging
      */
     public void addContact(Parameters personalData, InstantMessagingContact contact)
     {
-        personalData.add(IM_ATTRIBUTE, contact.toString());
+        personalData.add(IM_CONTACTS_ATTRIBUTE, contact.toString());
     }
     
     /**
@@ -147,6 +150,6 @@ public class InstantMessaging
      */
     public void removeContact(Parameters personalData, InstantMessagingContact contact)
     {
-        personalData.remove(IM_ATTRIBUTE, contact.toString());        
+        personalData.remove(IM_CONTACTS_ATTRIBUTE, contact.toString());        
     }
 }
