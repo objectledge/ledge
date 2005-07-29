@@ -72,7 +72,7 @@ import com.sun.msv.verifier.Verifier;
  * </ul>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ConfigurationFactory.java,v 1.11 2005-07-07 08:21:39 zwierzem Exp $
+ * @version $Id: ConfigurationFactory.java,v 1.12 2005-07-29 12:06:21 pablo Exp $
  */
 public class ConfigurationFactory
 {
@@ -179,7 +179,7 @@ public class ConfigurationFactory
         catch(Exception e)
         {
             throw new ComponentInitializationError("configuration file "+
-                path+" for component "+componentName+" is malformed", e);
+                path+" for component "+componentName+" is malformed: '" + e.getMessage() + "'", e);
         }
         return source;
     }
