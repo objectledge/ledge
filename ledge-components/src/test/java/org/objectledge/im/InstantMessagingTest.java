@@ -30,13 +30,15 @@ package org.objectledge.im;
 
 import org.jcontainer.dna.Configuration;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.LedgeTestCase;
 
 /**
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: InstantMessagingTest.java,v 1.1 2005-07-28 12:08:10 rafal Exp $
+ * @version $Id: InstantMessagingTest.java,v 1.2 2005-07-29 05:32:53 rafal Exp $
  */
 public class InstantMessagingTest
     extends LedgeTestCase
@@ -74,5 +76,28 @@ public class InstantMessagingTest
         assertEquals("http://status.icq.com/online.gif?icq=3657252&img=5", icq.getStatusUrl("3657252"));
         assertEquals(true, icq.isValidScreenName("3657252"));
         assertEquals(false, icq.isValidScreenName("filem0n"));        
+    }
+    
+    public void testContacts()
+    {
+        Parameters pd = new DefaultParameters();
+        InstantMessagingProtocol icq = im.getProtocol("icq");
+        InstantMessagingProtocol tlen = im.getProtocol("tlen");
+        im.addContact(pd, new InstantMessagingContact(icq, "3657252"));
+        im.addContact(pd, new InstantMessagingContact(tlen, "filem0n"));        
+        assertEquals(2, im.getContacts(pd).size());
+        for(InstantMessagingContact contact : im.getContacts(pd))
+        {
+            if(contact.getProtocol().getId().equals("icq"))
+            {
+                assertEquals(contact.getScreenName(), "3657252");
+            }
+            if(contact.getProtocol().getId().equals("tlen"))
+            {
+                assertEquals(contact.getScreenName(), "filem0n");
+            }
+        }
+        im.removeContact(pd, new InstantMessagingContact(tlen, "filem0n"));
+        assertEquals(1, im.getContacts(pd).size());
     }
 }
