@@ -239,13 +239,19 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                 case REMOVE_ATTRIBUTE:
                     try
                     {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("context_id = ");
-                        sb.append(ctx.getDelegate().getContextId());
-                        sb.append(" and name = '");
-                        sb.append(attribute.getID());
-                        sb.append("'");
-                        persistence.delete(sb.toString(), PersistentAttribute.FACTORY);
+                        while(values.hasMore())
+                        {
+                            String value = (String)values.next();
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("context_id = ");
+                            sb.append(ctx.getDelegate().getContextId());
+                            sb.append(" and name = '");
+                            sb.append(attribute.getID());
+                            sb.append("' and value = '");
+                            sb.append(value);
+                            sb.append("'");                            
+                            persistence.delete(sb.toString(), PersistentAttribute.FACTORY);
+                        }
                     }    
                     catch(PersistenceException e)
                     {
