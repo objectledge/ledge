@@ -33,5 +33,12 @@
    </prefix>
    <prefix name="LoggedInUsers">
      <prefix name="title"><value>On-line users</value></prefix>
+     <prefix name="back"><value>back</value></prefix>
+     <prefix name="remove"><value>remove</value></prefix>
+     <prefix name="add"><value>add</value></prefix>
+     <prefix name="result">
+       <prefix name="screenNameEmpty"><value>pusty identyfikator</value></prefix>
+       <prefix name="screenNameInvalid"><value>niepoprawny identifikator</value></prefix>
+     </prefix>
    </prefix>
 </strings>

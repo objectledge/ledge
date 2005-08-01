@@ -30,6 +30,7 @@ package org.objectledge.modules.components.im;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -38,11 +39,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.UserTrackingValve;
 import org.objectledge.context.Context;
 import org.objectledge.im.InstantMessaging;
 import org.objectledge.im.InstantMessagingContact;
+import org.objectledge.im.InstantMessagingProtocol;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.directory.DirectoryParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -53,7 +56,7 @@ import org.objectledge.web.mvc.components.AbstractComponent;
  * A component that displays logged in users along with relevan IM information.
  * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: LoggedInUsers.java,v 1.1 2005-07-29 13:27:52 rafal Exp $
+ * @version $Id: LoggedInUsers.java,v 1.2 2005-08-01 09:45:23 rafal Exp $
  */
 public class LoggedInUsers
     extends AbstractComponent
@@ -161,6 +164,22 @@ public class LoggedInUsers
             templatingContext.put("personalData", personalData);
             templatingContext.put("idleTime", idleTime);
             templatingContext.put("contacts", contacts);
+            AuthenticationContext authContext = AuthenticationContext
+                .getAuthenticationContext(context);
+            templatingContext.put("currentUser", authContext.getUserPrincipal());
+            templatingContext.put("currentUserLogin", 
+                userManager.getLogin(authContext.getUserPrincipal()));
+
+            Collection<InstantMessagingProtocol> protocols = instantMessaging.getProtocols();
+            List<List<String>> protocolOptions = new ArrayList<List<String>>(protocols.size());
+            for(InstantMessagingProtocol protocol : protocols)
+            {
+                List<String> item = new ArrayList<String>(2);
+                item.add(protocol.getName());
+                item.add(protocol.getId());
+                protocolOptions.add(item);
+            }
+            templatingContext.put("protocolOptions", protocolOptions);
         }
         catch(Exception e)
         {
