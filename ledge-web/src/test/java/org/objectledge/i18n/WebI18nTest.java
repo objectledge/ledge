@@ -109,6 +109,7 @@ public class WebI18nTest extends LedgeTestCase
         mockI18n = mock(I18n.class);
         i18n = (I18n)mockI18n.proxy();
         mockI18n.stubs().method("getDefaultLocale").will(returnValue(Locale.US));
+        mockI18n.stubs().method("getPreferedLocale").will(returnValue(Locale.US));
 
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
         context.setAttribute(HttpContext.class, httpContext);
