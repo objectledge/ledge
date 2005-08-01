@@ -32,7 +32,7 @@ package org.objectledge.im;
  * Holds information about protocol and screen name, sufficient to initiate an IM session.
  * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: InstantMessagingContact.java,v 1.1 2005-07-28 13:10:48 rafal Exp $
+ * @version $Id: InstantMessagingContact.java,v 1.2 2005-08-01 09:44:06 rafal Exp $
  */
 public class InstantMessagingContact
 {
@@ -98,5 +98,30 @@ public class InstantMessagingContact
     public String toString()
     {
         return protocol.getId() + ":" + screenName;
+    }
+
+    /**
+     * Creates an InstantMessagingContact from the string representation.
+     * 
+     * @param stringForm the string representation.
+     * @param instantMessaging the InstantMessaging component, for resolving protocol.
+     * @return a new InstantMessagingContact instance.
+     * @throws IllegalArgumentException if the stringFrom contains invalid representation.
+     */
+    public static InstantMessagingContact fromString(String stringForm,
+        InstantMessaging instantMessaging) 
+        throws IllegalArgumentException
+    {
+        String[] token = stringForm.split(":");
+        if(token.length != 2)
+        {
+            throw new IllegalArgumentException("malfromed string representation: "+stringForm);
+        }
+        InstantMessagingProtocol protocol = instantMessaging.getProtocol(token[0]);
+        if(protocol == null)
+        {
+            throw new IllegalArgumentException("unknown protocol: "+token[0]);
+        }
+        return new InstantMessagingContact(protocol, token[1]);
     }
 }
