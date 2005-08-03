@@ -45,7 +45,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileSystemProvider.java,v 1.4 2004-02-12 11:44:32 pablo Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.5 2005-08-03 10:22:23 pablo Exp $
  */
 public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider
@@ -84,7 +84,7 @@ public class ServletFileSystemProvider
      */
     public InputStream getInputStream(String path) 
     {
-		return context.getResourceAsStream(path);
+		return context.getResourceAsStream(FileSystem.normalizedPath(path));
     }
     
     /**
