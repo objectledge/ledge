@@ -28,7 +28,7 @@
  POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<!-- $Id: project.xml,v 1.9 2005-07-15 05:00:12 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.10 2005-08-03 07:45:25 rafal Exp $ -->
 <project>
   <pomVersion>3</pomVersion>
   
@@ -38,7 +38,7 @@
   
   <groupId>objectledge</groupId>
   <id>ledge-forms</id>
-  <currentVersion>SNAPSHOT</currentVersion>
+  <currentVersion>${versions.ledge}</currentVersion>
   
   <name>Ledge Forms</name>
   <shortDescription>
@@ -72,13 +72,13 @@
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-components</artifactId>
-      <version>SNAPSHOT</version>
+      <version>${versions.ledge}</version>
       <url>http://objectledge.org/modules/ledge-components/</url>
     </dependency>
     <dependency>
       <groupId>objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <version>SNAPSHOT</version>
+      <version>${versions.ledge}</version>
       <url>http://objectledge.org/modules/ledge-web/</url>
     </dependency>
     <dependency>
