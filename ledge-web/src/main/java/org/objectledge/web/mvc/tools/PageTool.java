@@ -50,7 +50,7 @@ import org.objectledge.web.HttpContext;
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.13 2005-07-22 17:25:45 pablo Exp $
+ * @version $Id: PageTool.java,v 1.14 2005-08-04 11:10:23 rafal Exp $
  */
 public class PageTool
 {
@@ -70,8 +70,10 @@ public class PageTool
     /** Contains {@link ScriptLink} objects autoloaded on addition of script links. */
     protected ArrayList<ScriptLink> autoLoadScriptLinks = new ArrayList<ScriptLink>();
 
-    /** Contains autoload {@link ScriptLink} objects' signatures, it is used to prevent multiple additions of
-     * the same autoload script link. */
+    /**
+     * Contains autoload {@link ScriptLink} objects' signatures, it is used to prevent multiple
+     * additions of the same autoload script link.
+     */
     protected Set<ContentLink> autoLoadScriptLinksSet = new HashSet<ContentLink>();
     
     /** Contains {@link ScriptLink} objects. */
@@ -558,5 +560,15 @@ public class PageTool
     public String getEncoding()
     {
         return httpContext.getEncoding();
+    }
+    
+    /**
+     * Sets the status code of the HTTP response.
+     * 
+     * @param status the status code to set.
+     */
+    public void setStatus(int status)
+    {
+        httpContext.getResponse().setStatus(status);
     }
 }
