@@ -29,6 +29,8 @@ package org.objectledge.pipeline;
 
 import java.util.concurrent.Semaphore;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
 import org.objectledge.statistics.DataSource;
 import org.objectledge.statistics.Graph;
@@ -38,7 +40,7 @@ import org.objectledge.statistics.ReflectiveStatisticsProvider;
  * A valve that provides control over the number of threads executing another valve.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConcurrencyControlValve.java,v 1.7 2005-05-16 09:55:06 rafal Exp $
+ * @version $Id: ConcurrencyControlValve.java,v 1.8 2005-08-04 11:54:09 rafal Exp $
  */
 public class ConcurrencyControlValve
     extends ReflectiveStatisticsProvider
@@ -72,6 +74,19 @@ public class ConcurrencyControlValve
         }
     }
 
+    /**
+     * Creates a new ConcurrencyControlValve instance.
+     *
+     * @param nestedValve the valve to control.
+     * @param config the confguration object.
+     * @throws ConfigurationException if the configuration is incorrect.
+     */
+    public ConcurrencyControlValve(final Valve nestedValve, final Configuration config)
+        throws ConfigurationException
+    {
+        this(nestedValve, config.getChild("limit").getValueAsInteger());
+    }
+    
     /**
      * {@inheritDoc}
      */
