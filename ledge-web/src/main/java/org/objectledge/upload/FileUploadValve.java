@@ -32,7 +32,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileUploadValve.java,v 1.15 2005-07-22 17:25:58 pablo Exp $
+ * @version $Id: FileUploadValve.java,v 1.16 2005-08-05 12:49:11 rafal Exp $
  */
 public class FileUploadValve 
     implements Valve
@@ -193,8 +193,8 @@ public class FileUploadValve
            
 			HttpContext httpContext = HttpContext.getHttpContext(context); 
             String field = new String(contents, httpContext.getEncoding());
-            Parameters parameters = RequestParameters.getRequestParameters(context);
-            parameters.add(name, field);
+            RequestParameters parameters = RequestParameters.getRequestParameters(context);
+            parameters.addPOSTParameter(name, field);
         } 
         else 
         {
