@@ -33,19 +33,19 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.web.mvc.MVCContext;
 
 /**
  * Give a read only access to request parameters including MVC parameters.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ParametersTool.java,v 1.6 2005-07-07 08:29:29 zwierzem Exp $
+ * @version $Id: ParametersTool.java,v 1.7 2005-08-05 12:48:24 rafal Exp $
  */
 public class ParametersTool
 {
     private MVCContext mvcContext;
-    private Parameters parameters;
+    private RequestParameters parameters;
 
     /**
      * Creates the parameters tool for a given set of parameters and mvc context.
@@ -53,7 +53,7 @@ public class ParametersTool
      * @param mvcContext the MVC context providing info about currenlty selected action and view.
      * @param parameters the parameters to be represented by the tool
      */
-    public ParametersTool(MVCContext mvcContext, Parameters parameters)
+    public ParametersTool(MVCContext mvcContext, RequestParameters parameters)
     {
        this.mvcContext = mvcContext;
        this.parameters = parameters; 
@@ -327,4 +327,37 @@ public class ParametersTool
     {
         return parameters.isDefined(name);
     }
+    
+    /**
+     * Checks if the parameter was passed in through request path info.
+     * 
+     * @param name name of the parameter.
+     * @return <code>true</code> if the parameter was passed in through path info.
+     */
+    public boolean isPathInfoParameter(String name)
+    {
+        return parameters.isPathInfoParameter(name);
+    }
+
+    /**
+     * Checks if the parameter was passed in through request query string.
+     * 
+     * @param name name of the parameter.
+     * @return <code>true</code> if the parameter was passed in through request query string.
+     */
+    public boolean isQueryStringParameter(String name)
+    {
+        return parameters.isQueryStringParameter(name);
+    }
+    
+    /**
+     * Checks if the parameter was passed in through POST request body.
+     * 
+     * @param name name of the parameter.
+     * @return <code>true</code> if the parameter was passed through POST request body.
+     */
+    public boolean isPOSTParameter(String name)
+    {
+        return parameters.isPOSTParameter(name);
+    }    
 }

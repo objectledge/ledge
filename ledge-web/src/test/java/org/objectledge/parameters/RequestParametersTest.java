@@ -52,6 +52,8 @@ public class RequestParametersTest extends LedgeTestCase
     private HttpServletRequest httpServletRequest;
     private Mock mockHttpServletResponse;
     private HttpServletResponse httpServletResponse;
+    
+    private RequestParameters parameters;
 
     /*
      * @see TestCase#setUp()
@@ -65,27 +67,61 @@ public class RequestParametersTest extends LedgeTestCase
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         Vector parameterNames = new Vector();
-        parameterNames.add("foo");
+        parameterNames.add("mixed");
+        parameterNames.add("post");
+        parameterNames.add("get");
         mockHttpServletRequest.stubs().method("getParameterNames").
             will(returnValue(parameterNames.elements()));
-        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("foo")).
-            will(returnValue(new String[] { "barek", "bar" }));
-        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue("foo=barek"));
-        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
+        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("mixed")).
+            will(returnValue(new String[] { "mixed1", "mixed2" }));
+        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("post")).
+            will(returnValue(new String[] { "post" }));
+        mockHttpServletRequest.stubs().method("getParameterValues").with(eq("get")).
+            will(returnValue(new String[] { "get" }));
+        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue("get=get&mixed=mixed1"));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("path/path"));
 
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);
+        parameters = RequestParameters.getRequestParameters(context);
     }
 
-    public void testInit()
+    public void testPath()
     {
-        Parameters parameters = RequestParameters.getRequestParameters(context);
-        assertNotNull(parameters);
-        assertEquals(parameters.get("view"), "Default");
-        assertEquals(parameters.getStrings("foo")[0], "barek");
-        assertEquals(parameters.getStrings("foo")[1], "bar");
+        assertEquals("path", parameters.get("path"));
+        
+        assertTrue(parameters.isPathInfoParameter("path"));
+        assertFalse(parameters.isQueryStringParameter("path"));
+        assertFalse(parameters.isPOSTParameter("path"));
     }
 
+    public void testPost()
+    {
+        assertEquals("post", parameters.get("post"));
+        
+        assertFalse(parameters.isPathInfoParameter("post"));
+        assertFalse(parameters.isQueryStringParameter("post"));
+        assertTrue(parameters.isPOSTParameter("post"));        
+    }
+
+    public void testGet()
+    {
+        assertEquals("get", parameters.get("get"));
+        
+        assertFalse(parameters.isPathInfoParameter("get"));
+        assertTrue(parameters.isQueryStringParameter("get"));
+        assertFalse(parameters.isPOSTParameter("get"));        
+    }
+
+    public void testMixed()
+    {    
+        assertEquals(parameters.getStrings("mixed")[0], "mixed1");
+        assertEquals(parameters.getStrings("mixed")[1], "mixed2");
+
+        assertFalse(parameters.isPathInfoParameter("mixed"));
+        assertTrue(parameters.isQueryStringParameter("mixed"));
+        assertTrue(parameters.isPOSTParameter("mixed"));        
+    }
 }

@@ -32,8 +32,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,10 +56,14 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.16 2005-05-09 07:46:16 rafal Exp $
+ * @version $Id: RequestParameters.java,v 1.17 2005-08-05 12:48:27 rafal Exp $
  */
 public class RequestParameters extends SortedParameters
 {
+    private Set<String> pathParams = new HashSet<String>();
+    private Set<String> queryParams = new HashSet<String>();
+    private Set<String> postParams = new HashSet<String>();    
+    
 	/**
 	 * Usefull method to retrieve parameters from context.
 	 *
@@ -95,6 +101,7 @@ public class RequestParameters extends SortedParameters
         // servlet container
         HashMap queryStringParams = new HashMap();
         queryStringParams.putAll(this.map);
+        queryParams.addAll(queryStringParams.keySet());
         
         // post parameters
         Enumeration names = request.getParameterNames();
@@ -113,9 +120,21 @@ public class RequestParameters extends SortedParameters
                 add(name, values[i]);
             }
         }
+        postParams.addAll(map.keySet());
+        for(String name : map.keySet())
+        {
+            if(queryStringParams.containsKey(name)
+                && ((String[])queryStringParams.get(name)).length == getStrings(name).length)
+            {
+                postParams.remove(name);
+            }
+        }
 
         // get path info parameters
         addURLParams(request.getPathInfo(), "/");
+        pathParams.addAll(map.keySet());
+        pathParams.removeAll(queryParams);
+        pathParams.removeAll(postParams);        
 
         // speed up sorted parameters retrieval
         Map tmp = new LinkedHashMap(map);
@@ -196,5 +215,50 @@ public class RequestParameters extends SortedParameters
             throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
         }
         ///CLOVER:ON
+    }
+    
+    /**
+     * Checks if the parameter was passed in through request path info.
+     * 
+     * @param name name of the parameter.
+     * @return <code>true</code> if the parameter was passed in through path info.
+     */
+    public boolean isPathInfoParameter(String name)
+    {
+        return pathParams.contains(name);
+    }
+
+    /**
+     * Checks if the parameter was passed in through request query string.
+     * 
+     * @param name name of the parameter.
+     * @return <code>true</code> if the parameter was passed in through request query string.
+     */
+    public boolean isQueryStringParameter(String name)
+    {
+        return queryParams.contains(name);
+    }
+    
+    /**
+     * Checks if the parameter was passed in through POST request body.
+     * 
+     * @param name name of the parameter.
+     * @return <code>true</code> if the parameter was passed through POST request body.
+     */
+    public boolean isPOSTParameter(String name)
+    {
+        return postParams.contains(name);
+    }
+    
+    /**
+     * To be used by FileUploadValve, that handles multipart/form-data POSTs.
+     * 
+     * @param name of the parameter.
+     * @param value value of the parameter.
+     */
+    public void addPOSTParameter(String name, String value)
+    {
+        super.add(name, value);
+        postParams.add(name);
     }
 }
