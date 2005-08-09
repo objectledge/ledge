@@ -27,16 +27,31 @@
 // 
 package org.objectledge.web;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
 import org.apache.log4j.NDC;
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.statistics.DataSource;
@@ -48,13 +63,33 @@ import org.objectledge.utils.StringUtils;
  * A valve that counts processed HTTP requests and sessions.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RequestTrackingValve.java,v 1.4 2005-05-16 09:55:07 rafal Exp $
+ * @version $Id: RequestTrackingValve.java,v 1.5 2005-08-09 12:40:12 rafal Exp $
  */
 public class RequestTrackingValve
     extends ReflectiveStatisticsProvider
     implements Valve
 {
     private final Valve nested;
+    
+    private final Logger log;
+    
+    private final PrintWriter performanceLog;
+    
+    private final PrintWriter slowRequestLog;
+    
+    private final long slowRequestThreshold;
+
+    private final DateFormat timeFormat;
+    
+    private static final String DEFAULT_TIME_FORMAT_PATTERN = "yyyy/MM/dd HH:mm:ss";
+    
+    private final long timeResolution;
+    
+    private static final long DEFAULT_TIME_RESOLUTION = 1000L;
+    
+    private final MemoryMXBean memoryMXBean;
+    
+    private final List<GarbageCollectorMXBean> garbageCollectorMXBeans;
 
     private int totalRequests = 0;
     
@@ -62,20 +97,95 @@ public class RequestTrackingValve
     
     private int concurrentSessions = 0;
     
+    private int concurrentRequests = 0;
+    
     private long totalDuration = 0;
-
-    private final Logger log;
+    
+    private String currentTime;
+    
+    private long lastCurrentTime;
     
     /**
      * Creates new RequestTrackingValve instance.
      *
      * @param nested the nested valve.
      * @param log the logger to use.
+     * @param fileSystem the FileSystem component.
+     * @param performanceLogPath the FileSystem path of performance log file.
+     * @param slowRequestLogPath the FileSystem path of slow request log file.
+     * @param slowRequestThreshold minimum processing duration in milliseconds for requests that
+     * should be logged in slow request log.  
+     * @param timeFormatPattern the SimpleDateFormat pattern to use for date formatting.
+     * @param timeResolution the resolution of time measurement in the custom logs.
      */
-    public RequestTrackingValve(final Valve nested, final Logger log)
+    public RequestTrackingValve(final Valve nested, final Logger log, 
+        final FileSystem fileSystem, final String performanceLogPath,
+        final String slowRequestLogPath, final long slowRequestThreshold,
+        final String timeFormatPattern, final long timeResolution)
     {
         this.nested = nested;
         this.log = log;
+        try
+        {
+            if(performanceLogPath != null)
+            {
+                this.performanceLog = new PrintWriter(new OutputStreamWriter(fileSystem
+                    .getOutputStream(performanceLogPath), "UTF-8"));
+            }
+            else
+            {
+                this.performanceLog = null;
+            }
+            if(slowRequestLogPath != null)
+            {
+                this.slowRequestLog = new PrintWriter(new OutputStreamWriter(fileSystem
+                    .getOutputStream(slowRequestLogPath), "UTF-8"));
+            }
+            else
+            {
+                this.slowRequestLog = null;
+            }
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new ComponentInitializationError("internal error", e);
+        }
+        this.slowRequestThreshold = slowRequestThreshold;
+        this.timeFormat = new SimpleDateFormat(timeFormatPattern);
+        this.timeResolution = timeResolution;
+        this.memoryMXBean = ManagementFactory.getMemoryMXBean();
+        this.garbageCollectorMXBeans = ManagementFactory.getGarbageCollectorMXBeans();
+    }
+
+    /**
+     * Creates new RequestTrackingValve instance.
+     *
+     * @param nested the nested valve.
+     * @param log the logger to use.
+     * @param fileSystem the FileSystem component.
+     */
+    public RequestTrackingValve(final Valve nested, final Logger log, final FileSystem fileSystem)
+    {
+        this(nested, log, fileSystem, null, null, Long.MAX_VALUE, DEFAULT_TIME_FORMAT_PATTERN,
+            DEFAULT_TIME_RESOLUTION);
+    }
+
+    /**
+     * Creates new RequestTrackingValve instance.
+     *
+     * @param nested the nested valve.
+     * @param log the logger to use.
+     * @param fileSystem the FileSystem component.
+     * @param config the component configuration.
+     */    
+    public RequestTrackingValve(final Valve nested, final Logger log, final FileSystem fileSystem,
+        final Configuration config)
+    {
+        this(nested, log, fileSystem, config.getChild("performanceLog").getChild("path").getValue(
+            null), config.getChild("slowRequestLog").getChild("path").getValue(null), config
+            .getChild("slowRequestLog").getChild("threshold").getValueAsLong(Long.MAX_VALUE),
+            config.getChild("time").getChild("format").getValue(DEFAULT_TIME_FORMAT_PATTERN),
+            config.getChild("time").getChild("resolution").getValueAsLong(DEFAULT_TIME_RESOLUTION));
     }
 
     /**
@@ -84,30 +194,48 @@ public class RequestTrackingValve
     public void process(Context context)
         throws ProcessingException
     {
-        long timer = 0;
+        long startTime = 0;
+        int r = 0;
+        int s = 0;
+        String requestUrl = null;
         try
         {
             HttpContext httpContext = HttpContext.getHttpContext(context);
-            int r = totalRequests++;
-            int s = trackSession(httpContext).getId(); 
+            r = totalRequests++;
+            concurrentRequests++;
+            s = trackSession(httpContext).getId(); 
             NDC.push("R"+r+" S"+s);
+            requestUrl = getRequestUrl(httpContext);
             if(log.isInfoEnabled())
             {
-                log.info("starting "+getRequestUrl(httpContext));
+                log.info("starting "+requestUrl);
             }
-            timer = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
+            if(performanceLog != null || slowRequestLog != null)
+            {
+                updateCurrentTime(startTime);
+            }
             nested.process(context);
         }
         finally
         {
-            long duration = System.currentTimeMillis() - timer;
+            long duration = System.currentTimeMillis() - startTime;
             totalDuration += duration;
             if(log.isInfoEnabled())
             {
                 log.info("done in "
                     + StringUtils.formatMilliIntervalAsSeconds(duration));
             }
+            if(performanceLog != null)
+            {
+                performanceLog(r, s, startTime, duration);
+            }
+            if(slowRequestLog != null && duration > slowRequestThreshold)
+            {
+                slowRequestLog(r, s, duration, requestUrl);
+            }
             NDC.pop();
+            concurrentRequests--;
         }
     }
     
@@ -122,6 +250,18 @@ public class RequestTrackingValve
             session.setAttribute(SessionMarker.KEY, marker);
         }
         return marker;
+    }
+    
+    private void updateCurrentTime(long time)
+    {
+        synchronized(timeFormat)
+        {
+            if(currentTime == null || time - lastCurrentTime > timeResolution)
+            {
+                currentTime = timeFormat.format(new Date(time));
+                lastCurrentTime = time;
+            }
+        }
     }
 
     private String getRequestUrl(HttpContext httpContext)
@@ -193,6 +333,56 @@ public class RequestTrackingValve
         }
     }
 
+    // performance related logs /////////////////////////////////////////////////////////////////
+    
+    private void performanceLog(int r, int s, long startTime, long duration)
+    {
+        performanceLog.format("%s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", currentTime, r, s,
+            getTimeOfDay(startTime), duration, concurrentRequests, concurrentSessions,
+            getUsedMemory(), getGCCount(), getGCTime());
+        performanceLog.flush();
+    }
+    
+    private int getTimeOfDay(long time)
+    {
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(time);
+        return cal.get(Calendar.HOUR_OF_DAY) * 3600 + cal.get(Calendar.MINUTE) * 60
+            + cal.get(Calendar.SECOND);
+    }
+    
+    private long getUsedMemory()
+    {
+        return memoryMXBean.getHeapMemoryUsage().getUsed()
+            + memoryMXBean.getNonHeapMemoryUsage().getUsed();
+    }
+    
+    private long getGCCount()
+    {
+        long count = 0L;
+        for(GarbageCollectorMXBean gc : garbageCollectorMXBeans)
+        {
+            count += gc.getCollectionCount();
+        }            
+        return count;
+    }
+    
+    private long getGCTime()
+    {
+        long time = 0L;
+        for(GarbageCollectorMXBean gc : garbageCollectorMXBeans)
+        {
+            time += gc.getCollectionTime();
+        }            
+        return time;
+    }    
+    
+    private void slowRequestLog(int r, int s, long duration, String url)
+    {
+        slowRequestLog.format("%s R%d S%d %dms %s\n", currentTime, r, s, duration, url);
+        slowRequestLog.flush();
+    }
+    
     // statistics ///////////////////////////////////////////////////////////////////////////////
     
     /**
