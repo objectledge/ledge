@@ -27,6 +27,7 @@
 //
 package org.objectledge.web.mvc.tools;
 
+import java.lang.reflect.Array;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.15 2005-07-22 17:25:44 pablo Exp $
+ * @version $Id: StringTool.java,v 1.16 2005-08-10 07:45:37 rafal Exp $
  */
 public class StringTool
 {
@@ -171,8 +172,7 @@ public class StringTool
         {
             return 0;
         }
-        Object[] objs = (Object[])obj;
-        return objs.length;
+        return Array.getLength(obj);
     }
     
     /**
