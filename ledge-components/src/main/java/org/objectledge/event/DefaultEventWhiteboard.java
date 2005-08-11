@@ -46,7 +46,7 @@ import org.jcontainer.dna.Logger;
  * Default event forwarder implementation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultEventWhiteboard.java,v 1.4 2005-05-25 15:16:49 pablo Exp $
+ * @version $Id: DefaultEventWhiteboard.java,v 1.5 2005-08-11 04:49:00 rafal Exp $
  */
 public class DefaultEventWhiteboard implements EventWhiteboard
 {
@@ -81,7 +81,7 @@ public class DefaultEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void addListener(Class iface, Object listener, Object object)
+    public synchronized void addListener(Class iface, Object listener, Object object)
         throws IllegalArgumentException
     {
         if (!iface.isInterface())
@@ -111,7 +111,7 @@ public class DefaultEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void removeListener(Class iface, Object listener, Object object)
+    public synchronized void removeListener(Class iface, Object listener, Object object)
     {
         Map triggerMap = (Map)interfaceMap.get(iface);
         if (triggerMap != null)
@@ -127,7 +127,7 @@ public class DefaultEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void addRemoteListener(Class iface, Remote listener, Object object)
+    public synchronized void addRemoteListener(Class iface, Remote listener, Object object)
         throws IllegalArgumentException
     {
         InvocationHandler handler = new RemoteInvocationHandler(iface, listener);
@@ -146,7 +146,7 @@ public class DefaultEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void removeRemoteListener(Class iface, Remote listener, Object object)
+    public synchronized void removeRemoteListener(Class iface, Remote listener, Object object)
     {
         Map ifMap = (Map)proxies.get(listener);
         if(ifMap != null)
@@ -174,7 +174,7 @@ public class DefaultEventWhiteboard implements EventWhiteboard
         }
     }
 
-    void dispatchEvent(Method method, Object[] args, Object object)
+    synchronized void dispatchEvent(Method method, Object[] args, Object object)
     {
         Class iface = method.getDeclaringClass();
         Map triggerMap = (Map)interfaceMap.get(iface);
