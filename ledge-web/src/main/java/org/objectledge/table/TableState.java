@@ -28,9 +28,7 @@
 
 package org.objectledge.table;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,7 +43,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.6 2004-12-23 07:17:47 rafal Exp $
+ * @version $Id: TableState.java,v 1.7 2005-08-22 09:04:22 zwierzem Exp $
  */
 public class TableState
 {
@@ -66,9 +64,6 @@ public class TableState
 
     /** Is current sorting direction ascending, default: <code>true</code>. */
     private boolean ascendingSort = true;
-
-    /** Sorting comparators by tree level map. */
-    private Map sorting = new HashMap();
 
     /** Current table page, default: <code>1</code>. */
     private int currentPage = 1;
