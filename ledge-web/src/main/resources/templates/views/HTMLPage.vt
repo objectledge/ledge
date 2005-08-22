@@ -27,7 +27,7 @@
 ##
 #**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HTMLPage.vt,v 1.1 2005-07-25 12:50:47 rafal Exp $
+ * @version $Id: HTMLPage.vt,v 1.2 2005-08-22 14:15:04 zwierzem Exp $
 *###
 <html>
 ## top level view
@@ -35,7 +35,7 @@ $viewEnclosureTool.top()
 ##
 <head>
 <title>$pageTool.title</title>
-<meta http-equiv="Content-Type" content="$pageContentType">
+<meta http-equiv="Content-Type" content="$pageTool.contentType">
 ## page tool http equiv meta tags
 #foreach($meta in $pageTool.httpEquivMetas)
 <meta http-equiv="$meta.httpEquiv" content="$meta.content">
