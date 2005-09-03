@@ -170,4 +170,14 @@ public class StringUtilsTest extends TestCase
         assertEquals("    ", sb.toString());        
     }
     
+    public void testIsEmpty()
+        throws Exception
+    {
+        String str = null;
+        assertTrue(StringUtils.isEmpty(str));
+        str = "";
+        assertTrue(StringUtils.isEmpty(str));
+        str = "not-empty";
+        assertFalse(StringUtils.isEmpty(str));
+    }
 }

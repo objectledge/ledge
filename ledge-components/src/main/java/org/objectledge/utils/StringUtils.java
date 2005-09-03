@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.31 2005-06-30 08:52:06 pablo Exp $
+ * @version $Id: StringUtils.java,v 1.32 2005-09-03 11:47:05 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -850,4 +850,23 @@ public class StringUtils
         }                
         return buff.toString();
     }    
+    
+    /**
+     * Checks if a given string is <code>null</code> or empty.
+     * 
+     * @param str string to be checked.
+     * @return true if the string is <code>null</code> or empty.
+     */
+    public static boolean isEmpty(String str)
+    {
+        if( str == null)
+        { 
+            return true;
+        }
+        if( str.length()==0)
+        {
+            return true;
+        }
+        return false;
+    }
 }
