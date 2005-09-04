@@ -15,24 +15,19 @@ public class DOM4JValidatorImpl
 implements DOM4JValidator
 {
     private XMLServiceImpl xmlService;
-    private DOM4JReportingSAXWriter saxWriter;
-    private com.sun.msv.verifier.Verifier verifier;
 
     public DOM4JValidatorImpl(XMLServiceImpl xmlService)
     {
         this.xmlService = xmlService;
-        saxWriter = new DOM4JReportingSAXWriter();
     }
     
-    private void setGrammar(String grammarID)
-    throws Exception
+    private com.sun.msv.verifier.Verifier getVerifier(String grammarID)
+        throws Exception
     {
-        com.sun.msv.grammar.Grammar grammar =  xmlService.getGrammar(grammarID);
+        com.sun.msv.grammar.Grammar grammar = xmlService.getGrammar(grammarID);
         if(grammar instanceof XMLSchemaGrammar)
         {
-            verifier = new  ExtendedVerifier(
-                            ((XMLSchemaGrammar)grammar),
-                            (org.xml.sax.ErrorHandler)null); // ErrorHandler
+            return new ExtendedVerifier(((XMLSchemaGrammar)grammar), (org.xml.sax.ErrorHandler)null); // ErrorHandler
         }
         else
         {
@@ -50,7 +45,8 @@ implements DOM4JValidator
             throw new ValidationException("There is no document to validate");
         }
 
-        setGrammar(grammarID);
+        DOM4JReportingSAXWriter saxWriter = new DOM4JReportingSAXWriter();
+        com.sun.msv.verifier.Verifier verifier = getVerifier(grammarID);
         
         // WARN errorAndContentHandler can be null - it means that the errors will 
         // not be reported
