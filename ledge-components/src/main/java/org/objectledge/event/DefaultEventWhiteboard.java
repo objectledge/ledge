@@ -46,7 +46,7 @@ import org.jcontainer.dna.Logger;
  * Default event forwarder implementation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultEventWhiteboard.java,v 1.5 2005-08-11 04:49:00 rafal Exp $
+ * @version $Id: DefaultEventWhiteboard.java,v 1.6 2005-09-04 11:47:18 rafal Exp $
  */
 public class DefaultEventWhiteboard implements EventWhiteboard
 {
@@ -174,40 +174,47 @@ public class DefaultEventWhiteboard implements EventWhiteboard
         }
     }
 
-    synchronized void dispatchEvent(Method method, Object[] args, Object object)
+    void dispatchEvent(Method method, Object[] args, Object object)
     {
         Class iface = method.getDeclaringClass();
-        Map triggerMap = (Map)interfaceMap.get(iface);
-        if(triggerMap != null)
+        Set currentHandlers = null;
+        synchronized(this)
         {
-            Map handlers = (Map)triggerMap.get(object);
-            if(handlers != null)
+            Map triggerMap = (Map)interfaceMap.get(iface);
+            if(triggerMap != null)
             {
-                Set orig = new HashSet(handlers.keySet());
-                Iterator i = orig.iterator();
-                while(i.hasNext())
+                Map handlers = (Map)triggerMap.get(object);
+                if(handlers != null)
                 {
-                    Object handler = i.next();
-                    try
-                    {
-                        method.invoke(handler, args);
-                    }
-                    catch(ThreadDeath t)
-                    {
-                        throw t;
-                    }
-                    catch(VirtualMachineError t)
-                    {
-                        throw t;
-                    }
-                    catch(InvocationTargetException e)
-                    {
-                        logger.error("Failed to invoke handler", e.getTargetException());
-                    }
-                    catch(Throwable t)
-                    {
-                        logger.error("Failed to invoke handler", t);
-                    }
+                    currentHandlers = new HashSet(handlers.keySet());
+                }
+            }
+        }
+        if(currentHandlers != null)
+        {
+            Iterator i = currentHandlers.iterator();
+            while(i.hasNext())
+            {
+                Object handler = i.next();
+                try
+                {
+                    method.invoke(handler, args);
+                }
+                catch(ThreadDeath t)
+                {
+                    throw t;
+                }
+                catch(VirtualMachineError t)
+                {
+                    throw t;
+                }
+                catch(InvocationTargetException e)
+                {
+                    logger.error("Failed to invoke handler", e.getTargetException());
+                }
+                catch(Throwable t)
+                {
+                    logger.error("Failed to invoke handler", t);
                 }
             }
         }
