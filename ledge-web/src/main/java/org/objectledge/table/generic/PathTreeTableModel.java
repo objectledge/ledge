@@ -47,7 +47,7 @@ import org.objectledge.table.TableState;
  * the UI on the fly, the toolkit provides {@link PathTreeElement} class.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PathTreeTableModel.java,v 1.6 2004-12-22 08:58:13 rafal Exp $
+ * @version $Id: PathTreeTableModel.java,v 1.7 2005-09-16 13:30:50 zwierzem Exp $
  */
 public class PathTreeTableModel
     implements ExtendedTableModel
@@ -65,9 +65,6 @@ public class PathTreeTableModel
 
     /** Maps objects to ids. */
     protected Map idByObject = new HashMap();
-
-    /** Simple identifier generator. */
-    protected int nextId = 0;
 
     /** Maps objects to sets of children objects. */
     protected Map childrenByObject = new HashMap();
@@ -186,7 +183,7 @@ public class PathTreeTableModel
                 throw new IllegalStateException("cannot bind "+path+
                                                 " because "+parent+" is not bound");
             }
-            String id = ""+(nextId++);
+            String id = Integer.toString(path.hashCode());
             idByObject.put(object, id);
             objectById.put(id, object);
             childrenByObject.put(object, new HashSet());
