@@ -1,7 +1,7 @@
 /**
  * Date selector support.
  *
- * @author <a href="mailto:rafal@caltha.pl">Rafał� Krzewski</a>
+ * @author <a href="mailto:rafal@caltha.pl">Rafa????? Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: $
  */
@@ -133,11 +133,11 @@ function dateEnabled(element, saveDisabledString)
     var minuteElem = form.elements[base+'_minute'];
     var dateElem = form.elements[base];
 
-    var year = yearElem.options[yearElem.selectedIndex].value;
-    var month = monthElem.options[monthElem.selectedIndex].value;
-    var day = dayElem.options[dayElem.selectedIndex].value;
-    var hour = hourElem.options[hourElem.selectedIndex].value;
-    var minute = minuteElem.options[minuteElem.selectedIndex].value;
+    var year = yearElem.value;
+    var month = monthElem.value;
+    var day = dayElem.value;
+    var hour = hourElem.value;
+    var minute = minuteElem.value;
     var selectedDate = new Date(year, month, day, hour, minute, 0, 0);
 
     if(element.value == 'true')
