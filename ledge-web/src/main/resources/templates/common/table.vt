@@ -30,7 +30,7 @@
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: table.vt,v 1.5 2004-11-05 09:43:43 zwierzem Exp $
+ * @version $Id: table.vt,v 1.6 2005-09-19 08:56:47 zwierzem Exp $
 *###
 
 #**
@@ -65,12 +65,12 @@
 #macro(tableView_header $table $tableLink $columnOrder)
   #foreach($columnName in $columnOrder)
     #set($column = $table.getColumn($columnName))
-    <th #*
-*##if($column.width)width="$column.width" #end#*
-*##if($column.style)style="$column.style" #end#*
-*##if($column.align)align="$column.align" #end#*
-*##if($column.valign)valign="$column.valign" #end#*
-*##if($column.get('class'))class="$column.get('class')"#end nowrap="nowrap">
+    <th ##
+#if($column.width)width="$column.width" #end##
+#if($column.style)style="$column.style" #end##
+#if($column.align)align="$column.align" #end##
+#if($column.valign)valign="$column.valign" #end##
+#if($column.get('class'))class="$column.get('class')"#end nowrap="nowrap">
     #tableView_headCellContent($table $column $tableLink)
     </th>
   #end
@@ -112,12 +112,12 @@
 #macro(tableView_header_Submit $table $tableLink $columnOrder $function)
   #foreach($columnName in $columnOrder)
     #set($column = $table.getColumn($columnName))
-    <th #*
-*##if($column.width)width="$column.width" #end#*
-*##if($column.style)style="$column.style" #end#*
-*##if($column.align)align="$column.align" #end#*
-*##if($column.valign)valign="$column.valign" #end#*
-*##if($column.get('class'))class="$column.get('class')"#end nowrap="nowrap">
+    <th ##
+#if($column.width)width="$column.width" #end##
+#if($column.style)style="$column.style" #end##
+#if($column.align)align="$column.align" #end##
+#if($column.valign)valign="$column.valign" #end##
+#if($column.get('class'))class="$column.get('class')"#end nowrap="nowrap">
     #tableView_headCellContent_Submit($table $column $tableLink $function)
     </th>
   #end
