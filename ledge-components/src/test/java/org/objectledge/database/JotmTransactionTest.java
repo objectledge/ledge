@@ -41,7 +41,7 @@ import org.picocontainer.Startable;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransactionTest.java,v 1.7 2004-06-25 11:21:55 fil Exp $
+ * @version $Id: JotmTransactionTest.java,v 1.8 2005-09-25 12:03:49 rafal Exp $
  */
 public class JotmTransactionTest extends TestCase
 {
@@ -70,7 +70,7 @@ public class JotmTransactionTest extends TestCase
         log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
         context = new Context();
         context.clearAttributes();
-        transaction = new JotmTransaction(2, context, log, null);
+        transaction = new JotmTransaction(2, 120, context, log, null);
         valve = new Transaction.GuardValve(transaction, log);
     }
     
@@ -162,7 +162,7 @@ public class JotmTransactionTest extends TestCase
     public void testGuardValveNoTracing()
         throws Exception
     {
-        transaction = new JotmTransaction(0, context, log, null);
+        transaction = new JotmTransaction(0, 120, context, log, null);
         valve = new Transaction.GuardValve(transaction, log);
         boolean controller1 = transaction.begin();
         assertTrue(controller1);

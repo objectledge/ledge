@@ -57,7 +57,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.2 2005-02-08 20:33:04 rafal Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.3 2005-09-25 12:03:41 rafal Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -71,7 +71,7 @@ public class XaPoolDataSourceTest extends TestCase
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        transaction = new JotmTransaction(0, new Context(), log, null);
+        transaction = new JotmTransaction(0, 120, new Context(), log, null);
         
         DefaultConfiguration conf = new DefaultConfiguration("config","","");
         DefaultConfiguration connConf = new DefaultConfiguration("connection","","config");

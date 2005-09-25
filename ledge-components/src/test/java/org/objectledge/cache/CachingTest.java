@@ -90,7 +90,7 @@ public class CachingTest extends TestCase
         ThreadPool pool = new ThreadPool(cleanup, context, config, logger);
         DataSource dataSource = getDataSource();
         IdGenerator idGenerator = new IdGenerator(dataSource);
-        JotmTransaction transaction = new JotmTransaction(0, new Context(), logger, null);
+        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger, null);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
         notification = new Notification();
