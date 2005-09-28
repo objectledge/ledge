@@ -54,12 +54,12 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * <h4>template</h4>
  * <pre>
- * $link.view('somepackage.SomeView').action('somepackage.SomeAction').set('paramName','paramValue')
+ * $link.view('somepackage.SomeView').action('somepackage.SomeAction').set('paramName','paramValue').fragment('this_line')
  * </pre>
  *
  * <h4>output</h4>
  * <pre>
- * /context/servlet/view/somepackage.SomeView?action=somepackage.SomeAction&amp;paramName=paramValue
+ * /context/servlet/view/somepackage.SomeView?action=somepackage.SomeAction&amp;paramName=paramValue#this_line
  * </pre>
  * 
  * <p>The links are encoded using UTF-8 encoding no matter what encoding is used in the generated
@@ -67,7 +67,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.25 2005-07-22 17:25:44 pablo Exp $
+ * @version $Id: LinkTool.java,v 1.26 2005-09-28 19:40:05 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -812,7 +812,9 @@ public class LinkTool
     }
 
     /**
-     * Allows subclasses to override parameters rendered in {@link #toString()} method.
+     * Allows other Tools to check link properties and 
+     * creaton of subclasses which can override action name 
+     * rendered in {@link #toString()} method.
      * 
      * <p>WARN: This implementation only returns a reference to this <code>LinkTool</code>'s
      * parameters field. If the subclass needs to change the rendered parameters, it should copy
@@ -820,7 +822,7 @@ public class LinkTool
      * 
      * @return the overriden parameters container
      */
-    protected Parameters getParameters()
+    public Parameters getParameters()
     {
         return parameters;
     }
@@ -943,12 +945,14 @@ public class LinkTool
     }
     
     /**
-     * Allows subclasses to override view name rendered in {@link #toString()} method.
+     * Allows other Tools to check link properties and 
+     * creaton of subclasses which can override action name 
+     * rendered in {@link #toString()} method.
      * 
      * @return the overriden view name or <code>null</code> if it should be replaced with view
      *  from current request.
      */
-    protected String getView()
+    public String getView()
     {
         return view;
     }
@@ -1013,11 +1017,13 @@ public class LinkTool
     }
     
     /**
-     * Allows subclasses to override action name rendered in {@link #toString()} method.
+     * Allows other Tools to check link properties and 
+     * creaton of subclasses which can override action name 
+     * rendered in {@link #toString()} method.
      * 
      * @return the overriden action name
      */
-    protected String getAction()
+    public String getAction()
     {
         return action;
     }
