@@ -41,7 +41,7 @@ import org.objectledge.context.Context;
  * Operates upon the UserTransaction object provided by the application server through JNDI.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JndiTransaction.java,v 1.3 2004-02-06 15:38:06 fil Exp $
+ * @version $Id: JndiTransaction.java,v 1.4 2005-10-03 07:28:24 rafal Exp $
  */
 public class JndiTransaction extends Transaction
 {
@@ -49,12 +49,13 @@ public class JndiTransaction extends Transaction
      * Constructs a JndiLogger instance.
      * 
      * @param tracing tracing depth.
+     * @param defaultTimeout default transaction timeout in seconds.
      * @param context the threads processing context.
      * @param log the logger to use for error reporting.
      */
-    public JndiTransaction(int tracing, Context context, Logger log)
+    public JndiTransaction(int tracing, int defaultTimeout, Context context, Logger log)
     {
-        super(tracing, context, log);
+        super(tracing, defaultTimeout, context, log);
     }
     
     /**
