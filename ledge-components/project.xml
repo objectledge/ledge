@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE.
 -->
-<!-- $Id: project.xml,v 1.67 2005-08-03 07:45:24 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.68 2005-10-03 09:08:42 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -130,7 +130,7 @@
     <dependency>
       <groupId>jotm</groupId>
       <artifactId>jotm</artifactId>
-      <version>1.5.3</version>
+      <version>2.0.10</version>
       <url>http://jotm.objectweb.org/</url>
     </dependency>
     <dependency>
@@ -168,9 +168,15 @@
     <dependency>
       <groupId>jotm</groupId>
       <artifactId>jotm_jrmp_stubs</artifactId>
-      <version>1.5.3</version>
+      <version>2.0.10</version>
       <url>http://jotm.objectweb.org/</url>
     </dependency>
+    <dependency>
+      <groupId>howl</groupId>
+      <artifactId>howl</artifactId>
+      <version>0.1.8</version>
+      <url>http://howl.objectweb.org/</url>
+    </dependency>    
     <dependency>
       <groupId>connector</groupId>
       <artifactId>connector</artifactId>
@@ -180,7 +186,7 @@
     <dependency>
       <groupId>carol</groupId>
       <artifactId>carol</artifactId>
-      <version>1.5.1</version>
+      <version>2.0.5</version>
       <url>http://carol.objectweb.org/</url>
     </dependency>
     <dependency>
