@@ -44,7 +44,7 @@ import org.picocontainer.Startable;
  * An implementation of the Transaction interface using JOTM.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: JotmTransaction.java,v 1.11 2005-09-25 12:03:49 rafal Exp $
+ * @version $Id: JotmTransaction.java,v 1.12 2005-10-03 07:28:03 rafal Exp $
  */
 public class JotmTransaction
     extends Transaction
@@ -67,9 +67,8 @@ public class JotmTransaction
         LoggingConfigurator loggingConfigurator)
         throws NamingException, SystemException
     {
-        super(tracing, context, log);
+        super(tracing, transactionTimeout, context, log);
         tmService = new Jotm(true, false);
-        tmService.getTransactionManager().setTransactionTimeout(transactionTimeout);
     }
     
     /**
