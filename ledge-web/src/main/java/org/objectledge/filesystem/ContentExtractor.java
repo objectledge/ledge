@@ -44,7 +44,7 @@ import org.picocontainer.Startable;
  * server.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ContentExtractor.java,v 1.4 2005-06-10 14:52:07 zwierzem Exp $
+ * @version $Id: ContentExtractor.java,v 1.5 2005-10-06 14:21:27 rafal Exp $
  */
 public class ContentExtractor
 	implements Startable
@@ -120,22 +120,21 @@ public class ContentExtractor
         {
             return;
         }
-        String[] items = in.list(name);
-        for(int i=0; i<items.length; i++)
+        for(String item : in.list(name))
         {
-            String item = name+"/"+items[i];
-            if(in.isDirectory(item))
+            String path = name+"/"+item;
+            if(in.isDirectory(path))
             {
-                extractDirectory(item, in, out, buffer);
+                extractDirectory(path, in, out, buffer);
             }
             else
             {
-                InputStream is = in.getInputStream(item);
-                if(!out.exists(FileSystem.directoryPath(item)))
+                InputStream is = in.getInputStream(path);
+                if(!out.exists(FileSystem.directoryPath(path)))
                 {
-                    out.mkdirs(FileSystem.directoryPath(item));
+                    out.mkdirs(FileSystem.directoryPath(path));
                 }
-                OutputStream os = out.getOutputStream(item, false);
+                OutputStream os = out.getOutputStream(path, false);
                 if(is != null && os != null)
                 {
                     int count = 0;
