@@ -33,12 +33,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Set;
 
 /**
  * Specifies the contract between FileSystem abstarction and its concrete delegates.
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemProvider.java,v 1.6 2004-09-27 13:30:56 zwierzem Exp $
+ * @version $Id: FileSystemProvider.java,v 1.7 2005-10-06 08:38:38 rafal Exp $
  */
 public interface FileSystemProvider
 {
@@ -116,7 +117,7 @@ public interface FileSystemProvider
      * @throws IOException if <code>dir</code> does not exist
      *         or is not a directory.
      */
-    public String[] list(String dir)
+    public Set<String> list(String dir)
         throws IOException;
 
     /**

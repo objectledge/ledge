@@ -42,8 +42,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -51,7 +53,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.29 2005-02-21 16:28:04 zwierzem Exp $
+ * @version $Id: FileSystem.java,v 1.30 2005-10-06 08:38:38 rafal Exp $
  */
 public class FileSystem
 {
@@ -459,6 +461,10 @@ public class FileSystem
     public String[] list(String path)
         throws IOException
     {
+        if (!exists(path)) {
+            throw new IOException(path+" does not exist");        
+        }
+        Set<String> results = new HashSet<String>();
         for (Iterator i = providers.iterator(); i.hasNext();)
         {
             FileSystemProvider fp = (FileSystemProvider)i.next();
@@ -468,20 +474,22 @@ public class FileSystem
                 {
                     if(fp.canRead(path))
                     {
-                        return fp.list(path);
+                        results.addAll(fp.list(path));
                     }
                     else
                     {
-                        throw new IOException("cannot read "+path);
+                        throw new IOException(fp.getName() + " provider has " + path
+                            + " but it's not readable.");
                     }
                 }
                 else
                 {
-                    throw new IOException(path+" is not a directory");
+                    throw new IOException(fp.getName() + " provider has " + path
+                        + " but it's not a directory.");                    
                 }
             }
         }
-        throw new IOException(path+" does not exist");
+        return results.toArray(new String[0]);
     }
 
     /**

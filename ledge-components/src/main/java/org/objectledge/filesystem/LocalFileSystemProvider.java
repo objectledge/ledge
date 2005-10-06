@@ -40,6 +40,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.LocalRandomAccessFile;
@@ -55,7 +58,7 @@ import org.objectledge.filesystem.impl.LocalRandomAccessFile;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.6 2005-02-21 16:28:04 zwierzem Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.7 2005-10-06 08:38:38 rafal Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -200,7 +203,7 @@ public class LocalFileSystemProvider
     /**
      * {@inheritDoc}
      */
-    public String[] list(String dir) 
+    public Set<String> list(String dir) 
     	throws IOException
     {
 		File file = getFile(dir);
@@ -216,7 +219,7 @@ public class LocalFileSystemProvider
 		{
 			throw new IOException(dir+" is not a directory");
 		}
-		return file.list();
+		return new HashSet<String>(Arrays.asList(file.list()));
     }
 
 
