@@ -29,6 +29,7 @@ package org.objectledge.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -64,7 +65,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.6 2005-02-21 16:15:09 zwierzem Exp $
+ * @version $Id: ThreadDataSource.java,v 1.7 2005-10-07 15:35:41 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -117,7 +118,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection();
-            conn = new ThreadConnection(conn, null);
+            conn = new ThreadConnection(conn, null, log);
             setCachedConnection(conn, null);
         }
         else
@@ -137,7 +138,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection(user, password);
-            conn = new ThreadConnection(conn, user);
+            conn = new ThreadConnection(conn, user, log);
             setCachedConnection(conn, user);
         }
         else
@@ -161,7 +162,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.6 2005-02-21 16:15:09 zwierzem Exp $
+     * @version $Id: ThreadDataSource.java,v 1.7 2005-10-07 15:35:41 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -334,6 +335,7 @@ public class ThreadDataSource
                     while(j.hasNext())
                     {
                         ThreadConnection conn = (ThreadConnection)j.next();
+                        conn.logUsage();
                         try
                         {
                             conn.closeConnection();
@@ -355,14 +357,25 @@ public class ThreadDataSource
     public class ThreadConnection
         extends DelegatingConnection
     {
-        private int refCount = 1;
+        private final String user;
         
-        private String user;
+        private final Logger log;
         
-        ThreadConnection(Connection conn, String user)
+        private int refCount = 1;        
+        
+        private int reads = 0;
+        
+        private int writes = 0;
+        
+        private long startTime;
+        
+        private long totalTimeMillis = 0L;
+        
+        ThreadConnection(Connection conn, String user, Logger log)
         {
             super(conn);
             this.user = user;
+            this.log = log;
             trace(true, user, refCount);
         }
         
@@ -387,15 +400,62 @@ public class ThreadDataSource
             }
         }
         
+        private void registerRead(long timeMillis)
+        {
+            reads++;
+            totalTimeMillis += timeMillis;
+        }
+        
+        private void registerWrite(long timeMillis)
+        {
+            writes++;
+            totalTimeMillis += timeMillis;
+        }
+        
+        void startStatement(String sql)
+        {
+            log.debug(sql);
+            startTime = System.currentTimeMillis();
+        }
+        
+        void finishStatement(String sql)
+        {
+            long timeMillis = System.currentTimeMillis() - startTime;
+            if(sql.trim().toUpperCase().startsWith("SELECT"))
+            {
+                registerRead(timeMillis);
+            }
+            else
+            {
+                registerWrite(timeMillis);
+            }
+        }
+        
+        void logUsage()
+        {
+            log.info(reads + " reads, " + writes + " writes " + " spent " + totalTimeMillis + "ms");
+        }        
+        
         void closeConnection()
             throws SQLException
         {
             getDelegate().close();
             setCachedConnection(null, user);
         }
+        
+        
 
         // Connection interface /////////////////////////////////////////////////////////////////
         
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Statement wrapStatement(Statement orig)
+        {
+            return new MonitoringStatement(orig, this, log);
+        }
+
         /**
          * {@inheritDoc}
          */
