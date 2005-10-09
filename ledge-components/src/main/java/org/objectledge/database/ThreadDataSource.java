@@ -40,6 +40,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.database.impl.DelegatingConnection;
 import org.objectledge.database.impl.DelegatingDataSource;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
@@ -65,7 +66,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.9 2005-10-09 18:29:27 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.10 2005-10-09 19:13:11 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -82,31 +83,49 @@ public class ThreadDataSource
         "org.objectledge.database.ThreadDataSource.traceBuffer";
     
     /** thread's processing context. */
-    private Context context;
+    private final Context context;
     
     /** tracing depth (0 if disabled). */
-    private int tracing;
+    private final int tracing;
     
     /** the logger. */
-    private Logger log;
+    private final Logger log;
     
-    /** should the thread's connection be cached when unused. */
-    private final boolean cacheConnection = true;
+    /** the logger for SQL statements. */
+    private final Logger statementLog;
+    
+    /** should the thread's connection be cached while unused. */
+    private final boolean cacheConnection;
 
     /**
      * Creates a ThreadDataSource instance.
      * 
      * @param dataSource delegate DataSource.
      * @param tracing tracing depth.
+     * @param cacheConnection should the thread's connection be cached while unused.
+     * @param statementLogName separate statement log name, component's own log will be used if 
+     *        null.
      * @param context thread's processing context.
+     * @param loggingConfigurator the logging configurator for creating statement log.
      * @param log the logger to report error to.
      */    
-    public ThreadDataSource(DataSource dataSource, int tracing, Context context, Logger log)
+    public ThreadDataSource(DataSource dataSource, int tracing, boolean cacheConnection,
+        String statementLogName, LoggingConfigurator loggingConfigurator, Context context,
+        Logger log)
     {
         super(dataSource);
         this.context = context;
         this.tracing = tracing;
+        this.cacheConnection = cacheConnection;
         this.log = log;
+        if(statementLogName != null)
+        {
+            this.statementLog = loggingConfigurator.createLogger(statementLogName);
+        }
+        else
+        {
+            this.statementLog = log;
+        }
     }
     
     // DataSource interface /////////////////////////////////////////////////////////////////////
@@ -121,7 +140,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection();
-            conn = new ThreadConnection(conn, null, log);
+            conn = new ThreadConnection(conn, null, log, statementLog);
             setCachedConnection(conn, null);
         }
         else
@@ -141,7 +160,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection(user, password);
-            conn = new ThreadConnection(conn, user, log);
+            conn = new ThreadConnection(conn, user, log, statementLog);
             setCachedConnection(conn, user);
         }
         else
@@ -165,7 +184,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.9 2005-10-09 18:29:27 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.10 2005-10-09 19:13:11 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -380,6 +399,8 @@ public class ThreadDataSource
         
         private final Logger log;
         
+        private final Logger statementLog;
+        
         private int refCount = 1;        
         
         private int reads = 0;
@@ -390,11 +411,12 @@ public class ThreadDataSource
         
         private long totalTimeMillis = 0L;
         
-        ThreadConnection(Connection conn, String user, Logger log)
+        ThreadConnection(Connection conn, String user, Logger log, Logger statementLog)
         {
             super(conn);
             this.user = user;
             this.log = log;
+            this.statementLog = statementLog;
             trace(true, user, refCount);
         }
 
@@ -430,7 +452,7 @@ public class ThreadDataSource
         
         void startStatement(String sql)
         {
-            log.debug(sql);
+            statementLog.debug(sql);
             startTime = System.currentTimeMillis();
         }
         
@@ -452,8 +474,13 @@ public class ThreadDataSource
         {
             if(reads + writes > 0) 
             {
-                log.info(reads + " reads, " + writes + " writes " + " spent " + totalTimeMillis
-                    + "ms");
+                log.info(reads + " reads, " + writes + " writes " + " spent "
+                    + totalTimeMillis + "ms");
+                if(!log.equals(statementLog)) 
+                {
+                    statementLog.info(reads + " reads, " + writes + " writes " + " spent "
+                        + totalTimeMillis + "ms");
+                }
             }
             getDelegate().close();
             setCachedConnection(null, user);
