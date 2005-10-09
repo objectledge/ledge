@@ -36,6 +36,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.database.impl.DelegatingConnection;
@@ -66,7 +67,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.10 2005-10-09 19:13:11 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.11 2005-10-09 19:43:21 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -99,7 +100,6 @@ public class ThreadDataSource
 
     /**
      * Creates a ThreadDataSource instance.
-     * 
      * @param dataSource delegate DataSource.
      * @param tracing tracing depth.
      * @param cacheConnection should the thread's connection be cached while unused.
@@ -110,7 +110,7 @@ public class ThreadDataSource
      * @param log the logger to report error to.
      */    
     public ThreadDataSource(DataSource dataSource, int tracing, boolean cacheConnection,
-        String statementLogName, LoggingConfigurator loggingConfigurator, Context context,
+        String statementLogName, Context context, LoggingConfigurator loggingConfigurator,
         Logger log)
     {
         super(dataSource);
@@ -126,6 +126,25 @@ public class ThreadDataSource
         {
             this.statementLog = log;
         }
+    }
+
+    /**
+     * Creates a new ThreadDataSource instance.
+     * 
+     * @param dataSource the delegate datasource.
+     * @param config component's configuration.
+     * @param loggingConfigurator the logging configurator.
+     * @param context thread's processing context.
+     * @param log the logger.
+     */
+    public ThreadDataSource(DataSource dataSource, Configuration config,
+        LoggingConfigurator loggingConfigurator, Context context, Logger log)
+    {
+        this(
+            dataSource, 
+            config.getChild("tracing").getValueAsInteger(0), 
+            config.getChild("cacheConnection").getValueAsBoolean(false), 
+            config.getChild("statementLog").getValue(null), context, loggingConfigurator, log);
     }
     
     // DataSource interface /////////////////////////////////////////////////////////////////////
@@ -184,7 +203,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.10 2005-10-09 19:13:11 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.11 2005-10-09 19:43:21 rafal Exp $
      */
     public static class GuardValve
         implements Valve

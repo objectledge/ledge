@@ -43,7 +43,7 @@ import org.objectledge.pipeline.Valve;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSourceTest.java,v 1.6 2005-10-09 19:13:11 rafal Exp $
+ * @version $Id: ThreadDataSourceTest.java,v 1.7 2005-10-09 19:43:21 rafal Exp $
  */
 public class ThreadDataSourceTest extends TestCase
 {
@@ -80,7 +80,7 @@ public class ThreadDataSourceTest extends TestCase
         context = new Context();
         context.clearAttributes();
         log = new Log4JLogger(org.apache.log4j.Logger.getLogger(ThreadDataSource.class));
-        threadDataSource = new ThreadDataSource(dataSource, tracing, false, null, null, context, log);
+        threadDataSource = new ThreadDataSource(dataSource, tracing, false, null, context, null, log);
         guardValve = new ThreadDataSource.GuardValve(log);
     }
     
