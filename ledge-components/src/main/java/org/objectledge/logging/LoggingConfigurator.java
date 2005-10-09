@@ -40,6 +40,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.spi.DefaultRepositorySelector;
 import org.apache.log4j.spi.RootCategory;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.w3c.dom.Document;
@@ -87,7 +89,7 @@ import org.xml.sax.SAXException;
  * </ul>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.6 2005-07-07 08:21:38 zwierzem Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.7 2005-10-09 19:12:06 rafal Exp $
  */
 public class LoggingConfigurator
 {
@@ -116,4 +118,16 @@ public class LoggingConfigurator
         LogManager.setRepositorySelector(new DefaultRepositorySelector(hierarchy), 
             LogManager.class);
     }
+    
+    
+    /**
+     * Creates a logger instance.
+     * 
+     * @param name of the logger.
+     * @return a logger instance.
+     */
+    public Logger createLogger(String name)
+    {
+        return new Log4JLogger(LogManager.getLogger(name));
+    }    
 }

@@ -28,9 +28,7 @@
 
 package org.objectledge.logging;
 
-import org.apache.log4j.LogManager;
 import org.jcontainer.dna.Logger;
-import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.pico.customization.CustomizedComponentProvider;
 import org.objectledge.pico.customization.UnsupportedKeyTypeException;
 import org.picocontainer.MutablePicoContainer;
@@ -65,12 +63,14 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  * </p>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggerFactory.java,v 1.17 2005-07-07 08:30:05 zwierzem Exp $
+ * @version $Id: LoggerFactory.java,v 1.18 2005-10-09 19:12:04 rafal Exp $
  */
 public class LoggerFactory
     implements CustomizedComponentProvider
 {
-    private MutablePicoContainer loggerContainer;
+    private final LoggingConfigurator loggingConfigurator;
+    
+    private final MutablePicoContainer loggerContainer;
 
     /**
      * Creates a new instance of Factory and installs apropriate component adapter.
@@ -82,6 +82,7 @@ public class LoggerFactory
      */
     public LoggerFactory(LoggingConfigurator loggingConfigurator)
     {
+        this.loggingConfigurator = loggingConfigurator;
         this.loggerContainer = new DefaultPicoContainer();
     }
 
@@ -96,7 +97,7 @@ public class LoggerFactory
         String marker = getComponentMarker(key);
         if(loggerContainer.getComponentInstance(marker) == null)
         {
-            Logger logger = createLogger(marker);
+            Logger logger = loggingConfigurator.createLogger(marker);
             loggerContainer.registerComponentInstance(marker, logger);
         }
         return (Logger)loggerContainer.getComponentInstance(marker);
@@ -168,15 +169,5 @@ public class LoggerFactory
         {
             return key.toString();
         }
-    }
-    /**
-     * Creates a plain logger instance.
-     * 
-     * @param marker component key marker.
-     * @return a plain logger.
-     */
-    protected Logger createLogger(String marker)
-    {
-        return new Log4JLogger(LogManager.getLogger(marker));
     }
 }
