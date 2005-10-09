@@ -65,7 +65,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.8 2005-10-09 18:00:35 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.9 2005-10-09 18:29:27 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -89,6 +89,9 @@ public class ThreadDataSource
     
     /** the logger. */
     private Logger log;
+    
+    /** should the thread's connection be cached when unused. */
+    private final boolean cacheConnection = true;
 
     /**
      * Creates a ThreadDataSource instance.
@@ -162,7 +165,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.8 2005-10-09 18:00:35 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.9 2005-10-09 18:29:27 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -303,15 +306,29 @@ public class ThreadDataSource
             while(i.hasNext())
             {
                 Map userMap = (Map)i.next();
-                if(!userMap.isEmpty())
+                Iterator j = userMap.values().iterator();
+                while(j.hasNext())
                 {
-                    return true;
+                    ThreadConnection conn = (ThreadConnection)j.next();
+                    if(conn.isInUse())
+                    {
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
 
+    void unusedConnection(ThreadConnection conn) 
+        throws SQLException
+    {
+        if(!cacheConnection)
+        {
+            conn.closeConnection();
+        }
+    }
+    
     /**
      * Close the connection if the thread has one, and report the error condition.
      *
@@ -328,14 +345,16 @@ public class ThreadDataSource
                 Map userMap = (Map)i.next();
                 if(userMap != null && !userMap.isEmpty())
                 {
-                    log.error("Thread owns an open connection.\n"+
-                        getTrace(context)+
-                        "Attempting cleanup now.");
                     Iterator j = userMap.values().iterator();
                     while(j.hasNext())
                     {
                         ThreadConnection conn = (ThreadConnection)j.next();
-                        conn.logUsage();
+                        if(conn.isInUse())
+                        {
+                            log.error("Thread owns an open connection.\n"+
+                                getTrace(context)+
+                                "Attempting cleanup now.");
+                        }
                         try
                         {
                             conn.closeConnection();
@@ -378,6 +397,8 @@ public class ThreadDataSource
             this.log = log;
             trace(true, user, refCount);
         }
+
+        // usage tracing ////////////////////////////////////////////////////////////////////////
         
         void enter()
         {
@@ -392,13 +413,20 @@ public class ThreadDataSource
             refCount--;
             if(refCount == 0)
             {
-                closeConnection();
+                unusedConnection(this);
             }
             if(refCount < 0)
             {
                 throw new SQLException("too many close() calls");
             }
         }
+        
+        boolean isInUse()
+        {
+            return refCount > 0;
+        }
+        
+        // statement tracing ////////////////////////////////////////////////////////////////////
         
         void startStatement(String sql)
         {
@@ -419,19 +447,19 @@ public class ThreadDataSource
             }
         }
         
-        void logUsage()
-        {
-            log.info(reads + " reads, " + writes + " writes " + " spent " + totalTimeMillis + "ms");
-        }        
-        
         void closeConnection()
             throws SQLException
         {
+            if(reads + writes > 0) 
+            {
+                log.info(reads + " reads, " + writes + " writes " + " spent " + totalTimeMillis
+                    + "ms");
+            }
             getDelegate().close();
             setCachedConnection(null, user);
         }
 
-        // Connection interface /////////////////////////////////////////////////////////////////
+        // dependant objects handling ///////////////////////////////////////////////////////////
         
         /**
          * {@inheritDoc}
@@ -441,6 +469,8 @@ public class ThreadDataSource
         {
             return new MonitoringStatement(orig, this, log);
         }
+        
+        // Connection interface /////////////////////////////////////////////////////////////////
 
         /**
          * {@inheritDoc}
