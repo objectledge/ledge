@@ -65,7 +65,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.7 2005-10-07 15:35:41 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.8 2005-10-09 18:00:35 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -162,7 +162,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.7 2005-10-07 15:35:41 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.8 2005-10-09 18:00:35 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -400,18 +400,6 @@ public class ThreadDataSource
             }
         }
         
-        private void registerRead(long timeMillis)
-        {
-            reads++;
-            totalTimeMillis += timeMillis;
-        }
-        
-        private void registerWrite(long timeMillis)
-        {
-            writes++;
-            totalTimeMillis += timeMillis;
-        }
-        
         void startStatement(String sql)
         {
             log.debug(sql);
@@ -420,14 +408,14 @@ public class ThreadDataSource
         
         void finishStatement(String sql)
         {
-            long timeMillis = System.currentTimeMillis() - startTime;
+            totalTimeMillis += System.currentTimeMillis() - startTime;
             if(sql.trim().toUpperCase().startsWith("SELECT"))
             {
-                registerRead(timeMillis);
+                reads++;
             }
             else
             {
-                registerWrite(timeMillis);
+                writes++;
             }
         }
         
@@ -442,8 +430,6 @@ public class ThreadDataSource
             getDelegate().close();
             setCachedConnection(null, user);
         }
-        
-        
 
         // Connection interface /////////////////////////////////////////////////////////////////
         
