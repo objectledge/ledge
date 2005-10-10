@@ -67,7 +67,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.11 2005-10-09 19:43:21 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.12 2005-10-10 09:03:34 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -203,7 +203,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.11 2005-10-09 19:43:21 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.12 2005-10-10 09:03:34 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -513,7 +513,7 @@ public class ThreadDataSource
         @Override
         protected Statement wrapStatement(Statement orig)
         {
-            return new MonitoringStatement(orig, this, log);
+            return new MonitoringStatement(orig, this);
         }
         
         // Connection interface /////////////////////////////////////////////////////////////////
