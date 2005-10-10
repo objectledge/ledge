@@ -42,13 +42,15 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * A delegation pattern wrapper for java.sql.CallableStatement.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DelegatingCallableStatement.java,v 1.1 2005-10-07 14:50:00 rafal Exp $
+ * @version $Id: DelegatingCallableStatement.java,v 1.2 2005-10-10 08:27:46 rafal Exp $
  */
 @SuppressWarnings("deprecation")
 public class DelegatingCallableStatement
@@ -57,16 +59,62 @@ public class DelegatingCallableStatement
 {
 
     private final CallableStatement callableStatement;
+    
+    private final Map<String, Object> parameterMap = new HashMap<String, Object>();
 
     /**
      * Creates a new DelegatingCallableStatement instance.
      *
      * @param callableStatement the delegate callable statement.
+     * @param sql the statement body.
      */
-    public DelegatingCallableStatement(CallableStatement callableStatement)
+    public DelegatingCallableStatement(CallableStatement callableStatement, String sql)
     {
-        super(callableStatement);
+        super(callableStatement, sql);
         this.callableStatement = callableStatement;
+    }
+    
+    private void setParameter(String parameterName, Object value)
+    {
+        parameterMap.put(parameterName, value);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void clearParameters2()
+    {
+        super.clearParameters2();
+        parameterMap.clear();        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getBody()
+    {
+        List<Object> parameterList = getParameterList();
+        StringBuilder body = new StringBuilder();
+        body.append(getSQL());
+        if(!parameterList.isEmpty() || !parameterMap.isEmpty())
+        {
+            body.append(" with ");
+        }
+        if(!parameterList.isEmpty())
+        {
+            body.append(parameterList.toString());
+        }
+        if(!parameterList.isEmpty() && !parameterMap.isEmpty())
+        {
+            body.append(", ");
+        }
+        if(!parameterMap.isEmpty())
+        {
+            body.append(parameterMap.toString());
+        }
+        return body.toString();
     }
 
     // .. CallableStatement .....................................................................
@@ -560,10 +608,11 @@ public class DelegatingCallableStatement
     /**
      * {@inheritDoc}
      */
-    public void setURL(String parameterName, URL val)
+    public void setURL(String parameterName, URL x)
         throws SQLException
     {
-        callableStatement.setURL(parameterName, val);
+        setParameter(parameterName, x);
+        callableStatement.setURL(parameterName, x);
     }
 
     /**
@@ -572,6 +621,7 @@ public class DelegatingCallableStatement
     public void setNull(String parameterName, int sqlType)
         throws SQLException
     {
+        setParameter(parameterName, "NULL");
         callableStatement.setNull(parameterName, sqlType);
     }
 
@@ -581,6 +631,7 @@ public class DelegatingCallableStatement
     public void setBoolean(String parameterName, boolean x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setBoolean(parameterName, x);
     }
 
@@ -590,6 +641,7 @@ public class DelegatingCallableStatement
     public void setByte(String parameterName, byte x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setByte(parameterName, x);
     }
 
@@ -599,6 +651,7 @@ public class DelegatingCallableStatement
     public void setShort(String parameterName, short x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setShort(parameterName, x);
     }
 
@@ -608,6 +661,7 @@ public class DelegatingCallableStatement
     public void setInt(String parameterName, int x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setInt(parameterName, x);
     }
 
@@ -617,6 +671,7 @@ public class DelegatingCallableStatement
     public void setLong(String parameterName, long x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setLong(parameterName, x);
     }
 
@@ -626,6 +681,7 @@ public class DelegatingCallableStatement
     public void setFloat(String parameterName, float x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setFloat(parameterName, x);
     }
 
@@ -635,6 +691,7 @@ public class DelegatingCallableStatement
     public void setDouble(String parameterName, double x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setDouble(parameterName, x);
     }
 
@@ -644,6 +701,7 @@ public class DelegatingCallableStatement
     public void setBigDecimal(String parameterName, BigDecimal x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setBigDecimal(parameterName, x);
     }
 
@@ -653,6 +711,7 @@ public class DelegatingCallableStatement
     public void setString(String parameterName, String x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setString(parameterName, x);
     }
 
@@ -662,6 +721,7 @@ public class DelegatingCallableStatement
     public void setBytes(String parameterName, byte[] x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setBytes(parameterName, x);
     }
 
@@ -671,6 +731,7 @@ public class DelegatingCallableStatement
     public void setDate(String parameterName, Date x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setDate(parameterName, x);
     }
 
@@ -680,6 +741,7 @@ public class DelegatingCallableStatement
     public void setTime(String parameterName, Time x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setTime(parameterName, x);
     }
 
@@ -689,6 +751,7 @@ public class DelegatingCallableStatement
     public void setTimestamp(String parameterName, Timestamp x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setTimestamp(parameterName, x);
     }
 
@@ -698,6 +761,7 @@ public class DelegatingCallableStatement
     public void setAsciiStream(String parameterName, InputStream x, int length)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setAsciiStream(parameterName, x, length);
     }
 
@@ -707,6 +771,7 @@ public class DelegatingCallableStatement
     public void setBinaryStream(String parameterName, InputStream x, int length)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setBinaryStream(parameterName, x, length);
     }
 
@@ -716,6 +781,7 @@ public class DelegatingCallableStatement
     public void setObject(String parameterName, Object x, int targetSqlType, int scale)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setObject(parameterName, x, targetSqlType, scale);
     }
 
@@ -725,6 +791,7 @@ public class DelegatingCallableStatement
     public void setObject(String parameterName, Object x, int targetSqlType)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setObject(parameterName, x, targetSqlType);
     }
 
@@ -734,6 +801,7 @@ public class DelegatingCallableStatement
     public void setObject(String parameterName, Object x)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setObject(parameterName, x);
     }
 
@@ -743,6 +811,7 @@ public class DelegatingCallableStatement
     public void setCharacterStream(String parameterName, Reader reader, int length)
         throws SQLException
     {
+        setParameter(parameterName, reader);
         callableStatement.setCharacterStream(parameterName, reader, length);
     }
 
@@ -752,6 +821,7 @@ public class DelegatingCallableStatement
     public void setDate(String parameterName, Date x, Calendar cal)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setDate(parameterName, x, cal);
     }
 
@@ -761,6 +831,7 @@ public class DelegatingCallableStatement
     public void setTime(String parameterName, Time x, Calendar cal)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setTime(parameterName, x, cal);
     }
 
@@ -770,6 +841,7 @@ public class DelegatingCallableStatement
     public void setTimestamp(String parameterName, Timestamp x, Calendar cal)
         throws SQLException
     {
+        setParameter(parameterName, x);
         callableStatement.setTimestamp(parameterName, x, cal);
     }
 
@@ -779,6 +851,7 @@ public class DelegatingCallableStatement
     public void setNull(String parameterName, int sqlType, String typeName)
         throws SQLException
     {
+        setParameter(parameterName, "NULL");
         callableStatement.setNull(parameterName, sqlType, typeName);
     }
 }

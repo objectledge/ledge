@@ -44,13 +44,15 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * A delegation pattern wrapper for java.sql.PreparedStatement.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DelegatingPreparedStatement.java,v 1.1 2005-10-07 14:50:00 rafal Exp $
+ * @version $Id: DelegatingPreparedStatement.java,v 1.2 2005-10-10 08:27:46 rafal Exp $
  */
 @SuppressWarnings("deprecation")
 public class DelegatingPreparedStatement
@@ -59,15 +61,74 @@ public class DelegatingPreparedStatement
 {
     private final PreparedStatement preparedStatement;
     
+    private final String sql;
+    
+    private final ArrayList<Object> parameterList = new ArrayList<Object>();
+    
     /**
      * Creates a new DelegatingPreparedStatement instance.
      *
      * @param preparedStatement the delegate prepared statement.
+     * @param sql the statement body.
      */
-    public DelegatingPreparedStatement(final PreparedStatement preparedStatement)
+    public DelegatingPreparedStatement(final PreparedStatement preparedStatement, final String sql)
     {
         super(preparedStatement);
         this.preparedStatement = preparedStatement;
+        this.sql = sql;
+    }
+    
+    private void setParameter(int parameterIndex, Object value)
+    {
+        parameterList.ensureCapacity(parameterIndex);
+        parameterList.set(parameterIndex - 1, value);
+    }
+    
+    /**
+     * Returns the statements SQL string.
+     * 
+     * @return the statements SQL string.
+     */
+    protected String getSQL()
+    {
+        return sql;
+    }
+    
+    /**
+     * Returns the current parameter list.
+     * 
+     * @return the current parameter list.
+     */
+    protected List<Object> getParameterList()
+    {
+        return parameterList;
+    }
+    
+    /**
+     * Clear parmateter information stored by the wrapper.
+     * 
+     * <p>remember to invoke super.clearParameters2()</p>
+     */
+    protected void clearParameters2()
+    {
+        parameterList.clear();        
+    }
+
+    /**
+     * Returns the statement body with current parameters.
+     * 
+     * @return the statement body with current parameters.
+     */
+    protected String getBody()
+    {
+        StringBuilder body = new StringBuilder();
+        body.append(sql);
+        if(!parameterList.isEmpty())
+        {
+            body.append(" with ");
+            body.append(parameterList.toString());
+        }
+        return body.toString();
     }
        
     // .. PreparedStatement ..................................................................... 
@@ -87,6 +148,7 @@ public class DelegatingPreparedStatement
     public void clearParameters()
         throws SQLException
     {
+        clearParameters2();
         preparedStatement.clearParameters();
     }
 
@@ -96,6 +158,7 @@ public class DelegatingPreparedStatement
     public boolean execute()
         throws SQLException
     {
+        clearParameters2();
         return preparedStatement.execute();
     }
 
@@ -105,6 +168,7 @@ public class DelegatingPreparedStatement
     public ResultSet executeQuery()
         throws SQLException
     {
+        clearParameters2();
         return preparedStatement.executeQuery();
     }
 
@@ -114,6 +178,7 @@ public class DelegatingPreparedStatement
     public int executeUpdate()
         throws SQLException
     {
+        clearParameters2();
         return preparedStatement.executeUpdate();
     }
 
@@ -138,10 +203,11 @@ public class DelegatingPreparedStatement
     /**
      * {@inheritDoc}
      */
-    public void setArray(int i, Array x)
+    public void setArray(int parameterIndex, Array x)
         throws SQLException
     {
-        preparedStatement.setArray(i, x);
+        setParameter(parameterIndex, x);
+        preparedStatement.setArray(parameterIndex, x);
     }
 
     /**
@@ -150,6 +216,7 @@ public class DelegatingPreparedStatement
     public void setAsciiStream(int parameterIndex, InputStream x, int length)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setAsciiStream(parameterIndex, x, length);
     }
 
@@ -159,6 +226,7 @@ public class DelegatingPreparedStatement
     public void setBigDecimal(int parameterIndex, BigDecimal x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setBigDecimal(parameterIndex, x);
     }
 
@@ -168,16 +236,18 @@ public class DelegatingPreparedStatement
     public void setBinaryStream(int parameterIndex, InputStream x, int length)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setBinaryStream(parameterIndex, x, length);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setBlob(int i, Blob x)
+    public void setBlob(int parameterIndex, Blob x)
         throws SQLException
     {
-        preparedStatement.setBlob(i, x);
+        setParameter(parameterIndex, x);
+        preparedStatement.setBlob(parameterIndex, x);
     }
 
     /**
@@ -186,6 +256,7 @@ public class DelegatingPreparedStatement
     public void setBoolean(int parameterIndex, boolean x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setBoolean(parameterIndex, x);
     }
 
@@ -195,6 +266,7 @@ public class DelegatingPreparedStatement
     public void setByte(int parameterIndex, byte x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setByte(parameterIndex, x);
     }
 
@@ -204,6 +276,7 @@ public class DelegatingPreparedStatement
     public void setBytes(int parameterIndex, byte[] x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setBytes(parameterIndex, x);
     }
 
@@ -213,16 +286,18 @@ public class DelegatingPreparedStatement
     public void setCharacterStream(int parameterIndex, Reader reader, int length)
         throws SQLException
     {
+        setParameter(parameterIndex, reader);
         preparedStatement.setCharacterStream(parameterIndex, reader, length);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setClob(int i, Clob x)
+    public void setClob(int parameterIndex, Clob x)
         throws SQLException
     {
-        preparedStatement.setClob(i, x);
+        setParameter(parameterIndex, x);
+        preparedStatement.setClob(parameterIndex, x);
     }
 
     /**
@@ -231,6 +306,7 @@ public class DelegatingPreparedStatement
     public void setDate(int parameterIndex, Date x, Calendar cal)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setDate(parameterIndex, x, cal);
     }
 
@@ -240,6 +316,7 @@ public class DelegatingPreparedStatement
     public void setDate(int parameterIndex, Date x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setDate(parameterIndex, x);
     }
 
@@ -249,6 +326,7 @@ public class DelegatingPreparedStatement
     public void setDouble(int parameterIndex, double x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setDouble(parameterIndex, x);
     }
 
@@ -258,6 +336,7 @@ public class DelegatingPreparedStatement
     public void setFloat(int parameterIndex, float x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setFloat(parameterIndex, x);
     }
 
@@ -267,6 +346,7 @@ public class DelegatingPreparedStatement
     public void setInt(int parameterIndex, int x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setInt(parameterIndex, x);
     }
 
@@ -276,16 +356,18 @@ public class DelegatingPreparedStatement
     public void setLong(int parameterIndex, long x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setLong(parameterIndex, x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setNull(int paramIndex, int sqlType, String typeName)
+    public void setNull(int parameterIndex, int sqlType, String typeName)
         throws SQLException
     {
-        preparedStatement.setNull(paramIndex, sqlType, typeName);
+        setParameter(parameterIndex, "NULL");
+        preparedStatement.setNull(parameterIndex, sqlType, typeName);
     }
 
     /**
@@ -294,6 +376,7 @@ public class DelegatingPreparedStatement
     public void setNull(int parameterIndex, int sqlType)
         throws SQLException
     {
+        setParameter(parameterIndex, "NULL");
         preparedStatement.setNull(parameterIndex, sqlType);
     }
 
@@ -303,6 +386,7 @@ public class DelegatingPreparedStatement
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scale)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setObject(parameterIndex, x, targetSqlType, scale);
     }
 
@@ -312,6 +396,7 @@ public class DelegatingPreparedStatement
     public void setObject(int parameterIndex, Object x, int targetSqlType)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setObject(parameterIndex, x, targetSqlType);
     }
 
@@ -321,16 +406,18 @@ public class DelegatingPreparedStatement
     public void setObject(int parameterIndex, Object x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setObject(parameterIndex, x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setRef(int i, Ref x)
+    public void setRef(int parameterIndex, Ref x)
         throws SQLException
     {
-        preparedStatement.setRef(i, x);
+        setParameter(parameterIndex, x);
+        preparedStatement.setRef(parameterIndex, x);
     }
 
     /**
@@ -339,6 +426,7 @@ public class DelegatingPreparedStatement
     public void setShort(int parameterIndex, short x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setShort(parameterIndex, x);
     }
 
@@ -348,6 +436,7 @@ public class DelegatingPreparedStatement
     public void setString(int parameterIndex, String x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setString(parameterIndex, x);
     }
 
@@ -357,6 +446,7 @@ public class DelegatingPreparedStatement
     public void setTime(int parameterIndex, Time x, Calendar cal)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setTime(parameterIndex, x, cal);
     }
 
@@ -366,6 +456,7 @@ public class DelegatingPreparedStatement
     public void setTime(int parameterIndex, Time x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setTime(parameterIndex, x);
     }
 
@@ -375,6 +466,7 @@ public class DelegatingPreparedStatement
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setTimestamp(parameterIndex, x, cal);
     }
 
@@ -384,6 +476,7 @@ public class DelegatingPreparedStatement
     public void setTimestamp(int parameterIndex, Timestamp x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setTimestamp(parameterIndex, x);
     }
 
@@ -393,6 +486,7 @@ public class DelegatingPreparedStatement
     public void setUnicodeStream(int parameterIndex, InputStream x, int length)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setUnicodeStream(parameterIndex, x, length);
     }
 
@@ -402,6 +496,7 @@ public class DelegatingPreparedStatement
     public void setURL(int parameterIndex, URL x)
         throws SQLException
     {
+        setParameter(parameterIndex, x);
         preparedStatement.setURL(parameterIndex, x);
     }
 }
