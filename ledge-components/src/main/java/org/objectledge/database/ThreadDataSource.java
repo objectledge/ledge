@@ -27,7 +27,9 @@
 // 
 package org.objectledge.database;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -67,7 +69,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.12 2005-10-10 09:03:34 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.13 2005-10-10 09:44:50 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -203,7 +205,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.12 2005-10-10 09:03:34 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.13 2005-10-10 09:44:50 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -515,6 +517,24 @@ public class ThreadDataSource
         {
             return new MonitoringStatement(orig, this);
         }
+        
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected PreparedStatement wrapPreparedStatement(PreparedStatement orig, String sql)
+        {
+            return new MonitoringPreparedStatement(orig, sql, this);
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected CallableStatement wrapCallableStatement(CallableStatement orig, String sql)
+        {
+            return new MonitoringCallableStatement(orig, sql, this);
+        }                
         
         // Connection interface /////////////////////////////////////////////////////////////////
 
