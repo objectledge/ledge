@@ -89,10 +89,21 @@ import org.xml.sax.SAXException;
  * </ul>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.7 2005-10-09 19:12:06 rafal Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.8 2005-10-10 14:06:16 rafal Exp $
  */
 public class LoggingConfigurator
 {
+    /**
+     * Creates a new LoggingConfigurator instance.
+     * 
+     * <p>
+     * Instance created using this constructor does not alter configuration of Log4j in any way.
+     * </p>
+     */
+    public LoggingConfigurator()
+    {        
+    }
+    
     /**
      * Creates a new LoggingConfigurator.
      * 
