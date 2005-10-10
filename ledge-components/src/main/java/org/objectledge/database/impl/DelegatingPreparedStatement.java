@@ -52,7 +52,7 @@ import java.util.List;
  * A delegation pattern wrapper for java.sql.PreparedStatement.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DelegatingPreparedStatement.java,v 1.3 2005-10-10 08:49:25 rafal Exp $
+ * @version $Id: DelegatingPreparedStatement.java,v 1.4 2005-10-10 09:44:28 rafal Exp $
  */
 @SuppressWarnings("deprecation")
 public class DelegatingPreparedStatement
@@ -81,7 +81,18 @@ public class DelegatingPreparedStatement
     private void setParameter(int parameterIndex, Object value)
     {
         parameterList.ensureCapacity(parameterIndex);
-        parameterList.set(parameterIndex - 1, value);
+        if(parameterIndex <= parameterList.size())
+        {
+            parameterList.set(parameterIndex - 1, value);
+        }
+        else
+        {
+            for(int i  = parameterList.size() + 1; i < parameterIndex; i++)
+            {
+                parameterList.add(null);
+            }
+            parameterList.add(value);
+        }
     }
     
     /**
