@@ -27,6 +27,9 @@
 // 
 package org.objectledge.database;
 
+import static org.objectledge.statistics.DataSource.Graph.LINE1;
+import static org.objectledge.statistics.DataSource.Type.COUNTER;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,8 +49,9 @@ import org.objectledge.database.impl.DelegatingDataSource;
 import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.statistics.Graph;
+import org.objectledge.statistics.ReflectiveStatisticsProvider;
 import org.objectledge.utils.StringUtils;
-
 /**
  * A decorator for javax.sql.DataSource interface that makes sure a Thread uses only one physical
  * connection to the database.
@@ -69,7 +73,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.13 2005-10-10 09:44:50 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.14 2005-10-10 10:43:06 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -99,7 +103,9 @@ public class ThreadDataSource
     
     /** should the thread's connection be cached while unused. */
     private final boolean cacheConnection;
-
+    
+    private final Statistics statistics;
+    
     /**
      * Creates a ThreadDataSource instance.
      * @param dataSource delegate DataSource.
@@ -128,6 +134,39 @@ public class ThreadDataSource
         {
             this.statementLog = log;
         }
+        this.statistics = null;
+    }
+
+    /**
+     * Creates a ThreadDataSource instance.
+     * @param dataSource delegate DataSource.
+     * @param tracing tracing depth.
+     * @param cacheConnection should the thread's connection be cached while unused.
+     * @param statementLogName separate statement log name, component's own log will be used if 
+     *        null.
+     * @param context thread's processing context.
+     * @param loggingConfigurator the logging configurator for creating statement log.
+     * @param statistics delegate object.
+     * @param log the logger to report error to.
+     */    
+    public ThreadDataSource(DataSource dataSource, int tracing, boolean cacheConnection,
+        String statementLogName, Context context, LoggingConfigurator loggingConfigurator,
+        Statistics statistics, Logger log)
+    {
+        super(dataSource);
+        this.context = context;
+        this.tracing = tracing;
+        this.cacheConnection = cacheConnection;
+        this.log = log;
+        if(statementLogName != null)
+        {
+            this.statementLog = loggingConfigurator.createLogger(statementLogName);
+        }
+        else
+        {
+            this.statementLog = log;
+        }
+        this.statistics = statistics;
     }
 
     /**
@@ -148,6 +187,27 @@ public class ThreadDataSource
             config.getChild("cacheConnection").getValueAsBoolean(false), 
             config.getChild("statementLog").getValue(null), context, loggingConfigurator, log);
     }
+
+    /**
+     * Creates a new ThreadDataSource instance.
+     * 
+     * @param dataSource the delegate datasource.
+     * @param config component's configuration.
+     * @param loggingConfigurator the logging configurator.
+     * @param statistics delegate object.
+     * @param context thread's processing context.
+     * @param log the logger.
+     */
+    public ThreadDataSource(DataSource dataSource, Configuration config,
+        LoggingConfigurator loggingConfigurator, Context context, Statistics statistics, Logger log)
+    {
+        this(
+            dataSource, 
+            config.getChild("tracing").getValueAsInteger(0), 
+            config.getChild("cacheConnection").getValueAsBoolean(false), 
+            config.getChild("statementLog").getValue(null), 
+            context, loggingConfigurator, statistics, log);
+    }
     
     // DataSource interface /////////////////////////////////////////////////////////////////////
 
@@ -161,7 +221,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection();
-            conn = new ThreadConnection(conn, null, log, statementLog);
+            conn = new ThreadConnection(conn, null, statementLog);
             setCachedConnection(conn, null);
         }
         else
@@ -181,7 +241,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection(user, password);
-            conn = new ThreadConnection(conn, user, log, statementLog);
+            conn = new ThreadConnection(conn, user, statementLog);
             setCachedConnection(conn, user);
         }
         else
@@ -205,7 +265,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.13 2005-10-10 09:44:50 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.14 2005-10-10 10:43:06 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -409,6 +469,24 @@ public class ThreadDataSource
             }
         }
     }
+    
+    void updateStatistics(int reads, int writes, long timeMillis)
+    {
+        if(reads + writes > 0) 
+        {
+            if(statistics != null)
+            {
+                statistics.update(reads, writes, timeMillis);
+            }
+            log.info(reads + " reads, " + writes + " writes " + " spent "
+                + timeMillis + "ms");
+            if(!log.equals(statementLog)) 
+            {
+                statementLog.info(reads + " reads, " + writes + " writes " + " spent "
+                    + timeMillis + "ms");
+            }
+        }        
+    }
 
     /**
      * A thread's cached connection.
@@ -417,8 +495,6 @@ public class ThreadDataSource
         extends DelegatingConnection
     {
         private final String user;
-        
-        private final Logger log;
         
         private final Logger statementLog;
         
@@ -432,11 +508,10 @@ public class ThreadDataSource
         
         private long totalTimeMillis = 0L;
         
-        ThreadConnection(Connection conn, String user, Logger log, Logger statementLog)
+        ThreadConnection(Connection conn, String user, Logger statementLog)
         {
             super(conn);
             this.user = user;
-            this.log = log;
             this.statementLog = statementLog;
             trace(true, user, refCount);
         }
@@ -493,16 +568,7 @@ public class ThreadDataSource
         void closeConnection()
             throws SQLException
         {
-            if(reads + writes > 0) 
-            {
-                log.info(reads + " reads, " + writes + " writes " + " spent "
-                    + totalTimeMillis + "ms");
-                if(!log.equals(statementLog)) 
-                {
-                    statementLog.info(reads + " reads, " + writes + " writes " + " spent "
-                        + totalTimeMillis + "ms");
-                }
-            }
+            updateStatistics(reads, writes, totalTimeMillis);
             getDelegate().close();
             setCachedConnection(null, user);
         }
@@ -545,6 +611,118 @@ public class ThreadDataSource
             throws SQLException
         {
             leave();
+        }
+    }
+    
+    /**
+     * Publishes database usage statistics.
+     */
+    public static class Statistics extends ReflectiveStatisticsProvider
+    {
+        private static final org.objectledge.statistics.DataSource READS_DS = 
+            new org.objectledge.statistics.DataSource("database_reads", "Database reads", 
+                COUNTER, LINE1);
+
+        private static final org.objectledge.statistics.DataSource WRITES_DS = 
+            new org.objectledge.statistics.DataSource("database_writes", "Database writes", 
+                COUNTER, LINE1);
+
+        private static final org.objectledge.statistics.DataSource TIME_DS = 
+            new org.objectledge.statistics.DataSource("database_access_time", 
+                "Database access time", COUNTER, LINE1);
+        
+        private static final org.objectledge.statistics.DataSource[] STATEMENTS_DATA_SOURCES = {
+            READS_DS, WRITES_DS
+        };
+        
+        private static final org.objectledge.statistics.DataSource[] TIME_DATA_SOURCES = {
+            TIME_DS
+        };
+        
+        private static final org.objectledge.statistics.DataSource[] DATA_SOURCES = {
+            READS_DS, WRITES_DS, TIME_DS
+        };
+        
+        private static final Graph STATEMENTS_GRAPH = new Graph("database_statements",
+            "Database statements", null, STATEMENTS_DATA_SOURCES, "statements");
+        
+        private static final Graph TIME_GRAPH = new Graph("database_access_time",
+            "Database access time", null, TIME_DATA_SOURCES, "milliseconds");
+        
+        private static final Graph[] GRAPHS = { STATEMENTS_GRAPH, TIME_GRAPH };
+
+        private int totalReads = 0;
+        
+        private int totalWrites = 0;
+        
+        private long totalAccessTime = 0;        
+        
+        /**
+         * {@inheritDoc}
+         */
+        public String getName()
+        {
+            return "Database";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Graph[] getGraphs()
+        {
+            return GRAPHS;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public org.objectledge.statistics.DataSource[] getDataSources()
+        {
+            return DATA_SOURCES;
+        }
+        
+        /**
+         * Returns number of preformed DB reads.
+         * 
+         * @return number of preformed DB reads.
+         */
+        public int getDatabaseReads()
+        {
+            return totalReads;
+        }
+
+        /**
+         * Returns number of preformed DB writes.
+         * 
+         * @return number of preformed DB writes.
+         */
+        public int getDatabaseWrites()
+        {
+            return totalWrites;
+        }
+
+        /**
+         * Returns total DB access time in milliseconds.
+         * 
+         * @return total DB access time in milliseconds.
+         */
+        public long getDatabaseAccessTime()
+        {
+            return totalAccessTime;
+        }
+        
+        /**
+         * Update db access statistics.
+         * 
+         * @param reads number of performed reads.
+         * @param writes number of performed writes.
+         * @param accessTime combined duration of these reads and writes.
+         */
+        void update(int reads, int writes, long accessTime)
+        {
+            totalReads += reads;
+            totalWrites += writes;
+            totalAccessTime += accessTime;            
         }
     }
 }
