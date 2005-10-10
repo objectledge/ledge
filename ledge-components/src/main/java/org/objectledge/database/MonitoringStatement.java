@@ -13,7 +13,7 @@ import org.objectledge.database.impl.DelegatingStatement;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: MonitoringStatement.java,v 1.1 2005-10-07 15:35:41 rafal Exp $
+ * @version $Id: MonitoringStatement.java,v 1.2 2005-10-10 08:52:44 rafal Exp $
  */
 public class MonitoringStatement 
     extends DelegatingStatement
@@ -32,17 +32,6 @@ public class MonitoringStatement
         super(statement);
         this.threadConn = threadConn;
         this.log = log;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addBatch(String sql)
-        throws SQLException
-    {
-        threadConn.startStatement("addBatch " + sql);
-        super.addBatch(sql);
     }
 
     /**
@@ -215,14 +204,14 @@ public class MonitoringStatement
     public int[] executeBatch()
         throws SQLException
     {
-        threadConn.startStatement("executeBatch");
+        threadConn.startStatement(getBatchBuffer());
         try
         {
             return super.executeBatch();
         }
         finally
         {
-            threadConn.finishStatement("executeBatch");
+            threadConn.finishStatement(getBatchBuffer());
         }
     }
 }
