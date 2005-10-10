@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.database.ThreadDataSource.ThreadConnection;
 import org.objectledge.database.impl.DelegatingStatement;
 
@@ -13,25 +12,23 @@ import org.objectledge.database.impl.DelegatingStatement;
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: MonitoringStatement.java,v 1.2 2005-10-10 08:52:44 rafal Exp $
+ * @version $Id: MonitoringStatement.java,v 1.3 2005-10-10 08:54:37 rafal Exp $
  */
 public class MonitoringStatement 
     extends DelegatingStatement
 {
     private final ThreadConnection threadConn;
-    private final Logger log;
+
     /**
      * Creates a new MonitoringStatement instance.
      *
      * @param statement original Statement.
      * @param threadConn associated ThreadConnection.
-     * @param log the Logger.
      */
-    public MonitoringStatement(Statement statement, ThreadConnection threadConn, Logger log)
+    public MonitoringStatement(Statement statement, ThreadConnection threadConn)
     {
         super(statement);
         this.threadConn = threadConn;
-        this.log = log;
     }
 
     /**
