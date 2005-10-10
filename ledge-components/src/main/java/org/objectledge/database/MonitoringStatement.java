@@ -8,11 +8,10 @@ import org.objectledge.database.ThreadDataSource.ThreadConnection;
 import org.objectledge.database.impl.DelegatingStatement;
 
 /**
- * Statement wrapper that monitors the number of DB reads/writes, their duration
- *
+ * Statement wrapper that monitors the number of DB reads/writes, and their duration.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: MonitoringStatement.java,v 1.3 2005-10-10 08:54:37 rafal Exp $
+ * @version $Id: MonitoringStatement.java,v 1.4 2005-10-10 08:57:10 rafal Exp $
  */
 public class MonitoringStatement 
     extends DelegatingStatement
