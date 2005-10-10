@@ -52,7 +52,7 @@ import java.util.List;
  * A delegation pattern wrapper for java.sql.PreparedStatement.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DelegatingPreparedStatement.java,v 1.2 2005-10-10 08:27:46 rafal Exp $
+ * @version $Id: DelegatingPreparedStatement.java,v 1.3 2005-10-10 08:49:25 rafal Exp $
  */
 @SuppressWarnings("deprecation")
 public class DelegatingPreparedStatement
@@ -139,6 +139,7 @@ public class DelegatingPreparedStatement
     public void addBatch()
         throws SQLException
     {
+        addToBatchBuffer(getBody());
         preparedStatement.addBatch();
     }
 

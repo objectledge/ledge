@@ -38,12 +38,14 @@ import java.sql.Statement;
  * A delegation pattern wrapper for java.sql.Statement.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DelegatingStatement.java,v 1.1 2005-10-07 14:50:00 rafal Exp $
+ * @version $Id: DelegatingStatement.java,v 1.2 2005-10-10 08:48:18 rafal Exp $
  */
 public class DelegatingStatement
     implements Statement
 {
     private final Statement statement;
+    
+    private final StringBuilder batchBuffer = new StringBuilder();
     
     /**
      * Creates a new DelegatingStatement instance.
@@ -53,6 +55,59 @@ public class DelegatingStatement
     public DelegatingStatement(final Statement statement)
     {
         this.statement = statement;
+    }
+    
+    /**
+     * Returns the contents of the batch buffer.
+     * 
+     * @return the contents of the batch buffer.
+     */
+    protected String getBatchBuffer()
+    {
+        return batchBuffer.toString();
+    }
+    
+    /**
+     * Adds a statement to the batch buffer.
+     * 
+     * @param statement the statement body.
+     */
+    protected void addToBatchBuffer(String statement)
+    {
+        batchBuffer.append(statement);
+        batchBuffer.append("\n");
+    }    
+    
+    // .. Statement .............................................................................
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addBatch(String sql)
+        throws SQLException
+    {
+        addToBatchBuffer(sql);
+        statement.addBatch(sql);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void clearBatch()
+        throws SQLException
+    {
+        batchBuffer.setLength(0);
+        statement.clearBatch();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int[] executeBatch()
+        throws SQLException
+    {
+        batchBuffer.setLength(0);
+        return statement.executeBatch();
     }
     
     /**
@@ -269,33 +324,6 @@ public class DelegatingStatement
         throws SQLException
     {
         return statement.getResultSetType();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void addBatch(String sql)
-        throws SQLException
-    {
-        statement.addBatch(sql);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void clearBatch()
-        throws SQLException
-    {
-        statement.clearBatch();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int[] executeBatch()
-        throws SQLException
-    {
-        return statement.executeBatch();
     }
 
     /**
