@@ -35,6 +35,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
@@ -49,7 +50,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MVCFinderTest.java,v 1.15 2005-03-30 11:20:33 zwierzem Exp $
+ * @version $Id: MVCFinderTest.java,v 1.16 2005-10-10 14:06:45 rafal Exp $
  */
 public class MVCFinderTest extends TestCase
 {
@@ -76,7 +77,7 @@ public class MVCFinderTest extends TestCase
             getConfig(NameSequenceFactory.class, NameSequenceFactory.class);
         NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
         config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        LoggerFactory loggerFactory = new LoggerFactory(null);
+        LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
         Logger logger = loggerFactory.getLogger(Templating.class);
         templating = new VelocityTemplating(config, logger, fs);
         logger = loggerFactory.getLogger(MVCFinder.class);

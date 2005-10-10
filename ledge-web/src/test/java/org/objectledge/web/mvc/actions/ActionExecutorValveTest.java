@@ -34,6 +34,7 @@ import org.objectledge.LedgeWebTestCase;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
@@ -61,7 +62,7 @@ public class ActionExecutorValveTest extends LedgeWebTestCase
         Configuration config = getConfig(fs, NameSequenceFactory.class, NameSequenceFactory.class);
         NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
         config = getConfig(fs, Templating.class, VelocityTemplating.class);
-        LoggerFactory loggerFactory = new LoggerFactory(null);
+        LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
         Logger logger = loggerFactory.getLogger(Templating.class);
         Templating templating = new VelocityTemplating(config, logger, fs);
         logger = loggerFactory.getLogger(MVCFinder.class);

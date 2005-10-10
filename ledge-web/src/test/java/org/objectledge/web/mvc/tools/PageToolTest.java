@@ -41,6 +41,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
@@ -54,7 +55,7 @@ import org.objectledge.xml.XMLValidator;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolTest.java,v 1.13 2005-03-31 10:05:58 pablo Exp $
+ * @version $Id: PageToolTest.java,v 1.14 2005-10-10 14:06:44 rafal Exp $
  */
 public class PageToolTest extends LedgeTestCase
 {
@@ -77,7 +78,7 @@ public class PageToolTest extends LedgeTestCase
 		ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
 
 		Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-		LoggerFactory loggerFactory = new LoggerFactory(null);
+		LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
 		Logger logger = loggerFactory.getLogger(Templating.class);
 		Templating templating = new VelocityTemplating(config, logger, fs);
 		config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);

@@ -41,6 +41,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
@@ -114,7 +115,7 @@ public class ExceptionRedirectorValveTest extends LedgeTestCase
 
             config = configFactory.getConfig(ExceptionRedirectorValve.class, 
                                             ExceptionRedirectorValve.class);
-            LoggerFactory loggerFactory = new LoggerFactory(null);
+            LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
             Logger logger = loggerFactory.getLogger(ExceptionRedirectorValve.class);
             exceptionRedirectorValve = new ExceptionRedirectorValve(config, logger);
             

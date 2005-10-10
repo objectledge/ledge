@@ -32,6 +32,7 @@ import org.objectledge.LedgeWebTestCase;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
@@ -42,7 +43,7 @@ import org.objectledge.xml.XMLValidator;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NameSequenceFactoryTest.java,v 1.15 2005-02-08 19:11:41 rafal Exp $
+ * @version $Id: NameSequenceFactoryTest.java,v 1.16 2005-10-10 14:06:45 rafal Exp $
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
@@ -160,7 +161,7 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
     public Templating getTemplating() throws Exception
     {
         Configuration config = getConfig(fs,"org.objectledge.templating.Templating.xml");
-        LoggerFactory loggerFactory = new LoggerFactory(null);
+        LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
         return new VelocityTemplating(config, loggerFactory.getLogger(Templating.class), fs);
     }
 }

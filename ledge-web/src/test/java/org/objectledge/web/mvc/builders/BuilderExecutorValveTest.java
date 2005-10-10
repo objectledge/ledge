@@ -37,6 +37,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
@@ -55,7 +56,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: BuilderExecutorValveTest.java,v 1.17 2005-02-21 16:48:16 rafal Exp $
+ * @version $Id: BuilderExecutorValveTest.java,v 1.18 2005-10-10 14:06:45 rafal Exp $
  */
 public class BuilderExecutorValveTest 
 	extends LedgeTestCase
@@ -78,7 +79,7 @@ public class BuilderExecutorValveTest
             getConfig(NameSequenceFactory.class, NameSequenceFactory.class);
         NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
         config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        LoggerFactory loggerFactory = new LoggerFactory(null);
+        LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
         Logger logger = loggerFactory.getLogger(Templating.class);
         templating = new VelocityTemplating(config, logger, fs);
         logger = loggerFactory.getLogger(MVCFinder.class);

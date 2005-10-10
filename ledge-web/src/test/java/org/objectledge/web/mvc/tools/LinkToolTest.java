@@ -40,6 +40,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParametersLoaderValve;
@@ -78,7 +79,7 @@ public class LinkToolTest extends LedgeTestCase
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
 
         Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        LoggerFactory loggerFactory = new LoggerFactory(null);
+        LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
         Logger logger = loggerFactory.getLogger(Templating.class);
         Templating templating = new VelocityTemplating(config, logger, fs);
         config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
@@ -249,7 +250,7 @@ public class LinkToolTest extends LedgeTestCase
         validator = new XMLValidator(new XMLGrammarCache());
         configFactory = new ConfigurationFactory(fs, validator, ".");
         config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        loggerFactory = new LoggerFactory(null);
+        loggerFactory = new LoggerFactory(new LoggingConfigurator());
         logger = loggerFactory.getLogger(Templating.class);
         templating = new VelocityTemplating(config, logger, fs);
         config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);

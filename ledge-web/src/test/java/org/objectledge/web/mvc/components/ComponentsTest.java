@@ -36,6 +36,7 @@ import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
@@ -84,7 +85,7 @@ public class ComponentsTest extends TestCase
                         getConfig(NameSequenceFactory.class, NameSequenceFactory.class);
             NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
             config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-            LoggerFactory loggerFactory = new LoggerFactory(null);
+            LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
             Logger logger = loggerFactory.getLogger(Templating.class);
             Templating templating = new VelocityTemplating(config, logger, fs);
             logger = loggerFactory.getLogger(MVCFinder.class);

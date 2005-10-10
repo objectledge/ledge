@@ -47,6 +47,7 @@ import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.utils.AddToList;
 import org.objectledge.utils.LedgeTestCase;
@@ -118,7 +119,7 @@ public class WebI18nTest extends LedgeTestCase
         paramsLoader.process(context);
         MVCInitializerValve mvcInitializer = new MVCInitializerValve(webConfigurator);
         mvcInitializer.process(context);
-        LoggerFactory loggerFactory = new LoggerFactory(null);
+        LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
         localeLoaderValve = new LocaleLoaderValve(logger, i18n);
         AuthenticationContext authenticationContext = new AuthenticationContext();
         context.setAttribute(AuthenticationContext.class, authenticationContext);
