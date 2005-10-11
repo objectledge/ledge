@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMultipart;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.mail.MailSystem;
-import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
@@ -32,7 +31,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileUploadValve.java,v 1.16 2005-08-05 12:49:11 rafal Exp $
+ * @version $Id: FileUploadValve.java,v 1.17 2005-10-11 09:05:45 zwierzem Exp $
  */
 public class FileUploadValve 
     implements Valve

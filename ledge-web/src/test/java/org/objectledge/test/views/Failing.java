@@ -28,16 +28,13 @@
 package org.objectledge.test.views;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
-import org.objectledge.web.mvc.builders.BuildException;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Failing.java,v 1.3 2005-07-26 12:15:49 rafal Exp $
+ * @version $Id: Failing.java,v 1.4 2005-10-11 09:05:44 zwierzem Exp $
  */
 public class Failing extends AbstractBuilder
 {
