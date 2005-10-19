@@ -41,6 +41,30 @@
         libraries and tools. The software developed in the course of the project will be available 
         for any non-commercial or commercial use on the terms of liberal BSD license.</p>
       </subsection>
+      <subsection name="Cyklotron 2">
+        <p>
+          <a href="http://cykotron2.cyklotron.org">Cyklotron 2</a>
+        </p>
+    		<p>Cyklotron 2 is the successor of Cyklotron content management system.</p>
+		<p>Cyklotron 2 is a cleanroom reimplementation, that focuses on simplicity of the internal
+		mechanisms, and extensibility of the system by adding custom applications.</p>
+		<p>The focal point of Cyklotron2 is the Dashboard - the common administrative interface
+		for all embedded applications, that integrates tree view of all resources in the system
+		accessible to the user, dynamic properties pane and context sensitive operations menu.
+		All these elements are metadata driven, and new applications can easily integrate into
+		this framework through a number of well defined extension points.</p>
+		<p>Cyklotron 2 offers a pervasive security system. Applications define roles and permissions
+		specific to their problem domain, and their assignment to particular resources, groups, and
+		individuals is managed in a consistent way across the whole system.</p>
+		<p>Public (as opposed to administrative) interface of Cyklotron 2 is similar to that developed
+		in Cyklotron. It is based on layout styles, layout templates, component slots (sockets)
+		and components. Custom applications can extend the interface by providing custom components
+		that are subject to configuration, visual customization and internationalization through
+		shared, consistent mechanisms.</p>
+		<p>At this point only a fraction of Cyklotron functionality was ported. The current objective
+		of the project is to produce a set of applications sufficient to use Cyklotron 2 as a 
+		group collaboration system similar to <a href="http://groups.engo.pl">eNGO groups</a>.</p>
+      </subsection>      
     </section>
   </body>
 </document>
