@@ -109,7 +109,7 @@ public class PasswordDigester
         /**
          * {@inheritDoc}
          */
-        public Object makeObject() throws Exception
+        public synchronized Object makeObject() throws Exception
         {
             return MessageDigest.getInstance(algorithm);
         }
