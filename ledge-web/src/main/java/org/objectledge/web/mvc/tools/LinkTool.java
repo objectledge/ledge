@@ -67,7 +67,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.26 2005-09-28 19:40:05 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.27 2005-11-04 11:50:16 rafal Exp $
  */
 public class LinkTool
 {
@@ -773,7 +773,7 @@ public class LinkTool
             appendServerPart(sb);
 
             // prepare address part
-            sb.append(httpContext.getRequest().getContextPath());
+            sb.append(getContextPath());
 
             if (contentLink)
             {
@@ -781,7 +781,7 @@ public class LinkTool
             }
             else
             {
-                sb.append(httpContext.getRequest().getServletPath());
+                sb.append(getServletPath());
 
                 Parameters parametersTmp = getParameters(); 
                 String[] keys = parametersTmp.getParameterNames();
@@ -861,6 +861,26 @@ public class LinkTool
     protected String getServerName()
     {
         return httpContext.getRequest().getServerName();
+    }
+
+    /**
+     * Allows subclasses to override cotext path name rendered in {@link #toString()} method.
+     * 
+     * @return the overriden context path
+     */
+    protected String getContextPath()
+    {
+        return httpContext.getRequest().getContextPath();
+    }
+
+    /**
+     * Allows subclasses to override servlet path name rendered in {@link #toString()} method.
+     * 
+     * @return the overriden serlvet path
+     */
+    protected String getServletPath()
+    {
+        return httpContext.getRequest().getServletPath();
     }
 
     /**
