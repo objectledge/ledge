@@ -67,7 +67,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.27 2005-11-04 11:50:16 rafal Exp $
+ * @version $Id: LinkTool.java,v 1.28 2005-11-04 14:50:32 rafal Exp $
  */
 public class LinkTool
 {
@@ -870,7 +870,15 @@ public class LinkTool
      */
     protected String getContextPath()
     {
-        return httpContext.getRequest().getContextPath();
+        if(config.rewrite)
+        {
+            // rely on mod rewrite to put context path into URL
+            return "";
+        }
+        else
+        {
+            return httpContext.getRequest().getContextPath();
+        }
     }
 
     /**
@@ -880,7 +888,15 @@ public class LinkTool
      */
     protected String getServletPath()
     {
-        return httpContext.getRequest().getServletPath();
+        if(config.rewrite)
+        {
+            // rely on mod rewrite to put servlet path into URL
+            return "";
+        }
+        else
+        {
+            return httpContext.getRequest().getServletPath();
+        }
     }
 
     /**
@@ -1140,6 +1156,9 @@ public class LinkTool
     
         /** external content switch */
         private boolean externalContent;
+        
+        /** rewrite (drop context and servlet path from URLs) switch. */
+        private boolean rewrite;
 
         /** the web configurator. */
         private WebConfigurator webConfigurator;
@@ -1204,6 +1223,7 @@ public class LinkTool
             queryStringSeparator = config.getChild("query_separator").
                 getValue(DEFAULT_QUERY_SEPARATOR);
             externalContent = config.getChild("external_content").getValueAsBoolean(false);
+            rewrite = config.getChild("rewrite").getValueAsBoolean(false);
             // TODO: remove WebConfigurator
             viewToken = webConfigurator.getViewToken();
             actionToken = webConfigurator.getActionToken();
