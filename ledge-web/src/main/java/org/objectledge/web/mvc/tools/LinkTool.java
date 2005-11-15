@@ -29,7 +29,9 @@
 package org.objectledge.web.mvc.tools;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,7 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.parameters.SortedParameters;
+import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
@@ -67,7 +70,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.28 2005-11-04 14:50:32 rafal Exp $
+ * @version $Id: LinkTool.java,v 1.29 2005-11-15 10:40:41 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -522,6 +525,96 @@ public class LinkTool
             target.fragment = url.substring(url.lastIndexOf('#') + 1);
         }
         return target;
+    }
+    /**
+     * Prepare link tool pointed to referer page
+     * @return the link tool
+     */
+    public LinkTool getReferer()
+    {
+        Enumeration enumeration = httpContext.getRequest().getHeaders("referer");
+        if( enumeration != null && enumeration.hasMoreElements())
+        {
+            return parseURL(enumeration.nextElement().toString());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Parse given string to obtain link tool object
+     * @param url - string of the toString() shape
+     * @return the link tool
+     * @see #toString()
+     */
+    private LinkTool parseURL(String url)
+    {
+        LinkTool target = getLinkTool(this);
+        if( StringUtils.isEmpty(url))
+        {
+            return target;
+        }
+        try
+        {
+            target.view = URLDecoder.decode(parseURLPart(url, 0,
+                    config.viewToken+"/", "?"), PARAMETER_ENCODING);
+            target.action = URLDecoder.decode(parseURLPart(url, 0,
+                    config.actionToken+"=", "&"), PARAMETER_ENCODING);
+
+            target.parameters.add(getParameters(), false);
+
+            int beginParamIndex = url.indexOf("&");
+            if( beginParamIndex > -1)
+            {
+                while(beginParamIndex < url.length()-1)
+                {
+                    String paramName = URLDecoder.decode(parseURLPart(url,
+                            beginParamIndex, "&", "="), PARAMETER_ENCODING);
+                    beginParamIndex += paramName.length();
+                    String paramValue = URLDecoder.decode(parseURLPart(url,
+                            beginParamIndex, "=", "&"), PARAMETER_ENCODING);
+                    beginParamIndex = url.indexOf("=", beginParamIndex) + paramValue.length();
+                    if (paramName.equals(config.actionToken))
+                    {
+                        continue;
+                    }
+                    target.parameters.add(paramName, paramValue);
+                }
+            }
+            return target;
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new RuntimeException("Exception occured", e);
+        }
+    }
+
+    /**
+     * Parses given <code>url</code> and returns substring beetwen
+     *  <code>beginDelimeter</code> and <code>endDelimeter</code> but
+     *  after beginIndex character.
+     * @param url
+     * @param beginIndex
+     * @param beginDelimiter
+     * @param endDelimiter
+     * @return string
+     */
+    private String parseURLPart(String url, int beginIndex, String beginDelimiter, String endDelimiter)
+    {
+        beginIndex = url.indexOf(beginDelimiter, beginIndex);
+        if( beginIndex < 0)
+        {
+            return "";
+        }
+        beginIndex += beginDelimiter.length();
+        int endIndex = url.indexOf(endDelimiter, beginIndex);
+        if( endIndex < 0)
+        {
+            endIndex = url.length();
+        }
+        return url.substring(beginIndex, endIndex);
     }
 
     // parameter add methods ---------------------------------------------------------------------- 
