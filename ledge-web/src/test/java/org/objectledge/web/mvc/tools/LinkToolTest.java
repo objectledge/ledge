@@ -28,6 +28,7 @@
 
 package org.objectledge.web.mvc.tools;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -293,6 +294,21 @@ public class LinkToolTest extends LedgeTestCase
         assertEquals(linkTool.self().toString(),"/test/ledge#bar");
         assertEquals(linkTool.set("foo","bar").set("bar","foo").toString(),
                     "/test/ledge?bar=foo&foo=bar");
-    }
 
+        //referer test
+        Mock mockEnumeration = mock(Enumeration.class);
+        Enumeration enumeration = (Enumeration)mockEnumeration.proxy();
+        mockEnumeration.stubs().method("hasMoreElements").will(returnValue(true));
+        mockHttpServletRequest.stubs().method("getHeaders").will(returnValue(enumeration));
+        mockEnumeration.stubs().method("nextElement").will(returnValue("https://www.objectledge.org/index.html"));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1"));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList"));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login"));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId="));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=");
+    }
 }
