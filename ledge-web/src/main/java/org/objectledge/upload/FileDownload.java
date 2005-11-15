@@ -34,13 +34,14 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import org.objectledge.context.Context;
+import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
 
 /**
  * An utility for the file download functionality.
  *
  * @author <a href="dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileDownload.java,v 1.3 2004-12-22 08:58:44 rafal Exp $
+ * @version $Id: FileDownload.java,v 1.4 2005-11-15 10:40:06 zwierzem Exp $
  */
 public class FileDownload
 {
@@ -74,16 +75,24 @@ public class FileDownload
      * @param lastModified the last modification date of dowloaded data.
      * @param bytesSize number of bytes that will be sent (size of data from input stream) the file
      *  cannot be larger than 4GB
+     * @param fileName the filename of downloaded data, if null or empty
+     *  no header content-disposition will be attached
      * @throws IOException thrown on errors while downloading
      */
-    public void dumpData(InputStream is, String contentType, long lastModified, int bytesSize)
+    public void dumpData(InputStream is, String contentType, long lastModified,
+            int bytesSize, String fileName)
         throws IOException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
         // TODO: Decide whether to put default content type into HttpContext
-        if(contentType == null || contentType.length() == 0)
+        if( StringUtils.isEmpty(contentType))
         {
             contentType = OCTET_STREAM_CONTENT_TYPE;
+        }
+        if( !StringUtils.isEmpty(fileName))
+        {
+            httpContext.getResponse().setHeader(
+                "Content-Disposition", "attachment; filename="+fileName);
         }
         httpContext.setContentType(contentType);
         if(bytesSize > 0)
@@ -117,7 +126,7 @@ public class FileDownload
     public void dumpData(InputStream is, String contentType, long lastModified)
         throws IOException
     {
-        dumpData(is, contentType, lastModified, -1);
+        dumpData(is, contentType, lastModified, -1, null);
     }
 
     /**
@@ -133,5 +142,43 @@ public class FileDownload
     {
         Date date = new Date();
         dumpData(is, contentType, date.getTime());
+    }
+
+    /**
+     * Dumps the <code>InputStream</code> contents as a direct response with unknown size.
+     * 
+     * @param is    the input stream of data to be downloaded
+     * @param contentType   the content-type of downloaded data
+     * @param lastModified  the last modification date of dowloaded data
+     * @param fileName  the filename of downloaded data, if null or empty no header
+     *  content-disposition will be attached.
+     * @throws IOException  thrown on errors while downloading
+     */
+    public void dumpData(InputStream is, String contentType, long lastModified, String fileName)
+        throws IOException
+    {
+        dumpData(is, contentType, lastModified, -1, fileName);
+    }
+       
+    
+    /**
+     * Dumps the <code>InputStream</code> contents as a direct response with current time as last
+     * modification time and unknown size.
+     * 
+     * @param is
+     *            the input stream of data to be downloaded
+     * @param contentType
+     *            the content-type of downloaded data
+     * @param fileName
+     *            the filename of downloaded data, if null or empty no header content-disposition
+     *            will be attached.
+     * @throws IOException
+     *             thrown on errors while downloading
+     */
+    public void dumpData(InputStream is, String contentType, String fileName)
+        throws IOException
+    {
+        Date date = new Date();
+        dumpData(is, contentType, date.getTime(), fileName);
     }
 }
