@@ -91,7 +91,7 @@ import org.xml.sax.SAXException;
  * &lt;/hibernate-configuration>
  *</pre>
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionFactory.java,v 1.4 2005-11-16 23:33:36 zwierzem Exp $
+ * @version $Id: HibernateSessionFactory.java,v 1.5 2005-11-16 23:59:48 zwierzem Exp $
  */
 public class HibernateSessionFactory 
 implements Startable
@@ -109,7 +109,7 @@ implements Startable
         logger.info("HibernateConfig starting...");
         org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration();
         
-        String xmlPath = "/config/hibernate.xml";  
+        String xmlPath = "/config/"+this.getClass().getCanonicalName()+".xml";  
         
         cfg.setEntityResolver(new EntityResolver() {
             
