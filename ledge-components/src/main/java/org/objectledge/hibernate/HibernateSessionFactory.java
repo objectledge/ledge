@@ -27,16 +27,20 @@
 //
 package org.objectledge.hibernate;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.Startable;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * The hibernate session factory component.
@@ -87,7 +91,7 @@ import org.picocontainer.Startable;
  * &lt;/hibernate-configuration>
  *</pre>
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionFactory.java,v 1.3 2005-07-29 14:39:52 rafal Exp $
+ * @version $Id: HibernateSessionFactory.java,v 1.4 2005-11-16 23:33:36 zwierzem Exp $
  */
 public class HibernateSessionFactory 
 implements Startable
@@ -98,16 +102,34 @@ implements Startable
         return  sessionFactory.openSession();
     }
     
-    public HibernateSessionFactory(Configuration config, Logger logger,
-            FileSystem fs) 
+    public HibernateSessionFactory(Logger logger, final FileSystem fs) 
     throws ConfigurationException, ClassNotFoundException, HibernateException, 
             MalformedURLException {
 
         logger.info("HibernateConfig starting...");
         org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration();
         
-        String xmlPath = "/config/org.objectledge.hibernate.HibernateSessionFactory.xml";  
+        String xmlPath = "/config/hibernate.xml";  
         
+        cfg.setEntityResolver(new EntityResolver() {
+            
+            private HashMap<String, String> mapping = new HashMap();
+            {
+                mapping.put("-//Hibernate/Hibernate Configuration DTD 3.0//EN",
+                    "hibernate-configuration-3.0.dtd");
+                mapping.put("-//Hibernate/Hibernate Mapping DTD 3.0//EN",
+                    "hibernate-mapping-3.0.dtd");
+            }
+            
+            public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+            {
+                InputSource is = new InputSource(
+                    fs.getInputStream("/org/objectledge/hibernate/"+mapping.get(publicId)));
+                is.setPublicId(publicId);
+                //is.setSystemId()
+                return is;
+            }
+        });
         cfg.configure(fs.getResource(xmlPath));
        
         sessionFactory = cfg.buildSessionFactory();
