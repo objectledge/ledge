@@ -34,15 +34,11 @@ import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.LogManager;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.I18n;
@@ -51,19 +47,19 @@ import org.objectledge.logging.LedgeDOMConfigurator;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.scheduler.cron.TokenMgrError;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class TransientSchedulerTest extends TestCase
+public class TransientSchedulerTest extends LedgeTestCase
 {
     private FileSystem fs = null;
 
@@ -331,15 +327,7 @@ public class TransientSchedulerTest extends TestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        InputSource source = new InputSource(fs.
-            getInputStream(name));
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-        SAXConfigurationHandler handler = new SAXConfigurationHandler();
-        reader.setContentHandler(handler);
-        reader.setErrorHandler(handler);
-        reader.parse(source);
-        return handler.getConfiguration();
+        return getConfig(fs, name);
     }
 
 }

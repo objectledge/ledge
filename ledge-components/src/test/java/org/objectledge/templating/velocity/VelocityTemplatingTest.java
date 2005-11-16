@@ -33,15 +33,11 @@ import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
@@ -60,26 +56,22 @@ import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.templating.tools.ContextToolPopulatorValve;
 import org.objectledge.templating.tools.ContextToolRecyclerValve;
 import org.objectledge.templating.tools.ContextTools;
+import org.objectledge.utils.LedgeTestCase;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 /**
  * Velocity Templating test.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class VelocityTemplatingTest extends TestCase
+public class VelocityTemplatingTest extends LedgeTestCase
 {
     private Templating templating;
 
-    /**
-     * Constructor for VelocityTemplatingTest.
-     * @param arg0 the arg.
-     */
-    public VelocityTemplatingTest(String arg0)
+    protected void setUp() throws Exception
     {
-        super(arg0);
+        super.setUp();
 		FileSystemProvider lfs = new LocalFileSystemProvider("local", "src/test/resources");
 		FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
 			getClass().getClassLoader());
@@ -94,15 +86,8 @@ public class VelocityTemplatingTest extends TestCase
             configurator.doConfigure(logConfig.getDocumentElement(), 
                 LogManager.getLoggerRepository());
 
-            source = new InputSource(fs.getInputStream(
-                "config/org.objectledge.templating.velocity.VelocityTemplating.xml"));
-            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-            XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-            SAXConfigurationHandler handler = new SAXConfigurationHandler();
-            reader.setContentHandler(handler);
-            reader.setErrorHandler(handler);
-            reader.parse(source);
-            Configuration config = handler.getConfiguration();
+            Configuration config = getConfig(fs,
+                "config/org.objectledge.templating.velocity.VelocityTemplating.xml");
                 
 			Logger logger = Logger.getLogger(VelocityTemplating.class);
 			templating = new VelocityTemplating(config, new Log4JLogger(logger), fs);
@@ -111,14 +96,6 @@ public class VelocityTemplatingTest extends TestCase
 		{
 			throw new RuntimeException(e);
 		}
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void setUp() throws Exception
-    {
-		super.setUp();
     }
 
     /**

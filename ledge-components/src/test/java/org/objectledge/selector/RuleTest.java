@@ -31,36 +31,20 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RuleTest.java,v 1.3 2004-06-28 10:08:44 fil Exp $
+ * @version $Id: RuleTest.java,v 1.4 2005-11-16 23:38:15 zwierzem Exp $
  */
-public class RuleTest extends TestCase
+public class RuleTest extends LedgeTestCase
 {
-
-    /**
-     * Constructor for RuleTest.
-     * @param arg0
-     */
-    public RuleTest(String arg0)
-    {
-        super(arg0);
-    }
-
     public void testRules()
         throws Exception
     {
@@ -81,14 +65,7 @@ public class RuleTest extends TestCase
             throw new Exception("parser error "+e.getMessage()+" in "+e.getSystemId()+" at line "+
                 e.getLineNumber(), e);
         }
-        InputSource source = new InputSource(configUrl.toString());
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-        SAXConfigurationHandler handler = new SAXConfigurationHandler();
-        reader.setContentHandler(handler);
-        reader.setErrorHandler(handler);
-        reader.parse(source);
-        Configuration config = handler.getConfiguration();
+        Configuration config = getConfig(fs, "selector/RuleTest.xml");
         
         Configuration[] tests = config.getChildren("test");
         Rule[] rules = new Rule[tests.length];    

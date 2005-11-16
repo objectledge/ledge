@@ -34,15 +34,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.sql.DataSource;
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.cache.impl.DelegateMap;
 import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.LRUMap;
@@ -62,27 +58,23 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.notification.Notification;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.ThreadPool;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
+import org.objectledge.utils.LedgeTestCase;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class CachingTest extends TestCase
+public class CachingTest extends LedgeTestCase
 {
     private static final String TEST_CHANNEL = "test_channel";
     
     private CacheFactorySPI caching;
 
     private Notification notification;
-    /**
-     * Constructor for CachingTest.
-     * @param arg0
-     */
-    public CachingTest(String arg0) throws Exception
+
+    public void setUp()
+    throws Exception
     {
-        super(arg0);
         Context context = new Context();
         Valve cleanup = null;
         Configuration config = new DefaultConfiguration("config", "", "/config");
@@ -99,15 +91,7 @@ public class CachingTest extends TestCase
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
                                                 getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
-        InputSource source = new InputSource(
-            fs.getInputStream("config/org.objectledge.cache.CacheFactory.xml"));
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-        SAXConfigurationHandler handler = new SAXConfigurationHandler();
-        reader.setContentHandler(handler);
-        reader.setErrorHandler(handler);
-        reader.parse(source);
-        config = handler.getConfiguration();
+        config = getConfig(fs, "config/org.objectledge.cache.CacheFactory.xml");
         caching = new DefaultCacheFactory(config, logger, pool, notification, persistence);
     }
 

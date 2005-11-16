@@ -34,16 +34,12 @@ import java.util.Date;
 import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.LogManager;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
@@ -65,17 +61,17 @@ import org.objectledge.scheduler.JobNotFoundException;
 import org.objectledge.scheduler.Schedule;
 import org.objectledge.scheduler.ScheduleFactory;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.utils.LedgeTestCase;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class DBSchedulerTest extends TestCase
+public class DBSchedulerTest extends LedgeTestCase
 {
     private FileSystem fs = null;
 
@@ -224,15 +220,7 @@ public class DBSchedulerTest extends TestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        InputSource source = new InputSource(fs.
-            getInputStream(name));
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-        SAXConfigurationHandler handler = new SAXConfigurationHandler();
-        reader.setContentHandler(handler);
-        reader.setErrorHandler(handler);
-        reader.parse(source);
-        return handler.getConfiguration();
+        return getConfig(fs, name);
     }
 
     private DataSource getDataSource() throws Exception

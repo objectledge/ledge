@@ -32,43 +32,35 @@ import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.i18n.xml.XMLI18n;
 import org.objectledge.logging.LedgeDOMConfigurator;
+import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class XMLI18nTest extends TestCase
+public class XMLI18nTest extends LedgeTestCase
 {
 	/** i18n component */
 	private XMLI18n i18n;
 	
-    /**
-     * Constructor for XMLI18nTest.
-     * @param arg0
-     */
-    public XMLI18nTest(String arg0)
+    public void setUp()
+    throws Exception
     {
-        super(arg0);
         FileSystemProvider lfs = new LocalFileSystemProvider("local", "src/test/resources");
         FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath",
         										 getClass().getClassLoader());
@@ -83,14 +75,7 @@ public class XMLI18nTest extends TestCase
             configurator.doConfigure(logConfig.getDocumentElement(), 
                 LogManager.getLoggerRepository());
 
-            source = new InputSource(fs.getInputStream("config/org.objectledge.i18n.I18n.xml"));
-            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-            XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-            SAXConfigurationHandler handler = new SAXConfigurationHandler();
-            reader.setContentHandler(handler);
-            reader.setErrorHandler(handler);
-            reader.parse(source);
-            Configuration config = handler.getConfiguration();
+            Configuration config = getConfig(fs, "config/org.objectledge.i18n.I18n.xml");
             Logger logger = Logger.getLogger(XMLI18n.class);
             XMLValidator validator = new XMLValidator(new XMLGrammarCache());
             i18n = new XMLI18n(config, new Log4JLogger(logger), fs, validator);

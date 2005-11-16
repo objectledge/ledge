@@ -36,16 +36,12 @@ import javax.naming.directory.DirContext;
 import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.LogManager;
 import org.hsqldb.jdbc.jdbcDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
@@ -61,10 +57,10 @@ import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.UndefinedParameterException;
+import org.objectledge.utils.LedgeTestCase;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -72,20 +68,11 @@ import org.xml.sax.XMLReader;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class DirectoryParametersTest extends TestCase
+public class DirectoryParametersTest extends LedgeTestCase
 {
     private ContextFactory contextFactory;
     
     private FileSystem fs;
-    
-    /**
-     * Constructor for DirectoryParametersTest.
-     * @param arg0
-     */
-    public DirectoryParametersTest(String arg0)
-    {
-        super(arg0);
-    }
 
     public void setUp()
     	throws Exception
@@ -244,14 +231,7 @@ public class DirectoryParametersTest extends TestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        InputSource source = new InputSource(fs.getInputStream(name));
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-        SAXConfigurationHandler handler = new SAXConfigurationHandler();
-        reader.setContentHandler(handler);
-        reader.setErrorHandler(handler);
-        reader.parse(source);
-        return handler.getConfiguration();
+        return getConfig(fs, name);
     }
 
 }

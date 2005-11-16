@@ -31,42 +31,27 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.parsers.SAXParserFactory;
-
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: SelectorTest.java,v 1.4 2004-06-28 10:08:44 fil Exp $
+ * @version $Id: SelectorTest.java,v 1.5 2005-11-16 23:38:15 zwierzem Exp $
  */
-public class SelectorTest extends TestCase
+public class SelectorTest extends LedgeTestCase
 {
-
-    /**
-     * Constructor for SelectorTest.
-     * @param arg0
-     */
-    public SelectorTest(String arg0)
-    {
-        super(arg0);
-    }
-
     public Configuration getSelectorConfig(String name)
         throws Exception
     {
         FileSystem fs = FileSystem.getStandardFileSystem("src/test/resources");
-        URL configUrl = fs.getResource("selector/"+name);
+        String configPath = "selector/"+name;
+        URL configUrl = fs.getResource(configPath);
         URL schemaUrl = fs.getResource("org/objectledge/selector/Selector.rng");
         if(configUrl == null || schemaUrl == null)
         {
@@ -82,14 +67,7 @@ public class SelectorTest extends TestCase
             throw new Exception("parser error "+e.getMessage()+" in "+e.getSystemId()+" at line "+
                 e.getLineNumber(), e);
         }
-        InputSource source = new InputSource(configUrl.toString());
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        XMLReader reader = parserFactory.newSAXParser().getXMLReader();
-        SAXConfigurationHandler handler = new SAXConfigurationHandler();
-        reader.setContentHandler(handler);
-        reader.setErrorHandler(handler);
-        reader.parse(source);
-        return handler.getConfiguration();
+        return getConfig(fs, configPath);
     }
 
     public void testSelector()
