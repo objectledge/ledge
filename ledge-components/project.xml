@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE.
 -->
-<!-- $Id: project.xml,v 1.68 2005-10-03 09:08:42 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.69 2005-11-16 23:36:12 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -45,6 +45,7 @@
       <resource>
         <directory>src/main/java</directory>
         <includes>
+          <include>**/*.0.dtd</include>
           <include>**/*.rng</include>
           <include>**/*.sql</include>
         </includes>
@@ -59,6 +60,7 @@
         <resource>
           <directory>src/test/java</directory>
           <includes>
+            <include>**/*.0.dtd</include>
             <include>**/*.rng</include>
             <include>**/*.sql</include>
           </includes>
