@@ -45,7 +45,7 @@ import java.util.Map;
  * being otherwise being eligible to collection.</p>  
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: Context.java,v 1.7 2005-07-22 17:19:53 pablo Exp $
+ * @version $Id: Context.java,v 1.8 2005-11-18 11:39:33 rafal Exp $
  */
 public class Context
 {
@@ -68,12 +68,13 @@ public class Context
      * 
      * <p>Class object and the class name String are considered to be equivalent keys.</p>
      * 
+     * @param <T> the type reflected by key Class object, to avoid casting on the caller's side.
      * @param key a Class key of the attribute.
      * @return the value of the attribute.
      */
-    public Object getAttribute(Class key)
+    public <T> T getAttribute(Class<T> key)
     {
-        return getAttributes().get(key.getName()); 
+        return (T)getAttributes().get(key.getName()); 
     }
 
     /**
