@@ -310,5 +310,7 @@ public class LinkToolTest extends LedgeTestCase
         assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login");
         mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId="));
         assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId="));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId=");
     }
 }

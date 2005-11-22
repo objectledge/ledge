@@ -32,11 +32,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.jcontainer.dna.Configurable;
 import org.jcontainer.dna.ConfigurationException;
@@ -70,7 +72,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.29 2005-11-15 10:40:41 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.30 2005-11-22 21:41:53 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -526,6 +528,7 @@ public class LinkTool
         }
         return target;
     }
+
     /**
      * Prepare link tool pointed to referer page
      * @return the link tool
@@ -542,7 +545,7 @@ public class LinkTool
             return null;
         }
     }
-
+    
     /**
      * Parse given string to obtain link tool object
      * @param url - string of the toString() shape
@@ -550,71 +553,109 @@ public class LinkTool
      * @see #toString()
      */
     private LinkTool parseURL(String url)
-    {
+    {   
         LinkTool target = getLinkTool(this);
-        if( StringUtils.isEmpty(url))
+        int index = url.indexOf(config.viewToken+"/");
+        if( StringUtils.isEmpty(url) || index < 0)
         {
             return target;
         }
+        Map<String,String> paramsMap = parseURLParams(url.substring(index), "&=?/");
+        
+        for( String name: paramsMap.keySet())
+        {
+            if(config.viewToken.equals(name))
+            {
+                target.view = paramsMap.get(name);
+                continue;
+            }
+            if( config.actionToken.equals(name))
+            {
+                target.action = paramsMap.get(name);
+                continue;
+            }
+            target.parameters.add(name, paramsMap.get(name));
+        }
+        return target;
+    }
+    
+    private static final int START = 0;
+    private static final int NAME = 1;
+    private static final int SEPARATOR_AFTER_NAME = 2;
+    private static final int VALUE = 3;
+    private static final int SEPARATOR_AFTER_VALUE = 4;
+    
+    private Map<String,String> parseURLParams(String urlPart, String separator)
+    {       
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        if (urlPart == null)
+        {
+            return paramsMap;
+        }
+        
         try
         {
-            target.view = URLDecoder.decode(parseURLPart(url, 0,
-                    config.viewToken+"/", "?"), PARAMETER_ENCODING);
-            target.action = URLDecoder.decode(parseURLPart(url, 0,
-                    config.actionToken+"=", "&"), PARAMETER_ENCODING);
-
-            target.parameters.add(getParameters(), false);
-
-            int beginParamIndex = url.indexOf("&");
-            if( beginParamIndex > -1)
+            StringTokenizer st = new StringTokenizer(urlPart, separator, true);
+            int state = START;
+            String name = null;
+            while (st.hasMoreTokens())
             {
-                while(beginParamIndex < url.length()-1)
+                String token = st.nextToken();
+                // separators
+                if(token.length() == 1 && separator.indexOf(token.charAt(0)) > -1 )
                 {
-                    String paramName = URLDecoder.decode(parseURLPart(url,
-                            beginParamIndex, "&", "="), PARAMETER_ENCODING);
-                    beginParamIndex += paramName.length();
-                    String paramValue = URLDecoder.decode(parseURLPart(url,
-                            beginParamIndex, "=", "&"), PARAMETER_ENCODING);
-                    beginParamIndex = url.indexOf("=", beginParamIndex) + paramValue.length();
-                    if (paramName.equals(config.actionToken))
+                    switch(state)
                     {
-                        continue;
+                    case START:
+                        state = NAME;
+                        break;
+                    case SEPARATOR_AFTER_NAME:
+                        state = VALUE;
+                        break;
+                    case SEPARATOR_AFTER_VALUE:
+                        state = NAME;
+                        break;
+                    case VALUE:
+                        add(name, "");
+                        name = null;
+                        state = NAME;
+                        break;
+                    case NAME:
+                        throw new IllegalStateException("empty parameter name");
+                    default:
+                        throw new IllegalStateException(
+                        "illegal state while parsing params");
                     }
-                    target.parameters.add(paramName, paramValue);
+                }
+                // names and values
+                else
+                {
+                    switch(state)
+                    {
+                    case START:
+                    case NAME:
+                        name = URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING);
+                        paramsMap.put(name,"");
+                        state = SEPARATOR_AFTER_NAME;
+                        break;
+                    case VALUE:
+                        paramsMap.put(name, URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING));
+                        name = null;
+                        state = SEPARATOR_AFTER_VALUE;
+                        break;
+                    default:
+                        break;  
+                    }
                 }
             }
-            return target;
+            return paramsMap;
         }
+        ///CLOVER:OFF
         catch (UnsupportedEncodingException e)
         {
-            throw new RuntimeException("Exception occured", e);
+            throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
         }
-    }
-
-    /**
-     * Parses given <code>url</code> and returns substring beetwen
-     *  <code>beginDelimeter</code> and <code>endDelimeter</code> but
-     *  after beginIndex character.
-     * @param url
-     * @param beginIndex
-     * @param beginDelimiter
-     * @param endDelimiter
-     * @return string
-     */
-    private String parseURLPart(String url, int beginIndex, String beginDelimiter, String endDelimiter)
-    {
-        beginIndex = url.indexOf(beginDelimiter, beginIndex);
-        if( beginIndex < 0)
-        {
-            return "";
-        }
-        beginIndex += beginDelimiter.length();
-        int endIndex = url.indexOf(endDelimiter, beginIndex);
-        if( endIndex < 0)
-        {
-            endIndex = url.length();
-        }
-        return url.substring(beginIndex, endIndex);
+        ///CLOVER:ON
     }
 
     // parameter add methods ---------------------------------------------------------------------- 
