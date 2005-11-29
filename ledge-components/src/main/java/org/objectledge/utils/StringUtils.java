@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.32 2005-09-03 11:47:05 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.33 2005-11-29 12:16:13 rafal Exp $
  */
 public class StringUtils
 {
@@ -868,5 +868,19 @@ public class StringUtils
             return true;
         }
         return false;
+    }
+
+    /**
+     * Capitalize given string by transforming the first character to upper case.
+     * 
+     * @param str the string.
+     * @return the capitalized string.
+     */
+    public static String capitalize(String str)
+    {
+        StringBuilder buff = new StringBuilder(str.length());
+        buff.append(Character.toUpperCase(str.charAt(0)));
+        buff.append(str.substring(1));
+        return buff.toString();
     }
 }
