@@ -29,19 +29,19 @@
 package org.objectledge.modules.actions.table;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 
 /**
  * Changes the viewed page size.
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetPageSize.java,v 1.2 2005-07-07 08:29:28 zwierzem Exp $
+ * @version $Id: SetPageSize.java,v 1.3 2005-11-30 15:26:09 rafal Exp $
  */
 public class SetPageSize
     extends BaseTableAction
@@ -70,11 +70,11 @@ public class SetPageSize
         }
 
 		Parameters requestParameters = RequestParameters.getRequestParameters(context);
-        int size = requestParameters.getInt(TableConstants.PAGE_SIZE_PARAM_KEY, -1);
+        String paramName = String.format(TableConstants.PAGE_SIZE_PARAM_KEY, state.getId());
+        int size = requestParameters.getInt(paramName, -1);
         if(size == -1)
         {
-            throw new ProcessingException("'"+TableConstants.PAGE_SIZE_PARAM_KEY+
-				"' parameter not found");
+            throw new ProcessingException("'"+paramName+"' parameter not found");
         }
         state.setCurrentPage(1);
         state.setPageSize(size);

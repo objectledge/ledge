@@ -33,7 +33,7 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableConstants.java,v 1.6 2005-02-10 17:46:22 rafal Exp $
+ * @version $Id: TableConstants.java,v 1.7 2005-11-30 15:26:08 rafal Exp $
  */
 public final class TableConstants {
 
@@ -47,7 +47,7 @@ public final class TableConstants {
     public static final String PAGE_NO_PARAM_KEY = "page";
 
     /** Page number parameter key - <code>pageSize</code>. */
-    public static final String PAGE_SIZE_PARAM_KEY = "pageSize";
+    public static final String PAGE_SIZE_PARAM_KEY = "table%d-pageSize";
 
     /** Sort column name parameter key - <code>sortColumn</code>. */
     public static final String SORT_COLUMN_PARAM_KEY = "sortColumn";
