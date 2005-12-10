@@ -50,7 +50,7 @@ import org.objectledge.web.HttpContext;
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageTool.java,v 1.14 2005-08-04 11:10:23 rafal Exp $
+ * @version $Id: PageTool.java,v 1.15 2005-12-10 02:38:56 pablo Exp $
  */
 public class PageTool
 {
@@ -244,20 +244,43 @@ public class PageTool
      */
     public void addStyleLink(String href, int priority)
     {
-        addStyleLink(new ContentLink(href), priority);
+        addStyleLink(new ContentLink(href), priority, null, null);
     }
-
+    
+    /**
+     * Adds a style link with a given priority.
+     * @param href a link to the style
+     * @param priority priority of a style link
+     * @param media media of a style link
+     */
+    public void addStyleLink(String href, int priority, String media)
+    {
+        addStyleLink(new ContentLink(href), priority, media, null);
+    }
+    
+    /**
+     * Adds a style link with a given priority.
+     * @param href a link to the style
+     * @param priority priority of a style link
+     * @param media media of a style link
+     * @param rel ...
+     */
+    public void addStyleLink(String href, int priority, String media, String rel)
+    {
+        addStyleLink(new ContentLink(href), priority, media, rel);
+    }
+    
     /** 
      * Adds a style link with a given priority.
      * @param resLink a content resource link to be added
      * @param priority priority of a style link
      */
-    protected void addStyleLink(ContentLink resLink, int priority)
+    protected void addStyleLink(ContentLink resLink, int priority, String media, String rel)
     {
         if(!styleLinksSet.contains(resLink))
         {
             styleLinksSet.add(resLink);
-            styleLinks.add(new StyleLink(resLink, priority));
+            styleLinks.add(new StyleLink(resLink, priority, media, rel));
         }
     }
 
@@ -290,11 +313,15 @@ public class PageTool
     {
         private ContentLink resLink;
         private int priority;
+        private String media;
+        private String rel;
 
-        StyleLink(ContentLink resLink, int priority)
+        StyleLink(ContentLink resLink, int priority, String media, String rel)
         {
             this.resLink = resLink;
             this.priority = priority;
+            this.media = media;
+            this.rel = rel;
         }
 
         /** Getter for <code>href</code> attribute value.
@@ -311,6 +338,20 @@ public class PageTool
         public int getPriority()
         {
             return priority;
+        }
+        
+        public String getMedia()
+        {
+            return media;
+        }
+        
+        public String getRel()
+        {
+            if(rel == null || rel.length() == 0) 
+            {
+                return "stylesheet";
+            }
+            return rel;
         }
     }
 
