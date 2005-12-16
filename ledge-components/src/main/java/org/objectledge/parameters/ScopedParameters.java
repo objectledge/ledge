@@ -37,7 +37,7 @@ import java.util.Set;
  * An implementation of parameters decorator class to scope parameters key names.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: ScopedParameters.java,v 1.6 2005-05-31 14:54:14 pablo Exp $
+ * @version $Id: ScopedParameters.java,v 1.7 2005-12-16 11:42:16 pablo Exp $
  */
 public class ScopedParameters implements Parameters
 {
@@ -94,7 +94,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, boolean value)
     {
-        parameters.add(prefix+name, value);
+        parameters.add(getPrefix()+name, value);
     }
     
     /**
@@ -102,7 +102,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, boolean[] values)
     {
-        parameters.add(prefix+name, values);
+        parameters.add(getPrefix()+name, values);
     }
 
     /**
@@ -110,7 +110,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, Date value)
     {
-        parameters.add(prefix+name, value);
+        parameters.add(getPrefix()+name, value);
     }
 
     /**
@@ -118,7 +118,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, Date[] values)
     {
-        parameters.add(prefix+name, values);
+        parameters.add(getPrefix()+name, values);
     }
     
     /**
@@ -126,7 +126,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, float value)
     {
-        parameters.add(prefix+name, value);
+        parameters.add(getPrefix()+name, value);
     }
     
     /**
@@ -134,7 +134,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, float[] values)
     {
-        parameters.add(prefix+name, values);
+        parameters.add(getPrefix()+name, values);
     }
     
     /**
@@ -142,7 +142,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, int value)
     {
-        parameters.add(prefix+name, value);
+        parameters.add(getPrefix()+name, value);
     }
     
     /**
@@ -150,7 +150,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, int[] values)
     {
-        parameters.add(prefix+name, values);
+        parameters.add(getPrefix()+name, values);
     }
     
     /**
@@ -158,7 +158,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, long value)
     {
-        parameters.add(prefix+name, value);
+        parameters.add(getPrefix()+name, value);
     }
     
     /**
@@ -166,7 +166,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, long[] values)
     {
-        parameters.add(prefix+name, values);
+        parameters.add(getPrefix()+name, values);
     }
     
     /**
@@ -174,7 +174,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, String value)
     {
-        parameters.add(prefix+name, value);
+        parameters.add(getPrefix()+name, value);
     }
     
     /**
@@ -182,7 +182,7 @@ public class ScopedParameters implements Parameters
      */
     public void add(String name, String[] values)
     {
-        parameters.add(prefix+name, values);
+        parameters.add(getPrefix()+name, values);
     }
     
     /**
@@ -190,7 +190,7 @@ public class ScopedParameters implements Parameters
      */
     public String get(String name, String defaultValue)
     {
-        return parameters.get(prefix+name, defaultValue);
+        return parameters.get(getPrefix()+name, defaultValue);
     }
     
     /**
@@ -198,7 +198,7 @@ public class ScopedParameters implements Parameters
      */
     public String get(String name)
     {
-        return parameters.get(prefix+name);
+        return parameters.get(getPrefix()+name);
     }
     
     /**
@@ -206,7 +206,7 @@ public class ScopedParameters implements Parameters
      */
     public boolean getBoolean(String name, boolean defaultValue)
     {
-        return parameters.getBoolean(prefix+name, defaultValue);
+        return parameters.getBoolean(getPrefix()+name, defaultValue);
     }
     
     /**
@@ -214,7 +214,7 @@ public class ScopedParameters implements Parameters
      */
     public boolean getBoolean(String name)
     {
-        return parameters.getBoolean(prefix+name);
+        return parameters.getBoolean(getPrefix()+name);
     }
     
     /**
@@ -222,7 +222,7 @@ public class ScopedParameters implements Parameters
      */
     public boolean[] getBooleans(String name)
     {
-        return parameters.getBooleans(prefix+name);
+        return parameters.getBooleans(getPrefix()+name);
     }
     
     /**
@@ -238,7 +238,7 @@ public class ScopedParameters implements Parameters
      */
     public Date getDate(String name)
     {
-        return parameters.getDate(prefix+name);
+        return parameters.getDate(getPrefix()+name);
     }
 
     /**
@@ -246,7 +246,7 @@ public class ScopedParameters implements Parameters
      */
     public Date getDate(String name, Date defaultValue)
     {
-        return parameters.getDate(prefix+name, defaultValue);
+        return parameters.getDate(getPrefix()+name, defaultValue);
     }
 
     /**
@@ -254,7 +254,7 @@ public class ScopedParameters implements Parameters
      */
     public Date[] getDates(String name)
     {
-        return parameters.getDates(prefix+name);
+        return parameters.getDates(getPrefix()+name);
     }
     
     /**
@@ -262,7 +262,7 @@ public class ScopedParameters implements Parameters
      */
     public float getFloat(String name, float defaultValue)
     {
-        return parameters.getFloat(prefix+name, defaultValue);
+        return parameters.getFloat(getPrefix()+name, defaultValue);
     }
     
     /**
@@ -270,7 +270,7 @@ public class ScopedParameters implements Parameters
      */
     public float getFloat(String name) throws NumberFormatException
     {
-        return parameters.getFloat(prefix+name);
+        return parameters.getFloat(getPrefix()+name);
     }
     
     /**
@@ -278,7 +278,7 @@ public class ScopedParameters implements Parameters
      */
     public float[] getFloats(String name) throws NumberFormatException
     {
-        return parameters.getFloats(prefix+name);
+        return parameters.getFloats(getPrefix()+name);
     }
     
     /**
@@ -286,7 +286,7 @@ public class ScopedParameters implements Parameters
      */
     public int getInt(String name, int defaultValue)
     {
-        return parameters.getInt(prefix+name, defaultValue);
+        return parameters.getInt(getPrefix()+name, defaultValue);
     }
     
     /**
@@ -294,7 +294,7 @@ public class ScopedParameters implements Parameters
      */
     public int getInt(String name) throws NumberFormatException
     {
-        return parameters.getInt(prefix+name);
+        return parameters.getInt(getPrefix()+name);
     }
     
     /**
@@ -302,7 +302,7 @@ public class ScopedParameters implements Parameters
      */
     public int[] getInts(String name) throws NumberFormatException
     {
-        return parameters.getInts(prefix+name);
+        return parameters.getInts(getPrefix()+name);
     }
     
     /**
@@ -310,7 +310,7 @@ public class ScopedParameters implements Parameters
      */
     public long getLong(String name, long defaultValue)
     {
-        return parameters.getLong(prefix+name, defaultValue);
+        return parameters.getLong(getPrefix()+name, defaultValue);
     }
     
     /**
@@ -318,7 +318,7 @@ public class ScopedParameters implements Parameters
      */
     public long getLong(String name) throws NumberFormatException
     {
-        return parameters.getLong(prefix+name);
+        return parameters.getLong(getPrefix()+name);
     }
     
     /**
@@ -326,7 +326,7 @@ public class ScopedParameters implements Parameters
      */
     public long[] getLongs(String name) throws NumberFormatException
     {
-        return parameters.getLongs(prefix+name);
+        return parameters.getLongs(getPrefix()+name);
     }
     
     /**
@@ -334,7 +334,7 @@ public class ScopedParameters implements Parameters
      */
     public String[] getParameterNames()
     {
-        if(prefix.length() == 0)
+        if(getPrefix().length() == 0)
         {
             return parameters.getParameterNames();
         }
@@ -342,9 +342,9 @@ public class ScopedParameters implements Parameters
         ArrayList<String> list = new ArrayList<String>();
         for(int i=0; i<keys.length; i++)
         {
-            if(keys[i].startsWith(prefix))
+            if(keys[i].startsWith(getPrefix()))
             {
-                list.add(keys[i].substring(prefix.length()));
+                list.add(keys[i].substring(getPrefix().length()));
             }
         }
         String[] result = new String[list.size()];
@@ -356,7 +356,7 @@ public class ScopedParameters implements Parameters
      */
     public String[] getStrings(String name)
     {
-        return parameters.getStrings(prefix+name);
+        return parameters.getStrings(getPrefix()+name);
     }
     
     /**
@@ -364,7 +364,7 @@ public class ScopedParameters implements Parameters
      */
     public boolean isDefined(String name)
     {
-        return parameters.isDefined(prefix+name);
+        return parameters.isDefined(getPrefix()+name);
     }
     
     /**
@@ -372,7 +372,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove()
     {
-        if(prefix.length() == 0)
+        if(getPrefix().length() == 0)
         {
             parameters.remove();
             return;
@@ -380,7 +380,7 @@ public class ScopedParameters implements Parameters
         String[] keys = parameters.getParameterNames();
         for(int i=0; i<keys.length; i++)
         {
-            if(keys[i].startsWith(prefix))
+            if(keys[i].startsWith(getPrefix()))
             {
                 parameters.remove(keys[i]);
             }
@@ -392,7 +392,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove(Set<String> keys)
     {
-        if(prefix.length() == 0)
+        if(getPrefix().length() == 0)
         {
             parameters.remove(keys);
             return;
@@ -400,7 +400,7 @@ public class ScopedParameters implements Parameters
         HashSet<String> temp = new HashSet<String>(keys.size());
         for(String key: keys)
         {
-            temp.add(prefix+key);
+            temp.add(getPrefix()+key);
         }
         parameters.remove(temp);
     }
@@ -410,7 +410,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove(String name, Date value)
     {
-        parameters.remove(prefix+name, value);
+        parameters.remove(getPrefix()+name, value);
     }
 
     /**
@@ -418,7 +418,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove(String name, float value)
     {
-        parameters.remove(prefix+name, value);
+        parameters.remove(getPrefix()+name, value);
     }
     
     /**
@@ -426,7 +426,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove(String name, int value)
     {
-        parameters.remove(prefix+name, value);
+        parameters.remove(getPrefix()+name, value);
     }
     
     /**
@@ -434,7 +434,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove(String name, long value)
     {
-        parameters.remove(prefix+name, value);
+        parameters.remove(getPrefix()+name, value);
     }
     
     /**
@@ -442,7 +442,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove(String name, String value)
     {
-        parameters.remove(prefix+name, value);
+        parameters.remove(getPrefix()+name, value);
     }
     
     /**
@@ -450,7 +450,7 @@ public class ScopedParameters implements Parameters
      */
     public void remove(String name)
     {
-        parameters.remove(prefix+name);
+        parameters.remove(getPrefix()+name);
     }
     
     /**
@@ -458,7 +458,7 @@ public class ScopedParameters implements Parameters
      */
     public void removeExcept(Set<String> keys)
     {
-        if(prefix.length() == 0)
+        if(getPrefix().length() == 0)
         {
             parameters.removeExcept(keys);
             return;
@@ -469,7 +469,7 @@ public class ScopedParameters implements Parameters
         {
             if (!keys.contains(key))
             {
-                temp.add(prefix+key);
+                temp.add(getPrefix()+key);
             }
         }
         parameters.remove(temp);
@@ -480,7 +480,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, boolean value)
     {
-        parameters.set(prefix+name, value);
+        parameters.set(getPrefix()+name, value);
     }
     
     /**
@@ -488,7 +488,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, boolean[] values)
     {
-        parameters.set(prefix+name, values);
+        parameters.set(getPrefix()+name, values);
     }
 
     /**
@@ -496,7 +496,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, Date value)
     {
-        parameters.set(prefix+name, value);
+        parameters.set(getPrefix()+name, value);
     }
 
     /**
@@ -504,7 +504,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, Date[] values)
     {
-        parameters.set(prefix+name, values);
+        parameters.set(getPrefix()+name, values);
     }
 
     /**
@@ -512,7 +512,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, float value)
     {
-        parameters.set(prefix+name, value);
+        parameters.set(getPrefix()+name, value);
     }
     
     /**
@@ -520,7 +520,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, float[] values)
     {
-        parameters.set(prefix+name, values);
+        parameters.set(getPrefix()+name, values);
     }
     
     /**
@@ -528,7 +528,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, int value)
     {
-        parameters.set(prefix+name, value);
+        parameters.set(getPrefix()+name, value);
     }
     
     /**
@@ -536,7 +536,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, int[] values)
     {
-        parameters.set(prefix+name, values);
+        parameters.set(getPrefix()+name, values);
     }
     
     /**
@@ -544,7 +544,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, long value)
     {
-        parameters.set(prefix+name, value);
+        parameters.set(getPrefix()+name, value);
     }
     
     /**
@@ -552,7 +552,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, long[] values)
     {
-        parameters.set(prefix+name, values);
+        parameters.set(getPrefix()+name, values);
     }
     
     /**
@@ -560,7 +560,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, String value)
     {
-        parameters.set(prefix+name, value);
+        parameters.set(getPrefix()+name, value);
     }
     
     /**
@@ -568,7 +568,7 @@ public class ScopedParameters implements Parameters
      */
     public void set(String name, String[] values)
     {
-        parameters.set(prefix+name, values);
+        parameters.set(getPrefix()+name, values);
     }
 	
     /**
@@ -576,7 +576,7 @@ public class ScopedParameters implements Parameters
      */
 	public void set(Parameters parameters)
 	{
-	    if(prefix.length() == 0)
+	    if(getPrefix().length() == 0)
 	    {
 	        this.parameters.set(parameters);
 	    }
@@ -589,7 +589,7 @@ public class ScopedParameters implements Parameters
                 String[] values = parameters.getStrings(keys[i]);
 				for(int j=0; j<values.length; j++)
                 {
-                    this.parameters.add(prefix+keys[i], values[j]);
+                    this.parameters.add(getPrefix()+keys[i], values[j]);
                 }
             }
 	    }
@@ -611,5 +611,15 @@ public class ScopedParameters implements Parameters
             sb.append('\n');
         }
         return sb.toString();
+    }
+
+    /**
+     * Get the prefix.
+     * 
+     * @return prefix.
+     */
+    protected String getPrefix() 
+    {
+        return prefix;
     }
 }
