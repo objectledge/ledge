@@ -53,8 +53,8 @@ import org.objectledge.templating.TemplatingContext;
  * Simple templating implementation based on velocity engine.
  *
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.21 2005-06-10 11:45:37 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @version $Id: VelocityTemplating.java,v 1.22 2005-12-20 09:09:31 pablo Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {

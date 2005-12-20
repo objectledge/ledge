@@ -50,8 +50,8 @@ import org.objectledge.parameters.ScopedParameters;
 /**
  * A persistent implementation of parameters container.
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.9 2005-07-01 04:07:03 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @version $Id: DBParameters.java,v 1.10 2005-12-20 09:09:32 pablo Exp $
  */
 public class DBParameters implements Parameters
 {

@@ -35,8 +35,8 @@ import java.util.Set;
  * A container of parameters.
  *
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Parameters.java,v 1.13 2005-05-11 07:16:42 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @version $Id: Parameters.java,v 1.14 2005-12-20 09:09:32 pablo Exp $
  */
 public interface Parameters
 {

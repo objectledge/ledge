@@ -50,8 +50,8 @@ import org.objectledge.database.DatabaseUtils;
 /**
  * A simple implementation of parameters container.
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: DefaultParameters.java,v 1.23 2005-07-05 07:04:53 rafal Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @version $Id: DefaultParameters.java,v 1.24 2005-12-20 09:09:32 pablo Exp $
  */
 public class DefaultParameters implements Parameters
 {

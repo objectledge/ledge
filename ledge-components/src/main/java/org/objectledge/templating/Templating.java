@@ -36,8 +36,8 @@ import org.objectledge.ComponentInitializationError;
 /**
  * Templating component.
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Templating.java,v 1.8 2005-01-28 02:42:24 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @version $Id: Templating.java,v 1.9 2005-12-20 09:09:31 pablo Exp $
  */
 ///CLOVER:OFF
 public interface Templating

@@ -37,8 +37,8 @@ import org.objectledge.context.Context;
 /**
  * Interface for all templating contexts.
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: TemplatingContext.java,v 1.7 2005-02-02 22:18:16 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @version $Id: TemplatingContext.java,v 1.8 2005-12-20 09:09:31 pablo Exp $
  */
 ///CLOVER:OFF
 public abstract class TemplatingContext

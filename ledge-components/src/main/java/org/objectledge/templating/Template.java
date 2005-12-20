@@ -32,8 +32,8 @@ package org.objectledge.templating;
 /**
  * Interface for system template. 
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @version $Id: Template.java,v 1.4 2004-01-15 12:07:08 fil Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @version $Id: Template.java,v 1.5 2005-12-20 09:09:31 pablo Exp $
  */
 ///CLOVER:OFF
 public interface Template

@@ -40,9 +40,9 @@ import java.util.TreeSet;
 /**
  * A compound implementation of parameters.
  *
- * @author <a href="mailto:pablo@caltha.org">Pawel Potempski</a>
- * @author <a href="mailto:rafal@caltha.org">Rafal Krzewski</a>
- * @version $Id: CompoundParameters.java,v 1.6 2005-05-16 08:38:24 pablo Exp $
+ * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
+ * @author <a href="mailto:rafal@caltha.com">Rafal Krzewski</a>
+ * @version $Id: CompoundParameters.java,v 1.7 2005-12-20 09:09:32 pablo Exp $
  */
 public class CompoundParameters implements Parameters
 {
