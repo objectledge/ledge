@@ -42,7 +42,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.16 2005-08-10 07:45:37 rafal Exp $
+ * @version $Id: StringTool.java,v 1.17 2005-12-20 09:57:04 rafal Exp $
  */
 public class StringTool
 {
@@ -63,31 +63,47 @@ public class StringTool
      */
     public String shorten(String str, int maxLength)
     {
-        if(str.length() > maxLength)
-        {
-            StringBuilder buf = new StringBuilder(str);
-            buf.setLength(maxLength-1);
-            buf.append('\u2026'); // the ellipsis character - ie. 3 dots ...
-            return buf.toString();
-        }
-        return str;
+        return StringUtils.shortenString(str, maxLength/2, maxLength, "\u2026");
+    }
+
+    /**
+     * Trims the string to the specified length adding an ellipsis character (3 dots) at the end.
+     * 
+     * @param str the string.
+     * @param minLength minimum number of characters preserved.
+     * @param maxLength maximum number of characters preserved.
+     * @return the trimmed string with an ellipsis character (3 dots) at the end.
+     */
+    public String shorten(String str, int minLength, int maxLength)
+    {
+        return StringUtils.shortenString(str, minLength, maxLength, "\u2026");
     }
 
     /**
      * Trims the string to the specified length.
      * 
      * @param source the string.
-     * @param length maximum number of characters preserved.
+     * @param maxLength maximum number of characters preserved.
      * @param suffix suffix to append if the string is acutally trimmed.
      * @return the trimmed string.
      */
-    public String shortenString(String source, int length, String suffix)
+    public String shortenString(String source, int maxLength, String suffix)
     {
-        if(source == null || length >= source.length())
-        {
-            return source;
-        }
-        return source.substring(0, length)+suffix;
+        return StringUtils.shortenString(source, maxLength/2, maxLength, suffix);
+    }
+
+    /**
+     * Trims the string to the specified length.
+     * 
+     * @param source the string.
+     * @param minLength minimum number of characters preserved.
+     * @param maxLength maximum number of characters preserved.
+     * @param suffix suffix to append if the string is acutally trimmed.
+     * @return the trimmed string.
+     */
+    public String shortenString(String source, int minLength, int maxLength, String suffix)
+    {
+        return StringUtils.shortenString(source, minLength, maxLength, suffix);
     }
     
     /** 

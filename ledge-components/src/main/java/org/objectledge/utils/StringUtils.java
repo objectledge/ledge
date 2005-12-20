@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.33 2005-11-29 12:16:13 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.34 2005-12-20 09:57:01 rafal Exp $
  */
 public class StringUtils
 {
@@ -542,6 +542,57 @@ public class StringUtils
             out.append(lineOut);
         }
         return out.toString();
+    }
+    
+    /**
+     * Shorten the string to the specifed lenght.
+     * 
+     * <p>If the string is shorter than the maxLength limit it is returned intact. If the string is 
+     * longer,it will be truncated and the suffix will be added. If truncation is necessary, the 
+     * preferred truncation point is the last punctuation character before the limit, unless it
+     * occurs later than minLength in the string. In this case the prefferred truncation point
+     * is the last whitespace before the maxLength limit unless it occurs later than minLength.
+     * At last resort, the string is truncated at maxLenght limit.</p>
+     * 
+     * @param source the string to process.
+     * @param minLength minimum length of the shortened string.
+     * @param maxLength maximum length limit.
+     * @param suffix suffix to add if the string is actually shortened. Should be " ..." or
+     * " \u2026" (using Unicode horizontal ellipsis glyph).
+     * @return shortened string.
+     */
+    public static String shortenString(String source, int minLength, int maxLength, String suffix)
+    {
+        if(source == null || maxLength >= source.length())
+        {
+            return source;
+        }
+        // try to find a punctuation character before length limit
+        int i;
+        for(i = maxLength - 1; i >=0 ; i--)
+        {
+            int type = Character.getType(source.charAt(i));
+            if(type >= Character.DASH_PUNCTUATION && type <= Character.OTHER_PUNCTUATION)
+            {
+                break;
+            }
+        }
+        if(i < minLength)
+        {
+            // try to find a whitespace chracter before length limit
+            for(i = maxLength - 1; i >=0 ; i--)
+            {
+                if(Character.isWhitespace(source.charAt(i)))
+                {
+                    break;
+                }
+            }
+        }
+        if(i < minLength)
+        {
+            i = maxLength;
+        }
+        return source.substring(0, i) + suffix;
     }
     
     // pathnames ////////////////////////////////////////////////////////////

@@ -180,4 +180,18 @@ public class StringUtilsTest extends TestCase
         str = "not-empty";
         assertFalse(StringUtils.isEmpty(str));
     }
+    
+    public void testShorten()
+    {
+        final String suff = " ...";
+        //           123456789012345678901234567890123456789
+        String p  = "Aaa bbbb, cccc ddd. Yyyy uuuu xxxx.";
+        String s1 = "Aaa bbbb, cccc ddd ...";                // 20 10
+        String s2 = "Aaa bbbb, cccc ...";                    // 15 10
+        String s3 = "Aaa bbbb, ccc ...";                     // 12 10
+        
+        assertEquals(s1, StringUtils.shortenString(p, 10, 20, suff));
+        assertEquals(s2, StringUtils.shortenString(p, 10, 15, suff));
+        assertEquals(s3, StringUtils.shortenString(p, 11, 13, suff));
+    }
 }
