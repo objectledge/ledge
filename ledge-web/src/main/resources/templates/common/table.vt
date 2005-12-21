@@ -30,7 +30,7 @@
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: table.vt,v 1.9 2005-12-08 17:11:45 rafal Exp $
+ * @version $Id: table.vt,v 1.10 2005-12-21 16:00:24 rafal Exp $
 *###
 
 #**
@@ -333,6 +333,24 @@ $i18n.get('table.page.size')
 #macro(tableView_linesAndFolders $table $row $tableLink)
 #tableView_linesAndFoldersBase($table $row $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))##
 #end
+
+#**
+ * Display extended lines for displaying a muliti row item.
+ *
+ * @param $table the table tool.
+ * @param $row the row to displays tree images for.
+ *#
+#macro(tableView_extenededLines $table $row)
+#foreach($box in $table.linesAndFolders($row))##
+#if($box.extended)##
+<img src="$link.content("images/tree/I.gif")" />##
+#else
+<img src="$link.content("images/tree/blank.gif")" />##	
+#end##
+#end##
+#end
+
+##
 
 #**
  * Standard lines and folders with defalut expansion tooggling action.

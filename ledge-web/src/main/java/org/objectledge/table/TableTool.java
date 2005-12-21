@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.11 2005-05-20 00:47:19 rafal Exp $
+ * @version $Id: TableTool.java,v 1.12 2005-12-21 16:00:24 rafal Exp $
  */
 public class TableTool
 {
@@ -450,21 +450,22 @@ public class TableTool
 		return linesAndFolders;
     }
 
-	private static final LinesAndFoldersBox LF_I = new LinesAndFoldersBox("I");
-	private static final LinesAndFoldersBox LF_L = new LinesAndFoldersBox("L");
-	private static final LinesAndFoldersBox LF_T = new LinesAndFoldersBox("T");
-	private static final LinesAndFoldersBox LF_BLANK = new LinesAndFoldersBox("blank");
+	private static final LinesAndFoldersBox LF_I = new LinesAndFoldersBox("I", true);
+	private static final LinesAndFoldersBox LF_L = new LinesAndFoldersBox("L", false);
+	private static final LinesAndFoldersBox LF_T = new LinesAndFoldersBox("T", true);
+	private static final LinesAndFoldersBox LF_BLANK = new LinesAndFoldersBox("blank", false);
 	private static final LinesAndFoldersBox LF_L_PLUS = 
-		new LinesAndFoldersBox("Lplus", "toggle-expand");
+		new LinesAndFoldersBox("Lplus", "toggle-expand", false);
 	private static final LinesAndFoldersBox LF_L_MINUS = 
-		new LinesAndFoldersBox("Lminus", "toggle-expand");
+		new LinesAndFoldersBox("Lminus", "toggle-expand", false);
 	private static final LinesAndFoldersBox LF_T_PLUS = 
-		new LinesAndFoldersBox("Tplus", "toggle-expand");
+		new LinesAndFoldersBox("Tplus", "toggle-expand", true);
 	private static final LinesAndFoldersBox LF_T_MINUS = 
-		new LinesAndFoldersBox("Tminus", "toggle-expand");
-	private static final LinesAndFoldersBox LF_FOLDER = new LinesAndFoldersBox("folder");
-	private static final LinesAndFoldersBox LF_FILE = new LinesAndFoldersBox("file");
-	private static final LinesAndFoldersBox LF_FOLDEROPEN = new LinesAndFoldersBox("folderopen");
+		new LinesAndFoldersBox("Tminus", "toggle-expand", true);
+	private static final LinesAndFoldersBox LF_FOLDER = new LinesAndFoldersBox("folder", true);
+	private static final LinesAndFoldersBox LF_FILE = new LinesAndFoldersBox("file", false);
+	private static final LinesAndFoldersBox LF_FOLDEROPEN = new LinesAndFoldersBox("folderopen", 
+        true);
 
 	/** 
 	 * Represents an element of "lines and folders" line generated for a tree row.
@@ -473,24 +474,28 @@ public class TableTool
 	{
 		private String type;
 		private String linkType = "none";
+        private boolean extended;
 
 		/**
 		 * Creates a box of a given type with undefined link type.
 		 * @param type type of the box
+         * @param extended should the box be extended with I on the next line.
 		 */
-		public LinesAndFoldersBox(String type)
+		public LinesAndFoldersBox(String type, boolean extended)
 		{
 			this.type = type;
+            this.extended = extended;
 		}
 		
 		/**
 		 * Creates a box of a given type and link type.
 		 * @param type type of the box
 		 * @param linkType type of the link
+		 * @param extended should the box be extended with I on the next line.
 		 */
-		public LinesAndFoldersBox(String type, String linkType)
+		public LinesAndFoldersBox(String type, String linkType, boolean extended)
 		{
-			this(type);
+			this(type, extended);
 			this.linkType = linkType;
 		}
 
@@ -537,6 +542,17 @@ public class TableTool
         public boolean isIcon()
         {
             return type.equals("folder") || type.equals("file") || type.equals("folderopen");
+        }
+        
+        /**
+         * Should the box be extended with an I on the next line, when displaying a multi line
+         * item.
+         * 
+         * @return code>true</code> if the box should be extended with an I on the next line. 
+         */
+        public boolean isExtended()
+        {
+            return extended;
         }
 	}
 
