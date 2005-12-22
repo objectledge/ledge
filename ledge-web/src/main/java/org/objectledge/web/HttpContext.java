@@ -45,7 +45,7 @@ import org.objectledge.context.Context;
  * The http context encapsulates the http request and response.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.14 2005-07-22 17:25:46 pablo Exp $
+ * @version $Id: HttpContext.java,v 1.15 2005-12-22 09:57:10 rafal Exp $
  */
 public class HttpContext
 {
@@ -263,5 +263,26 @@ public class HttpContext
     public void removeSessionAttribute(String key)
     {
         request.getSession().setAttribute(key, null);
+    }
+
+    /**
+     * Sets the Content-Length header.
+     * 
+     * @param length the length of the response body.
+     */
+    public void setResponseLength(int length)
+    {
+        response.addIntHeader("Content-Length", length); 
+    }
+    
+    /**
+     * Add response headers that disable caching in the browser.
+     */
+    public void disableCache()
+    {
+        response.addHeader("Pragma", "no-cache");
+        response.addHeader("Cache-control",
+            "no-cache, no-store, must-revalidate, max_age=0, post-check=0, pre-check=0");
+        response.addHeader("Expires", "Mon, 12 May 1998 00:00:00 GMT");
     }
 }
