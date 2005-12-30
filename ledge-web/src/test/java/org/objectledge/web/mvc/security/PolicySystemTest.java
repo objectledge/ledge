@@ -175,10 +175,10 @@ public class PolicySystemTest extends LedgeWebTestCase
     {
         Policy policy = policySystem.getPolicy("bar");
         assertEquals(policySystem.checkPolicy(new DefaultPrincipal("root"), true, policy), true);
-        policy = new Policy(false, true, 
+        policy = new Policy("test", false, true, 
             new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
         assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"), false, policy), false);
-        policy = new Policy(false, false, 
+        policy = new Policy("test", false, false, 
             new String[] { "admin" }, new String[] { "foo" }, new String[] { "bar" });
         assertEquals(policySystem.checkPolicy(new DefaultPrincipal("anon"), false, policy), true);
     }
@@ -217,7 +217,7 @@ public class PolicySystemTest extends LedgeWebTestCase
 
     public void testPolicyTest()
     {
-        Policy policy = new Policy(false, true, 
+        Policy policy = new Policy("test", false, true, 
             new String[] { "admin" }, new String[] { "foo*" }, new String[] { "bar*" });
         assertEquals(policy.getActionPatterns()[0], "bar*");
         assertEquals(policy.getViewPatterns()[0], "foo*");

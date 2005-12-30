@@ -29,7 +29,6 @@
 package org.objectledge.web.mvc.security;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,7 +48,7 @@ import org.objectledge.security.RoleChecking;
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PolicySystem.java,v 1.2 2005-02-08 19:11:29 rafal Exp $
+ * @version $Id: PolicySystem.java,v 1.3 2005-12-30 08:42:06 rafal Exp $
  */
 public class PolicySystem
 {
@@ -90,33 +89,9 @@ public class PolicySystem
         globalSSL = config.getChild("globalSSL").getValueAsBoolean(globalSSL);
         globalLogin = config.getChild("globalLoginRequired").getValueAsBoolean(globalLogin);
         globalAccess = config.getChild("globalAccess").getValueAsBoolean(globalAccess);
-        Configuration[] policyNodes = config.getChildren("policy");
-        for (int i = 0; i < policyNodes.length; i++)
+        for (Configuration policyNode : config.getChildren("policy"))
         {
-            String name = policyNodes[i].getAttribute("name");
-            boolean ssl = policyNodes[i].getAttributeAsBoolean("ssl",false);
-            boolean auth = policyNodes[i].getAttributeAsBoolean("auth",false);
-            Configuration[] roleNodes = policyNodes[i].getChildren("role");
-            ArrayList roles = new ArrayList();
-            for(int j = 0; j < roleNodes.length; j++)
-            {
-                roles.add(roleNodes[j].getValue());
-            }
-            Configuration[] viewNodes = policyNodes[i].getChildren("view");
-            ArrayList views = new ArrayList();
-            for(int j = 0; j < viewNodes.length; j++)
-            {
-                views.add(viewNodes[j].getValue());
-            }
-            Configuration[] actionNodes = policyNodes[i].getChildren("action");
-            ArrayList actions = new ArrayList();
-            for(int j = 0; j < actionNodes.length; j++)
-            {
-                actions.add(actionNodes[j].getValue());
-            }
-            addPolicy(name, ssl, auth, (String[])roles.toArray(new String[roles.size()]),
-                       (String[])views.toArray(new String[views.size()]),
-                       (String[])actions.toArray(new String[actions.size()]));
+            addPolicy(policyNode);
         }
     }
 
@@ -267,8 +242,22 @@ public class PolicySystem
     public void addPolicy(String name, boolean requiresSSL, boolean requiresLogin, 
         String[] roles, String[] views, String[] actions)
     {
-        Policy policy = new Policy(requiresSSL, requiresLogin, roles, views, actions);
+        Policy policy = new Policy(name, requiresSSL, requiresLogin, roles, views, actions);
         policies.put(name, policy);
+    }
+    
+    /**
+     * Creates a policy dynamically.
+     *
+     * @param config policy configuration.
+     * @throws ConfigurationException if the configuration is malformed.
+     * @see Policy
+     */
+    public void addPolicy(Configuration config)
+        throws ConfigurationException
+    {
+        Policy policy = new Policy(config);
+        policies.put(policy.getName(), policy);
     }
     
     /**

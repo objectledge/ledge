@@ -28,15 +28,26 @@
 
 package org.objectledge.web.mvc.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+
 /**
  * Simple container class to store the description of an access policy.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Policy.java,v 1.3 2005-02-08 19:11:29 rafal Exp $
+ * @version $Id: Policy.java,v 1.4 2005-12-30 08:42:06 rafal Exp $
  */
 public class Policy
 {
+    private static final String[] STRINGS = {};
+
+    /** The name of the policy. */
+    private String name;
+    
     /** The involved roles. */
     private String[] roles;
     
@@ -61,6 +72,7 @@ public class Policy
     /**
      * Constructs a policy.
      *
+     * @param name the name of the policy.
      * @param requiresSSL <code>true</code> if the policy requires that
      *        the request is made using secure channel.
      * @param requiresLogin <code>true</code> if the policy requires user to 
@@ -69,9 +81,10 @@ public class Policy
      * @param views the patterns describing involved views.
      * @param actions the patterns describing involved actions.
      */
-    Policy(boolean requiresSSL, boolean requiresLogin, String[] roles, 
+    Policy(String name, boolean requiresSSL, boolean requiresLogin, String[] roles, 
            String[] views, String[] actions)
     {
+        this.name = name;
         this.requiresSSL = requiresSSL;
         this.requiresLogin = requiresLogin;
         this.roles = roles;
@@ -89,8 +102,54 @@ public class Policy
         }
     }
     
+    /**
+     * Creates a new Policy instance.
+     *
+     * @param config policy configuration object.
+     * @throws ConfigurationException if the configuration is malformed.
+     */
+    Policy(Configuration config) throws ConfigurationException        
+    {
+        name = config.getAttribute("name");
+        requiresSSL = config.getAttributeAsBoolean("ssl",false);
+        requiresLogin = config.getAttributeAsBoolean("auth",false);
+        Configuration[] roleNodes = config.getChildren("role");
+        ArrayList<String> rolesList = new ArrayList<String>();
+        for(int j = 0; j < roleNodes.length; j++)
+        {
+            rolesList.add(roleNodes[j].getValue());
+        }
+        roles = rolesList.toArray(STRINGS);
+        Configuration[] viewNodes = config.getChildren("view");
+        ArrayList<String> viewsList = new ArrayList<String>();
+        for(int j = 0; j < viewNodes.length; j++)
+        {
+            viewsList.add(viewNodes[j].getValue());
+        }
+        views = viewsList.toArray(STRINGS);
+        viewPatterns = getPatterns(viewsList);
+        Configuration[] actionNodes = config.getChildren("action");
+        ArrayList<String> actionsList = new ArrayList<String>();
+        for(int j = 0; j < actionNodes.length; j++)
+        {
+            actionsList.add(actionNodes[j].getValue());
+        }
+        actions = actionsList.toArray(STRINGS);
+        actionPatterns = getPatterns(actionsList);
+    }
+    
     // public interface //////////////////////////////////////////////////////
 
+    /**
+     * Returns the name of the policy.
+     * 
+     * @return name of the policy.
+     */
+    public String getName()
+    {
+        return name;
+    }
+    
     /**
      * Returns the names of Roles involved in the policy.
      *
@@ -188,6 +247,17 @@ public class Policy
 
     // implementation ////////////////////////////////////////////////////////
 
+    private String[][] getPatterns(List<String> patternList)
+    {
+        String[][] out = new String[patternList.size()][];
+        int idx = 0;
+        for(String pat : patternList)
+        {
+            out[idx++] = getPattern(pat);
+        }
+        return out;
+    }
+    
     /**
      * Parses pattern string from configuration.
      * 
