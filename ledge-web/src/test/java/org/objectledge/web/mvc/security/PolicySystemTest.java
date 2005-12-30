@@ -219,8 +219,6 @@ public class PolicySystemTest extends LedgeWebTestCase
     {
         Policy policy = new Policy("test", false, true, 
             new String[] { "admin" }, new String[] { "foo*" }, new String[] { "bar*" });
-        assertEquals(policy.getActionPatterns()[0], "bar*");
-        assertEquals(policy.getViewPatterns()[0], "foo*");
         assertEquals(policy.matchesRequest("foo", "bar"), true);
         assertEquals(policy.matchesRequest("foo2", "bar"), true);
         assertEquals(policy.matchesRequest("bar.foo", "xxx"), false);

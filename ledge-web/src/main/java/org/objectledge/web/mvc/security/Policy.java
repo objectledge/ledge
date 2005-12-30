@@ -39,7 +39,7 @@ import org.jcontainer.dna.ConfigurationException;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Policy.java,v 1.4 2005-12-30 08:42:06 rafal Exp $
+ * @version $Id: Policy.java,v 1.5 2005-12-30 09:05:57 rafal Exp $
  */
 public class Policy
 {
@@ -57,14 +57,8 @@ public class Policy
     /** login requirement. */
     private boolean requiresLogin;
     
-    /** unparsed view patterns. */
-    private String[] views;
-    
     /** parsed view patterns. */
     private String[][] viewPatterns;
-    
-    /** unparsed action patterns. */
-    private String[] actions;
     
     /** parsed action patterns. */
     private String[][] actionPatterns;
@@ -88,18 +82,8 @@ public class Policy
         this.requiresSSL = requiresSSL;
         this.requiresLogin = requiresLogin;
         this.roles = roles;
-        this.views = views;
-        this.viewPatterns = new String[views.length][];
-        for(int i=0; i<views.length; i++)
-        {
-            this.viewPatterns[i] = getPattern(views[i]);
-        }
-        this.actions = actions;
-        this.actionPatterns = new String[actions.length][];
-        for(int i=0; i<actions.length; i++)
-        {
-            this.actionPatterns[i] = getPattern(actions[i]);
-        }
+        this.viewPatterns = getPatterns(views);
+        this.actionPatterns = getPatterns(actions);
     }
     
     /**
@@ -126,7 +110,6 @@ public class Policy
         {
             viewsList.add(viewNodes[j].getValue());
         }
-        views = viewsList.toArray(STRINGS);
         viewPatterns = getPatterns(viewsList);
         Configuration[] actionNodes = config.getChildren("action");
         ArrayList<String> actionsList = new ArrayList<String>();
@@ -134,7 +117,6 @@ public class Policy
         {
             actionsList.add(actionNodes[j].getValue());
         }
-        actions = actionsList.toArray(STRINGS);
         actionPatterns = getPatterns(actionsList);
     }
     
@@ -186,38 +168,6 @@ public class Policy
     {
         return requiresLogin;
     }
-    
-    /**
-     * Returns a list of patterns describing views that are affected by the
-     * policy.
-     *
-     * <p>The pattern is composed of name of the view. with packages prefix 
-     * separated by , characters. An icomplete view name followed by * 
-     * character may be used to match * multiple views.</p>
-     *
-     * @return a list of patterns describing views that are affected by the
-     *         policy. 
-     */
-    public String[] getViewPatterns()
-    {
-        return views;
-    }
-    
-    /**
-     * Returns a list of patterns describing actions that are affected by the
-     * policy.
-     *
-     * <p>The pattern is the action class name composed of packages 
-     * separated by , characters. An icomplete action name followed 
-     * by * character may be used to match * multiple actions.</p>
-     *
-     * @return a list of patterns describing actions that are affected by the
-     *         policy. 
-     */
-    public String[] getActionPatterns()
-    {
-        return actions;
-    }
 
     /**
      * Checks if the view or action selected in the request match this policy.
@@ -247,6 +197,17 @@ public class Policy
 
     // implementation ////////////////////////////////////////////////////////
 
+    private String[][] getPatterns(String[] patternList)
+    {
+        String[][] out = new String[patternList.length][];
+        int idx = 0;
+        for(String pat : patternList)
+        {
+            out[idx++] = getPattern(pat);
+        }
+        return out;
+    }    
+    
     private String[][] getPatterns(List<String> patternList)
     {
         String[][] out = new String[patternList.size()][];
