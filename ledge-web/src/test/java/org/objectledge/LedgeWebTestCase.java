@@ -51,4 +51,14 @@ public abstract class LedgeWebTestCase extends LedgeTestCase
         }
         return configFactory.getConfig(role, impl);
     }      
+
+    protected Configuration getConfig(FileSystem fs, String component, Class impl) throws Exception
+    {
+        if(configFactory == null)
+        {
+            XMLValidator validator = new XMLValidator(new XMLGrammarCache());
+            configFactory = new ConfigurationFactory(fs, validator, ".");
+        }
+        return configFactory.getConfig(component, impl);
+    }      
 }

@@ -30,6 +30,7 @@ package org.objectledge.web.mvc.security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -39,7 +40,7 @@ import org.jcontainer.dna.ConfigurationException;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Policy.java,v 1.7 2005-12-30 12:43:53 rafal Exp $
+ * @version $Id: Policy.java,v 1.8 2005-12-30 13:18:30 rafal Exp $
  */
 public class Policy
 {
@@ -207,6 +208,22 @@ public class Policy
             {
                 out.add(invert(new WildcardMatcher(node.getValue(), Matcher.Type.ACTION), inverted));
             }
+            if("viewMatch".equals(type))
+            {
+                out.add(invert(new RegexMatcher(node.getValue(), Matcher.Type.VIEW), inverted));
+            }
+            if("actionMatch".equals(type))
+            {
+                out.add(invert(new RegexMatcher(node.getValue(), Matcher.Type.ACTION), inverted));
+            }
+            if("noView".equals(type))
+            {
+                out.add(invert(new NullMatcher(Matcher.Type.VIEW), inverted));
+            }
+            if("noAction".equals(type))
+            {
+                out.add(invert(new NullMatcher(Matcher.Type.ACTION), inverted));
+            }
             // ignore others
         }
         return out;
@@ -288,6 +305,53 @@ public class Policy
             return false;            
         }
     }
+    
+    /**
+     * java.util.regex based matcher.
+     */
+    private static class RegexMatcher
+        extends Matcher
+    {
+        private final Pattern pattern;
+        
+        public RegexMatcher(String regex, Type type)
+        {
+            super(type);
+            pattern = Pattern.compile(regex);
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public boolean matches(String value)
+        {
+            if(value != null)
+            {
+                return pattern.matcher(value).matches();
+            }
+            return false;
+        }
+    }
+
+    /**
+     * matches only null values. 
+     */
+    private static class NullMatcher
+        extends Matcher
+    {
+        public NullMatcher(Type type)
+        {
+            super(type);
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public boolean matches(String value)
+        {
+            return value == null;
+        }
+    }    
     
     /**
      * Provides inverse match for another matcher. 

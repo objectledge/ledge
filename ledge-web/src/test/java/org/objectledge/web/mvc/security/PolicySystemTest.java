@@ -31,6 +31,7 @@ package org.objectledge.web.mvc.security;
 import java.security.Principal;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.LedgeWebTestCase;
@@ -45,15 +46,25 @@ public class PolicySystemTest extends LedgeWebTestCase
     /**
      * number of policies defined in the config file.
      */
-    private static final int NUM_POLICIES = 2;
+    private static final int NUM_POLICIES = 1;
     
     private PolicySystem policySystem;
+    
+    private FileSystem fs;
+    
+    private Logger logger;
 
     public void setUp() throws Exception
     {
-        FileSystem fs = getFileSystem("src/test/resources/config");
-        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(LocaleLoaderValve.class));
+        fs = getFileSystem("src/test/resources/config");
+        logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(LocaleLoaderValve.class));
         Configuration config = getConfig(fs, PolicySystem.class, PolicySystem.class);
+        setupPolicySystem(config);
+    }
+
+    private void setupPolicySystem(Configuration config)
+        throws ConfigurationException
+    {
         RoleChecking roleChecking = new RoleChecking()
         {
             public String[] getRoles(Principal user) throws UserUnknownException
@@ -75,6 +86,7 @@ public class PolicySystemTest extends LedgeWebTestCase
         };
         policySystem = new PolicySystem(config, logger, roleChecking);
     }
+    
     public void testGetGlobalSSL()
     {
         assertEquals(policySystem.getGlobalSSL(), false);
@@ -232,9 +244,29 @@ public class PolicySystemTest extends LedgeWebTestCase
     }
     
     public void testExcept()
+        throws Exception
     {
+        setupPolicySystem(getConfig(fs, PolicySystem.class.getName()+"-alt", PolicySystem.class));
         Policy withExcept = policySystem.getPolicy("withExcept");
         assertTrue(withExcept.matchesRequest("admin.Home", null));
         assertFalse(withExcept.matchesRequest("public.Home", null));
+    }
+    
+    public void testRegex() 
+        throws Exception
+    {
+        setupPolicySystem(getConfig(fs, PolicySystem.class.getName()+"-alt", PolicySystem.class));
+        Policy withExcept = policySystem.getPolicy("withRegex");
+        assertTrue(withExcept.matchesRequest("Home", null));
+        assertFalse(withExcept.matchesRequest("admin.Home", null));        
+    }
+
+    public void testNoView()
+        throws Exception
+    {
+        setupPolicySystem(getConfig(fs, PolicySystem.class.getName()+"-alt", PolicySystem.class));
+        Policy withExcept = policySystem.getPolicy("withNoView");
+        assertTrue(withExcept.matchesRequest(null, null));
+        assertFalse(withExcept.matchesRequest("Home", null));        
     }
 }

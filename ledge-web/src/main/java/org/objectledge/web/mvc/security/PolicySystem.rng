@@ -37,6 +37,18 @@
       <element name="action">
         <text/>
       </element>
+      <element name="viewMatch">
+        <text/>
+      </element>
+      <element name="actionMatch">
+        <text/>
+      </element>         
+      <element name="noView">
+        <empty/>
+      </element>
+      <element name="noAction">
+        <empty/>
+      </element>
     </choice>
   </define>
 

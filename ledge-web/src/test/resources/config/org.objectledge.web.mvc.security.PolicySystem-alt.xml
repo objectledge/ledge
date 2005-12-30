@@ -28,9 +28,15 @@
 --> 
 
 <config>
-  <policy name="bar" auth="true">
-    <role>admin</role>
-    <action>action</action>
-    <view>view</view>
+  <policy name="withExcept">
+    <except>
+      <view>public.*</view>
+    </except>
+  </policy>
+  <policy name="withRegex">    
+    <viewMatch>\w+</viewMatch>
+  </policy>
+  <policy name="withNoView">
+    <noView/>
   </policy>
 </config>
