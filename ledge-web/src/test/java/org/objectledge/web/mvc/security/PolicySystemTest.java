@@ -42,6 +42,11 @@ import org.objectledge.security.RoleChecking;
 
 public class PolicySystemTest extends LedgeWebTestCase
 {
+    /**
+     * number of policies defined in the config file.
+     */
+    private static final int NUM_POLICIES = 2;
+    
     private PolicySystem policySystem;
 
     public void setUp() throws Exception
@@ -125,7 +130,7 @@ public class PolicySystemTest extends LedgeWebTestCase
     {
         Policy[] policies = policySystem.getPolicies();
         assertNotNull(policies);
-        assertEquals(policies.length, 1);
+        assertEquals(NUM_POLICIES, policies.length);
     }
 
     /*
@@ -142,24 +147,24 @@ public class PolicySystemTest extends LedgeWebTestCase
     public void testAddPolicy()
     {
         Policy[] policies = policySystem.getPolicies();
-        assertEquals(policies.length, 1);
+        assertEquals(NUM_POLICIES, policies.length);
         policySystem.addPolicy("foo", false, false, 
             new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
         policies = policySystem.getPolicies();
-        assertEquals(policies.length, 2);
+        assertEquals(NUM_POLICIES + 1, policies.length);
     }
 
     public void testRemovePolicy()
     {
         Policy[] policies = policySystem.getPolicies();
-        assertEquals(policies.length, 1);
+        assertEquals(NUM_POLICIES, policies.length);
         policySystem.addPolicy("foo", false, false, 
             new String[] { "admin" }, new String[] { "view" }, new String[] { "action" });
         policies = policySystem.getPolicies();
-        assertEquals(policies.length, 2);
+        assertEquals(NUM_POLICIES + 1, policies.length);
         policySystem.removePolicy("foo");
         policies = policySystem.getPolicies();
-        assertEquals(policies.length, 1);
+        assertEquals(NUM_POLICIES, policies.length);
         try
         {
             policySystem.removePolicy("foo2");
@@ -224,5 +229,12 @@ public class PolicySystemTest extends LedgeWebTestCase
         assertEquals(policy.matchesRequest("bar.foo", "xxx"), false);
         assertEquals(policy.matchesRequest("foo.foo", "bar.foo"), true);
         assertEquals(policy.matchesRequest("bar.foo", "bar.bar"), true);
+    }
+    
+    public void testExcept()
+    {
+        Policy withExcept = policySystem.getPolicy("withExcept");
+        assertTrue(withExcept.matchesRequest("admin.Home", null));
+        assertFalse(withExcept.matchesRequest("public.Home", null));
     }
 }

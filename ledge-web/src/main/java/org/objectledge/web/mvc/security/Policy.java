@@ -39,7 +39,7 @@ import org.jcontainer.dna.ConfigurationException;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Policy.java,v 1.6 2005-12-30 12:30:14 rafal Exp $
+ * @version $Id: Policy.java,v 1.7 2005-12-30 12:43:53 rafal Exp $
  */
 public class Policy
 {
@@ -100,7 +100,7 @@ public class Policy
             rolesList.add(roleNodes[j].getValue());
         }
         roles = rolesList.toArray(STRINGS);
-        matchers = getMatchers(config.getChildren());
+        matchers = getMatchers(config.getChildren(), false);
     }
     
     // public interface //////////////////////////////////////////////////////
@@ -188,26 +188,42 @@ public class Policy
         return out;
     }    
     
-    private List<Matcher> getMatchers(Configuration[] nodes)
+    private List<Matcher> getMatchers(Configuration[] nodes, boolean inverted)
         throws ConfigurationException
     {
         List<Matcher> out = new ArrayList<Matcher>();
         for(Configuration node : nodes)
         {
             String type = node.getName();
+            if("except".equals(type))
+            {
+                out.addAll(getMatchers(node.getChildren(), true));
+            }
             if("view".equals(type))
             {
-                out.add(new WildcardMatcher(node.getValue(), Matcher.Type.VIEW));
+                out.add(invert(new WildcardMatcher(node.getValue(), Matcher.Type.VIEW), inverted));
             }
             if("action".equals(type))
             {
-                out.add(new WildcardMatcher(node.getValue(), Matcher.Type.ACTION));
+                out.add(invert(new WildcardMatcher(node.getValue(), Matcher.Type.ACTION), inverted));
             }
             // ignore others
         }
         return out;
-    }    
-
+    }
+    
+    private Matcher invert(Matcher matcher, boolean invert)
+    {
+        if(invert)
+        {
+            return new InverseMatcher(matcher);
+        }
+        else
+        {
+            return matcher;
+        }
+    }
+    
     /**
      * Matches a string against a pattern. 
      */
@@ -272,4 +288,27 @@ public class Policy
             return false;            
         }
     }
+    
+    /**
+     * Provides inverse match for another matcher. 
+     */
+    private static class InverseMatcher
+        extends Matcher
+    {
+        private final Matcher matcher;
+
+        public InverseMatcher(Matcher matcher)
+        {
+            super(matcher.getType());
+            this.matcher = matcher;
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public boolean matches(String value)
+        {
+            return !matcher.matches(value);
+        }        
+    }    
 }

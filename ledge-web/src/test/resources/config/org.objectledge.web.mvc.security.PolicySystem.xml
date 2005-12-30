@@ -33,4 +33,9 @@
     <action>action</action>
     <view>view</view>
   </policy>
+  <policy name="withExcept" ssl="true">
+    <except>
+      <view>public.*</view>
+    </except>
+  </policy>
 </config>
