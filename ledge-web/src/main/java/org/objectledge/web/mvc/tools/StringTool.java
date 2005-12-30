@@ -42,7 +42,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.17 2005-12-20 09:57:04 rafal Exp $
+ * @version $Id: StringTool.java,v 1.18 2005-12-30 13:18:22 pablo Exp $
  */
 public class StringTool
 {
@@ -210,29 +210,41 @@ public class StringTool
      */
     public String bytesSize(long value)
     {
+        return bytesSize(value, 3);
+    }
+        
+    /**
+     * Format size value in <code>b</code>, <code>kb</code>, <code>Mb</code>.
+     *
+     * @param value the size in bytes.
+     * @param rest rest length;
+     * @return the size as string with a proper unit suffix.
+     */
+    public String bytesSize(long value, int rest)
+    {        
         StringBuilder b = new StringBuilder();
         if(value < 1024L)
         {
-            return b.append(value).append("b").toString();
+            return b.append(value).append("B").toString();
         }
         double floatValue = (double)value;
         if(value < 1048576L)
         {
             b.append(floatValue/1024);
             int index = b.indexOf(".");
-            if(index != -1 && b.length() > index+3)
+            if(index != -1 && b.length() > index+rest)
             {
-                b.setLength(index+3);
+                b.setLength(index+rest);
             }
-            return b.append("kb").toString();
+            return b.append("kB").toString();
         }
         b.append(floatValue/1048576);
         int index = b.indexOf(".");
-        if(index != -1 && b.length() > index+3)
+        if(index != -1 && b.length() > index+rest)
         {
-            b.setLength(index+3);
+            b.setLength(index+rest);
         }
-        return b.append("Mb").toString();        
+        return b.append("MB").toString();        
     }
     
     /**
