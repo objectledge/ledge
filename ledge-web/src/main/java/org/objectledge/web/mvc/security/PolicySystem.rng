@@ -27,46 +27,67 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <optional>
-    <element name="globalSSL">
-      <text/>
-    </element>
-  </optional>    
-  <optional>
-    <element name="globalLoginRequired">
-      <text/>
-    </element>
-  </optional>
-  <optional>
-    <element name="globalAccess">
-      <text/>
-    </element>
-  </optional>
-  <zeroOrMore>
-    <element name="policy">
-      <attribute name="name"/>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+
+  <define name="matcher">
+    <choice> 
+      <element name="view">
+        <text/>
+      </element>
+      <element name="action">
+        <text/>
+      </element>
+    </choice>
+  </define>
+
+  <start>
+    <element name="config">
+    
       <optional>
-        <attribute name="ssl"/>
+        <element name="globalSSL">
+          <text/>
+        </element>
+      </optional>    
+      <optional>
+        <element name="globalLoginRequired">
+          <text/>
+        </element>
       </optional>
-      <optional>        
-        <attribute name="auth"/>
-      </optional>        
-      <zeroOrMore>
-	    <element name="role">
+      <optional>
+        <element name="globalAccess">
           <text/>
+        </element>
+      </optional>
+    
+      <zeroOrMore>
+        <element name="policy">
+          <attribute name="name"/>
+          <optional>
+            <attribute name="ssl"/>
+          </optional>
+          <optional>        
+            <attribute name="auth"/>
+          </optional>        
+    
+          <zeroOrMore>
+	        <element name="role">
+              <text/>
+            </element>
+          </zeroOrMore>
+  
+          <zeroOrMore>
+            <choice>
+              <ref name="matcher"/>
+              <element name="except">
+                <oneOrMore>
+                  <ref name="matcher"/>
+                </oneOrMore>
+              </element>
+            </choice>
+          </zeroOrMore>            
+          
         </element>
       </zeroOrMore>
-      <zeroOrMore>
-	    <element name="action">
-          <text/>
-        </element>
-      </zeroOrMore>
-	  <zeroOrMore>
-	    <element name="view">
-          <text/>
-        </element>
-      </zeroOrMore>            
     </element>
-  </zeroOrMore>
-</element>
+  </start>
+</grammar>

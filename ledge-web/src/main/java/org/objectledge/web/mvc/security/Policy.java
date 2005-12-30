@@ -39,7 +39,7 @@ import org.jcontainer.dna.ConfigurationException;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Policy.java,v 1.5 2005-12-30 09:05:57 rafal Exp $
+ * @version $Id: Policy.java,v 1.6 2005-12-30 12:30:14 rafal Exp $
  */
 public class Policy
 {
@@ -57,12 +57,9 @@ public class Policy
     /** login requirement. */
     private boolean requiresLogin;
     
-    /** parsed view patterns. */
-    private String[][] viewPatterns;
+    /** the matchers. */
+    private List<Matcher> matchers;
     
-    /** parsed action patterns. */
-    private String[][] actionPatterns;
-
     /**
      * Constructs a policy.
      *
@@ -82,8 +79,7 @@ public class Policy
         this.requiresSSL = requiresSSL;
         this.requiresLogin = requiresLogin;
         this.roles = roles;
-        this.viewPatterns = getPatterns(views);
-        this.actionPatterns = getPatterns(actions);
+        this.matchers = getWildcardMatchers(views, actions);
     }
     
     /**
@@ -104,20 +100,7 @@ public class Policy
             rolesList.add(roleNodes[j].getValue());
         }
         roles = rolesList.toArray(STRINGS);
-        Configuration[] viewNodes = config.getChildren("view");
-        ArrayList<String> viewsList = new ArrayList<String>();
-        for(int j = 0; j < viewNodes.length; j++)
-        {
-            viewsList.add(viewNodes[j].getValue());
-        }
-        viewPatterns = getPatterns(viewsList);
-        Configuration[] actionNodes = config.getChildren("action");
-        ArrayList<String> actionsList = new ArrayList<String>();
-        for(int j = 0; j < actionNodes.length; j++)
-        {
-            actionsList.add(actionNodes[j].getValue());
-        }
-        actionPatterns = getPatterns(actionsList);
+        matchers = getMatchers(config.getChildren());
     }
     
     // public interface //////////////////////////////////////////////////////
@@ -178,16 +161,10 @@ public class Policy
      */
     public boolean matchesRequest(String view, String action)
     {
-        for(int i=0; i<viewPatterns.length; i++)
+        for(Matcher m : matchers)
         {
-            if(match(viewPatterns[i], view))
-            {
-                return true;
-            }
-        }
-        for(int i=0; i<actionPatterns.length; i++)
-        {
-            if(match(actionPatterns[i], action))
+            String s = (m.getType() == Matcher.Type.VIEW) ? view : action;
+            if(m.matches(s))
             {
                 return true;
             }
@@ -197,69 +174,102 @@ public class Policy
 
     // implementation ////////////////////////////////////////////////////////
 
-    private String[][] getPatterns(String[] patternList)
+    private List<Matcher> getWildcardMatchers(String[] views, String[] actions)
     {
-        String[][] out = new String[patternList.length][];
-        int idx = 0;
-        for(String pat : patternList)
+        List<Matcher> out = new ArrayList<Matcher>(views.length + actions.length);
+        for(String pattern : views)
         {
-            out[idx++] = getPattern(pat);
+            out.add(new WildcardMatcher(pattern, Matcher.Type.VIEW));
+        }
+        for(String pattern : actions)
+        {
+            out.add(new WildcardMatcher(pattern, Matcher.Type.ACTION));
         }
         return out;
     }    
     
-    private String[][] getPatterns(List<String> patternList)
+    private List<Matcher> getMatchers(Configuration[] nodes)
+        throws ConfigurationException
     {
-        String[][] out = new String[patternList.size()][];
-        int idx = 0;
-        for(String pat : patternList)
+        List<Matcher> out = new ArrayList<Matcher>();
+        for(Configuration node : nodes)
         {
-            out[idx++] = getPattern(pat);
+            String type = node.getName();
+            if("view".equals(type))
+            {
+                out.add(new WildcardMatcher(node.getValue(), Matcher.Type.VIEW));
+            }
+            if("action".equals(type))
+            {
+                out.add(new WildcardMatcher(node.getValue(), Matcher.Type.ACTION));
+            }
+            // ignore others
         }
         return out;
-    }
-    
+    }    
+
     /**
-     * Parses pattern string from configuration.
-     * 
-     * @param pat the pattern string to be parsed
-     * @return the pattern array
+     * Matches a string against a pattern. 
      */
-    private String[] getPattern(String pat)
+    private abstract static class Matcher
     {
-        String[] pattern = new String[2];
-        int pos = pat.indexOf('*');
-        if(pos < 0)
+        private final Type type;
+
+        public Matcher(Type type)
         {
-            pattern[0] = pat;
-            pattern[1] = null;
+            this.type = type;            
         }
-        else
+        
+        public abstract boolean matches(String value);
+        
+        public Type getType()
         {
-            pattern[0] = null;
-            pattern[1] = pat.substring(0,pos);
+            return type;
         }
-        return pattern;
+        
+        public enum Type
+        {
+            VIEW,
+            ACTION
+        }
     }
-    
+
     /**
-     * The pattern matching method.
-     *
-     * @param pattern the pattern.
-     * @param value the value.
-     * @return <code>true</code> if parameters match the pattern 
+     * Wildcard matcher that supports exact match and something* match. 
      */
-    private boolean match(Object pattern, String value)
+    private static class WildcardMatcher
+        extends Matcher
     {
-        String[] pat = (String[])pattern;
-        if(pat[0] != null && pat[0].equals(value))
+        private final String exact;
+        private final String head;
+        
+        public WildcardMatcher(String pattern, Type type)
         {
-            return true;
+            super(type);
+            int pos = pattern.indexOf('*');
+            if(pos < 0)
+            {
+                exact = pattern;
+                head = null;
+            }
+            else
+            {
+                exact = null;
+                head = pattern.substring(0,pos);
+            }            
         }
-        if(pat[1] != null && value != null && value.startsWith(pat[1]))
+        
+        public boolean matches(String value)
         {
-            return true;
+            if(exact != null && exact.equals(value))
+            {
+                return true;
+            }
+            if(head != null && value != null && value.startsWith(head))
+            {
+                return true;
+            }
+            return false;            
         }
-        return false;
     }
 }
