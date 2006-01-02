@@ -72,7 +72,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.30 2005-11-22 21:41:53 zwierzem Exp $
+ * @version $Id: LinkTool.java,v 1.31 2006-01-02 13:03:53 rafal Exp $
  */
 public class LinkTool
 {
@@ -113,6 +113,9 @@ public class LinkTool
 	/** protocol name */
 	private String protocolName;
 	
+    /** host name */
+    private String host;
+    
 	/** the port */
 	private int port;
 	
@@ -151,6 +154,7 @@ public class LinkTool
 		showProtocolName = false;
 		protocolName = ""; 
         port = 0;
+        host = null;
         // this means no override for view
         view = null;
 		action = "";
@@ -244,6 +248,19 @@ public class LinkTool
 		return target;
     }
 
+    /**
+     * Geneate an absolute link to another host.
+     * 
+     * @param host the host domain name.
+     * @return the link tool.
+     */
+    public LinkTool host(String host)
+    {
+        LinkTool target = absolute();
+        target.host = host;
+        return target;
+    }
+    
     /**
      * Avoid session information in link - useful for content served using external HTTP server. 
      *
@@ -994,7 +1011,14 @@ public class LinkTool
      */
     protected String getServerName()
     {
-        return httpContext.getRequest().getServerName();
+        if(host == null)
+        {
+            return httpContext.getRequest().getServerName();
+        }
+        else
+        {
+            return host;
+        }
     }
 
     /**
@@ -1216,6 +1240,7 @@ public class LinkTool
 		target.showProtocolName = source.showProtocolName;
 		target.protocolName = source.protocolName;
 		target.port = source.port;
+        target.host = source.host;
 		target.path = source.path;
         target.pathInfoSuffix = source.pathInfoSuffix;
 		target.fragment = source.fragment;
