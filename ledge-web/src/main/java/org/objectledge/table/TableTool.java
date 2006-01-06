@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.12 2005-12-21 16:00:24 rafal Exp $
+ * @version $Id: TableTool.java,v 1.13 2006-01-06 13:23:04 pablo Exp $
  */
 public class TableTool
 {
@@ -280,7 +280,7 @@ public class TableTool
         TableRow rootRow = rowSet.getRootRow();
 
         TableRow parentRow = row;
-        while(parentRow != rootRow)
+        while(parentRow != null && parentRow != rootRow)
         {
             parentRow = rowSet.getParentRow(parentRow);
             ancestors.add(0, parentRow);
