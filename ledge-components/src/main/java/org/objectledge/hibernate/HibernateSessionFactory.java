@@ -92,7 +92,7 @@ import org.xml.sax.SAXException;
  * &lt;/hibernate-configuration>
  *</pre>
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionFactory.java,v 1.6 2006-01-11 16:26:40 zwierzem Exp $
+ * @version $Id: HibernateSessionFactory.java,v 1.7 2006-01-11 22:15:14 zwierzem Exp $
  */
 public class HibernateSessionFactory 
 implements Startable
@@ -109,12 +109,10 @@ implements Startable
         return sessionFactory.openSession();
     }
 
-    public HibernateSessionFactory(Logger logger, final FileSystem fs, Interceptor interceptor)
+    public HibernateSessionFactory(Logger logger, final FileSystem fs, InterceptorFactory interceptorFactory)
         throws ConfigurationException, ClassNotFoundException, HibernateException,
         MalformedURLException
     {
-        this.interceptor = interceptor;
-        
         logger.info("HibernateConfig starting...");
         org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration();
         
@@ -145,6 +143,11 @@ implements Startable
        
         sessionFactory = cfg.buildSessionFactory();
 
+        if(interceptorFactory != null)
+        {
+            this.interceptor = interceptorFactory.createInterceptor(sessionFactory);
+        }
+        
         logger.info("HibernateConfig started");
     }
 

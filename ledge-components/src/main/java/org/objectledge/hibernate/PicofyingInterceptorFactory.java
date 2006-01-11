@@ -27,61 +27,38 @@
 //
 package org.objectledge.hibernate;
 
-import java.io.Serializable;
-
-import org.hibernate.CallbackException;
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.EntityMode;
 import org.hibernate.SessionFactory;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
- * The hibernate interceptor for creation of persistent objects using the container.
- * The container for objects is created per request.
+ * The picofying hibernate interceptor factory.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PicofyingInterceptor.java,v 1.2 2006-01-11 22:15:14 zwierzem Exp $
+ * @version $Id: PicofyingInterceptorFactory.java,v 1.1 2006-01-11 22:15:14 zwierzem Exp $
  */
-public class PicofyingInterceptor
-    extends EmptyInterceptor
+public class PicofyingInterceptorFactory
+    implements InterceptorFactory
 {
     private MutablePicoContainer container;
-    private SessionFactory sessionFactory;
 
     /**
      * Creates a new <code>HibernatePicofier</code> object.
      * 
      * @param container the Pico container.
-     * @param sessionFactory the Hibernate session factory. This is used to get meta data
-     *        information, including the id property name, of new entities.
      */
-    public PicofyingInterceptor(MutablePicoContainer parentContainer, SessionFactory sessionFactory)
+    public PicofyingInterceptorFactory(MutablePicoContainer parentContainer)
     {
         this.container = parentContainer;
-        this.sessionFactory = sessionFactory;
     }
 
     /**
-     * Instantiates a new persistent object with the given id. Uses Pico to inject dependencies into
-     * the new object.
+     * Creates the picofier.
      * 
-     * @param serializable the id of the object.
-     * @return the newly instantiated (and Picofied) object.
-     * @throw CallbackException if an error occurs
+     * @param sessionFactory the hibernate session factory. 
+     * @return the newly instantiated picofier  object.
      */
-    public Object instantiate(Class clazz, Serializable id)
-        throws CallbackException
+    public PicofyingInterceptor createInterceptor(SessionFactory sessionFactory)
     {
-        // TODO: implement using proper component adapters !!!
-        // get persistent object
-        MutablePicoContainer tempContainer = new DefaultPicoContainer(container);
-        tempContainer.registerComponentImplementation(clazz);
-        Object newEntity = tempContainer.getComponentInstance(clazz);
-        
-        // set peristent object's id
-        // WARN: assuming default mapping mode;
-        sessionFactory.getClassMetadata(clazz).setIdentifier(newEntity, id, EntityMode.POJO); 
-        return newEntity;
+        return new PicofyingInterceptor(container, sessionFactory);
     }
 }
