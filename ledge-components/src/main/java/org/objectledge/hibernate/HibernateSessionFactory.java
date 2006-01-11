@@ -32,6 +32,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Interceptor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.jcontainer.dna.ConfigurationException;
@@ -91,29 +92,38 @@ import org.xml.sax.SAXException;
  * &lt;/hibernate-configuration>
  *</pre>
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionFactory.java,v 1.5 2005-11-16 23:59:48 zwierzem Exp $
+ * @version $Id: HibernateSessionFactory.java,v 1.6 2006-01-11 16:26:40 zwierzem Exp $
  */
 public class HibernateSessionFactory 
 implements Startable
 {
     private SessionFactory sessionFactory;
+    private Interceptor interceptor;
 
-    public Session openHibernateSession() {
-        return  sessionFactory.openSession();
+    public Session openHibernateSession()
+    {
+        if(interceptor != null)
+        {
+            return sessionFactory.openSession(interceptor);
+        }
+        return sessionFactory.openSession();
     }
-    
-    public HibernateSessionFactory(Logger logger, final FileSystem fs) 
-    throws ConfigurationException, ClassNotFoundException, HibernateException, 
-            MalformedURLException {
 
+    public HibernateSessionFactory(Logger logger, final FileSystem fs, Interceptor interceptor)
+        throws ConfigurationException, ClassNotFoundException, HibernateException,
+        MalformedURLException
+    {
+        this.interceptor = interceptor;
+        
         logger.info("HibernateConfig starting...");
         org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration();
         
         String xmlPath = "/config/"+this.getClass().getCanonicalName()+".xml";  
         
-        cfg.setEntityResolver(new EntityResolver() {
+        cfg.setEntityResolver(new EntityResolver()
+        {
             
-            private HashMap<String, String> mapping = new HashMap();
+            private HashMap<String, String> mapping = new HashMap<String, String>();
             {
                 mapping.put("-//Hibernate/Hibernate Configuration DTD 3.0//EN",
                     "hibernate-configuration-3.0.dtd");
@@ -121,7 +131,8 @@ implements Startable
                     "hibernate-mapping-3.0.dtd");
             }
             
-            public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+            public InputSource resolveEntity(String publicId, String systemId)
+            throws SAXException, IOException
             {
                 InputSource is = new InputSource(
                     fs.getInputStream("/org/objectledge/hibernate/"+mapping.get(publicId)));
@@ -137,6 +148,13 @@ implements Startable
         logger.info("HibernateConfig started");
     }
 
+    public HibernateSessionFactory(Logger logger, final FileSystem fs) 
+    throws ConfigurationException, ClassNotFoundException, HibernateException, 
+            MalformedURLException
+    {
+        this(logger, fs, null);
+    }
+    
     public void start()
     {
         // nothing to do
