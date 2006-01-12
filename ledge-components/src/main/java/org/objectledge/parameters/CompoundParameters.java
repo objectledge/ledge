@@ -42,47 +42,31 @@ import java.util.TreeSet;
  *
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
  * @author <a href="mailto:rafal@caltha.com">Rafal Krzewski</a>
- * @version $Id: CompoundParameters.java,v 1.7 2005-12-20 09:09:32 pablo Exp $
+ * @version $Id: CompoundParameters.java,v 1.8 2006-01-12 15:51:01 rafal Exp $
  */
 public class CompoundParameters implements Parameters
 {
-    
     /** The underylying containers. */
     private List<Parameters> containers;
 
     /**
      * Constructs a copound parameter container.
      *
-     * <p>The second container will have precedence over the first one. </p>
+     * <p>The contatiners with lesser indexes will have precedence over the
+     * conainer with greater indexes.</p>
      *
-     * @param sub a parameter container.
-     * @param sup a parameter container.
+     * @param containers the containers.
      */
-    public CompoundParameters(Parameters sub, Parameters sup)
+    public CompoundParameters(Parameters... containers)
     {
-        containers = new ArrayList<Parameters>(2);
-        containers.add(sub);
-        containers.add(sup);
+        this.containers = Arrays.asList(containers);
     }
 
     /**
      * Constructs a copound parameter container.
      *
-     * <p>The contatiners with greater indexes will have precedence over the
-     * conainer with lesser indexes.</p>
-     *
-     * @param array the containers.
-     */
-    public CompoundParameters(Parameters[] array)
-    {
-        containers = Arrays.asList(array);
-    }
-    
-    /**
-     * Constructs a copound parameter container.
-     *
-     * <p>The contatiners with greater indexes will have precenence over the
-     * conainer with lesser indexes.</p>
+     * <p>The contatiners with lesser indexes will have precenence over the
+     * conainer with greater indexes.</p>
      *
      * @param list the containers.
      */
