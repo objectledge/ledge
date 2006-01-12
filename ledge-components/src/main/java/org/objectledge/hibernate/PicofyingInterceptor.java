@@ -34,6 +34,7 @@ import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.SessionFactory;
 import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.defaults.ConstructorInjectionComponentAdapterFactory;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
@@ -41,7 +42,7 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  * The container for objects is created per request.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PicofyingInterceptor.java,v 1.2 2006-01-11 22:15:14 zwierzem Exp $
+ * @version $Id: PicofyingInterceptor.java,v 1.3 2006-01-12 12:04:57 zwierzem Exp $
  */
 public class PicofyingInterceptor
     extends EmptyInterceptor
@@ -58,7 +59,7 @@ public class PicofyingInterceptor
      */
     public PicofyingInterceptor(MutablePicoContainer parentContainer, SessionFactory sessionFactory)
     {
-        this.container = parentContainer;
+        this.container = new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory(), parentContainer);
         this.sessionFactory = sessionFactory;
     }
 
@@ -73,15 +74,16 @@ public class PicofyingInterceptor
     public Object instantiate(Class clazz, Serializable id)
         throws CallbackException
     {
-        // TODO: implement using proper component adapters !!!
         // get persistent object
-        MutablePicoContainer tempContainer = new DefaultPicoContainer(container);
-        tempContainer.registerComponentImplementation(clazz);
-        Object newEntity = tempContainer.getComponentInstance(clazz);
+        if(container.getComponentAdapter(clazz) == null)
+        {
+            container.registerComponentImplementation(clazz);
+        }
+        Object instance = container.getComponentInstance(clazz);
         
         // set peristent object's id
         // WARN: assuming default mapping mode;
-        sessionFactory.getClassMetadata(clazz).setIdentifier(newEntity, id, EntityMode.POJO); 
-        return newEntity;
+        sessionFactory.getClassMetadata(clazz).setIdentifier(instance, id, EntityMode.POJO); 
+        return instance;
     }
 }
