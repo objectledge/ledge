@@ -246,14 +246,14 @@ public class XMLI18n extends AbstractI18n
 			throws SAXException
         {
 		    String name;
-		    if("prefix".equals(localName))
+            if("value".equals(localName) || "item".equals(localName))
+            {
+                currentChars.setLength(0);
+            }
+		    if("prefix".equals(localName) || "item".equals(localName))
 			{
 				name = attributes.getValue("name");
 				prefix.addLast(name);
-			}
-			else if("value".equals(localName))
-			{
-                currentChars.setLength(0);
 			}
 	    }
 
@@ -263,11 +263,7 @@ public class XMLI18n extends AbstractI18n
 		public void endElement(String uri, String localName, String qName)
             throws SAXException
 		{
-			if("prefix".equals(localName))
-			{
-			    prefix.removeLast();
-			}
-			else if("value".equals(localName))
+			if("value".equals(localName) || "item".equals(localName))
 			{
                 String value = currentChars.toString().trim();
                 if(value.length()>0)
@@ -300,6 +296,10 @@ public class XMLI18n extends AbstractI18n
                     }
                 }
 			}
+            if("prefix".equals(localName) || "item".equals(localName))
+            {
+                prefix.removeLast();
+            }
 		}
     
 		/**

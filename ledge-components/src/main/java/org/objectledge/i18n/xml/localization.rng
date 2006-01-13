@@ -30,32 +30,28 @@
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
   <start>
     <element name="strings">
-      <zeroOrMore>
-        <ref name="node"/>
-      </zeroOrMore>
+      <ref name="scope"/>
     </element>
   </start>
-
-  <define name="node">
-    <element name="prefix">
-      <attribute name="name"/>
+  
+  <define name="scope">
+    <optional>
+      <element name="value">
+        <text/>
+      </element>
+    </optional>
+    <zeroOrMore>
       <choice>
-        <group>
-          <optional>
-            <ref name="value-element"/>
-          </optional>
-          <oneOrMore>
-            <ref name="node"/>
-          </oneOrMore>
-        </group>
-        <ref name="value-element"/>
+        <element name="item">
+          <attribute name="name"/>
+          <text/>
+        </element>
+        <element name="prefix">
+          <attribute name="name"/>
+          <ref name="scope"/>      
+        </element>
       </choice>
-    </element>
+    </zeroOrMore>
   </define>
-
-  <define name="value-element">
-    <element name="value">
-      <text/>
-    </element>
-  </define>
+  
 </grammar>
