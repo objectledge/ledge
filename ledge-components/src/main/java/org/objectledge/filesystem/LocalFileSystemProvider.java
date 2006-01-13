@@ -58,7 +58,7 @@ import org.objectledge.filesystem.impl.LocalRandomAccessFile;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.7 2005-10-06 08:38:38 rafal Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.8 2006-01-13 14:28:49 zwierzem Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -269,6 +269,13 @@ public class LocalFileSystemProvider
         checkPath(to);        
 		File fromFile = getFile(from);
 		File toFile = getFile(to);
+        if (toFile.exists())
+        {
+            if (!toFile.delete())
+            {
+                throw new IOException("Cannot delete " + to);
+            }
+        }
 		if(!fromFile.renameTo(toFile))
 		{
 			throw new IOException("failed to rename "+from+" to "+to);
