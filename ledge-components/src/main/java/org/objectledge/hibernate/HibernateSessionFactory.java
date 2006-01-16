@@ -92,7 +92,7 @@ import org.xml.sax.SAXException;
  * &lt;/hibernate-configuration>
  *</pre>
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionFactory.java,v 1.7 2006-01-11 22:15:14 zwierzem Exp $
+ * @version $Id: HibernateSessionFactory.java,v 1.8 2006-01-16 22:52:18 zwierzem Exp $
  */
 public class HibernateSessionFactory 
 implements Startable
@@ -116,6 +116,10 @@ implements Startable
         logger.info("HibernateConfig starting...");
         org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration();
         
+        // this somewhat stinks - makes it impossible to have more than one configuration for
+        // hibernate
+        // also we need to add a separate class for configuring direcotry for hsqldb database
+        // maybe: hibernate.connection.provider_class ??
         String xmlPath = "/config/"+this.getClass().getCanonicalName()+".xml";  
         
         cfg.setEntityResolver(new EntityResolver()
