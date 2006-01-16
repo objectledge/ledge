@@ -27,56 +27,42 @@
 //
 package org.objectledge.hibernate;
 
-import java.io.Serializable;
-
-import org.hibernate.CallbackException;
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.EntityMode;
-import org.hibernate.SessionFactory;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.defaults.ConstructorInjectionComponentAdapterFactory;
+import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
- * The hibernate interceptor for creation of persistent objects using the container.
- * The container for objects is created per request.
+ * The object instatiator which uses non caching PicoContainer.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PicofyingInterceptor.java,v 1.4 2006-01-16 15:05:53 zwierzem Exp $
+ * @version $Id: NonCachingPicoObjectInstantiator.java,v 1.1 2006-01-16 15:05:53 zwierzem Exp $
  */
-public class PicofyingInterceptor
-    extends EmptyInterceptor
+public class NonCachingPicoObjectInstantiator
 {
-    private SessionFactory sessionFactory;
-    private NonCachingPicoObjectInstantiator objectInstantiator;
+    private MutablePicoContainer container;
 
     /**
-     * Creates a new <code>HibernatePicofier</code> object.
+     * Creates a new object.
      * 
-     * @param objectInstantiator the pico based object instantiator.
-     * @param sessionFactory the Hibernate session factory. This is used to get meta data
-     *        information, including the id property name, of new entities.
+     * @param container the Pico container.
      */
-    public PicofyingInterceptor(NonCachingPicoObjectInstantiator objectInstantiator, SessionFactory sessionFactory)
+    public NonCachingPicoObjectInstantiator(MutablePicoContainer parentContainer)
     {
-        this.objectInstantiator = objectInstantiator;
-        this.sessionFactory = sessionFactory;
+        this.container = new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory(), parentContainer);
     }
 
     /**
-     * Instantiates a new persistent object with the given id. Uses Pico to inject dependencies into
-     * the new object.
+     * Instantiates a new object. Uses Pico to inject dependencies into the new object.
      * 
-     * @param clazz the class of the persistent object to be instantiated.
-     * @param serializable the id of the object.
-     * @return the newly instantiated (and Picofied) object.
-     * @throw CallbackException if an error occurs
+     * @param clazz the class of the object to be instantiated.
+     * @return the newly instantiated object.
      */
-    public Object instantiate(Class clazz, Serializable id)
-        throws CallbackException
+    public Object instantiate(Class clazz)
     {
-        // get persistent object
-        Object instance = objectInstantiator.instantiate(clazz);
-        // set peristent object's id
-        // WARN: assuming default mapping mode;
-        sessionFactory.getClassMetadata(clazz).setIdentifier(instance, id, EntityMode.POJO); 
-        return instance;
+        if(container.getComponentAdapter(clazz) == null)
+        {
+            container.registerComponentImplementation(clazz);
+        }
+        return container.getComponentInstance(clazz);
     }
 }

@@ -28,37 +28,36 @@
 package org.objectledge.hibernate;
 
 import org.hibernate.SessionFactory;
-import org.picocontainer.MutablePicoContainer;
 
 /**
  * The picofying hibernate interceptor factory.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PicofyingInterceptorFactory.java,v 1.1 2006-01-11 22:15:14 zwierzem Exp $
+ * @version $Id: PicofyingInterceptorFactory.java,v 1.2 2006-01-16 15:05:53 zwierzem Exp $
  */
 public class PicofyingInterceptorFactory
     implements InterceptorFactory
 {
-    private MutablePicoContainer container;
+    private NonCachingPicoObjectInstantiator objectInstantiator;
 
     /**
-     * Creates a new <code>HibernatePicofier</code> object.
+     * Creates <code>PicofyingInterceptor</code> objects.
      * 
-     * @param container the Pico container.
+     * @param objectInstantiator the object instantiator.
      */
-    public PicofyingInterceptorFactory(MutablePicoContainer parentContainer)
+    public PicofyingInterceptorFactory(NonCachingPicoObjectInstantiator objectInstantiator)
     {
-        this.container = parentContainer;
+        this.objectInstantiator = objectInstantiator;
     }
 
     /**
-     * Creates the picofier.
+     * Creates the interceptor.
      * 
      * @param sessionFactory the hibernate session factory. 
      * @return the newly instantiated picofier  object.
      */
     public PicofyingInterceptor createInterceptor(SessionFactory sessionFactory)
     {
-        return new PicofyingInterceptor(container, sessionFactory);
+        return new PicofyingInterceptor(objectInstantiator, sessionFactory);
     }
 }
