@@ -72,7 +72,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.31 2006-01-02 13:03:53 rafal Exp $
+ * @version $Id: LinkTool.java,v 1.32 2006-01-18 13:26:42 rafal Exp $
  */
 public class LinkTool
 {
@@ -1154,14 +1154,17 @@ public class LinkTool
     private void appendPathInfoSuffix(StringBuilder sb)
         throws UnsupportedEncodingException
     {
-        final String pathInfoSuffixTmp = getPathInfoSuffix();
+        String pathInfoSuffixTmp = getPathInfoSuffix();
         if(pathInfoSuffixTmp != null && pathInfoSuffixTmp.length() > 0)
         {
             if(pathInfoSuffixTmp.charAt(0) != '/')
             {
                 sb.append('/');    
             }
-            sb.append(URLEncoder.encode(pathInfoSuffixTmp, PARAMETER_ENCODING));
+            pathInfoSuffixTmp = URLEncoder.encode(pathInfoSuffixTmp, PARAMETER_ENCODING);
+            // if someone puts slashes into the suffix, assume they know what they are doing.
+            pathInfoSuffixTmp = pathInfoSuffixTmp.replace("%2F","/");
+            sb.append(pathInfoSuffixTmp);
         }
     }
     
