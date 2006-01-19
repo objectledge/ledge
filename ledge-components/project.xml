@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE.
 -->
-<!-- $Id: project.xml,v 1.70 2006-01-17 13:41:07 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.71 2006-01-19 16:12:17 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -156,11 +156,6 @@
     <!-- runtime -->
 
     <dependency>
-      <id>dom4j</id>
-      <version>1.6.1</version>
-      <url>http://www.dom4j.org/</url>
-    </dependency>
-    <dependency>
       <groupId>javamail</groupId>
       <artifactId>mailapi</artifactId>
       <version>1.3.2</version>
@@ -213,7 +208,6 @@
       <version>20040506</version>
       <url>https://msv.dev.java.net/</url>
     </dependency>
-
     <!-- testing -->
 
     <dependency>
