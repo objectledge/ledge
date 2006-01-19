@@ -58,7 +58,7 @@ import org.objectledge.filesystem.impl.LocalRandomAccessFile;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LocalFileSystemProvider.java,v 1.8 2006-01-13 14:28:49 zwierzem Exp $
+ * @version $Id: LocalFileSystemProvider.java,v 1.9 2006-01-19 16:05:54 zwierzem Exp $
  */
 public class LocalFileSystemProvider 
 	implements FileSystemProvider
@@ -489,7 +489,7 @@ public class LocalFileSystemProvider
      * @param path the pathname.
      * @return java.io.File object.
      */
-    protected File getFile(String path)
+    public File getFile(String path)
     {
     	return new File(baseDir, path.replace(fs.charAt(0), '/'));
     }
