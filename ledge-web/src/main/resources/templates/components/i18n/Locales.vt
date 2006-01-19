@@ -1,5 +1,4 @@
 <form name="setlocale" method="post" action="$link.action("i18n.SetLocale")">
-    Set prefered locale:
     <select name="locale" onChange="javascrip:document.setlocale.submit();">
 	#foreach($locale in $locales)
 	  <option value="$locale"#if($locale.equals($currentLocale)) selected#end>$localeNames.get($locale)</option>
