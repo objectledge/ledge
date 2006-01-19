@@ -10,7 +10,7 @@
  *#
 #macro(ds_dateSelectorDate $name $enabled $years $currentDate $currentYear $currentMonth)
 ##
-#set($monthNames = $i18n.usePrefix('calendar.ofmonths'))
+#set($monthNames = $i18n.usePrefix('ledge.calendar.ofmonths'))
 ##
 <select class="dateSelectorDay" name="${name}_day" onChange="dateElementChanged(this)"#if(!$enabled) disabled="disabled"#end>
 <script language="javascript">
