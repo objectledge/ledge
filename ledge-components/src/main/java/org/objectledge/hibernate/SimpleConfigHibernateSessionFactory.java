@@ -72,12 +72,24 @@ import org.objectledge.filesystem.FileSystem;
  *</pre>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SimpleConfigHibernateSessionFactory.java,v 1.1 2006-01-17 13:40:27 zwierzem Exp $
+ * @version $Id: SimpleConfigHibernateSessionFactory.java,v 1.2 2006-01-19 16:06:43 zwierzem Exp $
  */
 public class SimpleConfigHibernateSessionFactory 
 extends AbstractHibernateSessionFactory
 {
-    public SimpleConfigHibernateSessionFactory(final Configuration config, Logger logger,
+    public SimpleConfigHibernateSessionFactory(Configuration config, Logger logger,
+        FileSystem fs, InterceptorFactory interceptorFactory) throws ConfigurationException
+    {
+        this(config, new ConfigurationModifier()
+            {
+                public String modify(String name, String value)
+                {
+                    return value;
+                }
+            }, logger, fs, interceptorFactory);
+    }
+
+    protected SimpleConfigHibernateSessionFactory(final Configuration config, final ConfigurationModifier modifier, Logger logger,
         FileSystem fs, InterceptorFactory interceptorFactory) throws ConfigurationException
     {
         super(logger, fs, new HibernateConfigurator()
@@ -87,7 +99,9 @@ extends AbstractHibernateSessionFactory
                 // set properties
                 for(Configuration property : config.getChild("session-factory").getChildren("property"))
                 {
-                    cfg.setProperty("hibernate."+property.getAttribute("name"), property.getValue(""));
+                    String name = property.getAttribute("name");
+                    String value = modifier.modify(name, property.getValue(""));
+                    cfg.setProperty("hibernate."+name, value);
                 }
                 
                 // add mappings by convention
@@ -106,5 +120,21 @@ extends AbstractHibernateSessionFactory
             }
         },
         interceptorFactory);
+    }
+
+    
+    /**
+     * Configurator modifies the hibernate configuration properties.
+     */
+    protected interface ConfigurationModifier
+    {
+        /**
+         * Changes a single property of the configuration.
+         * 
+         * @param name the property name
+         * @param value the property value
+         * @return the new property value 
+         */
+        public String modify(String name, String value);
     }
 }
