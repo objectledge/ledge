@@ -32,7 +32,7 @@ package org.objectledge.table;
  * Exception thrown on problems with table services and tools.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableException.java,v 1.2 2005-02-10 17:46:22 rafal Exp $
+ * @version $Id: TableException.java,v 1.3 2006-01-20 21:25:04 zwierzem Exp $
  */
 public class TableException extends Exception
 {
@@ -51,5 +51,16 @@ public class TableException extends Exception
     public TableException(String msg)
     {
         super(msg);
+    }
+
+    /**
+     * Constructs an instance of <code>TableException</code> with the specified detail message and
+     * root cause.
+     * @param msg the detail message.
+     * @param e the root cause.
+     */
+    public TableException(String msg, Throwable e)
+    {
+        super(msg, e);
     }
 }
