@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.14 2006-01-24 22:22:31 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.15 2006-01-24 22:26:46 zwierzem Exp $
  */
 public class TableTool
 {
@@ -188,7 +188,7 @@ public class TableTool
 
         if(page > 0 && perPage > 0)
         {
-            return (page-1)*perPage; // inclusive
+            return (page-1)*perPage + 1; // inclusive, indexing from 1
         }
         return 1;
     }
@@ -204,7 +204,7 @@ public class TableTool
 
         if(page > 0 && perPage > 0)
         {
-            return page*perPage - 1;       // exclusive
+            return page*perPage;  // exclusive, indexing from 1
         }
         return getTotalRowCount();
     }
