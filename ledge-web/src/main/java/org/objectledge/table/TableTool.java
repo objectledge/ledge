@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.13 2006-01-06 13:23:04 pablo Exp $
+ * @version $Id: TableTool.java,v 1.14 2006-01-24 22:22:31 zwierzem Exp $
  */
 public class TableTool
 {
@@ -175,6 +175,38 @@ public class TableTool
     public int getCurrentPage()
     {
         return state.getCurrentPage();
+    }
+
+    /**
+     * Return the number of the first row shown on the current page.
+     * @return the number of the start row.
+     */
+    public int getStartRow()
+    {
+        int page = state.getCurrentPage();
+        int perPage = state.getPageSize();
+
+        if(page > 0 && perPage > 0)
+        {
+            return (page-1)*perPage; // inclusive
+        }
+        return 1;
+    }
+    
+    /**
+     * Return the number of the last row shown on the current page.
+     * @return the number of the last row.
+     */
+    public int getEndRow()
+    {
+        int page = state.getCurrentPage();
+        int perPage = state.getPageSize();
+
+        if(page > 0 && perPage > 0)
+        {
+            return page*perPage - 1;       // exclusive
+        }
+        return getTotalRowCount();
     }
 
     /**
