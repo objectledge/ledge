@@ -28,6 +28,7 @@
 
 package org.objectledge.i18n;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,7 +39,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.16 2005-05-20 05:28:53 pablo Exp $
+ * @version $Id: I18nTool.java,v 1.17 2006-01-25 14:34:12 rafal Exp $
  */
 public class I18nTool
 {
@@ -224,5 +225,26 @@ public class I18nTool
     public Locale getLocale()
     {
         return locale;
+    }
+    
+    /**
+     * Returns a map with information about supported locales.
+     * 
+     * @return a map with information about supported locales.
+     */
+    public List<Locale> getSupportedLocales()
+    {
+        return Arrays.asList(i18n.getSupportedLocales());
+    }
+
+    /**
+     * Returns the human readable name of a Locale.
+     * 
+     * @param locale the locale.
+     * @return the locale's human readable name.
+     */
+    public String getLocaleName(Locale locale)
+    {
+        return i18n.getLocaleName(locale);
     }
 }
