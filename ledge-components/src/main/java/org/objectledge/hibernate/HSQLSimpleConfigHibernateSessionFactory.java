@@ -48,7 +48,7 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
  * </p>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: HSQLSimpleConfigHibernateSessionFactory.java,v 1.1 2006-01-19 16:06:43 zwierzem Exp $
+ * @version $Id: HSQLSimpleConfigHibernateSessionFactory.java,v 1.2 2006-01-25 11:15:44 zwierzem Exp $
  */
 public class HSQLSimpleConfigHibernateSessionFactory 
 extends SimpleConfigHibernateSessionFactory
@@ -66,8 +66,7 @@ extends SimpleConfigHibernateSessionFactory
                     {
                         LocalFileSystemProvider provider = (LocalFileSystemProvider)fs
                             .getProvider(locaFileSystemProviderName);
-                        return value.replaceFirst("\\{LEDGE_FS_ROOT\\}",
-                            provider.getFile("/").getAbsolutePath());
+                        return value.replaceFirst("\\{LEDGE_FS_ROOT\\}", provider.getBasePath());
                     }
                 return value;
             }
