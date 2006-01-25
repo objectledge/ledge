@@ -39,7 +39,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.17 2006-01-25 14:34:12 rafal Exp $
+ * @version $Id: I18nTool.java,v 1.18 2006-01-25 15:26:11 rafal Exp $
  */
 public class I18nTool
 {
@@ -246,5 +246,17 @@ public class I18nTool
     public String getLocaleName(Locale locale)
     {
         return i18n.getLocaleName(locale);
+    }
+    
+    /**
+     * Returns the human readable name of a Locale.
+     * 
+     * @param locale the locale.
+     * @return the locale's human readable name.
+     */    
+    public String getLocaleName(String locale)
+    {
+        Locale l = StringUtils.getLocale(locale);
+        return i18n.getLocaleName(l);
     }
 }
