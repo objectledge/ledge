@@ -29,7 +29,6 @@ package org.objectledge.hibernate;
 
 import java.io.Serializable;
 
-import org.hibernate.CallbackException;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.SessionFactory;
@@ -39,7 +38,7 @@ import org.hibernate.SessionFactory;
  * The container for objects is created per request.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PicofyingInterceptor.java,v 1.4 2006-01-16 15:05:53 zwierzem Exp $
+ * @version $Id: PicofyingInterceptor.java,v 1.5 2006-01-26 14:21:42 zwierzem Exp $
  */
 public class PicofyingInterceptor
     extends EmptyInterceptor
@@ -64,19 +63,26 @@ public class PicofyingInterceptor
      * Instantiates a new persistent object with the given id. Uses Pico to inject dependencies into
      * the new object.
      * 
-     * @param clazz the class of the persistent object to be instantiated.
-     * @param serializable the id of the object.
+     * @param entityName the name of the class of the persistent object to be instantiated.
+     * @param id the id of the object.
      * @return the newly instantiated (and Picofied) object.
      * @throw CallbackException if an error occurs
      */
-    public Object instantiate(Class clazz, Serializable id)
-        throws CallbackException
+    public Object instantiate(String entityName, EntityMode entityMode, Serializable id)
     {
-        // get persistent object
-        Object instance = objectInstantiator.instantiate(clazz);
-        // set peristent object's id
-        // WARN: assuming default mapping mode;
-        sessionFactory.getClassMetadata(clazz).setIdentifier(instance, id, EntityMode.POJO); 
-        return instance;
+        try
+        {
+            // get persistent object
+            Class clazz = Class.forName(entityName);
+            Object instance = objectInstantiator.instantiate(clazz);
+            // set peristent object's id
+            sessionFactory.getClassMetadata(clazz).setIdentifier(instance, id, entityMode); 
+            return instance;
+        }
+        catch(ClassNotFoundException e)
+        {
+            throw new IllegalArgumentException("not a clas name: "+entityName, e);
+        }
     }
 }
+
