@@ -28,6 +28,8 @@
 package org.objectledge.hibernate;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
@@ -38,14 +40,15 @@ import org.hibernate.SessionFactory;
  * The container for objects is created per request.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PicofyingInterceptor.java,v 1.5 2006-01-26 14:21:42 zwierzem Exp $
+ * @version $Id: PicofyingInterceptor.java,v 1.6 2006-01-26 14:25:34 zwierzem Exp $
  */
 public class PicofyingInterceptor
     extends EmptyInterceptor
 {
     private SessionFactory sessionFactory;
     private NonCachingPicoObjectInstantiator objectInstantiator;
-
+    private Map<String, Class> classByName = new HashMap<String, Class>();
+    
     /**
      * Creates a new <code>HibernatePicofier</code> object.
      * 
@@ -73,7 +76,12 @@ public class PicofyingInterceptor
         try
         {
             // get persistent object
-            Class clazz = Class.forName(entityName);
+            Class clazz = classByName.get(entityName);
+            if(clazz == null)
+            {
+                clazz = Class.forName(entityName);
+                classByName.put(entityName, clazz);
+            }
             Object instance = objectInstantiator.instantiate(clazz);
             // set peristent object's id
             sessionFactory.getClassMetadata(clazz).setIdentifier(instance, id, entityMode); 
