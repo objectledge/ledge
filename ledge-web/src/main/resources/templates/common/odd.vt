@@ -1,0 +1,14 @@
+#**
+ * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+ * @version $Id: odd.vt,v 1.1 2006-02-02 09:24:36 zwierzem Exp $
+*###
+
+#**
+ * Calculates and displays row's oddness or evenness.
+ *#
+#macro(odd)
+#if($oddCount) #set($oddCount = $oddCount + 1)##
+#else #set($oddCount = 0)#end##
+#set($odd = $oddCount % 2)##
+$odd##
+#end
