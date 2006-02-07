@@ -30,7 +30,7 @@
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: table.vt,v 1.10 2005-12-21 16:00:24 rafal Exp $
+ * @version $Id: table.vt,v 1.11 2006-02-07 16:34:14 zwierzem Exp $
 *###
 
 #**
@@ -263,6 +263,40 @@ $table.currentPage $i18n.get('table.page.of') $table.numPages |
   #set($pageLink = $tableLink.action('table.SetPage').set('page',$table.getPageNumber($table.numPages)))
   #set($pageLink = "javascript:${function}('$pageLink')")
 | <a href="$pageLink">$i18n.get('table.page.last')</a>
+</span>
+#end
+#end
+
+#macro(table_pageRowNums $table $pageNum)
+#set($endNum = $pageNum*$table.pageSize)
+#set($startNum = $endNum - $table.pageSize + 1)
+#if($endNum > $table.totalRowCount)
+#set($endNum = $table.totalRowCount)
+#end
+[$startNum - $endNum]##
+#end
+#**
+ * Displays a relative pager showing row numbers
+ *
+ * @param $table the table tool.
+ * @param $tableLink LinkTool with preset tableId.
+ *#
+#macro(tableView_relativePagerRows $table $tableLink $relativeNum)
+#set($minusRelativeNum = $relativeNum * (-1))
+#if($table.numPages > 1)
+<span class="table-pager">
+#set($setPageLink = $tableLink.action('table.SetPage'))
+<a href="$setPageLink.set('page',$table.getPageNumber(0))">$i18n.get('table.page.first')</a> |
+#if($table.getRelativePageNumber($minusRelativeNum) > 1)... #end
+#foreach($pageNum in [$table.getRelativePageNumber($minusRelativeNum)..$table.getRelativePageNumber(-1)])
+  #if($pageNum != $table.currentPage) <a href="$setPageLink.set('page',$pageNum)">#table_pageRowNums($table $pageNum)</a> #end
+#end
+<b>#table_pageRowNums($table $table.currentPage)</b>
+#foreach($pageNum in [$table.getRelativePageNumber(1)..$table.getRelativePageNumber($relativeNum)])
+  #if($pageNum != $table.currentPage) <a href="$setPageLink.set('page',$pageNum)">#table_pageRowNums($table $pageNum)</a> #end
+#end
+#if($table.getRelativePageNumber($relativeNum) < $table.numPages)... #end
+| <a href="$setPageLink.set('page',$table.getPageNumber($table.numPages))">$i18n.get('table.page.last')</a>
 </span>
 #end
 #end
