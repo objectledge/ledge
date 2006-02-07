@@ -37,7 +37,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableToolTest.java,v 1.3 2005-03-08 13:08:33 zwierzem Exp $
+ * @version $Id: TableToolTest.java,v 1.4 2006-02-07 13:15:03 zwierzem Exp $
  */
 public class TableToolTest extends TestCase
 {
@@ -477,7 +477,7 @@ public class TableToolTest extends TestCase
 		private TableState state;
 		private TableRow[] pagedRows;
 		private TableRow[] rows;
-		private Map rowsByChild = new HashMap();
+		private Map<TableRow, TableRow> rowsByChild = new HashMap<TableRow, TableRow>();
 		
 		public MockRowSet (TableState state, TableFilter[] filters)
 		{

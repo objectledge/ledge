@@ -33,7 +33,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumnTest.java,v 1.2 2004-05-06 10:58:57 pablo Exp $
+ * @version $Id: TableColumnTest.java,v 1.3 2006-02-07 13:15:03 zwierzem Exp $
  */
 public class TableColumnTest extends TestCase
 {
@@ -55,6 +55,7 @@ public class TableColumnTest extends TestCase
 		try
 		{
 			TableColumn tableColumn = new TableColumn(null);
+            tableColumn.getName();
     		fail("Should raise a TableException");
 		}
     	catch (TableException success) 
@@ -65,6 +66,7 @@ public class TableColumnTest extends TestCase
 		try
 		{
 			TableColumn tableColumn = new TableColumn("");
+            tableColumn.getName();
 			fail("Should raise a TableException");
 		}
 		catch (TableException success)
@@ -94,6 +96,7 @@ public class TableColumnTest extends TestCase
     /*
      * Test for void TableColumn(String, Comparator)
      */
+    @SuppressWarnings("unchecked")
     public void testTableColumnStringComparator()
     throws TableException
     {
@@ -117,6 +120,7 @@ public class TableColumnTest extends TestCase
     /*
      * Test for void TableColumn(String, Comparator, Comparator)
      */
+    @SuppressWarnings("unchecked")
     public void testTableColumnStringComparatorComparator()
     	throws TableException
     {
