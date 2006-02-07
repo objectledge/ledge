@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.7 2005-02-10 17:49:05 rafal Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.8 2006-02-07 13:13:31 zwierzem Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager
@@ -53,10 +53,10 @@ public class TableStateManagerImpl
     private int nextId = 1;
 
     /** id/name mapping */
-    private Map byNameMapping = new HashMap();
+    private Map<String, Integer> byNameMapping = new HashMap<String, Integer>();
 
     /** name/id mapping */
-    private Map byIdMapping = new HashMap();
+    private Map<Integer, String> byIdMapping = new HashMap<Integer, String>();
 
     // user access methods /////////////////////////////////////////////////////////////////////////
 
@@ -71,10 +71,22 @@ public class TableStateManagerImpl
         TableState state = getTableState(tableData, id);
         if(state == null)
         {
-            state = new TableState(id.intValue());
+            state = createTableState(id);
             tableData.put(id, state);
         }
         return state;
+    }
+
+    /**
+     * The factory method for {@link TableState} objects. Allows overriding of
+     * <code>TableState</code> class.
+     * 
+     * @param id
+     * @return the newly created table state object.
+     */
+    protected TableState createTableState(int id)
+    {
+        return new TableState(id);
     }
 
     /**
@@ -87,7 +99,7 @@ public class TableStateManagerImpl
      */
     private synchronized Integer getId(String name)
     {
-        Integer id = (Integer)byNameMapping.get(name);
+        Integer id = byNameMapping.get(name);
         if(id == null)
         {
             //create id
@@ -146,16 +158,16 @@ public class TableStateManagerImpl
      */
     private class TableData
     {
-        private Map map = new HashMap();
+        private Map<Integer, TableState> map = new HashMap<Integer, TableState>();
 
-        Object get(Object key)
+        TableState get(Integer key)
         {
             return map.get(key);
         }
 
-        void put(Object key, Object value)
+        void put(Integer id, TableState state)
         {
-            map.put(key,value);
+            map.put(id, state);
         }
     }
 }
