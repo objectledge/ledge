@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.7 2005-08-22 09:04:22 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.8 2006-02-07 13:12:23 zwierzem Exp $
  */
 public class TableState
 {
@@ -57,7 +57,7 @@ public class TableState
     private boolean allExpanded = false;
 
     /** Set of expanded nodes ids. */
-    private Set expanded = new HashSet();
+    private Set<String> expanded = new HashSet<String>();
 
     /** Name of a column selected for sorting, default: <code>null</code>. */
     private String sortColumnName;
@@ -86,7 +86,7 @@ public class TableState
     private boolean newState;
 
 	/** 
-	 * Default constructor for table state.
+	 * Constructor for table state.
 	 * @param id numeric id of a state as assigned by {@link TableStateManager}
 	 */
     public TableState(int id)
