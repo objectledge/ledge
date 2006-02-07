@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.8 2006-02-07 13:12:23 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.9 2006-02-07 16:33:48 zwierzem Exp $
  */
 public class TableState
 {
@@ -298,13 +298,13 @@ public class TableState
     }
 
     /**
-     * Sets the current page.
+     * Sets the current page, corrects the value to positive integer.
      *
      * @param currentPage the current page.
      */
     public void setCurrentPage(int currentPage)
     {
-        this.currentPage = currentPage;
+        this.currentPage = (currentPage < 1)? 1 : currentPage;
     }
 
     /**
