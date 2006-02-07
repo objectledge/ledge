@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.15 2006-01-24 22:26:46 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.16 2006-02-07 13:14:40 zwierzem Exp $
  */
 public class TableTool
 {
@@ -52,7 +52,7 @@ public class TableTool
     private TableRowSet rowSet;
 
     /** column map */
-    private Map columnsByName = new HashMap();
+    private Map<String, TableColumn> columnsByName = new HashMap<String, TableColumn>();
 
     /**
      * Constructor for basic implementation of TableRowSet.
@@ -62,7 +62,7 @@ public class TableTool
      * @param model the table model
      * @throws TableException on construction errors
      */
-    public TableTool(TableState state, List filters, TableModel model)
+    public TableTool(TableState state, List<TableFilter> filters, TableModel model)
     throws TableException
     {
         this.state = state;
@@ -137,7 +137,7 @@ public class TableTool
     public TableColumn getColumn(String name)
     throws TableException
     {
-        TableColumn column = (TableColumn)columnsByName.get(name);
+        TableColumn column = columnsByName.get(name);
         if(column == null)
         {
             column = new TableColumn(name);
@@ -202,11 +202,16 @@ public class TableTool
         int page = state.getCurrentPage();
         int perPage = state.getPageSize();
 
+        int endRow = getTotalRowCount();
         if(page > 0 && perPage > 0)
         {
-            return page*perPage;  // exclusive, indexing from 1
+            int pageEndRow = page*perPage;  // exclusive, indexing from 1
+            if(pageEndRow < endRow)
+            {
+                endRow = pageEndRow;
+            }
         }
-        return getTotalRowCount();
+        return endRow;
     }
 
     /**
@@ -308,7 +313,7 @@ public class TableTool
      */
     public List getAncestors(TableRow row)
     {
-        List ancestors = new ArrayList();
+        List<TableRow> ancestors = new ArrayList<TableRow>();
         TableRow rootRow = rowSet.getRootRow();
 
         TableRow parentRow = row;
@@ -388,7 +393,7 @@ public class TableTool
      */
     public List linesAndFolders(TableRow row)
     {
-		List linesAndFolders = new ArrayList();
+		List<LinesAndFoldersBox> linesAndFolders = new ArrayList<LinesAndFoldersBox>();
 		if( ! getViewAsTree() )
 		{
 			// -- list view
