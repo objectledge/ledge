@@ -43,7 +43,7 @@ import org.picocontainer.Startable;
  * Thread pool component.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadPool.java,v 1.10 2005-02-10 17:47:08 rafal Exp $
+ * @version $Id: ThreadPool.java,v 1.11 2006-02-08 18:24:45 zwierzem Exp $
  */
 public class ThreadPool
     implements Startable
@@ -69,7 +69,7 @@ public class ThreadPool
     
     private int workerPoolCapacity = 10;
     
-    private Set threads = new HashSet();
+    private Set<Daemon> threads = new HashSet<Daemon>();
 
     private Logger log;
     

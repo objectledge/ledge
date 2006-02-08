@@ -39,6 +39,7 @@ import java.sql.Ref;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,7 +57,7 @@ public class DefaultOutputRecord implements OutputRecord
     private Persistent object;
     
     /** The fields. */
-    private HashMap fields;
+    private HashMap<String,Object> fields;
         
     /**
      * Constructs an <code>OutputRecordImpl</code>.
@@ -65,7 +66,7 @@ public class DefaultOutputRecord implements OutputRecord
      */
     public DefaultOutputRecord(Persistent object)
     {
-        fields = new HashMap();
+        fields = new HashMap<String,Object>();
         this.object = object;
     }
         
@@ -497,13 +498,7 @@ public class DefaultOutputRecord implements OutputRecord
      */
     private Set getKeyFields()
     {
-        String[] keys = object.getKeyColumns();
-        HashSet keySet = new HashSet();
-        for(int i=0; i<keys.length; i++)
-        {
-            keySet.add(keys[i]);
-        }
-        return keySet;
+        return new HashSet<String>(Arrays.asList(object.getKeyColumns()));
     }
     
     /**

@@ -40,15 +40,15 @@ import org.objectledge.xml.XMLGrammarCache;
  * The Datatype set manager component. 
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DatatypeSetManager.java,v 1.4 2004-12-27 05:20:56 zwierzem Exp $
+ * @version $Id: DatatypeSetManager.java,v 1.5 2006-02-08 18:20:56 zwierzem Exp $
  */
 public class DatatypeSetManager
 {
 	/** the provided datatype sets. */
-	protected Map datatypeSets = new Hashtable();
+	protected Map<String,DatatypeSet> datatypeSets = new Hashtable<String,DatatypeSet>();
 
 	/** the datatype sets' factories. */
-	protected List factories = new ArrayList();
+	protected List<DatatypeSetFactory> factories = new ArrayList<DatatypeSetFactory>();
 	
 	/**
 	 * Creates an abstract datatype set manager.

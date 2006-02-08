@@ -44,7 +44,7 @@ import org.objectledge.parameters.Parameters;
  * Specifies a policy of naming accounts in the system.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: NamingPolicy.java,v 1.4 2005-02-21 16:14:36 zwierzem Exp $
+ * @version $Id: NamingPolicy.java,v 1.5 2006-02-08 18:19:37 zwierzem Exp $
  */
 public class NamingPolicy
 {
@@ -174,7 +174,7 @@ public class NamingPolicy
      * Represents syntax of a compound disthinguished name element. 
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: NamingPolicy.java,v 1.4 2005-02-21 16:14:36 zwierzem Exp $
+     * @version $Id: NamingPolicy.java,v 1.5 2006-02-08 18:19:37 zwierzem Exp $
      */    
     public static class Token
     {
@@ -199,8 +199,8 @@ public class NamingPolicy
                 throw new ConfigurationException("at least one element required", config.getPath(),
                     config.getLocation());
             }
-            List stringSpecs = new ArrayList(elements.length/2);
-            List propertySpecs = new ArrayList(elements.length/2);
+            List<String> stringSpecs = new ArrayList<String>(elements.length/2);
+            List<String> propertySpecs = new ArrayList<String>(elements.length/2);
             for(int i=0; i<elements.length; i++)
             {
                 if(elements[i].getName().equals("string"))

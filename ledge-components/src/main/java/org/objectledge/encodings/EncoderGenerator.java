@@ -40,13 +40,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
  * Generator for encoding converter tables.
  *
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: EncoderGenerator.java,v 1.5 2005-02-10 17:46:55 rafal Exp $
+ * @version   $Id: EncoderGenerator.java,v 1.6 2006-02-08 18:21:46 zwierzem Exp $
  */
 public class EncoderGenerator
 {
@@ -75,16 +76,16 @@ public class EncoderGenerator
 
         // 2. build mappings groups upon most significant bytes of their unicode
         // values
-        HashMap groups = new HashMap();
+        HashMap<Short,Map<Short,MappingEntry>> groups = new HashMap<Short,Map<Short,MappingEntry>>();
         for(int i = 0; i < inputTable.length; i++)
         {
             short prefixValue = (short)(inputTable[i].getUnicodeCode() & (short)(prefixMask));
             Short prefix = new Short(prefixValue);
             // get or create group array
-            HashMap group = (HashMap)(groups.get(prefix));
+            Map<Short,MappingEntry> group = groups.get(prefix);
             if(group == null)
             {
-                group = new HashMap(256);
+                group = new HashMap<Short,MappingEntry>(256);
             }
             groups.put(prefix, group);
 
@@ -179,7 +180,7 @@ public class EncoderGenerator
         out.write(" * Encoder for "+encodingName+" character set.\n");
         out.write(" *\n");
         out.write(" * @author <a href=\"mailto:dgajda@caltha.pl\">Damian Gajda</a>\n");
-        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.5 2005-02-10 17:46:55 rafal Exp $\n");
+        out.write(" * @version " +        	"$Id: EncoderGenerator.java,v 1.6 2006-02-08 18:21:46 zwierzem Exp $\n");
         out.write(" */\n");
         out.write("public class CharEncoder"+encodingName+"\n");
         out.write("         extends CharEncoder\n");
@@ -296,7 +297,7 @@ public class EncoderGenerator
                 return;
             }
 
-            ArrayList mappingEntries = new ArrayList(512);
+            ArrayList<MappingEntry> mappingEntries = new ArrayList<MappingEntry>(512);
 
             try
             {
@@ -310,7 +311,7 @@ public class EncoderGenerator
 
                     // split the incoming line
                     StringTokenizer tokenizer = new StringTokenizer(line);
-                    ArrayList fields = new ArrayList(4);
+                    ArrayList<String> fields = new ArrayList<String>(4);
                     while(tokenizer.hasMoreTokens())
                     {
                         fields.add(tokenizer.nextToken());
@@ -411,7 +412,7 @@ public class EncoderGenerator
      * @author    damian
      * @version
      */
-    public static class UnicodeComparator implements Comparator
+    public static class UnicodeComparator implements Comparator<MappingEntry>
     {
         /**
          * Description of the Method.
@@ -420,11 +421,8 @@ public class EncoderGenerator
          * @param o2  Description of Parameter
          * @return    Description of the Returned Value
          */
-        public int compare(Object o1, Object o2)
+        public int compare(MappingEntry m1, MappingEntry m2)
         {
-            MappingEntry m1 = (MappingEntry)o1;
-            MappingEntry m2 = (MappingEntry)o2;
-
             if(m1.getUnicodeCode() < m2.getUnicodeCode())
             {
                 return -1;

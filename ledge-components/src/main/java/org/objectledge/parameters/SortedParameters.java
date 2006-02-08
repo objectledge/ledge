@@ -37,7 +37,7 @@ import java.util.TreeMap;
  * An implementation of parameters container which sorts parameter keys.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SortedParameters.java,v 1.1 2004-07-05 13:50:06 zwierzem Exp $
+ * @version $Id: SortedParameters.java,v 1.2 2006-02-08 18:24:45 zwierzem Exp $
  */
 public class SortedParameters extends DefaultParameters
 {
@@ -46,7 +46,7 @@ public class SortedParameters extends DefaultParameters
      */
     protected void setupMap()
     {
-        map = new TreeMap();
+        map = new TreeMap<String, String[]>();
     }
 
     /**

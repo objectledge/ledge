@@ -46,7 +46,7 @@ import org.jcontainer.dna.Logger;
  * Default event forwarder implementation.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultEventWhiteboard.java,v 1.6 2005-09-04 11:47:18 rafal Exp $
+ * @version $Id: DefaultEventWhiteboard.java,v 1.7 2006-02-08 18:22:08 zwierzem Exp $
  */
 public class DefaultEventWhiteboard implements EventWhiteboard
 {
@@ -56,10 +56,10 @@ public class DefaultEventWhiteboard implements EventWhiteboard
     /**
      * The Map Listener interface -> ( Map trigger object -> Set of Listeners ) 
      */
-    private Map interfaceMap = new HashMap();
+    private Map<Class,Map<Object,Map>> interfaceMap = new HashMap<Class,Map<Object,Map>>();
 
     /** Created proxies for <code>Remote</code> objects. */
-    private Map proxies = new WeakHashMap();
+    private Map<Remote,Map<Class,Object>> proxies = new WeakHashMap<Remote,Map<Class,Object>>();
 
     /** The EventWhiteboardFactory */
     private EventWhiteboardFactory eventSystem;
@@ -93,13 +93,13 @@ public class DefaultEventWhiteboard implements EventWhiteboard
             throw new IllegalArgumentException("Handler class " + listener.getClass().getName() + 
                                                 " does not implement " + iface.getName());
         }
-        Map triggerMap = (Map)interfaceMap.get(iface);
+        Map<Object,Map> triggerMap = interfaceMap.get(iface);
         if (triggerMap == null)
         {
-            triggerMap = new WeakHashMap();
+            triggerMap = new WeakHashMap<Object,Map>();
             interfaceMap.put(iface, triggerMap);
         }
-        Map handlers = (Map)triggerMap.get(object);
+        Map handlers = triggerMap.get(object);
         if (handlers == null)
         {
             handlers = new WeakHashMap();
@@ -133,10 +133,10 @@ public class DefaultEventWhiteboard implements EventWhiteboard
         InvocationHandler handler = new RemoteInvocationHandler(iface, listener);
         Object proxy = Proxy.newProxyInstance(this.getClass().getClassLoader(),
                                               new Class[] { iface }, handler);
-        Map ifMap = (Map)proxies.get(listener);
+        Map<Class,Object> ifMap = proxies.get(listener);
         if(ifMap == null)
         {
-            ifMap = new HashMap();
+            ifMap = new HashMap<Class,Object>();
             proxies.put(listener, ifMap);
         }
         ifMap.put(iface, proxy);
@@ -180,10 +180,10 @@ public class DefaultEventWhiteboard implements EventWhiteboard
         Set currentHandlers = null;
         synchronized(this)
         {
-            Map triggerMap = (Map)interfaceMap.get(iface);
+            Map<Object,Map> triggerMap = interfaceMap.get(iface);
             if(triggerMap != null)
             {
-                Map handlers = (Map)triggerMap.get(object);
+                Map handlers = triggerMap.get(object);
                 if(handlers != null)
                 {
                     currentHandlers = new HashSet(handlers.keySet());

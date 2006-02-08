@@ -46,7 +46,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * Provides information about components deployed in the system and their configuration. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConfigurationInspector.java,v 1.4 2005-05-09 05:33:59 rafal Exp $
+ * @version $Id: ConfigurationInspector.java,v 1.5 2006-02-08 18:20:11 zwierzem Exp $
  */
 public class ConfigurationInspector
 {
@@ -100,7 +100,7 @@ public class ConfigurationInspector
     {
         if(!configurationFactory.hasConfig(key))
         {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         List<String> entries = new ArrayList<String>();
         InputSource config = configurationFactory.getRawConfigurationSource(key);
@@ -236,7 +236,7 @@ public class ConfigurationInspector
                 }
                 String impl = attributes.getValue("class");
                 
-                List<String> params = Collections.EMPTY_LIST;
+                List<String> params = Collections.emptyList();
                 List<String> config = getComponentConfig(key);
                 list.add(new ComponentConfiguration((classKey ? "class " : "") + key, impl, params, 
                     config));
@@ -249,7 +249,7 @@ public class ConfigurationInspector
      * 
      *
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ConfigurationInspector.java,v 1.4 2005-05-09 05:33:59 rafal Exp $
+     * @version $Id: ConfigurationInspector.java,v 1.5 2006-02-08 18:20:11 zwierzem Exp $
      */
     private class ConfigurationHandler 
         extends DefaultHandler

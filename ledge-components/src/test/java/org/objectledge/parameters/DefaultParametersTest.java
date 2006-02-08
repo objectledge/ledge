@@ -607,7 +607,7 @@ public class DefaultParametersTest extends TestCase
     {
         params.set("foo", "bar");
         params.set("bar", "foo");
-        Set set = new HashSet();
+        Set<String> set = new HashSet<String>();
         set.add("foo");
         params.remove(set);
         assertEquals(params.isDefined("foo"), false);
@@ -621,7 +621,7 @@ public class DefaultParametersTest extends TestCase
     {
         params.set("foo", "bar");
         params.set("bar", "foo");
-        Set set = new HashSet();
+        Set<String> set = new HashSet<String>();
         set.add("foo");
         params.removeExcept(set);
         assertEquals(params.isDefined("bar"), false);

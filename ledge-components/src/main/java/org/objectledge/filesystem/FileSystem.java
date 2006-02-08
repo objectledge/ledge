@@ -53,14 +53,14 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.30 2005-10-06 08:38:38 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.31 2006-02-08 18:22:33 zwierzem Exp $
  */
 public class FileSystem
 {
     private String protocol = "ledge";
 
     /** The providers. */
-    private List providers = new ArrayList();
+    private List<FileSystemProvider> providers = new ArrayList<FileSystemProvider>();
 
     /** The size of the buffer. */
     private int bufferSize;
@@ -977,7 +977,7 @@ public class FileSystem
             return "/";
         }
         StringTokenizer st = new StringTokenizer(path, "/");
-        ArrayList temp = new ArrayList(st.countTokens());
+        ArrayList<String> temp = new ArrayList<String>(st.countTokens());
         while(st.hasMoreTokens())
         {
             String t = st.nextToken();

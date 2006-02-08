@@ -39,7 +39,7 @@ import org.jcontainer.dna.Configuration;
  * Verifies a login name against a set of reserved ones and pattern.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LoginVerifier.java,v 1.3 2004-02-24 15:50:51 pablo Exp $
+ * @version $Id: LoginVerifier.java,v 1.4 2006-02-08 18:19:37 zwierzem Exp $
  */
 public class LoginVerifier
 {
@@ -47,7 +47,7 @@ public class LoginVerifier
     public static final String LOGIN_PATTERN = "[-a-zA-Z0-9]+";
 
     /** the reserved logins set */
-    private Set reserved;
+    private Set<String> reserved;
     
     /** the login pattern */
     private Pattern loginPattern;
@@ -59,7 +59,7 @@ public class LoginVerifier
      */    
     public LoginVerifier(Configuration config)
     {
-        reserved = new HashSet();
+        reserved = new HashSet<String>();
         String list = config.getChild("reserved").getValue("");
         StringTokenizer st = new StringTokenizer(list);
         while(st.hasMoreTokens())

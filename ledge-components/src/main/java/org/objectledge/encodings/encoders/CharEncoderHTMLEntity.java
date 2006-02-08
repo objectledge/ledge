@@ -8,7 +8,7 @@ import org.objectledge.encodings.MappingEntry;
  * HTMLEntity encoder.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CharEncoderHTMLEntity.java,v 1.4 2004-03-12 15:47:42 zwierzem Exp $
+ * @version $Id: CharEncoderHTMLEntity.java,v 1.5 2006-02-08 18:21:47 zwierzem Exp $
  */
 public class CharEncoderHTMLEntity
          extends CharEncoder
@@ -16,7 +16,8 @@ public class CharEncoderHTMLEntity
     //---------------------------------------------------------------------
     // static fields
 
-    private static final HashMap ENTITIES_BY_NAME = new HashMap();
+    private static final HashMap<String, MappingEntry> ENTITIES_BY_NAME =
+        new HashMap<String, MappingEntry>();
 
     private static final MappingEntry[] ENTITIES =
             {

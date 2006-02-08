@@ -39,12 +39,12 @@ import junit.framework.TestCase;
  * Tests for the general-purpose visitor.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: VisitorTest.java,v 1.3 2005-03-18 12:06:36 rafal Exp $
+ * @version $Id: VisitorTest.java,v 1.4 2006-02-08 18:26:51 zwierzem Exp $
  */
 public class VisitorTest
     extends TestCase
 {
-    private List<String> recorder = new ArrayList();
+    private List<String> recorder = new ArrayList<String>();
     
     public void setUp()
     {
@@ -164,7 +164,8 @@ public class VisitorTest
             Item next = o.next();
             if(next == null)
             {
-                return Collections.EMPTY_LIST.iterator();
+                List<Item> list = Collections.emptyList(); 
+                return list.iterator();
             }
             else
             {

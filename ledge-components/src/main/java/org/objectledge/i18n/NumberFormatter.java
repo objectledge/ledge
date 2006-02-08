@@ -46,7 +46,7 @@ import org.objectledge.utils.StringUtils;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
  * 
- * @version $Id: NumberFormatter.java,v 1.1 2005-08-29 20:28:13 rafal Exp $
+ * @version $Id: NumberFormatter.java,v 1.2 2006-02-08 18:23:44 zwierzem Exp $
  */
 public class NumberFormatter
 {
@@ -54,10 +54,10 @@ public class NumberFormatter
 	protected Logger logger;
 
 	/** The locale map. */
-	protected Map localeMap;
+	protected Map<Locale,Map<String,String>> localeMap;
 	
 	/** The default locale patterns. */
-	protected Map defaultPatterns;
+	protected Map<Locale,String> defaultPatterns;
 	
 	/**
 	 * Component constructor.
@@ -70,8 +70,8 @@ public class NumberFormatter
 		throws ConfigurationException
 	{
 		this.logger = logger;
-		localeMap = new HashMap();
-		defaultPatterns = new HashMap();
+		localeMap = new HashMap<Locale,Map<String,String>>();
+		defaultPatterns = new HashMap<Locale,String>();
         Configuration[] locales = config.getChildren("locale");
         for (int i = 0; i < locales.length; i++)
         {
@@ -79,7 +79,7 @@ public class NumberFormatter
             String defaultPattern = locales[i].getAttribute("defaultPattern");
             Configuration[] patterns = locales[i].getChildren("pattern");
             Locale locale = StringUtils.getLocale(name);
-            Map map = new HashMap();
+            Map<String,String> map = new HashMap<String,String>();
             localeMap.put(locale, map);
             defaultPatterns.put(locale, defaultPattern);
             for (int j = 0; j < patterns.length; j++)

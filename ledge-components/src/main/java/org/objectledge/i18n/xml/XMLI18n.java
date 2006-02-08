@@ -120,7 +120,7 @@ public class XMLI18n extends AbstractI18n
 	 */
 	public void reload()
 	{
-		Map newLocaleMap = new HashMap();
+		Map<String,Map<String,String>> newLocaleMap = new HashMap<String,Map<String,String>>();
 		try
 		{
 		    if(fileSystem.exists(localeDir) && fileSystem.isDirectory(localeDir))
@@ -144,10 +144,10 @@ public class XMLI18n extends AbstractI18n
 					String rest = files[i].substring(split+1, files[i].length());
 					split = rest.indexOf('.');
 					String locale = rest.substring(0, split);
-					Map map = (Map)newLocaleMap.get(locale);
+					Map<String,String> map = newLocaleMap.get(locale);
 					if(map == null)
 					{
-						map = new HashMap();
+						map = new HashMap<String,String>();
 						newLocaleMap.put(locale, map);
 					}
                     loadFile(files[i], map, prefix);
@@ -169,7 +169,7 @@ public class XMLI18n extends AbstractI18n
 		localeMap = newLocaleMap;
 	}
 
-	private void loadFile(String file, Map map, String prefix)
+	private void loadFile(String file, Map<String,String> map, String prefix)
         throws MalformedURLException, SAXException, ParserConfigurationException, IOException
 	{
 		try
@@ -201,13 +201,13 @@ public class XMLI18n extends AbstractI18n
 	    private Locator locator;
 
 		/** prefix stack */
-		private LinkedList prefix = new LinkedList();
+		private LinkedList<String> prefix = new LinkedList<String>();
 
 		/** string buffer */
 		private StringBuilder sb = new StringBuilder();
 		
 		/** map to load the mappings */
-		private Map map;
+		private Map<String,String> map;
 		
 		/** base prefix */
 		private String basePrefix;
@@ -221,7 +221,7 @@ public class XMLI18n extends AbstractI18n
 		 * @param map the locale map.
 		 * @param basePrefix the base prefix.
 		 */
-		public void init(Map map, String basePrefix)
+		public void init(Map<String,String> map, String basePrefix)
 		{
 			this.basePrefix = basePrefix;
 		    this.map = map;

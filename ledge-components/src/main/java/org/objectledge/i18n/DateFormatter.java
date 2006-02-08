@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * The date formater component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DateFormatter.java,v 1.4 2005-01-13 09:46:57 pablo Exp $
+ * @version $Id: DateFormatter.java,v 1.5 2006-02-08 18:23:44 zwierzem Exp $
  */
 public class DateFormatter
 {
@@ -51,10 +51,10 @@ public class DateFormatter
 	protected Logger logger;
 
 	/** The locale map. */
-	protected Map localeMap;
+	protected Map<Locale,Map<String,String>> localeMap;
 	
 	/** The default locale patterns. */
-	protected Map defaultPatterns;
+	protected Map<Locale,String> defaultPatterns;
 	
 	/**
 	 * Component constructor.
@@ -67,8 +67,8 @@ public class DateFormatter
 		throws ConfigurationException
 	{
 		this.logger = logger;
-		localeMap = new HashMap();
-		defaultPatterns = new HashMap();
+		localeMap = new HashMap<Locale,Map<String,String>>();
+		defaultPatterns = new HashMap<Locale,String>();
         Configuration[] locales = config.getChildren("locale");
         for (int i = 0; i < locales.length; i++)
         {
@@ -76,7 +76,7 @@ public class DateFormatter
             String defaultPattern = locales[i].getAttribute("defaultPattern");
             Configuration[] patterns = locales[i].getChildren("pattern");
             Locale locale = StringUtils.getLocale(name);
-            Map map = new HashMap();
+            Map<String,String> map = new HashMap<String,String>();
             localeMap.put(locale, map);
             defaultPatterns.put(locale, defaultPattern);
             for (int j = 0; j < patterns.length; j++)

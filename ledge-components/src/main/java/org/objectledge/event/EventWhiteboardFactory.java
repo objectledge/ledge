@@ -29,7 +29,8 @@
 package org.objectledge.event;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -59,7 +60,7 @@ import org.objectledge.threads.ThreadPool;
  * InboundEventWhiteboard} and {@link OutboundEventWhiteboard}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventWhiteboardFactory.java,v 1.3 2004-03-01 13:48:13 fil Exp $
+ * @version $Id: EventWhiteboardFactory.java,v 1.4 2006-02-08 18:22:07 zwierzem Exp $
  */
 public class EventWhiteboardFactory
 {
@@ -72,7 +73,7 @@ public class EventWhiteboardFactory
     private boolean asynchronous = false;
     
     /** The event queue */
-    private ArrayList queue;
+    private List<Event> queue = new LinkedList<Event>();
 
     /**
      * Component constructor.

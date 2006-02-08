@@ -43,11 +43,11 @@ import com.sun.msv.grammar.util.ExpressionWalker;
  * DatatypeSet implementation based on MSV.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLSchemaDatatypeSet.java,v 1.3 2004-12-27 04:43:20 rafal Exp $
+ * @version $Id: XMLSchemaDatatypeSet.java,v 1.4 2006-02-08 18:20:56 zwierzem Exp $
  */
 public class XMLSchemaDatatypeSet extends AbstractDatatypeSet
 {
-	private Map datatypes = new Hashtable();
+	private Map<String,Datatype> datatypes = new Hashtable<String,Datatype>();
 	
 	/**
 	 * Creates a XML schema backed datatype set.
@@ -69,7 +69,7 @@ public class XMLSchemaDatatypeSet extends AbstractDatatypeSet
      */
     protected Datatype getDatatypeInternal(String name)
     {
-		return (Datatype) datatypes.get(name);
+		return datatypes.get(name);
     }
 
 	// implementation -----------------------------------------------------------------------------

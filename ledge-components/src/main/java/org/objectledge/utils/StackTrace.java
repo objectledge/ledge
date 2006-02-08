@@ -35,7 +35,7 @@ import java.util.List;
  * Captures a full stack trace in a multi-level <code>Throwable</code> sequence.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StackTrace.java,v 1.7 2005-02-21 16:27:24 zwierzem Exp $
+ * @version $Id: StackTrace.java,v 1.8 2006-02-08 18:25:08 zwierzem Exp $
  */
 public class StackTrace
 {    
@@ -92,8 +92,8 @@ public class StackTrace
     {
         if(trace == null)
         {
-            List messages = new ArrayList();
-            List traces = new ArrayList();
+            List<String> messages = new ArrayList<String>();
+            List<StackTraceElement[]> traces = new ArrayList<StackTraceElement[]>();
 
             boolean tracing = false;
             int tracingDepth = 0;
@@ -138,7 +138,7 @@ public class StackTrace
                 }
             }
 
-            List traceLines = new ArrayList();
+            List<String> traceLines = new ArrayList<String>();
             StringBuilder buff = new StringBuilder();
 
             for (int i = traces.size() - 1; i > 0; i--)

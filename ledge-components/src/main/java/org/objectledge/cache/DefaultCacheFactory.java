@@ -76,7 +76,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.3 2005-04-25 05:06:49 pablo Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.4 2006-02-08 18:19:56 zwierzem Exp $
  */
 public class DefaultCacheFactory
     implements CacheFactorySPI, CacheFactory
@@ -140,25 +140,25 @@ public class DefaultCacheFactory
     // member objects ////////////////////////////////////////////////////////
     
     /** The registered StatisticsMaps */
-    private List statistics = new ArrayList();
+    private List<StatisticsMap> statistics = new ArrayList<StatisticsMap>();
 
     /** Mapping of *_TYPE constants into configured implementation classes. */
-    private Map implClasses = new HashMap();
+    private Map<String,Class> implClasses = new HashMap<String,Class>();
 
     /** instance prepared configurations map. */
-    private Map instanceConfigurations = new HashMap();
+    private Map<String,Configuration> instanceConfigurations = new HashMap<String,Configuration>();
     
     /** Factory configurations */
-    private Map factoryConfigurations = new HashMap();
+    private Map<String,Configuration> factoryConfigurations = new HashMap<String,Configuration>();
 
     /** Configured map instances. */
-    private Map instances = new HashMap();
+    private Map<String,Map> instances = new HashMap<String,Map>();
 
     /** DelayedUpdate queue (target update time -&gt; object)*/
-    private SortedMap queue = new TreeMap();
+    private SortedMap<Long,Set<DelayedUpdate>> queue = new TreeMap<Long,Set<DelayedUpdate>>();
 
     /** DelayedUpdate queue helper map (object -&gt; target update time)*/
-    private Map queueHelper = new HashMap();
+    private Map<DelayedUpdate,Long> queueHelper = new HashMap<DelayedUpdate,Long>();
 
     /** The configuration */
     private Configuration config;
@@ -199,7 +199,7 @@ public class DefaultCacheFactory
         this.notification = notification;
         this.persistence = persistence;
         
-        Map classMap = new HashMap();
+        Map<String, String> classMap = new HashMap<String, String>();
         classMap.put(HASH_MAP_TYPE, HASH_MAP_CLASS_DEFALUT);
         classMap.put(TIMEOUT_MAP_TYPE, TIMEOUT_MAP_CLASS_DEFALUT);
         classMap.put(LRU_MAP_TYPE, LRU_MAP_CLASS_DEFALUT);
@@ -209,7 +209,7 @@ public class DefaultCacheFactory
         classMap.put(STATISTICS_MAP_TYPE, STATISTICS_MAP_CLASS_DEFALUT);
         classMap.put(FORGETFULL_MAP_TYPE, FORGETFULL_MAP_CLASS_DEFALUT);
         
-        Map ifaceMap = new HashMap();
+        Map<String, Class> ifaceMap = new HashMap<String, Class>();
         ifaceMap.put(HASH_MAP_TYPE, Map.class);
         ifaceMap.put(TIMEOUT_MAP_TYPE, TimeoutMap.class);
         ifaceMap.put(LRU_MAP_TYPE, LRUMap.class);
@@ -467,10 +467,10 @@ public class DefaultCacheFactory
             // queue helper provides a reverse mapping, so we don't need have
             // to perform liner search
             Long target = (Long)queueHelper.get(object);
-            Set set;
+            Set<DelayedUpdate> set;
             if(target != null)
             {
-                set = (Set)queue.get(target);
+                set = queue.get(target);
                 set.remove(object);
                 if(set.isEmpty())
                 {
@@ -478,10 +478,10 @@ public class DefaultCacheFactory
                 }
             }
             target = new Long(System.currentTimeMillis()+object.getUpdateLatency());
-            set = (Set)queue.get(target);
+            set = queue.get(target);
             if(set == null)
             {
-                set = new HashSet();
+                set = new HashSet<DelayedUpdate>();
                 queue.put(target, set);
                 queueHelper.put(object, target);
             }

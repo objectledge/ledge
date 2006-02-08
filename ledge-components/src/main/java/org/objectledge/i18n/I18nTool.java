@@ -39,7 +39,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.18 2006-01-25 15:26:11 rafal Exp $
+ * @version $Id: I18nTool.java,v 1.19 2006-02-08 18:23:44 zwierzem Exp $
  */
 public class I18nTool
 {
@@ -169,7 +169,7 @@ public class I18nTool
 	 * @param values the values use for substitution.
 	 * @return the output string.
 	 */
-	public String get(String key, List values)
+	public String get(String key, List<String> values)
 	{
 		return i18n.get(locale, getKey(key), values);
 	}	

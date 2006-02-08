@@ -48,7 +48,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileSystem backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.20 2005-10-06 08:38:38 rafal Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.21 2006-02-08 18:22:33 zwierzem Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -72,16 +72,16 @@ public abstract class ReadOnlyFileSystemProvider
     protected String name;
 
 	/** The file listing. */	
-	private Map listing = null;
+	private Map<String,Object> listing = null;
 
     /** The directory tree. */
-    private Map directoryTree = new HashMap();
+    private Map<String,Object> directoryTree = new HashMap<String,Object>();
 
 	/** The file listing. */	
-	private Map times = new HashMap();
+	private Map<String,Long> times = new HashMap<String,Long>();
 
 	/** The file listing. */	
-	private Map lengths = new HashMap();
+	private Map<String,Long> lengths = new HashMap<String,Long>();
 
 	// initialization ///////////////////////////////////////////////////////
 	
@@ -156,9 +156,9 @@ public abstract class ReadOnlyFileSystemProvider
                new InputStreamReader(is, LISTING_ENCODING));
             if(listing == null)
             {
-                listing = new HashMap();
+                listing = new HashMap<String,Object>();
             }
-			ArrayList tempList = new ArrayList();
+			ArrayList<String> tempList = new ArrayList<String>();
 			StringBuilder tempBuffer = new StringBuilder();
 			while(reader.ready())
 			{
@@ -218,13 +218,13 @@ public abstract class ReadOnlyFileSystemProvider
 				}
 				StringTokenizer st = new StringTokenizer(path,"/");
 				String token = null;
-                Map current = directoryTree;
+                Map<String,Object> current = directoryTree;
 				tokenLoop: while(st.hasMoreTokens())
 				{
 					token = st.nextToken();
 					if(st.hasMoreTokens())
 					{
-						current = (Map)current.get(token);
+						current = (Map<String,Object>)current.get(token);
 						if(current == null)
 						{
 							throw new ComponentInitializationError("missing parent directory for "+

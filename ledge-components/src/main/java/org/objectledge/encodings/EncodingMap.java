@@ -29,6 +29,7 @@
 package org.objectledge.encodings;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * EncodingMap is a convenience class which handles conversions between IANA encoding names and Java
@@ -86,14 +87,14 @@ import java.util.HashMap;
  * </pre>
  * 
  * @author    <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version   $Id: EncodingMap.java,v 1.3 2005-02-10 17:46:55 rafal Exp $
+ * @version   $Id: EncodingMap.java,v 1.4 2006-02-08 18:21:46 zwierzem Exp $
  */
 public class EncodingMap
 {
     /** IANA to Java map */
-    private static final HashMap IANA_2_JAVA_MAP = new HashMap();
+    private static final Map<String,String> IANA_2_JAVA_MAP = new HashMap<String,String>();
     /** Java to IANA map */
-    private static final HashMap JAVA_2_IANA_MAP = new HashMap();
+    private static final Map<String,String> JAVA_2_IANA_MAP = new HashMap<String,String>();
 
     static {
         // add IANA to Java encoding mappings.

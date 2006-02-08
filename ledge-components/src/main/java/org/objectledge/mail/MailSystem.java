@@ -33,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.11 2005-01-27 00:56:01 pablo Exp $
+ * @version $Id: MailSystem.java,v 1.12 2006-02-08 18:24:12 zwierzem Exp $
  */
 public class MailSystem
 {
@@ -62,10 +62,10 @@ public class MailSystem
     private MimetypesFileTypeMap mimeMap;
     
     /** mail queue */
-    private LinkedList mailQueue = new LinkedList();
+    private LinkedList<LedgeMessage> mailQueue = new LinkedList<LedgeMessage>();
     
     /** server list - not implemented */
-    private Map sessionsMap = new HashMap();
+    private Map<String,Session> sessionsMap = new HashMap<String,Session>();
 
     /** default provider */
     private String defaultSession;
@@ -290,7 +290,7 @@ public class MailSystem
     public static class LedgeAuthenticator
         extends Authenticator
     {
-        private Map authInfo = new HashMap();
+        private Map<String,Map<String,String>> authInfo = new HashMap<String,Map<String,String>>();
 
 		/**
 		 * Create new Ledge authentication.
@@ -323,10 +323,10 @@ public class MailSystem
 		 */
         public void addCredentials(String protocol, String username, String password)
         {
-			Map protocolCredentials = (Map)authInfo.get(protocol);
+			Map<String,String> protocolCredentials = authInfo.get(protocol);
 			if(protocolCredentials == null)
 			{
-				protocolCredentials = new HashMap();
+				protocolCredentials = new HashMap<String,String>();
 				authInfo.put(protocol, protocolCredentials);
 			}
 			protocolCredentials.put(username, password);

@@ -45,7 +45,7 @@ import org.picocontainer.Startable;
  * Manages a pool of worker threads.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: WorkerPool.java,v 1.7 2005-02-09 22:02:33 rafal Exp $
+ * @version $Id: WorkerPool.java,v 1.8 2006-02-08 18:25:09 zwierzem Exp $
  */
 public class WorkerPool
 {
@@ -63,9 +63,9 @@ public class WorkerPool
     
     private int counter = 1;
     
-    private LinkedList queue = new LinkedList();
+    private LinkedList<Task> queue = new LinkedList<Task>();
     
-    private Set workerSet = new HashSet();
+    private Set<Worker> workerSet = new HashSet<Worker>();
 
     /**
      * Creates a daemon thread.

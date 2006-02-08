@@ -30,6 +30,7 @@ package org.objectledge.xml;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -44,12 +45,12 @@ import com.sun.msv.grammar.Grammar;
  * Grammar cache - loads and caches MSV's Grammar objects.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLGrammarCache.java,v 1.2 2004-06-01 11:13:11 zwierzem Exp $
+ * @version $Id: XMLGrammarCache.java,v 1.3 2006-02-08 18:26:26 zwierzem Exp $
  */
 public class XMLGrammarCache
 {
 	private SAXParserFactory parserFactory;
-	private HashMap grammars = new HashMap();
+	private Map<URL,Grammar> grammars = new HashMap<URL,Grammar>();
 
 	/**
 	 * Creates a XML grammar cache.
@@ -104,7 +105,6 @@ public class XMLGrammarCache
     throws SAXException, ParserConfigurationException, IOException
     {
         Grammar grammar=null;
-        final long stime = System.currentTimeMillis();
         // parse schema and other XML-based grammars
         // GrammarLoader will detect the language.
 		// TODO Add objectledge EntityResolver implementation
@@ -119,8 +119,6 @@ public class XMLGrammarCache
         {
             throw new SAXException("Unknow reason for error when loading grammar '"+grammarURI+"'");
         }
-
-        long parsingTime = System.currentTimeMillis();
 
         return grammar;
     }
