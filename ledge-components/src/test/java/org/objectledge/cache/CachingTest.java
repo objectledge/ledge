@@ -66,8 +66,6 @@ import org.objectledge.utils.LedgeTestCase;
  */
 public class CachingTest extends LedgeTestCase
 {
-    private static final String TEST_CHANNEL = "test_channel";
-    
     private CacheFactorySPI caching;
 
     private Notification notification;

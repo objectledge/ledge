@@ -29,7 +29,6 @@
 package org.objectledge.templating.tools;
 
 import org.jmock.Mock;
-import org.objectledge.context.Context;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityContext;
 import org.objectledge.utils.LedgeTestCase;
@@ -57,7 +56,6 @@ public class ContextToolsTest extends LedgeTestCase
 	public void testLoadTools()
         throws Exception
 	{
-        Context context = new Context();
         templatingContext = new VelocityContext();
 	   	ContextTools contextTools = new ContextTools(new ContextToolFactory[]{toolFactory});
         toolFactoryMock.expects(once()).method("getKey").will(returnValue("foo"));

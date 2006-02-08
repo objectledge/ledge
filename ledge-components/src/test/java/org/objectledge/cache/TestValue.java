@@ -35,7 +35,7 @@ import org.objectledge.database.persistence.Persistent;
 
 /**
  * @author <a href="mailto:rafal@caltha.pl">Pawel Potempski</a>
- * @version $Id: TestValue.java,v 1.2 2005-02-10 17:47:02 rafal Exp $
+ * @version $Id: TestValue.java,v 1.3 2006-02-08 18:26:00 zwierzem Exp $
  */
 public class TestValue implements Persistent
 {
@@ -44,8 +44,6 @@ public class TestValue implements Persistent
     private static String[] keyColumns = new String[] { "test_value_id" };
 
     private boolean saved = false;
-
-    private long id = -1;
 
     private String name;
 
@@ -75,7 +73,6 @@ public class TestValue implements Persistent
     public void setSaved(long id)
     {
         saved = true;
-        this.id = id;
     }
 
     public boolean getSaved()
