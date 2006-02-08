@@ -36,12 +36,12 @@ import org.objectledge.pipeline.Valve;
  * Pipeline processing valve that initialize hibernate session.
  *
  * @author <a href="mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionValve.java,v 1.2 2005-07-29 14:39:05 rafal Exp $
+ * @version $Id: HibernateSessionValve.java,v 1.3 2006-02-08 18:23:12 zwierzem Exp $
  */
 public class HibernateSessionValve 
     implements Valve
 {
-	/** the authentication component */
+    private Context context;
 	private HibernateSessionFactory hibernateSessionFactory;
 	
 	/**
@@ -49,11 +49,36 @@ public class HibernateSessionValve
 	 * 
      * @param userManager the user manager component.
 	 */
-	public HibernateSessionValve(HibernateSessionFactory hibernateSessionFactory)
+	public HibernateSessionValve(Context context, HibernateSessionFactory hibernateSessionFactory)
 	{
+        this.context = context;
 		this.hibernateSessionFactory = hibernateSessionFactory;
 	}
-	
+
+    /**
+     * Alternative way of accessing the hibenrate session. Allows no session initialisation
+     * if it is not needed. For this to work, the valve should not be used.
+     * @return
+     */
+    public Session getSession()
+    {
+        HibernateSessionContext hibernateSessionContext = context
+            .getAttribute(HibernateSessionContext.class);
+        if(hibernateSessionContext == null)
+        {
+            try
+            {
+                process(context);
+            }
+            catch(ProcessingException e)
+            {
+                throw new RuntimeException(e); // should not happen, push up anyway
+            }
+            hibernateSessionContext = context.getAttribute(HibernateSessionContext.class);
+        }
+        return hibernateSessionContext.getSession();
+    }
+    
     /**
      * Run the pipeline valve - create session.
      * 
