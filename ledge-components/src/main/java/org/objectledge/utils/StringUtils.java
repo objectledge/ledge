@@ -46,7 +46,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.34 2005-12-20 09:57:01 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.35 2006-02-08 18:25:33 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -611,8 +611,12 @@ public class StringUtils
     public static String normalizedPath(String path)
         throws IllegalArgumentException
     {
+        if(path.length()==0 || path.equals("/"))
+        {
+            return "/";
+        }
         StringTokenizer st = new StringTokenizer(path, "/");
-        ArrayList temp = new ArrayList(st.countTokens());
+        ArrayList<String> temp = new ArrayList<String>(st.countTokens());
         while(st.hasMoreTokens())
         {
             String t = st.nextToken();
