@@ -56,7 +56,7 @@ import org.objectledge.web.mvc.components.AbstractComponent;
  * A component that displays logged in users along with relevan IM information.
  * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: LoggedInUsers.java,v 1.2 2005-08-01 09:45:23 rafal Exp $
+ * @version $Id: LoggedInUsers.java,v 1.3 2006-02-15 14:21:50 pablo Exp $
  */
 public class LoggedInUsers
     extends AbstractComponent
@@ -149,7 +149,11 @@ public class LoggedInUsers
                 Parameters userPersonalData = new DirectoryParameters(userManager
                     .getPersonalData(p));
                 personalData.put(p, userPersonalData);
-                int idle = (int)((now.getTime() - userTracker.getLastClickTime(p).getTime()) / 1000);
+                int idle = 0;
+                if(userTracker.getLastClickTime(p)!=null)
+                {
+                    idle = (int)((now.getTime() - userTracker.getLastClickTime(p).getTime()) / 1000);
+                }
                 idleTime.put(p, idle);
                 List<InstantMessagingContact> userContacts;
                 userContacts = new ArrayList<InstantMessagingContact>(instantMessaging
