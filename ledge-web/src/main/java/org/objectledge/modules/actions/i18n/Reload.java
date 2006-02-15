@@ -28,18 +28,19 @@
 package org.objectledge.modules.actions.i18n;
 
 import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.pipeline.Valve;
 import org.objectledge.i18n.I18n;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.mvc.builders.PolicyProtectedAction;
+import org.objectledge.web.mvc.security.PolicySystem;
 
 /**
  * Restart .
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Reload.java,v 1.1 2005-02-15 16:16:40 pablo Exp $
+ * @version $Id: Reload.java,v 1.2 2006-02-15 14:19:27 pablo Exp $
  */
-public class Reload 
-    implements Valve
+public class Reload
+    extends PolicyProtectedAction
 {
     private I18n i18n;
     
@@ -48,8 +49,9 @@ public class Reload
      * 
      * @param i18n the I18n component.
      */
-    public Reload(I18n i18n)
+    public Reload(I18n i18n, PolicySystem policySystem)
     {
+        super(policySystem);
         this.i18n = i18n;
     }
 
