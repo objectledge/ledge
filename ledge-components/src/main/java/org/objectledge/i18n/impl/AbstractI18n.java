@@ -44,7 +44,7 @@ import org.objectledge.utils.StringUtils;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.20 2006-02-08 18:24:12 zwierzem Exp $
+ * @version $Id: AbstractI18n.java,v 1.21 2006-02-28 12:15:51 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -251,7 +251,7 @@ public abstract class AbstractI18n implements I18n
 	/**
 	 * {@inheritDoc}
 	 */
-    public String get(Locale locale, String key, String[] values)
+    public String get(Locale locale, String key, String ... values)
 	{
 		String template = get(locale, key);
 		return StringUtils.substitute(template, values);

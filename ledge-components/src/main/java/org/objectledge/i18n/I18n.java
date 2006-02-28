@@ -36,7 +36,7 @@ import java.util.Locale;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18n.java,v 1.12 2006-02-08 18:23:44 zwierzem Exp $
+ * @version $Id: I18n.java,v 1.13 2006-02-28 12:15:52 rafal Exp $
  */
 public interface I18n
 {
@@ -114,7 +114,7 @@ public interface I18n
 	 * @param values the values use for substitution.
 	 * @return the the output string.
 	 */
-	public String get(Locale locale, String key, String[] values);
+	public String get(Locale locale, String key, String ... values);
 
     /**
 	 * Get the string and replace $[1..n] variables with given values.
