@@ -37,8 +37,9 @@
      <prefix name="remove"><value>remove</value></prefix>
      <prefix name="add"><value>add</value></prefix>
      <prefix name="result">
-       <prefix name="screenNameEmpty"><value>pusty identyfikator</value></prefix>
-       <prefix name="screenNameInvalid"><value>niepoprawny identifikator</value></prefix>
+       <prefix name="screenNameEmpty"><value>empty screen name</value></prefix>
+       <prefix name="screenNameInvalid"><value>invalid screen name</value></prefix>     
+       <prefix name="screenNameDuplicated"><value>screen name already defined</value></prefix>
      </prefix>
    </prefix>
 </strings>

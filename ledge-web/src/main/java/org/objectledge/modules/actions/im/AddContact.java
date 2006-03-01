@@ -29,6 +29,8 @@
 package org.objectledge.modules.actions.im;
 
 import java.security.Principal;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
@@ -46,7 +48,7 @@ import org.objectledge.templating.TemplatingContext;
  * Adds an IM contact to the user's personal data.
  * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: AddContact.java,v 1.1 2005-08-01 09:45:25 rafal Exp $
+ * @version $Id: AddContact.java,v 1.2 2006-03-01 14:18:57 pablo Exp $
  */
 public class AddContact
     implements Valve
@@ -105,6 +107,17 @@ public class AddContact
         }
         try
         {
+            Collection<InstantMessagingContact> contacts = instantMessaging.getContacts(personalData);
+            Iterator<InstantMessagingContact> it = contacts.iterator();
+            while(it.hasNext())
+            {
+                InstantMessagingContact imc = it.next();
+                if(imc.getProtocol().equals(protocol) && imc.getScreenName().equals(screenName))
+                {
+                    templatingContext.put("result", "screenNameDuplicated");
+                    return;
+                }
+            }
             instantMessaging.addContact(personalData, new InstantMessagingContact(protocol,
                 screenName));
         }
