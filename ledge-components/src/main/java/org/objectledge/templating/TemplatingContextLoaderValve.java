@@ -36,7 +36,7 @@ import org.objectledge.pipeline.Valve;
  * for use by other valves.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TemplatingContextLoaderValve.java,v 1.3 2005-07-22 17:19:50 pablo Exp $
+ * @version $Id: TemplatingContextLoaderValve.java,v 1.4 2006-03-01 09:37:53 rafal Exp $
  */
 public class TemplatingContextLoaderValve 
     implements Valve
@@ -61,7 +61,8 @@ public class TemplatingContextLoaderValve
 	 */
 	public void process(Context context)
 	{
-		TemplatingContext templatingContext = templating.createContext(); 
+		TemplatingContext templatingContext = templating.createContext();
+        templatingContext.put("templatingContext", templatingContext);
 		context.setAttribute(TemplatingContext.class, templatingContext);
 	}
 }
