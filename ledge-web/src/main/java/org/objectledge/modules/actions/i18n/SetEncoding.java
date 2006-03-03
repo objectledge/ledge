@@ -48,7 +48,7 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetEncoding.java,v 1.4 2005-02-10 17:49:10 rafal Exp $
+ * @version $Id: SetEncoding.java,v 1.5 2006-03-03 15:06:52 zwierzem Exp $
  */
 public class SetEncoding 
     implements Valve
@@ -61,10 +61,6 @@ public class SetEncoding
      */
     public void process(Context context) throws ProcessingException
     {
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        AuthenticationContext authenticationContext = 
-            AuthenticationContext.getAuthenticationContext(context);
-        I18nContext i18nContext = I18nContext.getI18nContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         String encoding = parameters.get("encoding",null);
         if(encoding == null)
@@ -81,7 +77,10 @@ public class SetEncoding
         }
             
         String cookieKey = "encoding";
-        Principal principal = authenticationContext.getUserPrincipal();
+        AuthenticationContext authenticationContext =
+            AuthenticationContext.getAuthenticationContext(context);
+        Principal principal = (authenticationContext != null) ?
+                authenticationContext.getUserPrincipal() : null;
         if(principal != null && principal.getName() != null)
         {
             cookieKey = cookieKey + "." + StringUtils.
@@ -91,9 +90,11 @@ public class SetEncoding
         {
             cookieKey = cookieKey + ".anonymous";
         }
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
         cookieKey = cookieKey + "." + i18nContext.getLocale().toString();
         Cookie cookie = new Cookie(cookieKey, encoding);
         cookie.setMaxAge(3600*24*365);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         cookie.setPath(httpContext.getRequest().getContextPath()+
                        httpContext.getRequest().getServletPath());
         httpContext.getResponse().addCookie(cookie);

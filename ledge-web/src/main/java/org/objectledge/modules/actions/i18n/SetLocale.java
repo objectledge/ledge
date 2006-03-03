@@ -48,7 +48,7 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: SetLocale.java,v 1.3 2005-02-10 17:49:10 rafal Exp $
+ * @version $Id: SetLocale.java,v 1.4 2006-03-03 15:06:52 zwierzem Exp $
  */
 public class SetLocale 
     implements Valve
@@ -61,10 +61,6 @@ public class SetLocale
      */
     public void process(Context context) throws ProcessingException
     {
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        AuthenticationContext authenticationContext =
-            AuthenticationContext.getAuthenticationContext(context);
-        I18nContext i18nContext = I18nContext.getI18nContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         String localeString = parameters.get("locale", null);
         Locale locale = null;
@@ -78,7 +74,10 @@ public class SetLocale
         }
 
         String cookieKey = "";
-        Principal principal = authenticationContext.getUserPrincipal();
+        AuthenticationContext authenticationContext =
+            AuthenticationContext.getAuthenticationContext(context);
+        Principal principal = (authenticationContext != null) ?
+                authenticationContext.getUserPrincipal() : null;
         if (principal != null && principal.getName() != null)
         {
             cookieKey = cookieKey + "." + StringUtils.cookieNameSafeString(principal.getName());
@@ -91,10 +90,12 @@ public class SetLocale
         String encodingCookieKey = "encoding" + cookieKey + "." + locale.toString();
         Cookie cookie = new Cookie(localeCookieKey, localeString);
         cookie.setMaxAge(3600 * 24 * 365);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         cookie.setPath(httpContext.getRequest().getContextPath() + 
                        httpContext.getRequest().getServletPath());
         httpContext.getResponse().addCookie(cookie);
         httpContext.setSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY, locale);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
         i18nContext.setLocale(locale);
         Cookie[] cookies = httpContext.getRequest().getCookies();
         if (cookies != null)
