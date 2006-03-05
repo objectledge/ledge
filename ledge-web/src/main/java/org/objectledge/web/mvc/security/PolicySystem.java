@@ -48,7 +48,7 @@ import org.objectledge.security.RoleChecking;
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PolicySystem.java,v 1.3 2005-12-30 08:42:06 rafal Exp $
+ * @version $Id: PolicySystem.java,v 1.4 2006-03-05 22:34:08 zwierzem Exp $
  */
 public class PolicySystem
 {
@@ -69,9 +69,6 @@ public class PolicySystem
 
     /** access permission for request not matching any policy. */
     private boolean globalAccess = true;
-
-    /** the configuration key for RoleChecking implementing service. */
-    public static final String ROLE_CHEKCING_KEY = "roleChecking";
 
     /**
      * Component constructor.
