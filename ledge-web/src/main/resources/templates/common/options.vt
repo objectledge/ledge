@@ -14,15 +14,6 @@
  * @author <a href="mailto:Michal.Mach@caltha.pl>Michal Mach</a>
  *#
 
-#**
- * Option element list.
- *#
-#macro(options $list $selected)
-#foreach($elem in $list)
-<option value="$elem.get(1)"#if($elem.get(1).equals($selected)) selected="selected"#end>$elem.get(0)</option>
-#end
-#end
-
 #macro(option $value $label $selected)
 <option value="$value"#if($value.equals($selected)) selected="selected"#end>$label</option>
 #end
