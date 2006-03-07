@@ -31,14 +31,10 @@ package org.objectledge.i18n;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.Logger;
-import org.objectledge.utils.StringUtils;
 
 /**
  * The number formater component.
@@ -46,56 +42,18 @@ import org.objectledge.utils.StringUtils;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
  * 
- * @version $Id: NumberFormatter.java,v 1.2 2006-02-08 18:23:44 zwierzem Exp $
+ * @version $Id: NumberFormatter.java,v 1.3 2006-03-07 17:35:06 zwierzem Exp $
  */
-public class NumberFormatter
+public class NumberFormatter extends AbstractFormatter
 {
-	/** The logger. */
-	protected Logger logger;
 
-	/** The locale map. */
-	protected Map<Locale,Map<String,String>> localeMap;
-	
-	/** The default locale patterns. */
-	protected Map<Locale,String> defaultPatterns;
-	
-	/**
-	 * Component constructor.
-	 *
-	 * @param config the configuration.
-	 * @param logger the logger. 
-     * @throws ConfigurationException if the component configuration is malformed.
-	 */
-	public NumberFormatter(Configuration config, Logger logger)
-		throws ConfigurationException
-	{
-		this.logger = logger;
-		localeMap = new HashMap<Locale,Map<String,String>>();
-		defaultPatterns = new HashMap<Locale,String>();
-        Configuration[] locales = config.getChildren("locale");
-        for (int i = 0; i < locales.length; i++)
-        {
-            String name = locales[i].getAttribute("name");
-            String defaultPattern = locales[i].getAttribute("defaultPattern");
-            Configuration[] patterns = locales[i].getChildren("pattern");
-            Locale locale = StringUtils.getLocale(name);
-            Map<String,String> map = new HashMap<String,String>();
-            localeMap.put(locale, map);
-            defaultPatterns.put(locale, defaultPattern);
-            for (int j = 0; j < patterns.length; j++)
-            {
-                String patternName = patterns[j].getAttribute("name");
-                String patternValue = patterns[j].getAttribute("value", null);
-                if (patternValue == null)
-                {
-                    patternValue = patterns[j].getValue();
-                }
-                map.put(patternName, patternValue);
-            }
-        }
-	}
-	
-	/**
+	public NumberFormatter(Configuration config, I18n i18n)
+        throws ConfigurationException
+    {
+        super(config, i18n);
+    }
+
+    /**
 	 * Get the number format based on defined pattern.
 	 * 
 	 * @param pattern the pattern.
@@ -104,12 +62,7 @@ public class NumberFormatter
 	 */
 	public NumberFormat getNumberFormat(String pattern, Locale locale)
 	{
-	    Map patterns = (Map)localeMap.get(locale);
-	    if(patterns == null)
-	    {
-	        return null;
-	    }
-        String patternValue =  (String)patterns.get(pattern);
+        String patternValue =  getPatternValue(pattern, locale);
         if(patternValue == null)
         {
             return null;
@@ -128,16 +81,5 @@ public class NumberFormatter
 	public NumberFormat getNumberFormat(Locale locale)
 	{
         return getNumberFormat(getDefaultPattern(locale), locale);
-	}	
-	
-	/**
-	 * Get the default pattern for locale. 
-	 * 
-	 * @param locale the locale.
-	 * @return the default pattern name.
-	 */
-	public String getDefaultPattern(Locale locale)
-	{
-	    return (String)defaultPatterns.get(locale);
 	}
 }
