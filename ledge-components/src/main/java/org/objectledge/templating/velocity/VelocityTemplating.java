@@ -54,7 +54,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.24 2006-02-09 09:26:57 zwierzem Exp $
+ * @version $Id: VelocityTemplating.java,v 1.25 2006-03-10 08:17:32 zwierzem Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -350,6 +350,11 @@ public class VelocityTemplating implements Templating, LogSystem
         return encoding;
     }
 
+    public String getTemplateExtension()
+    {
+        return extension;
+    }
+    
     // Velocity logging interface implementation
 
     /**
