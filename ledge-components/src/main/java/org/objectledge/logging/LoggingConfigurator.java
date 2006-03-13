@@ -89,7 +89,7 @@ import org.xml.sax.SAXException;
  * </ul>
  *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LoggingConfigurator.java,v 1.8 2005-10-10 14:06:16 rafal Exp $
+ * @version $Id: LoggingConfigurator.java,v 1.9 2006-03-13 18:22:02 zwierzem Exp $
  */
 public class LoggingConfigurator
 {
@@ -122,7 +122,7 @@ public class LoggingConfigurator
         Document config = builder.parse(source);
         DOMConfigurator configurator = new LedgeDOMConfigurator(fileSystem);
 
-        Hierarchy hierarchy = new LedgeLoggerHierarchy(new RootCategory((Level)Level.DEBUG));
+        Hierarchy hierarchy = new LedgeLoggerHierarchy(new RootCategory(Level.DEBUG));
         configurator.doConfigure(config.getDocumentElement(), hierarchy);
         // We use ClassLoader local, but accessible object as the guard. This allows reinitializing 
         // Log4J from within the same sandbox.
