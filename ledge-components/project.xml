@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE.
 -->
-<!-- $Id: project.xml,v 1.71 2006-01-19 16:12:17 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.72 2006-03-13 18:23:04 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -45,7 +45,6 @@
       <resource>
         <directory>src/main/java</directory>
         <includes>
-          <include>**/*.0.dtd</include>
           <include>**/*.rng</include>
           <include>**/*.sql</include>
         </includes>
@@ -60,7 +59,6 @@
         <resource>
           <directory>src/test/java</directory>
           <includes>
-            <include>**/*.0.dtd</include>
             <include>**/*.rng</include>
             <include>**/*.sql</include>
           </includes>
@@ -147,10 +145,11 @@
       <version>20040506</version>
       <url>https://sourceforge.net/projects/relaxng</url>
     </dependency>
+    
     <dependency>
       <groupId>hibernate</groupId>
       <artifactId>hibernate</artifactId>
-      <version>3.0.5</version>
+      <version>3.1.2</version>
       <url>https://hibernate.org/</url>
     </dependency>
     <!-- runtime -->

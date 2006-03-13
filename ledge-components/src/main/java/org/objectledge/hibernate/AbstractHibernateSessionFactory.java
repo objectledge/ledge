@@ -45,7 +45,7 @@ import org.xml.sax.SAXException;
  * 
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractHibernateSessionFactory.java,v 1.1 2006-01-17 13:40:27 zwierzem Exp $
+ * @version $Id: AbstractHibernateSessionFactory.java,v 1.2 2006-03-13 18:22:50 zwierzem Exp $
  */
 public abstract class AbstractHibernateSessionFactory 
 implements HibernateSessionFactory
@@ -72,7 +72,7 @@ implements HibernateSessionFactory
             throws SAXException, IOException
             {
                 InputSource is = new InputSource(
-                     fs.getInputStream("/org/objectledge/hibernate/"+mapping.get(publicId)));
+                     fs.getInputStream("/org/hibernate/"+mapping.get(publicId)));
                 is.setPublicId(publicId);
                 //is.setSystemId()
                 return is;

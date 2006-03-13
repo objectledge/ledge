@@ -62,7 +62,7 @@ import org.objectledge.context.Context;
  * </pre>
  *
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionContext.java,v 1.3 2005-07-29 14:39:05 rafal Exp $
+ * @version $Id: HibernateSessionContext.java,v 1.4 2006-03-13 18:22:50 zwierzem Exp $
  */
 public class HibernateSessionContext
 {
@@ -74,7 +74,7 @@ public class HibernateSessionContext
 	 */
 	public static HibernateSessionContext getHibernateSessionContext(Context context)
 	{
-		return (HibernateSessionContext)context.getAttribute(HibernateSessionContext.class);
+		return context.getAttribute(HibernateSessionContext.class);
 	}
 
 	/** the session. */
