@@ -107,7 +107,7 @@ public class XMLI18n extends AbstractI18n
         }
         this.xmlValidator = xmlValidator;
 		localeFilePattern = Pattern.
-			compile("[a-zA-Z0-9\\-]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}\\.xml");
+			compile("[a-zA-Z0-9\\-]*(\\.[a-zA-Z0-9]+)*_[a-z]{2}_[A-Z]{2}(\\.[a-zA-Z0-9]*)?\\.xml");
 		SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
 		parser = factory.newSAXParser();

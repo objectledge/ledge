@@ -45,7 +45,7 @@ import org.objectledge.context.Context;
  * The http context encapsulates the http request and response.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.15 2005-12-22 09:57:10 rafal Exp $
+ * @version $Id: HttpContext.java,v 1.16 2006-03-15 14:06:28 pablo Exp $
  */
 public class HttpContext
 {
@@ -57,7 +57,7 @@ public class HttpContext
 	 */
 	public static HttpContext getHttpContext(Context context)
 	{
-		return (HttpContext)context.getAttribute(HttpContext.class);
+		return context.getAttribute(HttpContext.class);
 	}
 	
 	/** http request */
