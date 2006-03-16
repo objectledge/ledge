@@ -33,16 +33,16 @@ import org.objectledge.table.TableFilter;
  * This is a filter which accepts only directories.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: DirectoryAcceptFilter.java,v 1.2 2005-02-08 21:19:20 rafal Exp $
+ * @version $Id: DirectoryAcceptFilter.java,v 1.3 2006-03-16 17:57:01 zwierzem Exp $
  */
 public class DirectoryAcceptFilter
-    implements TableFilter
+    implements TableFilter<FileObject>
 {
     /**
      * {@inheritDoc}
      */
-    public boolean accept(Object object)
+    public boolean accept(FileObject object)
     {
-        return ((FileObject)object).isDirectory();
+        return object.isDirectory();
     }
 }

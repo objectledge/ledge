@@ -28,6 +28,7 @@
 
 package org.objectledge.table;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,17 +45,17 @@ import java.util.Map;
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumn.java,v 1.3 2005-02-08 19:11:27 rafal Exp $
+ * @version $Id: TableColumn.java,v 1.4 2006-03-16 17:57:04 zwierzem Exp $
  */
-public class TableColumn
+public class TableColumn<T>
 {
     /** properties map */
     private Map properties = new HashMap();
 
     private String name;
 
-    private Comparator comparator;
-    private Comparator reverseComparator;
+    private Comparator<T> comparator;
+    private Comparator<T> reverseComparator;
 
     /**
      * Constructs non sortable columns.
@@ -77,7 +78,7 @@ public class TableColumn
      * @param comparator comparator object for this column, may be <code>null</code>.
      * @throws TableException if column name is <code>null</code> or empty
      */
-    public TableColumn(String name, Comparator comparator)
+    public TableColumn(String name, Comparator<T> comparator)
         throws TableException
     {
         if(name == null || name.length() == 0)
@@ -98,7 +99,7 @@ public class TableColumn
      * @param reverseComparator reverse comparator object for this column, may be <code>null</code>.
      * @throws TableException if column name is <code>null</code> or empty
      */
-    public TableColumn(String name, Comparator comparator, Comparator reverseComparator)
+    public TableColumn(String name, Comparator<T> comparator, Comparator<T> reverseComparator)
         throws TableException
     {
         this(name, comparator);
@@ -134,7 +135,8 @@ public class TableColumn
      * @param value the value of the property
      * @return this column object for easy use in multiple calls to this method
      */
-    public TableColumn set(Object key, Object value)
+    @SuppressWarnings("unchecked")
+    public TableColumn<T> set(Object key, Object value)
     {
         properties.put(key,value);
         return this;
@@ -159,11 +161,11 @@ public class TableColumn
     /** Getter for property comparator.
      * @return Value of property comparator.
      */
-    public Comparator getComparator()
+    public Comparator<T> getComparator()
     {
         if(comparator == null && reverseComparator != null)
         {
-            comparator = new ReverseComparator(reverseComparator);
+            comparator = Collections.reverseOrder(reverseComparator);
         }
         return comparator;
     }
@@ -171,35 +173,12 @@ public class TableColumn
     /** Getter for property reverseComparator.
      * @return Value of property reverseComparator.
      */
-    public Comparator getReverseComparator()
+    public Comparator<T> getReverseComparator()
     {
         if(reverseComparator == null && comparator != null)
         {
-            reverseComparator = new ReverseComparator(comparator);
+            reverseComparator = Collections.reverseOrder(comparator);
         }
         return reverseComparator;
-    }
-
-    /** Class for construction of reverse comparators. */
-    public class ReverseComparator implements Comparator
-    {
-        private Comparator comparator;
-
-		/**
-		 * Constructs a reverse comparator for a given comparator.
-		 * @param comparator the comparator to be reversed.
-		 */
-        public ReverseComparator(Comparator comparator)
-        {
-            this.comparator = comparator;
-        }
-
-		/** 
-		 * {@inheritDoc}
-		 */
-        public int compare(Object o1, Object o2)
-        {
-            return - comparator.compare(o1, o2);
-        }
     }
 }

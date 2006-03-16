@@ -33,10 +33,29 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumnTest.java,v 1.3 2006-02-07 13:15:03 zwierzem Exp $
+ * @version $Id: TableColumnTest.java,v 1.4 2006-03-16 17:57:08 zwierzem Exp $
  */
 public class TableColumnTest extends TestCase
 {
+
+    Comparator<String> comparator = new Comparator<String>()
+    {
+        public int compare(String o1, String o2)
+        {
+            return o1.compareTo(o2);
+        }
+    };
+
+    Comparator<String> reverseComparator = new Comparator<String>()
+    {
+        public int compare(String o1, String o2)
+        {
+            return o2.compareTo(o1);
+        }
+    };
+    
+    String a = "a";
+    String b = "b";
 
     /**
      * Constructor for TableColumnTest.
@@ -100,21 +119,13 @@ public class TableColumnTest extends TestCase
     public void testTableColumnStringComparator()
     throws TableException
     {
-    	Comparator comparator = new Comparator()
-    	{
-	        public int compare(Object o1, Object o2)
-	        {
-	            return -1;
-	        }
-    	};
-    	
 		TableColumn tableColumn = new TableColumn("name", comparator);
 		assertSame(tableColumn.getComparator(), comparator);
 		assertNotNull(tableColumn.getReverseComparator());
 		assertNotSame(tableColumn.getReverseComparator(), tableColumn.getComparator());
 		assertEquals(tableColumn.isSortable(), true);
-		assertEquals(tableColumn.getReverseComparator().compare(null, null),
-					(- tableColumn.getComparator().compare(null, null)));
+        assertEquals(tableColumn.getReverseComparator().compare(a, b),
+            tableColumn.getComparator().compare(b, a));
     }
 
     /*
@@ -124,36 +135,21 @@ public class TableColumnTest extends TestCase
     public void testTableColumnStringComparatorComparator()
     	throws TableException
     {
-		Comparator comparator = new Comparator()
-		{
-			public int compare(Object o1, Object o2)
-			{
-				return -1;
-			}
-		};
-
-		Comparator reverseComparator = new Comparator()
-		{
-			public int compare(Object o1, Object o2)
-			{
-				return 1;
-			}
-		};
-    	
+        
 		TableColumn tableColumn = new TableColumn("name", comparator, reverseComparator);
 		assertSame(tableColumn.getComparator(), comparator);
 		assertSame(tableColumn.getReverseComparator(), reverseComparator);
 		assertNotSame(tableColumn.getReverseComparator(), comparator);
 		assertEquals(tableColumn.isSortable(), true);
-		assertEquals(tableColumn.getReverseComparator().compare(null, null),
-					(- tableColumn.getComparator().compare(null, null)));
+		assertEquals(tableColumn.getReverseComparator().compare(a, b),
+					tableColumn.getComparator().compare(b, a));
 
 		tableColumn = new TableColumn("name", null, reverseComparator);
 		assertNotNull(tableColumn.getComparator());
 		assertNotSame(tableColumn.getComparator(), reverseComparator);
 		assertSame(tableColumn.getReverseComparator(), reverseComparator);
 		assertEquals(tableColumn.isSortable(), true);
-		assertEquals(tableColumn.getReverseComparator().compare(null, null),
-					(- tableColumn.getComparator().compare(null, null)));
+        assertEquals(tableColumn.getReverseComparator().compare(a, b),
+            tableColumn.getComparator().compare(b, a));
     }
 }

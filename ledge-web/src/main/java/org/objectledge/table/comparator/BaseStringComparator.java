@@ -36,10 +36,10 @@ import java.util.Locale;
  * It provides localisation for string comparisons.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseStringComparator.java,v 1.3 2005-07-07 08:29:32 zwierzem Exp $
+ * @version $Id: BaseStringComparator.java,v 1.4 2006-03-16 17:57:03 zwierzem Exp $
  */
-public abstract class BaseStringComparator
-    implements Comparator
+public abstract class BaseStringComparator<T>
+    implements Comparator<T>
 {
     /** The Collator to use for comparisons. */
     protected Collator collator;

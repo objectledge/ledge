@@ -34,10 +34,10 @@ import java.util.Date;
  * This is a base comparator for comparing time values related to an object.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TimeComparator.java,v 1.2 2005-02-08 21:19:28 rafal Exp $
+ * @version $Id: TimeComparator.java,v 1.3 2006-03-16 17:57:03 zwierzem Exp $
  */
-public abstract class TimeComparator
-    implements Comparator
+public abstract class TimeComparator<T>
+    implements Comparator<T>
 {
     /** Compares two objects using their date attributes. Dates may be null, the contract is:
      *  <ul>

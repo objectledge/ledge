@@ -43,16 +43,16 @@ import org.objectledge.table.TableState;
  * <p>Item indices are used as ids.</p>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListTableModel.java,v 1.6 2004-12-22 08:58:13 rafal Exp $
+ * @version $Id: ListTableModel.java,v 1.7 2006-03-16 17:57:03 zwierzem Exp $
  */
-public class ListTableModel
-    implements ExtendedTableModel
+public class ListTableModel<T>
+    implements ExtendedTableModel<T>
 {
     /** The embeded list. */
-    protected List list;
+    protected List<T> list;
 
     /** The columns of the list. */
-    protected TableColumn[] columns;
+    protected TableColumn<T>[] columns;
 
     /**
      * Constructs a new model.
@@ -60,7 +60,8 @@ public class ListTableModel
      * @param list the list to build model for.
      * @param columns the columns of the table, <code>null</code> to disable sorting.
      */
-    public ListTableModel(List list, TableColumn[] columns)
+    @SuppressWarnings("unchecked")
+    public ListTableModel(List<T> list, TableColumn<T>[] columns)
     {
         this.list = list;
         if(columns == null)
@@ -79,7 +80,7 @@ public class ListTableModel
      * @param array the array to build model for.
      * @param columns the columns of the table, <code>null</code> to disable sorting.
      */
-    public ListTableModel(Object[] array, TableColumn[] columns)
+    public ListTableModel(T[] array, TableColumn<T>[] columns)
     {
         this(Arrays.asList(array), columns);
     }
@@ -87,15 +88,15 @@ public class ListTableModel
     /**
      * {@inheritDoc}
      */
-    public TableRowSet getRowSet(TableState state, TableFilter[] filters)
+    public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters)
     {
         if(state.getTreeView())
         {
-			return new GenericTreeRowSet(state, filters, this);
+			return new GenericTreeRowSet<T>(state, filters, this);
         }
         else
         {
-			return new GenericListRowSet(state, filters, this);
+			return new GenericListRowSet<T>(state, filters, this);
         }
     }
 
@@ -105,15 +106,16 @@ public class ListTableModel
      * @param parent the parent
      * @return table of children
      */
-    public Object[] getChildren(Object parent)
+    @SuppressWarnings("unchecked")
+    public T[] getChildren(T parent)
     {
         if(parent == null)
         {
-            return list.toArray();
+            return (T[]) list.toArray();
         }
         else
         {
-            return new Object[0];
+            return (T[]) new Object[0];
         }
     }
 
@@ -123,7 +125,7 @@ public class ListTableModel
      * @param id the id of the object
      * @return model object
      */
-    public Object getObject(String id)
+    public T getObject(String id)
     {
         try
         {
@@ -147,7 +149,7 @@ public class ListTableModel
      * @param child model object.
      * @return the id of the object.
      */
-    public String getId(String parent, Object child)
+    public String getId(String parent, T child)
     {
         int index = list.indexOf(child);
         if(index >= 0)
@@ -166,7 +168,7 @@ public class ListTableModel
      *
      * @return array of <code>TableColumn</code> objects
      */
-    public TableColumn[] getColumns()
+    public TableColumn<T>[] getColumns()
     {
         return columns;
     }

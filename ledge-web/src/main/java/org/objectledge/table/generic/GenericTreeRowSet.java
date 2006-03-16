@@ -35,6 +35,7 @@ import java.util.List;
 import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 
 
@@ -42,9 +43,9 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as tree.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericTreeRowSet.java,v 1.6 2004-12-23 07:17:41 rafal Exp $
+ * @version $Id: GenericTreeRowSet.java,v 1.7 2006-03-16 17:57:03 zwierzem Exp $
  */
-public class GenericTreeRowSet extends BaseGenericRowSet
+public class GenericTreeRowSet<T> extends BaseGenericRowSet<T>
 {
     /**
      * Constructs the object.
@@ -53,7 +54,7 @@ public class GenericTreeRowSet extends BaseGenericRowSet
      * @param filters the table filters.
      * @param model the table model.
      */
-    public GenericTreeRowSet(TableState state, TableFilter[] filters, ExtendedTableModel model)
+    public GenericTreeRowSet(TableState state, TableFilter<T>[] filters, ExtendedTableModel<T> model)
     {
         super(state, filters, model);
     }
@@ -77,7 +78,7 @@ public class GenericTreeRowSet extends BaseGenericRowSet
      *
      * @param rowsList list of table rows for current view.
      */
-    protected void sortAllRows(List rowsList)
+    protected void sortAllRows(List<TableRow<T>> rowsList)
     {
         // WARN: must not sort a final list for tree view
     }
@@ -87,9 +88,9 @@ public class GenericTreeRowSet extends BaseGenericRowSet
      *
      * @param childrenList list of children nodes for current subtree.
      */
-    protected void sortChildren(List childrenList)
+    protected void sortChildren(List<T> childrenList)
     {
-        Comparator comparator = getObjectComparator();
+        Comparator<T> comparator = getObjectComparator();
         if(comparator != null)
         {
             Collections.sort(childrenList, comparator);
@@ -107,9 +108,9 @@ public class GenericTreeRowSet extends BaseGenericRowSet
      *
      * @return a comparator for model's objects, or <code>null</code>.
      */
-    protected Comparator getObjectComparator()
+    protected Comparator<T> getObjectComparator()
     {
-        TableColumn column = getSortColumn();
+        TableColumn<T> column = getSortColumn();
         if(column == null)
         {
             return null;

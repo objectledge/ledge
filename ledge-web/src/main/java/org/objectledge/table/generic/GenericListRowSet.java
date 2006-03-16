@@ -43,9 +43,9 @@ import org.objectledge.table.TableState;
  * An implementation of a rowset which prepares rows to be displayed as list.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: GenericListRowSet.java,v 1.6 2005-07-07 08:29:30 zwierzem Exp $
+ * @version $Id: GenericListRowSet.java,v 1.7 2006-03-16 17:57:03 zwierzem Exp $
  */
-public class GenericListRowSet extends BaseGenericRowSet
+public class GenericListRowSet<T> extends BaseGenericRowSet<T>
 {
     /**
      * Constructs the rowset.
@@ -54,7 +54,7 @@ public class GenericListRowSet extends BaseGenericRowSet
      * @param filters a list of filters to be used while creating the rows set.
      * @param model the table model.
      */
-    public GenericListRowSet(TableState state, TableFilter[] filters, ExtendedTableModel model)
+    public GenericListRowSet(TableState state, TableFilter<T>[] filters, ExtendedTableModel<T> model)
     {
         super(state, filters, model);
     }
@@ -81,9 +81,9 @@ public class GenericListRowSet extends BaseGenericRowSet
      *
      * @param rowsList list of table rows for current view.
      */
-    protected void sortAllRows(List rowsList)
+    protected void sortAllRows(List<TableRow<T>> rowsList)
     {
-        Comparator comparator = getRowComparator();
+        Comparator<TableRow<T>> comparator = getRowComparator();
         if(comparator != null)
         {
             Collections.sort(rowsList, comparator);
@@ -112,22 +112,20 @@ public class GenericListRowSet extends BaseGenericRowSet
      *
      * @return a comparator for TableRow objects, or <code>null</code>.
      */
-    protected Comparator getRowComparator()
+    protected Comparator<TableRow<T>> getRowComparator()
     {
-        TableColumn column = getSortColumn();
+        TableColumn<T> column = getSortColumn();
         if(column == null)
         {
             return null;
         }
-        final Comparator objectComparator = 
+        final Comparator<T> objectComparator = 
         	(state.getAscSort()) ? column.getComparator() : column.getReverseComparator();
 
-        return new Comparator()
+        return new Comparator<TableRow<T>>()
             {
-                public int compare(Object o1, Object o2)
+                public int compare(TableRow<T> r1, TableRow<T> r2)
                 {
-                    TableRow r1 = (TableRow)o1;
-                    TableRow r2 = (TableRow)o2;
                     return objectComparator.compare(r1.getObject(), r2.getObject());
                 }
             };

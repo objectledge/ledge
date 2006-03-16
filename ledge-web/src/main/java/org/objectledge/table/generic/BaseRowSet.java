@@ -36,9 +36,9 @@ import org.objectledge.table.TableState;
  * This class provides some utility methods for {@link TableRowSet} implementations.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseRowSet.java,v 1.4 2004-12-23 07:17:41 rafal Exp $
+ * @version $Id: BaseRowSet.java,v 1.5 2006-03-16 17:57:03 zwierzem Exp $
  */
-public abstract class BaseRowSet implements TableRowSet
+public abstract class BaseRowSet<T> implements TableRowSet<T>
 {
     /** Table state defining the behaviour of this row set. */
     protected TableState state;
@@ -47,7 +47,7 @@ public abstract class BaseRowSet implements TableRowSet
     protected int maxDepth;
 
     /** Table of filters used by the rowset to prepare a list of rows. */
-    protected TableFilter[] filters;
+    protected TableFilter<T>[] filters;
 
     /**
      * construct the object.
@@ -55,7 +55,7 @@ public abstract class BaseRowSet implements TableRowSet
      * @param state the state of the table instance
      * @param filters a list of filters to be used while creating the rows set
      */
-    public BaseRowSet(TableState state, TableFilter[] filters)
+    public BaseRowSet(TableState state, TableFilter<T>[] filters)
     {
         this.state = state;
         this.filters = filters;
@@ -94,7 +94,7 @@ public abstract class BaseRowSet implements TableRowSet
      * @param object the object to check.
      * @return <code>true</code> if accepted.
      */
-    protected boolean accept(Object object)
+    protected boolean accept(T object)
     {
         if(filters != null)
         {

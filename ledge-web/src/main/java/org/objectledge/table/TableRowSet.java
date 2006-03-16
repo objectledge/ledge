@@ -33,9 +33,9 @@ package org.objectledge.table;
  * provide model-specific implementations to increase performance of the model.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableRowSet.java,v 1.2 2004-03-05 12:14:15 zwierzem Exp $
+ * @version $Id: TableRowSet.java,v 1.3 2006-03-16 17:57:04 zwierzem Exp $
  */
-public interface TableRowSet
+public interface TableRowSet<T>
 {
     /**
      * Returns a table state associated with this row set.
@@ -50,20 +50,20 @@ public interface TableRowSet
      *
      * @return a list of rows.
      */
-    public TableRow[] getRows();
+    public TableRow<T>[] getRows();
 
     /**
      * Gets the root node of the row set.
      * @return root row provided by this row set
      */
-    public TableRow getRootRow();
+    public TableRow<T> getRootRow();
 
     /**
      * Gets the parent of object.
      * @param childRow a table row TODO: may be a <code>null</code>
      * @return parent row for a given child row 
      */
-    public TableRow getParentRow(TableRow childRow);
+    public TableRow<T> getParentRow(TableRow<T> childRow);
 
     /**
      * Checks whether the ancestor has more children
@@ -73,7 +73,7 @@ public interface TableRowSet
      * @param descendantRow row which is an descendant for the given ancestor row
      * @return <code>true</code> if ancestor has more children
      */
-    public boolean hasMoreChildren(TableRow ancestorRow, TableRow descendantRow);
+    public boolean hasMoreChildren(TableRow<T> ancestorRow, TableRow<T> descendantRow);
 
     /**
      * Return the number of elements in returned array.

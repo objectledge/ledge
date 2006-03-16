@@ -32,9 +32,9 @@ package org.objectledge.table;
  * TableFilter specifies a partial view of a table (tree).
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableFilter.java,v 1.2 2004-12-23 07:17:47 rafal Exp $
+ * @version $Id: TableFilter.java,v 1.3 2006-03-16 17:57:04 zwierzem Exp $
  */
-public interface TableFilter
+public interface TableFilter<T>
 {
     /**
      * Checks whether object belongs to a table (tree) view.
@@ -42,5 +42,5 @@ public interface TableFilter
      * @param object the object to check.
      * @return <code>true</code> if accepted.
      */
-    public boolean accept(Object object);
+    public boolean accept(T object);
 }

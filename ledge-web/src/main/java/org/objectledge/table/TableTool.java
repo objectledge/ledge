@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,19 +41,22 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.16 2006-02-07 13:14:40 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.17 2006-03-16 17:57:04 zwierzem Exp $
  */
-public class TableTool
+public class TableTool<T>
 {
     /** table state */
     private TableState state;
 
     /** table model */
-    private TableRowSet rowSet;
+    private TableRowSet<T> rowSet;
 
     /** column map */
-    private Map<String, TableColumn> columnsByName = new HashMap<String, TableColumn>();
+    private Map<String, TableColumn<T>> columnsByName = new HashMap<String, TableColumn<T>>();
 
+    /** cached list of rows */
+    private List<TableRow<T>> rows;
+    
     /**
      * Constructor for basic implementation of TableRowSet.
      *
@@ -62,11 +65,12 @@ public class TableTool
      * @param model the table model
      * @throws TableException on construction errors
      */
-    public TableTool(TableState state, List<TableFilter> filters, TableModel model)
+    @SuppressWarnings("unchecked")
+    public TableTool(TableState state, List<TableFilter<T>> filters, TableModel<T> model)
     throws TableException
     {
         this.state = state;
-        TableFilter[] filtersArray = null;
+        TableFilter<T>[] filtersArray = null;
         if(filters != null)
         {
             filtersArray = new TableFilter[filters.size()];
@@ -75,10 +79,10 @@ public class TableTool
         this.rowSet = model.getRowSet(state, filtersArray);
 
         // prepare the column map
-        TableColumn[] columns = model.getColumns();
+        TableColumn<T>[] columns = model.getColumns();
         for(int i=0; i<columns.length; i++)
         {
-            TableColumn column = columns[i];
+            TableColumn<T> column = columns[i];
             if(columnsByName.containsKey(column.getName()))
             {
                 throw new TableException("Duplicate table column name '"+column.getName()+"'");
@@ -112,7 +116,7 @@ public class TableTool
      *
      * @return the root row of the table
      */
-    public TableRow getRootRow()
+    public TableRow<T> getRootRow()
     {
         return rowSet.getRootRow();
     }
@@ -134,13 +138,13 @@ public class TableTool
      * @return the <code>TableColumn</code> object
      * @throws TableException on error in table column retrieval/construction
      */
-    public TableColumn getColumn(String name)
+    public TableColumn<T> getColumn(String name)
     throws TableException
     {
-        TableColumn column = columnsByName.get(name);
+        TableColumn<T> column = columnsByName.get(name);
         if(column == null)
         {
-            column = new TableColumn(name);
+            column = new TableColumn<T>(name);
             columnsByName.put(name, column);
         }
         return column;
@@ -151,10 +155,10 @@ public class TableTool
      *
      * @return the <code>TableColumn</code> object
      */
-    public TableColumn getSortColumn()
+    public TableColumn<T> getSortColumn()
     {
         String sortColumnName = state.getSortColumnName();
-        return (TableColumn)columnsByName.get(sortColumnName);
+        return columnsByName.get(sortColumnName);
     }
 
     /**
@@ -168,13 +172,13 @@ public class TableTool
     }
 
     /**
-     * Return the number of the current page of the table.
-	 * TODO: Add pageNumber sanity check either here or in RowSet.
+     * Return the number of the current page of the table, the number is sanitized before return.
+     * 
 	 * @return the current page
      */
     public int getCurrentPage()
     {
-        return state.getCurrentPage();
+        return sanitizedCurrentPage();
     }
 
     /**
@@ -298,9 +302,13 @@ public class TableTool
      *
      * @return a list of tree nodes.
      */
-    public List getRows()
+    public List<TableRow<T>> getRows()
     {
-        return Arrays.asList(rowSet.getRows());
+        if(rows == null)
+        {
+            rows = Arrays.asList(rowSet.getRows());  
+        }
+        return rows;
     }
 
     /**
@@ -311,12 +319,12 @@ public class TableTool
      * @param row the examinated row
      * @return the list of the ancestors
      */
-    public List getAncestors(TableRow row)
+    public List<TableRow<T>> getAncestors(TableRow<T> row)
     {
-        List<TableRow> ancestors = new ArrayList<TableRow>();
-        TableRow rootRow = rowSet.getRootRow();
+        List<TableRow<T>> ancestors = new LinkedList<TableRow<T>>();
+        TableRow<T> rootRow = rowSet.getRootRow();
 
-        TableRow parentRow = row;
+        TableRow<T> parentRow = row;
         while(parentRow != null && parentRow != rootRow)
         {
             parentRow = rowSet.getParentRow(parentRow);
@@ -333,10 +341,10 @@ public class TableTool
      * @param row the examinated row
      * @return the list of the ancestors
      */
-    public List getReverseAncestors(TableRow row)
+    public List<TableRow<T>> getReverseAncestors(TableRow<T> row)
     {
         // a little bit slower, but less code
-        List list = getAncestors(row);
+        List<TableRow<T>> list = getAncestors(row);
         Collections.reverse(list);
         return list;
     }
@@ -348,7 +356,7 @@ public class TableTool
      * @param descendant the descendant row
      * @return <code>true</code> if ancestor has more children.
      */
-    public boolean hasMoreChildren(TableRow ancestor, TableRow descendant)
+    public boolean hasMoreChildren(TableRow<T> ancestor, TableRow<T> descendant)
     {
         return rowSet.hasMoreChildren(ancestor, descendant);
     }
@@ -359,7 +367,7 @@ public class TableTool
      * @param row the child row
      * @return the parent row, or null for root node.
      */
-    public TableRow getParent(TableRow row)
+    public TableRow<T> getParent(TableRow<T> row)
     {
         return rowSet.getParentRow(row);
     }
@@ -370,7 +378,7 @@ public class TableTool
      * @param row the row
      * @return <code>true</code> if row is expanded
      */
-    public boolean isExpanded(TableRow row)
+    public boolean isExpanded(TableRow<T> row)
     {
         return state.isExpanded(row.getId());
     }
@@ -391,7 +399,7 @@ public class TableTool
      * @param row the row for which the lines and folders data will be generated
      * @return list of {@link LinesAndFoldersBox} 
      */
-    public List linesAndFolders(TableRow row)
+    public List<LinesAndFoldersBox> linesAndFolders(TableRow<T> row)
     {
 		List<LinesAndFoldersBox> linesAndFolders = new ArrayList<LinesAndFoldersBox>();
 		if( ! getViewAsTree() )
@@ -422,11 +430,10 @@ public class TableTool
 		}
 
 		// other rows
-		TableRow parent = getParent(row);
+		TableRow<T> parent = getParent(row);
 		// -- lines generation START
-		for (Iterator iter = getAncestors(row).iterator(); iter.hasNext();)
+		for (TableRow<T> ancestor : getAncestors(row))
         {
-            TableRow ancestor = (TableRow) iter.next();
 			if(ancestor != parent)
 			{
 				if(hasMoreChildren(ancestor, row))
@@ -593,13 +600,12 @@ public class TableTool
         }
 	}
 
-	/*
+	/**
 	 * Sanitizes the number of the current page of the table - set a proper number in the state.
-	 * TODO: Add pageNumber sanity check either here or in RowSet.
 	 *
 	 * @return the sanitized page number 
 	 */
-/*	public int sanitizeCurrentPage(TableState state, int numberOfPages)
+	private int sanitizedCurrentPage()
 	{
 		int perPage = state.getPageSize();
 		if(perPage == 0)
@@ -609,7 +615,7 @@ public class TableTool
 		}
 		else
 		{
-			int maxPage = numberOfPages;
+			int maxPage = getNumPages();
 			int currentPage = state.getCurrentPage();
 			// automatic page number reset
 			if(currentPage > maxPage)
@@ -620,5 +626,5 @@ public class TableTool
 			}
 		}
 		return state.getCurrentPage();
-	}*/
+	}
 }

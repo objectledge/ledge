@@ -48,13 +48,13 @@ import org.objectledge.table.generic.GenericTreeRowSet;
  * Implementation of Table service based on file service
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: FileTableModel.java,v 1.4 2005-02-25 14:27:42 zwierzem Exp $
+ * @version $Id: FileTableModel.java,v 1.5 2006-03-16 17:57:01 zwierzem Exp $
  */
-public class FileTableModel implements ExtendedTableModel
+public class FileTableModel implements ExtendedTableModel<FileObject>
 {
     private final FileSystem fileSystem;
-    private final Map<String, Comparator> comparatorByColumnName =
-        new HashMap<String, Comparator>();
+    private final Map<String, Comparator<FileObject>> comparatorByColumnName =
+        new HashMap<String, Comparator<FileObject>>();
 
     /**
      * Creates new FileTableModel instance.
@@ -79,15 +79,15 @@ public class FileTableModel implements ExtendedTableModel
      * @param filters the filters to apply.
      * @return table of children
      */
-    public TableRowSet getRowSet(TableState state, TableFilter[] filters)
+    public TableRowSet<FileObject> getRowSet(TableState state, TableFilter<FileObject>[] filters)
     {
         if(state.getTreeView())
         {
-            return new GenericTreeRowSet(state, filters, this);
+            return new GenericTreeRowSet<FileObject>(state, filters, this);
         }
         else
         {
-            return new GenericListRowSet(state, filters, this);
+            return new GenericListRowSet<FileObject>(state, filters, this);
         }
     }
 
@@ -97,17 +97,18 @@ public class FileTableModel implements ExtendedTableModel
      *
      * @return array of <code>TableColumn</code> objects
      */
-    public TableColumn[] getColumns()
+    @SuppressWarnings("unchecked")
+    public TableColumn<FileObject>[] getColumns()
     {
-        TableColumn[] columns = new TableColumn[comparatorByColumnName.size()];
+        TableColumn<FileObject>[] columns = new TableColumn[comparatorByColumnName.size()];
         int i=0;
         for(Iterator iter = comparatorByColumnName.keySet().iterator(); iter.hasNext(); i++)
         {
             String columnName = (String)(iter.next());
-            Comparator comparator =  (Comparator)(comparatorByColumnName.get(columnName));
+            Comparator<FileObject> comparator =  comparatorByColumnName.get(columnName);
             try
             {
-                columns[i] = new TableColumn(columnName, comparator);
+                columns[i] = new TableColumn<FileObject>(columnName, comparator);
             }
             catch(TableException e)
             {
@@ -123,17 +124,17 @@ public class FileTableModel implements ExtendedTableModel
      * @param parent the parent
      * @return table of children
      */
-    public Object[] getChildren(Object parent)
+    public FileObject[] getChildren(FileObject parent)
     {
         if(parent == null)
         {
-            return new Object[0];
+            return new FileObject[0];
         }
         
-        FileObject parentObject = (FileObject)parent;
+        FileObject parentObject = parent;
         if(!parentObject.isDirectory())
         {
-            return new Object[0];
+            return new FileObject[0];
         }
         
         String parentPath = normalizeDirPath(parentObject.getPath());
@@ -148,7 +149,7 @@ public class FileTableModel implements ExtendedTableModel
         }
         if(fileNames == null)
         {
-			return new Object[0];
+			return new FileObject[0];
         }
 
 		FileObject[] files = new FileObject[fileNames.length]; 
@@ -166,7 +167,7 @@ public class FileTableModel implements ExtendedTableModel
      * @param id the id of the object
      * @return model object
      */
-    public Object getObject(String id)
+    public FileObject getObject(String id)
     {
         if(fileSystem.exists(id))
         {
@@ -186,13 +187,13 @@ public class FileTableModel implements ExtendedTableModel
      *
      * @return the id of the object.
      */
-    public String getId(String parentId, Object child)
+    public String getId(String parentId, FileObject child)
     {
         if(child == null)
         {
             return parentId;    // TODO ???
         }
-        return ((FileObject)child).getPath();
+        return child.getPath();
     }
     
     // implementation //////////////////////////////////////////////////////////////////////////////

@@ -44,29 +44,29 @@ import org.objectledge.table.TableState;
  * It ensures that rows collection is built only once.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseGenericRowSet.java,v 1.12 2005-07-07 08:29:30 zwierzem Exp $
+ * @version $Id: BaseGenericRowSet.java,v 1.13 2006-03-16 17:57:03 zwierzem Exp $
  */
-public abstract class BaseGenericRowSet extends BaseRowSet
+public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
 {
     /** Table model which provides data for this row set. */
-    protected ExtendedTableModel model;
+    protected ExtendedTableModel<T> model;
 
     /** Root row for this row set. */
-    protected TableRow rootRow;
+    protected TableRow<T> rootRow;
 
     /** Keeps total number of rows in this row set. */
     protected int totalRowCount;
 
     /** Local row set cache - keeps page of rows. */
-    protected TableRow[] rows;
+    protected TableRow<T>[] rows;
 
     /** This map allows quick child row lookup.
      * Used in {@link #hasMoreChildren(TableRow,TableRow)}. */
-    protected HashMap rowsByParent = new HashMap();
+    protected HashMap<TableRow<T>,TableRow<T>[]> rowsByParent = new HashMap<TableRow<T>,TableRow<T>[]>();
 
     /** This map allows quick parent row lookup.
      * Used in {@link #hasMoreChildren(TableRow,TableRow)} and {@link #getParentRow(TableRow)}. */
-    protected HashMap rowsByChild = new HashMap();
+    protected HashMap<TableRow<T>,TableRow<T>> rowsByChild = new HashMap<TableRow<T>,TableRow<T>>();
 
     /**
      * Constructs the rowset.
@@ -75,7 +75,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      * @param filters a list of filters to be used while creating the rows set.
      * @param model the table model.
      */
-    public BaseGenericRowSet(TableState state, TableFilter[] filters, ExtendedTableModel model)
+    public BaseGenericRowSet(TableState state, TableFilter<T>[] filters, ExtendedTableModel<T> model)
     {
         super(state, filters);
         this.model = model;
@@ -86,16 +86,16 @@ public abstract class BaseGenericRowSet extends BaseRowSet
 	/**
 	 * {@inheritDoc}
 	 */
-    public TableRow[] getRows()
+    @SuppressWarnings("unchecked")
+    public TableRow<T>[] getRows()
     {
         if(rows == null)
         {
-            List list = getAllRows();
+            List<TableRow<T>> list = getAllRows();
 
             list = getCurrentPageRows(list);
 
-            rows = new TableRow[list.size()];
-            rows = (TableRow[])list.toArray(rows);
+            rows = (TableRow<T>[])list.toArray(new TableRow[list.size()]);
         }
 
         return rows;
@@ -104,7 +104,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
 	/**
 	 * {@inheritDoc}
 	 */
-    public TableRow getRootRow()
+    public TableRow<T> getRootRow()
     {
         // in case rows were not drawn from the model
         getRows();
@@ -114,17 +114,17 @@ public abstract class BaseGenericRowSet extends BaseRowSet
 	/**
 	 * {@inheritDoc}
 	 */
-    public TableRow getParentRow(TableRow childRow)
+    public TableRow<T> getParentRow(TableRow<T> childRow)
     {
         // in case rows were not drawn from the model
         getRows();
-        return (TableRow)rowsByChild.get(childRow);
+        return rowsByChild.get(childRow);
     }
 
 	/**
 	 * {@inheritDoc}
 	 */
-    public boolean hasMoreChildren(TableRow ancestorRow, TableRow descendantRow)
+    public boolean hasMoreChildren(TableRow<T> ancestorRow, TableRow<T> descendantRow)
     {
         // in case rows were not drawn from the model
         getRows();
@@ -135,11 +135,11 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         }
 
         // get a direct child of ancestor which is also an ancestor of descendant
-        TableRow childRow = null;
+        TableRow<T> childRow = null;
         while(descendantRow != null && descendantRow != ancestorRow)
         {
             childRow = descendantRow;
-            descendantRow = (TableRow)rowsByChild.get(descendantRow);
+            descendantRow = rowsByChild.get(descendantRow);
         }
 
         if(descendantRow == null)
@@ -148,7 +148,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         }
 
         // get filtered and sorted ancestor's children
-        TableRow[] children = (TableRow[])rowsByParent.get(ancestorRow);
+        TableRow<T>[] children = rowsByParent.get(ancestorRow);
 
         // check whether child that was found is on the end of children list
         TableRow lastChildRow = children[children.length-1];
@@ -161,7 +161,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
     public int getPageRowCount()
     {
         // in case rows were not drawn from the model
-        TableRow[] list = getRows();
+        TableRow<T>[] list = getRows();
         return list.length;
     }
 
@@ -184,7 +184,7 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      * @param list a lit of table rows to be snipped to current view page
      * @return a list of table nodes containing only current page rows.
      */
-    protected List getCurrentPageRows(List list)
+    protected List<TableRow<T>> getCurrentPageRows(List<TableRow<T>> list)
     {
         int page = state.getCurrentPage();
         int perPage = state.getPageSize();
@@ -219,13 +219,13 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      *
      * @return a list of tree nodes.
      */
-    protected List getAllRows()
+    protected List<TableRow<T>> getAllRows()
     {
         // start row list creation
-        ArrayList rowList = new ArrayList();
+        ArrayList<TableRow<T>> rowList = new ArrayList<TableRow<T>>();
         // WARN: save root row
         String rootId = state.getRootId();
-        Object rootObject = model.getObject(rootId);
+        T rootObject = model.getObject(rootId);
         this.rootRow = getSubTree(rootId, rootObject, 0, rowList); // depth = 0
 
         // sort rows collection for list view
@@ -247,13 +247,14 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      * @param rowList the target node list.
      * @return the root of created subtree
      */
-    protected TableRow getSubTree(String rootId, Object rootObject, int depth, List rowList)
+    @SuppressWarnings("unchecked")
+    protected TableRow<T> getSubTree(String rootId, T rootObject, int depth, List<TableRow<T>> rowList)
     {
         //1. get children for this subtree root node
-        Object[] childrenObjects = model.getChildren(rootObject);
+        T[] childrenObjects = model.getChildren(rootObject);
 
         // 1.1. filter them out
-        List childrenList = new ArrayList();
+        List<T> childrenList = new ArrayList<T>(childrenObjects.length);
         for(int i = 0; i< childrenObjects.length; i++)
         {
             if(accept(childrenObjects[i]))
@@ -271,8 +272,8 @@ public abstract class BaseGenericRowSet extends BaseRowSet
         // 2.1. create current rootRow
         int childCount = childrenList.size();
         int visibleChildCount = continueRecursion ? childrenList.size() : 0;
-        TableRow localRootRow =
-        	new TableRow(rootId, rootObject, depth, childCount, visibleChildCount);
+        TableRow<T> localRootRow =
+        	new TableRow<T>(rootId, rootObject, depth, childCount, visibleChildCount);
 
         // 2.2. add current root row to rowList
         if(rootObject != null)
@@ -295,16 +296,16 @@ public abstract class BaseGenericRowSet extends BaseRowSet
             sortChildren(childrenList);
 
             // WARN: create TableRow array for children caching
-            TableRow[] children = new TableRow[childrenList.size()];
+            TableRow<T>[] children = (TableRow<T>[]) new TableRow[childrenList.size()];
 
             // 4. add children to rowList collection
             for(int i = 0; i< childrenList.size(); i++)
             {
-                Object childObject = childrenList.get(i);
+                T childObject = childrenList.get(i);
                 String childId = model.getId(rootId, childObject);
 
                 // go down the tree
-                TableRow childRow = getSubTree(childId, childObject, depth, rowList);
+                TableRow<T> childRow = getSubTree(childId, childObject, depth, rowList);
 
                 // WARN: add TableRow to array created for children caching
                 children[i] = childRow;
@@ -337,14 +338,14 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      *
      * @param rowsList list of table rows for current view.
      */
-    protected abstract void sortAllRows(List rowsList);
+    protected abstract void sortAllRows(List<TableRow<T>> rowsList);
 
     /**
      * Sorts children collection for tree or forest view.
      *
      * @param childrenList list of children nodes for current subtree.
      */
-    protected abstract void sortChildren(List childrenList);
+    protected abstract void sortChildren(List<T> childrenList);
 
     /**
      * Returns the selected sorting column.
@@ -354,11 +355,11 @@ public abstract class BaseGenericRowSet extends BaseRowSet
      *
      * @return the selected sorting column, or <code>null</code>
      */
-    protected TableColumn getSortColumn()
+    protected TableColumn<T> getSortColumn()
     {
         String sortColumnName = state.getSortColumnName();
-        TableColumn column = null;
-        TableColumn[] columns = model.getColumns();
+        TableColumn<T> column = null;
+        TableColumn<T>[] columns = model.getColumns();
         for(int i=0; i<columns.length; i++)
         {
             if(columns[i].getName().equals(sortColumnName))

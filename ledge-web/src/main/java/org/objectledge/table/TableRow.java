@@ -32,15 +32,15 @@ package org.objectledge.table;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableRow.java,v 1.6 2005-05-16 09:24:41 zwierzem Exp $
+ * @version $Id: TableRow.java,v 1.7 2006-03-16 17:57:04 zwierzem Exp $
  */
-public class TableRow
+public class TableRow<T>
 {
     /** Object id */
     private String id = "";
 
     /** Object table row */
-    private Object object;
+    private T object;
 
     /** nesting depth of this node. */
     private int depth;
@@ -61,7 +61,7 @@ public class TableRow
      * @param childCount number of children under this tree node
      * @param visibleChildCount number of children currently visible under this tree node
      */
-    public TableRow(String id, Object object, int depth, int childCount, int visibleChildCount)
+    public TableRow(String id, T object, int depth, int childCount, int visibleChildCount)
     {
         if(id != null)
         {
@@ -90,7 +90,7 @@ public class TableRow
      *
      * @return the object.
      */
-    public Object getObject()
+    public T getObject()
     {
         return object;
     }
