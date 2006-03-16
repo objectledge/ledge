@@ -3,10 +3,8 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.3.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/xml-apis/jars/xml-apis-2.0.2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/sosnoski-xmls/jars/sosnoski-xmls.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/tidy/jars/tidy-damian.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/w3c-css2/jars/w3c-css2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/steadystate-css2/jars/steadystate-css2.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/dom4j/jars/dom4j-1.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/isorelax/jars/isorelax-20040506.jar"/>
