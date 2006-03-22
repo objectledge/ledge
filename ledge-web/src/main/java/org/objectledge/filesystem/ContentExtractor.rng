@@ -40,8 +40,10 @@
       <text/>
     </element>
   </element>
-  <!-- name of the directory processed -->
-  <element name="directory">  
-    <text/>
-  </element>
+  <!-- name of the directories to be processed -->
+  <oneOrMore>
+    <element name="directory">  
+      <text/>
+    </element>
+  </oneOrMore>
 </element>

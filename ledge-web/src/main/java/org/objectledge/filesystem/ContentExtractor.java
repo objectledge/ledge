@@ -29,6 +29,8 @@ package org.objectledge.filesystem;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -44,7 +46,7 @@ import org.picocontainer.Startable;
  * server.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ContentExtractor.java,v 1.5 2005-10-06 14:21:27 rafal Exp $
+ * @version $Id: ContentExtractor.java,v 1.6 2006-03-22 14:31:30 rafal Exp $
  */
 public class ContentExtractor
 	implements Startable
@@ -67,7 +69,10 @@ public class ContentExtractor
             extractContentFrom[i] = source[i].getValue();
         }
         extractContentTo = providers.getChild("target").getValue();
-        extractContentDirectory = config.getChild("directory").getValue();
+        for(Configuration dir : config.getChildren("directory"))
+        {
+            directories.add(dir.getValue());
+        }
         this.fileSystem = fileSystem;
     }
     
@@ -75,7 +80,7 @@ public class ContentExtractor
     protected FileSystem fileSystem;
     
     /** The directory used for content extraction. */
-    protected String extractContentDirectory;
+    protected List<String> directories = new ArrayList<String>(1);
     
     /** Names of the providers to read content from in the desired processing 
      * order.*/
@@ -84,9 +89,9 @@ public class ContentExtractor
     /** Name of the provider to write content to. */
     protected String extractContentTo;
     
-    private void extractContent()
+    private void extractDirectory(String directory)
     {
-        String updateMarker = extractContentDirectory+"/.updated"; 
+        String updateMarker = directory+"/.updated"; 
         try
         {
             FileSystemProvider out = fileSystem.getProvider(extractContentTo);
@@ -99,7 +104,7 @@ public class ContentExtractor
             for(int i=0; i<extractContentFrom.length; i++)
             {
                 in = fileSystem.getProvider(extractContentFrom[i]);
-                extractDirectory(extractContentDirectory, in, out, buffer);
+                extractDirectoryFromProvider(directory, in, out, buffer);
             }
             if(extractContentFrom.length > 0)
             {
@@ -112,8 +117,8 @@ public class ContentExtractor
         }
     }
     
-    private void extractDirectory(String name, FileSystemProvider in, FileSystemProvider out, 
-        byte[] buffer)
+    private void extractDirectoryFromProvider(String name, FileSystemProvider in,
+        FileSystemProvider out, byte[] buffer)
         throws Exception
     {
         if(!in.exists(name) || !in.isDirectory(name))
@@ -125,7 +130,7 @@ public class ContentExtractor
             String path = name+"/"+item;
             if(in.isDirectory(path))
             {
-                extractDirectory(path, in, out, buffer);
+                extractDirectoryFromProvider(path, in, out, buffer);
             }
             else
             {
@@ -157,7 +162,10 @@ public class ContentExtractor
      */
     public void start()
     {
-        extractContent();
+        for(String dir : directories)
+        {
+            extractDirectory(dir);
+        }
     }
 
     /**
