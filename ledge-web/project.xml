@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.50 2005-08-03 07:45:20 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.51 2006-03-22 15:04:00 pablo Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -181,6 +181,13 @@
       <version>1.1</version>
       <url>http://jakarta.apache.org/commons/collections</url>
     </dependency>
+    <dependency>
+      <groupId>radeox</groupId>
+      <artifactId>radeox</artifactId>
+      <version>1.0-b2</version>
+      <url>http://radeox.org</url>
+    </dependency>
+    
     <!-- findbugs seems to need that -->
 
     <dependency>
