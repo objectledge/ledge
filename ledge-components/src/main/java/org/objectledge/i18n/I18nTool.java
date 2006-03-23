@@ -28,18 +28,19 @@
 
 package org.objectledge.i18n;
 
+import org.objectledge.utils.StringUtils;
+
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-
-import org.objectledge.utils.StringUtils;
 
 /**
  * The I18n contex tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.19 2006-02-08 18:23:44 zwierzem Exp $
+ * @version $Id: I18nTool.java,v 1.20 2006-03-23 09:54:54 pablo Exp $
  */
 public class I18nTool
 {
@@ -185,6 +186,16 @@ public class I18nTool
 		return i18n.defined(locale, getKey(key));
 	}
 	
+    /**
+     * Get the locale keys that are direct children of given key.
+     * 
+     * @return the collection of keys.
+     */
+    public Collection<String> getKeys()
+    {
+        return i18n.getKeys(locale);
+    }
+    
     // implementation ------------------------------------------------------------------------------
 
     /**

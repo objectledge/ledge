@@ -28,6 +28,7 @@
 
 package org.objectledge.i18n;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,7 +37,7 @@ import java.util.Locale;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18n.java,v 1.13 2006-02-28 12:15:52 rafal Exp $
+ * @version $Id: I18n.java,v 1.14 2006-03-23 09:54:54 pablo Exp $
  */
 public interface I18n
 {
@@ -125,7 +126,15 @@ public interface I18n
 	 * @return the the output string.
 	 */
 	public String get(Locale locale, String key, List<String> values);	
-	
+
+    /**
+     * Get all keys defined for given locale.
+     * 
+     * @param locale the locale.
+     * @return the list of keys.
+     */
+    public Collection<String> getKeys(Locale locale);
+    
 	/**
 	 * Reload the localization.
 	 * 

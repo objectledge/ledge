@@ -28,23 +28,25 @@
 
 package org.objectledge.i18n.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.i18n.I18n;
 import org.objectledge.utils.StringUtils;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 /**
  * Base implementation of I18n component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.21 2006-02-28 12:15:51 rafal Exp $
+ * @version $Id: AbstractI18n.java,v 1.22 2006-03-23 09:54:53 pablo Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
@@ -82,7 +84,7 @@ public abstract class AbstractI18n implements I18n
 	private boolean useKeyIfUndefined;
 	
 	/** the localization bundles map. */
-	protected Map localeMap;
+	protected Map<String, Map<String, String>> localeMap;
 	
 	/** supported locale. */
 	protected Locale[] supportedLocales;
@@ -107,7 +109,7 @@ public abstract class AbstractI18n implements I18n
 			getAttributeAsBoolean("enabled", DEFAULT_USE_DEFAULT_LOCALE);
 		useKeyIfUndefined = config.getChild("key-fallback").
 			getAttributeAsBoolean("enabled", DEFAULT_USE_KEY_IF_UNDEFINED);
-		localeMap = new HashMap();
+		localeMap = new HashMap<String, Map<String, String>>();
 
 		if(config.getChild("supported-locales", false) != null)
 		{
@@ -247,6 +249,18 @@ public abstract class AbstractI18n implements I18n
         return value;
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<String> getKeys(Locale locale)
+    {
+        Map<String, String> bundle = localeMap.get(locale.toString());
+        if(bundle != null)
+        {
+            return bundle.keySet();
+        }
+        return new HashSet<String>();
+    }
     
 	/**
 	 * {@inheritDoc}
