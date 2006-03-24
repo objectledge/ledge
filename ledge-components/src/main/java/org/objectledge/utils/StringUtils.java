@@ -31,6 +31,7 @@ package org.objectledge.utils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.35 2006-02-08 18:25:33 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.36 2006-03-24 14:24:40 rafal Exp $
  */
 public class StringUtils
 {
@@ -937,5 +938,80 @@ public class StringUtils
         buff.append(Character.toUpperCase(str.charAt(0)));
         buff.append(str.substring(1));
         return buff.toString();
+    }
+    
+    public static final String UTF_8_ENCODING = "UTF-8";
+
+    /**
+     * Convert from UTF-8 bytes to a String.
+     * 
+     * @param bytes UTF-8 bytes.
+     * @return a String.
+     */
+    public static String fromUTF8(byte[] bytes)
+    {
+        if(bytes == null)
+        {
+            return null;
+        }
+        try
+        {
+            return new String(bytes, UTF_8_ENCODING);
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new IllegalStateException("UTF-8 not supported?", e);
+        }
+    }
+
+    /**
+     * Convert from a String to UTF-8 bytes.
+     * 
+     * @param string String.
+     * @return UTF-8 bytes.
+     */
+    public static byte[] toUTF8(String string)
+    {
+        if(string == null)
+        {
+            return null;
+        }        
+        try
+        {
+            return string.getBytes(UTF_8_ENCODING);
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new IllegalStateException("UTF-8 not supported?", e);
+        }
+    }    
+    
+    /**
+     * Append strings to the end of a string array.
+     * 
+     * @param values original array.
+     * @param additional strings to be added.
+     * @return new array containg combined values.
+     */
+    public static String[] push(String[] values, String ... additional)
+    {
+        String[] result = new String[values.length + additional.length];
+        System.arraycopy(values, 0, result, 0, values.length);
+        System.arraycopy(additional, 0, result, values.length, additional.length);
+        return result;
+    }
+    
+    /**
+     * Remove strings from the end of a string array.
+     * 
+     * @param values original array.
+     * @param n the number of strings to be removed.
+     * @return new array containt smallr number of values.
+     */
+    public static String[] pop(String[] values, int n)
+    {
+        String[] result = new String[values.length - n];
+        System.arraycopy(values, 0, result, 0, values.length - n);
+        return result;
     }
 }
