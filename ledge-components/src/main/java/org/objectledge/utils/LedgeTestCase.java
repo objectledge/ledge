@@ -30,10 +30,13 @@ package org.objectledge.utils;
 
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Properties;
 
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.Log4JLogger;
 import org.jcontainer.dna.impl.SAXConfigurationHandler;
 import org.jmock.MockObjectTestCase;
 import org.jmock.cglib.CGLIBCoreMock;
@@ -54,6 +57,10 @@ import org.xml.sax.XMLReader;
  */
 public abstract class LedgeTestCase extends MockObjectTestCase
 {
+    /**
+     * 
+     */
+    private static final String LOG4J_PATTERN = "%-5p [%t] %x %30.30c - %m%n";
     private FileSystem fileSystem;
 
     // filesystem ///////////////////////////////////////////////////////////////////////////////
@@ -131,7 +138,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         }
         catch (Exception e)
         {
-            throw new Exception("composition file " + schemaUrl + "is missing or invalid", e);
+            throw new Exception("schema file " + schemaUrl + "is missing or invalid", e);
         }
         try
         {
@@ -144,8 +151,23 @@ public abstract class LedgeTestCase extends MockObjectTestCase
         }
         catch (Exception e)
         {
-            throw new Exception("composition file " + configUrl + "is missing or invalid", e);
+            throw new Exception("configuration file " + configUrl + "is missing or invalid", e);
         }
+    }
+    
+    protected void initLog4J(String level)
+    {
+        Properties props = new Properties();
+        props.setProperty("log4j.rootLogger", level + ", console");
+        props.setProperty("log4j.appender.console", "org.apache.log4j.ConsoleAppender");
+        props.setProperty("log4j.appender.console.layout", "org.apache.log4j.PatternLayout");        
+        props.setProperty("log4j.appender.console.layout.ConversionPattern", LOG4J_PATTERN);        
+        org.apache.log4j.PropertyConfigurator.configure(props);
+    }
+    
+    protected Logger getLogger()
+    {
+        return new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
     }
 
     // jMock goodies ////////////////////////////////////////////////////////////////////////////
