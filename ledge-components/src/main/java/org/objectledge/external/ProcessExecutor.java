@@ -40,11 +40,9 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.utils.StringUtils;
 
-import clover.org.apache.velocity.app.event.d;
-
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: ProcessExecutor.java,v 1.1 2006-03-24 14:27:37 rafal Exp $
+ * @version $Id: ProcessExecutor.java,v 1.2 2006-03-28 18:02:38 zwierzem Exp $
  */
 public class ProcessExecutor
 {

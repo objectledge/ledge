@@ -53,7 +53,7 @@ import org.objectledge.utils.StringUtils;
  * </ul>
  * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: ScriptDirectory.java,v 1.1 2006-03-24 14:27:37 rafal Exp $
+ * @version $Id: ScriptDirectory.java,v 1.2 2006-03-28 18:02:38 zwierzem Exp $
  */
 public class ScriptDirectory
 {
@@ -218,7 +218,7 @@ public class ScriptDirectory
         {
             if(item.isDirectory())
             {
-                ensureExecutable(dir, namePattern, commandTokens);
+                ensureExecutable(item, namePattern, commandTokens);
             }
             else if(namePattern.matcher(item.getPath()).matches())
             {
