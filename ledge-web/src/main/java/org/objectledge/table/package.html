@@ -3,7 +3,7 @@
 <head>
 <!--
 
-  $Id: package.html,v 1.1 2005-07-07 08:25:33 zwierzem Exp $
+  $Id: package.html,v 1.2 2006-03-29 15:10:57 zwierzem Exp $
 
  Copyright (c) 2003-2005, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
@@ -36,6 +36,44 @@
 <body>
 
 The table toolkit for displaying list and tree structures.
+
+<p>
+The API for the table toolkit is targeted to both Java developers and template designers.
+In order to use the table toolkit Velocity templating language must be known by the template
+developers.
+</p>
+
+<h2>
+The template designer API
+</h2>
+<p>
+In context objects:
+</p>
+<ul>
+	<li>{@link org.objectledge.table.TableTool}</li>
+	<li>{@link org.objectledge.table.TableRow}</li>
+	<li>{@link org.objectledge.table.TableColumn}</li>
+</ul>
+<p>
+Actions to be called:
+</p>
+<ul>
+	<li>{@link org.objectledge.table.TableConstants}</li>
+</ul>
+<p>
+Macro library:
+</p>
+<ul>
+	<li>table.vt</li>
+</ul>
+
+<h2>
+The Java developer API
+</h2>
+<ul>
+	<li>{@link org.objectledge.table.TableColumn}</li>
+	<li>{@link org.objectledge.table.TableTool}</li>
+</ul>
 
 <!-- Put @see and @since tags down here. -->
 

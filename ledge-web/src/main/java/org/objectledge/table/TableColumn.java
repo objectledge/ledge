@@ -45,9 +45,9 @@ import java.util.Map;
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumn.java,v 1.4 2006-03-16 17:57:04 zwierzem Exp $
+ * @version $Id: TableColumn.java,v 1.5 2006-03-29 15:10:57 zwierzem Exp $
  */
-public class TableColumn<T>
+public class TableColumn<T> implements Comparable<TableColumn<T>>
 {
     /** properties map */
     private Map properties = new HashMap();
@@ -180,5 +180,14 @@ public class TableColumn<T>
             reverseComparator = Collections.reverseOrder(comparator);
         }
         return reverseComparator;
+    }
+
+    /**
+     * @param o compared column
+     * @return result of column names comparison.
+     */
+    public int compareTo(TableColumn o)
+    {
+        return this.name.compareTo(o.name);
     }
 }

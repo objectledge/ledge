@@ -38,10 +38,63 @@ import java.util.Map;
 
 /**
  * A Velocity context table view tool to help build the list and tree.
+ * 
+ * <p>
+ * TableTool is a core part of the template designer API. It provides access to data of the
+ * presented list or tree. Following is a description of methods used to access this data.
+ * </p>
+ * 
+ * <h2>
+ * Basic data access
+ * </h2>
+ * <ul>
+ * <li>{@link #getRows()}</li>
+ * <li>{@link #getPageRowCount()}</li>
+ * <li>{@link #getTotalRowCount()}</li>
+ * <li>{@link #getId()}</li>
+ * </ul>
+ *  
+ * <h2>
+ * Paging information
+ * </h2>
+ * <ul>
+ * <li>{@link #getNumPages()}</li>
+ * <li>{@link #getCurrentPage()}</li>
+ * <li>{@link #getPageSize()}</li>
+ * <li>{@link #getStartRow()}</li>
+ * <li>{@link #getEndRow()}</li>
+ * <li>{@link #getPageNumber(int)}</li>
+ * <li>{@link #getRelativePageNumber(int)}</li>
+ * </ul>
+ * 
+ * <h2>
+ * Sorting information
+ * </h2>
+ * <ul>
+ * <li>{@link #getSortColumn()}</li>
+ * <li>{@link #getAscSort()}</li>
+ * <li>{@link #getColumn(String)}</li>
+ * <li>{@link #getColumns()}</li>
+ * </ul>
+ * 
+ * <h2>
+ * Tree data access
+ * </h2>
+ * <ul>
+ * <li>{@link #getAncestors(TableRow)}</li>
+ * <li>{@link #getParent(TableRow)}</li>
+ * <li>{@link #getRootRow()}</li>
+ * <li>{@link #getShowRoot()}</li>
+ * <li>{@link #getViewAsTree()}</li>
+ * <li>{@link #hasMoreChildren(TableRow, TableRow)}</li>
+ * <li>{@link #isAllExpanded()}</li>
+ * <li>{@link #isExpanded(TableRow)}</li>
+ * <li>{@link #linesAndFolders(TableRow)}</li>
+ * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.17 2006-03-16 17:57:04 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.18 2006-03-29 15:10:57 zwierzem Exp $
  */
 public class TableTool<T>
 {
@@ -92,7 +145,9 @@ public class TableTool<T>
     }
 
     /**
-     * Gets the numeric table state id.
+     * Gets the numeric table state id, this value has to be used as
+     * {@link TableConstants#TABLE_ID_PARAM_KEY} parameter value used by table toolki actions,
+     * such as {@link org.objectledge.modules.actions.table.SetPage}. 
      *
      * @return the id of the table instance
      */
@@ -102,9 +157,9 @@ public class TableTool<T>
     }
 
     /**
-     * Returns the current view type of the table.
+     * Informs about the current view type of the table - list or tree.
      *
-     * @return current view
+     * @return <code>true</code> if the list of rows is prepared in tree mode. 
      */
     public boolean getViewAsTree()
     {
@@ -114,7 +169,7 @@ public class TableTool<T>
     /**
      * Returns the root row of the table.
      *
-     * @return the root row of the table
+     * @return the root row of the table, may be null.
      */
     public TableRow<T> getRootRow()
     {
@@ -124,7 +179,7 @@ public class TableTool<T>
     /**
      * Informs about root visibility.
      *
-     * @return <code>true</code> if root row should be shown
+     * @return <code>true</code> if root row is included in the list of rows.
      */
     public boolean getShowRoot()
     {
@@ -132,11 +187,27 @@ public class TableTool<T>
     }
 
     /**
+     * Returns the list of columns defined in this tool.
+     * <p>
+     * Returned columns list contains alphabetically sorted column definition objects created
+     * by the {@link TableModel} and added by the TableTool user.
+     * </p>
+     *
+     * @return the sorted list of <code>TableColumn</code> objects.
+     */
+    public List<TableColumn<T>> getColumns()
+    throws TableException
+    {
+        List<TableColumn<T>> lcolumns = new ArrayList<TableColumn<T>>(columnsByName.values());
+        Collections.sort(lcolumns);
+        return lcolumns;
+    }
+
+    /**
      * Returns the column definition.
      *
      * @param name the name of the column
      * @return the <code>TableColumn</code> object
-     * @throws TableException on error in table column retrieval/construction
      */
     public TableColumn<T> getColumn(String name)
     throws TableException
@@ -151,7 +222,8 @@ public class TableTool<T>
     }
 
     /**
-     * Returns the column definition by which the table is sorted.
+     * Returns the column definition by which the table rows are sorted.
+     * This method can be used to build <i>sorter</i> interface links.
      *
      * @return the <code>TableColumn</code> object
      */
@@ -162,7 +234,8 @@ public class TableTool<T>
     }
 
     /**
-     * Returns the direction of sorting.
+     * Tells about the direction of sorting.
+     * This method can be used to build <i>sorter</i> interface links.
      *
      * @return <code>true</code> if sorting direction is set to ascending.
      */
@@ -172,17 +245,21 @@ public class TableTool<T>
     }
 
     /**
-     * Return the number of the current page of the table, the number is sanitized before return.
+     * Return the number of the current page of the table, the number is sanitized (ie. cannot be
+     * smaller than 1 and larger than {@link #getNumPages()}) before return.
+     * This method should be used to build <i>pager</i> interface.
      * 
 	 * @return the current page
      */
     public int getCurrentPage()
     {
-        return sanitizedCurrentPage();
+        return sanitizeCurrentPage();
     }
 
     /**
      * Return the number of the first row shown on the current page.
+     * This method can be used to build <i>pager</i> interface.
+     * 
      * @return the number of the start row.
      */
     public int getStartRow()
@@ -199,6 +276,8 @@ public class TableTool<T>
     
     /**
      * Return the number of the last row shown on the current page.
+     * This method can be used to build <i>pager</i> interface.
+     * 
      * @return the number of the last row.
      */
     public int getEndRow()
@@ -219,7 +298,8 @@ public class TableTool<T>
     }
 
     /**
-     * Return the size of the page.
+     * Return the currently set size of the page.
+     * This method can be used to build <i>pager</i> interface.
      *
      * @return the size of the page
      */
@@ -229,9 +309,10 @@ public class TableTool<T>
     }
 
     /**
-     * Return the number of pages in table.
+     * Return the total number of pages in represented table.
+     * This method can be used to build <i>pager</i> interface.
      *
-     * @return the number of visible pages
+     * @return the total number of pages.
      */
     public int getNumPages()
     {
@@ -247,9 +328,11 @@ public class TableTool<T>
     }
 
     /**
-     * Return the sanitized page number.
-     * @param i a page number to be sanitized.
-     * @return the page number
+     * For a requested page number, return the sanitized page number.
+     * This method can be used to build <i>pager</i> interface.
+     * 
+     * @param i a requested page number to be sanitized.
+     * @return the sanitized page number.
      */
     public int getPageNumber(int i)
     {
@@ -267,6 +350,8 @@ public class TableTool<T>
 
     /**
      * Return the sanitized page number relative to current page.
+     * This method can be used to build <i>pager</i> interface.
+     * 
      * @param page a page number to be added to current page and sanitized.
      * @return the page number
      */
@@ -276,9 +361,12 @@ public class TableTool<T>
     }
 
     /**
-     * Return the number of elements in returned array.
+     * Return the number of rows in the list returned by {@link #getRows()}. For the last page the
+     * number of rows may be smaller than the current size of the page ({@link #getPageSize()})
+     * since the total number of rows ({@link #getTotalRowCount()} may be not divisible by the page
+     * size.  
      *
-     * @return the size of returned array
+     * @return the number of presented rows.
      */
     public int getPageRowCount()
     {
@@ -286,10 +374,9 @@ public class TableTool<T>
     }
 
     /**
-     * Return the total number of rows in row set represented by this
-     * table tool.
+     * Return the total number of rows in row set represented by this table tool.
      *
-     * @return total number of rows
+     * @return total number of rows.
      */
     public int getTotalRowCount()
     {
@@ -297,10 +384,14 @@ public class TableTool<T>
     }
 
     /**
-     * Returns the list of {@link TableRow} objects representing the resource
-     * tree.
+     * Returns the list of {@link TableRow} objects representing the tree or list of objects.
+     * <p>
+     * The list contains only those rows which are presented on the current page. The list is
+     * filtered and sorted. In case of trees the list is ordered in a way which allows proper
+     * display in file explorer manner.
+     * </p>
      *
-     * @return a list of tree nodes.
+     * @return a list of tree/list nodes.
      */
     public List<TableRow<T>> getRows()
     {
@@ -314,7 +405,7 @@ public class TableTool<T>
     /**
      * Returns the list of ancestors for the row, it does include root row,
      * but does not include current row.
-     * This method is used to build tree with lines.
+     * This method can be used to build tree with lines.
      *
      * @param row the examinated row
      * @return the list of the ancestors
@@ -350,7 +441,9 @@ public class TableTool<T>
     }
 
     /**
-     * Return the parent of the row - delegate this method to model.
+     * Checks whether the ancestor has more children
+     * (ie. the decendant is not a descendant of last child of ancestor).
+     * - delegate this method to model.
      * 
      * @param ancestor the ancestor row
      * @param descendant the descendant row
@@ -605,7 +698,7 @@ public class TableTool<T>
 	 *
 	 * @return the sanitized page number 
 	 */
-	private int sanitizedCurrentPage()
+	private int sanitizeCurrentPage()
 	{
 		int perPage = state.getPageSize();
 		if(perPage == 0)
