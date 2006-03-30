@@ -37,11 +37,16 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 
 /**
- * Changes currently viewed page.
+ * Changes currently viewed page in the table state object.
+ * Uses following parameters:
+ * <ul>
+ * <li>{@link org.objectledge.table.TableConstants#TABLE_ID_PARAM_KEY} - to retreive the table state</li>
+ * <li>{@link org.objectledge.table.TableConstants#PAGE_NO_PARAM_KEY} - as requested page number</li>
+ * </ul>
  * 
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetPage.java,v 1.2 2005-07-07 08:29:28 zwierzem Exp $
+ * @version $Id: SetPage.java,v 1.3 2006-03-30 17:12:41 zwierzem Exp $
  */
 public class SetPage
     extends BaseTableAction

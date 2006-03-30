@@ -37,11 +37,16 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 
 /**
- * Changes the viewed page size.
+ * Changes the viewed page size in the table state object.
+ * Uses following parameters:
+ * <ul>
+ * <li>{@link org.objectledge.table.TableConstants#TABLE_ID_PARAM_KEY} - to retreive the table state</li>
+ * <li>{@link org.objectledge.table.TableConstants#PAGE_SIZE_PARAM_KEY} - as requested page size</li>
+ * </ul>
  * 
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetPageSize.java,v 1.3 2005-11-30 15:26:09 rafal Exp $
+ * @version $Id: SetPageSize.java,v 1.4 2006-03-30 17:12:41 zwierzem Exp $
  */
 public class SetPageSize
     extends BaseTableAction

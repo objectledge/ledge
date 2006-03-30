@@ -41,30 +41,34 @@ import java.util.Map;
  * 
  * <p>
  * TableTool is a core part of the template designer API. It provides access to data of the
- * presented list or tree. Following is a description of methods used to access this data.
+ * presented list or tree. Following is a presentation of an example use in the template and 
+ * a description of methods used to access table data.
  * </p>
+ * 
+ * <pre>
+ * </pre>
  * 
  * <h2>
  * Basic data access
  * </h2>
  * <ul>
- * <li>{@link #getRows()}</li>
- * <li>{@link #getPageRowCount()}</li>
- * <li>{@link #getTotalRowCount()}</li>
- * <li>{@link #getId()}</li>
+ * <li>{@link #getRows()} - returns the list of rows presented in the table.</li>
+ * <li>{@link #getPageRowCount()} - returns the number of presented rows.</li>
+ * <li>{@link #getTotalRowCount()} - returns the total number of rows (including ones not presented).</li>
+ * <li>{@link #getId()} - the id of the table state used in table toolkit actions.</li>
  * </ul>
  *  
  * <h2>
  * Paging information
  * </h2>
  * <ul>
- * <li>{@link #getNumPages()}</li>
- * <li>{@link #getCurrentPage()}</li>
- * <li>{@link #getPageSize()}</li>
- * <li>{@link #getStartRow()}</li>
- * <li>{@link #getEndRow()}</li>
- * <li>{@link #getPageNumber(int)}</li>
- * <li>{@link #getRelativePageNumber(int)}</li>
+ * <li>{@link #getNumPages()} - total number of pages of content in presented collection.</li>
+ * <li>{@link #getCurrentPage()} - number of currently viewed page.</li>
+ * <li>{@link #getPageSize()} - the set page size.</li>
+ * <li>{@link #getStartRow()} - number of the starting row of currently viewed page.</li>
+ * <li>{@link #getEndRow()} - number of the ending row of currently viewed page.</li>
+ * <li>{@link #getPageNumber(int)} - calculates a sane number of a page.</li>
+ * <li>{@link #getRelativePageNumber(int)} - relatively calculates a sane number of a page.</li>
  * </ul>
  * 
  * <h2>
@@ -94,17 +98,17 @@ import java.util.Map;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.18 2006-03-29 15:10:57 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.19 2006-03-30 17:12:42 zwierzem Exp $
  */
 public class TableTool<T>
 {
     /** table state */
     private TableState state;
 
-    /** table model */
+    /** Table row set retrieved from the table model. */
     private TableRowSet<T> rowSet;
 
-    /** column map */
+    /** Maps columns by their names, keeps track of name uniqueness. */
     private Map<String, TableColumn<T>> columnsByName = new HashMap<String, TableColumn<T>>();
 
     /** cached list of rows */
@@ -146,8 +150,9 @@ public class TableTool<T>
 
     /**
      * Gets the numeric table state id, this value has to be used as
-     * {@link TableConstants#TABLE_ID_PARAM_KEY} parameter value used by table toolki actions,
-     * such as {@link org.objectledge.modules.actions.table.SetPage}. 
+     * {@link TableConstants#TABLE_ID_PARAM_KEY} parameter value used by all table toolkit actions,
+     * such as {@link org.objectledge.modules.actions.table.SetPage} 
+     * or {@link org.objectledge.modules.actions.table.SetSortColumn}. 
      *
      * @return the id of the table instance
      */
@@ -443,11 +448,12 @@ public class TableTool<T>
     /**
      * Checks whether the ancestor has more children
      * (ie. the decendant is not a descendant of last child of ancestor).
-     * - delegate this method to model.
+     * - delegated to row set.
      * 
-     * @param ancestor the ancestor row
-     * @param descendant the descendant row
+     * @param ancestor row which is an ancestor for the given descendant row
+     * @param descendant row which is a descendant for the given ancestor row
      * @return <code>true</code> if ancestor has more children.
+     * @see TableRowSet#hasMoreChildren(TableRow, TableRow)
      */
     public boolean hasMoreChildren(TableRow<T> ancestor, TableRow<T> descendant)
     {
@@ -467,6 +473,8 @@ public class TableTool<T>
 
     /**
      * Checks if a row is expanded.
+     * Tree expansion mechanism is used for navigation through the tree.
+     * Expanded nodes show their children to the user.
      *
      * @param row the row
      * @return <code>true</code> if row is expanded
@@ -477,9 +485,11 @@ public class TableTool<T>
     }
     
     /**
-     * Checks if the tree is forced to expand completely.
+     * Checks if the tree is forced to expand all nodes.
+     * Tree expansion mechanism is used for navigation through the tree.
+     * Expanded nodes show their children to the user.
      * 
-     * @return <code>true</code> if the tree is forced to expand completely.
+     * @return <code>true</code> if the tree is forced to expand all nodes.
      */
     public boolean isAllExpanded()
     {

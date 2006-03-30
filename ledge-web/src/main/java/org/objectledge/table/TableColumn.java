@@ -34,18 +34,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class representing table column. It allows template designers to access
+ * Class representing table column.
+ * 
+ * <p>It allows template designers to access
  * meta data for columns and provide generic macros for table header generation.
- * Apart from that it provides comparators which can be used as:
+ *  * Apart from that it provides comparators which can be used as:</p>
  * <ul>
  * <li>internal information about soring for TableModel implementations</li>
  * <li>Comparator provider for {@link org.objectledge.table.generic.GenericListRowSet} and 
  * {@link org.objectledge.table.generic.GenericTreeRowSet}
  * - {@link TableRowSet} implementations</li>
  * </ul>
+ * 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumn.java,v 1.5 2006-03-29 15:10:57 zwierzem Exp $
+ * @version $Id: TableColumn.java,v 1.6 2006-03-30 17:12:42 zwierzem Exp $
  */
 public class TableColumn<T> implements Comparable<TableColumn<T>>
 {

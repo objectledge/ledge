@@ -36,10 +36,11 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 
 /**
- * Base action class for row state toggling actions.
+ * Base action class for row expansion state toggling actions.
+ * Provides method for accesing the id of the row for which the state is changed.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseToggleAction.java,v 1.2 2005-07-07 08:29:28 zwierzem Exp $
+ * @version $Id: BaseToggleAction.java,v 1.3 2006-03-30 17:12:41 zwierzem Exp $
  */
 public abstract class BaseToggleAction
     extends BaseTableAction
@@ -55,6 +56,11 @@ public abstract class BaseToggleAction
 
     /**
      * Returns id of a row for which it's state is toggled.
+     * Uses following parameters:
+     * <ul>
+     * <li>{@link org.objectledge.table.TableConstants#ROW_ID_PARAM_KEY} - as requested row id</li>
+     * </ul>
+     * 
 	 * @param context used to access request parameters and http context.
 	 * @return row id selected using current request parameters
 	 * @throws ProcessingException if row identification parameter is not defined for

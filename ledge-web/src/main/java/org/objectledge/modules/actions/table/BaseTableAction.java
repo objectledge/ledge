@@ -38,10 +38,11 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 
 /**
- * Base class for all table actions.
+ * Base class for all table actions. Provides method for accesing the 
+ * {@link org.objectledge.table.TableState}.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseTableAction.java,v 1.2 2004-12-23 07:18:11 rafal Exp $
+ * @version $Id: BaseTableAction.java,v 1.3 2006-03-30 17:12:41 zwierzem Exp $
  */
 public abstract class BaseTableAction
 	implements Valve
@@ -60,6 +61,12 @@ public abstract class BaseTableAction
 
 	/**
 	 * Retrieves currently modified table state from users session.
+     * Uses following parameters:
+	 * <ul>
+	 * <li>{@link org.objectledge.table.TableConstants#TABLE_ID_PARAM_KEY}
+     *  - to retreive the table state</li>
+     * </ul>
+     * 
 	 * @param context used to access request parameters and http context.
 	 * @return table state selected using current request parameters
 	 * @throws ProcessingException if table identification parameter is not defined for

@@ -38,10 +38,14 @@ import org.objectledge.table.TableStateManager;
 
 /**
  * Toggles expanded-all table state flag.
+ * Uses following parameters:
+ * <ul>
+ * <li>{@link org.objectledge.table.TableConstants#TABLE_ID_PARAM_KEY} - to retreive the table state</li>
+ * </ul>
  *
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleExpandedAll.java,v 1.3 2005-07-07 08:29:28 zwierzem Exp $
+ * @version $Id: ToggleExpandedAll.java,v 1.4 2006-03-30 17:12:41 zwierzem Exp $
  */
 public class ToggleExpandedAll
     extends BaseToggleAction

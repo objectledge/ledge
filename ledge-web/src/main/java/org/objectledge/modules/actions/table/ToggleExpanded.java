@@ -35,10 +35,15 @@ import org.objectledge.table.TableStateManager;
 
 /**
  * Toggles a row expansion state.
+ * Uses following parameters:
+ * <ul>
+ * <li>{@link org.objectledge.table.TableConstants#TABLE_ID_PARAM_KEY} - to retreive the table state</li>
+ * <li>{@link org.objectledge.table.TableConstants#ROW_ID_PARAM_KEY} - as requested row id</li>
+ * </ul>
  * 
  * @author <a href="mailo:pablo@ngo.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ToggleExpanded.java,v 1.2 2005-07-07 08:29:28 zwierzem Exp $
+ * @version $Id: ToggleExpanded.java,v 1.3 2006-03-30 17:12:41 zwierzem Exp $
  */
 public class ToggleExpanded
     extends BaseToggleAction

@@ -39,9 +39,14 @@ import org.objectledge.parameters.RequestParameters;
 /**
  * Sets a new sorting for a given table.
  * If the same column is set, sorting direction is changed.
+ * Uses following parameters:
+ * <ul>
+ * <li>{@link org.objectledge.table.TableConstants#TABLE_ID_PARAM_KEY} - to retreive the table state</li>
+ * <li>{@link org.objectledge.table.TableConstants#SORT_COLUMN_PARAM_KEY} - as requested column name</li>
+ * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetSortColumn.java,v 1.2 2005-07-07 08:29:28 zwierzem Exp $
+ * @version $Id: SetSortColumn.java,v 1.3 2006-03-30 17:12:41 zwierzem Exp $
  */
 public class SetSortColumn extends BaseTableAction
 {
