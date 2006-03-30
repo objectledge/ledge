@@ -35,7 +35,7 @@ import java.util.Locale;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.1 2006-03-29 15:54:48 pablo Exp $
+ * @version $Id: MailingListsManager.java,v 1.2 2006-03-30 14:45:21 pablo Exp $
  */
 public interface MailingListsManager 
 {
@@ -58,10 +58,11 @@ public interface MailingListsManager
     /**
      * Delete mailing list.
      *
-     * @param list the list to be deleted.
+     * @param name name of the list to delete.
+     * @param deleteArchived delete if <code>true</code>
      * @throws MailingListsException if ml deletion failed.
      */
-    public void deleteList(MailingList list)
+    public void deleteList(String name, boolean deleteArchived)
         throws MailingListsException;
     
     /**
@@ -79,7 +80,7 @@ public interface MailingListsManager
      * @return the list of public lists.
      * @throws MailingListsException if something goes wrong.
      */
-    public List<MailingList> getPublicLists()
+    public List<String> getPublicLists()
         throws MailingListsException;
     
     /**
@@ -88,7 +89,7 @@ public interface MailingListsManager
      * @return the list of all lists.
      * @throws MailingListsException if something goes wrong;
      */
-    public List<MailingList> getLists()
+    public List<String> getLists()
         throws MailingListsException;
     
 }
