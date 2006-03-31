@@ -24,6 +24,7 @@ public class Tescik
         MailmanMailingListsManager mml = 
             new MailmanMailingListsManager(logger, 
                 "http://potenilla.caltha.pl/mailman/RPC2", "", "12345");
+        /**
         mml.createList("test1", "potenilla.caltha.pl", false, 
           new String[]{"pablo@caltha.pl"},"haslo", false, new Locale("pl","PL"));
         System.out.println(mml.getLists());
@@ -36,6 +37,17 @@ public class Tescik
         //System.out.println("STATUS: "+ml.deleteMember("007j24@wp.pl", true));
         System.out.println("MEMBERS: "+ml.getMembers());
         mml.deleteList("test1", true);
+        
+        */
+        MailingList ml = mml.getList("kaszanka", "12345");
+        ml.setSubscriptionPolicy(2);
+        ml.setPostingModerated(true);
+        System.out.println("Subscription policy?: "+ml.getSubscriptionPolicy());
+        System.out.println("Moderowane?: "+ml.isPostingModerated());
+        ml.setSubscriptionPolicy(3);
+        ml.setPostingModerated(false);
+        System.out.println("Subscription policy?: "+ml.getSubscriptionPolicy());
+        System.out.println("Moderowane?: "+ml.isPostingModerated());
     }
 
 }

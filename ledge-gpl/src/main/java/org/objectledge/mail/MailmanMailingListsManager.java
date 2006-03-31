@@ -30,21 +30,22 @@ package org.objectledge.mail;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
-import org.objectledge.parameters.Parameters;
 
 /**
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.2 2006-03-30 14:46:42 pablo Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.3 2006-03-31 13:00:24 pablo Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -316,7 +317,9 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result value: '"+result+"' or class:'"+result.getClass().getName());    }
+        throw new MailingListsException("Invalid result value: '"+result+
+            "' or class:'"+result.getClass().getName());    
+    }
 
     /**
      * {@inheritDoc}
@@ -340,19 +343,46 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    Parameters getOptions(String listName, String adminPassword)
+    Object getOption(String listName, String adminPassword, String key)
         throws MailingListsException
     {
-        throw new UnsupportedOperationException("not implemented yet!");
+        Object[] params = new Object[]{
+                        listName, adminPassword, new String[]{key}};
+        Object result = executeMethod("Mailman.getOptions", params);
+        if(result instanceof Map)
+        {
+            return ((Map)result).get(key);
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result value: '"+result+"' or class:'"+result.getClass().getName());    
     }
 
     /**
      * {@inheritDoc}
      */
-    void setOptions(String listName, String adminPassword, 
-        Parameters options) throws MailingListsException
+    void setOption(String listName, String adminPassword, 
+        String key, Object value) throws MailingListsException
     {
-        throw new UnsupportedOperationException("not implemented yet!");
+        Hashtable<String, Object> map = new Hashtable<String, Object>();
+        map.put(key, value);
+        Object[] params = new Object[]{
+                        listName, adminPassword, map};
+        Object result = executeMethod("Mailman.setOptions", params);
+        if(result instanceof Boolean)
+        {
+            if(((Boolean)result))
+            {
+                return;
+            }
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result value: '"+result+"' or class:'"+result.getClass().getName());
     }
 
     /**
@@ -374,7 +404,22 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
     }
     
-    
+    /**
+     * {@inheritDoc}
+     */
+    List getPendingPosts(String listName, String adminPassword) throws MailingListsException
+    {
+        throw new UnsupportedOperationException("not implemented yet!");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    List getPendingSubscriptions(String listName, String adminPassword) throws MailingListsException
+    {
+        throw new UnsupportedOperationException("not implemented yet!");
+    }
+
     // private methods
     /**
      * RPC method executor.

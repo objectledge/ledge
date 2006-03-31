@@ -36,7 +36,7 @@ import org.objectledge.parameters.Parameters;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.1 2006-03-29 15:54:48 pablo Exp $
+ * @version $Id: MailingList.java,v 1.2 2006-03-31 13:00:20 pablo Exp $
  */
 public interface MailingList
 {
@@ -46,7 +46,12 @@ public interface MailingList
     
     public static final int NEEDS_TO_CONFIRM = 2;
     
-
+    public static final int REQUIRE_CONFIRM = 1;
+    
+    public static final int REQUIRE_APPROVAL = 2;
+    
+    public static final int REQUIRE_CONFIRM_AND_APPROVAL = 3;
+    
     /**
      * Add new member to mailing list.
      * 
@@ -102,24 +107,6 @@ public interface MailingList
         throws MailingListsException;
     
     /**
-     * Get list configuration.
-     * 
-     * @return the list configuration.
-     * @throws MailingListsException if anything goes wrong.
-     */
-    public Parameters getOptions()
-        throws MailingListsException;
-
-    /**
-     * Set new mailing list configuration.
-     * 
-     * @param options ml options
-     * @throws MailingListsException if anything goes wrong.
-     */
-    public void setOptions(Parameters options)
-        throws MailingListsException;
-    
-    /**
      * Set ml's administrator password.
      * 
      * @param password new password.
@@ -127,4 +114,59 @@ public interface MailingList
      */
     public void setPassword(String password)
         throws MailingListsException;
+    
+    /**
+     * Set moderation flag for mailing list.
+     * 
+     * @param moderated moderated if <code>true</code>
+     * @throws MailingListsException
+     */
+    public void setPostingModerated(boolean moderated)
+        throws MailingListsException;
+    
+    /**
+     * Get current moderation flag.
+     * 
+     * @return whether posting on this list is moderated
+     * @throws MailingListsException
+     */
+    public boolean isPostingModerated()
+        throws MailingListsException;
+    
+    /**
+     * Set subscription policy for list.
+     * 
+     * @param policy the policy.
+     * @throws MailingListsException
+     */
+    public void setSubscriptionPolicy(int policy)
+        throws MailingListsException;
+    
+    /**
+     * Get current subscription policy.
+     * 
+     * @return subscription policy.
+     * @throws MailingListsException
+     */
+    public int getSubscriptionPolicy()
+        throws MailingListsException;
+    
+    /**
+     * Get list of messages waiting for moderation.
+     * 
+     * @return the list of messages.
+     * @throws MailingListsException
+     */
+    public List getPendingPosts()
+        throws MailingListsException;
+    
+    /**
+     * Get list of subscriptions. 
+     * 
+     * @return the list of subscriptions waiting for moderation.
+     * @throws MailingListsException
+     */
+    public List getPendingSubscriptions()
+        throws MailingListsException;
+    
 }
