@@ -56,6 +56,7 @@ public class Tescik
         System.out.println("Subscription policy?: "+ml.getSubscriptionPolicy());
         System.out.println("Moderowane?: "+ml.isPostingModerated());
         */
+        /**
         MailmanMailingList ml = (MailmanMailingList)mml.getList("testlist", "12345");
         System.out.println("Messages: "+ml.getPendingPosts());
         System.out.println("Type: "+ml.getPendingTaskType(4));
@@ -69,6 +70,8 @@ public class Tescik
         message.setText("bleble");
         message.setHeader("sender","fsdfsdf");
         ml.postMessage(message);
+        */
+        System.out.println("Locales: "+mml.getLocales());
     }
 
 }

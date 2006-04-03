@@ -35,23 +35,22 @@ import java.util.Locale;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.2 2006-03-30 14:45:21 pablo Exp $
+ * @version $Id: MailingListsManager.java,v 1.3 2006-04-03 14:38:00 pablo Exp $
  */
 public interface MailingListsManager 
 {
     /**
-     * Create mailing list.
+     * Create new mailing list.
      *
      * @param name the name of the list.
      * @param domain the email domain.
-     * @param moderated moderated if <code>true</code>
      * @param administrators list of administrators's email addresses
      * @param password the administrator password, auto generated if <code>null</code>
      * @param notify if <code>true</code> send notification about list creation.
      * @param locale mailing list locale.
      * @throws MailingListsException if ml creation failed.
      */
-    public MailingList createList(String name, String domain, boolean moderated, 
+    public MailingList createList(String name, String domain, 
         String[] administrators, String password, boolean notify, Locale locale)
     	throws MailingListsException;
     
@@ -92,4 +91,13 @@ public interface MailingListsManager
     public List<String> getLists()
         throws MailingListsException;
     
+    /**
+     * Get all available locales.
+     * 
+     * @return the list of locales.
+     * @throws MailingListsException
+     */
+    public List getLocales()
+        throws MailingListsException;
+
 }

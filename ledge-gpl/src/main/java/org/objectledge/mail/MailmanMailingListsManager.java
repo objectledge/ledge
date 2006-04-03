@@ -30,7 +30,9 @@ package org.objectledge.mail;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,7 +47,7 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.4 2006-04-03 13:38:35 pablo Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.5 2006-04-03 14:38:05 pablo Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -103,12 +105,12 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    public MailingList createList(String name, String domain, boolean moderated, 
+    public MailingList createList(String name, String domain, 
         String[] administrators, String password, 
         boolean notify, Locale locale) throws MailingListsException
     {
         Object[] params = new Object[]{
-            adminPassword, name, domain, moderated, administrators,
+            adminPassword, name, domain, true, administrators,
             password, notify, locale.getDisplayLanguage()};
         Object result = null;
         try
@@ -221,6 +223,34 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
     }
 
+    /**
+     * {@inheritDoc}
+     */    
+    public List getLocales()
+        throws MailingListsException
+    {
+        Object[] params = new Object[]{adminPassword};
+        Object result = executeMethod("Mailman.getLocales", params);
+        List<String> names = new ArrayList<String>();
+        if(result instanceof Collection)
+        {
+            Collection list = (Collection)result;
+            ArrayList<String> codes = new ArrayList<String>();
+            Iterator it = list.iterator();
+            while(it.hasNext())
+            {
+                List innerList = (List)it.next();
+                codes.add((String)innerList.get(0));
+            }
+            return codes;
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+    }
+    
     // package private operations
     
     /**
