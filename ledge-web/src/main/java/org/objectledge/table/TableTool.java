@@ -107,57 +107,41 @@ import java.util.Map;
  * </ul>
  * 
  * <pre>
- * <span style="color: green">
- * ## create a link containing the table id, so it can be used to call table toolkit actions
- * </span>
+ * <span style="color: green">## create a link containing the table id, so it can be used to call table toolkit actions * </span>
  * #set($tableLink = $link.set('tableId',$table.id))
- *  
- * <span style="color: green">
- * ## add label property to displayed columns
- * </span>
+ * <span style="color: green">## add label property to displayed columns</span>
  * $table.getColumn('name').set('label', 'First name')
  * $table.getColumn('surname').set('label', 'Family name')
  * $table.getColumn('grade').set('label', 'Grade')
- * <span style="color: green">
- * ## create a list of names of columns used to display a list of sorting links
- * </span>
+ * <span style="color: green">## create a list of names of columns used to display a list of sorting links</span>
  * #set($columnOrder = ['name','surname','grade'])
  * &lt;p&gt;
  * Sorting:
- * <span style="color: green">
- * ## iterate list of column names to display sorting list
- * </span>
+ * <span style="color: green">## iterate list of column names to display sorting list</span>
  * #foreach($columnName in $columnOrder)
- * <span style="color: green">
- * ## call a special macro to display a table heading contgent with sorting link 
- * </span>
+ * <span style="color: green">## call a special macro to display a table heading contgent with sorting link</span>
  * #tableView_headCellContent($table $table.getColumn($columnName) $tableLink),
  * #end
  * &lt;/p&gt;
  * 
- * <span style="color: green">
- * ## display one of pager variations 
- * </span>
+ * <span style="color: green">## display one of pager variations</span>
  * &lt;div class="pager-box"&gt;
  * #tableView_relativePager($table $tableLink)
  * &lt;/div&gt;
  *
- * <span style="color: green">
- * ## display the list itself 
- * </span>
- * <ol id="students" start="$table.startRow">
+ * <span style="color: green">## display the list itself</span>
+ * &lt;ol id="students" start="$table.startRow"&gt;
  * #foreach($row in $table.rows)
- * <span style="color: green">
- * ## get the student object from the row 
- * </span>
+ * <span style="color: green">## get the student object from the row</span>
  * #set($student = $row.object)
- * ...
+ * &lt;li&gt;...&lt;/li&gt;
  * #end
+ * &lt;/ol&gt;
  * </pre>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.22 2006-04-03 18:54:55 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.23 2006-04-03 19:13:35 zwierzem Exp $
  */
 public class TableTool<T>
 {
