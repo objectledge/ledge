@@ -26,12 +26,16 @@
 ## POSSIBILITY OF SUCH DAMAGE.  
 ## 
 #**
- * table rendering macros
+ * Table toolkit rendering macros.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
- * @version $Id: table.vt,v 1.12 2006-03-13 15:22:22 rafal Exp $
+ * @version $Id: table.vt,v 1.13 2006-04-03 18:58:43 zwierzem Exp $
 *###
+
+## ------------------------------------------------------------------------------------------------
+## ----------------------------------- SORTING LINK GENERATION ------------------------------------
+## ------------------------------------------------------------------------------------------------
 
 #**
  * Displays a single header cell contents.
@@ -135,6 +139,10 @@ $table.getColumn($column).set('label', $i18n.usePrefix('labels').get($column))
 #end	
 #end
 
+## ------------------------------------------------------------------------------------------------
+## ----------------------------------- CONVENIENCE ------------------------------------------------
+## ------------------------------------------------------------------------------------------------
+
 #**
  * Displays table body.
  *
@@ -153,6 +161,10 @@ $table.getColumn($column).set('label', $i18n.usePrefix('labels').get($column))
     #end
   #end
 #end
+
+## ------------------------------------------------------------------------------------------------
+## ----------------------------------- PAGER GENERATION -------------------------------------------
+## ------------------------------------------------------------------------------------------------
 
 #**
  * Displays the table pager.
@@ -173,7 +185,6 @@ $table.currentPage $i18n.get('table.page.of') $table.numPages |
 </span>
 #end
 #end
-
 
 #**
  * Displays the table pager - form submit version.
@@ -340,6 +351,9 @@ $i18n.get('table.page.size')
 </span>
 #end
 
+## ------------------------------------------------------------------------------------------------
+## ----------------------------------- TREES GENERATION -------------------------------------------
+## ------------------------------------------------------------------------------------------------
 
 #**
  * Displays lines, expand boxes and icons for a tree view.
