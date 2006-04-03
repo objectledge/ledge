@@ -99,14 +99,65 @@ import java.util.Map;
  *      file explorer like lines and folder icons.</li>
  * </ul>
  *
- * <h2>Example use of table tool in templat code</h2>
- * <pre>
+ * <h2>Example use of table tool in the template code</h2>
+ * <p>The code below uses macros from <code>table.vt</code> macro library.</p>
+ * <p>References used:</p>
+ * <ul>
+ * <li><code>$table</code> - the table tool, containing a list of students</li>
+ * </ul>
  * 
+ * <pre>
+ * <span style="color: green">
+ * ## create a link containing the table id, so it can be used to call table toolkit actions
+ * </span>
+ * #set($tableLink = $link.set('tableId',$table.id))
+ *  
+ * <span style="color: green">
+ * ## add label property to displayed columns
+ * </span>
+ * $table.getColumn('name').set('label', 'First name')
+ * $table.getColumn('surname').set('label', 'Family name')
+ * $table.getColumn('grade').set('label', 'Grade')
+ * <span style="color: green">
+ * ## create a list of names of columns used to display a list of sorting links
+ * </span>
+ * #set($columnOrder = ['name','surname','grade'])
+ * &lt;p&gt;
+ * Sorting:
+ * <span style="color: green">
+ * ## iterate list of column names to display sorting list
+ * </span>
+ * #foreach($columnName in $columnOrder)
+ * <span style="color: green">
+ * ## call a special macro to display a table heading contgent with sorting link 
+ * </span>
+ * #tableView_headCellContent($table $table.getColumn($columnName) $tableLink),
+ * #end
+ * &lt;/p&gt;
+ * 
+ * <span style="color: green">
+ * ## display one of pager variations 
+ * </span>
+ * &lt;div class="pager-box"&gt;
+ * #tableView_relativePager($table $tableLink)
+ * &lt;/div&gt;
+ *
+ * <span style="color: green">
+ * ## display the list itself 
+ * </span>
+ * <ol id="students" start="$table.startRow">
+ * #foreach($row in $table.rows)
+ * <span style="color: green">
+ * ## get the student object from the row 
+ * </span>
+ * #set($student = $row.object)
+ * ...
+ * #end
  * </pre>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.21 2006-04-03 18:38:51 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.22 2006-04-03 18:54:55 zwierzem Exp $
  */
 public class TableTool<T>
 {
