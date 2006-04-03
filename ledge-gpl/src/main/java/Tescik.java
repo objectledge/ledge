@@ -1,9 +1,15 @@
 
-import java.util.Locale;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.objectledge.mail.MailingList;
+import org.objectledge.mail.MailmanMailingList;
 import org.objectledge.mail.MailmanMailingListsManager;
 
 public class Tescik
@@ -39,6 +45,7 @@ public class Tescik
         mml.deleteList("test1", true);
         
         */
+        /**
         MailingList ml = mml.getList("kaszanka", "12345");
         ml.setSubscriptionPolicy(2);
         ml.setPostingModerated(true);
@@ -48,6 +55,20 @@ public class Tescik
         ml.setPostingModerated(false);
         System.out.println("Subscription policy?: "+ml.getSubscriptionPolicy());
         System.out.println("Moderowane?: "+ml.isPostingModerated());
+        */
+        MailmanMailingList ml = (MailmanMailingList)mml.getList("testlist", "12345");
+        System.out.println("Messages: "+ml.getPendingPosts());
+        System.out.println("Type: "+ml.getPendingTaskType(4));
+        System.out.println(ml.getPendingMessage(4));
+        Properties sessionProperties = new Properties();
+        Session session = Session.getInstance(sessionProperties);
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("testlist@potenilla.caltha.pl"));
+        message.addRecipient(RecipientType.TO, new InternetAddress("blbble@potenilla.caltha.pl"));
+        message.setSubject("test x 15");
+        message.setText("bleble");
+        message.setHeader("sender","fsdfsdf");
+        ml.postMessage(message);
     }
 
 }

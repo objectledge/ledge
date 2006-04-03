@@ -36,7 +36,7 @@ import org.objectledge.parameters.Parameters;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.2 2006-03-31 13:00:20 pablo Exp $
+ * @version $Id: MailingList.java,v 1.3 2006-04-03 13:38:29 pablo Exp $
  */
 public interface MailingList
 {
@@ -168,5 +168,23 @@ public interface MailingList
      */
     public List getPendingSubscriptions()
         throws MailingListsException;
+
+    /**
+     * Get list of unsubscriptions. 
+     * 
+     * @return the list of unsubscriptions waiting for moderation.
+     * @throws MailingListsException
+     */
+    public List getPendingUnubscriptions()
+        throws MailingListsException;
     
+    /**
+     * Get pending message. 
+     * 
+     * @param id message identifier.
+     * @return the message.
+     * @throws MailingListsException
+     */
+    public Object getPendingMessage(int id)
+        throws MailingListsException;
 }

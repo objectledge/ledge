@@ -28,13 +28,18 @@
 
 package org.objectledge.mail;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
+
+import javax.mail.Message;
+
 
 /**
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.3 2006-03-31 13:00:24 pablo Exp $
+ * @version $Id: MailmanMailingList.java,v 1.4 2006-04-03 13:38:35 pablo Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -149,6 +154,48 @@ public class MailmanMailingList implements MailingList
         return manager.getPendingSubscriptions(listName, adminPassword);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List getPendingUnubscriptions() throws MailingListsException
+    {
+        return manager.getPendingUnsubscriptions(listName, adminPassword);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Object getPendingMessage(int id) throws MailingListsException
+    {
+        return manager.getPendingTask(listName, adminPassword, id);
+    }
+
+    /**
+     * 
+     */
+    public Object getPendingTaskType(int id) throws MailingListsException
+    {
+        return manager.getPendingTaskType(listName, adminPassword, id);
+    }
+    
+    /**
+     * 
+     */
+    public void postMessage(Message message) throws MailingListsException
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try
+        {
+            message.writeTo(baos);
+            manager.postMessage(listName, adminPassword, 
+                baos.toString("UTF-8"));
+        }
+        catch(Exception e)
+        {
+            throw new MailingListsException("failed to serialize message", e);
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */
