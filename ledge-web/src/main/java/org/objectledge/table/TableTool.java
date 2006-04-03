@@ -75,30 +75,33 @@ import java.util.Map;
  * Sorting information
  * </h2>
  * <ul>
- * <li>{@link #getSortColumn()}</li>
- * <li>{@link #getAscSort()}</li>
- * <li>{@link #getColumn(String)}</li>
- * <li>{@link #getColumns()}</li>
+ * <li>{@link #getSortColumn()} - returns an object representing the column by which the tree/list
+ *     data is sorted.</li>
+ * <li>{@link #getAscSort()} - tells about the direction of sorting.</li>
+ * <li>{@link #getColumn(String)} - returns a column by name 
+ *      (may create a column object for unknown name).</li>
+ * <li>{@link #getColumns()} - returns all column objects.</li>
  * </ul>
  * 
  * <h2>
  * Tree data access
  * </h2>
  * <ul>
- * <li>{@link #getAncestors(TableRow)}</li>
- * <li>{@link #getParent(TableRow)}</li>
- * <li>{@link #getRootRow()}</li>
- * <li>{@link #getShowRoot()}</li>
- * <li>{@link #getViewAsTree()}</li>
+ * <li>{@link #getAncestors(TableRow)} - returns list of ancestors for a given row.</li>
+ * <li>{@link #getParent(TableRow)} - returns a parent row for a given row.</li>
+ * <li>{@link #getRootRow()} - returns a root row of currently displayed tree/list.</li>
+ * <li>{@link #getShowRoot()} - tells whather the root row is shown (included in row collection).</li>
+ * <li>{@link #getViewAsTree()} - tells whether the row collection is rendered as tree or a list.</li>
  * <li>{@link #hasMoreChildren(TableRow, TableRow)}</li>
- * <li>{@link #isAllExpanded()}</li>
- * <li>{@link #isExpanded(TableRow)}</li>
- * <li>{@link #linesAndFolders(TableRow)}</li>
+ * <li>{@link #isAllExpanded()} - tells whether all tree nodes are expanded.</li>
+ * <li>{@link #isExpanded(TableRow)} - tells ehether a given row is expanded.</li>
+ * <li>{@link #linesAndFolders(TableRow)} - returns a list of objects which make it easy to render
+ *      file explorer like lines and folder icons.</li>
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.19 2006-03-30 17:12:42 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.20 2006-04-03 17:35:29 zwierzem Exp $
  */
 public class TableTool<T>
 {
@@ -498,9 +501,10 @@ public class TableTool<T>
 
     /**
      * Returns a list of {@link LinesAndFoldersBox} objects for a given row to help building tree 
-     * like structures. 
-     * @param row the row for which the lines and folders data will be generated
-     * @return list of {@link LinesAndFoldersBox} 
+     * like structures (similar to ones that can be seen in windows file explorer interface).
+     *  
+     * @param row the row for which the lines and folders data will be generated.
+     * @return list of {@link LinesAndFoldersBox}.
      */
     public List<LinesAndFoldersBox> linesAndFolders(TableRow<T> row)
     {
@@ -597,21 +601,40 @@ public class TableTool<T>
 		return linesAndFolders;
     }
 
-	private static final LinesAndFoldersBox LF_I = new LinesAndFoldersBox("I", true);
-	private static final LinesAndFoldersBox LF_L = new LinesAndFoldersBox("L", false);
-	private static final LinesAndFoldersBox LF_T = new LinesAndFoldersBox("T", true);
-	private static final LinesAndFoldersBox LF_BLANK = new LinesAndFoldersBox("blank", false);
-	private static final LinesAndFoldersBox LF_L_PLUS = 
+    /** A box representing a single verical line, named <code>I</code>.
+     * Line is used to draw line along expanded children of a node. */
+	public static final LinesAndFoldersBox LF_I = new LinesAndFoldersBox("I", true);
+    /** A box representing an L-shaped line (for the last child), named <code>L</code>. */
+	public static final LinesAndFoldersBox LF_L = new LinesAndFoldersBox("L", false);
+    /** A box representing an T-shaped line (for the inner child), named <code>L</code>. */
+	public static final LinesAndFoldersBox LF_T = new LinesAndFoldersBox("T", true);
+    /** A box representing an blank area, named <code>blank</code>. */
+	public static final LinesAndFoldersBox LF_BLANK = new LinesAndFoldersBox("blank", false);
+    /** A box representing an expansion button (plus sign) on a L-shaped line, 
+     * named <code>Lplus</code>. */
+	public static final LinesAndFoldersBox LF_L_PLUS = 
 		new LinesAndFoldersBox("Lplus", "toggle-expand", false);
-	private static final LinesAndFoldersBox LF_L_MINUS = 
+    /** A box representing an expansion button (minus sign) on a L-shaped line, 
+     * named <code>Lminus</code>. */
+	public static final LinesAndFoldersBox LF_L_MINUS = 
 		new LinesAndFoldersBox("Lminus", "toggle-expand", false);
-	private static final LinesAndFoldersBox LF_T_PLUS = 
+    /** A box representing an expansion button (plus sign) on a T-shaped line, 
+     * named <code>Tplus</code>. */
+	public static final LinesAndFoldersBox LF_T_PLUS = 
 		new LinesAndFoldersBox("Tplus", "toggle-expand", true);
-	private static final LinesAndFoldersBox LF_T_MINUS = 
+    /** A box representing an expansion button (minus sign) on a T-shaped line, 
+     * named <code>Tminus</code>. */
+	public static final LinesAndFoldersBox LF_T_MINUS = 
 		new LinesAndFoldersBox("Tminus", "toggle-expand", true);
-	private static final LinesAndFoldersBox LF_FOLDER = new LinesAndFoldersBox("folder", true);
-	private static final LinesAndFoldersBox LF_FILE = new LinesAndFoldersBox("file", false);
-	private static final LinesAndFoldersBox LF_FOLDEROPEN = new LinesAndFoldersBox("folderopen", 
+    /** A box representing a closed folder icon, named <code>folder</code>.
+     * It is used for not expanded nodes which have child nodes. */
+	public static final LinesAndFoldersBox LF_FOLDER = new LinesAndFoldersBox("folder", true);
+    /** A box representing a file icon, named <code>file</code>.
+     * It is used for nodes which do NOT have child nodes. */
+	public static final LinesAndFoldersBox LF_FILE = new LinesAndFoldersBox("file", false);
+    /** A box representing an open folder icon, named <code>folderopen</code>.
+     * It is used for expanded nodes which have child nodes. */
+	public static final LinesAndFoldersBox LF_FOLDEROPEN = new LinesAndFoldersBox("folderopen", 
         true);
 
 	/** 
