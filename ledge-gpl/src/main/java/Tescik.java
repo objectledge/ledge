@@ -71,7 +71,9 @@ public class Tescik
         message.setHeader("sender","fsdfsdf");
         ml.postMessage(message);
         */
-        System.out.println("Locales: "+mml.getLocales());
+        MailmanMailingList ml = (MailmanMailingList)mml.getList("testlist", "12345");
+        System.out.println("Messages: "+ml.getPendingPosts());
+        ml.acceptMessage(4);
     }
 
 }

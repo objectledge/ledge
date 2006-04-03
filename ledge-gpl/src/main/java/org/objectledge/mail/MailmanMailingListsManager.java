@@ -47,7 +47,7 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.5 2006-04-03 14:38:05 pablo Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.6 2006-04-03 15:11:07 pablo Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -505,6 +505,23 @@ public class MailmanMailingListsManager implements MailingListsManager
     {
         Object[] params = new Object[]{listName, adminPassword, message};
         Object result = executeMethod("Mailman.postMessage", params);
+        if(result instanceof Boolean && ((Boolean)result))
+        {
+            return;
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+    }
+    
+    public void handleModeratorRequest(String listName, String adminPassword,
+        int id, int command)
+            throws MailingListsException
+    {
+        Object[] params = new Object[]{listName, adminPassword, id, command};
+        Object result = executeMethod("Mailman.handleModeratorRequest", params);
         if(result instanceof Boolean && ((Boolean)result))
         {
             return;

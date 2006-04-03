@@ -29,7 +29,6 @@
 package org.objectledge.mail;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 import javax.mail.Message;
@@ -39,7 +38,7 @@ import javax.mail.Message;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.4 2006-04-03 13:38:35 pablo Exp $
+ * @version $Id: MailmanMailingList.java,v 1.5 2006-04-03 15:11:08 pablo Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -61,6 +60,11 @@ public class MailmanMailingList implements MailingList
     
     private static final int OPTION_POSTING_MODERATED = 1;
 
+    private static final int ML_ACTION_APPROVE = 1;
+    private static final int ML_ACTION_REJECT = 2;
+    private static final int ML_ACTION_DISCARD = 3;
+    private static final int ML_ACTION_SUBSCRIBE = 4;
+    private static final int ML_ACTION_UNSUBSCRIBE = 5;
     
     /** list manager */
     private MailmanMailingListsManager manager;
@@ -268,6 +272,59 @@ public class MailmanMailingList implements MailingList
         }
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public void acceptMessage(int id) throws MailingListsException
+    {
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_APPROVE);
+    }
     
+    /**
+     * {@inheritDoc}
+     */
+    public void rejectMessage(int id) throws MailingListsException
+    {
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
+    }
     
+    /**
+     * {@inheritDoc}
+     */
+    public void discardMessage(int id) throws MailingListsException
+    {
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_DISCARD);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void rejectSubscription(int id) throws MailingListsException
+    {
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void acceptSubscription(int id) throws MailingListsException
+    {
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_SUBSCRIBE);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void rejectUnsubscription(int id) throws MailingListsException
+    {
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void acceptUnsubscription(int id) throws MailingListsException
+    {
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_UNSUBSCRIBE);
+    }
 }

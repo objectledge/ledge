@@ -30,13 +30,11 @@ package org.objectledge.mail;
 
 import java.util.List;
 
-import org.objectledge.parameters.Parameters;
-
 /**
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.3 2006-04-03 13:38:29 pablo Exp $
+ * @version $Id: MailingList.java,v 1.4 2006-04-03 15:11:02 pablo Exp $
  */
 public interface MailingList
 {
@@ -187,4 +185,60 @@ public interface MailingList
      */
     public Object getPendingMessage(int id)
         throws MailingListsException;
+    
+    /**
+     * Accept message.
+     * 
+     * @param id message identifier.
+     * @throws MailingListsException 
+     */
+    public void acceptMessage(int id) throws MailingListsException;
+    
+    /**
+     * Reject message.
+     * 
+     * @param id message identifier.
+     * @throws MailingListsException 
+     */
+    public void rejectMessage(int id) throws MailingListsException;
+    
+    /**
+     * Discard message.
+     * 
+     * @param id message identifier.
+     * @throws MailingListsException 
+     */
+    public void discardMessage(int id) throws MailingListsException;
+    
+    /**
+     * Reject subscription request.
+     * 
+     * @param id message identifier.
+     * @throws MailingListsException 
+     */
+    public void rejectSubscription(int id) throws MailingListsException;
+    
+    /**
+     * Accept subscription request.
+     * 
+     * @param id message identifier.
+     * @throws MailingListsException 
+     */
+    public void acceptSubscription(int id) throws MailingListsException;
+    
+    /**
+     * Reject unsubscription request.
+     * 
+     * @param id message identifier.
+     * @throws MailingListsException 
+     */
+    public void rejectUnsubscription(int id) throws MailingListsException;
+    
+    /**
+     * Accept unsubscription request.
+     * 
+     * @param id message identifier.
+     * @throws MailingListsException 
+     */
+    public void acceptUnsubscription(int id) throws MailingListsException;
 }
