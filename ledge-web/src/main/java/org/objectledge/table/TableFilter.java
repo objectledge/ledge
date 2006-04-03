@@ -30,9 +30,11 @@ package org.objectledge.table;
 
 /**
  * TableFilter specifies a partial view of a table (tree).
+ * A collection of filter objects has to be provided for every creation of a 
+ * {@link org.objectledge.table.TableTool}.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableFilter.java,v 1.3 2006-03-16 17:57:04 zwierzem Exp $
+ * @version $Id: TableFilter.java,v 1.4 2006-04-03 18:38:51 zwierzem Exp $
  */
 public interface TableFilter<T>
 {

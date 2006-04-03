@@ -28,11 +28,36 @@
 
 package org.objectledge.table;
 
-/** Container for displayed row of data.
+/**
+ * Container for displayed row of data.
+ * Objects of this class are accessed by template designers while displaying contents of tree/list.
+ * 
+ * <p>
+ * The main properties of a row are:
+ * </p>
+ * <ul>
+ * <li>{@link #id} - the id of the row (unique for all rows), used to identify rows while
+ *     executing table toolkit actions.</li>
+ * <li>{@link #object} - the object represented by the row, this is the real data displayed for
+ *     application users.</li>
+ * </ul>
+ * 
+ * <p>
+ * Tree information properties of a row are:
+ * </p>
+ * <ul>
+ * <li>{@link #depth} - the depth in the tree.</li>
+ * <li>{@link #childCount} - real number of unfiltered children of the node (possibly hidden
+ *      due to being in collapsed state, 
+ *      (see {@link org.objectledge.table.TableState#isExpanded(String)} and
+ *       {@link org.objectledge.table.TableTool#isExpanded(TableRow)}).</li>
+ * <li>{@link #visibleChildCount} - real number of unfiltered visible children of the node
+ *      (shown in the case of the node being in expanded state).</li>
+ * </ul>
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableRow.java,v 1.7 2006-03-16 17:57:04 zwierzem Exp $
+ * @version $Id: TableRow.java,v 1.8 2006-04-03 18:38:51 zwierzem Exp $
  */
 public class TableRow<T>
 {

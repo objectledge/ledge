@@ -99,9 +99,14 @@ import java.util.Map;
  *      file explorer like lines and folder icons.</li>
  * </ul>
  *
+ * <h2>Example use of table tool in templat code</h2>
+ * <pre>
+ * 
+ * </pre>
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.20 2006-04-03 17:35:29 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.21 2006-04-03 18:38:51 zwierzem Exp $
  */
 public class TableTool<T>
 {

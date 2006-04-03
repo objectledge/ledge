@@ -48,12 +48,12 @@ import java.util.Map;
  * 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumn.java,v 1.6 2006-03-30 17:12:42 zwierzem Exp $
+ * @version $Id: TableColumn.java,v 1.7 2006-04-03 18:38:51 zwierzem Exp $
  */
 public class TableColumn<T> implements Comparable<TableColumn<T>>
 {
     /** properties map */
-    private Map properties = new HashMap();
+    private Map<String,Object> properties = new HashMap<String,Object>();
 
     private String name;
 
@@ -110,9 +110,10 @@ public class TableColumn<T> implements Comparable<TableColumn<T>>
     }
 
     /**
-     * Table columns allow template designers set some values before they are
+     * Table columns allow template designers set some values in a chained way before they are
      * used. Because setting values happens in a template it cannot leave
      * any artifacts - that is why <code>toString()</code> has to return an empty string.
+     * 
      * @return an empty string
      */
     public String toString()
@@ -122,9 +123,11 @@ public class TableColumn<T> implements Comparable<TableColumn<T>>
 
     /**
      * Retrieve column property.
+     * 
+     * Column properties can be set using {@link #set(Object, Object)} method.
      *
-     * @param key of the column
-     * @return the object value
+     * @param key of the property.
+     * @return the property value.
      */
     public Object get(String key)
     {
@@ -132,21 +135,25 @@ public class TableColumn<T> implements Comparable<TableColumn<T>>
     }
 
     /**
-     * Sets the column property.
+     * Sets the column property, can be called ina chained way.
+     * Example of calling the method in a chained way:
+     * <pre>
+     * $tableTool.getColumn('name').set('label','Full name').set('class','large')
+     * </pre>
      *
      * @param key the key of property
      * @param value the value of the property
      * @return this column object for easy use in multiple calls to this method
      */
     @SuppressWarnings("unchecked")
-    public TableColumn<T> set(Object key, Object value)
+    public TableColumn<T> set(String key, Object value)
     {
         properties.put(key,value);
         return this;
     }
 
-    /** Getter for property name.
-     * @return Value of property name.
+    /** 
+     * @return unique name of the colum as used in {@link TableTool#getColumn(String)}. 
      */
     public String getName()
     {
@@ -161,8 +168,9 @@ public class TableColumn<T> implements Comparable<TableColumn<T>>
         return (comparator != null || reverseComparator != null);
     }
 
-    /** Getter for property comparator.
-     * @return Value of property comparator.
+    /** 
+     * @return comparator defined for the column, should be used only by {@link TableModel} and
+     * {@link TableRowSet} implementations, comparator is used for ascending sorting.
      */
     public Comparator<T> getComparator()
     {
@@ -173,8 +181,9 @@ public class TableColumn<T> implements Comparable<TableColumn<T>>
         return comparator;
     }
 
-    /** Getter for property reverseComparator.
-     * @return Value of property reverseComparator.
+    /** 
+     * @return reverse comparator defined for the column, should be used only by {@link TableModel}
+     *  and {@link TableRowSet} implementations, reverse comparator is used for descending sorting.
      */
     public Comparator<T> getReverseComparator()
     {

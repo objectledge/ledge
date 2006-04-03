@@ -37,12 +37,13 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManager.java,v 1.4 2004-07-02 08:43:26 pablo Exp $
+ * @version $Id: TableStateManager.java,v 1.5 2006-04-03 18:38:51 zwierzem Exp $
  */
 public interface TableStateManager
 {
     /**
      * Returns the state of the table instance - it is stored in session's context.
+     * This method should be used to create/access table state objects.
      *
      * @param context the thread context.
      * @param name the unique identifier of the state in the session.

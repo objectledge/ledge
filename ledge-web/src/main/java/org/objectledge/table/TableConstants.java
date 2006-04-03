@@ -29,11 +29,19 @@
 package org.objectledge.table;
 
 /**
- * Interface with table service constants.
+ * The table toolkit constants, defining the names of request parameters used by table toolkit
+ * actions.
+ * 
+ * @see org.objectledge.modules.actions.table.SetPage
+ * @see org.objectledge.modules.actions.table.SetPageSize
+ * @see org.objectledge.modules.actions.table.SetSortColumn
+ * @see org.objectledge.modules.actions.table.ToggleExpanded
+ * @see org.objectledge.modules.actions.table.ToggleExpandedAll
+ * @see org.objectledge.modules.actions.table.ToggleView
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableConstants.java,v 1.7 2005-11-30 15:26:08 rafal Exp $
+ * @version $Id: TableConstants.java,v 1.8 2006-04-03 18:38:51 zwierzem Exp $
  */
 public final class TableConstants {
 

@@ -30,10 +30,12 @@ package org.objectledge.table;
 
 /**
  * TableRowSet is a companion interface for TableModel interface which may
- * provide model-specific implementations to increase performance of the model.
+ * provide model-specific implementations (differen from 
+ * {@link org.objectledge.table.generic.GenericListRowSet} and
+ * {@link org.objectledge.table.generic.GenericTreeRowSet}) to increase performance of the model.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableRowSet.java,v 1.4 2006-03-30 17:12:42 zwierzem Exp $
+ * @version $Id: TableRowSet.java,v 1.5 2006-04-03 18:38:51 zwierzem Exp $
  */
 public interface TableRowSet<T>
 {
@@ -60,7 +62,7 @@ public interface TableRowSet<T>
 
     /**
      * Gets the parent of object.
-     * @param childRow a table row TODO: may be a <code>null</code>
+     * @param childRow a table row, may be a <code>null</code>
      * @return parent row for a given child row 
      */
     public TableRow<T> getParentRow(TableRow<T> childRow);
@@ -68,6 +70,7 @@ public interface TableRowSet<T>
     /**
      * Checks whether the ancestor has more children
      * (ie. the decendant is not a descendant of last child of ancestor).
+     * Used to calculate {@link TableTool#linesAndFolders(TableRow)}.
      *
      * @param ancestorRow row which is an ancestor for the given descendant row
      * @param descendantRow row which is a descendant for the given ancestor row

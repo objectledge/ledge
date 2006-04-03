@@ -37,13 +37,12 @@ import java.util.Set;
  * <ul>
  * <li>the id of a root node - it may be <code>null</code> for forest and flat 
  * list type of data,</li>
- * <li>TableFilter elements and,</li>
  * <li>expansion state of nodes (does not apply to flat list).</li>
  * </ul>
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.9 2006-02-07 16:33:48 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.10 2006-04-03 18:38:51 zwierzem Exp $
  */
 public class TableState
 {
@@ -112,7 +111,7 @@ public class TableState
     /**
      * Called by the table service to mark the state as used previously.
      *
-     * <p>You have no interest in calling this method yourself.</p>
+     * <p>You have no interest in calling this method yourself, unless You know what You are doing.</p>
      */
     public void setOld()
     {
@@ -120,9 +119,10 @@ public class TableState
     }
 
     /**
-     * Returns this table state's id.
+     * Returns this table state's id as defined by mapping held by 
+     * {@link TableStateManager}.
      *
-     * @return Value of property id.
+     * @return numerical id of the table state.
      */
     public int getId()
     {
@@ -130,7 +130,7 @@ public class TableState
     }
 
     /**
-     * Returns the root id of the table.
+     * Returns the id of the root of the table data.
      *
      * @return the root id.
      */
@@ -140,7 +140,7 @@ public class TableState
     }
 
     /**
-     * Sets root id.
+     * Sets root id. Root id will be used to define the subtree displayed as a tree.
      *
      * @param rootId the root id.
      */
@@ -350,7 +350,7 @@ public class TableState
     /**
      * Returns the showRoot option.
      *
-     * @return the showRoot option value.
+     * @return <code>true</code> if root node should be included in presented collection of rows.
      */
     public boolean getShowRoot()
     {
@@ -377,6 +377,9 @@ public class TableState
     }
 
     /** Setter for property maxVisibleDepth.
+     * The propery tells maximal deepth of the tree to be shown. No levels below this number will
+     * be included in the tree.
+     * 
      * @param maxVisibleDepth New value of property maxVisibleDepth.
      */
     public void setMaxVisibleDepth(int maxVisibleDepth)

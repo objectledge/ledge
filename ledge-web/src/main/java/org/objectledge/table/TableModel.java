@@ -29,32 +29,33 @@
 package org.objectledge.table;
 
 /**
- * TableModel interface for all model data sources. You can implement it
- * and provide Your own implementation of <code>{@link TableRowSet}</code> interface,
- * or You can implement an <code>{@link ExtendedTableModel}</code> and use
- * default implementation of <code>{@link TableRowSet}</code> -
+ * TableModel interface defines a tree/list data source. It must be implemented to provide objects
+ * the chosen implementation of <code>{@link TableRowSet}</code> interface. A different approach is
+ * to implement an <code>{@link ExtendedTableModel}</code> and use
+ * default implementations of <code>{@link TableRowSet}</code> -
  * <code>{@link org.objectledge.table.generic.GenericListRowSet}</code> or 
  * <code>{@link org.objectledge.table.generic.GenericTreeRowSet}</code>.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableModel.java,v 1.5 2006-03-16 17:57:04 zwierzem Exp $
+ * @version $Id: TableModel.java,v 1.6 2006-04-03 18:38:51 zwierzem Exp $
  */
 public interface TableModel<T>
 {
     /**
-     * Returns a {@link TableRowSet} object initialised by this model
-     * and a given {@link TableState}.
+     * Returns a {@link TableRowSet} object initialised by this model, a given {@link TableState}
+     * and set of filters defined for the view.
      *
      * @param state the parent
      * @param filters a list of filters to be used while creating the rows set
-     * @return table of children
+     * @return the row set object which allows access to tree/list objects.
      */
     public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters);
 
     /**
      * Returns array of column definitions. They defitinions should be created on every call,
-     * because they may be modified during it's lifecycle.
+     * because they may be modified during it's lifecycle 
+     * (see {@link TableColumn#set(String, Object)}).
      *
      * @return array of <code>TableColumn</code> objects
      */
