@@ -29,11 +29,11 @@ public class Tescik
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(Tescik.class));
         MailmanMailingListsManager mml = 
             new MailmanMailingListsManager(logger, 
-                "http://potenilla.caltha.pl/mailman/RPC2", "", "12345");
+                "http://potenilla.caltha.pl/mailman/RPC2", "12345");
 
         MailmanMailingListsManager mml2 = 
             new MailmanMailingListsManager(logger, 
-                "http://localhost:8999", "", "12345");
+                "http://localhost:8999", "12345");
 
         /**
         mml.createList("test1", "potenilla.caltha.pl", false, 

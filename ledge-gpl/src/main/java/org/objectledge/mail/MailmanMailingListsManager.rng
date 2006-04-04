@@ -35,11 +35,6 @@
       </element>
     </optional>    
     <optional>
-      <element name="login">
-        <text/>
-      </element>
-    </optional>    
-    <optional>
       <element name="password">
         <text/>
       </element>

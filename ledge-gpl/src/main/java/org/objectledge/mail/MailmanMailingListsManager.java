@@ -57,7 +57,7 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.8 2006-04-04 13:39:30 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.9 2006-04-04 14:16:38 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -69,9 +69,6 @@ public class MailmanMailingListsManager implements MailingListsManager
 
     /** mailman rcp address */
     private String address;
-
-    /** mailman admin login */
-    private String adminLogin;
 
     /** mailman admin password */
     private String adminPassword;
@@ -100,13 +97,11 @@ public class MailmanMailingListsManager implements MailingListsManager
         this.logger = logger;
         this.mailSystem = mailSystem;
         address = config.getChild("address").getValue("http://localhost/mailman/RPC2");
-        adminLogin = config.getChild("login").getValue("top");
         adminPassword = config.getChild("password").getValue("secret");
         monitoringAddress = config.getChild("monitoring_address").getValue("");
         monitoringSessionName = config.getChild("monitoring_session").getValue("");
         lastIdMap = new HashMap<String, Integer>();
         client = new XmlRpcClient(address);
-        client.setBasicAuthentication(adminLogin, adminPassword);
     }
     
     /**
@@ -117,16 +112,14 @@ public class MailmanMailingListsManager implements MailingListsManager
      * @param login mailman admin login.
      * @param password mailman admin password.
      */
-    public MailmanMailingListsManager(Logger logger, String address, String login, String password)
+    public MailmanMailingListsManager(Logger logger, String address, String password)
         throws MalformedURLException
     {
         this.logger = logger;
         this.address = address;
-        this.adminLogin = login;
         this.adminPassword = password;
         lastIdMap = new HashMap<String, Integer>();
         client = new XmlRpcClient(address);
-        client.setBasicAuthentication(adminLogin, adminPassword);
     }
 
     /**
