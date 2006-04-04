@@ -54,10 +54,5 @@
         <text/>
       </element>
     </optional>  
-    <optional>
-      <element name="list_id_header_name">
-        <text/>
-      </element>
-    </optional>  
   </interleave>    
 </element>

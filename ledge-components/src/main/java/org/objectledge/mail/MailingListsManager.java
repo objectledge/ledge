@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.4 2006-04-04 11:29:22 pablo Exp $
+ * @version $Id: MailingListsManager.java,v 1.5 2006-04-04 13:39:27 rafal Exp $
  */
 public interface MailingListsManager 
 {
@@ -109,19 +109,5 @@ public interface MailingListsManager
      * @throws MailingListsException
      */
     public List<Message> getNewMessages()
-        throws MailingListsException;
-    
-    /**
-     * Get mailing list id header name.
-     * 
-     * @return list id header name.
-     */
-    public String getListIdHeaderName();
-    
-    /**
-     * Get mailing list post header name.
-     * 
-     * @return list post header name.
-     */
-    public String getListPostHeaderName();
+        throws MailingListsException;    
 }

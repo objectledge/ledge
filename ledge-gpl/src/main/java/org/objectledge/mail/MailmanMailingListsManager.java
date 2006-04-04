@@ -57,16 +57,10 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.7 2006-04-04 11:29:26 pablo Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.8 2006-04-04 13:39:30 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
-    /** default list id header name */
-    private static final String DEFAULT_LIST_ID_HEADER_NAME = "List-Id";
-    
-    /** default list post header name */
-    private static final String DEFAULT_LIST_POST_HEADER_NAME = "List-Post";
-    
     /** logging facility */
     private Logger logger;
     
@@ -94,12 +88,6 @@ public class MailmanMailingListsManager implements MailingListsManager
     /** system monitoring mail session */
     private String monitoringSessionName;
     
-    /** header added by mailing list server to identify mailing list */
-    private String listIdHeaderName;
-    
-    /** header added by mailing list server to identify mailing list */
-    private String listPostHeaderName;
-    
     /**
      * Ledge component constructor.
      * 
@@ -116,8 +104,6 @@ public class MailmanMailingListsManager implements MailingListsManager
         adminPassword = config.getChild("password").getValue("secret");
         monitoringAddress = config.getChild("monitoring_address").getValue("");
         monitoringSessionName = config.getChild("monitoring_session").getValue("");
-        listIdHeaderName = config.getChild("list_id_header_name").getValue(DEFAULT_LIST_ID_HEADER_NAME);
-        listPostHeaderName = config.getChild("list_post_header_name").getValue(DEFAULT_LIST_POST_HEADER_NAME);
         lastIdMap = new HashMap<String, Integer>();
         client = new XmlRpcClient(address);
         client.setBasicAuthentication(adminLogin, adminPassword);
@@ -343,22 +329,6 @@ public class MailmanMailingListsManager implements MailingListsManager
         return list;
     }
 
-    /**
-     * {@inheritDoc}
-     */    
-    public String getListIdHeaderName()
-    {
-        return listIdHeaderName;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */    
-    public String getListPostHeaderName()
-    {
-        return listPostHeaderName;
-    }
-    
     // package private operations
     
     /**
