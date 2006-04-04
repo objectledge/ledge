@@ -96,7 +96,7 @@ import org.objectledge.web.mvc.security.SecurityHelper;
  * <img src="doc-files/BuilderExecutorValve-1.gif" alt="Enclosing view choice algorithm" />
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BuilderExecutorValve.java,v 1.35 2005-07-22 17:25:48 pablo Exp $
+ * @version $Id: BuilderExecutorValve.java,v 1.36 2006-04-04 12:34:14 pablo Exp $
  */
 public class BuilderExecutorValve 
     implements Valve
@@ -191,6 +191,7 @@ public class BuilderExecutorValve
                     {
                         break;
                     }
+                    mvcContext.setView(routeBuilderName);
                     viewName = routeBuilderName;
                     builderResult = classFinder.findBuilder(viewName);
                     builder = builderResult.getBuilder();
