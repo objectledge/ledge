@@ -30,11 +30,13 @@ package org.objectledge.mail;
 
 import java.util.List;
 
+import javax.mail.Message;
+
 /**
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.4 2006-04-03 15:11:02 pablo Exp $
+ * @version $Id: MailingList.java,v 1.5 2006-04-04 11:29:22 pablo Exp $
  */
 public interface MailingList
 {
@@ -49,6 +51,12 @@ public interface MailingList
     public static final int REQUIRE_APPROVAL = 2;
     
     public static final int REQUIRE_CONFIRM_AND_APPROVAL = 3;
+    
+    public static final int PENDING_POST = 1;
+    
+    public static final int PENDING_SUBSCRIPTION = 2;
+    
+    public static final int PENDING_UNSUBSCRIPTION = 3;
     
     /**
      * Add new member to mailing list.
@@ -183,7 +191,25 @@ public interface MailingList
      * @return the message.
      * @throws MailingListsException
      */
-    public Object getPendingMessage(int id)
+    public Message getPendingMessage(Object id)
+        throws MailingListsException;
+    
+    /**
+     * Get pending tasks.
+     * 
+     * @return the list of tasks identifiers
+     * @throws MailingListsException
+     */
+    public List getNewPendingTasks() throws MailingListsException;
+    
+    /**
+     * Get pending message. 
+     * 
+     * @param id message identifier.
+     * @return the message.
+     * @throws MailingListsException
+     */
+    public Object getPendingTaskType(Object id)
         throws MailingListsException;
     
     /**
@@ -192,7 +218,7 @@ public interface MailingList
      * @param id message identifier.
      * @throws MailingListsException 
      */
-    public void acceptMessage(int id) throws MailingListsException;
+    public void acceptMessage(Object id) throws MailingListsException;
     
     /**
      * Reject message.
@@ -200,7 +226,7 @@ public interface MailingList
      * @param id message identifier.
      * @throws MailingListsException 
      */
-    public void rejectMessage(int id) throws MailingListsException;
+    public void rejectMessage(Object id) throws MailingListsException;
     
     /**
      * Discard message.
@@ -208,7 +234,7 @@ public interface MailingList
      * @param id message identifier.
      * @throws MailingListsException 
      */
-    public void discardMessage(int id) throws MailingListsException;
+    public void discardMessage(Object id) throws MailingListsException;
     
     /**
      * Reject subscription request.
@@ -216,7 +242,7 @@ public interface MailingList
      * @param id message identifier.
      * @throws MailingListsException 
      */
-    public void rejectSubscription(int id) throws MailingListsException;
+    public void rejectSubscription(Object id) throws MailingListsException;
     
     /**
      * Accept subscription request.
@@ -224,7 +250,7 @@ public interface MailingList
      * @param id message identifier.
      * @throws MailingListsException 
      */
-    public void acceptSubscription(int id) throws MailingListsException;
+    public void acceptSubscription(Object id) throws MailingListsException;
     
     /**
      * Reject unsubscription request.
@@ -232,7 +258,7 @@ public interface MailingList
      * @param id message identifier.
      * @throws MailingListsException 
      */
-    public void rejectUnsubscription(int id) throws MailingListsException;
+    public void rejectUnsubscription(Object id) throws MailingListsException;
     
     /**
      * Accept unsubscription request.
@@ -240,5 +266,5 @@ public interface MailingList
      * @param id message identifier.
      * @throws MailingListsException 
      */
-    public void acceptUnsubscription(int id) throws MailingListsException;
+    public void acceptUnsubscription(Object id) throws MailingListsException;
 }

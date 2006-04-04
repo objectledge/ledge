@@ -43,6 +43,21 @@
       <element name="password">
         <text/>
       </element>
-    </optional>    
+    </optional>  
+	<optional>
+      <element name="monitoring_address">
+        <text/>
+      </element>
+    </optional>  
+    <optional>
+      <element name="monitoring_session">
+        <text/>
+      </element>
+    </optional>  
+    <optional>
+      <element name="list_id_header_name">
+        <text/>
+      </element>
+    </optional>  
   </interleave>    
 </element>

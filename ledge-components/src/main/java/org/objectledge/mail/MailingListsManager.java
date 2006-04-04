@@ -31,11 +31,13 @@ package org.objectledge.mail;
 import java.util.List;
 import java.util.Locale;
 
+import javax.mail.Message;
+
 /**
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.3 2006-04-03 14:38:00 pablo Exp $
+ * @version $Id: MailingListsManager.java,v 1.4 2006-04-04 11:29:22 pablo Exp $
  */
 public interface MailingListsManager 
 {
@@ -50,7 +52,7 @@ public interface MailingListsManager
      * @param locale mailing list locale.
      * @throws MailingListsException if ml creation failed.
      */
-    public MailingList createList(String name, String domain, 
+    public String createList(String name, String domain, 
         String[] administrators, String password, boolean notify, Locale locale)
     	throws MailingListsException;
     
@@ -99,5 +101,27 @@ public interface MailingListsManager
      */
     public List getLocales()
         throws MailingListsException;
-
+    
+    /**
+     * Retrieve new messages from system account.
+     * 
+     * @return the list of new messages.
+     * @throws MailingListsException
+     */
+    public List<Message> getNewMessages()
+        throws MailingListsException;
+    
+    /**
+     * Get mailing list id header name.
+     * 
+     * @return list id header name.
+     */
+    public String getListIdHeaderName();
+    
+    /**
+     * Get mailing list post header name.
+     * 
+     * @return list post header name.
+     */
+    public String getListPostHeaderName();
 }

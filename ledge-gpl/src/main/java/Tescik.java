@@ -30,6 +30,11 @@ public class Tescik
         MailmanMailingListsManager mml = 
             new MailmanMailingListsManager(logger, 
                 "http://potenilla.caltha.pl/mailman/RPC2", "", "12345");
+
+        MailmanMailingListsManager mml2 = 
+            new MailmanMailingListsManager(logger, 
+                "http://localhost:8999", "", "12345");
+
         /**
         mml.createList("test1", "potenilla.caltha.pl", false, 
           new String[]{"pablo@caltha.pl"},"haslo", false, new Locale("pl","PL"));
@@ -71,9 +76,9 @@ public class Tescik
         message.setHeader("sender","fsdfsdf");
         ml.postMessage(message);
         */
-        MailmanMailingList ml = (MailmanMailingList)mml.getList("testlist", "12345");
+        MailmanMailingList ml = (MailmanMailingList)mml2.getList("testlist", "12345");
         System.out.println("Messages: "+ml.getPendingPosts());
-        ml.acceptMessage(4);
+        //ml.acceptMessage(4);
     }
 
 }

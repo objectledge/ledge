@@ -28,15 +28,25 @@
 
 package org.objectledge.mail;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
+
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
@@ -47,12 +57,21 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.6 2006-04-03 15:11:07 pablo Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.7 2006-04-04 11:29:26 pablo Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
+    /** default list id header name */
+    private static final String DEFAULT_LIST_ID_HEADER_NAME = "List-Id";
+    
+    /** default list post header name */
+    private static final String DEFAULT_LIST_POST_HEADER_NAME = "List-Post";
+    
     /** logging facility */
     private Logger logger;
+    
+    /** mail system */
+    private MailSystem mailSystem;
 
     /** mailman rcp address */
     private String address;
@@ -65,20 +84,41 @@ public class MailmanMailingListsManager implements MailingListsManager
     
     /** rpc client */
     private XmlRpcClient client;
+    
+    /** last id map */
+    private HashMap<String, Integer> lastIdMap;
 
+    /** system monitoring address */
+    private String monitoringAddress;
+    
+    /** system monitoring mail session */
+    private String monitoringSessionName;
+    
+    /** header added by mailing list server to identify mailing list */
+    private String listIdHeaderName;
+    
+    /** header added by mailing list server to identify mailing list */
+    private String listPostHeaderName;
+    
     /**
      * Ledge component constructor.
      * 
      * @param config component configuration.
      * @param logger the logger.
      */
-    public MailmanMailingListsManager(Configuration config, Logger logger)
+    public MailmanMailingListsManager(Configuration config, Logger logger, MailSystem mailSystem)
         throws MalformedURLException
     {
         this.logger = logger;
+        this.mailSystem = mailSystem;
         address = config.getChild("address").getValue("http://localhost/mailman/RPC2");
         adminLogin = config.getChild("login").getValue("top");
         adminPassword = config.getChild("password").getValue("secret");
+        monitoringAddress = config.getChild("monitoring_address").getValue("");
+        monitoringSessionName = config.getChild("monitoring_session").getValue("");
+        listIdHeaderName = config.getChild("list_id_header_name").getValue(DEFAULT_LIST_ID_HEADER_NAME);
+        listPostHeaderName = config.getChild("list_post_header_name").getValue(DEFAULT_LIST_POST_HEADER_NAME);
+        lastIdMap = new HashMap<String, Integer>();
         client = new XmlRpcClient(address);
         client.setBasicAuthentication(adminLogin, adminPassword);
     }
@@ -98,6 +138,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         this.address = address;
         this.adminLogin = login;
         this.adminPassword = password;
+        lastIdMap = new HashMap<String, Integer>();
         client = new XmlRpcClient(address);
         client.setBasicAuthentication(adminLogin, adminPassword);
     }
@@ -105,7 +146,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    public MailingList createList(String name, String domain, 
+    public String createList(String name, String domain, 
         String[] administrators, String password, 
         boolean notify, Locale locale) throws MailingListsException
     {
@@ -126,14 +167,20 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new InvalidListNameException("",e);
         }
-        if(result instanceof String)
-        {
-            return new MailmanMailingList(this, name, ((String)result));
-        }
         if(result == null)
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
+        if(result instanceof String)
+        {
+            String newPassword = (String)result;
+            if(monitoringAddress.length() > 0)
+            {
+                getList(name, newPassword).addMember(monitoringAddress,
+                    "Mailiman - Ledge integration", "", false, true);
+            }
+        }
+        
         throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
     }
 
@@ -249,6 +296,67 @@ public class MailmanMailingListsManager implements MailingListsManager
             throw new MailingListsException("Null result of rpc method invocation");
         }
         throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+    }
+    
+    /**
+     * {@inheritDoc}
+     */    
+    public List<Message> getNewMessages()
+        throws MailingListsException
+    {
+        ArrayList<Message> list = new ArrayList<Message>();
+        if(monitoringAddress.length() > 0)
+        {
+            Session session = mailSystem.getSession(monitoringSessionName);
+            try
+            {
+                Store store = session.getStore();
+                store.connect();
+                try
+                {
+                    Folder folder = store.getFolder("INBOX");
+                    folder.open(Folder.READ_WRITE);
+                    try
+                    {
+                        Message messages[] = folder.getMessages();
+                        for (Message message:messages)
+                        {
+                            message.setFlag(Flags.Flag.DELETED, true);
+                            list.add(message);
+                        }
+                    }
+                    finally
+                    {
+                        folder.close(true);
+                    }
+                }
+                finally
+                {
+                    store.close();
+                }
+            }
+            catch(Exception e)
+            {
+                throw new MailingListsException("failed to fetch new messages", e);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * {@inheritDoc}
+     */    
+    public String getListIdHeaderName()
+    {
+        return listIdHeaderName;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */    
+    public String getListPostHeaderName()
+    {
+        return listPostHeaderName;
     }
     
     // package private operations
@@ -468,14 +576,44 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new UnsupportedOperationException("not implemented yet!");
     }
     
-    Object getPendingTask(String listName, String adminPassword, int id)
+    Message getPendingTask(String listName, String adminPassword, Object id)
         throws MailingListsException
     {
         Object[] params = new Object[]{listName, adminPassword, id};
         Object result = executeMethod("Mailman.getPendingTask", params);
         if(result instanceof String)
         {
-            return result;
+            String msg = (String)result;
+            Session session = mailSystem.getSession();
+            try 
+            {
+                InputStream is = new ByteArrayInputStream(msg.getBytes("UTF-8"));
+                MimeMessage message = new MimeMessage(session, is);
+                return message;
+            }
+            catch(Exception e)
+            {
+                throw new MailingListsException("Failed to deserialize message", e);
+            }
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+    }
+
+    List getNewPendingTasks(String listName, String adminPassword)
+        throws MailingListsException
+    {
+        int lastId = getLastId(listName);
+        Object[] params = new Object[]{listName, adminPassword, lastId};
+        Object result = executeMethod("Mailman.getNewPendingTasks", params);
+        if(result instanceof List)
+        {
+            List list = (List)result;
+            setLastId(listName, (Integer)list.get(list.size()-1));
+            return list;
         }
         if(result == null)
         {
@@ -484,7 +622,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
     }
     
-    Integer getPendingTaskType(String listName, String adminPassword, int id)
+    Integer getPendingTaskType(String listName, String adminPassword, Object id)
         throws MailingListsException
     {
         Object[] params = new Object[]{listName, adminPassword, id};
@@ -517,7 +655,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     }
     
     public void handleModeratorRequest(String listName, String adminPassword,
-        int id, int command)
+        Object id, int command)
             throws MailingListsException
     {
         Object[] params = new Object[]{listName, adminPassword, id, command};
@@ -597,5 +735,21 @@ public class MailmanMailingListsManager implements MailingListsManager
             vector.add(ob);
         }
         return vector;
+    }
+    
+    private synchronized int getLastId(String listName)
+    {
+        Integer lastId = lastIdMap.get(listName);
+        if(lastId != null)
+        {
+            return lastId;
+        }
+        lastIdMap.put(listName, 0);
+        return 0;
+    }
+    
+    private synchronized void setLastId(String listName, int value)
+    {
+        lastIdMap.put(listName, value);
     }
 }
