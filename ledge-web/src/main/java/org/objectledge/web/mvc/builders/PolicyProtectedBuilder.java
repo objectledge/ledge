@@ -39,7 +39,7 @@ import org.objectledge.web.mvc.security.SecurityChecking;
  * A builder that must be protected by a specific policy. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PolicyProtectedBuilder.java,v 1.2 2005-07-26 12:15:36 rafal Exp $
+ * @version $Id: PolicyProtectedBuilder.java,v 1.3 2006-04-05 15:52:30 zwierzem Exp $
  */
 public abstract class PolicyProtectedBuilder
     extends AbstractBuilder
@@ -65,7 +65,8 @@ public abstract class PolicyProtectedBuilder
     public boolean requiresSecureChannel(Context context)
         throws Exception
     {
-        return false;
+        Policy policy = getPolicy(context);
+        return policy.requiresSSL();
     }
 
     /**
@@ -75,9 +76,7 @@ public abstract class PolicyProtectedBuilder
         throws Exception
     {
         Policy policy = getPolicy(context);
-        AuthenticationContext authenticationContext =
-            AuthenticationContext.getAuthenticationContext(context);
-        return !policy.requiresLogin() || authenticationContext.isUserAuthenticated();
+        return policy.requiresLogin();
     }
 
     /**
