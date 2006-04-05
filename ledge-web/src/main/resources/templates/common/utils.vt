@@ -1,6 +1,6 @@
 #**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: utils.vt,v 1.1 2006-04-05 12:11:22 rafal Exp $
+ * @version $Id: utils.vt,v 1.2 2006-04-05 12:33:58 rafal Exp $
 *###
 
 #**
@@ -17,5 +17,5 @@ $odd##
  * Discards the given value.
  *#
 #macro(discard $value)
-##
+#set($dummy = $value)##
 #end
