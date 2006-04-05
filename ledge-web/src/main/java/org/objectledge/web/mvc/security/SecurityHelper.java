@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SecurityHelper.java,v 1.9 2005-02-10 17:49:11 rafal Exp $
+ * @version $Id: SecurityHelper.java,v 1.10 2006-04-05 15:49:43 zwierzem Exp $
  */
 public class SecurityHelper
 {
@@ -96,7 +96,7 @@ public class SecurityHelper
                     AuthenticationContext.getAuthenticationContext(context);
                 if(authenticationContext == null)
                 {
-                    throw new IllegalStateException("failed to retrieve mvc context " +
+                    throw new IllegalStateException("failed to retrieve authentication context " +
                                                      " for security checking purpose");
                 }
                 if(!authenticationContext.isUserAuthenticated())
