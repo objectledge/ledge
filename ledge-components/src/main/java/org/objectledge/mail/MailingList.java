@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.6 2006-04-06 09:35:12 rafal Exp $
+ * @version $Id: MailingList.java,v 1.7 2006-04-06 09:58:34 rafal Exp $
  */
 public interface MailingList
 {
@@ -45,14 +45,14 @@ public interface MailingList
     {
         COMPLETED,
         NEEDS_APPROVAL,
-        NEEDS_TO_CONFIRM;
+        NEEDS_CONFIRMATION;
     }    
     
     public enum SubscriptionPolicy
     {
-        REQUIRE_CONFIRM,
+        REQUIRE_CONFIRMATION,
         REQUIRE_APPROVAL,
-        REQUIRE_CONFIRM_AND_APPROVAL
+        REQUIRE_CONFIRMATION_AND_APPROVAL
     }    
     
     public enum TaskType

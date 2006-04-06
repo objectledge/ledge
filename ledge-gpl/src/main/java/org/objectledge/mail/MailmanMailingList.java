@@ -43,7 +43,7 @@ import javax.mail.internet.MimeMessage;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.7 2006-04-06 09:35:08 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.8 2006-04-06 09:58:31 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -240,9 +240,9 @@ public class MailmanMailingList implements MailingList
             case OPTION_REQUIRE_APPROVAL:
                 return MailingList.SubscriptionPolicy.REQUIRE_APPROVAL;
             case OPTION_REQUIRE_CONFIRM:
-                return MailingList.SubscriptionPolicy.REQUIRE_CONFIRM;
+                return MailingList.SubscriptionPolicy.REQUIRE_CONFIRMATION;
             case OPTION_REQUIRE_CONFIRM_AND_APPROVAL:
-                return MailingList.SubscriptionPolicy.REQUIRE_CONFIRM_AND_APPROVAL;
+                return MailingList.SubscriptionPolicy.REQUIRE_CONFIRMATION_AND_APPROVAL;
             default:
                 throw new IllegalStateException("invalid subscription policy option: "+value);
         }
@@ -290,10 +290,10 @@ public class MailmanMailingList implements MailingList
             case REQUIRE_APPROVAL:
                 manager.setOption(listName, adminPassword, SUBSCRIBE_POLICY, ""+OPTION_REQUIRE_APPROVAL);
                 return;
-            case REQUIRE_CONFIRM:
+            case REQUIRE_CONFIRMATION:
                 manager.setOption(listName, adminPassword, SUBSCRIBE_POLICY, ""+OPTION_REQUIRE_CONFIRM);
                 return;
-            case REQUIRE_CONFIRM_AND_APPROVAL:
+            case REQUIRE_CONFIRMATION_AND_APPROVAL:
                 manager.setOption(listName, adminPassword, SUBSCRIBE_POLICY, ""+OPTION_REQUIRE_CONFIRM_AND_APPROVAL);
                 return;
             default:

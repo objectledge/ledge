@@ -57,7 +57,7 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.10 2006-04-06 09:35:08 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.11 2006-04-06 09:58:31 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -346,7 +346,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         catch(NeedConfirmationException e)
         {
-            return MailingList.OperationStatus.NEEDS_TO_CONFIRM;
+            return MailingList.OperationStatus.NEEDS_CONFIRMATION;
         }
         if(result instanceof Boolean)
         {
@@ -405,7 +405,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         catch(NeedConfirmationException e)
         {
-            return MailingList.OperationStatus.NEEDS_TO_CONFIRM;
+            return MailingList.OperationStatus.NEEDS_CONFIRMATION;
         }
         if(result instanceof Boolean)
         {
