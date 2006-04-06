@@ -130,7 +130,7 @@ public class MailingListProcessor
                 Object id = it.next();
                 Object type = list.getPendingTaskType(id);
                 Message message = list.getPendingMessage(id);
-                if(type.equals(MailingList.PENDING_POST))
+                if(type.equals(MailingList.TaskType.PENDING_POST))
                 {
                     for(MailingListsNotificationListener listener: listeners)
                     {
@@ -138,7 +138,7 @@ public class MailingListProcessor
                     }
                     continue;
                 }
-                if(type.equals(MailingList.PENDING_SUBSCRIPTION))
+                if(type.equals(MailingList.TaskType.PENDING_SUBSCRIPTION))
                 {
                     for(MailingListsNotificationListener listener: listeners)
                     {
@@ -146,7 +146,7 @@ public class MailingListProcessor
                     }
                     continue;
                 }
-                if(type.equals(MailingList.PENDING_UNSUBSCRIPTION))
+                if(type.equals(MailingList.TaskType.PENDING_UNSUBSCRIPTION))
                 {
                     for(MailingListsNotificationListener listener: listeners)
                     {

@@ -57,7 +57,7 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.9 2006-04-04 14:16:38 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.10 2006-04-06 09:35:08 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -327,7 +327,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    int addMember(String listName, String adminPassword, 
+    MailingList.OperationStatus addMember(String listName, String adminPassword, 
         String address, String name, String password, 
         boolean digest, boolean ignoreCreationPolicy)
             throws MailingListsException
@@ -342,17 +342,17 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         catch(NeedApprovalException e)
         {
-            return MailingList.NEEDS_APPROVAL;
+            return MailingList.OperationStatus.NEEDS_APPROVAL;
         }
         catch(NeedConfirmationException e)
         {
-            return MailingList.NEEDS_TO_CONFIRM;
+            return MailingList.OperationStatus.NEEDS_TO_CONFIRM;
         }
         if(result instanceof Boolean)
         {
             if(((Boolean)result))
             {
-                return MailingList.SUBSCRIBED;
+                return MailingList.OperationStatus.COMPLETED;
             }
         }
         if(result == null)
@@ -389,7 +389,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    int deleteMember(String listName, String adminPassword, 
+    MailingList.OperationStatus deleteMember(String listName, String adminPassword, 
         String address, boolean ignoreDeletingPolicy) throws MailingListsException
     {
         Object[] params = new Object[]{
@@ -401,17 +401,17 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         catch(NeedApprovalException e)
         {
-            return MailingList.NEEDS_APPROVAL;
+            return MailingList.OperationStatus.NEEDS_APPROVAL;
         }
         catch(NeedConfirmationException e)
         {
-            return MailingList.NEEDS_TO_CONFIRM;
+            return MailingList.OperationStatus.NEEDS_TO_CONFIRM;
         }
         if(result instanceof Boolean)
         {
             if(((Boolean)result))
             {
-                return MailingList.SUBSCRIBED;
+                return MailingList.OperationStatus.COMPLETED;
             }
         }
         if(result == null)

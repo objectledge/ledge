@@ -28,6 +28,7 @@
 
 package org.objectledge.mail;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.mail.Message;
@@ -36,27 +37,30 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.5 2006-04-04 11:29:22 pablo Exp $
+ * @version $Id: MailingList.java,v 1.6 2006-04-06 09:35:12 rafal Exp $
  */
 public interface MailingList
 {
-    public static final int SUBSCRIBED = 0;
+    public enum OperationStatus
+    {
+        COMPLETED,
+        NEEDS_APPROVAL,
+        NEEDS_TO_CONFIRM;
+    }    
     
-    public static final int NEEDS_APPROVAL = 1;
+    public enum SubscriptionPolicy
+    {
+        REQUIRE_CONFIRM,
+        REQUIRE_APPROVAL,
+        REQUIRE_CONFIRM_AND_APPROVAL
+    }    
     
-    public static final int NEEDS_TO_CONFIRM = 2;
-    
-    public static final int REQUIRE_CONFIRM = 1;
-    
-    public static final int REQUIRE_APPROVAL = 2;
-    
-    public static final int REQUIRE_CONFIRM_AND_APPROVAL = 3;
-    
-    public static final int PENDING_POST = 1;
-    
-    public static final int PENDING_SUBSCRIPTION = 2;
-    
-    public static final int PENDING_UNSUBSCRIPTION = 3;
+    public enum TaskType
+    {
+        PENDING_POST,
+        PENDING_SUBSCRIPTION,
+        PENDING_UNSUBSCRIPTION
+    }
     
     /**
      * Add new member to mailing list.
@@ -69,7 +73,7 @@ public interface MailingList
      * @return the state of the membership.
      * @throws MailingListsException if anything goes wrong.
      */
-    public int addMember(String address, String name, String password, 
+    public OperationStatus addMember(String address, String name, String password, 
         boolean digest, boolean ignoreCreationPolicy)
         throws MailingListsException;
 
@@ -80,7 +84,7 @@ public interface MailingList
      * @param ignoreDeletingPolicy force deleting ignoring confirmation and approval.
      * @throws MailingListsException if anything goes wrong.
      */
-    public int deleteMember(String address, boolean ignoreDeletingPolicy)
+    public OperationStatus deleteMember(String address, boolean ignoreDeletingPolicy)
         throws MailingListsException;
 
     /**
@@ -145,7 +149,7 @@ public interface MailingList
      * @param policy the policy.
      * @throws MailingListsException
      */
-    public void setSubscriptionPolicy(int policy)
+    public void setSubscriptionPolicy(SubscriptionPolicy policy)
         throws MailingListsException;
     
     /**
@@ -154,7 +158,7 @@ public interface MailingList
      * @return subscription policy.
      * @throws MailingListsException
      */
-    public int getSubscriptionPolicy()
+    public SubscriptionPolicy getSubscriptionPolicy()
         throws MailingListsException;
     
     /**
@@ -209,7 +213,7 @@ public interface MailingList
      * @return the message.
      * @throws MailingListsException
      */
-    public Object getPendingTaskType(Object id)
+    public TaskType getPendingTaskType(Object id)
         throws MailingListsException;
     
     /**

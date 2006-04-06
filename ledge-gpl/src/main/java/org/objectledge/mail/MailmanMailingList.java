@@ -43,7 +43,7 @@ import javax.mail.internet.MimeMessage;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.6 2006-04-04 11:29:26 pablo Exp $
+ * @version $Id: MailmanMailingList.java,v 1.7 2006-04-06 09:35:08 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -72,6 +72,8 @@ public class MailmanMailingList implements MailingList
     private static final int ML_ACTION_UNSUBSCRIBE = 5;
     
     static final int TASK_TYPE_PENDING_POST = 1;
+    static final int TASK_TYPE_PENDING_SUBSCRIPTION = 2;
+    static final int TASK_TYPE_PENDING_UNSUBSCRIPTION = 3;
     
     /** list manager */
     private MailmanMailingListsManager manager;
@@ -100,7 +102,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public int addMember(String address, String name, String password, 
+    public MailingList.OperationStatus addMember(String address, String name, String password, 
         boolean digest, boolean ignoreCreationPolicy)
         throws MailingListsException
     {
@@ -128,7 +130,8 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public int deleteMember(String address, boolean ignoreDeletingPolicy) throws MailingListsException
+    public MailingList.OperationStatus deleteMember(String address, boolean ignoreDeletingPolicy)
+        throws MailingListsException
     {
         return manager.deleteMember(listName, adminPassword, address, ignoreDeletingPolicy); 
     }
@@ -192,9 +195,20 @@ public class MailmanMailingList implements MailingList
     /**
      * 
      */
-    public Object getPendingTaskType(Object id) throws MailingListsException
+    public MailingList.TaskType getPendingTaskType(Object id) throws MailingListsException
     {
-        return manager.getPendingTaskType(listName, adminPassword, id);
+        Integer type = manager.getPendingTaskType(listName, adminPassword, id);
+        switch(type)
+        {
+        case TASK_TYPE_PENDING_POST:
+            return MailingList.TaskType.PENDING_POST;
+        case TASK_TYPE_PENDING_SUBSCRIPTION:
+            return MailingList.TaskType.PENDING_SUBSCRIPTION;
+        case TASK_TYPE_PENDING_UNSUBSCRIPTION:
+            return MailingList.TaskType.PENDING_UNSUBSCRIPTION;
+        default:
+            throw new IllegalStateException("invalid pending task type: "+type);            
+        }
     }
     
     /**
@@ -218,17 +232,17 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public int getSubscriptionPolicy() throws MailingListsException
+    public MailingList.SubscriptionPolicy getSubscriptionPolicy() throws MailingListsException
     {
         Integer value = (Integer)manager.getOption(listName, adminPassword, SUBSCRIBE_POLICY);
         switch(value)
         {
             case OPTION_REQUIRE_APPROVAL:
-                return REQUIRE_APPROVAL;
+                return MailingList.SubscriptionPolicy.REQUIRE_APPROVAL;
             case OPTION_REQUIRE_CONFIRM:
-                return REQUIRE_CONFIRM;
+                return MailingList.SubscriptionPolicy.REQUIRE_CONFIRM;
             case OPTION_REQUIRE_CONFIRM_AND_APPROVAL:
-                return REQUIRE_CONFIRM_AND_APPROVAL;
+                return MailingList.SubscriptionPolicy.REQUIRE_CONFIRM_AND_APPROVAL;
             default:
                 throw new IllegalStateException("invalid subscription policy option: "+value);
         }
@@ -269,7 +283,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void setSubscriptionPolicy(int policy) throws MailingListsException
+    public void setSubscriptionPolicy(MailingList.SubscriptionPolicy policy) throws MailingListsException
     {
         switch(policy)
         {
