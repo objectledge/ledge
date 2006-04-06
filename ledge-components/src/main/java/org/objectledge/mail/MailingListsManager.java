@@ -37,10 +37,38 @@ import javax.mail.Message;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.5 2006-04-04 13:39:27 rafal Exp $
+ * @version $Id: MailingListsManager.java,v 1.6 2006-04-06 10:23:42 rafal Exp $
  */
 public interface MailingListsManager 
 {
+    public enum Status
+    {
+        /** The manager is installed and configured correctly. */
+        OPERATIONAL,
+        
+        /** The manager is not configured correctly or it's required external dependencies 
+         *  are not configured correctly.  */
+        UNOPERATIONAL,
+        
+        /** The manager is not installed or was disabled by the administrator. */
+        UNAVAILABLE
+    }
+
+    /**
+     * Checks the manager's status.
+     * <p>
+     * When UNOPERATIONAL status is returned, all relevant information should be written to the
+     * server logs.
+     * </p>
+     * <p>
+     * When UNOPERATIONAL or UNAVAILABLE status is returned, all methods except this one are free to
+     * throw any exceptions as will, with unspecified side effects. In short - don't call them.
+     * </p>
+     * 
+     * @return the manager status.
+     */
+    public Status getStatus();    
+    
     /**
      * Create new mailing list.
      *

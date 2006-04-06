@@ -57,7 +57,7 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.11 2006-04-06 09:58:31 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.12 2006-04-06 10:23:40 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -120,6 +120,21 @@ public class MailmanMailingListsManager implements MailingListsManager
         this.adminPassword = password;
         lastIdMap = new HashMap<String, Integer>();
         client = new XmlRpcClient(address);
+    }
+    
+    public MailingListsManager.Status getStatus()
+    {
+        try
+        {
+            getLocales();
+            checkMessageStore();
+            return MailingListsManager.Status.OPERATIONAL;
+        }
+        catch(MailingListsException e)
+        {
+            logger.error("The manager is not operational", e);
+            return MailingListsManager.Status.UNOPERATIONAL;
+        }
     }
 
     /**
@@ -275,6 +290,41 @@ public class MailmanMailingListsManager implements MailingListsManager
             throw new MailingListsException("Null result of rpc method invocation");
         }
         throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+    }
+    
+    private void checkMessageStore()
+        throws MailingListsException
+    {
+        if(monitoringAddress.length() > 0)
+        {
+            Session session = mailSystem.getSession(monitoringSessionName);
+            try
+            {
+                Store store = session.getStore();
+                store.connect();
+                try
+                {
+                    Folder folder = store.getFolder("INBOX");
+                    folder.open(Folder.READ_WRITE);
+                    try
+                    {
+                        folder.getMessages();
+                    }
+                    finally
+                    {
+                        folder.close(true);
+                    }
+                }
+                finally
+                {
+                    store.close();
+                }
+            }
+            catch(Exception e)
+            {
+                throw new MailingListsException("failed to check new messages", e);
+            }
+        }
     }
     
     /**
