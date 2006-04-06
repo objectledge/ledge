@@ -51,16 +51,16 @@ if [ ! -f $LIB_TIMESTAMP -o ! -d $LIB_SRC -o $WEBAPP_PROJECT -nt $LIB_TIMESTAMP 
     mkdir -p $LIB_DIR
     for LIB in `find $LIB_SRC -name \*.jar`; do
 	if ! basename $LIB | grep $INCLUDES > /dev/null; then
-	    cp $LIB $LIB_DIR
+	    cp -u $LIB $LIB_DIR
         fi
     done
     touch $LIB_TIMESTAMP
 fi
 
 if [ -d $WEBAPP_SRC ]; then
-    cp -a $WEBAPP_SRC/* $WEBAPP_DIR >/dev/null 2>&1
+    cp -au $WEBAPP_SRC/* $WEBAPP_DIR >/dev/null 2>&1
 fi
 
-if [ -d $WEBAPP_SRC/config.local ]; then
-    cp $WEBAPP_SRC/config.local/*.xml $WEBAPP_DIR/config >/dev/null 2>&1
+if [ -d ${WEBAPP_SRC}.local ]; then
+    cp -au ${WEBAPP_SRC}.local/* $WEBAPP_DIR >/dev/null 2>&1
 fi
