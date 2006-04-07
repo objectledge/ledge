@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.7 2006-04-06 09:58:34 rafal Exp $
+ * @version $Id: MailingList.java,v 1.8 2006-04-07 18:42:43 pablo Exp $
  */
 public interface MailingList
 {
@@ -271,4 +271,11 @@ public interface MailingList
      * @throws MailingListsException 
      */
     public void acceptUnsubscription(Object id) throws MailingListsException;
+    
+    /**
+     * 
+     */
+    public void postMessage(Message message) 
+        throws MailingListsException;
+    
 }
