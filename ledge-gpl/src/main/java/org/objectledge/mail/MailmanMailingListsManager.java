@@ -57,7 +57,7 @@ import org.jcontainer.dna.Logger;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.12 2006-04-06 10:23:40 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.13 2006-04-10 11:31:14 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -267,7 +267,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */    
-    public List getLocales()
+    public List<String> getLocales()
         throws MailingListsException
     {
         Object[] params = new Object[]{adminPassword};
