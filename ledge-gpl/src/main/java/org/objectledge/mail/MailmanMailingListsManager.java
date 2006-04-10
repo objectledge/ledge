@@ -52,12 +52,13 @@ import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.utils.StringUtils;
 
 /**
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.13 2006-04-10 11:31:14 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.14 2006-04-10 12:07:54 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -267,7 +268,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */    
-    public List<String> getLocales()
+    public List<Locale> getLocales()
         throws MailingListsException
     {
         Object[] params = new Object[]{adminPassword};
@@ -276,12 +277,12 @@ public class MailmanMailingListsManager implements MailingListsManager
         if(result instanceof Collection)
         {
             Collection list = (Collection)result;
-            ArrayList<String> codes = new ArrayList<String>();
+            ArrayList<Locale> codes = new ArrayList<Locale>();
             Iterator it = list.iterator();
             while(it.hasNext())
             {
                 List innerList = (List)it.next();
-                codes.add((String)innerList.get(0));
+                codes.add(StringUtils.getLocale((String)innerList.get(0)));
             }
             return codes;
         }
