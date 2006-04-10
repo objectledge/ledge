@@ -107,22 +107,28 @@ public class StringUtilsTest extends TestCase
     
     public void testGetLocale()
     {
-        Locale locale = StringUtils.getLocale("pl_PL");
-        assertEquals(locale.getCountry(),"PL");
-        assertEquals(locale.getLanguage(),"pl");
-        locale = StringUtils.getLocale("en_US_TEST");
-        assertEquals(locale.getCountry(),"US");
-        assertEquals(locale.getLanguage(),"en");
-        assertEquals(locale.getVariant(),"TEST");
-        try
-        {
-            locale = StringUtils.getLocale("pl-PL");
-            fail("should throw the exception");
-        }
-        catch(IllegalArgumentException e)
-        {
-            //ok!
-        }
+        Locale locale;
+        // Polish
+        locale = StringUtils.getLocale("pl");
+        assertEquals("pl", locale.getLanguage());
+        
+        // Portugal / Brasil
+        locale = StringUtils.getLocale("pt_BR");
+        assertEquals("pt", locale.getLanguage());
+        assertEquals("BR", locale.getCountry());
+        
+        // Spanish / Spain / Traditional collation
+        locale = StringUtils.getLocale("es_ES_Traditional");
+        assertEquals("es", locale.getLanguage());
+        assertEquals("ES", locale.getCountry());
+        assertEquals("Traditional", locale.getVariant());
+        
+        // Spanish / Spain / Traditional collation / Windows
+        locale = StringUtils.getLocale("es_ES_Traditional_Win");
+        assertEquals("es", locale.getLanguage());
+        assertEquals("ES", locale.getCountry());
+        assertEquals("Traditional_Win", locale.getVariant());
+
     }
     
     public void testGetByteCount()

@@ -47,7 +47,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.36 2006-03-24 14:24:40 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.37 2006-04-10 12:05:05 rafal Exp $
  */
 public class StringUtils
 {
@@ -313,28 +313,27 @@ public class StringUtils
 	 */
 	public static Locale getLocale(String name)
 	{
-		try
-		{
-			Locale locale;
-			StringTokenizer st = new StringTokenizer(name, "_");
-			String language = st.nextToken();
-			String country = st.nextToken();
-			if(st.hasMoreTokens())
-			{
-				String variant = st.nextToken();
-				locale = new Locale(language, country, variant);
-			}
-			else
-			{
-				locale = new Locale(language, country);
-			}
-			return locale;
-		}
-		catch(Exception e)
-		{
-			throw new IllegalArgumentException("Locale parsing exception - " +
-                "invalid string representation '" + name + "'");
-		}
+        String[] t = name.split("_");
+        switch(t.length)
+        {
+        case 1:
+            return new Locale(t[0]);
+        case 2:
+            return new Locale(t[0], t[1]);
+        case 3:
+            return new Locale(t[0], t[1], t[2]);
+        default:
+            StringBuilder v = new StringBuilder();
+            for(int i = 2 ; i < t.length; i++)
+            {
+                v.append(t[i]);
+                if(i < t.length - 1)
+                {
+                    v.append('_');
+                }
+            }
+            return new Locale(t[0], t[1], v.toString());
+        }
 	}
 	
 	/**
