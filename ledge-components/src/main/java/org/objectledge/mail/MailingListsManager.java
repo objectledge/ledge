@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.8 2006-04-10 12:07:56 rafal Exp $
+ * @version $Id: MailingListsManager.java,v 1.9 2006-04-11 12:51:21 rafal Exp $
  */
 public interface MailingListsManager 
 {
@@ -127,7 +127,15 @@ public interface MailingListsManager
      * @return the list of locales.
      * @throws MailingListsException
      */
-    public List<Locale> getLocales()
+    public List<Locale> getAvailableLocales()
+        throws MailingListsException;
+    
+    /**
+     * Get all e-mail domains configured in the system.
+     *  
+     * @return e-mail domains configured in the system.
+     */
+    public List<String> getAvailableDomains()
         throws MailingListsException;
     
     /**

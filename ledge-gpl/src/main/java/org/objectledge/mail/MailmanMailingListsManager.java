@@ -58,7 +58,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.14 2006-04-10 12:07:54 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.15 2006-04-11 12:51:26 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -127,7 +127,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     {
         try
         {
-            getLocales();
+            getAvailableLocales();
             checkMessageStore();
             return MailingListsManager.Status.OPERATIONAL;
         }
@@ -268,11 +268,11 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */    
-    public List<Locale> getLocales()
+    public List<Locale> getAvailableLocales()
         throws MailingListsException
     {
-        Object[] params = new Object[]{adminPassword};
-        Object result = executeMethod("Mailman.getLocales", params);
+        Object[] params = new Object[] { adminPassword };
+        Object result = executeMethod("Mailman.getAvailableLocales", params);
         List<String> names = new ArrayList<String>();
         if(result instanceof Collection)
         {
@@ -285,6 +285,33 @@ public class MailmanMailingListsManager implements MailingListsManager
                 codes.add(StringUtils.getLocale((String)innerList.get(0)));
             }
             return codes;
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<String> getAvailableDomains()
+        throws MailingListsException
+    {
+        Object[] params = new Object[] { adminPassword };
+        Object result = executeMethod("Mailman.getAvailableDomains", params);        
+        List<String> names = new ArrayList<String>();
+        if(result instanceof Collection)
+        {
+            Collection list = (Collection)result;
+            ArrayList<String> domains = new ArrayList<String>();
+            Iterator it = list.iterator();
+            while(it.hasNext())
+            {
+                domains.add((String)it.next());
+            }
+            return domains;
         }
         if(result == null)
         {
