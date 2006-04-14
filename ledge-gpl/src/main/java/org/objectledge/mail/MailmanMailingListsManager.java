@@ -58,7 +58,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.15 2006-04-11 12:51:26 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.16 2006-04-14 09:55:46 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -174,9 +174,9 @@ public class MailmanMailingListsManager implements MailingListsManager
                 getList(name, newPassword).addMember(monitoringAddress,
                     "Mailiman - Ledge integration", "", false, true);
             }
+            return newPassword;
         }
-        
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -199,7 +199,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -231,7 +231,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -262,7 +262,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -290,7 +290,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -317,7 +317,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
     private void checkMessageStore()
@@ -437,7 +437,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -461,7 +461,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -497,7 +497,7 @@ public class MailmanMailingListsManager implements MailingListsManager
             throw new MailingListsException("Null result of rpc method invocation");
         }
         throw new MailingListsException("Invalid result value: '"+result+
-            "' or class:'"+result.getClass().getName());    
+            "' or class: "+result.getClass().getName());    
     }
 
     /**
@@ -516,7 +516,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -536,7 +536,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result value: '"+result+"' or class:'"+result.getClass().getName());    
+        throw new MailingListsException("Invalid result value: '"+result+"' or class: "+result.getClass().getName());    
     }
 
     /**
@@ -561,7 +561,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result value: '"+result+"' or class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result value: '"+result+"' or class: "+result.getClass().getName());
     }
 
     /**
@@ -580,7 +580,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
     /**
@@ -598,7 +598,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -641,7 +641,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     List getNewPendingTasks(String listName, String adminPassword)
@@ -660,7 +660,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
     Integer getPendingTaskType(String listName, String adminPassword, Object id)
@@ -676,7 +676,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
     void postMessage(String listName, String adminPassword, String message)
@@ -692,7 +692,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
     public void handleModeratorRequest(String listName, String adminPassword,
@@ -709,7 +709,7 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("Null result of rpc method invocation");
         }
-        throw new MailingListsException("Invalid result class:'"+result.getClass().getName());
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
     // private methods
