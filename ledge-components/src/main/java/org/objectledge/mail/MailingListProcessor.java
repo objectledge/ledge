@@ -99,31 +99,28 @@ public class MailingListProcessor
             while(it.hasNext())
             {
                 Object id = it.next();
-                Object type = list.getPendingTaskType(id);
+                MailingList.TaskType type = list.getPendingTaskType(id);
                 Message message = list.getPendingMessage(id);
-                if(type.equals(MailingList.TaskType.PENDING_POST))
+                switch(type)
                 {
+                case PENDING_POST:
                     for(MailingListsNotificationListener listener: listeners)
                     {
                         listener.newPendingMessageAdded(listName, message);
                     }
-                    continue;
-                }
-                if(type.equals(MailingList.TaskType.PENDING_SUBSCRIPTION))
-                {
+                    break;
+                case PENDING_SUBSCRIPTION:
                     for(MailingListsNotificationListener listener: listeners)
                     {
                         listener.newPendingSubscriptionAdded(listName, message);
                     }
-                    continue;
-                }
-                if(type.equals(MailingList.TaskType.PENDING_UNSUBSCRIPTION))
-                {
+                    break;
+                case PENDING_UNSUBSCRIPTION:
                     for(MailingListsNotificationListener listener: listeners)
                     {
                         listener.newPendingUnsubscriptionAdded(listName, message);
                     }
-                    continue;
+                    break;                    
                 }
             }
         }
