@@ -58,7 +58,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.17 2006-04-14 12:24:32 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.18 2006-04-19 08:23:47 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -704,6 +704,22 @@ public class MailmanMailingListsManager implements MailingListsManager
         if(result instanceof Boolean && ((Boolean)result))
         {
             return;
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+    }
+    
+    String getInterfaceBaseURL(String domain)
+        throws MailingListsException
+    {
+        Object[] params = new Object[] { adminPassword, domain };
+        Object result = executeMethod("Mailman.getInterfaceBaseURL", params);
+        if(result instanceof String)
+        {
+            return (String)result;
         }
         if(result == null)
         {

@@ -28,7 +28,7 @@
 
 package org.objectledge.mail;
 
-import java.util.EnumSet;
+import java.net.URL;
 import java.util.List;
 
 import javax.mail.Message;
@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.8 2006-04-07 18:42:43 pablo Exp $
+ * @version $Id: MailingList.java,v 1.9 2006-04-19 08:23:42 rafal Exp $
  */
 public interface MailingList
 {
@@ -273,9 +273,47 @@ public interface MailingList
     public void acceptUnsubscription(Object id) throws MailingListsException;
     
     /**
+     * Post an e-mail message to the list.
      * 
+     * @param message the message.
+     * @throws MailingListsException
      */
     public void postMessage(Message message) 
         throws MailingListsException;
     
+    /**
+     * Returns the e-mail address used for subscribing to the list.
+     * 
+     * @return the e-mail address used for subscribing to the list.
+     * @throws MailingListsException
+     */
+    public String getSubscriptionAddress()
+        throws MailingListsException;    
+    
+    /**
+     * Returns the e-mail address used for posting to the list.
+     * 
+     * @return the e-mail address used for posting to the list.
+     * @throws MailingListsException
+     */
+    public String getPostingAddress()
+        throws MailingListsException;
+    
+    /**
+     * Returns the location of the list member's self-service WWW interface.
+     * 
+     * @return the location of the list member's self-service WWW interface.
+     * @throws MailingListsException
+     */
+    public URL getMemberInterfaceLocation()
+        throws MailingListsException;
+    
+    /**
+     * Returns the location of the list administrators WWW interface.
+     * 
+     * @return the location of the list administrators WWW interface.
+     * @throws MailingListsException
+     */
+    public URL getAdministratorInterfaceLocation()
+        throws MailingListsException;
 }

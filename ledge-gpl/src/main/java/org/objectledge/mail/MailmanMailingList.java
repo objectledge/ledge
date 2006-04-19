@@ -32,6 +32,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import javax.mail.Message;
@@ -43,7 +45,7 @@ import javax.mail.internet.MimeMessage;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.8 2006-04-06 09:58:31 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.9 2006-04-19 08:23:47 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -52,6 +54,8 @@ public class MailmanMailingList implements MailingList
     private static final String SUBSCRIBE_POLICY = "subscribe_policy";
     
     private static final String POSTING_MODERATION = "default_member_moderation";
+    
+    private static final String HOST_NAME = "host_name";
 
     /** options values */
     
@@ -355,5 +359,74 @@ public class MailmanMailingList implements MailingList
     public void acceptUnsubscription(Object id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_UNSUBSCRIBE);
+    }
+    
+    
+    /**
+     * Returns the e-mail address used for subscribing to the list.
+     * 
+     * @return the e-mail address used for subscribing to the list.
+     * @throws MailingListsException
+     */
+    public String getSubscriptionAddress()
+        throws MailingListsException
+    {
+        String listDomain = (String)manager.getOption(listName, adminPassword, HOST_NAME);
+        return listName + "@" + listDomain;
+    }    
+    
+    /**
+     * Returns the e-mail address used for posting to the list.
+     * 
+     * @return the e-mail address used for posting to the list.
+     * @throws MailingListsException
+     */
+    public String getPostingAddress()
+        throws MailingListsException
+    {
+        String listDomain = (String)manager.getOption(listName, adminPassword, HOST_NAME);
+        return listName + "-subscribe@" + listDomain;
+    }
+    
+    /**
+     * Returns the location of the list member's self-service WWW interface.
+     * 
+     * @return the location of the list member's self-service WWW interface.
+     * @throws MailingListsException
+     */
+    public URL getMemberInterfaceLocation()
+        throws MailingListsException
+    {
+        String listDomain = (String)manager.getOption(listName, adminPassword, HOST_NAME);
+        String interfaceBaseURL = manager.getInterfaceBaseURL(listDomain);
+        try
+        {
+            return new URL(interfaceBaseURL + "listinfo/" + listName);
+        }
+        catch(MalformedURLException e)
+        {
+            throw new MailingListsException("invalid URL specifier returned by mailman "+ interfaceBaseURL);
+        }
+    }
+    
+    /**
+     * Returns the location of the list administrators WWW interface.
+     * 
+     * @return the location of the list administrators WWW interface.
+     * @throws MailingListsException
+     */
+    public URL getAdministratorInterfaceLocation()
+        throws MailingListsException
+    {
+        String listDomain = (String)manager.getOption(listName, adminPassword, HOST_NAME);
+        String interfaceBaseURL = manager.getInterfaceBaseURL(listDomain);
+        try
+        {
+            return new URL(interfaceBaseURL + "admin/" + listName);
+        }
+        catch(MalformedURLException e)
+        {
+            throw new MailingListsException("invalid URL specifier returned by mailman "+ interfaceBaseURL);
+        }
     }
 }
