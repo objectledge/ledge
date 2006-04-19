@@ -58,7 +58,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.18 2006-04-19 08:23:47 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.19 2006-04-19 14:59:52 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -470,6 +470,10 @@ public class MailmanMailingListsManager implements MailingListsManager
     MailingList.OperationStatus deleteMember(String listName, String adminPassword, 
         String address, boolean ignoreDeletingPolicy) throws MailingListsException
     {
+        if(address.equals(monitoringAddress))
+        {
+            throw new MailingListsException("monitoring account cannot be unsubscribed from a list");
+        }
         Object[] params = new Object[]{
                         listName, adminPassword, address, ignoreDeletingPolicy};
         Object result = null;
@@ -510,7 +514,9 @@ public class MailmanMailingListsManager implements MailingListsManager
         Object result = executeMethod("Mailman.getMembers", params);
         if(result instanceof List)
         {
-            return (List<String>)result;
+            List<String> members = (List<String>)result;
+            members.remove(monitoringAddress);
+            return members;
         }
         if(result == null)
         {
