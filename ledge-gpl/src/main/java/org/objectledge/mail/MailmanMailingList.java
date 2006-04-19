@@ -45,7 +45,7 @@ import javax.mail.internet.MimeMessage;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.9 2006-04-19 08:23:47 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.10 2006-04-19 11:04:41 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -372,7 +372,7 @@ public class MailmanMailingList implements MailingList
         throws MailingListsException
     {
         String listDomain = (String)manager.getOption(listName, adminPassword, HOST_NAME);
-        return listName + "@" + listDomain;
+        return listName + "-subscribe@" + listDomain;
     }    
     
     /**
@@ -385,7 +385,7 @@ public class MailmanMailingList implements MailingList
         throws MailingListsException
     {
         String listDomain = (String)manager.getOption(listName, adminPassword, HOST_NAME);
-        return listName + "-subscribe@" + listDomain;
+        return listName + "@" + listDomain;
     }
     
     /**
