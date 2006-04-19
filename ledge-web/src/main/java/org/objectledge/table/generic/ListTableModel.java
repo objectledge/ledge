@@ -43,7 +43,7 @@ import org.objectledge.table.TableState;
  * <p>Item indices are used as ids.</p>
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListTableModel.java,v 1.7 2006-03-16 17:57:03 zwierzem Exp $
+ * @version $Id: ListTableModel.java,v 1.8 2006-04-19 12:56:51 rafal Exp $
  */
 public class ListTableModel<T>
     implements ExtendedTableModel<T>
@@ -61,7 +61,7 @@ public class ListTableModel<T>
      * @param columns the columns of the table, <code>null</code> to disable sorting.
      */
     @SuppressWarnings("unchecked")
-    public ListTableModel(List<T> list, TableColumn<T>[] columns)
+    public ListTableModel(List<T> list, TableColumn<T> ... columns)
     {
         this.list = list;
         if(columns == null)
@@ -80,7 +80,7 @@ public class ListTableModel<T>
      * @param array the array to build model for.
      * @param columns the columns of the table, <code>null</code> to disable sorting.
      */
-    public ListTableModel(T[] array, TableColumn<T>[] columns)
+    public ListTableModel(T[] array, TableColumn<T> ... columns)
     {
         this(Arrays.asList(array), columns);
     }
