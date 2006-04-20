@@ -58,7 +58,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.19 2006-04-19 14:59:52 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.20 2006-04-20 10:28:27 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -172,7 +172,7 @@ public class MailmanMailingListsManager implements MailingListsManager
             if(monitoringAddress.length() > 0)
             {
                 getList(name, newPassword).addMember(monitoringAddress,
-                    "Mailiman - Ledge integration", "", false, true);
+                    "Mailiman - Ledge integration", "", false, true, false, false);
             }
             return newPassword;
         }
@@ -407,12 +407,11 @@ public class MailmanMailingListsManager implements MailingListsManager
      */
     MailingList.OperationStatus addMember(String listName, String adminPassword, 
         String address, String name, String password, 
-        boolean digest, boolean ignoreCreationPolicy)
+        boolean digest, boolean ignoreCreationPolicy, boolean acknowledge, boolean notifyAdmins)
             throws MailingListsException
     {
-        Object[] params = new Object[]{
-                        listName, adminPassword, address, name, 
-                        password, digest, ignoreCreationPolicy};
+        Object[] params = new Object[] { listName, adminPassword, address, name, password, digest,
+                        ignoreCreationPolicy, acknowledge, notifyAdmins };
         Object result = null;
         try
         {
@@ -467,15 +466,16 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    MailingList.OperationStatus deleteMember(String listName, String adminPassword, 
-        String address, boolean ignoreDeletingPolicy) throws MailingListsException
+    MailingList.OperationStatus deleteMember(String listName, String adminPassword, String address,
+        boolean ignoreDeletingPolicy, boolean acknowledge, boolean notifyAdmins)
+        throws MailingListsException
     {
         if(address.equals(monitoringAddress))
         {
             throw new MailingListsException("monitoring account cannot be unsubscribed from a list");
         }
-        Object[] params = new Object[]{
-                        listName, adminPassword, address, ignoreDeletingPolicy};
+        Object[] params = new Object[] { listName, adminPassword, address, ignoreDeletingPolicy,
+                        acknowledge, notifyAdmins };
         Object result = null;
         try
         {

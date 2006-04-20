@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.9 2006-04-19 08:23:42 rafal Exp $
+ * @version $Id: MailingList.java,v 1.10 2006-04-20 10:28:42 rafal Exp $
  */
 public interface MailingList
 {
@@ -70,11 +70,14 @@ public interface MailingList
      * @param password member's password, auto generated if <code>null</code>
      * @param digest if <code>true</code> member will receive batched digest delivery.
      * @param ignoreCreationPolicy force creating ignoring confirmation and approval.
+     * @param acknowledge send acknowledge message to the subscribed user.
+     * @param notifyAdmins send notification message to the list administrators.
      * @return the state of the membership.
      * @throws MailingListsException if anything goes wrong.
      */
     public OperationStatus addMember(String address, String name, String password, 
-        boolean digest, boolean ignoreCreationPolicy)
+        boolean digest, boolean ignoreCreationPolicy, boolean acknowledge,
+        boolean notifyAdmins)
         throws MailingListsException;
 
     /**
@@ -82,9 +85,12 @@ public interface MailingList
      *
      * @param address email address of a member.
      * @param ignoreDeletingPolicy force deleting ignoring confirmation and approval.
+     * @param acknowledge send acknowledge message to the subscribed user.
+     * @param notifyAdmins send notification message to the list administrators.
      * @throws MailingListsException if anything goes wrong.
      */
-    public OperationStatus deleteMember(String address, boolean ignoreDeletingPolicy)
+    public OperationStatus deleteMember(String address, boolean ignoreDeletingPolicy,
+        boolean acknowledge, boolean notifyAdmins)
         throws MailingListsException;
 
     /**

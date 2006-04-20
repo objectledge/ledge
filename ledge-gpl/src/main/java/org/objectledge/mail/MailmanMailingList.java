@@ -45,7 +45,7 @@ import javax.mail.internet.MimeMessage;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.10 2006-04-19 11:04:41 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.11 2006-04-20 10:28:27 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -107,10 +107,11 @@ public class MailmanMailingList implements MailingList
      * {@inheritDoc}
      */
     public MailingList.OperationStatus addMember(String address, String name, String password, 
-        boolean digest, boolean ignoreCreationPolicy)
+        boolean digest, boolean ignoreCreationPolicy, boolean acknowledge, boolean notifyAdmins)
         throws MailingListsException
     {
-        return manager.addMember(listName, adminPassword, address, name, password, digest, ignoreCreationPolicy);
+        return manager.addMember(listName, adminPassword, address, name, password, digest,
+            ignoreCreationPolicy, acknowledge, notifyAdmins);
     }
 
     /**
@@ -134,10 +135,12 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public MailingList.OperationStatus deleteMember(String address, boolean ignoreDeletingPolicy)
+    public MailingList.OperationStatus deleteMember(String address, boolean ignoreDeletingPolicy,
+        boolean acknowledge, boolean notifyAdmins)
         throws MailingListsException
     {
-        return manager.deleteMember(listName, adminPassword, address, ignoreDeletingPolicy); 
+        return manager.deleteMember(listName, adminPassword, address, ignoreDeletingPolicy,
+            acknowledge, notifyAdmins); 
     }
 
     /**
