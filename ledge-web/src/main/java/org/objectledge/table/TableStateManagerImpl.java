@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.8 2006-02-07 13:13:31 zwierzem Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.9 2006-04-21 13:51:56 zwierzem Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager
@@ -75,6 +75,17 @@ public class TableStateManagerImpl
             tableData.put(id, state);
         }
         return state;
+    }
+
+    /** 
+     * {@inheritDoc}
+     */
+    public void clearState(Context context, String name)
+    {
+        Integer id = getId(name);
+        HttpContext httpContext = HttpContext.getHttpContext(context);
+        TableData tableData = getTableData(httpContext);
+        tableData.clear(id);
     }
 
     /**
@@ -168,6 +179,11 @@ public class TableStateManagerImpl
         void put(Integer id, TableState state)
         {
             map.put(id, state);
+        }
+
+        void clear(Integer id)
+        {
+            map.remove(id);
         }
     }
 }

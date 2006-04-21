@@ -37,7 +37,7 @@ import org.objectledge.context.Context;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManager.java,v 1.5 2006-04-03 18:38:51 zwierzem Exp $
+ * @version $Id: TableStateManager.java,v 1.6 2006-04-21 13:51:56 zwierzem Exp $
  */
 public interface TableStateManager
 {
@@ -52,6 +52,14 @@ public interface TableStateManager
     public TableState getState(Context context, String name);
 
     /**
+     * Clears the state of the table instance.
+     *
+     * @param context the thread context.
+     * @param name the unique identifier of the state in the session.
+     */
+    public void clearState(Context context, String name);
+
+    /**
      * Returns the state of the table instance - it is used by Table toolkit companion actions.
      *
      * @param context the thread context.
@@ -59,4 +67,5 @@ public interface TableStateManager
      * @return the state of component.
      */
     public TableState getState(Context context, Integer id);
+
 }
