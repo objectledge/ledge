@@ -58,7 +58,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.21 2006-04-21 12:49:34 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.22 2006-04-21 13:50:51 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -667,7 +667,10 @@ public class MailmanMailingListsManager implements MailingListsManager
         if(result instanceof List)
         {
             List list = (List)result;
-            setLastId(listName, (Integer)list.get(list.size()-1));
+            if(!list.isEmpty())
+            {
+                setLastId(listName, (Integer)list.get(list.size() - 1));
+            }
             return list;
         }
         if(result == null)
