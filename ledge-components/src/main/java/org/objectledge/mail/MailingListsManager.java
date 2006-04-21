@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.9 2006-04-11 12:51:21 rafal Exp $
+ * @version $Id: MailingListsManager.java,v 1.10 2006-04-21 12:49:38 rafal Exp $
  */
 public interface MailingListsManager 
 {
@@ -102,7 +102,15 @@ public interface MailingListsManager
      */
     public MailingList getList(String name, String password)
         throws MailingListsException;
-    
+
+    /**
+     * Get mailing list, using system administrator's credantials.
+     * 
+     * @param name name of the list.
+     */
+    public MailingList getList(String name)
+        throws MailingListsException;
+
     /**
      * Get all advertised lists.
      * 

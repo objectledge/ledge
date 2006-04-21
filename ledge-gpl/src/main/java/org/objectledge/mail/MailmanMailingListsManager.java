@@ -58,7 +58,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.20 2006-04-20 10:28:27 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.21 2006-04-21 12:49:34 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -210,6 +210,14 @@ public class MailmanMailingListsManager implements MailingListsManager
         return new MailmanMailingList(this, name, password);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public MailingList getList(String name) throws MailingListsException
+    {
+        return new MailmanMailingList(this, name, adminPassword);
+    }
+    
     /**
      * {@inheritDoc}
      */

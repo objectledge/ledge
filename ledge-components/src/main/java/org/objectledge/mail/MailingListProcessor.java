@@ -93,7 +93,7 @@ public class MailingListProcessor
         List<String> names = manager.getLists();
         for(String listName: names)
         {
-            MailingList list = manager.getList(listName, "");
+            MailingList list = manager.getList(listName);
             List ids = list.getNewPendingTasks();
             Iterator it = ids.iterator();
             while(it.hasNext())
