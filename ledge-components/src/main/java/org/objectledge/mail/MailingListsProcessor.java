@@ -13,7 +13,7 @@ import org.objectledge.scheduler.Job;
  * A job that checks the start and expire date of the polls
  *
  */
-public class MailingListProcessor
+public class MailingListsProcessor
     extends Job
 {
     /** List-Id header as defined by RFC2919 */
@@ -34,7 +34,7 @@ public class MailingListProcessor
     /**
      *
      */
-    public MailingListProcessor(Logger logger, MailingListsManager manager, 
+    public MailingListsProcessor(Logger logger, MailingListsManager manager, 
         MailingListsNotificationListener[] listeners)
     {
         this.logger = logger;
