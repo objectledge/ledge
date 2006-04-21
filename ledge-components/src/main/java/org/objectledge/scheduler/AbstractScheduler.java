@@ -340,6 +340,7 @@ public abstract class AbstractScheduler
         if(job.isEnabled())
         {
             Date nextRun = job.getSchedule().getNextRunTime(new Date(), job.getLastRunTime());
+            logger.debug("scheduling " + job.getName() + " at " + nextRun + " (last run " + job.getLastRunTime() + ")");
             if(nextRun != null)
             {
                 Date start = job.getTimeLimitStart();
@@ -410,6 +411,8 @@ public abstract class AbstractScheduler
         {
             if(!job.isRunning() || job.isReentrant())
             {
+                logger.debug("starting " + job.getName() + " at " + new Date());
+                job.setRunning(true);
                 RunnerTask rt = new RunnerTask(job);
                 threadPool.runWorker(rt);
             }
@@ -478,7 +481,6 @@ public abstract class AbstractScheduler
 
             synchronized(job)
             {
-                job.setRunning(true);
                 try
                 {
                     job.setLastRunTime(new Date());
@@ -500,6 +502,31 @@ public abstract class AbstractScheduler
                 {
                     logger.error("invalid job specification " + job.getJobClassName(), e);
                 }
+                finally
+                {
+                    synchronized(runners)
+                    {
+                        Set set = (Set)runners.get(job);
+                        if(set != null)
+                        {
+                            set.remove(this);
+                            if(set.isEmpty())
+                            {
+                                synchronized(job)
+                                {
+                                    job.setRunning(false);
+                                }
+                            }
+                        }
+                    }
+
+                    if(!job.isReentrant())
+                    {
+                        AbstractScheduler.this.schedule(job);
+                    }
+                    thread = null;
+                    
+                }
             }
             catch(VirtualMachineError e)
             {
@@ -513,24 +540,6 @@ public abstract class AbstractScheduler
             {
                 logger.error("uncaught exception in scheduled job " + job.getName(), t);
             }
-
-            synchronized(runners)
-            {
-                Set set = (Set)runners.get(job);
-                if(set != null)
-                {
-                    set.remove(this);
-                    if(set.isEmpty())
-                    {
-                        synchronized(job)
-                        {
-                            job.setRunning(false);
-                        }
-                    }
-                }
-            }
-
-            thread = null;
         }
 
         public void terminate(Thread t)
@@ -562,7 +571,7 @@ public abstract class AbstractScheduler
     {
         public String getName()
         {
-            return "Scheduled Job";
+            return "Job Scheduler";
         }
 
         public void process(Context context)
@@ -597,7 +606,10 @@ public abstract class AbstractScheduler
                         {
                             AbstractJobDescriptor job = (AbstractJobDescriptor)i.next();
                             AbstractScheduler.this.run(job);
-                            AbstractScheduler.this.schedule(job);
+                            if(job.isReentrant())
+                            {
+                                AbstractScheduler.this.schedule(job);
+                            }
                         }
                         if(!queue.isEmpty())
                         {
