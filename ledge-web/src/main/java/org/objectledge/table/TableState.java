@@ -42,10 +42,13 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.10 2006-04-03 18:38:51 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.11 2006-04-21 16:04:28 zwierzem Exp $
  */
 public class TableState
 {
+    /** Name under which this table state is mapped in TableService. */
+    private String name;
+
     /** Id under which this table state is mapped in TableService. */
     private int id;
 
@@ -86,10 +89,12 @@ public class TableState
 
 	/** 
 	 * Constructor for table state.
+	 * @param name 
 	 * @param id numeric id of a state as assigned by {@link TableStateManager}
 	 */
-    public TableState(int id)
+    public TableState(String name, int id)
     {
+        this.name = name;
         this.id = id;
         newState = true;
     }
@@ -116,6 +121,17 @@ public class TableState
     public void setOld()
     {
         newState = false;
+    }
+
+    /**
+     * Returns this table state's name as defined by mapping held by 
+     * {@link TableStateManager}.
+     *
+     * @return name of the table state.
+     */
+    public String getName()
+    {
+        return name;
     }
 
     /**

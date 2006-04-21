@@ -41,7 +41,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateManagerImpl.java,v 1.9 2006-04-21 13:51:56 zwierzem Exp $
+ * @version $Id: TableStateManagerImpl.java,v 1.10 2006-04-21 16:04:28 zwierzem Exp $
  */
 public class TableStateManagerImpl
     implements TableStateManager
@@ -71,7 +71,8 @@ public class TableStateManagerImpl
         TableState state = getTableState(tableData, id);
         if(state == null)
         {
-            state = createTableState(id);
+            name = name.intern(); // save space for names in the 
+            state = createTableState(name, id);
             tableData.put(id, state);
         }
         return state;
@@ -92,12 +93,13 @@ public class TableStateManagerImpl
      * The factory method for {@link TableState} objects. Allows overriding of
      * <code>TableState</code> class.
      * 
+     * @param name the name of the state
      * @param id
      * @return the newly created table state object.
      */
-    protected TableState createTableState(int id)
+    protected TableState createTableState(String name, int id)
     {
-        return new TableState(id);
+        return new TableState(name, id);
     }
 
     /**
@@ -117,6 +119,7 @@ public class TableStateManagerImpl
             id = new Integer(nextId);
             nextId++;
             //create mappings
+            name = name.intern();
             byNameMapping.put(name, id);
             byIdMapping.put(id, name);
         }

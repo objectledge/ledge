@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableStateTest.java,v 1.3 2004-07-01 11:42:14 zwierzem Exp $
+ * @version $Id: TableStateTest.java,v 1.4 2006-04-21 16:04:27 zwierzem Exp $
  */
 public class TableStateTest extends TestCase
 {
@@ -46,15 +46,17 @@ public class TableStateTest extends TestCase
     }
 
 	private int id = 1;
+    private String name = "name";
 
     public void testTableState()
     {
-    	TableState state = new TableState(id);
+    	TableState state = new TableState(name, id);
     	// check defaults
     	assertTrue(state.isNew());
     	assertFalse(state.getAllExpanded());
     	assertEquals(state.getCurrentPage(), 1);
     	assertEquals(state.getId(), id);
+        assertEquals(state.getName(), name);
     	assertEquals(state.getMaxVisibleDepth(), 0);
     	assertEquals(state.getPageSize(), 0);
     	assertEquals(state.getRootId(), "");
@@ -107,7 +109,7 @@ public class TableStateTest extends TestCase
 
 	public void testExpanded()
 	{
-		TableState state = new TableState(id);
+		TableState state = new TableState(name, id);
 
 		assertFalse(state.isExpanded("expanded-id"));
 		state.setExpanded("expanded-id");

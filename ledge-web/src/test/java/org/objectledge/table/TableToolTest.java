@@ -37,7 +37,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableToolTest.java,v 1.4 2006-02-07 13:15:03 zwierzem Exp $
+ * @version $Id: TableToolTest.java,v 1.5 2006-04-21 16:04:27 zwierzem Exp $
  */
 public class TableToolTest extends TestCase
 {
@@ -64,7 +64,7 @@ public class TableToolTest extends TestCase
     {
         super.setUp();
         
-        state = new TableState(1);
+        state = new TableState("name", 1);
 		state.setTreeView(true);
 		state.setExpanded( new String[] { "0", "1", "2", "5" } );
     }
