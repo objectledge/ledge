@@ -39,7 +39,7 @@ import org.objectledge.parameters.Parameters;
  * A base implementation of the UserManager interface.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.4 2005-05-18 08:08:05 pablo Exp $
+ * @version $Id: UserManager.java,v 1.5 2006-04-24 09:50:50 rafal Exp $
  */
 public abstract class UserManager
 {
@@ -58,6 +58,13 @@ public abstract class UserManager
     protected PasswordGenerator passwordGenerator;
     
     // initialization ///////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * No-arg ctor for mock object testing.
+     */
+    protected UserManager()
+    {       
+    }
     
     /**
      * Creates an instance of the user manager.

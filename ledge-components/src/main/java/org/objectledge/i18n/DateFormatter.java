@@ -39,10 +39,17 @@ import org.jcontainer.dna.ConfigurationException;
  * The date formater component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: DateFormatter.java,v 1.6 2006-03-07 17:35:06 zwierzem Exp $
+ * @version $Id: DateFormatter.java,v 1.7 2006-04-24 09:50:49 rafal Exp $
  */
 public class DateFormatter extends AbstractFormatter
 {
+    /**
+     * No-arg ctor for mock object testing.
+     */
+    protected DateFormatter()
+    {
+    }
+    
 	public DateFormatter(Configuration config, I18n i18n)
         throws ConfigurationException
     {

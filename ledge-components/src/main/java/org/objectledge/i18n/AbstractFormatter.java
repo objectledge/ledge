@@ -12,7 +12,7 @@ import org.objectledge.utils.StringUtils;
  * The abstract formater component.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractFormatter.java,v 1.1 2006-03-07 17:35:06 zwierzem Exp $
+ * @version $Id: AbstractFormatter.java,v 1.2 2006-04-24 09:50:49 rafal Exp $
  */
 public abstract class AbstractFormatter
 {
@@ -23,6 +23,13 @@ public abstract class AbstractFormatter
     /** The default locale patterns. */
     protected Map<Locale,String> defaultPatterns;
 
+    /**
+     * No-arg ctor for mock object testing.
+     */
+    protected AbstractFormatter()
+    {
+    }
+    
     /**
      * Component constructor.
      *
