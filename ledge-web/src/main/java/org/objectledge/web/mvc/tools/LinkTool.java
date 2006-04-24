@@ -72,7 +72,7 @@ import org.objectledge.web.mvc.MVCContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LinkTool.java,v 1.32 2006-01-18 13:26:42 rafal Exp $
+ * @version $Id: LinkTool.java,v 1.33 2006-04-24 13:35:50 zwierzem Exp $
  */
 public class LinkTool
 {
@@ -876,7 +876,23 @@ public class LinkTool
         return target;
     }
 
-	/**
+    /**
+     * @return the name of the action parameter.
+     */
+    public String actionParam()
+    {
+        return config.actionToken;
+    }
+    
+    /**
+     * @return the name of the view parameter.
+     */
+    public String viewParam()
+    {
+        return config.viewToken;
+    }
+
+    /**
 	 * Removes the view parameter.
 	 *
 	 * @return the link tool.
