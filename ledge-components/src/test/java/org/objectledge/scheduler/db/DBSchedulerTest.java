@@ -90,7 +90,7 @@ public class DBSchedulerTest extends LedgeTestCase
         Document logConfig = builder.parse(source);
         LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
         configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
-        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(MailSystem.class));
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(DBScheduler.class));
         Configuration config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
         Context context = new Context();
         ThreadPool threadPool = new ThreadPool(null, context,config, logger);
