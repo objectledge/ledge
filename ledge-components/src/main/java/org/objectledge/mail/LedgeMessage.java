@@ -1,5 +1,7 @@
 package org.objectledge.mail;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +33,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.7 2005-04-07 09:22:19 zwierzem Exp $
+ * @version $Id: LedgeMessage.java,v 1.8 2006-04-25 08:21:04 rafal Exp $
  */
 public class LedgeMessage
 {
@@ -227,8 +229,9 @@ public class LedgeMessage
      * 
      * @throws MergingException thrown when merging failed.
      * @throws MessagingException thrown when unsupported charset found.
+     * @return contents of the Message-Id header of the generated message.  
      */
-    public void prepare() 
+    public String prepare() 
         throws MergingException, MessagingException
     {
         String content = null;
@@ -336,6 +339,16 @@ public class LedgeMessage
             message.setContent(content, contentType);
         }
         prepared = true;
+        try
+        {
+            // trigger Message-Id generation
+            message.writeTo(new ByteArrayOutputStream());
+            return message.getHeader("Message-Id")[0];
+        }
+        catch(IOException e)
+        {
+            throw new MessagingException("failed to serialize message", e);
+        }
     }    
     
     /**
