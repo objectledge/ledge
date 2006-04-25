@@ -33,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.12 2006-02-08 18:24:12 zwierzem Exp $
+ * @version $Id: MailSystem.java,v 1.13 2006-04-25 08:19:52 rafal Exp $
  */
 public class MailSystem
 {
@@ -79,6 +79,14 @@ public class MailSystem
 	/** email address validator pattern */
 	private Pattern emailAddressPattern; 
 	
+    /**
+     * No-arg ctor for mocking.
+     */
+    protected MailSystem()
+    {
+        // intentionally left blank
+    }
+    
 	/**
      * Initializes the component.
      * 
