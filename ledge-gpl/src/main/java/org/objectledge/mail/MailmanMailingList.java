@@ -28,24 +28,22 @@
 
 package org.objectledge.mail;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.SequenceInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
+
+import org.objectledge.utils.StringUtils;
 
 
 /**
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.11 2006-04-20 10:28:27 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.12 2006-04-25 12:58:25 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -56,6 +54,8 @@ public class MailmanMailingList implements MailingList
     private static final String POSTING_MODERATION = "default_member_moderation";
     
     private static final String HOST_NAME = "host_name";
+    
+    private static final String PREFERRED_LANGUAGE = "preferred_language";
 
     /** options values */
     
@@ -432,4 +432,11 @@ public class MailmanMailingList implements MailingList
             throw new MailingListsException("invalid URL specifier returned by mailman "+ interfaceBaseURL);
         }
     }
+
+    public Locale getPreferredLanguage()
+        throws MailingListsException
+    {
+        String languageName = (String)manager.getOption(listName, adminPassword, PREFERRED_LANGUAGE);
+        return StringUtils.getLocale(languageName);
+    }    
 }

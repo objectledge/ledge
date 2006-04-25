@@ -30,6 +30,7 @@ package org.objectledge.mail;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.Message;
 
@@ -37,7 +38,7 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.10 2006-04-20 10:28:42 rafal Exp $
+ * @version $Id: MailingList.java,v 1.11 2006-04-25 12:58:22 rafal Exp $
  */
 public interface MailingList
 {
@@ -321,5 +322,14 @@ public interface MailingList
      * @throws MailingListsException
      */
     public URL getAdministratorInterfaceLocation()
+        throws MailingListsException;
+    
+    /**
+     * Returns the preferred language for the list.
+     * 
+     * @return the preferred language for the list.
+     * @throws MailingListsException
+     */
+    public Locale getPreferredLanguage()
         throws MailingListsException;
 }
