@@ -120,7 +120,7 @@ public class MailSystemTest extends LedgeTestCase
         message.prepare();
         msg = message.getMessage();
         assertEquals("foo",msg.getContent());
-        assertEquals("text/plain",msg.getContentType());
+        assertEquals("text/plain; charset=ISO-8859-2",msg.getContentType());
         
         message = mailSystem.newMessage();
         message.setTemplate(new Locale("pl","PL"), "PLAIN", "Foo");
