@@ -37,7 +37,7 @@ import javax.mail.Message;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.10 2006-04-21 12:49:38 rafal Exp $
+ * @version $Id: MailingListsManager.java,v 1.11 2006-04-25 15:06:24 rafal Exp $
  */
 public interface MailingListsManager 
 {
@@ -78,10 +78,11 @@ public interface MailingListsManager
      * @param password the administrator password, auto generated if <code>null</code>
      * @param notify if <code>true</code> send notification about list creation.
      * @param locale mailing list locale.
+     * @param moderated should member postings be moderated.
      * @throws MailingListsException if ml creation failed.
      */
-    public String createList(String name, String domain, 
-        String[] administrators, String password, boolean notify, Locale locale)
+    public String createList(String name, String domain, String[] administrators, String password,
+        boolean notify, Locale locale, boolean moderated)
     	throws MailingListsException;
     
     /**

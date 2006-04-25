@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -58,7 +59,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.22 2006-04-21 13:50:51 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.23 2006-04-25 15:06:37 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -143,7 +144,7 @@ public class MailmanMailingListsManager implements MailingListsManager
      */
     public String createList(String name, String domain, 
         String[] administrators, String password, 
-        boolean notify, Locale locale) throws MailingListsException
+        boolean notify, Locale locale, boolean moderated) throws MailingListsException
     {
         Object[] params = new Object[]{
             adminPassword, name, domain, true, administrators,
@@ -169,10 +170,19 @@ public class MailmanMailingListsManager implements MailingListsManager
         if(result instanceof String)
         {
             String newPassword = (String)result;
+            MailingList list = getList(name, newPassword); 
             if(monitoringAddress.length() > 0)
             {
-                getList(name, newPassword).addMember(monitoringAddress,
-                    "Mailiman - Ledge integration", "", false, true, false, false);
+                list.addMember(monitoringAddress, "Mailiman - Ledge integration", "", false, true,
+                    false, false);
+            }
+            if(moderated)
+            {
+                addOptionValue(name, newPassword, "hold_these_nonmembers", list.getPostingAddress());
+            }
+            else
+            {
+                addOptionValue(name, newPassword, "accept_these_nonmembers", list.getPostingAddress());                
             }
             return newPassword;
         }
@@ -577,7 +587,23 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         throw new MailingListsException("Invalid result value: '"+result+"' or class: "+result.getClass().getName());
     }
+    
+    void addOptionValue(String listName, String adminPassword, String key, Object value)
+        throws MailingListsException
+    {
+        List values = (List)getOption(listName, adminPassword, key);
+        values.add(value);
+        setOption(listName, adminPassword, key, values);
+    }
 
+    void removeOptionValue(String listName, String adminPassword, String key, Object value)
+        throws MailingListsException
+    {
+        List values = (List)getOption(listName, adminPassword, key);
+        values.remove(value);
+        setOption(listName, adminPassword, key, values);
+    }
+    
     /**
      * {@inheritDoc}
      */

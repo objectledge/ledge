@@ -41,7 +41,7 @@ import org.objectledge.mail.MailingListsManager.Status;
  * This operation reports UNAVAILABLE status
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DummyMailingListsManager.java,v 1.3 2006-04-21 12:49:38 rafal Exp $
+ * @version $Id: DummyMailingListsManager.java,v 1.4 2006-04-25 15:06:24 rafal Exp $
  */
 public class DummyMailingListsManager
     implements MailingListsManager
@@ -64,7 +64,7 @@ public class DummyMailingListsManager
      * {@inheritDoc}
      */
     public String createList(String name, String domain, String[] administrators, String password,
-        boolean notify, Locale locale)
+        boolean notify, Locale locale, boolean moderated)
         throws MailingListsException
     {
         throw SUPPORT_UNAVAILABLE_EXCEPTION;
