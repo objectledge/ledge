@@ -3,8 +3,11 @@ package org.objectledge.mail;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.mail.Flags;
+import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Store;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.scheduler.Job;
@@ -16,13 +19,6 @@ import org.objectledge.scheduler.Job;
 public class MailingListsProcessor
     extends Job
 {
-    /** List-Id header as defined by RFC2919 */
-    private static final String LIST_ID_HEADER_NAME = "List-Id";
-    
-    /** List-Post header as defined by RFC2369 */
-    private static final String LIST_POST_HEADER_NAME = "List-Post";
-
-    
     // instance variables ////////////////////////////////////////////////////
 
     private MailingListsManager manager;
@@ -69,22 +65,49 @@ public class MailingListsProcessor
     {
         try
         {
-            List<Message> messages = manager.getNewMessages();
-            for(Message message: messages)
+            Store store = manager.getMessageStore();
+            store.connect();
+            try
             {
-                String listName = getListName(message);
-                if(listName != null)
+                Folder folder = store.getFolder("INBOX");
+                folder.open(Folder.READ_WRITE);
+                try
                 {
-                    for(MailingListsNotificationListener listener: listeners)
+                    Message messages[] = folder.getMessages();
+                    for (Message message:messages)
                     {
-                        listener.newMessageAdded(listName, message);
+                        MailingList list = manager.getList(message);
+                        if(list != null)
+                        {
+                            for(MailingListsNotificationListener listener: listeners)
+                            {
+                                listener.newMessageAdded(list.getName(), message);
+                            }
+                        }
+                        message.setFlag(Flags.Flag.DELETED, true);
                     }
                 }
+                finally
+                {
+                    try
+                    {
+                        folder.expunge();
+                    }
+                    catch(Exception e)
+                    {
+                        logger.error("failed to expunge messages", e);
+                    }
+                    folder.close(true);
+                }
+            }
+            finally
+            {
+                store.close();
             }
         }
         catch(Exception e)
         {
-            throw new MailingListsException("failed to fetch new messages", e);
+            throw new MailingListsException("failed to process new messages", e);
         }
     }    
 
@@ -124,35 +147,5 @@ public class MailingListsProcessor
                 }
             }
         }
-    }
-    
-    /**
-     * Dedect which mailing list the message belongs to.
-     * 
-     * Unfortunately Mailman is not accepting the List-Id headers it generates as list 
-     * identifiers - it creating them by joing local list name (internal identifier) with list 
-     * domain using a dot, while at the same time it accepts dots in local list names. This makes 
-     * it impossible to extract local list name from the header in a reliable way. On the other
-     * hand the List-Post header contains always <mailto:LOCALNAME@DOMAIN> which may be parsed
-     * reliably. Just make sure the list is configured to put this header in the messages.
-     * 
-     * @param message the message.
-     * @return the list name.
-     * @throws MessagingException if there is a problem parsing message headers.
-     */
-    private String getListName(Message message) throws MessagingException
-    {
-        String[] listPostHeader = message.getHeader(LIST_POST_HEADER_NAME);
-        if(listPostHeader != null && listPostHeader.length > 0)
-        {
-            String header = listPostHeader[0]; 
-            if(header.contains("<mailto:") && header.contains(">"))
-            {
-                int startIndex = header.lastIndexOf("<mailto:");
-                int endIndex = header.lastIndexOf("@");
-                return header.substring(startIndex+8, endIndex);
-            }
-        }
-        return null;
-    }
+    }    
 }

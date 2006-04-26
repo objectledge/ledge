@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.mail.Message;
-
-import org.objectledge.mail.MailingListsManager.Status;
+import javax.mail.Store;
 
 /**
  * A dummy implmentation MailingListsManager.
@@ -41,7 +40,7 @@ import org.objectledge.mail.MailingListsManager.Status;
  * This operation reports UNAVAILABLE status
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DummyMailingListsManager.java,v 1.4 2006-04-25 15:06:24 rafal Exp $
+ * @version $Id: DummyMailingListsManager.java,v 1.5 2006-04-26 10:36:43 rafal Exp $
  */
 public class DummyMailingListsManager
     implements MailingListsManager
@@ -136,9 +135,19 @@ public class DummyMailingListsManager
     /**
      * {@inheritDoc}
      */
-    public List<Message> getNewMessages()
+    public Store getMessageStore()
         throws MailingListsException
     {
         throw SUPPORT_UNAVAILABLE_EXCEPTION;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public MailingList getList(Message message)
+        throws MailingListsException
+    {
+        throw SUPPORT_UNAVAILABLE_EXCEPTION;
+    }
+
 }

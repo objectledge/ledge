@@ -32,12 +32,13 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.mail.Message;
+import javax.mail.Store;
 
 /**
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsManager.java,v 1.11 2006-04-25 15:06:24 rafal Exp $
+ * @version $Id: MailingListsManager.java,v 1.12 2006-04-26 10:36:43 rafal Exp $
  */
 public interface MailingListsManager 
 {
@@ -148,11 +149,25 @@ public interface MailingListsManager
         throws MailingListsException;
     
     /**
-     * Retrieve new messages from system account.
+     * Open a connection to the incoming message store.
      * 
-     * @return the list of new messages.
+     * @return message store.
      * @throws MailingListsException
      */
-    public List<Message> getNewMessages()
+    public Store getMessageStore()
         throws MailingListsException;    
+    
+    /**
+     * Returns the mailing list that that the given message belongs to, if any. 
+     * 
+     * All operations on a list acquire with this method will be performed using site 
+     * administrators credentials.
+     * 
+     * @param a mail message.
+     * @return MailingList object, or <code>null</code> if the message does not belong to a
+     *         mailing list.
+     * @throws MailingListsException
+     */
+    public MailingList getList(Message message)
+        throws MailingListsException;
 }

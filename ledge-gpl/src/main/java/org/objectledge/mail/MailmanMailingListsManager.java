@@ -45,6 +45,7 @@ import java.util.Vector;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeMessage;
@@ -59,10 +60,16 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.23 2006-04-25 15:06:37 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.24 2006-04-26 10:36:48 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
+    /** List-Id header as defined by RFC2919 */
+    private static final String LIST_ID_HEADER_NAME = "List-Id";
+    
+    /** List-Post header as defined by RFC2369 */
+    private static final String LIST_POST_HEADER_NAME = "List-Post";
+    
     /** logging facility */
     private Logger logger;
     
@@ -376,48 +383,69 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */    
-    public List<Message> getNewMessages()
-        throws MailingListsException
+    public Store getMessageStore() throws MailingListsException
     {
-        ArrayList<Message> list = new ArrayList<Message>();
-        if(monitoringAddress.length() > 0)
+        try
         {
             Session session = mailSystem.getSession(monitoringSessionName);
-            try
-            {
-                Store store = session.getStore();
-                store.connect();
-                try
-                {
-                    Folder folder = store.getFolder("INBOX");
-                    folder.open(Folder.READ_WRITE);
-                    try
-                    {
-                        Message messages[] = folder.getMessages();
-                        for (Message message:messages)
-                        {
-                            message.setFlag(Flags.Flag.DELETED, true);
-                            list.add(message);
-                        }
-                    }
-                    finally
-                    {
-                        folder.close(true);
-                    }
-                }
-                finally
-                {
-                    store.close();
-                }
-            }
-            catch(Exception e)
-            {
-                throw new MailingListsException("failed to fetch new messages", e);
-            }
+            return session.getStore();
         }
-        return list;
+        catch(Exception e)
+        {
+            throw new MailingListsException("failed to access message store", e);
+        }
     }
 
+    /**
+     * Dedect which mailing list the message belongs to.
+     * 
+     * Unfortunately Mailman is not accepting the List-Id headers it generates as list 
+     * identifiers - it creating them by joing local list name (internal identifier) with list 
+     * domain using a dot, while at the same time it accepts dots in local list names. This makes 
+     * it impossible to extract local list name from the header in a reliable way. On the other
+     * hand the List-Post header contains always <mailto:LOCALNAME@DOMAIN> which may be parsed
+     * reliably. Just make sure the list is configured to put this header in the messages.
+     * 
+     * @param message the message.
+     * @return the list name.
+     * @throws MessagingException if there is a problem parsing message headers.
+     */
+    private String getListName(Message message) throws MessagingException
+    {
+        String[] listPostHeader = message.getHeader(LIST_POST_HEADER_NAME);
+        if(listPostHeader != null && listPostHeader.length > 0)
+        {
+            String header = listPostHeader[0]; 
+            if(header.contains("<mailto:") && header.contains(">"))
+            {
+                int startIndex = header.lastIndexOf("<mailto:");
+                int endIndex = header.lastIndexOf("@");
+                return header.substring(startIndex+8, endIndex);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public MailingList getList(Message message) throws MailingListsException
+    {
+        try
+        {
+            String listName = getListName(message);
+            if(listName != null)
+            {
+                return getList(listName);
+            }
+        }
+        catch(MessagingException e)
+        {
+            logger.error("failed to parse message", e);
+        }
+        return null;
+    }
+    
     // package private operations
     
     /**
