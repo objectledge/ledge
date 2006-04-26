@@ -38,7 +38,7 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.11 2006-04-25 12:58:22 rafal Exp $
+ * @version $Id: MailingList.java,v 1.12 2006-04-26 10:31:51 rafal Exp $
  */
 public interface MailingList
 {
@@ -62,6 +62,13 @@ public interface MailingList
         PENDING_SUBSCRIPTION,
         PENDING_UNSUBSCRIPTION
     }
+
+    /**
+     * Returns the list name.
+     * 
+     * @return the list name.
+     */
+    public String getName();
     
     /**
      * Add new member to mailing list.

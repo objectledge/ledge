@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.12 2006-04-25 12:58:25 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.13 2006-04-26 10:31:54 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -103,6 +103,14 @@ public class MailmanMailingList implements MailingList
         this.adminPassword = adminPassword;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getName()
+    {
+        return listName;
+    }
+    
     /**
      * {@inheritDoc}
      */
