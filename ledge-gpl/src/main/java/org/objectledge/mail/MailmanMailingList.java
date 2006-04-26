@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.13 2006-04-26 10:31:54 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.14 2006-04-26 13:11:18 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -170,7 +170,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public List getPendingPosts() throws MailingListsException
+    public List<String> getPendingPosts() throws MailingListsException
     {
         return manager.getPendingPosts(listName, adminPassword);
     }
@@ -178,7 +178,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public List getNewPendingTasks() throws MailingListsException
+    public List<String> getNewPendingTasks() throws MailingListsException
     {
         return manager.getNewPendingTasks(listName, adminPassword);
     }
@@ -186,7 +186,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public List getPendingSubscriptions() throws MailingListsException
+    public List<String> getPendingSubscriptions() throws MailingListsException
     {
         return manager.getPendingSubscriptions(listName, adminPassword);
     }
@@ -194,7 +194,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public List getPendingUnubscriptions() throws MailingListsException
+    public List<String> getPendingUnubscriptions() throws MailingListsException
     {
         return manager.getPendingUnsubscriptions(listName, adminPassword);
     }
@@ -202,7 +202,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public Message getPendingMessage(Object id) throws MailingListsException
+    public Message getPendingMessage(String id) throws MailingListsException
     {
         return manager.getPendingTask(listName, adminPassword, id);
     }
@@ -210,7 +210,7 @@ public class MailmanMailingList implements MailingList
     /**
      * 
      */
-    public MailingList.TaskType getPendingTaskType(Object id) throws MailingListsException
+    public MailingList.TaskType getPendingTaskType(String id) throws MailingListsException
     {
         Integer type = manager.getPendingTaskType(listName, adminPassword, id);
         switch(type)
@@ -319,7 +319,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void acceptMessage(Object id) throws MailingListsException
+    public void acceptMessage(String id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_APPROVE);
     }
@@ -327,7 +327,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void rejectMessage(Object id) throws MailingListsException
+    public void rejectMessage(String id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
     }
@@ -335,7 +335,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void discardMessage(Object id) throws MailingListsException
+    public void discardMessage(String id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_DISCARD);
     }
@@ -343,7 +343,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void rejectSubscription(Object id) throws MailingListsException
+    public void rejectSubscription(String id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
     }
@@ -351,7 +351,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void acceptSubscription(Object id) throws MailingListsException
+    public void acceptSubscription(String id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_SUBSCRIBE);
     }
@@ -359,7 +359,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void rejectUnsubscription(Object id) throws MailingListsException
+    public void rejectUnsubscription(String id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
     }
@@ -367,7 +367,7 @@ public class MailmanMailingList implements MailingList
     /**
      * {@inheritDoc}
      */
-    public void acceptUnsubscription(Object id) throws MailingListsException
+    public void acceptUnsubscription(String id) throws MailingListsException
     {
         manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_UNSUBSCRIBE);
     }

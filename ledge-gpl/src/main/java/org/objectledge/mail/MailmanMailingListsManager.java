@@ -60,7 +60,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.24 2006-04-26 10:36:48 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.25 2006-04-26 13:11:18 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -654,13 +654,13 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    List getPendingPosts(String listName, String adminPassword) throws MailingListsException
+    List<String> getPendingPosts(String listName, String adminPassword) throws MailingListsException
     {
         Object[] params = new Object[]{listName, adminPassword};
         Object result = executeMethod("Mailman.getPendingMessages", params);
         if(result instanceof List)
         {
-            return (List<String>)result;
+            return toStringList((List<Integer>)result);
         }
         if(result == null)
         {
@@ -672,20 +672,42 @@ public class MailmanMailingListsManager implements MailingListsManager
     /**
      * {@inheritDoc}
      */
-    List getPendingSubscriptions(String listName, String adminPassword) throws MailingListsException
+    List<String> getPendingSubscriptions(String listName, String adminPassword)
+        throws MailingListsException
     {
-        throw new UnsupportedOperationException("not implemented yet!");
+        Object[] params = new Object[]{listName, adminPassword};
+        Object result = executeMethod("Mailman.getPendingSubscriptions", params);
+        if(result instanceof List)
+        {
+            return toStringList((List<Integer>)result);
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
      * {@inheritDoc}
      */
-    List getPendingUnsubscriptions(String listName, String adminPassword) throws MailingListsException
+    List<String> getPendingUnsubscriptions(String listName, String adminPassword)
+        throws MailingListsException
     {
-        throw new UnsupportedOperationException("not implemented yet!");
+        Object[] params = new Object[]{listName, adminPassword};
+        Object result = executeMethod("Mailman.getPendingUnsubscriptions", params);
+        if(result instanceof List)
+        {
+            return toStringList((List<Integer>)result);
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
-    Message getPendingTask(String listName, String adminPassword, Object id)
+    Message getPendingTask(String listName, String adminPassword, String id)
         throws MailingListsException
     {
         Object[] params = new Object[]{listName, adminPassword, id};
@@ -725,7 +747,7 @@ public class MailmanMailingListsManager implements MailingListsManager
             {
                 setLastId(listName, (Integer)list.get(list.size() - 1));
             }
-            return list;
+            return toStringList(list);
         }
         if(result == null)
         {
@@ -734,7 +756,17 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
-    Integer getPendingTaskType(String listName, String adminPassword, Object id)
+    private List<String> toStringList(List<Integer> in)
+    {
+        List<String> out = new ArrayList<String>(in.size());
+        for(Integer i : in)
+        {
+            out.add(i.toString());
+        }
+        return out;
+    }
+    
+    Integer getPendingTaskType(String listName, String adminPassword, String id)
         throws MailingListsException
     {
         Object[] params = new Object[]{listName, adminPassword, id};
@@ -767,7 +799,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     }
     
     public void handleModeratorRequest(String listName, String adminPassword,
-        Object id, int command)
+        String id, int command)
             throws MailingListsException
     {
         Object[] params = new Object[]{listName, adminPassword, id, command};
@@ -799,7 +831,8 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
-    // private methods
+    // -- private methods -----------------------------------------------------------------------
+    
     /**
      * RPC method executor.
      * It resolve XmlRpcException codes into Java Exceptions.
