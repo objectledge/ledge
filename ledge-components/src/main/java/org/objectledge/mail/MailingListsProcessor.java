@@ -89,14 +89,6 @@ public class MailingListsProcessor
                 }
                 finally
                 {
-                    try
-                    {
-                        folder.expunge();
-                    }
-                    catch(Exception e)
-                    {
-                        logger.error("failed to expunge messages", e);
-                    }
                     folder.close(true);
                 }
             }
