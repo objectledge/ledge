@@ -14,7 +14,6 @@ import org.objectledge.scheduler.Job;
 
 /**
  * A job that checks the start and expire date of the polls
- *
  */
 public class MailingListsProcessor
     extends Job
@@ -109,14 +108,10 @@ public class MailingListsProcessor
         for(String listName: names)
         {
             MailingList list = manager.getList(listName);
-            List ids = list.getNewPendingTasks();
-            Iterator it = ids.iterator();
-            while(it.hasNext())
+            for(String id : list.getNewPendingTasks())
             {
-                Object id = it.next();
-                MailingList.TaskType type = list.getPendingTaskType(id);
                 Message message = list.getPendingMessage(id);
-                switch(type)
+                switch(list.getPendingTaskType(id))
                 {
                 case PENDING_POST:
                     for(MailingListsNotificationListener listener: listeners)
