@@ -35,7 +35,7 @@ import javax.mail.Message;
  * Mailing manager component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingListsNotificationListener.java,v 1.1 2006-04-04 11:29:22 pablo Exp $
+ * @version $Id: MailingListsNotificationListener.java,v 1.2 2006-04-26 13:18:31 rafal Exp $
  */
 public interface MailingListsNotificationListener 
 {
@@ -44,9 +44,10 @@ public interface MailingListsNotificationListener
      *
      * @param listName the list name.
      * @param message the message.
+     * @param id administrative request id.
      * @throws MailingListsException if ml creation failed.
      */
-    public void newPendingMessageAdded(String listName, Message message)
+    public void newPendingMessageAdded(String listName, Message message, String id)
     	throws MailingListsException;
 
     /**
@@ -54,9 +55,10 @@ public interface MailingListsNotificationListener
      *
      * @param listName the list name.
      * @param message the message.
+     * @param id administrative request id.
      * @throws MailingListsException if ml creation failed.
      */
-    public void newPendingSubscriptionAdded(String listName, Message message)
+    public void newPendingSubscriptionAdded(String listName, Message message, String id)
         throws MailingListsException;
 
     /**
@@ -64,9 +66,10 @@ public interface MailingListsNotificationListener
      *
      * @param listName the list name.
      * @param message the message.
+     * @param id administrative request id.
      * @throws MailingListsException if ml creation failed.
      */
-    public void newPendingUnsubscriptionAdded(String listName, Message message)
+    public void newPendingUnsubscriptionAdded(String listName, Message message, String id)
         throws MailingListsException;
 
     /**

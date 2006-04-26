@@ -116,19 +116,19 @@ public class MailingListsProcessor
                 case PENDING_POST:
                     for(MailingListsNotificationListener listener: listeners)
                     {
-                        listener.newPendingMessageAdded(listName, message);
+                        listener.newPendingMessageAdded(listName, message, id);
                     }
                     break;
                 case PENDING_SUBSCRIPTION:
                     for(MailingListsNotificationListener listener: listeners)
                     {
-                        listener.newPendingSubscriptionAdded(listName, message);
+                        listener.newPendingSubscriptionAdded(listName, message, id);
                     }
                     break;
                 case PENDING_UNSUBSCRIPTION:
                     for(MailingListsNotificationListener listener: listeners)
                     {
-                        listener.newPendingUnsubscriptionAdded(listName, message);
+                        listener.newPendingUnsubscriptionAdded(listName, message, id);
                     }
                     break;                    
                 }
