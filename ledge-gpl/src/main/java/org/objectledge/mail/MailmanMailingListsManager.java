@@ -60,7 +60,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.27 2006-04-27 10:10:17 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.28 2006-04-27 10:42:08 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -874,6 +874,10 @@ public class MailmanMailingListsManager implements MailingListsManager
             if(errorCode == -32505)
             {
                 throw new ListAlreadyExistsException(e.getMessage());
+            }
+            if(errorCode == -32506)
+            {
+                throw new LostAdministrativeRequestException(e.getMessage());
             }
             throw new MailingListsException(e.getMessage());
         }
