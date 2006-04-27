@@ -38,7 +38,7 @@ import javax.mail.Message;
  * Mailing list interface.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailingList.java,v 1.13 2006-04-26 13:11:13 rafal Exp $
+ * @version $Id: MailingList.java,v 1.14 2006-04-27 10:10:07 rafal Exp $
  */
 public interface MailingList
 {
@@ -242,9 +242,10 @@ public interface MailingList
      * Reject message.
      * 
      * @param id message identifier.
+     * @param comment comment on reasons of rejection (may be null).
      * @throws MailingListsException 
      */
-    public void rejectMessage(String id) throws MailingListsException;
+    public void rejectMessage(String id, String comment) throws MailingListsException;
     
     /**
      * Discard message.
@@ -258,9 +259,10 @@ public interface MailingList
      * Reject subscription request.
      * 
      * @param id message identifier.
+     * @param comment comment on reasons of rejection (may be null).
      * @throws MailingListsException 
      */
-    public void rejectSubscription(String id) throws MailingListsException;
+    public void rejectSubscription(String id, String comment) throws MailingListsException;
     
     /**
      * Accept subscription request.
@@ -274,9 +276,10 @@ public interface MailingList
      * Reject unsubscription request.
      * 
      * @param id message identifier.
+     * @param comment comment on reasons of rejection (may be null).
      * @throws MailingListsException 
      */
-    public void rejectUnsubscription(String id) throws MailingListsException;
+    public void rejectUnsubscription(String id, String comment) throws MailingListsException;
     
     /**
      * Accept unsubscription request.

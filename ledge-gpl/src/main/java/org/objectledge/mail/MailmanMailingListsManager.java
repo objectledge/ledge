@@ -60,7 +60,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.26 2006-04-27 08:29:47 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.27 2006-04-27 10:10:17 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -773,10 +773,18 @@ public class MailmanMailingListsManager implements MailingListsManager
     }
     
     void handleModeratorRequest(String listName, String adminPassword,
-        String id, int command)
+        String id, int command, String comment)
             throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword, Integer.parseInt(id), command};
+        Object[] params;
+        if(comment != null)
+        {
+            params = new Object[]{listName, adminPassword, Integer.parseInt(id), command};
+        }
+        else
+        {
+            params = new Object[]{listName, adminPassword, Integer.parseInt(id), command, comment};            
+        }
         Object result = executeMethod("Mailman.handleModeratorRequest", params);
         if(result instanceof Boolean && ((Boolean)result))
         {

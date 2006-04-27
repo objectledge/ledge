@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.14 2006-04-26 13:11:18 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.15 2006-04-27 10:10:17 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -321,15 +321,15 @@ public class MailmanMailingList implements MailingList
      */
     public void acceptMessage(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_APPROVE);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_APPROVE, null);
     }
     
     /**
      * {@inheritDoc}
      */
-    public void rejectMessage(String id) throws MailingListsException
+    public void rejectMessage(String id, String comment) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT, comment);
     }
     
     /**
@@ -337,15 +337,15 @@ public class MailmanMailingList implements MailingList
      */
     public void discardMessage(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_DISCARD);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_DISCARD, null);
     }
     
     /**
      * {@inheritDoc}
      */
-    public void rejectSubscription(String id) throws MailingListsException
+    public void rejectSubscription(String id, String comment) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT, comment);
     }
     
     /**
@@ -353,15 +353,15 @@ public class MailmanMailingList implements MailingList
      */
     public void acceptSubscription(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_SUBSCRIBE);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_SUBSCRIBE, null);
     }
     
     /**
      * {@inheritDoc}
      */
-    public void rejectUnsubscription(String id) throws MailingListsException
+    public void rejectUnsubscription(String id, String comment) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_REJECT, comment);
     }
     
     /**
@@ -369,7 +369,7 @@ public class MailmanMailingList implements MailingList
      */
     public void acceptUnsubscription(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_UNSUBSCRIBE);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_UNSUBSCRIBE, null);
     }
     
     
