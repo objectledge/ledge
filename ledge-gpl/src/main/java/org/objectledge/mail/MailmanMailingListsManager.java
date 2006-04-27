@@ -60,7 +60,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.25 2006-04-26 13:11:18 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.26 2006-04-27 08:29:47 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -705,12 +705,34 @@ public class MailmanMailingListsManager implements MailingListsManager
             throw new MailingListsException("Null result of rpc method invocation");
         }
         throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+    }    
+
+    List<String> getNewPendingTasks(String listName, String adminPassword)
+        throws MailingListsException
+    {
+        int lastId = getLastId(listName);
+        Object[] params = new Object[]{listName, adminPassword, lastId};
+        Object result = executeMethod("Mailman.getNewPendingTasks", params);
+        if(result instanceof List)
+        {
+            List list = (List)result;
+            if(!list.isEmpty())
+            {
+                setLastId(listName, (Integer)list.get(list.size() - 1));
+            }
+            return toStringList(list);
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
-    
+
     Message getPendingTask(String listName, String adminPassword, String id)
         throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword, id};
+        Object[] params = new Object[]{listName, adminPassword, Integer.parseInt(id)};
         Object result = executeMethod("Mailman.getPendingTask", params);
         if(result instanceof String)
         {
@@ -733,43 +755,11 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
-
-    List getNewPendingTasks(String listName, String adminPassword)
-        throws MailingListsException
-    {
-        int lastId = getLastId(listName);
-        Object[] params = new Object[]{listName, adminPassword, lastId};
-        Object result = executeMethod("Mailman.getNewPendingTasks", params);
-        if(result instanceof List)
-        {
-            List list = (List)result;
-            if(!list.isEmpty())
-            {
-                setLastId(listName, (Integer)list.get(list.size() - 1));
-            }
-            return toStringList(list);
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
-    }
-    
-    private List<String> toStringList(List<Integer> in)
-    {
-        List<String> out = new ArrayList<String>(in.size());
-        for(Integer i : in)
-        {
-            out.add(i.toString());
-        }
-        return out;
-    }
-    
+        
     Integer getPendingTaskType(String listName, String adminPassword, String id)
         throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword, id};
+        Object[] params = new Object[]{listName, adminPassword, Integer.parseInt(id)};
         Object result = executeMethod("Mailman.getPendingTaskType", params);
         if(result instanceof Integer)
         {
@@ -782,27 +772,11 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
-    void postMessage(String listName, String adminPassword, String message)
-        throws MailingListsException
-    {
-        Object[] params = new Object[]{listName, adminPassword, message};
-        Object result = executeMethod("Mailman.postMessage", params);
-        if(result instanceof Boolean && ((Boolean)result))
-        {
-            return;
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
-    }
-    
-    public void handleModeratorRequest(String listName, String adminPassword,
+    void handleModeratorRequest(String listName, String adminPassword,
         String id, int command)
             throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword, id, command};
+        Object[] params = new Object[]{listName, adminPassword, Integer.parseInt(id), command};
         Object result = executeMethod("Mailman.handleModeratorRequest", params);
         if(result instanceof Boolean && ((Boolean)result))
         {
@@ -815,6 +789,22 @@ public class MailmanMailingListsManager implements MailingListsManager
         throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
+    void postMessage(String listName, String adminPassword, String message)
+        throws MailingListsException
+    {
+        Object[] params = new Object[] { listName, adminPassword, message };
+        Object result = executeMethod("Mailman.postMessage", params);
+        if(result instanceof Boolean && ((Boolean)result))
+        {
+            return;
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("Null result of rpc method invocation");
+        }
+        throw new MailingListsException("Invalid result class: " + result.getClass().getName());
+    }
+
     String getInterfaceBaseURL(String domain)
         throws MailingListsException
     {
@@ -897,6 +887,16 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         return vector;
     }
+    
+    private List<String> toStringList(List<Integer> in)
+    {
+        List<String> out = new ArrayList<String>(in.size());
+        for(Integer i : in)
+        {
+            out.add(i.toString());
+        }
+        return out;
+    }    
     
     private synchronized int getLastId(String listName)
     {
