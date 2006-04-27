@@ -30,10 +30,10 @@ package org.objectledge.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -42,7 +42,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -60,7 +59,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.28 2006-04-27 10:42:08 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.29 2006-04-27 11:07:21 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -853,35 +852,39 @@ public class MailmanMailingListsManager implements MailingListsManager
         }
         if(result instanceof XmlRpcException)
         {
-            XmlRpcException e = ((XmlRpcException)result); 
-            int errorCode = e.code;
-            if(errorCode == -32501)
-            {
-                throw new NeedConfirmationException(e.getMessage());
-            }
-            if(errorCode == -32502)
-            {
-                throw new NeedApprovalException(e.getMessage());
-            }
-            if(errorCode == -32503)
-            {
-                throw new MailingListsAuthenticationException(e.getMessage());
-            }
-            if(errorCode == -32504)
-            {
-                throw new InvalidListNameException(e.getMessage());
-            }
-            if(errorCode == -32505)
-            {
-                throw new ListAlreadyExistsException(e.getMessage());
-            }
-            if(errorCode == -32506)
-            {
-                throw new LostAdministrativeRequestException(e.getMessage());
-            }
-            throw new MailingListsException(e.getMessage());
+            throw unwrapException((XmlRpcException)result);
         }
         return result;
+    }
+    
+    private static final Map<Integer,Class<? extends MailingListsException>> exceptions = 
+        new HashMap<Integer,Class<? extends MailingListsException>>();
+    
+    static
+    {
+        exceptions.put(-32501, NeedConfirmationException.class);
+        exceptions.put(-32502, NeedApprovalException.class);
+        exceptions.put(-32503, MailingListsAuthenticationException.class);
+        exceptions.put(-32504, InvalidListNameException.class);
+        exceptions.put(-32505, ListAlreadyExistsException.class);
+        exceptions.put(-32506, LostAdministrativeRequestException.class);
+    }
+    
+    private MailingListsException unwrapException(XmlRpcException xmlRpcEx)
+    {
+        Class<? extends MailingListsException> exClass = exceptions.containsKey(xmlRpcEx.code) ? 
+            exceptions.get(xmlRpcEx.code) : MailingListsException.class;
+        try
+        {
+            Constructor<? extends MailingListsException> exCtor = exClass
+                .getConstructor(new Class[] { String.class });
+            return exCtor.newInstance(xmlRpcEx.getMessage());
+        }
+        catch(Exception e)
+        {
+            return new MailingListsException("failed to reflecively report exception of class "
+                + exClass.getName(), e); 
+        }
     }
     
     /**
