@@ -5,7 +5,7 @@
   because it is unique in case of use of 'repeat' control.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: ControlsSelect.vt,v 1.1 2005-03-22 06:28:11 zwierzem Exp $
+  @version $Id: ControlsSelect.vt,v 1.2 2006-04-28 10:02:25 pablo Exp $
 *#
 #**
   Selection input.
@@ -33,7 +33,7 @@
          *##if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end#*
          *# class="#if($field.ref.bind.getRequired($instance, $field)) #if($field.hasValue($instance)) formtool-required-value#else formtool-required#end #end$!field.vis.CSSClass"#*
          *##if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end>
-#*    *##formtool_html_selectOptions ($field.children.get(0) $loopIndex)
+#*    *##formtool_html_selectOptions ($field $loopIndex)
 #*    *#</select>
 #*    *##formtool_selectPulldownEnd($parentGroup $field $loopIndex)#*
   *##elseif( $field.selectUI ==  'listbox')#*
@@ -123,14 +123,21 @@
 *#
 #macro (formtool_html_selectOptions $field $loopIndex)
 ##<!-- formtool_html_selectOptions $loopIndex $treeDepth -->
-#foreach ( $item in $field.children )#*
+#if($field.type == 'dynamicSelectOne')##  
+  #foreach($el in $templatingContext.get($field.key))##
+<option value="$el.name" #if($field.isSelected($instance, $el.name)) selected="selected" #end>$el.value</option>
+  #end
+#else
+ #foreach ( $item in $field.children.get(0).children )#*
   *##if ($item.type == 'item' || $item.type == 'itemref')#*
       *##formtool_html_option ( $item $velocityCount)#*
   *##elseif ($item.type == 'choices')#*
       *##formtool_html_optgroup ($item $loopIndex)#*
   *##end##
+ #end
 #end
 #end
+
 #**
   Internal macro for a choices group.
 

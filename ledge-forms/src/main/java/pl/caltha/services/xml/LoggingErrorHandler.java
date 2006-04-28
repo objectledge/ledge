@@ -4,13 +4,13 @@ import org.jcontainer.dna.Logger;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.sun.msv.relaxns.grammar.relax.Localizer;
+import pl.caltha.internal.xml.Localizer;
 
 /**
  * Error handler that logs all errors and warnings.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: LoggingErrorHandler.java,v 1.2 2005-02-10 17:50:27 rafal Exp $
+ * @version $Id: LoggingErrorHandler.java,v 1.3 2006-04-28 10:02:24 pablo Exp $
  */
 public class LoggingErrorHandler extends BaseErrorHandler
 {

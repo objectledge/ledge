@@ -14,7 +14,7 @@ import pl.caltha.forms.ConstructionException;
 /** Utility class for form-tool.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Util.java,v 1.3 2005-02-08 20:33:12 rafal Exp $
+ * @version $Id: Util.java,v 1.4 2006-04-28 10:02:23 pablo Exp $
  */
 public class Util
 {
@@ -93,6 +93,20 @@ public class Util
         if(Util.getSAXAttributeVal(atts, name) != null)
         {
             return createIntAttribute(atts, name);
+        }
+        else
+        {
+            return defVal;
+        }
+    }
+    
+    public static String createAttribute(Attributes atts, String name, String defVal)
+    throws ConstructionException
+    {
+        String value = getSAXAttributeVal(atts, name); 
+        if(value != null)
+        {
+            return value;
         }
         else
         {

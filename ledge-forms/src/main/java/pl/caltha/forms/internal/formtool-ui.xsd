@@ -48,6 +48,7 @@ User Interface form controls
       <xsd:element ref="formtool:upload"/>
       <xsd:element ref="formtool:selectOne"/>
       <xsd:element ref="formtool:selectMany"/>
+      <xsd:element ref="formtool:dynamicSelectOne"/>
       <xsd:element ref="formtool:range"/>
       <xsd:element ref="formtool:submit"/>
       <xsd:element ref="formtool:button"/>
@@ -326,6 +327,20 @@ User Interface form controls
       <xsd:attributeGroup ref="formtool:commonUIAttributes"/>
       <xsd:attribute name="selectUI" type="formtool:selectUIType" use="required"/>
       <xsd:attribute name="size" type="xsd:nonNegativeInteger" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="dynamicSelectOne">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="formtool:caption"/>
+      </xsd:sequence>
+      <xsd:attribute name="id" type="xsd:ID" use="optional"/>
+      <xsd:attributeGroup ref="formtool:bindFirstAttributes"/>
+      <xsd:attributeGroup ref="formtool:commonUIAttributes"/>
+      <xsd:attribute name="selectUI" type="formtool:selectUIType" use="required"/>
+      <xsd:attribute name="size" type="xsd:nonNegativeInteger" use="optional"/>
+      <xsd:attribute name="key" type="xsd:string" use="required"/>
     </xsd:complexType>
   </xsd:element>
 

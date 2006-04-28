@@ -36,7 +36,7 @@ public class ExtendedVerifier extends IDConstraintChecker {
     public ExtendedVerifier(XMLSchemaGrammar grammar, ErrorHandler errorHandler) {
         super(grammar, errorHandler);
         // WARN: Using a resource bundle from foreign package
-        Localizer.addBundle("com.sun.msv.verifier.Messages");
+        Localizer.init();
     }
 
     public ExtendedVerifier(XMLSchemaGrammar grammar, ExtendedContentHandler handler, ErrorHandler errorHandler) {

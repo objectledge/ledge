@@ -14,7 +14,7 @@ import pl.caltha.forms.internal.util.Util;
  * Implementation of Select controls.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: NodeControlSelect.java,v 1.1 2005-01-19 06:55:28 pablo Exp $
+ * @version $Id: NodeControlSelect.java,v 1.2 2006-04-28 10:02:23 pablo Exp $
  */
 public class NodeControlSelect extends NodeControl
 {
@@ -26,6 +26,7 @@ public class NodeControlSelect extends NodeControl
 
         selectUI = Util.getSAXAttributeVal(atts, "selectUI");
         size = Util.createIntAttribute(atts, "size", 1);
+        key = Util.createAttribute(atts, "key", "empty");
     }
 
     private HashMap itemsByValue = new HashMap();
@@ -43,6 +44,7 @@ public class NodeControlSelect extends NodeControl
     /** UI type for Select control. */
     private String selectUI;
     private int size;
+    private String key;
 
     //------------------------------------------------------------------------
     //access methods for attributes
@@ -55,6 +57,11 @@ public class NodeControlSelect extends NodeControl
     {
         return size;
     }
+    
+    public String getKey()
+    {
+        return key;
+    }
 
     /** Returns true if given item is selected in a given instance.
      * This method is called by select items. */
@@ -65,6 +72,13 @@ public class NodeControlSelect extends NodeControl
         return selectedValues.contains(item.getValue());
     }
 
+    public boolean isSelected(InstanceImpl instance, String value)
+    {
+        Set selectedValues = getSelectedValuesSet(instance);
+        // Return true for selected item/value
+        return selectedValues.contains(value);
+    }
+    
     /** Key for storing selected values map for this Select element.
      * Selected values is not connected with definitionUIPath, because
      * it is an instance property as opposed to UI state property

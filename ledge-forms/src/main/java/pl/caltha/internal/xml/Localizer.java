@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 /** Localizer class for XMLService.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Localizer.java,v 1.2 2005-01-21 14:00:05 pablo Exp $
+ * @version $Id: Localizer.java,v 1.3 2006-04-28 10:02:24 pablo Exp $
  */
 public class Localizer
 {
@@ -16,6 +16,7 @@ public class Localizer
     public static void init()
     {
         addBundle("pl.caltha.internal.xml.Messages");
+        addBundle("com.sun.msv.verifier.Messages");
     }
     
     /** Adds a new bundle to this localizer. */

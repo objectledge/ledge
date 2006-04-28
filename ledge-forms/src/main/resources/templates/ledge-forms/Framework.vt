@@ -2,7 +2,7 @@
   Core set of macros.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: Framework.vt,v 1.4 2005-03-23 13:41:54 zwierzem Exp $
+  @version $Id: Framework.vt,v 1.5 2006-04-28 10:02:25 pablo Exp $
 *#
 #**
   Starts form processing.
@@ -123,7 +123,7 @@ function formtool_dispatch_event(formName, buttonName)
       *##formtool_submit ($element $loopIndex)#*
       *##formtool_buttonEnd($parentGroup $element $loopIndex)#*
 -- selections
-  *##elseif( $element.type == 'selectMany' || $element.type == 'selectOne' )#*
+  *##elseif( $element.type == 'selectMany' || $element.type == 'selectOne' || $element.type == 'dynamicSelectOne')#*
       *##formtool_select ($parentGroup $element $loopIndex)#*
 -- hidden
   *##elseif( $element.type == 'hidden' )#formtool_hidden ($element $loopIndex)#*

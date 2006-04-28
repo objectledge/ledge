@@ -6,7 +6,7 @@ import java.util.HashMap;
  *
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: UIConstants.java,v 1.3 2005-02-10 17:46:51 rafal Exp $
+ * @version $Id: UIConstants.java,v 1.4 2006-04-28 10:02:23 pablo Exp $
  */
 public class UIConstants
 {
@@ -79,6 +79,7 @@ public class UIConstants
 
     public static final String SELECTMANY = "selectMany";
     public static final String SELECTONE = "selectOne";
+    public static final String DYNAMICSELECTONE = "dynamicSelectOne";
     public static final String CHOICES = "choices";
     public static final String ITEM = "item";
     public static final String ITEMREF = "itemref";
@@ -137,6 +138,7 @@ public class UIConstants
 
         classNames.put(SELECTMANY,    "NodeControlSelect");
         classNames.put(SELECTONE,     "NodeControlSelect");
+        classNames.put(DYNAMICSELECTONE,     "NodeControlSelect");
         classNames.put(CHOICES,       "NodeCaption");
         classNames.put(ITEM,          "NodeControlSelectItem");
         classNames.put(ITEMREF,       "NodeControlSelectItemRef");
