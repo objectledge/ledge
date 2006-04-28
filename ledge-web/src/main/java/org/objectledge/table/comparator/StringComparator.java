@@ -30,13 +30,15 @@ package org.objectledge.table.comparator;
 
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  *
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: StringComparator.java,v 1.1 2006-04-19 12:57:45 rafal Exp $
+ * @version $Id: StringComparator.java,v 1.2 2006-04-28 07:30:16 rafal Exp $
  */
 public class StringComparator
     implements Comparator<String>
@@ -44,7 +46,32 @@ public class StringComparator
     /** The Collator to use for comparisons. */
     private final Collator collator;
     
-    public StringComparator(Locale locale)
+    private static final Map<Locale, StringComparator> instances = 
+        new HashMap<Locale, StringComparator>();
+
+    /**
+     * Factory method.
+     * 
+     * @param locale the Locale.
+     * @return comparator instance.
+     */
+    public static synchronized StringComparator getInstance(Locale locale)
+    {
+        StringComparator instance = instances.get(locale);
+        if(instance == null)
+        {
+            instance = new StringComparator(locale);
+            instances.put(locale, instance);     
+        }
+        return instance;
+    }
+    
+    /**
+     * Private constructor, to enforce factory method use.
+     *
+     * @param locale the Locale.
+     */
+    private StringComparator(Locale locale)
     {
         this.collator = Collator.getInstance(locale);
     }
