@@ -27,7 +27,6 @@
 //
 package org.objectledge.hibernate;
 
-import org.hibernate.Session;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
@@ -36,12 +35,19 @@ import org.objectledge.pipeline.Valve;
  * Pipeline processing valve that closes hibernate session.
  * 
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionFinallyValve.java,v 1.3 2005-08-29 20:15:56 rafal Exp $
+ * @version $Id: HibernateSessionFinallyValve.java,v 1.4 2006-05-04 13:25:04 zwierzem Exp $
  */
 public class HibernateSessionFinallyValve
     implements Valve
 {
 
+    private HibernateSessionValve hibernateSessionValve;
+
+    public HibernateSessionFinallyValve(HibernateSessionValve hibernateSessionValve)
+    {
+        this.hibernateSessionValve = hibernateSessionValve;
+    }
+    
     /**
      * Run the pipeline valve - close session.
      * 
@@ -51,15 +57,6 @@ public class HibernateSessionFinallyValve
     public void process(Context context)
         throws ProcessingException
     {
-        HibernateSessionContext hibernateSessionContext = HibernateSessionContext
-            .getHibernateSessionContext(context);
-        if(hibernateSessionContext != null)
-        {
-            Session session = hibernateSessionContext.getSession();
-            if(session != null)
-            {
-                session.close();
-            }
-        }
+        hibernateSessionValve.closeSession();
     }
 }

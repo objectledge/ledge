@@ -36,7 +36,7 @@ import org.objectledge.pipeline.Valve;
  * Pipeline processing valve that initialize hibernate session.
  *
  * @author <a href="mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionValve.java,v 1.3 2006-02-08 18:23:12 zwierzem Exp $
+ * @version $Id: HibernateSessionValve.java,v 1.4 2006-05-04 13:25:04 zwierzem Exp $
  */
 public class HibernateSessionValve 
     implements Valve
@@ -77,6 +77,21 @@ public class HibernateSessionValve
             hibernateSessionContext = context.getAttribute(HibernateSessionContext.class);
         }
         return hibernateSessionContext.getSession();
+    }
+
+    public void closeSession()
+    {
+        HibernateSessionContext hibernateSessionContext = context
+            .getAttribute(HibernateSessionContext.class);
+        if(hibernateSessionContext != null)
+        {
+            Session session = hibernateSessionContext.getSession();
+            if(session != null)
+            {
+                session.close();
+            }
+            context.removeAttribute(HibernateSessionContext.class);
+        }
     }
     
     /**
