@@ -33,7 +33,7 @@ import org.objectledge.threads.ThreadPool;
  *
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: MailSystem.java,v 1.13 2006-04-25 08:19:52 rafal Exp $
+ * @version $Id: MailSystem.java,v 1.14 2006-05-05 08:43:11 rafal Exp $
  */
 public class MailSystem
 {
@@ -211,6 +211,29 @@ public class MailSystem
     public LedgeMessage newMessage(String sessionName)
     {
         return new LedgeMessage(this, logger, templating, getSession(sessionName));
+    }
+    
+    /**
+     * Create a new message based on a pre-existing JavaMali message object and the default session.
+     *
+     * @param message the JavaMail message.
+     * @return the mail message wrapper.
+     */
+    public LedgeMessage newMessage(Message message)
+    {
+        return newMessage(defaultSession, message);
+    }
+    
+    /**
+     * Create a new message based on a pre-existing JavaMali message object.
+     *
+     * @param sessionName the name of the session.
+     * @param message the JavaMail message.
+     * @return the mail message wrapper.
+     */
+    public LedgeMessage newMessage(String sessionName, Message message)
+    {
+        return new LedgeMessage(this, logger, templating, getSession(sessionName), message);
     }
     
     /**

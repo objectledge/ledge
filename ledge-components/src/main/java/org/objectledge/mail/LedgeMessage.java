@@ -33,7 +33,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.8 2006-04-25 08:21:04 rafal Exp $
+ * @version $Id: LedgeMessage.java,v 1.9 2006-05-05 08:43:11 rafal Exp $
  */
 public class LedgeMessage
 {
@@ -92,6 +92,24 @@ public class LedgeMessage
         this.logger = logger;
         this.templating = templating;
         message = new MimeMessage(session);
+    }
+    
+    /**
+     * Constructs a new message.
+     * 
+     * @param mailSystem the mailSystem.
+     * @param logger the logger.
+     * @param templating the templating system.
+     * @param session the mail session.
+     * @param message the JavaMail Message 
+     */
+    public LedgeMessage(MailSystem mailSystem, Logger logger,
+                        Templating templating, Session session, Message message)
+    {
+        this.mailSystem = mailSystem;
+        this.logger = logger;
+        this.templating = templating;
+        this.message = message;
     }
     
     /**
