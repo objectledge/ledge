@@ -42,7 +42,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.18 2005-12-30 13:18:22 pablo Exp $
+ * @version $Id: StringTool.java,v 1.19 2006-05-08 13:17:51 rafal Exp $
  */
 public class StringTool
 {
@@ -170,6 +170,17 @@ public class StringTool
     public String wrap(String in, int width)
     {
         return StringUtils.wrap(in, width); 
+    }
+    
+    /**
+     * Justifies a list of strings.
+     * 
+     * @param strings the strings.
+     * @param w the width of the text column.
+     */
+    public String justify(List<String> strings, int w)
+    {
+        return StringUtils.justify(strings, w);
     }
     
     /**

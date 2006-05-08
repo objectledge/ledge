@@ -36,6 +36,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -47,7 +48,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.37 2006-04-10 12:05:05 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.38 2006-05-08 13:17:44 rafal Exp $
  */
 public class StringUtils
 {
@@ -544,6 +545,58 @@ public class StringUtils
         return out.toString();
     }
     
+    /**
+     * Justifies a list of strings.
+     * 
+     * @param strings the strings.
+     * @param w the width of the text column.
+     */
+    public static String justify(List<String> strings, int w)
+    {
+        StringBuilder buff = new StringBuilder(w);
+        int t = 0;
+        for(int i=0; i<strings.size(); i++)
+        {
+            t += strings.get(i).length();
+        }
+        int s = w - t;
+        int g = strings.size() - 1;
+        if(g < 0)
+        {
+            // do nothing
+        }
+        else if(g == 0)
+        {
+            buff.append(strings.get(0));
+        }
+        else if(s <= g)
+        {
+            for(int i=0; i<strings.size(); i++)
+            {
+                buff.append(strings.get(i).trim());
+                buff.append(' ');
+            }
+        }
+        else
+        {
+            int gw = s / g;
+            int d = s % g > 0 ? g / (s % g) : 0; 
+            for(int i=0; i<strings.size(); i++)
+            {
+                buff.append(strings.get(i).trim());
+                for(int j=0; j<gw; j++)
+                {
+                    buff.append(' ');
+                }
+                if(d > 0 && i % d == 0)
+                {
+                    buff.append(' ');
+                }
+            }
+        }
+        return buff.toString();
+    }
+
     /**
      * Shorten the string to the specifed lenght.
      * 
