@@ -33,7 +33,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.9 2006-05-05 08:43:11 rafal Exp $
+ * @version $Id: LedgeMessage.java,v 1.10 2006-05-08 08:26:01 rafal Exp $
  */
 public class LedgeMessage
 {
@@ -367,7 +367,27 @@ public class LedgeMessage
         {
             throw new MessagingException("failed to serialize message", e);
         }
-    }    
+    }
+    
+    /**
+     * Serialize the message into an array of bytes.
+     * 
+     * @return the serialized message.
+     * @throws MergingException if there is a problem mergin the template.
+     * @throws MessagingException if there is a problem preparing the message.
+     * @throws IOException if there is a problem serializing the message.
+     */
+    public byte[] getMessageBytes()
+        throws MessagingException, MergingException, IOException
+    {
+        if(!prepared)
+        {
+            prepare();
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ((MimeMessage)message).writeTo(baos);
+        return baos.toByteArray();
+    }
     
     /**
      * Send the message and continue processing asynchronously.
