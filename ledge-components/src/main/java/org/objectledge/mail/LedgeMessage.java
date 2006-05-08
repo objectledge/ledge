@@ -33,7 +33,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:rkrzewsk@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LedgeMessage.java,v 1.10 2006-05-08 08:26:01 rafal Exp $
+ * @version $Id: LedgeMessage.java,v 1.11 2006-05-08 12:24:02 rafal Exp $
  */
 public class LedgeMessage
 {
@@ -110,6 +110,7 @@ public class LedgeMessage
         this.logger = logger;
         this.templating = templating;
         this.message = message;
+        this.prepared = true;
     }
     
     /**
