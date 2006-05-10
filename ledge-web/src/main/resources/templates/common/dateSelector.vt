@@ -34,16 +34,24 @@ $monthNames.get($month.toString())</option>
  * Time selection controls for dateSelectorMain macro.
  *#
 #macro(ds_dateSelectorTime $name $enabled $hours $minutes $currentHour $currentMinute)
+#if($hours.isEmpty())
+<input type="hidden" name="${name}_hour" value="0" />
+#else
 <select class="dateSelectorHour" name="${name}_hour" onChange="dateElementChanged(this)"#if(!$enabled) disabled="disabled"#end>
 #foreach($hour in $hours)##[0..23]
   <option value="$hour" #if($hour.intValue() == $currentHour) selected="selected"#end>$hour</option>  
 #end
 </select>
+#end
+#if($minutes.isEmpty())
+<input type="hidden" name="${name}_minute" value="0" />
+#else
 <select class="dateSelectorMinute" name="${name}_minute" onChange="dateElementChanged(this)"#if(!$enabled) disabled="disabled"#end>
 #foreach($minute in $minutes)##[0..59]
   <option value="$minute" #if($minute.intValue() == $currentMinute) selected="selected"#end>$minute</option>  
 #end
 </select>
+#end
 #end
 
 #**
