@@ -59,7 +59,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.29 2006-04-27 11:07:21 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.30 2006-05-12 13:32:17 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -152,23 +152,13 @@ public class MailmanMailingListsManager implements MailingListsManager
         String[] administrators, String password, 
         boolean notify, Locale locale, boolean moderated) throws MailingListsException
     {
+        String urlHost = getInterfaceBaseURL(domain);
+        
         Object[] params = new Object[]{
-            adminPassword, name, domain, true, administrators,
-            password, notify, locale.toString()};
+            adminPassword, name, domain, urlHost, true, administrators,
+            password, notify, vector(locale.toString())};
         Object result = null;
-        try
-        {
-            result = executeMethod("Mailman.createList", params);
-        }
-        // TODO fix it see "create.py" file ln. 82
-        catch(InvalidListNameException e)
-        {
-            throw new ListAlreadyExistsException("",e); 
-        }
-        catch(ListAlreadyExistsException e)
-        {
-            throw new InvalidListNameException("",e);
-        }
+        result = executeMethod("Mailman.createList", params);
         if(result == null)
         {
             throw new MailingListsException("Null result of rpc method invocation");
@@ -249,7 +239,13 @@ public class MailmanMailingListsManager implements MailingListsManager
         Object result = executeMethod("Mailman.listAllLists", params);
         if(result instanceof List)
         {
-            return (List<String>)result;
+            List<List<String>> infos = (List<List<String>>)result;
+            List<String> names = new ArrayList<String>(infos.size());
+            for(List<String> info : infos)
+            {
+                names.add(info.get(0));
+            }
+            return names;
         }
         if(result == null)
         {
@@ -901,6 +897,16 @@ public class MailmanMailingListsManager implements MailingListsManager
             vector.add(ob);
         }
         return vector;
+    }
+    
+    private Vector vector(Object ... params)
+    {
+        Vector vector = new Vector();
+        for(Object obj: params)
+        {
+            vector.add(obj);
+        }
+        return vector;        
     }
     
     private List<String> toStringList(List<Integer> in)
