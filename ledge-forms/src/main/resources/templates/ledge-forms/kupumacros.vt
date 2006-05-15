@@ -100,6 +100,9 @@ addEventHandler(window, 'load', function() {
     
 #set($formattingNames = $i18n.usePrefix('ledge-forms.formattingNames'))
     <select id="kupu-tb-styles">
+      <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="P">
+        ---
+      </option>
       <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="P" i18n:translate="paragraph-normal">
         $formattingNames.get('p')
       </option>
