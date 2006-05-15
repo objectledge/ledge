@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.16 2006-05-15 10:46:50 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.17 2006-05-15 11:57:23 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -330,7 +330,7 @@ public class MailmanMailingList implements MailingList
      */
     public void acceptMessage(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_APPROVE, null);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_APPROVE, "");
     }
     
     /**
@@ -346,7 +346,7 @@ public class MailmanMailingList implements MailingList
      */
     public void discardMessage(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_DISCARD, null);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_DISCARD, "");
     }
     
     /**
@@ -362,7 +362,7 @@ public class MailmanMailingList implements MailingList
      */
     public void acceptSubscription(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_SUBSCRIBE, null);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_SUBSCRIBE, "");
     }
     
     /**
@@ -378,7 +378,7 @@ public class MailmanMailingList implements MailingList
      */
     public void acceptUnsubscription(String id) throws MailingListsException
     {
-        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_UNSUBSCRIBE, null);
+        manager.handleModeratorRequest(listName, adminPassword, id, ML_ACTION_UNSUBSCRIBE, "");
     }
     
     

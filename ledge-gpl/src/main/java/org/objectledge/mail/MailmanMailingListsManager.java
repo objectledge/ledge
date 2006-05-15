@@ -59,7 +59,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.31 2006-05-15 10:46:50 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.32 2006-05-15 11:57:23 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -152,10 +152,8 @@ public class MailmanMailingListsManager implements MailingListsManager
         String[] administrators, String password, 
         boolean notify, Locale locale, boolean moderated) throws MailingListsException
     {
-        String urlHost = getInterfaceBaseURL(domain);
-        
         Object[] params = new Object[]{
-            adminPassword, name, domain, urlHost, true, administrators,
+            adminPassword, name, domain, "", true, administrators,
             password, notify, vector(locale.toString())};
         Object result = null;
         result = executeMethod("Mailman.createList", params);
