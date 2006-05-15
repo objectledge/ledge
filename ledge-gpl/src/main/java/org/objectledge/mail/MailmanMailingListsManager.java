@@ -59,7 +59,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingListsManager.java,v 1.30 2006-05-12 13:32:17 rafal Exp $
+ * @version $Id: MailmanMailingListsManager.java,v 1.31 2006-05-15 10:46:50 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
 {
@@ -172,14 +172,7 @@ public class MailmanMailingListsManager implements MailingListsManager
                 list.addMember(monitoringAddress, "Mailiman - Ledge integration", "", false, true,
                     false, false);
             }
-            if(moderated)
-            {
-                addOptionValue(name, newPassword, "hold_these_nonmembers", list.getPostingAddress());
-            }
-            else
-            {
-                addOptionValue(name, newPassword, "accept_these_nonmembers", list.getPostingAddress());                
-            }
+            list.setPostingModerated(moderated);
             return newPassword;
         }
         throw new MailingListsException("Invalid result class: "+result.getClass().getName());

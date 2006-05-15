@@ -43,7 +43,7 @@ import org.objectledge.utils.StringUtils;
  * Mailman mailing list.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski </a>
- * @version $Id: MailmanMailingList.java,v 1.15 2006-04-27 10:10:17 rafal Exp $
+ * @version $Id: MailmanMailingList.java,v 1.16 2006-05-15 10:46:50 rafal Exp $
  */
 public class MailmanMailingList implements MailingList
 {
@@ -51,6 +51,10 @@ public class MailmanMailingList implements MailingList
     
     private static final String SUBSCRIBE_POLICY = "subscribe_policy";
     
+    private static final String ACCEPTED_NONMEMBERS = "accept_these_nonmembers";
+
+    private static final String HELD_NONMEMBERS = "hold_these_nonmembers";
+
     private static final String POSTING_MODERATION = "default_member_moderation";
     
     private static final String HOST_NAME = "host_name";
@@ -285,13 +289,18 @@ public class MailmanMailingList implements MailingList
      */
     public void setPostingModerated(boolean moderated) throws MailingListsException
     {
+        String postingAddress = getPostingAddress();
         if(moderated)
         {
             manager.setOption(listName, adminPassword, POSTING_MODERATION, ""+OPTION_POSTING_MODERATED);
+            manager.addOptionValue(listName, adminPassword, HELD_NONMEMBERS, postingAddress);
+            manager.removeOptionValue(listName, adminPassword, ACCEPTED_NONMEMBERS, postingAddress);
         }
         else
         {
             manager.setOption(listName, adminPassword, POSTING_MODERATION, ""+OPTION_POSTING_NOT_MODERATED);
+            manager.addOptionValue(listName, adminPassword, ACCEPTED_NONMEMBERS, postingAddress);                
+            manager.removeOptionValue(listName, adminPassword, HELD_NONMEMBERS, postingAddress);
         }
     }
 
