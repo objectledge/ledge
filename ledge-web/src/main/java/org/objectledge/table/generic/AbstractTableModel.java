@@ -1,5 +1,5 @@
 // 
-//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+//Copyright (c) 2006, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 //All rights reserved. 
 // 
 //Redistribution and use in source and binary forms, with or without modification,  
@@ -28,108 +28,65 @@
 
 package org.objectledge.table.generic;
 
-import java.util.Arrays;
-import java.util.List;
-
+import org.objectledge.table.ExtendedTableModel;
 import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableRowSet;
+import org.objectledge.table.TableState;
 
 /**
- * A table model for wrapping a <code>java.util.List</code>
+ * A table model implementing the most basic methods to create a skeleton of the ExtendedTableModel.
  *
- * <p>Item indices are used as ids.</p>
- * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ListTableModel.java,v 1.9 2006-05-29 14:03:39 zwierzem Exp $
+ * @version $Id: AbstractTableModel.java,v 1.1 2006-05-29 14:03:39 zwierzem Exp $
  */
-public class ListTableModel<T>
-    extends AbstractTableModel<T>
+public abstract class AbstractTableModel<T>
+    implements ExtendedTableModel<T>
 {
-    /** The embeded list. */
-    protected List<T> list;
+    /** The columns of the list. */
+    protected TableColumn<T>[] columns;
 
     /**
      * Constructs a new model.
      *
-     * @param list the list to build model for.
      * @param columns the columns of the table, <code>null</code> to disable sorting.
      */
     @SuppressWarnings("unchecked")
-    public ListTableModel(List<T> list, TableColumn<T> ... columns)
+    public AbstractTableModel(TableColumn<T> ... columns)
     {
-        super(columns);
-        this.list = list;
-    }
-
-    /**
-     * Constructs a new model.
-     *
-     * @param array the array to build model for.
-     * @param columns the columns of the table, <code>null</code> to disable sorting.
-     */
-    public ListTableModel(T[] array, TableColumn<T> ... columns)
-    {
-        this(Arrays.asList(array), columns);
-    }
-
-    /**
-     * Gets all children of the parent, may return empty array.
-     *
-     * @param parent the parent
-     * @return table of children
-     */
-    @SuppressWarnings("unchecked")
-    public T[] getChildren(T parent)
-    {
-        if(parent == null)
+        if(columns == null)
         {
-            return (T[]) list.toArray();
+            this.columns = new TableColumn[0];
         }
         else
         {
-            return (T[]) new Object[0];
+            this.columns = columns;
         }
     }
 
     /**
-     * Returns the model dependent object by its id.
-     *
-     * @param id the id of the object
-     * @return model object
+     * {@inheritDoc}
      */
-    public T getObject(String id)
+    public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters)
     {
-        try
+        if(state.getTreeView())
         {
-            int index = Integer.parseInt(id);
-            return list.get(index);
-        }
-        catch(NumberFormatException e)
-        {
-            return null;
-        }
-        catch(IndexOutOfBoundsException e)
-        {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the id of the object.
-     * 
-     * @param parent the id of the parent.
-     * @param child model object.
-     * @return the id of the object.
-     */
-    public String getId(String parent, T child)
-    {
-        int index = list.indexOf(child);
-        if(index >= 0)
-        {
-            return Integer.toString(index);
+			return new GenericTreeRowSet<T>(state, filters, this);
         }
         else
         {
-            return null;
+			return new GenericListRowSet<T>(state, filters, this);
         }
+    }
+
+    /**
+     * Returns array of column definitions. They are created on every call,
+     * because they can get modified durig it's lifecycle.
+     *
+     * @return array of <code>TableColumn</code> objects
+     */
+    public TableColumn<T>[] getColumns()
+    {
+        return columns;
     }
 }
