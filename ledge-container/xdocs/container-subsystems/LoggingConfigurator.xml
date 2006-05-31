@@ -35,11 +35,11 @@
           <ul>
             <li>LoggingConfiguator <a href="../apidocs/org/objectledge/logging/LoggingConfigurator.html">JavaDoc</a></li>
             <li>LoggingConfiguator <a href="../apidocs/org/objectledge/logging/LoggingConfigurator.html">XRef</a></li>
-            <li>LoggingConfiguator <a href="http://objectledge.org/fisheye/ledge/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.java">CVS log</a></li>
+            <li>LoggingConfiguator <a href="http://objectledge.org/fisheye/browse/ledge/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.java">CVS log</a></li>
 			<li>Log4j <a href="http://logging.apache.org/log4j">documentation</a></li>
-			<li>LoggingConfiguator configuration file <a href="http://objectledge.org/fisheye/ledge/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.rng?r=MAIN">schema</a>
+			<li>LoggingConfiguator configuration file <a href="http://objectledge.org/fisheye/browse/ledge/ledge-container/src/main/java/org/objectledge/logging/LoggingConfigurator.rng?r=MAIN">schema</a>
               generated from DTD provided with Log4j</li>
-            <li>LoggingConfiguator configuration file <a href="http://objectledge.org/fisheye/ledge/ledge-container/src/test/resources/container1/config/org.objectledge.logging.LoggingConfigurator.xml?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">example</a></li>
+            <li>LoggingConfiguator configuration file <a href="http://objectledge.org/fisheye/browse/ledge/ledge-container/src/test/resources/container1/config/org.objectledge.logging.LoggingConfigurator.xml?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">example</a></li>
           </ul>
         </p>
       </subsection>

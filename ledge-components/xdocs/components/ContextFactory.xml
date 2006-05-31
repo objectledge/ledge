@@ -25,8 +25,8 @@
           <ul>
             <li>ContextFactory <a href="../apidocs/org/objectledge/naming/ContextFactory.html">JavaDoc</a></li>
             <li>ContextFactory <a href="../apidocs/org/objectledge/naming/ContextFactory.html">XRef</a></li>
-            <li>ContextFactory <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/naming/ContextFactory.java">CVS log</a></li>
-	        <li>ContextFactory configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/naming/ContextFactory.rng?r=MAIN">schema</a></li>            
+            <li>ContextFactory <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/naming/ContextFactory.java">CVS log</a></li>
+	        <li>ContextFactory configuration <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/naming/ContextFactory.rng?r=MAIN">schema</a></li>            
           </ul>
         </p>	    
 	  </subsection>

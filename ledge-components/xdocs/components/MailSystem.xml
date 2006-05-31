@@ -16,8 +16,8 @@
           <ul>
             <li>MailSystem <a href="../apidocs/org/objectledge/mail/MailSystem.html">JavaDoc</a></li>
             <li>MailSystem <a href="../apidocs/org/objectledge/mail/MailSystem.html">XRef</a></li>
-            <li>MailSystem <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/mail/MailSystem.java">CVS log</a></li>
-	        <li>MailSystem configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/mail/MailSystem.rng?r=MAIN">schema</a></li>            
+            <li>MailSystem <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/mail/MailSystem.java">CVS log</a></li>
+	        <li>MailSystem configuration <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/mail/MailSystem.rng?r=MAIN">schema</a></li>            
           </ul>
         </p>	    
 	  </subsection>

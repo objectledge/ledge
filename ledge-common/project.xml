@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: project.xml,v 1.14 2006-05-31 09:52:49 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.15 2006-05-31 10:27:15 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -27,7 +27,7 @@
   <repository>
     <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/ledge:${pom.artifactId}</developerConnection>
     <connection>scm:cvs:pserver:anoncvs@objectledge.org:/cvsroot/ledge:${pom.artifactId}</connection>
-    <url>http://objectledge.org/fisheye/${pom.groupId}/${pom.artifactId}</url>
+    <url>http://objectledge.org/fisheye/browse/${pom.groupId}/${pom.artifactId}</url>
   </repository>
   <versions>
     <version>

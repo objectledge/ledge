@@ -17,8 +17,8 @@
           <ul>
             <li>NameSequenceFactory <a href="../../apidocs/org/objectledge/web/mvc/finders/NameSequenceFactory.html">JavaDoc</a></li>
             <li>NameSequenceFactory <a href="../../xref/org/objectledge/web/mvc/finders/NameSequenceFactory.html">XRef</a></li>
-            <li>NameSequenceFactory <a href="http://objectledge.org/fisheye/ledge/ledge-web/src/main/java/org/objectledge/web/mvc/finders/NameSequenceFactory.java">CVS log</a></li>
-	        <li>NameSequenceFactory configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/web/mvc/finders/NameSequenceFactory.rng?r=MAIN">schema</a></li>
+            <li>NameSequenceFactory <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/mvc/finders/NameSequenceFactory.java">CVS log</a></li>
+	        <li>NameSequenceFactory configuration <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/web/mvc/finders/NameSequenceFactory.rng?r=MAIN">schema</a></li>
           </ul>
         </p>
       </subsection>

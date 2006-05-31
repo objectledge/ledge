@@ -18,8 +18,8 @@
           <ul>
             <li>WebConfigurator <a href="../apidocs/org/objectledge/web/WebConfigurator.html">JavaDoc</a></li>
             <li>WebConfigurator <a href="../xref/org/objectledge/web/WebConfigurator.html">XRef</a></li>
-            <li>WebConfigurator <a href="http://objectledge.org/fisheye/ledge/ledge-web/src/main/java/org/objectledge/web/WebConfigurator.java">CVS log</a></li>
-	        <li>WebConfigurator configuration <a href="http://objectledge.org/fisheye/ledge/ledge-web/src/main/java/org/objectledge/web/WebConfiguration.rng?r=MAIN">schema</a></li>                        
+            <li>WebConfigurator <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/WebConfigurator.java">CVS log</a></li>
+	        <li>WebConfigurator configuration <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/WebConfiguration.rng?r=MAIN">schema</a></li>                        
           </ul>
         </p>
       </subsection>

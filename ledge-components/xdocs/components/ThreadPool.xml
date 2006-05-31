@@ -32,11 +32,11 @@
           <ul>
             <li>Task <a href="../apidocs/org/objectledge/threads/Task.html">JavaDoc</a></li>
             <li>Task <a href="../xref/org/objectledge/threads/Task.html">XRef</a></li>
-            <li>Task <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/threads/Task.java">CVS log</a></li>
+            <li>Task <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/threads/Task.java">CVS log</a></li>
             <li>ThreadPool <a href="../apidocs/org/objectledge/threads/ThreadPool.html">JavaDoc</a></li>
             <li>ThreadPool <a href="../xref/org/objectledge/threads/ThreadPool.html">XRef</a></li>
-            <li>ThreadPool <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/threads/ThreadPool.java">CVS log</a></li>
-            <li>ThreadPool configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/threads/ThreadPool.rng?r=MAIN">schema</a></li>
+            <li>ThreadPool <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/threads/ThreadPool.java">CVS log</a></li>
+            <li>ThreadPool configuration <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/threads/ThreadPool.rng?r=MAIN">schema</a></li>
           </ul>
         </p>
       </subsection>

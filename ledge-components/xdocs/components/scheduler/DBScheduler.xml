@@ -15,9 +15,9 @@
 	      <ul>
 	        <li>DBScheduler <a href="../apidocs/org/objectledge/scheduler/db/DBScheduler.html">JavaDoc</a></li>
 	        <li>DBScheduler <a href="../../xref/org/objectledge/scheduler/db/DBScheduler.html">XRef</a></li>
-	        <li>DBScheduler <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/scheduler/db/DBScheduler.html">CVS log</a></li>
-	        <li>DBScheduler configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/scheduler/db/DBScheduler.rng?r=MAIN">schema</a></li>
-   	        <li>DBScheduler database schema <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/sql/scheduler/scheduler.sql?r=MAIN">schema</a></li>
+	        <li>DBScheduler <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/scheduler/db/DBScheduler.html">CVS log</a></li>
+	        <li>DBScheduler configuration <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/scheduler/db/DBScheduler.rng?r=MAIN">schema</a></li>
+   	        <li>DBScheduler database schema <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/sql/scheduler/scheduler.sql?r=MAIN">schema</a></li>
 	      </ul>
 	    </p>
       </subsection>

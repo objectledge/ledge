@@ -16,8 +16,8 @@
           <ul>
             <li>PolicySystem <a href="../apidocs/org/objectledge/policy/PolicySystem.html">JavaDoc</a></li>
             <li>PolicySystem <a href="../xref/org/objectledge/policy/PolicySystem.html">XRef</a></li>
-            <li>PolicySystem <a href="http://objectledge.org/fisheye/ledge/ledge-web/src/main/java/org/objectledge/policy/PolicySystem.java">CVS log</a></li>
-            <li>PolicySystem configuration <a href="http://objectledge.org/fisheye/ledge/ledge-web/src/main/java/org/objectledge/policy/PolicySystem.rng?r=MAIN">schema</a></li>
+            <li>PolicySystem <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/policy/PolicySystem.java">CVS log</a></li>
+            <li>PolicySystem configuration <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/policy/PolicySystem.rng?r=MAIN">schema</a></li>
           </ul>
         </p>
       </subsection>
