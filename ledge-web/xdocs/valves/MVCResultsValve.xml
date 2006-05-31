@@ -17,7 +17,7 @@
           <ul>
             <li>MVCResultsValve <a href="../apidocs/org/objectledge/web/mvc/MVCResultsValve.html">JavaDoc</a></li>
             <li>MVCResultsValve <a href="../xref/org/objectledge/web/mvc/MVCResultsValve.html">XRef</a></li>
-            <li>MVCResultsValve <a href="http://objectledge.org/viewcvs.cgi/ledge-web/src/main/java/org/objectledge/web/mvc/MVCResultsValve.java">CVS log</a></li>
+            <li>MVCResultsValve <a href="http://objectledge.org/fisheye/ledge/ledge-web/src/main/java/org/objectledge/web/mvc/MVCResultsValve.java">CVS log</a></li>
           </ul>
         </p>
       </subsection>

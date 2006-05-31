@@ -16,9 +16,9 @@
 	      <ul>
 	        <li>XMLI18n <a href="../apidocs/org/objectledge/i18n/xml/XMLI18n.html">JavaDoc</a></li>
 	        <li>XMLI18n <a href="../../xref/org/objectledge/i18n/xml/XMLI18n.html">XRef</a></li>
-	        <li>XMLI18n <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/i18n/xml/XMLI18n.java">CVS log</a></li>
-	        <li>XMLI18n configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/i18n/xml/XMLI18n.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
-	        <li>Localization file <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/i18n/xml/localization.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
+	        <li>XMLI18n <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/i18n/xml/XMLI18n.java">CVS log</a></li>
+	        <li>XMLI18n configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/i18n/xml/XMLI18n.rng?r=MAIN">schema</a></li>
+	        <li>Localization file <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/i18n/xml/localization.rng?r=MAIN">schema</a></li>
 	      </ul>
 	    </p>
       </subsection>

@@ -15,8 +15,8 @@
 	      <ul>
 	        <li>TransientScheduler <a href="../apidocs/org/objectledge/scheduler/TransientScheduler.html">JavaDoc</a></li>
 	        <li>TransientScheduler <a href="../../xref/org/objectledge/scheduler/TransientScheduler.html">XRef</a></li>
-	        <li>TransientScheduler <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/scheduler/TransientScheduler.html">CVS log</a></li>
-	        <li>TransientScheduler configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/scheduler/TransientScheduler.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>
+	        <li>TransientScheduler <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/scheduler/TransientScheduler.html">CVS log</a></li>
+	        <li>TransientScheduler configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/scheduler/TransientScheduler.rng?r=MAIN">schema</a></li>
 	      </ul>
 	    </p>
       </subsection>

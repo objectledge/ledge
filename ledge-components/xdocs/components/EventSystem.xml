@@ -32,8 +32,8 @@
           <ul>
             <li>EventSystem <a href="../apidocs/org/objectledge/event/EventSystem.html">JavaDoc</a></li>
             <li>EventSystem <a href="../apidocs/org/objectledge/event/EventSystem.html">XRef</a></li>
-            <li>EventSystem <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/event/EventSystem.java">CVS log</a></li>
-	        <li>EventSystem configuration <a href="http://objectledge.org/viewcvs.cgi/ledge-components/src/main/java/org/objectledge/event/EventSystem.rng?rev=HEAD&amp;content-type=text/vnd.viewcvs-markup">schema</a></li>            
+            <li>EventSystem <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/event/EventSystem.java">CVS log</a></li>
+	        <li>EventSystem configuration <a href="http://objectledge.org/fisheye/ledge/ledge-components/src/main/java/org/objectledge/event/EventSystem.rng?r=MAIN">schema</a></li>            
           </ul>
         </p>	    
 	  </subsection>
