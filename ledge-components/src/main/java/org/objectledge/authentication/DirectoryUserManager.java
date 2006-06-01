@@ -143,7 +143,7 @@ public class DirectoryUserManager extends UserManager
         anonymousName = config.getChild("anonymousName").getValue(null);
         superuserName = config.getChild("superuserName").getValue(null);
         String contextId = config.getChild("contextId").getValue("people");
-        directory = new ContextHelper(factory.getDirContext(contextId));
+        directory = new ContextHelper(factory, contextId, logger);
         
         String objectClassList = config.getChild("objectClass").getValue("");
         StringTokenizer st = new StringTokenizer(objectClassList,",");
@@ -188,7 +188,7 @@ public class DirectoryUserManager extends UserManager
         DirContext ctx = null;
         try
         {
-            ctx = (DirContext)directory.getBaseContext().lookup("");
+            ctx = directory.getBaseDirContext();
             Attributes attrs = new BasicAttributes(true);
             BasicAttribute oc = new BasicAttribute("objectClass");
             for (int i = 0; i < objectClass.length; i++)
@@ -233,7 +233,7 @@ public class DirectoryUserManager extends UserManager
         DirContext ctx = null;
         try 
         {
-            ctx = (DirContext)directory.getBaseContext().lookup("");
+            ctx = directory.getBaseDirContext();
             ctx.destroySubcontext(directory.getRelativeName(account.getName()));
             nameByLogin.remove(login);
             loginByName.remove(account.getName());
@@ -521,7 +521,7 @@ public class DirectoryUserManager extends UserManager
         DirContext ctx = null;
         try 
         {
-            ctx = (DirContext)directory.getBaseContext().lookup("");
+            ctx = directory.getBaseDirContext();
             Attributes matchAttrs = new BasicAttributes(false);
             matchAttrs.put(new BasicAttribute(attribute, value));
             NamingEnumeration answer = ctx.search("", matchAttrs, null);
@@ -552,7 +552,7 @@ public class DirectoryUserManager extends UserManager
         DirContext ctx = null;
         try 
         {
-            ctx = (DirContext)directory.getBaseContext().lookup("");
+            ctx = directory.getBaseDirContext();
             NamingEnumeration answer = ctx.search("", query, defaultSearchControls);
             List<String> results = new ArrayList<String>();
             while(answer.hasMore())
