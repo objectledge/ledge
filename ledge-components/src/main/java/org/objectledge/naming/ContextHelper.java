@@ -35,6 +35,8 @@ import javax.naming.NameParser;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
+import org.jcontainer.dna.Logger;
+
 /**
  * Helps you in looking up objects in a context using their fully qualified
  * distinguished names.
@@ -46,20 +48,27 @@ import javax.naming.directory.DirContext;
  * this task.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ContextHelper.java,v 1.1 2004-02-19 16:27:47 pablo Exp $
+ * @version $Id: ContextHelper.java,v 1.2 2006-06-01 06:37:49 rafal Exp $
  */
 public class ContextHelper
 {
     // instance variables ////////////////////////////////////////////////////
 
+    private final ContextFactory contextFactory;
+    
+    private final String contextAlias;
+    
     /** The wrapped context. */
     private Context context;
 
     /** Fully qualified name of the wrapped context. */
-    private Name baseName;
+    private final Name baseName;
 
     /** The name parser. */
-    private NameParser parser;
+    private final NameParser parser;
+    
+    /** The logger. */
+    private final Logger logger;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -69,12 +78,15 @@ public class ContextHelper
      * @param context the context to construct helper for.
      * @throws NamingException if failed.
      */
-    public ContextHelper(Context context)
+    public ContextHelper(ContextFactory contextFactory, String contextAlias, Logger logger)
         throws NamingException
     {
-        this.context = context;
-        parser = context.getNameParser("");
-        baseName = parser.parse(context.getNameInNamespace());
+        this.contextFactory = contextFactory;
+        this.contextAlias = contextAlias;
+        this.context = contextFactory.getContext(contextAlias);
+        this.parser = context.getNameParser("");
+        this.baseName = parser.parse(context.getNameInNamespace());
+        this.logger = logger;
     }
     
     // public interface /////////////////////////////////////////////////////
@@ -110,6 +122,42 @@ public class ContextHelper
     /**
      * Performs a lookup using a fully qualified DN.
      *
+     * @param name the fully qualified name.
+     * @return an Object.
+     * @throws NamingException if failed.
+     */
+    public Object lookup(Name name)
+        throws NamingException
+    {
+        Name relativeName;
+        if(name.isEmpty())
+        {
+            relativeName = name;
+        }
+        else
+        {
+            if(!name.startsWith(baseName))
+            {
+                throw new InvalidNameException(name+" is not in "+baseName+" namespace");
+            }
+            relativeName = name.getSuffix(baseName.size());
+        }
+        try
+        {
+            return context.lookup(relativeName);
+        }
+        catch(Exception e)
+        {
+            logger.error("context lookup failed, will attempt to reconnect", e);
+            reconnect();
+            logger.info("reconnect successful");
+            return context.lookup(relativeName);
+        }
+    }
+    
+    /**
+     * Performs a lookup using a fully qualified DN.
+     *
      * @param name the fully qualified name. 
      * @return an Object.
      * @throws NamingException if failed.
@@ -118,23 +166,6 @@ public class ContextHelper
         throws NamingException
     {
         return lookup(parser.parse(name));
-    }
-    
-    /**
-     * Performs a lookup using a fully qualified DN.
-     *
-     * @param name the fully qualified name.
-     * @return an Object.
-     * @throws NamingException if failed.
-     */
-    public Object lookup(Name name)
-        throws NamingException
-    {
-        if(!name.startsWith(baseName))
-        {
-            throw new InvalidNameException(name+" is not in "+baseName+" namespace");
-        }
-        return context.lookup(name.getSuffix(baseName.size()));
     }
     
     /**
@@ -194,9 +225,9 @@ public class ContextHelper
      *
      * @return the base context.
      */
-    public Context getBaseContext()
+    public Context getBaseContext() throws NamingException
     {
-        return context;
+        return (Context)lookup(parser.parse(""));
     }
 
     /**
@@ -204,9 +235,9 @@ public class ContextHelper
      *
      * @return the base directory context.
      */
-    public DirContext getBaseDirContext()
+    public DirContext getBaseDirContext() throws NamingException
     {
-        return (DirContext)context;
+        return (DirContext)lookup(parser.parse(""));
     }
 
     /**
@@ -236,4 +267,10 @@ public class ContextHelper
         }
         return parsedName.getSuffix(baseName.size());
     }    
+    
+    private void reconnect() throws NamingException
+    {
+        contextFactory.reconnect(contextAlias);
+        context = contextFactory.getContext(contextAlias);
+    }
 }
