@@ -35,10 +35,13 @@ import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -48,7 +51,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.38 2006-05-08 13:17:44 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.39 2006-06-12 19:05:04 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -1066,4 +1069,50 @@ public class StringUtils
         System.arraycopy(values, 0, result, 0, values.length - n);
         return result;
     }
+
+    /**
+     * Splits the string by the given separator and returns results as a set of strings.
+     * The set is ordered (LinkedHashSet). 
+     * @param in the input string
+     * @param separator the delimiter
+     * @return the set of strings.
+     */
+    public static Set<String> split(String in, String separator)
+    {
+        if(in == null || in.equals(""))
+        {
+            return new LinkedHashSet();
+        }
+        Set<String> set = new LinkedHashSet<String>(in.length() / 2);
+        set.addAll(Arrays.asList(in.split(separator)));
+        return set;
+    }
+    
+    /**
+     * Joins a set of strings comobinig them usign a given separator.
+     *  
+     * @param strings the input set of strings.
+     * @param separator the joining string.
+     * @return the resulting string.
+     */
+    public static String join(Set<String> strings, String separator)
+    {
+        StringBuilder b = new StringBuilder(256);
+        int i = 0;
+        for (String str : strings)
+        {
+            if(str != null && str.length() > 0)
+            {
+                if(i > 0)
+                {
+                    b.append(separator);
+                }
+                b.append(str);
+                i++;
+            }
+        }
+        return b.toString();
+    }
+
 }
+
