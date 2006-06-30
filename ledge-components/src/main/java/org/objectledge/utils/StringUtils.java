@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.40 2006-06-30 07:32:42 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.41 2006-06-30 08:17:09 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -1165,6 +1165,11 @@ public class StringUtils
      */
     public static long parseBytesSize(String value)
     {
+        if(isEmpty(value))
+        {
+            return -1L; // error
+        }
+        
         value = value.toLowerCase().trim();
         long multiplier = 1L;
         long order = 1L;
@@ -1242,7 +1247,6 @@ public class StringUtils
                 
             }
         }
-        
         
         if(state == ByteSizeState.FRACTION || state == ByteSizeState.NUMBER)
         {

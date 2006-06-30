@@ -210,7 +210,10 @@ public class StringUtilsTest extends TestCase
         assertEquals(1153434L, StringUtils.parseBytesSize("1.1mb"));
         assertEquals(1181116006L, StringUtils.parseBytesSize("1.1GB"));
         assertEquals(1181116006L, StringUtils.parseBytesSize("1.1gb"));
+
         assertEquals(-1L, StringUtils.parseBytesSize("1.sd1GB"));
+        assertEquals(-1L, StringUtils.parseBytesSize(""));
+        assertEquals(-1L, StringUtils.parseBytesSize(null));
     }
 
 }
