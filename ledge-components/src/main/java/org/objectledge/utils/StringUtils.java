@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.39 2006-06-12 19:05:04 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.40 2006-06-30 07:32:42 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -157,14 +157,14 @@ public class StringUtils
 		char[] chars = s.toCharArray();
 		for(int i=0; i<chars.length; i++)
 		{
-			if((int)chars[i] < 128)
+			if(chars[i] < 128)
 			{
 				buff.append(chars[i]);
 			}
 			else
 			{
 				buff.append("\\u");
-				String ucode = Integer.toString((int)chars[i], 16);
+				String ucode = Integer.toString(chars[i], 16);
 				for(int j=4-ucode.length(); j>0; j--)
 				{
 					buff.append('0');
@@ -474,7 +474,7 @@ public class StringUtils
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < input.length(); i++)
         {
-            int value = (int)input.charAt(i);
+            int value = input.charAt(i);
             String upper = fillString(Integer.toOctalString(value/256), 3, '0');
             String lower = fillString(Integer.toOctalString(value%256), 3, '0');            
             sb.append("\\");
@@ -699,7 +699,7 @@ public class StringUtils
         StringBuilder sb = new StringBuilder();
         for(int i=0; i<temp.size(); i++)
         {
-            sb.append('/').append((String)temp.get(i));
+            sb.append('/').append(temp.get(i));
         }
         return sb.toString();
     }
@@ -1081,7 +1081,7 @@ public class StringUtils
     {
         if(in == null || in.equals(""))
         {
-            return new LinkedHashSet();
+            return new LinkedHashSet<String>();
         }
         Set<String> set = new LinkedHashSet<String>(in.length() / 2);
         set.addAll(Arrays.asList(in.split(separator)));
@@ -1114,5 +1114,145 @@ public class StringUtils
         return b.toString();
     }
 
+    
+    /**
+     * Format size value in <code>B</code>, <code>kB</code>, <code>MB</code>,
+     * for example <code>15kB</code> or <code>23.5MB</code>.
+     *
+     * @param value the size in bytes.
+     * @param precision number of digits in decimal fraction.
+     * @return the size as string with a proper unit suffix.
+     */
+    public static String bytesSize(long value, int precision)
+    {        
+        StringBuilder b = new StringBuilder();
+        if(value < 1024L)
+        {
+            return b.append(value).append("B").toString();
+        }
+        double floatValue = value;
+        if(value < 1048576L)
+        {
+            b.append(floatValue/1024.0);
+            cutDigits(precision, b);
+            return b.append("kB").toString();
+        }
+        b.append(floatValue/1048576.0);
+        cutDigits(precision, b);
+        return b.append("MB").toString();        
+    }
+
+    private static void cutDigits(int precision, StringBuilder b)
+    {
+        int index = b.indexOf(".");
+        if(index != -1 && b.length() > index+precision)
+        {
+            b.setLength(index+precision);
+        }
+    }
+
+    private static enum ByteSizeState
+    {
+        START, BYTE, FRACTION, NUMBER, ERROR
+    }
+    
+    /**
+     * Parse a size value given as a number with <code>B</code>, <code>kB</code>, <code>MB</code>
+     * suffix, for example <code>15kB</code> or <code>23.5MB</code>.
+     *
+     * @param value the size as string with a proper unit suffix.
+     * @return the size in bytes.
+     */
+    public static long parseBytesSize(String value)
+    {
+        value = value.toLowerCase().trim();
+        long multiplier = 1L;
+        long order = 1L;
+        long size = 0L;
+        long sizeFraction = 0L;
+        ByteSizeState state = ByteSizeState.START;
+        for (int i = value.length() - 1; i >= 0 && state != ByteSizeState.ERROR; i--)
+        {
+            char c = value.charAt(i);
+            switch(state)
+            {
+            case START:
+                if(c == 'b')
+                {
+                    state = ByteSizeState.BYTE;
+                }
+                else if(c >= '0' && c <= '9')
+                {
+                    state = ByteSizeState.FRACTION;
+                    size = (c - '0');
+                    order = 10L;
+                }
+                else
+                {
+                    state = ByteSizeState.ERROR;
+                }
+                break;
+            case BYTE:
+                state = ByteSizeState.FRACTION;
+                if(c == 'k') multiplier = 1024L;
+                else if(c == 'm') multiplier = 1048576L;
+                else if(c == 'g') multiplier = 1073741824L;
+                else if(c >= '0' && c <= '9')
+                {
+                    size = (c - '0');
+                    order = 10L;
+                }
+                else
+                {
+                    state = ByteSizeState.ERROR;
+                }
+                break;
+            case FRACTION:
+                if(c >= '0' && c <= '9')
+                {
+                    size += (c - '0') * order;
+                    order *= 10L;
+                }
+                else if(c == ',' || c =='.')
+                {
+                    state = ByteSizeState.NUMBER;
+                    sizeFraction = Math.round((double)(size * multiplier) / (double)order); 
+                                    // yes, very big sizes will be wrong
+                    size = 0L;
+                    order = 1L;
+                }
+                else
+                {
+                    state = ByteSizeState.ERROR;
+                }
+                break;
+            case NUMBER:
+                if(c >= '0' && c <= '9')
+                {
+                    size += (c - '0') * order;
+                    order *= 10;
+                }
+                else
+                {
+                    state = ByteSizeState.ERROR;
+                }
+                break;
+            default:
+                state = ByteSizeState.ERROR;
+                
+            }
+        }
+        
+        
+        if(state == ByteSizeState.FRACTION || state == ByteSizeState.NUMBER)
+        {
+            return size * multiplier + sizeFraction;
+        }
+        else
+        {
+            return -1L; // error
+        }
+    }
+    
 }
 

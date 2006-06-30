@@ -42,7 +42,7 @@ import org.objectledge.utils.StringUtils;
  * The string manipulation tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: StringTool.java,v 1.19 2006-05-08 13:17:51 rafal Exp $
+ * @version $Id: StringTool.java,v 1.20 2006-06-30 07:32:48 zwierzem Exp $
  */
 public class StringTool
 {
@@ -225,37 +225,16 @@ public class StringTool
     }
         
     /**
-     * Format size value in <code>b</code>, <code>kb</code>, <code>Mb</code>.
+     * Format size value in <code>B</code>, <code>kB</code>, <code>MB</code>,
+     * for example <code>15kB</code> or <code>23.5MB</code>.
      *
      * @param value the size in bytes.
-     * @param rest rest length;
+     * @param precision number of digits in decimal fraction.
      * @return the size as string with a proper unit suffix.
      */
-    public String bytesSize(long value, int rest)
-    {        
-        StringBuilder b = new StringBuilder();
-        if(value < 1024L)
-        {
-            return b.append(value).append("B").toString();
-        }
-        double floatValue = (double)value;
-        if(value < 1048576L)
-        {
-            b.append(floatValue/1024);
-            int index = b.indexOf(".");
-            if(index != -1 && b.length() > index+rest)
-            {
-                b.setLength(index+rest);
-            }
-            return b.append("kB").toString();
-        }
-        b.append(floatValue/1048576);
-        int index = b.indexOf(".");
-        if(index != -1 && b.length() > index+rest)
-        {
-            b.setLength(index+rest);
-        }
-        return b.append("MB").toString();        
+    public String bytesSize(long value, int precision)
+    {
+        return StringUtils.bytesSize(value, precision);
     }
     
     /**
