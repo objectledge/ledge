@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.41 2006-06-30 08:17:09 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.42 2006-06-30 12:07:29 zwierzem Exp $
  */
 public class StringUtils
 {
@@ -1153,7 +1153,7 @@ public class StringUtils
 
     private static enum ByteSizeState
     {
-        START, BYTE, FRACTION, NUMBER, ERROR
+        START, BYTE, PREFRACTION, FRACTION, NUMBER, ERROR
     }
     
     /**
@@ -1198,14 +1198,35 @@ public class StringUtils
                 }
                 break;
             case BYTE:
-                state = ByteSizeState.FRACTION;
+                state = ByteSizeState.PREFRACTION;
                 if(c == 'k') multiplier = 1024L;
                 else if(c == 'm') multiplier = 1048576L;
                 else if(c == 'g') multiplier = 1073741824L;
+                else if(c == ' ' || c == '\t')
+                {
+                    // PREFRACTION
+                }
                 else if(c >= '0' && c <= '9')
                 {
                     size = (c - '0');
                     order = 10L;
+                    state = ByteSizeState.FRACTION;
+                }
+                else
+                {
+                    state = ByteSizeState.ERROR;
+                }
+                break;
+            case PREFRACTION:
+                if(c >= '0' && c <= '9')
+                {
+                    state = ByteSizeState.FRACTION;
+                    size = (c - '0');
+                    order = 10L;
+                }
+                else if(c == ' ' || c == '\t')
+                {
+                    // keep the state
                 }
                 else
                 {

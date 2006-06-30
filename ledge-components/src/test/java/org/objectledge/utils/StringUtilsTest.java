@@ -204,14 +204,15 @@ public class StringUtilsTest extends TestCase
     public void testParseBytesSize()
     {
         assertEquals(124L, StringUtils.parseBytesSize("124B"));
-        assertEquals(125L, StringUtils.parseBytesSize("124.55555B"));
+        assertEquals(125L, StringUtils.parseBytesSize("124.55555 B"));
         assertEquals(1536L, StringUtils.parseBytesSize("1.5kB"));
-        assertEquals(1153434L, StringUtils.parseBytesSize("1.1MB"));
+        assertEquals(1153434L, StringUtils.parseBytesSize("1.1 MB"));
         assertEquals(1153434L, StringUtils.parseBytesSize("1.1mb"));
         assertEquals(1181116006L, StringUtils.parseBytesSize("1.1GB"));
-        assertEquals(1181116006L, StringUtils.parseBytesSize("1.1gb"));
+        assertEquals(1181116006L, StringUtils.parseBytesSize("1.1 gb"));
 
-        assertEquals(-1L, StringUtils.parseBytesSize("1.sd1GB"));
+        assertEquals(-1L, StringUtils.parseBytesSize("1.sd1 GB"));
+        assertEquals(-1L, StringUtils.parseBytesSize("1.sd1G B"));
         assertEquals(-1L, StringUtils.parseBytesSize(""));
         assertEquals(-1L, StringUtils.parseBytesSize(null));
     }
