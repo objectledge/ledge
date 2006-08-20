@@ -48,7 +48,7 @@ import org.objectledge.security.RoleChecking;
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: PolicySystem.java,v 1.4 2006-03-05 22:34:08 zwierzem Exp $
+ * @version $Id: PolicySystem.java,v 1.5 2006-08-20 19:53:45 pablo Exp $
  */
 public class PolicySystem
 {
@@ -386,6 +386,10 @@ public class PolicySystem
     {
         try
         {
+            if(roles.length == 0)
+            {
+                return true;
+            }
             String[] userRoles = roleChecking.getRoles(user);
             if(userRoles != null)
             {
