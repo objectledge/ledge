@@ -36,7 +36,7 @@ import org.objectledge.utils.LedgeTestCase;
  * Test for the ProcessExecutor class.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: ProcessExecutorTest.java,v 1.1 2006-03-24 14:27:39 rafal Exp $
+ * @version $Id: ProcessExecutorTest.java,v 1.2 2006-11-06 16:51:12 zwierzem Exp $
  */
 public class ProcessExecutorTest
     extends LedgeTestCase
@@ -48,7 +48,8 @@ public class ProcessExecutorTest
     public void setUp()
     {
         boolean unix = false;
-        if(System.getProperty("os.name").equals("Linux"))
+        String osName = System.getProperty("os.name");
+        if(osName.equals("Linux") || osName.equals("Mac OS X"))
         {
             unix = true;
         }
