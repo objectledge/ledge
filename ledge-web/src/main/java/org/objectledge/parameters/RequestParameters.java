@@ -56,7 +56,7 @@ import org.objectledge.web.mvc.tools.LinkTool;
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: RequestParameters.java,v 1.17 2005-08-05 12:48:27 rafal Exp $
+ * @version $Id: RequestParameters.java,v 1.18 2006-11-23 00:22:22 rafal Exp $
  */
 public class RequestParameters extends SortedParameters
 {
@@ -152,6 +152,13 @@ public class RequestParameters extends SortedParameters
         if (urlPart == null)
         {
             return;
+        }
+        
+        // remove ;jsessionid=... part if misbehaving tomcat passes it down to the application layer
+        int pos = urlPart.indexOf(';');
+        if (pos >= 0)
+        {
+        	urlPart = urlPart.substring(0, pos);
         }
         
         try
