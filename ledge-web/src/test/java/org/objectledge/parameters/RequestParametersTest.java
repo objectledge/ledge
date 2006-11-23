@@ -124,4 +124,23 @@ public class RequestParametersTest extends LedgeTestCase
         assertTrue(parameters.isQueryStringParameter("mixed"));
         assertTrue(parameters.isPOSTParameter("mixed"));        
     }
+    
+    public void testJSessionIDPathinfo()
+    {
+        mockHttpServletRequest = mock(HttpServletRequest.class);
+        httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
+        mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+        mockHttpServletRequest.stubs().method("getParameterNames").
+        	will(returnValue(new Vector().elements()));
+        mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(null));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("path/path;jsessionid=8435A845CF71GB5E"));
+        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+        context.setAttribute(HttpContext.class, httpContext);
+        RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
+        paramsLoader.process(context);
+        parameters = RequestParameters.getRequestParameters(context);
+        
+        assertTrue(parameters.getParameterNames().length == 1);
+        assertEquals("path", parameters.get("path"));
+    }
 }
