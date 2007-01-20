@@ -141,7 +141,7 @@ import java.util.Map;
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: TableTool.java,v 1.23 2006-04-03 19:13:35 zwierzem Exp $
+ * @version $Id: TableTool.java,v 1.24 2007-01-20 13:36:10 pablo Exp $
  */
 public class TableTool<T>
 {
@@ -212,6 +212,11 @@ public class TableTool<T>
     public boolean getViewAsTree()
     {
         return state.getTreeView();
+    }
+    
+    public boolean isExpandingEnabled()
+    {
+        return state.isExpandingEnabled();
     }
 
     /**

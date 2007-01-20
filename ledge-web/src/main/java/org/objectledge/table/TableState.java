@@ -42,7 +42,7 @@ import java.util.Set;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableState.java,v 1.11 2006-04-21 16:04:28 zwierzem Exp $
+ * @version $Id: TableState.java,v 1.12 2007-01-20 13:36:10 pablo Exp $
  */
 public class TableState
 {
@@ -86,6 +86,9 @@ public class TableState
     /** <code>true</code> if the state object was created during this
      * request. */
     private boolean newState;
+    
+    /** In tree view whether link to expand/colapse tree should be enabled */
+    private boolean expandingEnabled;
 
 	/** 
 	 * Constructor for table state.
@@ -97,6 +100,7 @@ public class TableState
         this.name = name;
         this.id = id;
         newState = true;
+        expandingEnabled = true;
     }
 
     /**
@@ -111,6 +115,26 @@ public class TableState
     public boolean isNew()
     {
         return newState;
+    }
+
+    /**
+     * Returns <code>true</code> if links to expand/collapse tree are active
+     * 
+     * @return <code>true</code> if links to expand/collapse tree are active
+     */
+    public boolean isExpandingEnabled()
+    {
+        return expandingEnabled;
+    }
+
+    /** 
+     * Set whether links to expand/collapse tree should be active.
+     * 
+     * @param expandingEnabled <code>true</code> if links should be active.
+     */
+    public void setExpandingEnabled(boolean expandingEnabled)
+    {
+        this.expandingEnabled = expandingEnabled;
     }
 
     /**
