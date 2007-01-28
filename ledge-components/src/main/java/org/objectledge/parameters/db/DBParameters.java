@@ -51,7 +51,7 @@ import org.objectledge.parameters.ScopedParameters;
  * A persistent implementation of parameters container.
  *
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
- * @version $Id: DBParameters.java,v 1.10 2005-12-20 09:09:32 pablo Exp $
+ * @version $Id: DBParameters.java,v 1.11 2007-01-28 11:02:16 rafal Exp $
  */
 public class DBParameters implements Parameters
 {
@@ -667,7 +667,6 @@ public class DBParameters implements Parameters
                 if(!areValuesEqual(name))
                 {
     				String[] values = container.getStrings(name);
-    				name = DatabaseUtils.escapeSqlString(name);
     				deleteStmt.setString(1,name);
     				deleteStmt.addBatch();
                     doDelete = true;
@@ -675,7 +674,7 @@ public class DBParameters implements Parameters
     				{
                         isInsert = true;
     					insertStmt.setString(1,name);
-    					insertStmt.setString(2,DatabaseUtils.escapeSqlString(values[j]));
+    					insertStmt.setString(2,values[j]);
     					insertStmt.addBatch();
     				}
                 }
