@@ -76,7 +76,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.4 2006-02-08 18:19:56 zwierzem Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.5 2007-04-03 23:19:36 rafal Exp $
  */
 public class DefaultCacheFactory
     implements CacheFactorySPI, CacheFactory
@@ -338,6 +338,14 @@ public class DefaultCacheFactory
             instances.put(name, map);
         }
         return map;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> getInstanceNames()
+    {
+        return instances.keySet();
     }
 
     /**

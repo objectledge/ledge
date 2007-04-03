@@ -29,6 +29,7 @@ package org.objectledge.cache;
 
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.ConfigurationException;
 
@@ -36,7 +37,7 @@ import org.jcontainer.dna.ConfigurationException;
  * A factory of cache objects, which are variants of java.util.Map with additional functionality.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CacheFactory.java,v 1.3 2004-12-27 03:05:51 rafal Exp $
+ * @version $Id: CacheFactory.java,v 1.4 2007-04-03 23:19:36 rafal Exp $
  */
 public interface CacheFactory
 {
@@ -60,6 +61,13 @@ public interface CacheFactory
      */
     public abstract Map getInstance(String name, String configAlias) throws ConfigurationException;
 
+    /**
+     * Returns the names of all currently active map instances.
+     *  
+     * @return the names of all currently active map instances.
+     */    
+    public abstract Set<String> getInstanceNames();
+    
     /**
      * {@inheritDoc}
      */
