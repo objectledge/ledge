@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.10 2004-09-27 19:11:04 zwierzem Exp $
+ * @version $Id: FileSystemTest.java,v 1.11 2007-05-31 20:28:56 rafal Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -77,6 +77,7 @@ public class FileSystemTest extends TestCase
         URL url = fs.getResource("/filex");
         InputStream is = url.openStream();
         is.read();  
+        is.close();
     }
     
     public void testGetProtocol()

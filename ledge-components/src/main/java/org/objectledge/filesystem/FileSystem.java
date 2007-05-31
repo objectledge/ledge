@@ -53,7 +53,7 @@ import java.util.StringTokenizer;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.31 2006-02-08 18:22:33 zwierzem Exp $
+ * @version $Id: FileSystem.java,v 1.32 2007-05-31 20:28:55 rafal Exp $
  */
 public class FileSystem
 {
@@ -715,7 +715,8 @@ public class FileSystem
             }
         }
         while (count > 0);
-        out.flush();
+        out.close();
+        in.close();
     }
 
     /**
@@ -785,6 +786,7 @@ public class FileSystem
         }
         while (count > 0);
         out.flush();
+        ins.close();
     }
 
     /**
