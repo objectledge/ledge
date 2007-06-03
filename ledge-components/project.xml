@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  POSSIBILITY OF SUCH DAMAGE.
 -->
-<!-- $Id: project.xml,v 1.73 2006-05-31 15:29:40 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.74 2007-06-03 11:21:59 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -206,6 +206,12 @@
       <artifactId>xsdlib</artifactId>
       <version>20040506</version>
       <url>https://msv.dev.java.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>pcj</groupId>
+      <artifactId>pcj</artifactId>
+      <version>1.2</version>
+      <url>http://pcj.sourceforge.net</url>
     </dependency>
     <!-- testing -->
 
