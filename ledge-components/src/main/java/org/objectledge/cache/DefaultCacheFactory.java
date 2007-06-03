@@ -76,7 +76,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.5 2007-04-03 23:19:36 rafal Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.6 2007-06-03 11:27:48 rafal Exp $
  */
 public class DefaultCacheFactory
     implements CacheFactorySPI, CacheFactory
@@ -84,6 +84,12 @@ public class DefaultCacheFactory
     // constants ////////////////////////////////////////////////////////////
     /** Type constant for HashMap. */
     public static final String HASH_MAP_TYPE = "HashMap";
+    
+    /** Type constant for LongKeyOpenHashMap. */
+    public static final String LONG_KEY_OPEN_HASH_MAP_TYPE = "LongKeyOpenHashMap";
+
+    /** Type constant for LongKeyOpenHashMap. */
+    public static final String LONG_KEY_CHAINED_HASH_MAP_TYPE = "LongKeyChainedHashMap";
 
     /** Type constant for TimeoutMap. */
     public static final String TIMEOUT_MAP_TYPE = "TimeoutMap";
@@ -110,6 +116,14 @@ public class DefaultCacheFactory
     public static final String HASH_MAP_CLASS_DEFALUT =
         "java.util.HashMap";
 
+    /** The default LongKeyOpenHashMap implementation */
+    public static final String LONG_KEY_OPEN_HASH_MAP_DEFAULT = 
+        "org.objectledge.cache.impl.LongKeyOpenHashMapImpl";
+
+    /** The default LongKeyChainedHashMap implementation */
+    public static final String LONG_KEY_CHAINED_HASH_MAP_DEFAULT = 
+        "org.objectledge.cache.impl.LongKeyChainedHashMapImpl";
+    
     /** The default implementation TimeoutMap implementation. */
     public static final String TIMEOUT_MAP_CLASS_DEFALUT =
         "org.objectledge.cache.impl.TimeoutMapImpl";
@@ -201,6 +215,8 @@ public class DefaultCacheFactory
         
         Map<String, String> classMap = new HashMap<String, String>();
         classMap.put(HASH_MAP_TYPE, HASH_MAP_CLASS_DEFALUT);
+        classMap.put(LONG_KEY_OPEN_HASH_MAP_TYPE, LONG_KEY_OPEN_HASH_MAP_DEFAULT);
+        classMap.put(LONG_KEY_CHAINED_HASH_MAP_TYPE, LONG_KEY_CHAINED_HASH_MAP_DEFAULT);
         classMap.put(TIMEOUT_MAP_TYPE, TIMEOUT_MAP_CLASS_DEFALUT);
         classMap.put(LRU_MAP_TYPE, LRU_MAP_CLASS_DEFALUT);
         classMap.put(SOFT_MAP_TYPE, SOFT_MAP_CLASS_DEFALUT);
@@ -210,14 +226,12 @@ public class DefaultCacheFactory
         classMap.put(FORGETFULL_MAP_TYPE, FORGETFULL_MAP_CLASS_DEFALUT);
         
         Map<String, Class> ifaceMap = new HashMap<String, Class>();
-        ifaceMap.put(HASH_MAP_TYPE, Map.class);
         ifaceMap.put(TIMEOUT_MAP_TYPE, TimeoutMap.class);
         ifaceMap.put(LRU_MAP_TYPE, LRUMap.class);
         ifaceMap.put(SOFT_MAP_TYPE, SoftMap.class);
         ifaceMap.put(DISTRIBUTED_MAP_TYPE, DistributedMap.class);
         ifaceMap.put(FACTORY_MAP_TYPE, FactoryMap.class);
         ifaceMap.put(STATISTICS_MAP_TYPE, StatisticsMap.class);
-        ifaceMap.put(FORGETFULL_MAP_TYPE, ForgetfullMap.class);
         
         Configuration[] custom = config.getChildren("implementation");
         for(int i=0; i<custom.length; i++)
