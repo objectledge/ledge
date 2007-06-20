@@ -52,7 +52,7 @@ import org.objectledge.cache.spi.LRUMap;
  * implement than put() LRU ordering ;-)</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: LRUMapImpl.java,v 1.4 2005-02-09 22:02:24 rafal Exp $
+ * @version $Id: LRUMapImpl.java,v 1.5 2007-06-20 05:48:32 rafal Exp $
  */
 public class LRUMapImpl
     extends DelegateMap
@@ -69,7 +69,7 @@ public class LRUMapImpl
     private int capacity;
 
     /** The access list. */
-    private LinkedList access = new LinkedList();
+    private LinkedList<Object> access = new LinkedList<Object>();
 
     // initailization ////////////////////////////////////////////////////////
 
@@ -107,7 +107,7 @@ public class LRUMapImpl
     {
         if(capacity < access.size())
         {
-            access = new LinkedList(access.subList(0, capacity-1));
+            access = new LinkedList<Object>(access.subList(0, capacity-1));
         }
         this.capacity = capacity;
     }
@@ -127,7 +127,7 @@ public class LRUMapImpl
      */
     public Object put(Object key, Object value)
     {
-        if(delegate.size() == capacity)
+        while(delegate.size() > capacity)
         {
             delegate.remove(access.removeLast());
         }
@@ -148,6 +148,17 @@ public class LRUMapImpl
             access.addFirst(key);
         }
         return obj;
+    }
+    
+    public boolean containsKey(Object key)
+    {
+        boolean contains = delegate.containsKey(key);
+        if(contains)
+        {
+            access.remove(key);
+            access.addFirst(key);            
+        }
+        return contains;
     }
 
     /**
