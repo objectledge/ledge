@@ -277,7 +277,7 @@ public class DirectoryUserManager extends UserManager
     {
         try
         {
-            List list = lookupDNs(loginAttribute, login);
+            List<String> list = lookupDNs(loginAttribute, login);
             if(list.size()==0)
             {
                 throw new UserUnknownException("failed to lookup user by login");
@@ -290,12 +290,12 @@ public class DirectoryUserManager extends UserManager
                 message.append("':\n");
                 for(int i = 0; i < list.size();i++)
                 {
-                    message.append((String)list.get(i));
+                    message.append(list.get(i));
                     message.append("\n");
                 }
                 throw new AuthenticationException(message.toString());
             }
-            return new DefaultPrincipal((String)list.get(0));                           
+            return new DefaultPrincipal(list.get(0));                           
         }
         catch(NamingException e)
         {
@@ -417,11 +417,12 @@ public class DirectoryUserManager extends UserManager
      */
     public Principal[] lookupAccounts(String attribute, String value) throws NamingException
     {
-        List list = lookupDNs(attribute, value);
+        List<String> list = lookupDNs(attribute, value);
         Principal[] principals = new Principal[list.size()];
-        for(int i = 0; i < list.size();i++)
+        int i = 0;
+        for(String dn : list)
         {
-            principals[i] = new DefaultPrincipal((String)list.get(i));                           
+            principals[i++] = new DefaultPrincipal(dn);                           
         }
         return principals;
     }
@@ -431,11 +432,12 @@ public class DirectoryUserManager extends UserManager
      */
     public Principal[] lookupAccounts(String query) throws NamingException
     {
-        List list = lookupDNs(query);
+        List<String> list = lookupDNs(query);
         Principal[] principals = new Principal[list.size()];
-        for(int i = 0; i < list.size();i++)
+        int i = 0;
+        for(String dn : list)
         {
-            principals[i] = new DefaultPrincipal((String)list.get(i));                           
+            principals[i++] = new DefaultPrincipal(dn);                           
         }
         return principals;
     }
@@ -471,7 +473,7 @@ public class DirectoryUserManager extends UserManager
     private synchronized String getLoginName(String name)
         throws AuthenticationException
     {
-        String login = (String)loginByName.get(name);
+        String login = loginByName.get(name);
         if(login == null)
         {
             DirContext user = null;
@@ -515,7 +517,7 @@ public class DirectoryUserManager extends UserManager
      * @return the list of the name of matched context.
      * @throws NamingException if lookup fails.
      */
-    private List lookupDNs(String attribute, String value)
+    private List<String> lookupDNs(String attribute, String value)
         throws NamingException
     {
         DirContext ctx = null;
@@ -524,11 +526,11 @@ public class DirectoryUserManager extends UserManager
             ctx = directory.getBaseDirContext();
             Attributes matchAttrs = new BasicAttributes(false);
             matchAttrs.put(new BasicAttribute(attribute, value));
-            NamingEnumeration answer = ctx.search("", matchAttrs, null);
+            NamingEnumeration<SearchResult> answer = ctx.search("", matchAttrs, null);
             List<String> results = new ArrayList<String>();
             while(answer.hasMore())
             {
-                SearchResult result = (SearchResult)answer.next();
+                SearchResult result = answer.next();
                 results.add(result.getNameInNamespace());
             }
             return results;
@@ -546,18 +548,18 @@ public class DirectoryUserManager extends UserManager
      * @return the list of the name of matched context.
      * @throws NamingException if lookup fails.
      */
-    private List lookupDNs(String query)
+    private List<String> lookupDNs(String query)
         throws NamingException
     {
         DirContext ctx = null;
         try 
         {
             ctx = directory.getBaseDirContext();
-            NamingEnumeration answer = ctx.search("", query, defaultSearchControls);
+            NamingEnumeration<SearchResult> answer = ctx.search("", query, defaultSearchControls);
             List<String> results = new ArrayList<String>();
             while(answer.hasMore())
             {
-                SearchResult result = (SearchResult)answer.next();
+                SearchResult result = answer.next();
                 results.add(result.getNameInNamespace());
             }
             return results;
