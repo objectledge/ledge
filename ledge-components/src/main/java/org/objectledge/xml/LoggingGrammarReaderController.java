@@ -28,7 +28,6 @@
 package org.objectledge.xml;
 
 import org.jcontainer.dna.Logger;
-
 import org.xml.sax.EntityResolver;
 import org.xml.sax.Locator;
 
@@ -36,7 +35,7 @@ import org.xml.sax.Locator;
  * GrammarReaderController that logs all warnings and throws exceptions on errors.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LoggingGrammarReaderController.java,v 1.1 2004-06-01 11:13:11 zwierzem Exp $
+ * @version $Id: LoggingGrammarReaderController.java,v 1.2 2007-11-18 21:19:58 rafal Exp $
  */
 public class LoggingGrammarReaderController extends ExceptionGrammarReaderController
 {

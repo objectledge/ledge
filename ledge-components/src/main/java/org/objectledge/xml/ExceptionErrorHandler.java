@@ -28,15 +28,15 @@
 package org.objectledge.xml;
 
 import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * An <code>ErrorHandler</code> throwing the exception on any error.
  * Warnings are ignored.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: ExceptionErrorHandler.java,v 1.2 2005-02-10 17:46:57 rafal Exp $
+ * @version $Id: ExceptionErrorHandler.java,v 1.3 2007-11-18 21:19:58 rafal Exp $
  */
 public class ExceptionErrorHandler implements ErrorHandler
 {

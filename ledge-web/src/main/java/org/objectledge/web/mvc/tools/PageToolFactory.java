@@ -28,8 +28,8 @@
 
 package org.objectledge.web.mvc.tools;
 
-import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.web.HttpContext;
 
@@ -37,7 +37,7 @@ import org.objectledge.web.HttpContext;
  * Context tool factory component to build the page tool.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: PageToolFactory.java,v 1.9 2005-07-22 17:25:45 pablo Exp $
+ * @version $Id: PageToolFactory.java,v 1.10 2007-11-18 21:20:34 rafal Exp $
  */
 public class PageToolFactory implements ContextToolFactory
 {

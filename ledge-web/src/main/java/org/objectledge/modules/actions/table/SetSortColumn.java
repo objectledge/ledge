@@ -29,12 +29,12 @@
 package org.objectledge.modules.actions.table;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 
 /**
  * Sets a new sorting for a given table.
@@ -46,7 +46,7 @@ import org.objectledge.parameters.RequestParameters;
  * </ul>
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SetSortColumn.java,v 1.3 2006-03-30 17:12:41 zwierzem Exp $
+ * @version $Id: SetSortColumn.java,v 1.4 2007-11-18 21:20:36 rafal Exp $
  */
 public class SetSortColumn extends BaseTableAction
 {

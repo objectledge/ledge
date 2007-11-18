@@ -28,9 +28,9 @@
 
 package org.objectledge.security;
 
-import org.objectledge.authentication.UserUnknownException;
-
 import java.security.Principal;
+
+import org.objectledge.authentication.UserUnknownException;
 
 /**
  * Implemented by the service that provides the auguments the policy service

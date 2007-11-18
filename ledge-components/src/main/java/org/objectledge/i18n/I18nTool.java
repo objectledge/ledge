@@ -28,19 +28,19 @@
 
 package org.objectledge.i18n;
 
-import org.objectledge.utils.StringUtils;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+
+import org.objectledge.utils.StringUtils;
 
 /**
  * The I18n contex tool.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: I18nTool.java,v 1.20 2006-03-23 09:54:54 pablo Exp $
+ * @version $Id: I18nTool.java,v 1.21 2007-11-18 21:20:09 rafal Exp $
  */
 public class I18nTool
 {

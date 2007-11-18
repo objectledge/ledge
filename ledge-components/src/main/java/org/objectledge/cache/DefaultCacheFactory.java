@@ -49,7 +49,6 @@ import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.ConfigurableValueFactory;
 import org.objectledge.cache.spi.DistributedMap;
 import org.objectledge.cache.spi.FactoryMap;
-import org.objectledge.cache.spi.ForgetfullMap;
 import org.objectledge.cache.spi.LRUMap;
 import org.objectledge.cache.spi.LayeredMap;
 import org.objectledge.cache.spi.SoftMap;
@@ -76,7 +75,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.6 2007-06-03 11:27:48 rafal Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.7 2007-11-18 21:20:05 rafal Exp $
  */
 public class DefaultCacheFactory
     implements CacheFactorySPI, CacheFactory

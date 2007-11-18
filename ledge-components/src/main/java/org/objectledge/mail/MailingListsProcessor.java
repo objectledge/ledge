@@ -1,12 +1,10 @@
 package org.objectledge.mail;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Store;
 
 import org.jcontainer.dna.Logger;

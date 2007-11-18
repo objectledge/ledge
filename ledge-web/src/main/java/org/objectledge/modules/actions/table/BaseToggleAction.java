@@ -29,18 +29,18 @@
 package org.objectledge.modules.actions.table;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
 
 /**
  * Base action class for row expansion state toggling actions.
  * Provides method for accesing the id of the row for which the state is changed.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseToggleAction.java,v 1.3 2006-03-30 17:12:41 zwierzem Exp $
+ * @version $Id: BaseToggleAction.java,v 1.4 2007-11-18 21:20:36 rafal Exp $
  */
 public abstract class BaseToggleAction
     extends BaseTableAction

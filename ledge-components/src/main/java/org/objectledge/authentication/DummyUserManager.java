@@ -29,14 +29,9 @@
 package org.objectledge.authentication;
 
 import java.security.Principal;
-import java.util.Map;
 
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
-import javax.naming.directory.SearchControls;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.naming.ContextHelper;
 
 /**
  * The dummy user manager implementation.

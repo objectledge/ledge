@@ -28,10 +28,6 @@
 
 package org.objectledge.external;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.objectledge.utils.StringUtils;
@@ -40,7 +36,7 @@ import org.objectledge.utils.StringUtils;
  * Represents the result of script execution.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: ExecutionResult.java,v 1.1 2006-03-24 14:27:37 rafal Exp $
+ * @version $Id: ExecutionResult.java,v 1.2 2007-11-18 21:19:55 rafal Exp $
  */
 public class ExecutionResult
 {

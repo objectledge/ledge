@@ -35,7 +35,6 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -45,7 +44,7 @@ import com.sun.msv.grammar.Grammar;
  * Grammar cache - loads and caches MSV's Grammar objects.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: XMLGrammarCache.java,v 1.3 2006-02-08 18:26:26 zwierzem Exp $
+ * @version $Id: XMLGrammarCache.java,v 1.4 2007-11-18 21:19:58 rafal Exp $
  */
 public class XMLGrammarCache
 {

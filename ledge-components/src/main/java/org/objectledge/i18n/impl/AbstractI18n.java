@@ -28,12 +28,6 @@
 
 package org.objectledge.i18n.impl;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.Logger;
-import org.objectledge.i18n.I18n;
-import org.objectledge.utils.StringUtils;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,12 +35,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.i18n.I18n;
+import org.objectledge.utils.StringUtils;
+
 /**
  * Base implementation of I18n component.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: AbstractI18n.java,v 1.22 2006-03-23 09:54:53 pablo Exp $
+ * @version $Id: AbstractI18n.java,v 1.23 2007-11-18 21:20:13 rafal Exp $
  */
 public abstract class AbstractI18n implements I18n
 {
