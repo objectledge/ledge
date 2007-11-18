@@ -57,7 +57,7 @@ import org.xml.sax.XMLReader;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: XaPoolDataSourceTest.java,v 1.3 2005-09-25 12:03:41 rafal Exp $
+ * @version $Id: XaPoolDataSourceTest.java,v 1.4 2007-11-18 20:55:48 rafal Exp $
  */
 public class XaPoolDataSourceTest extends TestCase
 {
@@ -183,7 +183,7 @@ public class XaPoolDataSourceTest extends TestCase
         ResultSet rs = null;
         try
         {
-            ((XADataSource)dataSource).getXAConnection();            
+            xaConn = ((XADataSource)dataSource).getXAConnection();            
         }
         catch(ClassCastException e)
         {
