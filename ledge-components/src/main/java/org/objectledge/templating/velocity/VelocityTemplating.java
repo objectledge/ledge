@@ -54,7 +54,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.26 2007-11-18 21:05:45 rafal Exp $
+ * @version $Id: VelocityTemplating.java,v 1.27 2007-11-22 17:26:46 rafal Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -207,7 +207,7 @@ public class VelocityTemplating implements Templating, LogSystem
             for (int i = 0; i < paths.length; i++)
             {
                 String path = paths[i] + name + extension;
-                if (engine.resourceExists(path))
+                if (engine.templateExists(path))
                 {
                     exists = true;
                     break;
@@ -265,7 +265,7 @@ public class VelocityTemplating implements Templating, LogSystem
             for (int i = 0; i < paths.length; i++)
             {
                 path = paths[i] + name + extension;
-                if (engine.resourceExists(path))
+                if (engine.templateExists(path))
                 {
                     template = new VelocityTemplate(this, name, engine.getTemplate(path));
                 }
