@@ -37,7 +37,7 @@ import org.picocontainer.Startable;
  * A daemon thread helper object.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Daemon.java,v 1.4 2005-02-10 17:46:53 rafal Exp $
+ * @version $Id: Daemon.java,v 1.5 2007-12-21 00:05:22 rafal Exp $
  */
 public class Daemon
     implements Runnable, Startable
@@ -147,6 +147,10 @@ public class Daemon
             {
                 log.error("error in cleanup after "+task.getName(), e);
             }
+            finally
+            {
+                context.clearAttributes();
+            }            
         }
     }
 

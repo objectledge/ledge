@@ -38,7 +38,7 @@ import org.picocontainer.Startable;
  * A worker thread helper object.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Worker.java,v 1.6 2005-02-10 17:46:53 rafal Exp $
+ * @version $Id: Worker.java,v 1.7 2007-12-21 00:05:22 rafal Exp $
  */
 public class Worker 
     implements Runnable, Startable
@@ -171,6 +171,10 @@ public class Worker
                 catch(Throwable e)
                 {
                     log.error(name+": uncaught exception in cleanup", e);
+                }
+                finally
+                {
+                    context.clearAttributes();
                 }
             }
             
