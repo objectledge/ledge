@@ -30,16 +30,17 @@ package org.objectledge.event;
 
 import java.lang.reflect.Method;
 
-import junit.framework.TestCase;
-
 import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.jmock.Mock;
+import org.objectledge.cache.CacheFactory;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.utils.LedgeTestCase;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -47,7 +48,7 @@ import org.objectledge.threads.ThreadPool;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class EventSystemTest extends TestCase
+public class EventSystemTest extends LedgeTestCase
     implements FooInterface
 {
     private EventWhiteboardFactory event;
@@ -56,13 +57,12 @@ public class EventSystemTest extends TestCase
     
     private String testString;
     
-    /**
-     * Constructor for EventSystemTest.
-     * @param arg0
-     */
-    public EventSystemTest(String arg0)
+    private Mock mockCacheFactory;
+    private CacheFactory cacheFactory;
+    
+    
+    public void setUp()
     {
-        super(arg0);
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
         Context context = new Context();
@@ -70,10 +70,13 @@ public class EventSystemTest extends TestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         Valve cleanup = null;
         ThreadPool pool = new ThreadPool(cleanup, context, config, logger);
-        event = new EventWhiteboardFactory(config,logger,pool);
-        whiteboard = event.newInstance();
+        mockCacheFactory = mock(CacheFactory.class);
+        mockCacheFactory.stubs().method("registerForPeriodicExpunge").isVoid();
+        cacheFactory = (CacheFactory)mockCacheFactory.proxy();        
+        event = new EventWhiteboardFactory(config,logger,pool,cacheFactory);
+        whiteboard = event.newInstance();        
     }
-
+    
     public void testGetForwarder()
     {
         EventWhiteboard ef = event.newInstance();
