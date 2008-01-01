@@ -36,7 +36,7 @@ import java.rmi.Remote;
  * and private event forwarding objects.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventWhiteboard.java,v 1.2 2004-12-27 05:17:55 rafal Exp $
+ * @version $Id: EventWhiteboard.java,v 1.3 2008-01-01 22:53:37 rafal Exp $
  */
 public interface EventWhiteboard
 {
@@ -56,7 +56,7 @@ public interface EventWhiteboard
      *         interaface, or <code>handler</code> does not implement
      *         <code>iface</code> .
      */
-    public void addListener(Class iface, Object listener, Object object)
+    public void addListener(Class<?> iface, Object listener, Object object)
         throws IllegalArgumentException;
 
     /**
@@ -70,7 +70,7 @@ public interface EventWhiteboard
      * @param object the object the listener is recieving notifications on, or
      *        <code>null</code> for all objects.
      */
-    public void removeListener(Class iface, Object listener, Object object);
+    public void removeListener(Class<?> iface, Object listener, Object object);
 
     /**
      * Adds an event listener.
@@ -92,7 +92,7 @@ public interface EventWhiteboard
      * @throws IllegalArgumentException if the <code>iface</code> is an
      *         unknown interaface.
      */
-    public void addRemoteListener(Class iface, Remote listener, Object object)
+    public void addRemoteListener(Class<?> iface, Remote listener, Object object)
         throws IllegalArgumentException;
     
     /**
@@ -106,7 +106,7 @@ public interface EventWhiteboard
      * @param listener the listener object.
      * @param object the object the listener is recieving notifications on.
      */
-    public void removeRemoteListener(Class iface, Remote listener, Object object);
+    public void removeRemoteListener(Class<?> iface, Remote listener, Object object);
 
     /**
      * Calls a method on registered handlers.
