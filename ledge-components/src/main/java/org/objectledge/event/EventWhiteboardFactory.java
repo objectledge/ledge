@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.cache.CacheFactory;
 import org.objectledge.context.Context;
 import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
@@ -60,7 +61,7 @@ import org.objectledge.threads.ThreadPool;
  * InboundEventWhiteboard} and {@link OutboundEventWhiteboard}.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: EventWhiteboardFactory.java,v 1.4 2006-02-08 18:22:07 zwierzem Exp $
+ * @version $Id: EventWhiteboardFactory.java,v 1.5 2008-01-01 23:31:22 rafal Exp $
  */
 public class EventWhiteboardFactory
 {
@@ -75,16 +76,22 @@ public class EventWhiteboardFactory
     /** The event queue */
     private List<Event> queue = new LinkedList<Event>();
 
+    /** The cache factory. */
+    private final CacheFactory cacheFactory;
+
     /**
      * Component constructor.
      * 
      * @param config the configuration.
      * @param logger the logger.
      * @param threadPool the thread pool component.
+     * @param cacheFactory cache factory.
      */
-    public EventWhiteboardFactory(Configuration config, Logger logger, ThreadPool threadPool)
+    public EventWhiteboardFactory(Configuration config, Logger logger, ThreadPool threadPool,
+        CacheFactory cacheFactory)
     {
         this.logger = logger;
+        this.cacheFactory = cacheFactory;
         if(config != null)
         {
             asynchronous = config.getChild("asynchronous").getValueAsBoolean(false);
@@ -102,7 +109,7 @@ public class EventWhiteboardFactory
      */
     public EventWhiteboard newInstance()
     {
-        return new DefaultEventWhiteboard(this, logger);
+        return new DefaultEventWhiteboard(this, cacheFactory, logger);
     }
 
     /**
