@@ -30,6 +30,7 @@ package org.objectledge.cache;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import org.jcontainer.dna.ConfigurationException;
 
@@ -37,7 +38,7 @@ import org.jcontainer.dna.ConfigurationException;
  * A factory of cache objects, which are variants of java.util.Map with additional functionality.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: CacheFactory.java,v 1.4 2007-04-03 23:19:36 rafal Exp $
+ * @version $Id: CacheFactory.java,v 1.5 2008-01-01 22:28:32 rafal Exp $
  */
 public interface CacheFactory
 {
@@ -119,6 +120,17 @@ public interface CacheFactory
      * {@inheritDoc}
      */
     public abstract void register(DelayedUpdate object);
+    
+    /**
+     * Ensure a WeakHashMap object will expunge it's stale entries periodically.
+     * <p>
+     * A WeakHashMap object passed to this method will have it's size() method called roughly once
+     * each minute. This will trigger expunge of keys that have their referent objects collected.
+     * </p>
+     * 
+     * @param map the map to register for periodic expunge.
+     */
+    public void registerForPeriodicExpunge(WeakHashMap<?, ?> map);
 
     /**
      * Prints the report on the specified PrintWriter.

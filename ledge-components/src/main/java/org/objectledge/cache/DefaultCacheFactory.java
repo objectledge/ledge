@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.WeakHashMap;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -57,6 +58,7 @@ import org.objectledge.cache.spi.TimeoutMap;
 import org.objectledge.context.Context;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.notification.Notification;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
 
@@ -75,7 +77,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.7 2007-11-18 21:20:05 rafal Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.8 2008-01-01 22:28:32 rafal Exp $
  */
 public class DefaultCacheFactory
     implements CacheFactorySPI, CacheFactory
@@ -173,6 +175,9 @@ public class DefaultCacheFactory
     /** DelayedUpdate queue helper map (object -&gt; target update time)*/
     private Map<DelayedUpdate,Long> queueHelper = new HashMap<DelayedUpdate,Long>();
 
+    /** Registered WeakHashMap objects. */
+    private Map<WeakHashMap<?,?>, Object> weakHashMaps = new WeakHashMap<WeakHashMap<?,?>, Object>();
+    
     /** The configuration */
     private Configuration config;
     
@@ -187,7 +192,7 @@ public class DefaultCacheFactory
     
     /** The persistence */
     private Persistence persistence;
-
+    
     // initialization ////////////////////////////////////////////////////////
 
     /**
@@ -510,6 +515,14 @@ public class DefaultCacheFactory
             queue.notify();
         }
     }
+    
+    public void registerForPeriodicExpunge(WeakHashMap<?, ?> map)
+    {
+        synchronized(weakHashMaps)
+        {
+            weakHashMaps.put(map, null);
+        }
+    }
 
     /**
      * Prints the report on the specified PrintWriter.
@@ -739,6 +752,43 @@ public class DefaultCacheFactory
         public void terminate(Thread t)
         {
             t.interrupt();
+        }
+    }
+    
+    private class WeakHashMapExpungeTask extends Task
+    {
+        public String getName()
+        {
+            return "WeakHashMap periodic expunge";
+        }
+        
+        public void terminate(Thread t)
+        {
+            t.interrupt();
+        }
+
+        public void process(Context context)
+            throws ProcessingException
+        {
+            synchronized(weakHashMaps)
+            {
+                while(!Thread.interrupted())
+                {
+                    try
+                    {
+                        Thread.sleep(60 * 1000);
+                    }
+                    catch(InterruptedException e)
+                    {
+                        return;
+                    }
+                    for(WeakHashMap<?, ?> map : weakHashMaps.keySet())
+                    {
+                        // trigger expungeStaleEntries
+                        map.size();
+                    }
+                }
+            }
         }
     }
 }
