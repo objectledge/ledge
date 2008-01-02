@@ -29,11 +29,13 @@
 package org.objectledge.cache;
 
 import java.io.PrintWriter;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,7 +79,7 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.10 2008-01-02 00:28:34 rafal Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.11 2008-01-02 17:21:54 rafal Exp $
  */
 public class DefaultCacheFactory
     implements CacheFactorySPI, CacheFactory
@@ -176,7 +178,7 @@ public class DefaultCacheFactory
     private Map<DelayedUpdate,Long> queueHelper = new HashMap<DelayedUpdate,Long>();
 
     /** Registered WeakHashMap objects. */
-    private Map<WeakHashMap<?,?>, Object> weakHashMaps = new WeakHashMap<WeakHashMap<?,?>, Object>();
+    private List<WeakReference<WeakHashMap<?,?>>> weakHashMaps = new LinkedList<WeakReference<WeakHashMap<?,?>>>();
     
     /** The configuration */
     private Configuration config;
@@ -521,7 +523,7 @@ public class DefaultCacheFactory
     {
         synchronized(weakHashMaps)
         {
-            weakHashMaps.put(map, null);
+            weakHashMaps.add(new WeakReference<WeakHashMap<?, ?>>(map));
         }
     }
 
@@ -784,13 +786,34 @@ public class DefaultCacheFactory
                     {
                         return;
                     }
-                    for(WeakHashMap<?, ?> map : weakHashMaps.keySet())
-                    {
-                        // trigger expungeStaleEntries
-                        map.size();
-                    }
+                    expunge();
                 }
             }
+        }
+
+        private void expunge()
+        {
+            logger.info("starting expunge of " + weakHashMaps.size() + " maps");
+            int collected = 0;
+            long time = System.currentTimeMillis();
+            Iterator<WeakReference<WeakHashMap<?, ?>>> i = weakHashMaps.iterator();
+            while(i.hasNext())
+            {
+                WeakHashMap<?, ?> map = i.next().get();
+                if(map != null)
+                {
+                    // trigger expungeStaleEntries
+                    map.size();
+                }
+                else
+                {
+                    // map has gone weakly reachable itself, get rid of the ref
+                    i.remove();
+                    collected++;
+                }
+            }
+            time = System.currentTimeMillis() - time;
+            logger.info("expunge done in " + time + "ms, " + collected + " maps were collected since last run");
         }
     }
 }
