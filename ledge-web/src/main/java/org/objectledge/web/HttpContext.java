@@ -45,7 +45,7 @@ import org.objectledge.context.Context;
  * The http context encapsulates the http request and response.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: HttpContext.java,v 1.16 2006-03-15 14:06:28 pablo Exp $
+ * @version $Id: HttpContext.java,v 1.17 2008-01-03 22:25:55 rafal Exp $
  */
 public class HttpContext
 {
@@ -253,6 +253,21 @@ public class HttpContext
     public Object getSessionAttribute(String key)
     {
         return request.getSession().getAttribute(key);
+    }
+
+    /**
+     * Get the session attribute.
+     * 
+     * @param <T> type of the attribute value.
+     * @param key the attribute key
+     * @param defaultValue the value to return if not defined.
+     * @return session attribute value of defaultValue if session attribute is not defined.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getSessionAttribute(String key, T defaultValue)
+    {
+        T sessionValue = (T)request.getSession().getAttribute(key); 
+        return sessionValue == null ? defaultValue : sessionValue;
     }
     
     /**
