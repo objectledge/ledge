@@ -38,7 +38,7 @@ import junit.framework.TestCase;
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DateFormatterTest.java,v 1.1 2004-02-09 12:09:53 fil Exp $
+ * @version $Id: DateFormatterTest.java,v 1.2 2008-01-08 19:36:12 rafal Exp $
  */
 public class DateFormatterTest extends TestCase
 {
@@ -57,14 +57,14 @@ public class DateFormatterTest extends TestCase
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("CET"), new Locale("pl","PL"));
         cal.set(2004, 1, 4, 14, 48, 02);
     
-        DateFormatter formatter = new DateFormatter("EEE, d MMM yyyy HH:mm:ss Z", "en_US");
+        DateFormatter formatter = new DateFormatter("EEE, d MMM yyyy HH:mm:ss Z", "en_US", "CET");
         assertEquals("Wed, 4 Feb 2004 14:48:02 +0100", formatter.format(cal.getTime()));
     }
 
     public void testParse()
         throws Exception
     {
-        DateFormatter formatter = new DateFormatter("EEE, d MMM yyyy HH:mm:ss Z", "en_US");
+        DateFormatter formatter = new DateFormatter("EEE, d MMM yyyy HH:mm:ss Z", "en_US", "CET");
         Date parsed = formatter.parse("Wed, 4 Feb 2004 14:48:02 +0100");
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("CET"), new Locale("pl","PL"));
         cal.set(2004, 1, 4, 14, 48, 02);

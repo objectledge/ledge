@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.ObjectPool;
@@ -41,13 +42,15 @@ import org.apache.commons.pool.impl.GenericObjectPool;
  * Date formatter component.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DateFormatter.java,v 1.2 2004-12-27 05:17:43 rafal Exp $
+ * @version $Id: DateFormatter.java,v 1.3 2008-01-08 19:36:12 rafal Exp $
  */
 public class DateFormatter
 {
-    private String pattern;
+    final private String pattern;
     
-    private Locale locale;    
+    final private Locale locale;    
+    
+    final private TimeZone timeZone;
 
     private ObjectPool dateFormatPool = new GenericObjectPool(new DateFormatFactory());    
     
@@ -61,6 +64,20 @@ public class DateFormatter
     {
         this.pattern = pattern;
         this.locale = StringUtils.getLocale(locale);
+        this.timeZone = TimeZone.getDefault();
+    }
+
+    /**
+     * Constructs an instance of the date formatter.
+     * 
+     * @param pattern the formatting pattern.
+     * @param locale the locale name.
+     */    
+    public DateFormatter(String pattern, String locale, String timeZone)
+    {
+        this.pattern = pattern;
+        this.locale = StringUtils.getLocale(locale);
+        this.timeZone = TimeZone.getTimeZone(timeZone);
     }
 
     /**
@@ -154,7 +171,9 @@ public class DateFormatter
          */
         public Object makeObject() throws Exception
         {
-            return new SimpleDateFormat(pattern, locale);
+            DateFormat df = new SimpleDateFormat(pattern, locale);
+            df.setTimeZone(timeZone);
+            return df;
         }
     }
 }
