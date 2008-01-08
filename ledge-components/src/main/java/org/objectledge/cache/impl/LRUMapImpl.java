@@ -118,7 +118,7 @@ public class LRUMapImpl
         @Override
         protected boolean removeEldestEntry(Entry<Object, Object> eldest)
         {
-            return size() >= capacity;
+            return size() >= capacity + 1;
         }
 
         /**
