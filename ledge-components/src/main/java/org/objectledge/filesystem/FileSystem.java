@@ -48,12 +48,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 /**
  * Provides an abstration of files available in the local file system, in the ClassLoader, web 
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.32 2007-05-31 20:28:55 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.33 2008-01-08 19:19:48 rafal Exp $
  */
 public class FileSystem
 {
@@ -484,6 +486,20 @@ public class FileSystem
                 }
                 else
                 {
+                    // CYKLO-474
+                    // trying to collect some information about the context in which the bug occurs
+                    Logger log = Logger.getLogger(this.getClass());
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("CYKLO-474 assessment for ").append(path).append("\n");
+                    for(FileSystemProvider p : providers)
+                    {
+                        sb.append(p.getName()).append(": ");
+                        sb.append("exists ").append(p.exists(path)).append(", ");
+                        sb.append("isDirectory ").append(p.isDirectory(path)).append(", ");
+                        sb.append("isFile ").append(p.isFile(path)).append(", ");
+                        sb.append("canRead ").append(p.canRead(path)).append("\n");
+                    }
+                    log.error(sb.toString().trim());
                     throw new IOException(fp.getName() + " provider has " + path
                         + " but it's not a directory.");                    
                 }
