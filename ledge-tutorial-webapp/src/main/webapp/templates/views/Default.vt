@@ -1,0 +1,21 @@
+/
+Default($!embeddedPlaceholder)
+<br/>
+<a href="$link.view('foo.Bar').action('authentication.Login').set('login','foo').set('password','bar')">login</a>
+<br/>
+$i18nContext.locale : $httpContext.encoding : $mvcContext.userPrincipal.name<br/>
+
+<form name="setlocale" method="post" action="$link.action("i18n.SetLocale")">
+  <select name="locale" onChange="document.setlocale.submit()">
+    <option #if($i18nContext.locale.toString() == "pl_PL")selected="selected"#end value="pl_PL">pl_PL</option>
+    <option #if($i18nContext.locale.toString() == "en_US")selected="selected"#end value="en_US">en_US</option>
+  </select>
+</form>
+
+<form name="setencoding" method="post" action="$link.action("i18n.SetEncoding")">
+  <select name="encoding" onChange="document.setencoding.submit()">
+    <option #if($httpContext.encoding == "UTF-8")selected="selected"#end value="UTF-8">UTF-8</option>
+    <option #if($httpContext.encoding == "ISO-8859-2")selected="selected"#end value="ISO-8859-2">ISO-8859-2</option>
+    <option #if($httpContext.encoding == "ISO-8859-1")selected="selected"#end value="ISO-8859-1">ISO-8859-1</option>
+  </select>
+</form>
