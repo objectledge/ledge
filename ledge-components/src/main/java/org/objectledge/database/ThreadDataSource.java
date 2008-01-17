@@ -27,9 +27,6 @@
 // 
 package org.objectledge.database;
 
-import static org.objectledge.statistics.DataSource.Graph.LINE1;
-import static org.objectledge.statistics.DataSource.Type.COUNTER;
-
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,11 +43,13 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.database.impl.DelegatingConnection;
 import org.objectledge.database.impl.DelegatingDataSource;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
-import org.objectledge.statistics.Graph;
-import org.objectledge.statistics.ReflectiveStatisticsProvider;
+import org.objectledge.statistics.AbstractMuninGraph;
+import org.objectledge.statistics.MuninGraph;
+import org.objectledge.statistics.StatisticsProvider;
 import org.objectledge.utils.StringUtils;
 /**
  * A decorator for javax.sql.DataSource interface that makes sure a Thread uses only one physical
@@ -73,7 +72,7 @@ import org.objectledge.utils.StringUtils;
  * the trace.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ThreadDataSource.java,v 1.14 2005-10-10 10:43:06 rafal Exp $
+ * @version $Id: ThreadDataSource.java,v 1.14.2.1 2008-01-17 22:57:32 rafal Exp $
  */
 public class ThreadDataSource
     extends DelegatingDataSource
@@ -265,7 +264,7 @@ public class ThreadDataSource
      * and the connection is forcibly closed.</p>
      * 
      * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
-     * @version $Id: ThreadDataSource.java,v 1.14 2005-10-10 10:43:06 rafal Exp $
+     * @version $Id: ThreadDataSource.java,v 1.14.2.1 2008-01-17 22:57:32 rafal Exp $
      */
     public static class GuardValve
         implements Valve
@@ -617,40 +616,15 @@ public class ThreadDataSource
     /**
      * Publishes database usage statistics.
      */
-    public static class Statistics extends ReflectiveStatisticsProvider
+    public static class Statistics implements StatisticsProvider
     {
-        private static final org.objectledge.statistics.DataSource READS_DS = 
-            new org.objectledge.statistics.DataSource("database_reads", "Database reads", 
-                COUNTER, LINE1);
-
-        private static final org.objectledge.statistics.DataSource WRITES_DS = 
-            new org.objectledge.statistics.DataSource("database_writes", "Database writes", 
-                COUNTER, LINE1);
-
-        private static final org.objectledge.statistics.DataSource TIME_DS = 
-            new org.objectledge.statistics.DataSource("database_access_time", 
-                "Database access time", COUNTER, LINE1);
+        private final MuninGraph[] graphs;
         
-        private static final org.objectledge.statistics.DataSource[] STATEMENTS_DATA_SOURCES = {
-            READS_DS, WRITES_DS
-        };
+        public Statistics(FileSystem fs)
+        {
+            graphs = new MuninGraph[] { new StatementCount(fs), new AccessTime(fs) };
+        }
         
-        private static final org.objectledge.statistics.DataSource[] TIME_DATA_SOURCES = {
-            TIME_DS
-        };
-        
-        private static final org.objectledge.statistics.DataSource[] DATA_SOURCES = {
-            READS_DS, WRITES_DS, TIME_DS
-        };
-        
-        private static final Graph STATEMENTS_GRAPH = new Graph("database_statements",
-            "Database statements", null, STATEMENTS_DATA_SOURCES, "statements");
-        
-        private static final Graph TIME_GRAPH = new Graph("database_access_time",
-            "Database access time", null, TIME_DATA_SOURCES, "milliseconds");
-        
-        private static final Graph[] GRAPHS = { STATEMENTS_GRAPH, TIME_GRAPH };
-
         private int totalReads = 0;
         
         private int totalWrites = 0;
@@ -668,47 +642,67 @@ public class ThreadDataSource
         /**
          * {@inheritDoc}
          */
-        public Graph[] getGraphs()
+        public MuninGraph[] getGraphs()
         {
-            return GRAPHS;
+            return graphs;
+        }
+     
+        public class StatementCount
+            extends AbstractMuninGraph
+        {
+            public StatementCount(FileSystem fs)
+            {
+                super(fs);
+            }
+            
+            public String getId()
+            {
+                return "dbStatementCount";
+            }
+            
+            /**
+             * Returns number of preformed DB reads.
+             * 
+             * @return number of preformed DB reads.
+             */
+            public int getReads()
+            {
+                return totalReads;
+            }
+            
+            /**
+             * Returns number of preformed DB writes.
+             * 
+             * @return number of preformed DB writes.
+             */
+            public int getWrites()
+            {
+                return totalWrites;
+            }
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        public org.objectledge.statistics.DataSource[] getDataSources()
+        public class AccessTime
+            extends AbstractMuninGraph
         {
-            return DATA_SOURCES;
-        }
-        
-        /**
-         * Returns number of preformed DB reads.
-         * 
-         * @return number of preformed DB reads.
-         */
-        public int getDatabaseReads()
-        {
-            return totalReads;
-        }
-
-        /**
-         * Returns number of preformed DB writes.
-         * 
-         * @return number of preformed DB writes.
-         */
-        public int getDatabaseWrites()
-        {
-            return totalWrites;
-        }
-
-        /**
-         * Returns total DB access time in milliseconds.
-         * 
-         * @return total DB access time in milliseconds.
-         */
-        public long getDatabaseAccessTime()
-        {
-            return totalAccessTime;
+            public AccessTime(FileSystem fs)
+            {
+                super(fs);
+            }
+            
+            public String getId()
+            {
+                return "dbAccessTime";
+            }
+            
+            /**
+             * Returns total DB access time in milliseconds.
+             * 
+             * @return total DB access time in milliseconds.
+             */
+            public long getTime()
+            {
+                return totalAccessTime;
+            }
         }
         
         /**
