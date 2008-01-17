@@ -28,30 +28,19 @@
 package org.objectledge.statistics;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
-import org.jcontainer.dna.Logger;
-import org.objectledge.ComponentInitializationError;
 
 /**
  * A component that gathers systemwide statistics. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: Statistics.java,v 1.9 2005-05-16 09:31:10 rafal Exp $
+ * @version $Id: Statistics.java,v 1.9.4.1 2008-01-17 22:55:21 rafal Exp $
  */
 public class Statistics
 {
-    private Configuration config;
-    
-    private final Logger log;
-    
-    private final List<StatisticsProvider> providers;
+    private final MuninGraph[] graphs;
     
     /**
      * Creates new Statistics instance.
@@ -61,137 +50,22 @@ public class Statistics
      * @param log the logger.
      * @throws ConfigurationException if the configuration contains invalid entries.
      */
-    public Statistics(StatisticsProvider[] providers, Configuration config, Logger log)
+    public Statistics(StatisticsProvider[] providers)
         throws ConfigurationException
     {
-        this.providers = new ArrayList<StatisticsProvider>(Arrays.asList(providers));
-        this.config = config;
-        this.log = log;
-        configure(config);
-    }
-    
-    /**
-     * Returns the registered graphs.
-     * 
-     * @return the registered graphs.
-     */
-    public String[] getGraphNames()
-    {
-        List<String> l = new ArrayList<String>(graphs.size());
-        l.addAll(graphs.keySet());
-        Collections.sort(l);
-        return l.toArray(new String[l.size()]);
-    }
-    
-    /**
-     * Returns graph configuration for the specified graph
-     * 
-     * @param name the graph name.
-     * @return graph configuration.
-     */
-    public Graph getGraph(String name)
-    {
-        Graph g = graphs.get(name);
-        if(g == null)
-        {
-            throw new IllegalArgumentException("unknown graph "+name);
-        }
-        return g;
-    }
-    
-    /**
-     * Returns graph's data samples.
-     * 
-     * @param ds the DataSource.
-     * @return the graph's data samples.
-     */
-    public Number getDataValue(DataSource ds)
-    {
-        StatisticsProvider provider = dataSourceOwners.get(ds);
-        return provider.getDataValue(ds.getName());
-    }
-    
-    private Map<String,DataSource> dataSources = new HashMap<String,DataSource>();
-    
-    private Map<DataSource, StatisticsProvider> dataSourceOwners = 
-        new HashMap<DataSource,StatisticsProvider>();
-    
-    private Map<String,Graph> graphs = new HashMap<String,Graph>();
-    
-    private Map<Graph, StatisticsProvider> graphOwners = 
-        new HashMap<Graph, StatisticsProvider>();
-    
-    private void configure(Configuration config)
-        throws ConfigurationException
-    {
-        dataSources.clear();
-        dataSourceOwners.clear();
-        graphs.clear();
-        // declared data sources
+        List<MuninGraph> temp = new ArrayList<MuninGraph>();
         for(StatisticsProvider provider : providers)
         {
-            DataSource[] providerDataSources = provider.getDataSources();
-            for(DataSource dataSource : providerDataSources)
+            for(MuninGraph graph : provider.getGraphs())
             {
-                DataSource registered = dataSources.get(dataSource.getName());
-                if(registered != null)
-                {
-                    throw new ComponentInitializationError("statistics providers " + 
-                        provider.getName() + " and " + dataSourceOwners.get(registered).getName() + 
-                        " declare data source with name " + dataSource.getName());
-                }
-                dataSources.put(dataSource.getName(), dataSource);
-                dataSourceOwners.put(dataSource, provider);
+                temp.add(graph);
             }
         }
-        // data source overrides
-        Configuration[] overrideCfgs = config.getChildren("dataSource");
-        for(Configuration overrideCfg : overrideCfgs)
-        {
-            DataSource override = new DataSource(overrideCfg);
-            DataSource registered = dataSources.get(override.getName());
-            if(registered == null)
-            {
-                throw new ConfigurationException("found override for not registered data source "+
-                    override.getName(), overrideCfg.getPath(), overrideCfg.getLocation());
-            }
-            dataSources.put(override.getName(), new DataSource(registered, override));
-        }
-        // declared graphs
-        Map<Graph, StatisticsProvider> graphOwner = new HashMap<Graph, StatisticsProvider>();
-        for(StatisticsProvider provider : providers)
-        {
-            Graph[] providerGraphs = provider.getGraphs();
-            for(Graph graph : providerGraphs)
-            {
-                Graph registered = graphs.get(graph.getName());
-                if(registered != null)
-                {
-                    throw new ComponentInitializationError("statistics providers " + 
-                        provider.getName() + " and " + graphOwners.get(registered).getName() + 
-                        " declare graph with name " + graph.getName());
-                }
-                graphs.put(graph.getName(), graph);
-                graphOwners.put(graph, provider);
-            }
-        }
-        // graph overrides
-        overrideCfgs = config.getChildren("graph");
-        for(Configuration overrideCfg : overrideCfgs)
-        {
-            Graph override = new Graph(overrideCfg, dataSources);
-            Graph registered = graphs.get(override.getName());
-            if(registered == null)
-            {
-                throw new ConfigurationException("found override for not registered graph "+
-                    override.getName(), overrideCfg.getPath(), overrideCfg.getLocation());
-            }
-            graphs.put(override.getName(), new Graph(registered, override));
-        }
-        // update DataSource references inside Graph objects
-        for(Graph graph : graphs.values())
-        {
-            graph.updateDataSources(dataSources);
-        }
+        graphs = temp.toArray(new MuninGraph[temp.size()]);
+    }
+    
+    public MuninGraph[] getGraphs()
+    {
+        return graphs;
     }
 }
