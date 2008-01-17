@@ -54,8 +54,8 @@ import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
-import org.objectledge.statistics.DataSource;
-import org.objectledge.statistics.Graph;
+import org.objectledge.statistics.AbstractMuninGraph;
+import org.objectledge.statistics.MuninGraph;
 import org.objectledge.statistics.ReflectiveStatisticsProvider;
 import org.objectledge.utils.StringUtils;
 
@@ -63,7 +63,7 @@ import org.objectledge.utils.StringUtils;
  * A valve that counts processed HTTP requests and sessions.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RequestTrackingValve.java,v 1.5 2005-08-09 12:40:12 rafal Exp $
+ * @version $Id: RequestTrackingValve.java,v 1.5.2.1 2008-01-17 23:01:06 rafal Exp $
  */
 public class RequestTrackingValve
     extends ReflectiveStatisticsProvider
@@ -104,6 +104,8 @@ public class RequestTrackingValve
     private String currentTime;
     
     private long lastCurrentTime;
+    
+    private final MuninGraph[] graphs;
     
     /**
      * Creates new RequestTrackingValve instance.
@@ -155,6 +157,9 @@ public class RequestTrackingValve
         this.timeResolution = timeResolution;
         this.memoryMXBean = ManagementFactory.getMemoryMXBean();
         this.garbageCollectorMXBeans = ManagementFactory.getGarbageCollectorMXBeans();
+        this.graphs = new MuninGraph[] { new RequestsCount(fileSystem),
+                        new RequestsDuration(fileSystem), new ServedSessions(fileSystem),
+                        new ConcurrentSessions(fileSystem) };
     }
 
     /**
@@ -384,109 +389,115 @@ public class RequestTrackingValve
     }
     
     // statistics ///////////////////////////////////////////////////////////////////////////////
-    
+       
     /**
      * {@inheritDoc}
      */
-    public String getName()
+    public MuninGraph[] getGraphs()
     {
-        return "Request tracking";
+        return graphs;
     }
 
-    private static final DataSource REQUESTS_DS = new DataSource("requests_count",
-        "Served requests", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
-    
-    private static final Graph REQUESTS_GRAPH = new Graph("requests", "Served requests", 
-        null, new DataSource[] { REQUESTS_DS }, "requests");
-
-    private static final DataSource REQUESTS_DURATION_DS = new DataSource("requests_duration_value",
-        "Requests processing time", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
-    
-    private static final Graph REQUESTS_DURATION_GRAPH = new Graph("requests_duration",
-        "Requests processing time", null, new DataSource[] { REQUESTS_DURATION_DS },
-        "milliseconds");
-
-    private static final DataSource SESSIONS_DS = new DataSource("sessions_count",
-        "Served sessions", DataSource.Type.COUNTER, DataSource.Graph.LINE1);
-    
-    private static final Graph SESSIONS_GRAPH = new Graph("sessions", "Served sessions", 
-        null, new DataSource[] { SESSIONS_DS }, "sessions");
-
-    private static final DataSource CONCURRENT_SESSIONS_DS = new DataSource(
-        "concurrent_sessions_count", "Concurrent sessions", DataSource.Type.GAUGE,
-        DataSource.Graph.LINE1);
-
-    private static final Graph CONCURRENT_SESSIONS_GRAPH = new Graph("concurrent_sessions",
-        "Concurrent sessions", null, new DataSource[] { CONCURRENT_SESSIONS_DS },
-        "sessions");
-
-    private static final Graph[] GRAPHS = {
-        REQUESTS_GRAPH,
-        REQUESTS_DURATION_GRAPH,
-        SESSIONS_GRAPH,
-        CONCURRENT_SESSIONS_GRAPH
-    };
-    
-    private static final DataSource[] DATA_SOURCES = {
-        REQUESTS_DS,
-        REQUESTS_DURATION_DS,
-        SESSIONS_DS,
-        CONCURRENT_SESSIONS_DS        
-    };
-    
-    /**
-     * {@inheritDoc}
-     */
-    public Graph[] getGraphs()
+    public class RequestsCount
+        extends AbstractMuninGraph
     {
-        return GRAPHS;
+        public RequestsCount(FileSystem fs)
+        {
+            super(fs);
+        }
+        
+        public String getId()
+        {
+            return "requestsCount";
+        }
+        
+        /**
+         * Returns the total number of served requests.
+         * 
+         * @return the total number of served requests.
+         */
+        public Number getCount()
+        {
+            return new Integer(totalRequests);
+        }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public DataSource[] getDataSources()
+   
+    public class RequestsDuration
+        extends AbstractMuninGraph
     {
-        return DATA_SOURCES;
-    }
-
-    /**
-     * Returns the total number of served requests.
-     * 
-     * @return the total number of served requests.
-     */
-    public Number getRequestsCount()
-    {
-        return new Integer(totalRequests);
-    }
+        public RequestsDuration(FileSystem fs)
+        {
+            super(fs);
+        }
+        
+        public String getId()
+        {
+            return "requestsDuration";
+        }
+        
+        /**
+         * Returns the total duration of request processing.
+         * 
+         * @return the total duration of request processing.
+         */
+        public Number getDuration()
+        {
+            if(totalRequests > 0)
+            {
+                return new Double((double)totalDuration / totalRequests);
+            }
+            else
+            {
+                return 0f;
+            }
+        }
+    }    
     
-    /**
-     * Returns the total duration of request processing.
-     * 
-     * @return the total duration of request processing.
-     */
-    public Number getRequestsDurationValue()
+    public class ServedSessions
+        extends AbstractMuninGraph
     {
-        return new Long(totalDuration);
-    }
-    
-    /**
-     * Returns the total number of served sessions.
-     * 
-     * @return the total number of served sessions.
-     */
-    public Number getSessionsCount()
-    {
-        return new Integer(totalSessions);
+        public ServedSessions(FileSystem fs)
+        {
+            super(fs);
+        }
+        
+        public String getId()
+        {
+            return "servedSessions";
+        }
+        
+        /**
+         * Returns the total number of served sessions.
+         * 
+         * @return the total number of served sessions.
+         */
+        public Number getCount()
+        {
+            return new Integer(totalSessions);
+        }
     }
     
-    /**
-     * Returns the current number of concurrently active sessions.
-     * 
-     * @return the current number of concurrently active sessions.
-     */
-    public Number getConcurrentSessionsCount()
+    public class ConcurrentSessions
+        extends AbstractMuninGraph
     {
-        return new Integer(concurrentSessions);
+        public ConcurrentSessions(FileSystem fs)
+        {
+            super(fs);
+        }
+        
+        public String getId()
+        {
+            return "concurrentSessions";
+        }
+        
+        /**
+         * Returns the current number of concurrently active sessions.
+         * 
+         * @return the current number of concurrently active sessions.
+         */
+        public Number getCount()
+        {
+            return new Integer(concurrentSessions);
+        }
     }
 }
