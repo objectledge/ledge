@@ -22,7 +22,7 @@ $CVSROOT/CVSROOT/collect_diffs.rb --from $USER $@ < $TEMPFILE
 #
 # Invoke DamageControl
 #
-ruby /home/damagecontrol/current/bin/requestbuild --url http://localhost:4712/private/xmlrpc --projectname `echo $REPO | cut -d / -f 1`
+#ruby /home/damagecontrol/current/bin/requestbuild --url http://localhost:4712/private/xmlrpc --projectname `echo $REPO | cut -d / -f 1`
 
 #
 # clean up
