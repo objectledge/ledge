@@ -32,15 +32,16 @@ import java.util.concurrent.Semaphore;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
-import org.objectledge.statistics.DataSource;
-import org.objectledge.statistics.Graph;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.statistics.AbstractMuninGraph;
+import org.objectledge.statistics.MuninGraph;
 import org.objectledge.statistics.ReflectiveStatisticsProvider;
 
 /**
  * A valve that provides control over the number of threads executing another valve.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ConcurrencyControlValve.java,v 1.8 2005-08-04 11:54:09 rafal Exp $
+ * @version $Id: ConcurrencyControlValve.java,v 1.8.2.1 2008-01-17 22:57:17 rafal Exp $
  */
 public class ConcurrencyControlValve
     extends ReflectiveStatisticsProvider
@@ -53,6 +54,8 @@ public class ConcurrencyControlValve
     private final int limit;
 
     private volatile int threadCount = 0;
+    
+    private final MuninGraph[] graphs;
 
     /**
      * Creates new ConcurrencyControlValve instance.
@@ -60,7 +63,7 @@ public class ConcurrencyControlValve
      * @param nestedValve the valve to control.
      * @param limit the maximum number of threads allowed to execute, or 0 for unlimited.
      */
-    public ConcurrencyControlValve(final Valve nestedValve, final int limit)
+    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs, final int limit)
     {
         this.nestedValve = nestedValve;
         this.limit = limit;
@@ -72,6 +75,7 @@ public class ConcurrencyControlValve
         {
             semaphore = null;
         }
+        graphs = new MuninGraph[] { new Threads(fs) };
     }
 
     /**
@@ -81,10 +85,10 @@ public class ConcurrencyControlValve
      * @param config the confguration object.
      * @throws ConfigurationException if the configuration is incorrect.
      */
-    public ConcurrencyControlValve(final Valve nestedValve, final Configuration config)
+    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs, final Configuration config)
         throws ConfigurationException
     {
-        this(nestedValve, config.getChild("limit").getValueAsInteger());
+        this(nestedValve, fs, config.getChild("limit").getValueAsInteger());
     }
     
     /**
@@ -124,67 +128,56 @@ public class ConcurrencyControlValve
     /**
      * {@inheritDoc}
      */
-    public String getName()
+    public MuninGraph[] getGraphs()
     {
-        return "Concurrency control";
+        return graphs;
     }
 
-    private static final DataSource[] DATA_SOURCES = {
-                    new DataSource("concurrency_threads_running", "Running threads",
-                        DataSource.Type.GAUGE, DataSource.Graph.LINE1),
-                    new DataSource("concurrency_threads_waiting", "Waiting threads",
-                        DataSource.Type.GAUGE, DataSource.Graph.LINE1) };
-
-    private static final Graph[] GRAPHS = { new Graph("concurrency", "Execution concurrency", null,
-        DATA_SOURCES, "threads") };
-
-    /**
-     * {@inheritDoc}
-     */
-    public Graph[] getGraphs()
+    public class Threads
+        extends AbstractMuninGraph
     {
-        return GRAPHS;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public DataSource[] getDataSources()
-    {
-        return DATA_SOURCES;
-    }
-
-    /**
-     * Returns the number of concurrently executing threads.
-     * 
-     * @return the number of concurrently executing threads.
-     */
-    public Number getConcurrencyThreadsRunning()
-    {
-        if(semaphore != null)
-        {
-            return new Integer(limit - semaphore.availablePermits());
+        public Threads(FileSystem fs)
+        {   
+            super(fs);
         }
-        else
+        
+        public String getId()
         {
-            return threadCount;
+            return "threads";
         }
-    }
-
-    /**
-     * Returns the number of threads waiting for execution.
-     * 
-     * @return the number of threads waiting for execution.
-     */
-    public Number getConcurrencyThreadsWaiting()
-    {
-        if(semaphore != null)
+        
+        /**
+         * Returns the number of concurrently executing threads.
+         * 
+         * @return the number of concurrently executing threads.
+         */
+        public Number getRunning()
         {
-            return new Integer(semaphore.getQueueLength());
+            if(semaphore != null)
+            {
+                return new Integer(limit - semaphore.availablePermits());
+            }
+            else
+            {
+                return threadCount;
+            }
         }
-        else
+        
+        /**
+         * Returns the number of threads waiting for execution.
+         * 
+         * @return the number of threads waiting for execution.
+         */
+        public Number getWaiting()
         {
-            return 0;
+            if(semaphore != null)
+            {
+                return new Integer(semaphore.getQueueLength());
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
