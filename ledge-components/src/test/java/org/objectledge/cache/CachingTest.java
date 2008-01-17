@@ -90,7 +90,7 @@ public class CachingTest extends LedgeTestCase
                                                 getClass().getClassLoader());
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         config = getConfig(fs, "config/org.objectledge.cache.CacheFactory.xml");
-        caching = new DefaultCacheFactory(config, logger, pool, notification, persistence);
+        caching = new DefaultCacheFactory(config, logger, pool, notification, persistence, null);
     }
 
     public void testCaching()
