@@ -57,9 +57,6 @@
       <zeroOrMore>
         <element name="instance">
           <attribute name="name"/>
-          <optional>
-            <attribute name="graph"/>
-          </optional>
           <choice>
             <attribute name="alias"/>
             <ref name="mapConfig"/>
