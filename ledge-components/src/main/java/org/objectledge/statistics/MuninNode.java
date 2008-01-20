@@ -28,11 +28,16 @@
 package org.objectledge.statistics;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.Charset;
 
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.threads.Task;
@@ -40,73 +45,85 @@ import org.objectledge.threads.ThreadPool;
 import org.picocontainer.Startable;
 
 /**
- * An implementation of munin-node  
- *
+ * An implementation of munin-node
+ * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MuninNode.java,v 1.1 2005-05-13 06:46:21 rafal Exp $
+ * @version $Id: MuninNode.java,v 1.2 2008-01-20 15:17:31 rafal Exp $
  */
-public class MuninNode implements Startable
+public class MuninNode
+    implements Startable
 {
-    private final Logger log;
+    public static final int DEFAULT_PORT = 9000;
     
-    private final ThreadPool threadPool;
-    
-    private final MuninStatsisticsFormatter formatter;
-    
-    /** Number of incoming connections that can await handling. */ 
-    private static final int BACKLOG = 1;
+    public static final int DEFAULT_BUFFER_SIZE = 1024;
     
     /**
      * Creates new MuninNode instance.
      * 
+     * @param host host address to listen on, null for any.
+     * @param port the port on which the node will listen.
+     * @param bufferSize size of input and output buffers.
+     * @param statistics the statistics component.
      * @param threadPool the ThreadPool component.
      * @param log the log.
-     * @param statistics the statistics component.
-     * @param port the port on which the node will listen.
      * @throws IOException if the server socket could not be created.
      */
-    public MuninNode(ThreadPool threadPool, Logger log, Statistics statistics, int port)
+    public MuninNode(String host, int port, int bufferSize, Statistics statistics,
+        ThreadPool threadPool, Logger log)
         throws IOException
     {
-        this.threadPool = threadPool;
-        this.log = log;
-        this.formatter = new MuninStatsisticsFormatter(statistics);
         ServerSocketChannel channel = ServerSocketChannel.open();
         channel.configureBlocking(true);
-        channel.socket().bind(new InetSocketAddress(port), BACKLOG);
-        threadPool.runDaemon(new AcceptTask(channel, log));
+        SocketAddress address = host == null ? new InetSocketAddress(port) : new InetSocketAddress(
+            host, port);
+        channel.socket().bind(address);
+        threadPool.runDaemon(new AcceptTask(channel, bufferSize, statistics, threadPool, log));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    public MuninNode(Configuration config, Statistics statistics, ThreadPool threadPool, Logger log)
+        throws IOException
+    {
+        this(config.getChild("listen").getChild("host").getValue(null), config.getChild("listen")
+            .getChild("port").getValueAsInteger(DEFAULT_PORT), config.getChild("buffer-size")
+            .getValueAsInteger(DEFAULT_BUFFER_SIZE), statistics, threadPool, log);
+    }
+
     public void start()
     {
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void stop()
     {
+
     }
-    
+
     /**
      * A daemon task that accepts incoming connections and passes them to processors.
      */
-    private class AcceptTask 
+    private class AcceptTask
         extends Task
     {
+        private final Statistics statistics;
+
         private final ServerSocketChannel channel;
-        
+
         private final Logger log;
-        
-        public AcceptTask(ServerSocketChannel channel, Logger log)
+
+        private final int bufferSize;
+
+        private final ThreadPool threadPool;
+
+        public AcceptTask(ServerSocketChannel channel, int bufferSize, Statistics statistics, ThreadPool thereadPool,
+            Logger log)
         {
             this.channel = channel;
+            this.statistics = statistics;
+            this.bufferSize = bufferSize;
+            this.threadPool = thereadPool;
             this.log = log;
         }
-        
+
         /**
          * {@inheritDoc}
          */
@@ -125,7 +142,8 @@ public class MuninNode implements Startable
                 try
                 {
                     SocketChannel clientChannel = channel.accept();
-                    ProcessorTask processor = new ProcessorTask(clientChannel, log);
+                    ProcessorTask processor = new ProcessorTask(clientChannel, bufferSize,
+                        statistics, log);
                     threadPool.runWorker(processor);
                 }
                 catch(IOException e)
@@ -140,13 +158,13 @@ public class MuninNode implements Startable
          */
         public void terminate(Thread thread)
         {
-            log.info("accep task terminating");
+            log.info("accept task terminating");
             thread.interrupt();
             try
             {
                 channel.close();
             }
-            catch (IOException e) 
+            catch(IOException e)
             {
                 log.error("problem closing server socket channel");
             }
@@ -159,113 +177,172 @@ public class MuninNode implements Startable
     private class ProcessorTask
         extends Task
     {
+        private final Statistics statistics;
+
         private final SocketChannel channel;
-        
-        private final ByteBuffer buffer;
-        
+
         private final Logger log;
-        
-        public ProcessorTask(SocketChannel channel, Logger log)
+
+        private final Charset charset;
+
+        private final ByteBuffer inputBytes;
+
+        private final CharBuffer outputChars;
+
+        public ProcessorTask(SocketChannel channel, int bufferSize, Statistics statistics,
+            Logger log)
         {
+            this.statistics = statistics;
             this.channel = channel;
             this.log = log;
-            this.buffer = ByteBuffer.allocate(64);
+            inputBytes = ByteBuffer.allocate(bufferSize);
+            outputChars = CharBuffer.allocate(bufferSize);
+            this.charset = Charset.forName("ISO-8859-1");
         }
-        
+
         public void process(Context context)
         {
-            log.info("connection from "+channel.socket().getInetAddress());
-            // TODO implement
+            log.info("connection from " + channel.socket().getInetAddress());
             try
             {
-                channel.close();
+                String host = InetAddress.getLocalHost().getCanonicalHostName();
+                write("# cykltron munin node at " + host + "\n");
+                String command;
+                while(!(command = read()).equals("quit"))
+                {
+                    log.info("got command \""+ command+"\"");
+                    if(command.equals("")) // bug in munin?
+                    {
+                        break;
+                    }
+                    write(dispatch(command));
+                }
+                log.info("disconnecting");
             }
             catch(IOException e)
             {
-                log.error("problem closing connection", e);
+                log.error("IO exception", e);
+            }
+            finally
+            {
+                try
+                {
+                    channel.close();
+                }
+                catch(IOException e)
+                {
+                    log.error("problem closing connection", e);
+                }
             }
         }
-    }
-    
-    /**
-     * A class that provides the data from the Statistics component to Munin in textual form. 
-     */
-    private class MuninStatsisticsFormatter
-    {
-        private final Statistics statistics;
 
-/* Contents of removed Munin.vt template to be used for impelemnting the following methods
-#macro(EOL)
-    
-#end
-#if($parametersTool.isDefined('config'))
-#set($graph = $statistics.getGraph($parametersTool.config))
-graph_tile $graph.title
-#if($graph.createArgs)create_args $graph.createArgs#EOL()#end
-#if($graph.graphArgs)graph_args $graph.graphArgs#EOL()#end
-graph_order #foreach($dataSource in $graph.order)$dataSource.name #end#EOL()
-#if($graph.vLabel)graph_vlabel $graph.vLabel#EOL()#end
-#if($graph.totalLabel)graph_total $graph.totalLabel#EOL()#end
-scale#if($graph.notScaled) no#else yes#end#EOL()
-graph#if($graph.notDrawn) no#else yes#end#EOL()
-update#if($graph.notUpdated) no#else yes#end#EOL()
-#foreach($ds in $graph.order)
-${ds.name}.label $ds.label
-#if($ds.cdef)${ds.name}.cdef $ds.cdef#EOL()#end
-#if($ds.graph.toString().equals('HIDDEN'))
-${ds.name}.graph no
-#else
-${ds.name}.draw $ds.graph
-#end
-#if($ds.max)${ds.name}.max $ds.max#EOL()#end
-#if($ds.min)${ds.name}.min $ds.min#EOL()#end
-${ds.name}.type $ds.type
-#if($ds.minWarning || $ds.maxWarning)
-${ds.name}.warning $!{ds.minWarning}:$!{ds.maxWarning}
-#end
-#if($ds.minCritical || $ds.maxCritical)
-${ds.name}.critical $!{ds.minCritical}:$!{ds.maxCritical}
-#end
-#end
-#elseif($parametersTool.isDefined('data'))
-#set($graph = $statistics.getGraph($parametersTool.data))
-#foreach($ds in $graph.order)
-$ds.name $statistics.getDataValue($ds) 
-#end
-#else
-#foreach($name in $statistics.graphNames)
-$name
-#end
-#end
-*/
-        
-        public MuninStatsisticsFormatter(Statistics statistics)
+        private String read()
+            throws IOException
         {
-            this.statistics = statistics;
+            channel.read(inputBytes);
+            inputBytes.flip();
+            CharBuffer inputChars = charset.decode(inputBytes);
+            String string = inputChars.toString().trim();
+            inputBytes.clear();
+            return string;
         }
-        
-        public String nodes()
+
+        private void write(String string)
+            throws IOException
         {
-            // TODO implement
-            return "";
+            outputChars.put(string);
+            outputChars.flip();
+            ByteBuffer outputBytes = charset.encode(outputChars);
+            channel.write(outputBytes);
+            outputChars.clear();
         }
-        
-        public String config(String node)
+
+        private String dispatch(String command)
         {
-            // TODO implement
-            return "";
+            if(command.equals("version"))
+            {
+                return version();
+            }
+            if(command.equals("nodes"))
+            {
+                return nodes();
+            }
+            if(command.startsWith("list"))
+            {
+                return list();
+            }
+            if(command.startsWith("config"))
+            {
+                return config(command.substring(6).trim());
+            }
+            if(command.startsWith("fetch"))
+            {
+                return fetch(command.substring(5).trim());
+            }
+            if(command.equals("quit"))
+            {
+                return "good bye\n";
+            }
+            if(command.equals(""))
+            {
+                return "\n";
+            }
+            return "# Unknown command. Try list, nodes, config, fetch, version or quit\n";
         }
-        
-        public String fetch(String node)
+
+        private String version()
         {
-            // TODO implement
-            return "";
+            return "cyklotron munin node version 1.0\n";
         }
-        
-        public String version()
+
+        private String nodes()
         {
-            // TODO implement
-            return "";
+            return "cyklotron\n.\n";
+        }
+
+        private String list()
+        {
+            StringBuilder buff = new StringBuilder();
+            for (MuninGraph graph : statistics.getGraphs())
+            {
+                buff.append(graph.getId()).append(' ');
+            }
+            buff.append('\n');
+            return buff.toString();
+        }
+
+        private String config(String item)
+        {
+            StringBuilder buff = new StringBuilder();
+            for (MuninGraph graph : statistics.getGraphs())
+            {
+                if(graph.getId().equals(item))
+                {
+                    buff.append(graph.getConfig().trim()).append("\n");
+                    break;
+                }
+            }
+            buff.append(".\n");
+            return buff.toString();
+        }
+
+        private String fetch(String item)
+        {
+            StringBuilder buff = new StringBuilder();
+            for (MuninGraph graph : statistics.getGraphs())
+            {
+                if(graph.getId().equals(item))
+                {
+                    for (String variable : graph.getVariables())
+                    {
+                        buff.append(variable).append(".value ").append(graph.getValue(variable))
+                            .append("\n");
+                    }
+                    break;
+                }
+            }
+            buff.append(".\n");
+            return buff.toString();
         }
     }
 }

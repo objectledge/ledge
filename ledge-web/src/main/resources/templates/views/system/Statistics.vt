@@ -9,13 +9,12 @@ div.d1 {
 #macro(EOL)
 
 #end
-#foreach($graphName in $statistics.graphNames)
-#set($graph = $statistics.getGraph($graphName))
+#foreach($graph in $statistics.graphs)
 <h3>$graph.title</h3>
 <div class="d1">
-#foreach($ds in $graph.order)
-#set($value = $statistics.getDataValue($ds))
-$ds.label =#if($value) $value#else U#end <br/>
+#foreach($var in $graph.variables)
+#set($value = $graph.getValue($var))
+$graph.getLabel($var) =#if($value) $value#else U#end <br/>
 #end
 </div>
 #end

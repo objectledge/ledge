@@ -47,14 +47,12 @@ import org.picocontainer.Startable;
  * An add-on component for Statistics component that periodically logs statistics values to a file.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsWriter.java,v 1.1 2005-05-13 08:26:22 rafal Exp $
+ * @version $Id: StatisticsWriter.java,v 1.2 2008-01-20 15:17:31 rafal Exp $
  */
 public class StatisticsWriter 
     implements Startable
 {
     private final Statistics statistics;
-    
-    private final ThreadPool threadPool;
     
     /**
      * Creates new StatisticsWriter instance.
@@ -62,14 +60,13 @@ public class StatisticsWriter
      * @param statistics the Statistics component.
      * @param fileSystem the FileSystem component.
      * @param threadPool the ThreadPool component.
-     * @param path the path of the satistics log file, FileSystem relative.
-     * @param interval interval between stats dumps in seconds.
+     * @param path the path of the statistics log file, FileSystem relative.
+     * @param interval interval between statistics dumps in seconds.
      */
     public StatisticsWriter(Statistics statistics, FileSystem fileSystem, ThreadPool threadPool,
         String path, int interval)
     {
         this.statistics = statistics;
-        this.threadPool = threadPool;
         PrintWriter pw;
         try
         {
@@ -108,20 +105,20 @@ public class StatisticsWriter
     private void printHeader(PrintWriter pw)
     {
         pw.print("# time");
-        String[] graphs = statistics.getGraphNames();
+        MuninGraph[] graphs = statistics.getGraphs();
         if(graphs.length > 0)
         {
             pw.print(", ");
         }
         for(int i = 0; i < graphs.length; i++)
         {
-            DataSource[] dataSources = statistics.getGraph(graphs[i]).getOrder();
-            for(int j = 0; j < dataSources.length; j++)
+            String[] variables = graphs[i].getVariables(); 
+            for(int j = 0; j < variables.length; j++)
             {
-                pw.print(graphs[i]);
+                pw.print(graphs[i].getId());
                 pw.print(".");
-                pw.print(dataSources[j].getName());
-                if(j < dataSources.length - 1 || i < graphs.length - 1)
+                pw.print(variables[j]);
+                if(j < variables.length - 1 || i < graphs.length - 1)
                 {
                     pw.print(", ");
                 }
@@ -134,17 +131,17 @@ public class StatisticsWriter
     private void printStats(PrintWriter pw)
     {
         pw.print(System.currentTimeMillis());
-        String[] graphs = statistics.getGraphNames();
+        MuninGraph[] graphs = statistics.getGraphs();
         if(graphs.length > 0)
         {
             pw.print(", ");
         }
         for(int i = 0; i < graphs.length; i++)
         {
-            DataSource[] dataSources = statistics.getGraph(graphs[i]).getOrder();
-            for(int j = 0; j < dataSources.length; j++)
+            String[] variables = graphs[i].getVariables(); 
+            for(int j = 0; j < variables.length; j++)
             {
-                Number value = statistics.getDataValue(dataSources[j]);
+                Number value = graphs[i].getValue(variables[j]);
                 if(value == null)
                 {
                     pw.print("U");
@@ -153,7 +150,7 @@ public class StatisticsWriter
                 {
                     pw.print(value);
                 }
-                if(j < dataSources.length - 1 || i < graphs.length - 1)
+                if(j < variables.length - 1 || i < graphs.length - 1)
                 {
                     pw.print(", ");
                 }

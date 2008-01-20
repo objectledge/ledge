@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--  
- Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ Copyright (c) 2003-2008, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
  
  Redistribution and use in source and binary forms, with or without modification,  
@@ -29,51 +29,22 @@
 
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
   <start>
-    <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-      <zeroOrMore>
-        <element name="implementation">
-          <attribute name="type"/>
-          <attribute name="class"/>    
-        </element>
-      </zeroOrMore>
-      <zeroOrMore>
-        <element name="factory">
-          <attribute name="name"/>
-          <attribute name="class"/>
-          <zeroOrMore>
-            <element name="parameter">
-              <attribute name="name"/>
-              <attribute name="value"/>
-            </element>
-          </zeroOrMore> 
-        </element>
-      </zeroOrMore>
-      <zeroOrMore>
-        <element name="alias">
-          <attribute name="name"/>
-          <ref name="mapConfig"/>          
-        </element>
-      </zeroOrMore>
-      <zeroOrMore>
-        <element name="instance">
-          <attribute name="name"/>
-          <optional>
-            <attribute name="graph"/>
-          </optional>
-          <choice>
-            <attribute name="alias"/>
-            <ref name="mapConfig"/>
-          </choice>
-        </element>
-      </zeroOrMore>
+    <element name="config">
+	  <element name="listen">
+	    <optional>
+	      <element name="host">
+	        <text/>
+	      </element>
+	    </optional>
+	    <element name="port">
+	      <text/>
+	    </element>
+	  </element>
+      <optional>
+	    <element name="buffer-size">
+	      <text/>
+	    </element>
+      </optional>
     </element>
   </start>
-  <define name="mapConfig">
-    <oneOrMore>
-      <element name="config">
-        <text/>
-      </element>      
-    </oneOrMore>
-  </define>
 </grammar>
-

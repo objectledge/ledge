@@ -59,8 +59,12 @@ import org.objectledge.cache.spi.StatisticsMap;
 import org.objectledge.cache.spi.TimeoutMap;
 import org.objectledge.context.Context;
 import org.objectledge.database.persistence.Persistence;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.notification.Notification;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.statistics.AbstractMuninGraph;
+import org.objectledge.statistics.MuninGraph;
+import org.objectledge.statistics.StatisticsProvider;
 import org.objectledge.threads.Task;
 import org.objectledge.threads.ThreadPool;
 
@@ -79,10 +83,10 @@ import org.objectledge.threads.ThreadPool;
  * number <i>n</i> becomes the delegate of the layer <i>n+1</i>.</p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DefaultCacheFactory.java,v 1.11 2008-01-02 17:21:54 rafal Exp $
+ * @version $Id: DefaultCacheFactory.java,v 1.12 2008-01-20 15:17:50 rafal Exp $
  */
 public class DefaultCacheFactory
-    implements CacheFactorySPI, CacheFactory
+    implements CacheFactorySPI, CacheFactory, StatisticsProvider
 {
     // constants ////////////////////////////////////////////////////////////
     /** Type constant for HashMap. */
@@ -195,6 +199,9 @@ public class DefaultCacheFactory
     /** The persistence */
     private Persistence persistence;
     
+    /** Configured Munin graphs */
+    private final MuninGraph[] graphs;
+    
     // initialization ////////////////////////////////////////////////////////
 
     /**
@@ -205,12 +212,13 @@ public class DefaultCacheFactory
      * @param threadPool the thread pool.
      * @param notification the notification.
      * @param persistence the persistence.
+     * @param fileSystem TODO
      * @throws ConfigurationException thrown if configuration is invalid.
      * @throws ClassNotFoundException thrown if one of the class not found.
      */
     public DefaultCacheFactory(Configuration config, Logger logger, 
                     ThreadPool threadPool, Notification notification,
-                    Persistence persistence)
+                    Persistence persistence, FileSystem fileSystem)
         throws ConfigurationException, ClassNotFoundException
     {
         this.config = config;
@@ -271,6 +279,7 @@ public class DefaultCacheFactory
             String name = factories[i].getAttribute("name");
             factoryConfigurations.put(name,factories[i]);
         }
+        List<MuninGraph> graphList = new ArrayList<MuninGraph>();
         Configuration[] instanceNodes = config.getChildren("instance");
         for(int i =0; i < instanceNodes.length;i++)
         {
@@ -288,10 +297,34 @@ public class DefaultCacheFactory
             }
             Map map = buildInstance(name, instanceConfig);
             instances.put(name, map);
+            boolean graphRequested  = instanceNodes[i].getAttributeAsBoolean("graph", false);
+            if(graphRequested && fileSystem != null)
+            {
+                if(map instanceof StatisticsMap)
+                {
+                    graphList.add(new CacheSizeGraph(name, (StatisticsMap)map, fileSystem));
+                    graphList.add(new CacheRequestsGraph(name, (StatisticsMap)map, fileSystem));
+                    graphList.add(new CacheEfficiencyGraph(name, (StatisticsMap)map, fileSystem));
+                }
+                else
+                {
+                    throw new ConfigurationException("graph requested for instance " + name
+                        + "but outermost map is not an StatisticsMap", instanceNodes[i].getPath(),
+                        instanceNodes[i].getLocation());
+                }
+            }
         }
+        graphs = graphList.toArray(new MuninGraph[graphList.size()]);
         threadPool.runDaemon(new DelayedUpdateTask());
         threadPool.runDaemon(new WeakHashMapExpungeTask());        
-    }                          
+    }      
+    
+    // StatisticsProvider interface /////////////////////////////////////////////
+    
+    public MuninGraph[] getGraphs()
+    {
+        return graphs;
+    }
 
     // CacheFactorySPI interface ////////////////////////////////////////////////
 
@@ -816,4 +849,93 @@ public class DefaultCacheFactory
             logger.info("expunge done in " + time + "ms, " + collected + " maps were collected since last run");
         }
     }
+    
+    public abstract class AbstractCacheStatisticsGraph
+        extends AbstractMuninGraph
+    {
+        protected final String name;
+        protected final StatisticsMap map;
+    
+        public AbstractCacheStatisticsGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        {
+            super(fileSystem);
+            this.name = name;
+            this.map = map;
+        }
+        
+        public String getConfig()
+        {
+            String config = super.getConfig();
+            return config.replace("${name}", name);
+        }
+    }
+    
+    public class CacheEfficiencyGraph
+        extends AbstractCacheStatisticsGraph
+    {
+        public CacheEfficiencyGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        {
+            super(name, map, fileSystem);
+        }
+        
+        public String getId()
+        {
+            return "cache_" + name + "_efficiency";
+        }
+        
+        public double getHit()
+        {
+            if(map.getRequestCount() == 0)
+            {
+                return 0.0d;
+            }
+            else
+            {
+                return 100.0d * map.getHitCount() / map.getRequestCount();
+            }
+        }
+        
+        public double getMiss()
+        {
+            return 100.0d - getHit();
+        }
+    }
+    
+    public class CacheSizeGraph
+        extends AbstractCacheStatisticsGraph
+    {
+        public CacheSizeGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        {
+            super(name, map, fileSystem);
+        }
+        
+        public String getId()
+        {
+            return "cache_" + name + "_size";
+        }
+        
+        public int getSize()
+        {
+            return map.size();
+        }
+    }
+    
+    public class CacheRequestsGraph
+        extends AbstractCacheStatisticsGraph
+    {
+        public CacheRequestsGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        {
+            super(name, map, fileSystem);
+        }
+        
+        public String getId()
+        {
+            return "cache_" + name + "_demand";
+        }
+        
+        public int getCount()
+        {
+            return map.getRequestCount();
+        }
+    }       
 }

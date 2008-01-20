@@ -32,36 +32,15 @@ package org.objectledge.statistics;
  * A statistics data provider. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: StatisticsProvider.java,v 1.2 2005-05-11 07:16:36 rafal Exp $
+ * @version $Id: StatisticsProvider.java,v 1.3 2008-01-20 15:17:31 rafal Exp $
  */
 public interface StatisticsProvider
 {
-    /**
-     * Returns the provider name.
-     * 
-     * @return the provider name.
-     */
-    String getName();
-    
     /**
      * Returns graphs in this provider.
      * 
      * @return graphs in this provider.
      */
-    Graph[] getGraphs();
-    
-    /**
-     * Returns the data sources in this provider.
-     * 
-     * @return data sources in this provider.
-     */
-    DataSource[] getDataSources();
-    
-    /**
-     * Return the data probes.
-     * 
-     * @param name of the data source.
-     * @return a vector of data probes.
-     */
-    Number getDataValue(String name);
-}
+    MuninGraph[] getGraphs();
+}    
+
