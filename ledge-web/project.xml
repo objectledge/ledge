@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.52 2006-05-31 15:29:42 zwierzem Exp $ -->
+<!-- $Id: project.xml,v 1.53 2008-01-21 00:11:59 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -47,6 +47,7 @@
         <includes>
           <include>**/*.rng</include>
           <include>**/*.vm</include>
+          <include>**/*.munin</include>          
         </includes>
       </resource>
       <resource>
@@ -170,9 +171,15 @@
       <url>http://jakarta.apache.org/commons/collections</url>
     </dependency>
     <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+      <url>http://jakarta.apache.org/commons/lang</url>
+    </dependency>    
+    <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
-      <version>1.5-dev-20050406</version>
+      <version>1.5</version>
       <url>http://jakarta.apache.org/velocity/</url>
     </dependency>
     <dependency>
