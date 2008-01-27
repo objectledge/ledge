@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.33 2008-01-08 19:19:48 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.33.2.1 2008-01-27 21:02:46 rafal Exp $
  */
 public class FileSystem
 {
@@ -463,16 +463,19 @@ public class FileSystem
     public String[] list(String path)
         throws IOException
     {
-        if (!exists(path)) {
-            throw new IOException(path+" does not exist");        
+        // acquire Log4j logger directly - FileSystem needs to work before LoggerFactory compoennt
+        // is initialized.
+        Logger log = Logger.getLogger(this.getClass());
+        if(!exists(path))
+        {
+            throw new IOException(path + " does not exist");
         }
         Set<String> results = new HashSet<String>();
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (FileSystemProvider fp : providers)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
-            if (fp.exists(path))
+            if(fp.exists(path))
             {
-                if (fp.isDirectory(path))
+                if(fp.isDirectory(path))
                 {
                     if(fp.canRead(path))
                     {
@@ -480,18 +483,21 @@ public class FileSystem
                     }
                     else
                     {
-                        throw new IOException(fp.getName() + " provider has " + path
+                        // complain, but continue.
+                        log.error(fp.getName() + " provider has " + path
                             + " but it's not readable.");
                     }
                 }
                 else
                 {
+                    log
+                        .error(fp.getName() + " provider has " + path
+                            + " but it's not a directory.");
                     // CYKLO-474
                     // trying to collect some information about the context in which the bug occurs
-                    Logger log = Logger.getLogger(this.getClass());
                     StringBuffer sb = new StringBuffer();
                     sb.append("CYKLO-474 assessment for ").append(path).append("\n");
-                    for(FileSystemProvider p : providers)
+                    for (FileSystemProvider p : providers)
                     {
                         sb.append(p.getName()).append(": ");
                         sb.append("exists ").append(p.exists(path)).append(", ");
@@ -500,8 +506,6 @@ public class FileSystem
                         sb.append("canRead ").append(p.canRead(path)).append("\n");
                     }
                     log.error(sb.toString().trim());
-                    throw new IOException(fp.getName() + " provider has " + path
-                        + " but it's not a directory.");                    
                 }
             }
         }
