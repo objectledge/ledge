@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.33.2.1 2008-01-27 21:02:46 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.33.2.2 2008-01-28 00:25:52 rafal Exp $
  */
 public class FileSystem
 {
@@ -471,6 +471,7 @@ public class FileSystem
             throw new IOException(path + " does not exist");
         }
         Set<String> results = new HashSet<String>();
+        boolean readableDirectory = false;
         for (FileSystemProvider fp : providers)
         {
             if(fp.exists(path))
@@ -479,6 +480,7 @@ public class FileSystem
                 {
                     if(fp.canRead(path))
                     {
+                        readableDirectory = true;
                         results.addAll(fp.list(path));
                     }
                     else
@@ -507,6 +509,12 @@ public class FileSystem
                     }
                     log.error(sb.toString().trim());
                 }
+            }
+            // some provider claimed that item denoted by path exists, but then none were able
+            // to produce a listing
+            if(!readableDirectory)
+            {
+                throw new IOException(path+" is not a readable directory");
             }
         }
         return results.toArray(new String[0]);
