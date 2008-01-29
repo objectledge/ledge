@@ -13,6 +13,9 @@
     <module>../ledge-components</module>
     <module>../ledge-container</module>
     <module>../ledge-gpl</module>
+    <module>../ledge-lgpl</module>
+    <module>../ledge-web</module>
+    <module>../ledge-forms</module>
   </modules>
   <dependencyManagement>
     <dependencies>
