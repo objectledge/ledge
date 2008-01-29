@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.52.2.1 2008-01-21 17:36:12 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.52 2006-05-31 15:29:42 zwierzem Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -47,7 +47,6 @@
         <includes>
           <include>**/*.rng</include>
           <include>**/*.vm</include>
-          <include>**/*.munin</include>
         </includes>
       </resource>
       <resource>
