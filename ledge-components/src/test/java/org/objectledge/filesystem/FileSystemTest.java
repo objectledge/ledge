@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  *
  * <p>Created on Jan 8, 2004</p>
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: FileSystemTest.java,v 1.11 2007-05-31 20:28:56 rafal Exp $
+ * @version $Id: FileSystemTest.java,v 1.11.2.1 2008-01-29 18:18:36 rafal Exp $
  */
 public class FileSystemTest extends TestCase
 {
@@ -61,20 +61,55 @@ public class FileSystemTest extends TestCase
     public void setUp()
         throws Exception
     {
-        fs.createNewFile("filex");
+        fs.createNewFile("file_1");
+        fs.mkdirs("directory_1");
+        // ensure those are gone even if previous test fails
+        if(fs.exists("new_file_1"))
+        {
+            fs.delete("new_file_1");
+        }
+        if(fs.exists("new_file_1"))
+        {
+            fs.delete("new_file_1");
+        }
+        if(fs.exists("new_directory_1"))
+        {
+            fs.deleteRecursive("new_directory_1");
+        }
+        if(fs.exists("new_directory_2"))
+        {
+            fs.deleteRecursive("new_directory_2");
+        }
     }
 
     public void tearDown()
         throws Exception
     {
-        fs.delete("filex");
+        fs.delete("file_1");
+        fs.deleteRecursive("directory_1");
+        if(fs.exists("new_file_1"))
+        {
+            fs.delete("new_file_1");
+        }
+        if(fs.exists("new_file_1"))
+        {
+            fs.delete("new_file_1");
+        }
+        if(fs.exists("new_directory_1"))
+        {
+            fs.deleteRecursive("new_directory_1");
+        }
+        if(fs.exists("new_directory_2"))
+        {
+            fs.deleteRecursive("new_directory_2");
+        }
     }
 
     public void testURL()
         throws Exception
     {
         
-        URL url = fs.getResource("/filex");
+        URL url = fs.getResource("/file_1");
         InputStream is = url.openStream();
         is.read();  
         is.close();
@@ -98,7 +133,7 @@ public class FileSystemTest extends TestCase
         assertEquals(fs.getProvider("local").getName(),"local");
         try
         {
-            assertEquals(fs.getProvider("foo").getName(),"foo");
+            assertEquals(fs.getProvider("nonexistent_provider").getName(),"nonexistent_provider");
             fail("should throw the exception");
         }
         catch(IllegalArgumentException e)
@@ -110,37 +145,40 @@ public class FileSystemTest extends TestCase
     public void testGetResource()
             throws Exception
     {
-        assertNull(fs.getResource("foo/bar"));
+        assertNull(fs.getResource("nonexistent_file"));
     }
 
 
     public void testGetOutputStream()
             throws Exception
     {
-        OutputStream os = fs.getOutputStream("filex");
+        OutputStream os = fs.getOutputStream("new_file_1");
         assertNotNull(os);
         os.close();
         
-        os = fs.getOutputStream("foo");
+        os = fs.getOutputStream("new_file_2");
         assertNotNull(os);
         os.close();
-        assertEquals(fs.exists("foo"),true);
-        fs.delete("foo");
-        assertEquals(fs.exists("foo"),false);
-        os = fs.getOutputStream("filex",true);
+
+        assertEquals(fs.exists("new_file_2"),true);
+        fs.delete("new_file_2");
+        assertEquals(fs.exists("new_file_2"),false);
+        os = fs.getOutputStream("new_file_1",true);
         assertNotNull(os);
         os.close();
-        os = fs.getOutputStream("foo",true);
+        
+        os = fs.getOutputStream("new_file_2",true);
         assertNotNull(os);
         os.close();
-        fs.delete("foo");
-        assertEquals(fs.exists("foo"),false);
+        
+        fs.delete("new_file_2");
+        assertEquals(fs.exists("new_file_2"),false);
     }
             
     public void testGetRandomAccess()
        throws Exception
     {
-        RandomAccessFile file = fs.getRandomAccess("filex","rw");
+        RandomAccessFile file = fs.getRandomAccess("file_1","rw");
         assertNotNull(file);
         file.write("abcd".getBytes(), 0, 4);
         byte[] buff = new byte[4];
@@ -177,44 +215,44 @@ public class FileSystemTest extends TestCase
     public void testIsFile()
         throws Exception
     {
-        assertEquals(fs.isFile("filex"),true);
-        assertEquals(fs.isFile("config"),false);
+        assertEquals(fs.isFile("file_1"),true);
+        assertEquals(fs.isFile("directory_1"),false);
     }
     
     
     public void testIsDirectory()
         throws Exception
     {
-        assertEquals(fs.isDirectory("filex"),false);
-        assertEquals(fs.isDirectory("config"),true);
+        assertEquals(fs.isDirectory("file_1"),false);
+        assertEquals(fs.isDirectory("directory_1"),true);
     }
 
     public void testCanRead()
         throws Exception
     {
-        assertEquals(fs.canRead("filex"),true);
-        assertEquals(fs.canRead("foo"),false);
+        assertEquals(fs.canRead("file_1"),true);
+        assertEquals(fs.canRead("nonexistent_file"),false);
     }
     
     public void testCanWrite()
         throws Exception
     {
-        assertEquals(fs.canWrite("filex"),true);
-        assertEquals(fs.canRead("foo"),false);
+        assertEquals(fs.canWrite("file_1"),true);
+        assertEquals(fs.canRead("nonexistent_file"),false);
     }
     
     public void testLastModified()
         throws Exception
     {
-        assertEquals(fs.lastModified("filex") == -1L,false);
-        assertEquals(fs.lastModified("foo"),-1L);
+        assertEquals(fs.lastModified("file_1") == -1L,false);
+        assertEquals(fs.lastModified("nonexistent_file"),-1L);
     }
     
     public void testLength()
         throws Exception
     {
-        assertEquals(fs.length("filex"),0);
-        assertEquals(fs.length("foo"),-1L);
+        assertEquals(fs.length("file_1"),0);
+        assertEquals(fs.length("nonexistent_file"),-1L);
     }
         
     public void testList()
@@ -223,7 +261,7 @@ public class FileSystemTest extends TestCase
         assertEquals(fs.list("directory").length,5);
         try
         {
-            assertEquals(fs.list("directory_that_does_not_exist").length,2);
+            fs.list("nonexistent_directory");
             fail("should throw the exception");
         }
         catch(IOException e)
@@ -232,44 +270,43 @@ public class FileSystemTest extends TestCase
         }
         try
         {
-            assertEquals(fs.list("filex").length,2);
+            fs.list("file_1");
             fail("should throw the exception");
         }
         catch(IOException e)
         {
             //ok!
         }
-        //assertEquals(fs.length("foo"),-1L);
     }
     
     public void testCreateNewFile()
         throws Exception
     {
-        boolean result = fs.createNewFile("filex");
+        boolean result = fs.createNewFile("file_1");
         assertEquals(result,false);
-        result = fs.createNewFile("foo");
+        result = fs.createNewFile("new_file_1");
         assertEquals(result,true);
-        fs.delete("foo");
+        fs.delete("new_file_1");
     }
 
     public void testMkdirs()
         throws IOException
     {
-        assertEquals(fs.exists("foo"),false);
+        assertEquals(fs.exists("new_directory_1"),false);
         try
         {
-            fs.mkdirs("foo");
+            fs.mkdirs("new_directory_1");
         }
         catch(UnsupportedCharactersInFilePathException e)
         {
             fail("simple ascii characters should be supported: "+e.getMessage());
         }
-        assertEquals(fs.exists("foo"),true);
-        assertEquals(fs.isDirectory("foo"),true);
-        fs.delete("foo");
+        assertEquals(fs.exists("new_directory_1"),true);
+        assertEquals(fs.isDirectory("new_directory_1"),true);
+        fs.delete("new_directory_1");
         try
         {
-            fs.mkdirs("filex");
+            fs.mkdirs("file_1");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -283,7 +320,7 @@ public class FileSystemTest extends TestCase
     {
         try
         {
-            fs.delete("foo");
+            fs.delete("nonexistent_file");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -297,28 +334,28 @@ public class FileSystemTest extends TestCase
     {
         try
         {
-            fs.mkdirs("foo");
+            fs.mkdirs("new_directory_1");
         }
         catch(UnsupportedCharactersInFilePathException e)
         {
             fail("simple ascii characters should be supported: "+e.getMessage());
         }
-        assertEquals(fs.exists("foo"),true);
-        assertEquals(fs.exists("bar"),false);
+        assertEquals(fs.exists("new_directory_1"),true);
+        assertEquals(fs.exists("new_directory_2"),false);
         try
         {
-            fs.rename("foo","bar");
+            fs.rename("new_directory_1","new_directory_2");
         }
         catch(UnsupportedCharactersInFilePathException e)
         {
             fail("simple ascii characters should be supported: "+e.getMessage());
         }
-        assertEquals(fs.exists("foo"),false);
-        assertEquals(fs.exists("bar"),true);
-        fs.delete("bar");
+        assertEquals(fs.exists("new_directory_1"),false);
+        assertEquals(fs.exists("new_directory_2"),true);
+        fs.delete("new_directory_2");
         try
         {
-            fs.rename("bar","bar2");
+            fs.rename("nonexistent_file", "nonexistent_file_2");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -330,20 +367,20 @@ public class FileSystemTest extends TestCase
     public void testCopyFile()
         throws IOException
     {
-        assertEquals(fs.exists("foo"),false);
+        assertEquals(fs.exists("new_file_1"),false);
         try
         {
-            fs.copyFile("filex","foo");
+            fs.copyFile("file_1","new_file_1");
         }
         catch(UnsupportedCharactersInFilePathException e)
         {
             fail("simple ascii characters should be supported: "+e.getMessage());
         }
-        assertEquals(fs.exists("foo"),true);
-        fs.delete("foo");
+        assertEquals(fs.exists("new_file_1"),true);
+        fs.delete("new_file_1");
         try
         {
-            fs.copyFile("foo","bar");
+            fs.copyFile("new_file_1","new_file_2");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -352,7 +389,7 @@ public class FileSystemTest extends TestCase
         }
         try
         {
-            fs.copyFile("directory","bar");
+            fs.copyFile("directory_1", "new_directory_1");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -368,19 +405,19 @@ public class FileSystemTest extends TestCase
         int size = fs.list("directory").length;
         try
         {
-            fs.copyDir("directory","directory2");
+            fs.copyDir("directory","new_directory_1");
         }
         catch(UnsupportedCharactersInFilePathException e)
         {
             fail("simple ascii characters should be supported: "+e.getMessage());
         }
-        assertEquals(fs.exists("directory2"),true);
-        assertEquals(fs.list("directory2").length,size);
-        fs.deleteRecursive("directory2");
-        assertEquals(fs.exists("directory2"),false);
+        assertEquals(fs.exists("new_directory_1"),true);
+        assertEquals(fs.list("new_directory_1").length,size);
+        fs.deleteRecursive("new_directory_1");
+        assertEquals(fs.exists("new_directory_1"),false);
         try
         {
-            fs.copyDir("foo","bar");
+            fs.copyDir("nonexistent_directory","new_directory_1");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -389,7 +426,7 @@ public class FileSystemTest extends TestCase
         }
         try
         {
-            fs.copyFile("directory","fail");
+            fs.copyFile("directory","new_directory_1");
             fail("should throw the exception");
         }
         catch(Exception e)
@@ -401,27 +438,27 @@ public class FileSystemTest extends TestCase
     public void testReadStringOuputStream()
         throws Exception
     {
-        fs.createNewFile("foo");
-        assertEquals(fs.exists("foo"),true);
-        fs.write("foo","bar","ISO-8859-2");
-        assertEquals(fs.exists("foo"),true);
-        assertEquals(fs.read("foo","ISO-8859-2"),"bar");
-        assertEquals(fs.read("foo")[0],"bar".getBytes("ISO-8859-2")[0]);
-        assertEquals(fs.read("foo")[1],"bar".getBytes("ISO-8859-2")[1]);
-        assertEquals(fs.read("foo")[2],"bar".getBytes("ISO-8859-2")[2]);
+        fs.createNewFile("new_file_1");
+        assertEquals(fs.exists("new_file_1"),true);
+        fs.write("new_file_1","bar","ISO-8859-2");
+        assertEquals(fs.exists("new_file_1"),true);
+        assertEquals(fs.read("new_file_1","ISO-8859-2"),"bar");
+        assertEquals(fs.read("new_file_1")[0],"bar".getBytes("ISO-8859-2")[0]);
+        assertEquals(fs.read("new_file_1")[1],"bar".getBytes("ISO-8859-2")[1]);
+        assertEquals(fs.read("new_file_1")[2],"bar".getBytes("ISO-8859-2")[2]);
         ByteArrayOutputStream baos = new ByteArrayOutputStream(4);
-        fs.read("foo", baos);
+        fs.read("new_file_1", baos);
         assertEquals(baos.toString("ISO-8859-2"),"bar");
         
-        fs.createNewFile("foo");
-        fs.write("foo","bar".getBytes("ISO-8859-2"));
-        assertEquals(fs.read("foo","ISO-8859-2"),"bar");
+        fs.createNewFile("new_file_1");
+        fs.write("new_file_1","bar".getBytes("ISO-8859-2"));
+        assertEquals(fs.read("new_file_1","ISO-8859-2"),"bar");
             
-        fs.createNewFile("foo");
-        fs.write("foo",new ByteArrayInputStream("bar".getBytes("ISO-8859-2")));
-        assertEquals(fs.read("foo","ISO-8859-2"),"bar");
+        fs.createNewFile("new_file_1");
+        fs.write("new_file_1",new ByteArrayInputStream("bar".getBytes("ISO-8859-2")));
+        assertEquals(fs.read("new_file_1","ISO-8859-2"),"bar");
 
-        fs.delete("foo");
+        fs.delete("new_file_1");
     }
     
     public void testPaths()
@@ -456,7 +493,5 @@ public class FileSystemTest extends TestCase
         assertFalse(fs.checkPathChars(""));
         assertFalse(fs.checkPathChars(null));
     }
-    
-    
 }
 
