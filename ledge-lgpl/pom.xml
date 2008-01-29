@@ -22,12 +22,37 @@
       <artifactId>jotm</artifactId>
     </dependency>
     <dependency>
-      <groupId>xapool</groupId>
+      <groupId>org.objectledge.ext</groupId>
       <artifactId>xapool</artifactId>
     </dependency>
     <dependency>
-      <groupId>gnu-hylafax</groupId>
+      <groupId>org.objectledge.ext</groupId>
       <artifactId>gnu-hylafax</artifactId>
     </dependency>
+    <dependency>
+      <groupId>javax.resource</groupId>
+      <artifactId>connector-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>msv</groupId>
+      <artifactId>isorelax</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>msv</groupId>
+      <artifactId>xsdlib</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.rng</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>
