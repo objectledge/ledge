@@ -31,7 +31,7 @@
       <artifactId>radeox</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.objectledge.ext</groupId>
+      <groupId>httpunit</groupId>
       <artifactId>httpunit</artifactId>
     </dependency>
     <dependency>

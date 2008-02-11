@@ -186,9 +186,9 @@
         <version>0.9.4</version>
       </dependency>
       <dependency>
-        <groupId>org.objectledge.ext</groupId>
+        <groupId>httpunit</groupId>
         <artifactId>httpunit</artifactId>
-        <version>1.6.1-ledge2</version>
+        <version>1.6.1</version>
       </dependency>
       <dependency>
         <groupId>org.objectledge.ext</groupId>
