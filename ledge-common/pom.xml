@@ -191,9 +191,9 @@
         <version>1.6.1</version>
       </dependency>
       <dependency>
-        <groupId>org.objectledge.ext</groupId>
+        <groupId>jwebunit</groupId>
         <artifactId>jwebunit</artifactId>
-        <version>1.2-ledge2</version>
+        <version>1.2</version>
       </dependency>
       <dependency>
         <groupId>org.objectledge.ext</groupId>
