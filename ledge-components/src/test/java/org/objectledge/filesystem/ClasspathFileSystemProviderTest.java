@@ -29,21 +29,22 @@
 package org.objectledge.filesystem;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import junit.framework.TestCase;
 
 /**
- *
- *
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.3 2004-04-01 08:54:25 fil Exp $
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.4 2008-02-14 18:08:45 rafal Exp $
  */
-public class ClasspathFileSystemProviderTest extends TestCase
+public class ClasspathFileSystemProviderTest
+    extends TestCase
 {
     protected ClasspathFileSystemProvider provider;
 
     /**
      * Constructor for LocalFileProviderTest.
+     * 
      * @param arg0
      */
     public ClasspathFileSystemProviderTest(String arg0)
@@ -54,87 +55,90 @@ public class ClasspathFileSystemProviderTest extends TestCase
     /*
      * @see TestCase#setUp()
      */
-    protected void setUp() throws Exception
+    protected void setUp()
+        throws Exception
     {
         super.setUp();
-        provider = new ClasspathFileSystemProvider("classpath", 
-            ClasspathFileSystemProvider.class.getClassLoader());
+        provider = new ClasspathFileSystemProvider("classpath", ClasspathFileSystemProvider.class
+            .getClassLoader());
     }
 
     public void testGetName()
     {
-        assertEquals(provider.getName(), "classpath");
+        assertEquals("classpath", provider.getName());
     }
 
     public void testIsReadOnly()
     {
-        assertTrue("Provider is read only", provider.isReadOnly());
+        assertTrue(provider.isReadOnly());
     }
 
     public void testExists()
     {
-        assertTrue("File does not exist - check test resources!",
-                   provider.exists("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
-        assertFalse("File exists - check test resources!", provider.exists("nofile"));
+        assertTrue("should exist", provider
+            .exists("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        ;
+        assertFalse("should not exist", provider.exists("nonexistent_file"));
     }
 
     public void testIsFile()
+        throws IOException
     {
-        assertTrue("The resource is not a file - check test resources!", 
-            provider.isFile("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
-        //assertFalse("The resource is a file - check test resources!", 
-        //  			provider.isFile("org/objectledge/filesystem/"));
+        assertTrue("should be a file", provider
+            .isFile("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        assertFalse("should not be a file", provider.isFile("org/objectledge/filesystem/"));
+        assertFalse("should not be a file", provider.isFile("nonexistent_file"));
     }
 
     public void testIsDirectory()
     {
-        //assertTrue("The resource is not a directory - check test resources!", 
-        //			provider.isDirectory("org/objectledge/filesystem/"));
-        assertFalse("The resource is a directory - check test resources!", 
-        	provider.isDirectory("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        assertTrue("should be a directory", provider.isDirectory("org/objectledge/filesystem/"));
+        assertFalse("should be a directory", provider
+            .isDirectory("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 
     public void testCanRead()
     {
-		assertTrue("The resource is not readable - check test resources!", 
-			provider.canRead("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
-		assertFalse("The resource is readable - check test resources!", 
-			provider.canRead("nofile"));
+        assertTrue("should be readable", provider
+            .canRead("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        assertFalse("should not be readable", provider.canRead("nonexistent_file"));
     }
 
     public void testCanWrite()
     {
-		assertFalse("The resource is writable - check test resources!", 
-					provider.canWrite("nofile"));
+        assertFalse("should not be writable", provider.canWrite("nonexistent_file"));
+        assertFalse("should not be writable", provider
+            .canWrite("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        assertFalse("should not be writable", provider.canWrite("org/objectledge/filesystem/"));
     }
 
-    public void testList()  
+    public void testList()
         throws Exception
     {
-		//String[] list = provider.list("/org/");
-        //assertEquals(1, list.length);
+        // String[] list = provider.list("/org/");
+        // assertEquals(1, list.length);
     }
 
     public void testCreateNewFile()
-    	throws Exception 
-    {
-		try
-		{
-			provider.createNewFile("foo");
-			fail("should throw the exception");
-		}
-		catch(IOException e)
-		{
-			// expected
-		}
-	}
-		
-    public void testMkdirs()
-    throws IOException
+        throws Exception
     {
         try
         {
-            provider.mkdirs("foo");
+            provider.createNewFile("new_file");
+            fail("should throw the exception");
+        }
+        catch(IOException e)
+        {
+            // expected
+        }
+    }
+
+    public void testMkdirs()
+        throws IOException
+    {
+        try
+        {
+            provider.mkdirs("new_file");
             fail("should throw the exception");
         }
         catch(IOException e)
@@ -147,7 +151,7 @@ public class ClasspathFileSystemProviderTest extends TestCase
     {
         try
         {
-            provider.delete("foo");
+            provider.delete("new_file");
             fail("should throw the exception");
         }
         catch(IOException e)
@@ -160,7 +164,7 @@ public class ClasspathFileSystemProviderTest extends TestCase
     {
         try
         {
-            provider.rename("foo","foo");
+            provider.rename("org/objectledge/filesystem/ClasspathFileSystemProvider.class", "new_name");
             fail("should throw the exception");
         }
         catch(IOException e)
@@ -169,32 +173,34 @@ public class ClasspathFileSystemProviderTest extends TestCase
         }
     }
 
-    public void testGetInputStream()
+    public void testGetInputStream() throws IOException
     {
-        //TODO Implement getInputStream().
+        InputStream is = provider.getInputStream("org/objectledge/filesystem/ClasspathFileSystemProvider.class");
+        assertNotNull(is);
+        assertTrue("should read at least a byte", is.read() >= 0);
     }
 
     public void testGetOutputStream()
     {
-        assertNull(provider.getOutputStream("",true));
+        assertNull(provider.getOutputStream("", true));
     }
 
     public void testGetRandomAccess()
     {
-        assertNull(provider.getRandomAccess("",""));
+        assertNull(provider.getRandomAccess("", ""));
     }
 
     public void testLastModified()
     {
         assertEquals(-1L, provider.lastModified(""));
-        //assertEquals(true, 1079100713000L == provider.
-        //    lastModified("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        // assertEquals(true, 1079100713000L == provider.
+        // lastModified("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 
     public void testLength()
     {
         assertEquals(-1L, provider.length(""));
-        //assertEquals(true, 12345L == provider.
-        //    length("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        // assertEquals(true, 12345L == provider.
+        // length("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 }
