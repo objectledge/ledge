@@ -255,7 +255,7 @@ public class DirectoryUserManager extends UserManager
 		{
 			if(p.supportsRemoval())
 			{
-				p.createAccount(account);
+				p.removeAccount(account);
 			}
 		}
     }
