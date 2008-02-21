@@ -54,7 +54,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.27 2007-11-22 17:26:46 rafal Exp $
+ * @version $Id: VelocityTemplating.java,v 1.28 2008-02-21 23:31:20 rafal Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -330,6 +330,8 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             ((VelocityTemplate)template).getTemplate().
             	merge(((VelocityContext)context).getContext(), target);
+            // re-enable rendering if #stop directive was encountered in the nested template
+            ((org.apache.velocity.VelocityContext)((VelocityContext)context).getContext()).setAllowRendering(true);
         }
         catch(MethodInvocationException e)
         {
