@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -45,7 +48,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileSystemProvider.java,v 1.6 2008-02-25 22:01:35 rafal Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.7 2008-02-25 23:08:23 rafal Exp $
  */
 public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider
@@ -65,16 +68,30 @@ public class ServletFileSystemProvider
      */
     public ServletFileSystemProvider(String name, ServletContext context)
     {
-        super(name);
+        super(name, findListings(context));
         this.context = context;
-        try
+    }
+    
+    private static Collection<URL> findListings(ServletContext context)
+    {   
+        List<URL> listings = new ArrayList<URL>();
+        for (String location : LISTING_LOCATIONS)
         {
-            processListings();
+            try
+            {
+                if(context.getResourceAsStream(location) != null)
+                {
+                    listings.add(context.getResource(location));
+                    break;
+                }
+            }
+            catch(MalformedURLException e)
+            {
+                throw new ComponentInitializationError("failed to check for listing at location "
+                    + location, e);
+            }
         }
-        catch(IOException e)
-        {
-            throw new ComponentInitializationError("failed to parse listings", e);
-        }
+        return listings;
     }
     
     // public interface ///////////////////////////////////////////////////////////////////////////

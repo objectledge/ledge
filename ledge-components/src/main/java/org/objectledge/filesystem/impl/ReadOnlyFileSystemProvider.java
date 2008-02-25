@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -55,7 +56,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileSystem backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.23 2008-02-25 22:26:06 rafal Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.24 2008-02-25 23:08:27 rafal Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -63,7 +64,7 @@ public abstract class ReadOnlyFileSystemProvider
 	// constants ////////////////////////////////////////////////////////////
 	
     /** locations of the file listings, in order of precedence. */
-	public static final String[] LISTING_LOCATION =  
+	public static final String[] LISTING_LOCATIONS =  
 	{
 		"/WEB-INF/files.lst",
 		"/META-INF/files.lst",
@@ -97,38 +98,22 @@ public abstract class ReadOnlyFileSystemProvider
      * 
      * @param name the name of the provider.
      */
-	public ReadOnlyFileSystemProvider(String name)
+	public ReadOnlyFileSystemProvider(String name, Collection<URL> listings)
 	{
         this.name = name;
-	}
-
-    /**
-     * Processes the liststings at the common locations.
-     * 
-     * <p>{@link #getInputStream(String)} method must be functional at the point of calling this
-     * method.</p>
-     * 
-     * @throws IOException if the listings cannot be processed.
-     */
-    protected void processListings()
-        throws IOException
-    {
-        String location = null;
-        InputStream is = null;
-        for(int i=0; i<LISTING_LOCATION.length; i++)
+        for(URL listing : listings)
         {
-            location = LISTING_LOCATION[i];
-            is = getInputStream(location);
-            if(is != null)
+            try
             {
-                break;
+                InputStream is = listing.openStream();
+                processListing(listing.toString(), is);
+            }
+            catch(IOException e)
+            {
+                throw new ComponentInitializationError("failed to load listing " + listing, e);
             }
         }
-        if(is != null)
-        {
-            processListing(location, is);
-        }
-    }
+	}
 
     /**
      * {@inheritDoc}

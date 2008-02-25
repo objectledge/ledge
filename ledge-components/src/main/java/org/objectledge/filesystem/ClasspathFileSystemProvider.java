@@ -31,7 +31,10 @@ package org.objectledge.filesystem;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.List;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
@@ -40,7 +43,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.10 2008-02-25 22:26:44 rafal Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.11 2008-02-25 23:08:28 rafal Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
@@ -51,7 +54,49 @@ public class ClasspathFileSystemProvider
 	private ClassLoader classLoader;
 	
     // initialization /////////////////////////////////////////////////////////////////////////////
-    
+
+    /**
+     * Creates an new instance of the provider.
+     * 
+     * @param name the name of the provider.
+     * @param classLoader the class loader to load resources from.
+     * @param listings specific location to load listings from.
+     */
+	public ClasspathFileSystemProvider(String name, ClassLoader classLoader,
+        Collection<URL> listings)
+	{
+	    super(name, listings);
+	    this.classLoader = classLoader;
+	}
+	
+	/**
+	 * Locates listings on the classpath.
+	 * 
+	 * @param classLoader the class loader.
+	 * @return collection of listings found on the classpath.
+	 */
+	private static Collection<URL> findListings(ClassLoader classLoader)
+    {
+        List<URL> listings = new ArrayList<URL>();
+        for (String location : LISTING_LOCATIONS)
+        {
+            try
+            {
+                Enumeration<URL> locationListings = classLoader.getResources(location.substring(1));
+                while(locationListings.hasMoreElements())
+                {
+                    listings.add(locationListings.nextElement());
+                }
+            }
+            catch(IOException e)
+            {
+                throw new ComponentInitializationError("failed to enumerate resources at location "
+                    + location, e);
+            }
+        }
+        return listings;
+    }
+	
     /**
      * Creates an new instance of the provider.
      * 
@@ -60,34 +105,7 @@ public class ClasspathFileSystemProvider
      */
     public ClasspathFileSystemProvider(String name, ClassLoader classLoader)
     {
-        super(name);
-        this.classLoader = classLoader;
-        String location = null;
-        for(int i=0; i < LISTING_LOCATION.length; i++)
-        {
-            location = LISTING_LOCATION[i];
-            if(location.charAt(0) == '/')
-            {
-                location = location.substring(1);
-            }
-            URL listing = null;
-            try
-            {
-                
-                Enumeration listings = classLoader.getResources(location);
-                while(listings.hasMoreElements())
-                {
-                    listing = (URL)listings.nextElement();
-                    InputStream is = listing.openStream();
-                    processListing(listing.toString(), is);
-                }
-            }
-            catch(IOException e)
-            {
-                throw new ComponentInitializationError("failed to load listing "+location+" from "+
-                    listing, e);
-            }
-        }
+        this(name, classLoader, findListings(classLoader));
     }
     
     // public interface ///////////////////////////////////////////////////////////////////////////
