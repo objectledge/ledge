@@ -28,14 +28,18 @@
 
 package org.objectledge.filesystem;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import junit.framework.TestCase;
 
 /**
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.4 2008-02-14 18:08:45 rafal Exp $
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.5 2008-02-25 21:19:48 rafal Exp $
  */
 public class ClasspathFileSystemProviderTest
     extends TestCase
@@ -95,6 +99,11 @@ public class ClasspathFileSystemProviderTest
         assertTrue("should be a directory", provider.isDirectory("org/objectledge/filesystem/"));
         assertFalse("should be a directory", provider
             .isDirectory("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+    }
+    
+    public void testIsFileInJar()
+    {
+        assertTrue("should be a file", provider.isFile("java/io/File.class"));
     }
 
     public void testCanRead()
@@ -164,7 +173,8 @@ public class ClasspathFileSystemProviderTest
     {
         try
         {
-            provider.rename("org/objectledge/filesystem/ClasspathFileSystemProvider.class", "new_name");
+            provider.rename("org/objectledge/filesystem/ClasspathFileSystemProvider.class",
+                "new_name");
             fail("should throw the exception");
         }
         catch(IOException e)
@@ -173,9 +183,11 @@ public class ClasspathFileSystemProviderTest
         }
     }
 
-    public void testGetInputStream() throws IOException
+    public void testGetInputStream()
+        throws IOException
     {
-        InputStream is = provider.getInputStream("org/objectledge/filesystem/ClasspathFileSystemProvider.class");
+        InputStream is = provider
+            .getInputStream("org/objectledge/filesystem/ClasspathFileSystemProvider.class");
         assertNotNull(is);
         assertTrue("should read at least a byte", is.read() >= 0);
     }
@@ -191,16 +203,21 @@ public class ClasspathFileSystemProviderTest
     }
 
     public void testLastModified()
+        throws URISyntaxException
     {
-        assertEquals(-1L, provider.lastModified(""));
-        // assertEquals(true, 1079100713000L == provider.
-        // lastModified("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        URL url = provider
+            .getResource("org/objectledge/filesystem/ClasspathFileSystemProvider.class");
+        File f = new File(url.toURI());
+        assertEquals(f.lastModified(), provider
+            .lastModified("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 
-    public void testLength()
+    public void testLength() throws URISyntaxException
     {
-        assertEquals(-1L, provider.length(""));
-        // assertEquals(true, 12345L == provider.
-        // length("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+        URL url = provider
+            .getResource("org/objectledge/filesystem/ClasspathFileSystemProvider.class");
+        File f = new File(url.toURI());
+        assertEquals(f.length(), provider
+            .length("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
     }
 }
