@@ -48,7 +48,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.6 2008-02-25 21:44:48 rafal Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.7 2008-02-25 22:01:39 rafal Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
@@ -105,7 +105,7 @@ public class ClasspathFileSystemProvider
      */
     public InputStream getInputStream(String path)
     {
-        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        path = normalizedPath(path);
 		return classLoader.getResourceAsStream(path);
     }
     
@@ -114,7 +114,7 @@ public class ClasspathFileSystemProvider
      */
     public URL getResource(String path)
     {
-        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        path = normalizedPath(path);
         return classLoader.getResource(path);
     }
     
@@ -132,7 +132,7 @@ public class ClasspathFileSystemProvider
 
     private boolean checkItemType(String path, boolean directory)
     {
-        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        path = normalizedPath(path);
         URL url = classLoader.getResource(path);
         if(url != null)
         {
@@ -171,7 +171,7 @@ public class ClasspathFileSystemProvider
     @Override
     public long lastModified(String path)
     {
-        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        path = normalizedPath(path);
         URL url = classLoader.getResource(path);
         if(url != null)
         {
@@ -196,7 +196,7 @@ public class ClasspathFileSystemProvider
     @Override
     public long length(String path)
     {
-        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        path = normalizedPath(path);
         URL url = classLoader.getResource(path);
         if(url != null)
         {
@@ -255,13 +255,12 @@ public class ClasspathFileSystemProvider
     
     ///////////////////////////////////////////////////////////////////////////////////////////////
     
-
-    private String stripLeadingSlash(String path)
+    /**
+     * {@inheritDoc}
+     */
+    protected String normalizedPath(String path)
     {
-        if(path.length() > 0 && path.charAt(0) == '/')
-        {
-            path = path.substring(1);
-        }
-        return path;
-    }
+        // strip leading slash
+        return FileSystem.normalizedPath(path).substring(1);
+    }    
 }

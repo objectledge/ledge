@@ -45,7 +45,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * listing functionality. </p>
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ServletFileSystemProvider.java,v 1.5 2005-08-03 10:22:23 pablo Exp $
+ * @version $Id: ServletFileSystemProvider.java,v 1.6 2008-02-25 22:01:35 rafal Exp $
  */
 public class ServletFileSystemProvider 
 	extends ReadOnlyFileSystemProvider
@@ -84,7 +84,8 @@ public class ServletFileSystemProvider
      */
     public InputStream getInputStream(String path) 
     {
-		return context.getResourceAsStream(FileSystem.normalizedPath(path));
+        path = normalizedPath(path);
+		return context.getResourceAsStream(path);
     }
     
     /**
@@ -93,10 +94,7 @@ public class ServletFileSystemProvider
     public URL getResource(String path)
         throws MalformedURLException
     {
-        if(path.charAt(0) != '/')
-        {
-            path = "/"+path;
-        }
+        path = normalizedPath(path);
         if(context.getResourceAsStream(path) != null)
         {
             return context.getResource(path);
@@ -105,5 +103,14 @@ public class ServletFileSystemProvider
         {
             return null;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected String normalizedPath(String path)
+    {
+        // ensure leading slash
+        return FileSystem.normalizedPath(path);
     }
 }
