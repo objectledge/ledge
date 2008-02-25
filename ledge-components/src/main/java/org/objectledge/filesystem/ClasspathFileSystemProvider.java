@@ -28,19 +28,11 @@
 
 package org.objectledge.filesystem;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
@@ -48,7 +40,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.9 2008-02-25 22:26:06 rafal Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.10 2008-02-25 22:26:44 rafal Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
