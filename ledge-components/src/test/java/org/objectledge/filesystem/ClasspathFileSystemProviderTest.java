@@ -31,15 +31,17 @@ package org.objectledge.filesystem;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import junit.framework.TestCase;
 
 /**
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.5 2008-02-25 21:19:48 rafal Exp $
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.6 2008-02-25 21:44:48 rafal Exp $
  */
 public class ClasspathFileSystemProviderTest
     extends TestCase
@@ -124,8 +126,14 @@ public class ClasspathFileSystemProviderTest
     public void testList()
         throws Exception
     {
-        // String[] list = provider.list("/org/");
-        // assertEquals(1, list.length);
+        List<String> list = new ArrayList<String>(provider.list("/org/objectledge/filesystem/impl"));
+        Collections.sort(list);
+        System.out.println(list);
+        assertEquals(4, list.size());
+        assertEquals("LocalRandomAccessFile.class", list.get(0));
+        assertEquals("ReadOnlyFileSystemProvider.class", list.get(1));
+        assertEquals("URLConnectionImpl.class", list.get(2));
+        assertEquals("URLStreamHandlerImpl.class", list.get(3));
     }
 
     public void testCreateNewFile()
