@@ -41,7 +41,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.6 2008-02-25 21:44:48 rafal Exp $
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.7 2008-02-25 22:14:52 rafal Exp $
  */
 public class ClasspathFileSystemProviderTest
     extends TestCase
@@ -128,7 +128,6 @@ public class ClasspathFileSystemProviderTest
     {
         List<String> list = new ArrayList<String>(provider.list("/org/objectledge/filesystem/impl"));
         Collections.sort(list);
-        System.out.println(list);
         assertEquals(4, list.size());
         assertEquals("LocalRandomAccessFile.class", list.get(0));
         assertEquals("ReadOnlyFileSystemProvider.class", list.get(1));
