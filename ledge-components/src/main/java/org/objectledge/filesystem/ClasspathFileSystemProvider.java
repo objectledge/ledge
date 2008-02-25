@@ -48,7 +48,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.7 2008-02-25 22:01:39 rafal Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.8 2008-02-25 22:04:39 rafal Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
@@ -132,8 +132,7 @@ public class ClasspathFileSystemProvider
 
     private boolean checkItemType(String path, boolean directory)
     {
-        path = normalizedPath(path);
-        URL url = classLoader.getResource(path);
+        URL url = getResource(path);
         if(url != null)
         {
             if(url.getProtocol().equals("file"))
@@ -171,8 +170,7 @@ public class ClasspathFileSystemProvider
     @Override
     public long lastModified(String path)
     {
-        path = normalizedPath(path);
-        URL url = classLoader.getResource(path);
+        URL url = getResource(path);
         if(url != null)
         {
             URLConnection conn;
@@ -196,8 +194,7 @@ public class ClasspathFileSystemProvider
     @Override
     public long length(String path)
     {
-        path = normalizedPath(path);
-        URL url = classLoader.getResource(path);
+        URL url = getResource(path);
         if(url != null)
         {
             URLConnection conn;
