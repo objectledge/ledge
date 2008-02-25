@@ -28,17 +28,24 @@
 
 package org.objectledge.filesystem.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
@@ -48,7 +55,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileSystem backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.22 2008-02-25 22:01:37 rafal Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.23 2008-02-25 22:26:06 rafal Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -299,6 +306,51 @@ public abstract class ReadOnlyFileSystemProvider
 		return getInputStream(path) != null;
     }
 
+    private boolean checkItemType(String path, boolean directory)
+    {
+        URL url;
+        try
+        {
+            url = getResource(path);
+            if(url != null)
+            {
+                if(url.getProtocol().equals("file"))
+                {
+                    try
+                    {
+                        URLConnection conn = url.openConnection();
+                        conn.connect();
+                        // URLConnection does not provide a way to determine if the target object
+                        // is a file or directory in the API, so we need to pry the lid open...
+                        Field f = conn.getClass().getDeclaredField("isDirectory");
+                        f.setAccessible(true);
+                        return directory == f.getBoolean(conn);
+                    }
+                    catch(Exception e)
+                    {
+                        Logger log = Logger.getLogger(this.getClass());
+                        log.error("faield to check item type for "+path, e);
+                        return false;
+                    }
+                }
+                if(url.getProtocol().equals("jar"))
+                {
+                    // jar protocol supports only files - if item exists it must be a file
+                    return !directory;
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch(MalformedURLException e1)
+        {
+            throw new RuntimeException("malformed path", e1);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -310,7 +362,7 @@ public abstract class ReadOnlyFileSystemProvider
 		}
 		else
 		{
-			return getInputStream(path) != null;
+	        return checkItemType(path, false);
 		}
     }
 
@@ -325,7 +377,7 @@ public abstract class ReadOnlyFileSystemProvider
 		}
 		else
 		{
-			return false;
+		    return checkItemType(path, true);
 		}
     }
 
@@ -348,12 +400,12 @@ public abstract class ReadOnlyFileSystemProvider
     /**
      * {@inheritDoc}
      */
-    public Set<String> list(String dir) 
+    public Set<String> list(String path) 
         throws IOException
     {
 		if(listing != null)
 		{
-			Object obj = listing.get(FileSystem.normalizedPath(dir));
+			Object obj = listing.get(FileSystem.normalizedPath(path));
 			if(obj instanceof Map)
 			{
 				Set names = ((Map)obj).keySet();
@@ -361,12 +413,41 @@ public abstract class ReadOnlyFileSystemProvider
 			}
 			else
 			{
-				throw new IOException(dir+" is not a directory");
+				throw new IOException(path+" is not a directory");
 			}
 		}
 		else
 		{
-			throw new IOException(dir+" does not exist");
+	        if(isDirectory(path))
+	        {
+	            HashSet<String> res;
+	            try
+	            {
+	                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	                int c;
+	                InputStream is = getInputStream(path);
+	                while((c = is.read()) > 0)
+	                {
+	                    baos.write(c);
+	                }
+	                is.close();
+	                String dir = baos.toString("UTF-8");
+	                String[] items = dir.split("\n");
+	                res = new HashSet<String>(items.length);
+	                for(String item : items)
+	                {
+	                    res.add(item.trim());
+	                }
+	                return res;
+	            }
+	            catch(IOException e)
+	            {
+	                Logger log = Logger.getLogger(this.getClass());
+	                log.error("faield to list directory "+path, e);
+	                // fall trough to return statement below 
+	            }
+	        }
+	        return new HashSet<String>(0);
 		}
     }
 
@@ -431,15 +512,47 @@ public abstract class ReadOnlyFileSystemProvider
      */
 	public long lastModified(String path)
 	{
-		if(times != null)
+		if(listing != null)
 		{
 			Long mod = (Long)times.get(FileSystem.normalizedPath(path));
             if(mod != null)
             {
                 return mod.longValue();
             }
+            else
+            {
+                return -1L;
+            }
 		}
-        return -1L;
+		else
+		{
+	        try
+            {
+                URL url = getResource(path);
+                if(url != null)
+                {
+                    URLConnection conn;
+                    try
+                    {
+                        conn = url.openConnection();
+                        conn.connect();
+                        return conn.getLastModified();
+                    }
+                    catch(IOException e)
+                    {
+                        return -1L;
+                    }
+                }
+                else
+                {
+                    return -1L;
+                }
+            }
+            catch(MalformedURLException e)
+            {
+                throw new RuntimeException("malformed path", e);
+            }
+		}
 	}
 
     /**
@@ -447,14 +560,46 @@ public abstract class ReadOnlyFileSystemProvider
      */
 	public long length(String path)
 	{
-		if(lengths != null)
+		if(listing != null)
 		{
 			Long mod = (Long)lengths.get(FileSystem.normalizedPath(path));
             if(mod != null)
             {
                 return mod.longValue();
             }
+            else
+            {
+                return -1L;
+            }
         }
-		return -1L;
+		else
+		{
+	        try
+            {
+                URL url = getResource(path);
+                if(url != null)
+                {
+                    URLConnection conn;
+                    try
+                    {
+                        conn = url.openConnection();
+                        conn.connect();
+                        return conn.getContentLength();
+                    }
+                    catch(IOException e)
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch(MalformedURLException e)
+            {
+                throw new RuntimeException("malformed path", e);
+            }
+		}
 	}    
 }
