@@ -30,9 +30,12 @@ package org.objectledge.filesystem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
@@ -40,7 +43,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.4 2005-08-03 10:22:22 pablo Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.5 2008-02-25 21:27:16 rafal Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
@@ -110,8 +113,109 @@ public class ClasspathFileSystemProvider
         return classLoader.getResource(path);
     }
     
+    @Override
+    public boolean isFile(String path)
+    {
+        return checkItemType(path, false);
+    }
+    
+    @Override
+    public boolean isDirectory(String path)
+    {
+        return checkItemType(path, true);
+    }
+
+    private boolean checkItemType(String path, boolean directory)
+    {
+        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        URL url = classLoader.getResource(path);
+        if(url != null)
+        {
+            if(url.getProtocol().equals("file"))
+            {
+                try
+                {
+                    URLConnection conn = url.openConnection();
+                    conn.connect();
+                    // URLConnection does not provide a way to determine if the target object
+                    // is a file or directory in the API, so we need to pry the lid open...
+                    Field f = conn.getClass().getDeclaredField("isDirectory");
+                    f.setAccessible(true);
+                    return directory == f.getBoolean(conn);
+                }
+                catch(Exception e)
+                {
+                    Logger log = Logger.getLogger(this.getClass());
+                    log.error("faield to check item type for "+path, e);
+                    return false;
+                }
+            }
+            if(url.getProtocol().equals("jar"))
+            {
+                // jar protocol supports only files - if item exists it must be a file
+                return !directory;
+            }
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    @Override
+    public long lastModified(String path)
+    {
+        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        URL url = classLoader.getResource(path);
+        if(url != null)
+        {
+            URLConnection conn;
+            try
+            {
+                conn = url.openConnection();
+                conn.connect();
+                return conn.getLastModified();
+            }
+            catch(IOException e)
+            {
+                return -1L;
+            }
+        }
+        else
+        {
+            return -1L;
+        }
+    }
+    
+    @Override
+    public long length(String path)
+    {
+        path = stripLeadingSlash(FileSystem.normalizedPath(path));
+        URL url = classLoader.getResource(path);
+        if(url != null)
+        {
+            URLConnection conn;
+            try
+            {
+                conn = url.openConnection();
+                conn.connect();
+                return conn.getContentLength();
+            }
+            catch(IOException e)
+            {
+                return -1;
+            }
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    
     ///////////////////////////////////////////////////////////////////////////////////////////////
     
+
     private String stripLeadingSlash(String path)
     {
         if(path.length() > 0 && path.charAt(0) == '/')
