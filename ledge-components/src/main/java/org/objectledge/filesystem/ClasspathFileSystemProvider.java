@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
@@ -43,7 +44,7 @@ import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
  * An implementation of the FileSystemProvider that reads resources from the classpath.  
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.11 2008-02-25 23:08:28 rafal Exp $
+ * @version $Id: ClasspathFileSystemProvider.java,v 1.12 2008-02-26 22:51:28 rafal Exp $
  */
 public class ClasspathFileSystemProvider 
     extends ReadOnlyFileSystemProvider
@@ -67,6 +68,18 @@ public class ClasspathFileSystemProvider
 	{
 	    super(name, listings);
 	    this.classLoader = classLoader;
+	}
+	
+    /**
+     * Creates an new instance of the provider.
+     * 
+     * @param name the name of the provider.
+     * @param classLoader the class loader to load resources from.
+     * @param listings specific location to load listings from.
+     */
+	public ClasspathFileSystemProvider(String name, ClassLoader classLoader, URL ... listings )
+	{
+	    this(name, classLoader, Arrays.asList(listings));
 	}
 	
 	/**
