@@ -38,11 +38,11 @@ public class ClasspathFileSystemWithListingTest
     
     public void testIsDirectory()
     {
-        assertTrue("should not be a directory", provider.isDirectory("/dir/file1"));
-        assertTrue("should not be a directory", provider.isDirectory("/dir/file2"));
-        assertFalse("should be a directory", provider.isDirectory("/"));
-        assertFalse("should be a directory", provider.isDirectory("/dir"));
-        assertFalse("should be a directory", provider.isDirectory("/dir/empty"));
+        assertFalse("should not be a directory", provider.isDirectory("/dir/file1"));
+        assertFalse("should not be a directory", provider.isDirectory("/dir/file2"));
+        assertTrue("should be a directory", provider.isDirectory("/"));
+        assertTrue("should be a directory", provider.isDirectory("/dir"));
+        assertTrue("should be a directory", provider.isDirectory("/dir/empty"));
         assertFalse("should not be a directory", provider.isDirectory("/missing_file"));
         assertFalse("should not be a directory", provider.isDirectory("/dir/missing_file"));        
     }
