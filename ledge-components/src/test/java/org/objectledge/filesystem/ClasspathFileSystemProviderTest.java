@@ -41,7 +41,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.8 2008-02-28 16:31:23 rafal Exp $
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.9 2008-02-28 16:56:15 rafal Exp $
  */
 public class ClasspathFileSystemProviderTest
     extends TestCase
@@ -66,7 +66,7 @@ public class ClasspathFileSystemProviderTest
     {
         super.setUp();
         provider = new ClasspathFileSystemProvider("classpath", ClasspathFileSystemProvider.class
-            .getClassLoader());
+            .getClassLoader(), Collections.EMPTY_LIST);
     }
 
     public void testGetName()
