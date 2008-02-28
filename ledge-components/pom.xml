@@ -116,6 +116,7 @@
           <include>**/*.rng</include>
           <include>**/*.sql</include>
           <include>**/*.munin</include>
+          <include>**/*.lst</include>
         </includes>
       </testResource>
     </testResources>
