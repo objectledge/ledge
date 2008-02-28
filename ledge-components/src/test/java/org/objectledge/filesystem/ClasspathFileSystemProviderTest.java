@@ -41,7 +41,7 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.7 2008-02-25 22:14:52 rafal Exp $
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.8 2008-02-28 16:31:23 rafal Exp $
  */
 public class ClasspathFileSystemProviderTest
     extends TestCase
@@ -101,6 +101,11 @@ public class ClasspathFileSystemProviderTest
         assertTrue("should be a directory", provider.isDirectory("org/objectledge/filesystem/"));
         assertFalse("should be a directory", provider
             .isDirectory("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
+    }
+    
+    public void testExistInJar()
+    {
+        assertTrue("should exist", provider.exists("java/io/File.class"));
     }
     
     public void testIsFileInJar()
