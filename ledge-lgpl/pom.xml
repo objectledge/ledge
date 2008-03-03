@@ -29,21 +29,6 @@
       <groupId>org.objectledge.ext</groupId>
       <artifactId>gnu-hylafax</artifactId>
     </dependency>
-    <dependency>
-      <groupId>javax.resource</groupId>
-      <artifactId>connector-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>msv</groupId>
-      <artifactId>isorelax</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>msv</groupId>
-      <artifactId>xsdlib</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <build>
     <resources>

@@ -43,13 +43,13 @@
       <artifactId>maxq</artifactId>
     </dependency>
     <dependency>
-      <groupId>msv</groupId>
-      <artifactId>isorelax</artifactId>
+      <groupId>jmock</groupId>
+      <artifactId>jmock</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>msv</groupId>
-      <artifactId>xsdlib</artifactId>
+      <groupId>jmock</groupId>
+      <artifactId>jmock-cglib</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
