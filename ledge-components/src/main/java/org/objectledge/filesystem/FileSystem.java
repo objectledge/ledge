@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
  * application context, or through java.net.URL mechanism.
  *
  * @author <a href="rafal@caltha.pl">Rafal.Krzewski</a>
- * @version $Id: FileSystem.java,v 1.35 2008-02-28 17:17:55 rafal Exp $
+ * @version $Id: FileSystem.java,v 1.36 2008-03-04 21:52:21 rafal Exp $
  */
 public class FileSystem
 {
@@ -826,11 +826,6 @@ public class FileSystem
      */ 
     public byte[] read(String path) throws IOException
     {
-        InputStream in = getInputStream(path);
-        if (in == null)
-        {
-            throw new IOException(path + " does not exist");
-        }
         long length = length(path);
         if (length < 0)
         {
