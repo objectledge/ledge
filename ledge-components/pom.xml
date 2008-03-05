@@ -28,7 +28,6 @@
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>commons-pool</groupId>
