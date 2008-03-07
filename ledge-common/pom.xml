@@ -38,7 +38,7 @@
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-lgpl</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-      </dependency>      
+      </dependency>
       <dependency>
         <groupId>dna</groupId>
         <artifactId>dna-api</artifactId>
@@ -232,6 +232,21 @@
             <source>1.5</source>
             <target>1.5</target>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.objectledge</groupId>
+          <artifactId>ledge-maven-plugin</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+          <executions>
+            <execution>
+              <!-- once maven 2.1 lands, phase should be prepare-package -->
+              <phase>test</phase>
+              <goals>
+                <goal>version</goal>
+                <goal>listing</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
