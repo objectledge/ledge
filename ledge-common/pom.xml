@@ -267,6 +267,22 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <!-- apply ledge-maven-plugin to all ledge projects except itself -->
+      <id>with-ledge-maven-plugin</id>
+      <activation>
+        <file>
+          <missing>src/main/java/org/objectledge/maven</missing>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.objectledge</groupId>
+            <artifactId>ledge-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
-
 </project>
