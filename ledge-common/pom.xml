@@ -10,7 +10,7 @@
   <version>1.0.0-SNAPSHOT</version>
   <name>ObjectLedge master project</name>
   <modules>
-    <module>../ledge-maven2-plugin</module>
+    <module>../ledge-maven-plugin</module>
     <module>../ledge-components</module>
     <module>../ledge-container</module>
     <module>../ledge-gpl</module>
