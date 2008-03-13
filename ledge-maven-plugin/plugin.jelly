@@ -220,10 +220,8 @@
       </fileset>
     </fileScanner>
     <j:forEach var="srcFile" items="${srcFiles.iterator()}">
-      <j:new className="java.lang.Integer" var="cutoff">
-         <j:arg type="int" value="${srcFile.path.length()-4}"/>
-      </j:new>
-      <util:file var="dstFile" name="${srcFile.path.substring(0,cutoff)}.jj"/>
+      <j:set var="grammarName" value="${srcFile.name.replace('.jjt','')}"/>
+      <util:file var="dstFile" name="${srcFile.parent}/${grammarName}.java"/>
       <j:set var="propname" value="uptodate-${srcFile.path}"/>
       <uptodate property="${propname}" 
       	srcfile="${srcFile.path}" targetfile="${dstFile.path}"/>
@@ -237,13 +235,12 @@
           <j:set var="dummy" value="${dstDir.mkdirs()}"/>
           <copy todir="${dstDir.path}" overwrite="true">
             <fileset dir="${srcFile.parentFile.path}">
-              <include name="*.jjt"/>
-              <include name="*.jj"/>
+			  <include name="*.jjt"/>
               <include name="*.java"/>
             </fileset>
           </copy>
-          <ledge:jjtree input="${srcFile.name}" dir="${dstDir.path}"/>
-          <ledge:smartCopy srcDir="${dstDir}" srcMask="*.jj" dstDir="${srcFile.parentFile}"/>
+          <ledge:jjtree input="${grammarName}.jjt" dir="${dstDir.path}"/>
+          <ledge:javacc input="${grammarName}.jj" dir="${dstDir.path}"/>
           <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
           <touch file="${dstFile.path}"/>
         </j:when>
@@ -260,18 +257,16 @@
       </fileset>
     </fileScanner>
     <j:forEach var="srcFile" items="${srcFiles.iterator()}">
-      <j:new className="java.lang.Integer" var="cutoff">
-         <j:arg type="int" value="${srcFile.path.length()-3}"/>
-      </j:new>
-      <util:file var="dstFile" name="${srcFile.path.substring(0,cutoff)}.java"/>
+      <j:set var="grammarName" value="${srcFile.name.replace('.jj','')}"/>
+      <util:file var="dstFile" name="${srcFile.parent}/${grammarName}.java"/>
       <j:set var="propname" value="uptodate-${srcFile.path}"/>
       <uptodate property="${propname}" 
       	srcfile="${srcFile.path}" targetfile="${dstFile.path}"/>
       <j:set var="uptodate" value="${context.getVariable(propname)}"/>
+      <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
       <j:choose>
         <j:when test="${empty(uptodate)}">
           <echo>Generating parser for ${relPath}</echo>
-          <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
           <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
           <j:set var="dummy" value="${dstDir.mkdirs()}"/>
           <copy todir="${dstDir.path}" overwrite="true">
@@ -280,7 +275,7 @@
               <include name="*.java"/>
             </fileset>
           </copy>
-          <ledge:javacc input="${srcFile.name}" dir="${dstDir.path}"/>
+          <ledge:javacc input="${grammarName}.jj" dir="${dstDir.path}"/>
           <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
           <touch file="${dstFile.path}"/>
         </j:when>
