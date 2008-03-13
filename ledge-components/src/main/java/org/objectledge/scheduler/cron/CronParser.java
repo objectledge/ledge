@@ -518,7 +518,10 @@ public class CronParser implements CronParserConstants {
   private int jj_gc = 0;
 
   public CronParser(java.io.InputStream stream) {
-    jj_input_stream = new JavaCharStream(stream, 1, 1);
+     this(stream, null);
+  }
+  public CronParser(java.io.InputStream stream, String encoding) {
+    try { jj_input_stream = new JavaCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source = new CronParserTokenManager(jj_input_stream);
     token = new Token();
     token.next = jj_nt = token_source.getNextToken();
@@ -528,7 +531,10 @@ public class CronParser implements CronParserConstants {
   }
 
   public void ReInit(java.io.InputStream stream) {
-    jj_input_stream.ReInit(stream, 1, 1);
+     ReInit(stream, null);
+  }
+  public void ReInit(java.io.InputStream stream, String encoding) {
+    try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
     token = new Token();
     token.next = jj_nt = token_source.getNextToken();
@@ -720,6 +726,7 @@ public class CronParser implements CronParserConstants {
   final private void jj_rescan_token() {
     jj_rescan = true;
     for (int i = 0; i < 1; i++) {
+    try {
       JJCalls p = jj_2_rtns[i];
       do {
         if (p.gen > jj_gen) {
@@ -730,6 +737,7 @@ public class CronParser implements CronParserConstants {
         }
         p = p.next;
       } while (p != null);
+      } catch(LookaheadSuccess ls) { }
     }
     jj_rescan = false;
   }
