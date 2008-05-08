@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.9 2008-05-08 15:58:19 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.10 2008-05-08 16:05:21 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
@@ -15,10 +15,12 @@
 	</postGoal>      
 	
 	<preGoal name="test:match">
+	  <atttinGoal name="ledge:index-jar"/>
 	  <attainGoal name="ledge:index-tests"/>
 	</preGoal>
 	  
 	<preGoal name="test:test">
+	  <atttinGoal name="ledge:index-jar"/>
 	  <attainGoal name="ledge:index-tests"/>
 	</preGoal>	
 
