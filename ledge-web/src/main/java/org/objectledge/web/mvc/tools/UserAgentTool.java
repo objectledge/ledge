@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.9 2008-05-08 16:42:47 rafal Exp $
+ * @version $Id: UserAgentTool.java,v 1.10 2008-05-08 17:00:00 rafal Exp $
  */
 public class UserAgentTool
 {
@@ -230,80 +230,100 @@ public class UserAgentTool
 	        ua.trim();
 		}
         platform = getPlatform(ua);
-        int i = 0;
-        if (ua.indexOf("opera") != -1)
+        try
         {
-            i = ua.indexOf("opera");
-            family  = "opera";
-            org    = "opera";
-            version  = ua.substring(i+6);
+	        int i = 0;
+	        if (ua.indexOf("opera") != -1)
+	        {
+	            i = ua.indexOf("opera");
+	            family  = "opera";
+	            org    = "opera";
+	            version  = ua.substring(i+6);
+	        }
+	        else if ((i = ua.indexOf("msie")) != -1)
+	        {
+	            org    = "microsoft";
+	            int end = ua.indexOf(";",i+5);
+	            version  = ua.substring(i+5, end);
+	            family = "ie";
+	        }
+	        else if (ua.indexOf("gecko") != -1)
+	        {
+	            family = "gecko";
+	            int rvStart = ua.indexOf("rv:") + 3;
+	            int rvEnd = ua.indexOf(")", rvStart);
+	            String rv = ua.substring(rvStart, rvEnd);
+	            version = rv;
+	            if (ua.indexOf("netscape") != -1)
+	                {org = "netscape";} 
+	            else if (ua.indexOf("compuserve") != -1)
+	                {org = "compuserve";}
+	            else
+	                {org = "mozilla";}
+	        }
+	        else if ((ua.indexOf("mozilla") !=-1) && (ua.indexOf("spoofer")==-1)
+	                 && (ua.indexOf("compatible") == -1) && (ua.indexOf("opera")==-1)&&
+	                 (ua.indexOf("webtv")==-1) && (ua.indexOf("hotjava")==-1))
+	        {
+	            i = ua.lastIndexOf("/");
+	            int end = ua.indexOf(".",i);
+	            if(i > 0 && end + 3 <= ua.length())
+	            {
+	            	version = ua.substring(i+1, end+3);
+	            }
+	            else
+	            {
+	            	version = "UNKNOWN";
+	            }
+	            org = "netscape";
+	            family = "nn";
+	        }
+	        else if((ua.indexOf("mozilla") !=-1) && (ua.indexOf("konqueror")!=-1))
+	        {
+	            family  = "konqueror";
+	            org    = "konqueror";
+	            version  = "UNKNOWN";
+	        }
+	        else if ((i = ua.indexOf("aol")) != -1 )
+	        {
+	            // aol
+	            family  = "aol";
+	            org    = "aol";
+	            version  = ua.substring(i+4);
+	        }
+	        else if ((i = ua.indexOf("hotjava")) != -1 )
+	        {
+	            // hotjava
+	            family  = "hotjava";
+	            org    = "sun";
+	            version = "UNKNOWN";
+	            //version  = parseFloat(navigator.appVersion);
+	        }
+	        else
+	        {
+	            family = "UNKNOWN";
+	            org = "UNKNOWN";
+	            version = "UNKNOWN";
+	        }
         }
-        else if ((i = ua.indexOf("msie")) != -1)
+        catch(IndexOutOfBoundsException e)
         {
-            org    = "microsoft";
-            int end = ua.indexOf(";",i+5);
-            version  = ua.substring(i+5, end);
-            family = "ie";
+        	logger.error("failed to parse User-Agent \"" + ua + "\"");
+        	// fill the fields that are empty, preserve the rest
+        	if(family.equals(""))
+        	{
+	            family = "UNKNOWN";
+        	}
+        	if(org.equals(""))
+        	{
+        		org = "UNKNOWN";
+        	}
+        	if(version.equals(""))
+        	{
+        		version = "UNKOWN";
+        	}
         }
-        else if (ua.indexOf("gecko") != -1)
-        {
-            family = "gecko";
-            int rvStart = ua.indexOf("rv:") + 3;
-            int rvEnd = ua.indexOf(")", rvStart);
-            String rv = ua.substring(rvStart, rvEnd);
-            version = rv;
-            if (ua.indexOf("netscape") != -1)
-                {org = "netscape";} 
-            else if (ua.indexOf("compuserve") != -1)
-                {org = "compuserve";}
-            else
-                {org = "mozilla";}
-        }
-        else if ((ua.indexOf("mozilla") !=-1) && (ua.indexOf("spoofer")==-1)
-                 && (ua.indexOf("compatible") == -1) && (ua.indexOf("opera")==-1)&&
-                 (ua.indexOf("webtv")==-1) && (ua.indexOf("hotjava")==-1))
-        {
-            i = ua.lastIndexOf("/");
-            int end = ua.indexOf(".",i);
-            if(i > 0 && end + 3 <= ua.length())
-            {
-            	version = ua.substring(i+1, end+3);
-            }
-            else
-            {
-            	version = "UNKNOWN";
-            }
-            org = "netscape";
-            family = "nn";
-        }
-        else if((ua.indexOf("mozilla") !=-1) && (ua.indexOf("konqueror")!=-1))
-        {
-            family  = "konqueror";
-            org    = "konqueror";
-            version  = "UNKNOWN";
-        }
-        else if ((i = ua.indexOf("aol")) != -1 )
-        {
-            // aol
-            family  = "aol";
-            org    = "aol";
-            version  = ua.substring(i+4);
-        }
-        else if ((i = ua.indexOf("hotjava")) != -1 )
-        {
-            // hotjava
-            family  = "hotjava";
-            org    = "sun";
-            version = "UNKNOWN";
-            //version  = parseFloat(navigator.appVersion);
-        }
-        else
-        {
-            family = "UNKNOWN";
-            org = "UNKNOWN";
-            version = "UNKNOWN";
-        }
-        majorVersion = -1;
+	    majorVersion = -1;
         minorVersion = -1;
         microVersion = -1;
         extraVersion = null;
