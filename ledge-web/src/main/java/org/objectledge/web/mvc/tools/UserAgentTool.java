@@ -38,7 +38,7 @@ import org.objectledge.web.HttpContext;
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: UserAgentTool.java,v 1.8 2005-07-22 17:25:45 pablo Exp $
+ * @version $Id: UserAgentTool.java,v 1.9 2008-05-08 16:42:47 rafal Exp $
  */
 public class UserAgentTool
 {
@@ -265,7 +265,14 @@ public class UserAgentTool
         {
             i = ua.lastIndexOf("/");
             int end = ua.indexOf(".",i);
-            version = ua.substring(i+1, end+3);
+            if(i > 0 && end + 3 <= ua.length())
+            {
+            	version = ua.substring(i+1, end+3);
+            }
+            else
+            {
+            	version = "UNKNOWN";
+            }
             org = "netscape";
             family = "nn";
         }
