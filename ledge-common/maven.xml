@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: maven.xml,v 1.8 2005-07-07 07:05:56 rafal Exp $ -->
+<!-- $Id: maven.xml,v 1.9 2008-05-08 15:58:19 rafal Exp $ -->
 <project xmlns:j="jelly:core"
          xmlns:util="jelly:util"
          xmlns:ant="jelly:ant">
@@ -14,6 +14,14 @@
 	  <attainGoal name="ledge:ci-rename"/>
 	</postGoal>      
 	
+	<preGoal name="test:match">
+	  <attainGoal name="ledge:index-tests"/>
+	</preGoal>
+	  
+	<preGoal name="test:test">
+	  <attainGoal name="ledge:index-tests"/>
+	</preGoal>	
+
 	<preGoal name="war:war">
       <attainGoal name="ledge:repackage-content"/>
       <attainGoal name="ledge:version-war"/>
