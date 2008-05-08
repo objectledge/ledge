@@ -167,6 +167,11 @@
     <ledge:indexFiles dir="${maven.build.dest}"/>
   </goal>
   
+  <goal name="ledge:index-tests"
+        description="Generates a jar index in maven.test.dest/META-INF/files.lst">
+    <ledge:indexFiles dir="${maven.test.dest}"/>
+  </goal>
+  
   <goal name="ledge:index-war"
         description="Generates a war index in maven.war.webapp.dir/WEB-INF/files.lst">
     <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
