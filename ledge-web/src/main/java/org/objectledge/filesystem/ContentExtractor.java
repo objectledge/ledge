@@ -46,7 +46,7 @@ import org.picocontainer.Startable;
  * server.</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ContentExtractor.java,v 1.7 2006-03-23 08:40:58 pablo Exp $
+ * @version $Id: ContentExtractor.java,v 1.8 2008-05-18 13:34:19 rafal Exp $
  */
 public class ContentExtractor
 	implements Startable
@@ -161,7 +161,8 @@ public class ContentExtractor
                             os.write(buffer, 0, count);                            
                         }
                     }
-                    os.flush();
+                    is.close();
+                    os.close();
                 }
             }
         }
