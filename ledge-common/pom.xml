@@ -106,7 +106,7 @@
         <version>1.7.2.2</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.velocity</groupId>
+        <groupId>velocity</groupId>
         <artifactId>velocity</artifactId>
         <version>1.4</version>
       </dependency>
