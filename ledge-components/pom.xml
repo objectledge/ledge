@@ -134,6 +134,7 @@
         </executions>
         <configuration>
            <sourceDirectory>src/main/java</sourceDirectory>
+           <inPlace>true</inPlace>
         </configuration>
       </plugin>
     </plugins>
