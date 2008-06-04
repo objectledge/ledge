@@ -30,6 +30,7 @@ package org.objectledge.database.impl;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -37,7 +38,7 @@ import javax.sql.DataSource;
  * A delegation pattern wrapper for a DataSource interface.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DelegatingDataSource.java,v 1.4 2004-06-25 12:54:52 fil Exp $
+ * @version $Id: DelegatingDataSource.java,v 1.5 2008-06-04 22:55:44 rafal Exp $
  */
 public abstract class DelegatingDataSource implements DataSource
 {
@@ -111,5 +112,37 @@ public abstract class DelegatingDataSource implements DataSource
     public Connection getConnection(String username, String password) throws SQLException
     {
         return dataSource.getConnection(username, password);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(Class<? > iface)
+        throws SQLException
+    {
+        if(iface.equals(DataSource.class))
+        {
+            return true;
+        }
+        else
+        {
+            return dataSource.isWrapperFor(iface);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public <T>T unwrap(Class<T> iface)
+        throws SQLException
+    {
+        if(iface.equals(DataSource.class))
+        {
+            return iface.cast(this);
+        }
+        else
+        {
+            return dataSource.unwrap(iface);
+        }        
     }
 }

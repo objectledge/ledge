@@ -37,8 +37,13 @@ import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Date;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
 import java.sql.Ref;
+import java.sql.RowId;
 import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -50,7 +55,7 @@ import java.util.Map;
  * A delegation pattern wrapper for java.sql.CallableStatement.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DelegatingCallableStatement.java,v 1.2 2005-10-10 08:27:46 rafal Exp $
+ * @version $Id: DelegatingCallableStatement.java,v 1.3 2008-06-04 22:55:44 rafal Exp $
  */
 @SuppressWarnings("deprecation")
 public class DelegatingCallableStatement
@@ -853,5 +858,347 @@ public class DelegatingCallableStatement
     {
         setParameter(parameterName, "NULL");
         callableStatement.setNull(parameterName, sqlType, typeName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Reader getCharacterStream(int parameterIndex)
+        throws SQLException
+    {
+        return callableStatement.getCharacterStream(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Reader getCharacterStream(String parameterName)
+        throws SQLException
+    {
+        return callableStatement.getCharacterStream(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Reader getNCharacterStream(int parameterIndex)
+        throws SQLException
+    {
+        return callableStatement.getNCharacterStream(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Reader getNCharacterStream(String parameterName)
+        throws SQLException
+    {
+        return callableStatement.getNCharacterStream(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NClob getNClob(int parameterIndex)
+        throws SQLException
+    {
+        return callableStatement.getNClob(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NClob getNClob(String parameterName)
+        throws SQLException
+    {
+        return callableStatement.getNClob(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getNString(int parameterIndex)
+        throws SQLException
+    {
+        return callableStatement.getNString(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getNString(String parameterName)
+        throws SQLException
+    {
+        return callableStatement.getNString(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public RowId getRowId(int parameterIndex)
+        throws SQLException
+    {
+        return callableStatement.getRowId(parameterIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public RowId getRowId(String parameterName)
+        throws SQLException
+    {
+        return callableStatement.getRowId(parameterName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SQLXML getSQLXML(int parameterIndex)
+        throws SQLException
+    {
+        return callableStatement.getSQLXML(parameterIndex);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public SQLXML getSQLXML(String parameterName)
+        throws SQLException
+    {
+        return callableStatement.getSQLXML(parameterName);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setAsciiStream(String parameterName, InputStream x)
+        throws SQLException
+    {
+        setParameter(parameterName, x);
+        callableStatement.setAsciiStream(parameterName, x);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setAsciiStream(String parameterName, InputStream x, long length)
+        throws SQLException
+    {
+        setParameter(parameterName, x);
+        callableStatement.setAsciiStream(parameterName, x, length);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setBinaryStream(String parameterName, InputStream x)
+        throws SQLException
+    {
+        setParameter(parameterName, x);
+        callableStatement.setBinaryStream(parameterName, x);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setBinaryStream(String parameterName, InputStream x, long length)
+        throws SQLException
+    {
+        setParameter(parameterName, x);
+        callableStatement.setBinaryStream(parameterName, x, length);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setBlob(String parameterName, Blob x)
+        throws SQLException
+    {
+        setParameter(parameterName, x);
+        callableStatement.setBlob(parameterName, x);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setBlob(String parameterName, InputStream inputStream)
+        throws SQLException
+    {
+        setParameter(parameterName, inputStream);
+        callableStatement.setBlob(parameterName, inputStream);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setBlob(String parameterName, InputStream inputStream, long length)
+        throws SQLException
+    {
+        setParameter(parameterName, inputStream);
+        callableStatement.setBlob(parameterName, inputStream, length);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setCharacterStream(String parameterName, Reader reader)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setCharacterStream(parameterName, reader);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setCharacterStream(String parameterName, Reader reader, long length)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setCharacterStream(parameterName, reader, length);        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setClob(String parameterName, Clob x)
+        throws SQLException
+    {
+        setParameter(parameterName, x);
+        callableStatement.setClob(parameterName, x);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setClob(String parameterName, Reader reader)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setClob(parameterName, reader);        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setClob(String parameterName, Reader reader, long length)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setClob(parameterName, reader, length);        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setNCharacterStream(String parameterName, Reader reader)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setNCharacterStream(parameterName, reader);        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setNCharacterStream(String parameterName, Reader reader, long length)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setNCharacterStream(parameterName, reader, length);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setNClob(String parameterName, NClob value)
+        throws SQLException
+    {
+        setParameter(parameterName, value);
+        callableStatement.setNClob(parameterName, value);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setNClob(String parameterName, Reader reader)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setNClob(parameterName, reader);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setNClob(String parameterName, Reader reader, long length)
+        throws SQLException
+    {
+        setParameter(parameterName, reader);
+        callableStatement.setNClob(parameterName, reader, length);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setNString(String parameterName, String value)
+        throws SQLException
+    {
+        setParameter(parameterName, value);
+        callableStatement.setNString(parameterName, value);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setRowId(String parameterName, RowId x)
+        throws SQLException
+    {
+        setParameter(parameterName, x);
+        callableStatement.setRowId(parameterName, x);        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setSQLXML(String parameterName, SQLXML xmlObject)
+        throws SQLException
+    {
+        setParameter(parameterName, xmlObject);
+        callableStatement.setSQLXML(parameterName, xmlObject);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(Class<? > iface)
+        throws SQLException
+    {
+        if(iface.equals(Statement.class) || iface.equals(PreparedStatement.class)
+            || iface.equals(CallableStatement.class))
+        {
+            return true;
+        }
+        else
+        {
+            return callableStatement.isWrapperFor(iface);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public <T>T unwrap(Class<T> iface)
+        throws SQLException
+    {
+        if(iface.equals(Statement.class) || iface.equals(PreparedStatement.class)
+            || iface.equals(CallableStatement.class))
+        {
+            return iface.cast(this);
+        }
+        else
+        {
+            return callableStatement.unwrap(iface);
+        }
     }
 }

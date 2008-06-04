@@ -27,21 +27,29 @@
 // 
 package org.objectledge.database.impl;
 
+import java.sql.Array;
+import java.sql.Blob;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * A delegation pattern wrapper for java.sql.Connection.
  *  
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: DelegatingConnection.java,v 1.3 2005-10-07 14:50:00 rafal Exp $
+ * @version $Id: DelegatingConnection.java,v 1.4 2008-06-04 22:55:43 rafal Exp $
  */
 public class DelegatingConnection
     implements Connection
@@ -446,5 +454,97 @@ public class DelegatingConnection
     public void setTypeMap(Map map) throws SQLException
     {
         delegate.setTypeMap(map);
+    }
+
+    public Array createArrayOf(String typeName, Object[] elements)
+        throws SQLException
+    {
+        return delegate.createArrayOf(typeName, elements);
+    }
+
+    public Blob createBlob()
+        throws SQLException
+    {
+        return delegate.createBlob();
+    }
+
+    public Clob createClob()
+        throws SQLException
+    {
+        return delegate.createClob();
+    }
+
+    public NClob createNClob()
+        throws SQLException
+    {
+        return delegate.createNClob();
+    }
+
+    public SQLXML createSQLXML()
+        throws SQLException
+    {
+        return delegate.createSQLXML();
+    }
+
+    public Struct createStruct(String typeName, Object[] attributes)
+        throws SQLException
+    {
+        return delegate.createStruct(typeName, attributes);
+    }
+
+    public Properties getClientInfo()
+        throws SQLException
+    {
+        return delegate.getClientInfo();
+    }
+
+    public String getClientInfo(String name)
+        throws SQLException
+    {
+        return delegate.getClientInfo(name);
+    }
+
+    public boolean isValid(int timeout)
+        throws SQLException
+    {
+        return delegate.isValid(timeout);
+    }
+
+    public void setClientInfo(Properties properties)
+        throws SQLClientInfoException
+    {
+        delegate.setClientInfo(properties);       
+    }
+
+    public void setClientInfo(String name, String value)
+        throws SQLClientInfoException
+    {
+        delegate.setClientInfo(name, value);
+    }
+
+    public boolean isWrapperFor(Class<? > iface)
+        throws SQLException
+    {
+        if(iface.equals(Connection.class))
+        {
+            return true;
+        }
+        else
+        {
+            return delegate.isWrapperFor(iface);
+        }
+    }
+    
+    public <T>T unwrap(Class<T> iface)
+        throws SQLException
+    {
+        if(iface.equals(Connection.class))
+        {
+            return iface.cast(this);
+        }
+        else
+        {
+            return delegate.unwrap(iface);
+        }        
     }
 }

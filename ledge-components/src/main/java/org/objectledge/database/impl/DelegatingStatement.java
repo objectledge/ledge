@@ -38,7 +38,7 @@ import java.sql.Statement;
  * A delegation pattern wrapper for java.sql.Statement.
  *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
- * @version $Id: DelegatingStatement.java,v 1.2 2005-10-10 08:48:18 rafal Exp $
+ * @version $Id: DelegatingStatement.java,v 1.3 2008-06-04 22:55:44 rafal Exp $
  */
 public class DelegatingStatement
     implements Statement
@@ -414,5 +414,64 @@ public class DelegatingStatement
         throws SQLException
     {
         return statement.getResultSetHoldability();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isClosed()
+        throws SQLException
+    {
+        return statement.isClosed();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPoolable()
+        throws SQLException
+    {
+        return statement.isPoolable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPoolable(boolean poolable)
+        throws SQLException
+    {
+        statement.setPoolable(poolable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(Class<? > iface)
+        throws SQLException
+    {
+        if(iface.equals(Statement.class))
+        {
+            return true;
+        }
+        else
+        {
+            return statement.isWrapperFor(iface);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public <T>T unwrap(Class<T> iface)
+        throws SQLException
+    {
+        if(iface.equals(Statement.class))
+        {
+            return iface.cast(this);
+        }
+        else
+        {
+            return statement.unwrap(iface);
+        }        
     }
 }
