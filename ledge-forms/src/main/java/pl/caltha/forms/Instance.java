@@ -4,7 +4,7 @@ package pl.caltha.forms;
  * Defines container for user inputed form data and form's UI state.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: Instance.java,v 1.2 2005-02-08 20:33:22 rafal Exp $
+ * @version $Id: Instance.java,v 1.3 2008-07-24 17:06:37 rafal Exp $
  */
 public interface Instance
 {
@@ -35,4 +35,8 @@ public interface Instance
     
     /** Returns DOM4J Document object with this Instance's user inputed data. */
     public org.dom4j.Document getDocument();
+    
+    /** Return WYSIWIG editor Name */
+    public String getEditorName();
+    
 }

@@ -19,7 +19,7 @@ import pl.caltha.services.xml.XMLService;
  * Represents Form definition.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormImpl.java,v 1.3 2005-02-08 20:33:27 rafal Exp $
+ * @version $Id: FormImpl.java,v 1.4 2008-07-24 17:06:56 rafal Exp $
  */
 public class FormImpl implements Form
 {
@@ -55,6 +55,8 @@ public class FormImpl implements Form
     protected String defaultInstanceURI;
     /** Keeps an object representing default Instance. */
     private DefaultInstance defaultInstance;
+    /** WYSIWIG editor name */
+    private String editorName = "kupu";
     
     //private Parameters parameters;
 
@@ -119,6 +121,7 @@ public class FormImpl implements Form
     throws Exception
     {
         InstanceImpl instance = (InstanceImpl)inst;
+        instance.setEditorName(this.getEditorName());
         // 1. Apply new values
         // Apply new values dispatches:
         //  - errorCollector init
@@ -229,6 +232,14 @@ public class FormImpl implements Form
     {
         return formToolService;
     }
+    
+    public String getEditorName() {
+		return editorName;
+	}
+
+	public void setEditorName(String editorName) {
+		this.editorName = editorName;
+	}
 
 /*    public I18nService getI18nService()
     {

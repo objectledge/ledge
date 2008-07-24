@@ -43,4 +43,9 @@
       <text/>
     </element>
   </optional>
+  <optional>
+    <element name="wysiwigEditor">
+      <text/>
+    </element>
+  </optional>
 </element>

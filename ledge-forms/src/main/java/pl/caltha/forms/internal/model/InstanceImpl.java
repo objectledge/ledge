@@ -16,7 +16,7 @@ import pl.caltha.services.xml.validation.DOM4JValidator;
  * Container for user form data.
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: InstanceImpl.java,v 1.4 2005-02-21 13:54:29 zwierzem Exp $
+ * @version $Id: InstanceImpl.java,v 1.5 2008-07-24 17:07:12 rafal Exp $
  */
 public class InstanceImpl extends AbstractInstance
     implements Instance, java.io.Serializable
@@ -48,6 +48,9 @@ public class InstanceImpl extends AbstractInstance
 
     /** This field is <code>true</code> if this instance has all required values. */
     private boolean hasRequired = false;
+    
+    /** WYSIWIG editor name */
+    private String editorName = "kupu";
 
     //------------------------------------------------------------------------
     // Runtime cache
@@ -123,7 +126,15 @@ public class InstanceImpl extends AbstractInstance
     // methods used internally by form-tool
     //------------------------------------------------------------------------
 
-    //------------------------------------------------------------------------
+    public String getEditorName() {
+		return editorName;
+	}
+
+	public void setEditorName(String editorName) {
+		this.editorName = editorName;
+	}
+
+	//------------------------------------------------------------------------
     // Methods used during Instance processing
     public FormImpl getForm()
     {

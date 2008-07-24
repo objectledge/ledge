@@ -25,7 +25,7 @@ import pl.caltha.services.xml.XMLService;
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: FormsServiceImpl.java,v 1.7 2005-03-23 13:41:55 zwierzem Exp $
+ * @version $Id: FormsServiceImpl.java,v 1.8 2008-07-24 17:06:56 rafal Exp $
  */
 public class FormsServiceImpl 
 implements FormsService
@@ -53,6 +53,9 @@ implements FormsService
      * is a CPU intensive operation.
      */
      private boolean reloadFormDefinitions = false;
+     
+     /** WYSIWIG editor name */
+     private String editorName;
 
     //------------------------------------------------------------------------
 
@@ -68,7 +71,8 @@ implements FormsService
         uiSchemaURI   = config.getChild("uri.schema.ui").getValue("classpath:pl/caltha/forms/internal/formtool-ui.xsd");
         //formSchemaURI = config.getChild("uri.schema.form").getValue("pl/caltha/forms/internal/formtool-form.xsd");
         //uiSchemaURI   = config.getChild("uri.schema.ui").getValue("pl/caltha/forms/internal/formtool-ui.xsd");
-        
+        this.editorName = config.getChild("wysiwigEditor").getValue("kupu");
+
         log.info("Preloading schemas for 'formtool' service");
         preloadSchema(formSchemaURI);
         preloadSchema(uiSchemaURI);
@@ -170,6 +174,7 @@ implements FormsService
         org.xml.sax.InputSource is = getInputSource(formDefinitionURI);
         FormBuilder formBuilder = new FormBuilder(FormsService.ACCEPTED_NS_FORM, formSchemaURI);
         FormImpl form =  new FormImpl(this, xmlService, formDefinitionURI, formId);
+        form.setEditorName(this.editorName);
         formBuilder.build(form, reader, is, errorHandler);
 
         // Build DefaultInstance
@@ -358,7 +363,7 @@ implements FormsService
     /** FormData is a container for storing form Instances in users session.
      *
      * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
-     * @version $Id: FormsServiceImpl.java,v 1.7 2005-03-23 13:41:55 zwierzem Exp $
+     * @version $Id: FormsServiceImpl.java,v 1.8 2008-07-24 17:06:56 rafal Exp $
      */
     public class FormData
     {
