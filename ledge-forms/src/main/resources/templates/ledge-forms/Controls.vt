@@ -1,13 +1,13 @@
-#**
+#*
   This set of macros displays formtool controls as XHTML 1.0 controls.
 
   'uiPath' is being used instead of 'id' for HTML control's 'id',
   because it is unique in case of use of 'repeat' control.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: Controls.vt,v 1.3 2005-06-24 10:33:04 zwierzem Exp $
+  @version $Id: Controls.vt,v 1.4 2008-08-28 15:52:17 rafal Exp $
 *#
-#**
+#*
  TODO: Implement a hidden control:
    - add it to schema
    - add it to UIContants (NodeControl)
@@ -20,7 +20,7 @@
 #macro (formtool_hidden $field $loopIndex)
 <input type="hidden" name="$field.name" value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
 #end
-#**
+#*
   Output - used for displaying values.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -32,7 +32,7 @@
  #if($field.vis.CSSClass) class="$field.vis.CSSClass"#end##
  #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end>$!field.getValue($instance)</span>
 #end
-#**
+#*
   Textarea - multiline text input.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -50,7 +50,7 @@
  #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end##
  cols="$!field.cols" rows="$!field.rows">$!field.getValue($instance)</textarea>
 #end
-#**
+#*
   Input - one line text input.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -69,7 +69,7 @@
  size="$!field.cols" #if($field.maxLength > 0)maxlength="$field.maxLength"#end##
  value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
 #end
-#**
+#*
   Secret - one line text input for passwords - doesn't show the contents.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -88,7 +88,7 @@
  size="$!field.cols" maxlength="$!field.length"##
  value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
 #end
-#**
+#*
   Date - used for displaying date selectors.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -113,7 +113,7 @@
 #end
 </span>
 #end
-#**
+#*
   File upload selection field.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -132,7 +132,7 @@
  size="$!field.cols" maxlength="$!field.length"##
  value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
 #end
-#**
+#*
   Range selection - not implemented.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -142,7 +142,7 @@
 #macro (formtool_range $field $loopIndex)
 <span class="formtool-error">Control type UNSUPPORTED !!!</span>
 #end
-#**
+#*
   Button.
   @param instance    - current form instance.
   @param field       - current UI node.
@@ -161,7 +161,7 @@
  onclick="formtool_dispatch_event('$formtool_form_id', '$field.name');"##
 >$formtool_form_i18n.get($field.desc.caption.text)</button>
 #end
-#**
+#*
   Submit button.
   @param instance    - current form instance.
   @param field       - current UI node.

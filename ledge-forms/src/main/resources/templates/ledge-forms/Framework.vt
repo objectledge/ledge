@@ -1,10 +1,10 @@
-#**
+#*
   Core set of macros.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: Framework.vt,v 1.5 2006-04-28 10:02:25 pablo Exp $
+  @version $Id: Framework.vt,v 1.6 2008-08-28 15:52:17 rafal Exp $
 *#
-#**
+#*
   Starts form processing.
   @param instance - current form instance.
   @param form     - UI root node.
@@ -62,15 +62,16 @@ function formtool_dispatch_event(formName, buttonName)
 ##  special formtool fields - they control form processing
     <input type="hidden" name="$formtoolConst.instanceIdName" value="$instance.id" />
     <input type="hidden" name="$formtoolConst.dispatchControlName" />
-#*  *##formtool_pageStart($form_page)
-#*  *##foreach ( $element in $form_page.children )#*
---  velocityCount - gives us loop index - it can be used to differentiate row, controls rendering
-      *##formtool_element ('null' $element $velocityCount)#*
-    *##end#*
-    *##formtool_pageEnd($form_page)
+	 #formtool_pageStart($form_page)
+     #foreach ( $element in $form_page.children )
+       ## velocityCount - gives us loop index - it can be used to differentiate row, controls rendering
+       #formtool_element ('null' $element $velocityCount)
+     #end
+    
+    #formtool_pageEnd($form_page)
 </form>
 #end
-#**
+#*
  WARNING! $treeDepth is sometimes intentionaly NOT incremented to keep the
  real treeDepth -- not call depth. It is only incremented in grouping controls.
 
@@ -81,69 +82,74 @@ function formtool_dispatch_event(formName, buttonName)
 #macro (formtool_element $parentGroup $element $loopIndex)
 ##<!-- DEBUG: formtool_element $parentGroup.type $element.type $loopIndex $treeDepth -->
 ## TODO: Do something here #if( $element.bind.getRelevant($instance) )
-#* grouping elements
---  repeat
-  *##if( $element.type == 'repeat' )#*
-      *##foreach ( $subTree in $element.getChildren($instance) )#*
-          -- repeat subtree
-        *##formtool_repeatSubTreeStart($element $subTree $loopIndex)#*
-        *##foreach ( $subElement in $subTree.children )#*
-          *##formtool_element($element $subElement $velocityCount)#*
-        *##end#*
-        *##formtool_repeatSubTreeEnd($element $subTree $loopIndex)#*
-      *##end#*
---  group
-  *##elseif( $element.type == 'group' )#*
-      *##formtool_groupStart($parentGroup $element $loopIndex)#*
-      *##set( $treeDepth = $treeDepth + 1 )#*
-      *##foreach ( $subElement in $element.children )#*
-        *##formtool_element($element $subElement $velocityCount)#*
-      *##end#*
-      *##set( $treeDepth = $treeDepth - 1 )#*
-      *##formtool_groupEnd($parentGroup $element $loopIndex)#*
---  switch
-  *##elseif( $element.type == 'switch' )#*
-      *##formtool_switchStart($parentGroup $element $loopIndex)#*
-      *##set( $case = $element.getCase($instance) )#*
-        --
-      *##formtool_caseStart($parentGroup $case $loopIndex)#*
-      *##foreach ( $subElement in $case.children )#*
-        *##formtool_element($case $subElement $velocityCount)#*
-      *##end#*
-      *##formtool_caseEnd($parentGroup $case $loopIndex)#*
-        --
-      *##formtool_switchEnd($parentGroup $element $loopIndex)#*
--- buttons
-  *##elseif( $element.type == 'button')#*
-      *##formtool_buttonStart($parentGroup $element $loopIndex)#*
-      *##formtool_button ($element $loopIndex)#*
-      *##formtool_buttonEnd($parentGroup $element $loopIndex)#*
-  *##elseif( $element.type == 'submit' )#*
-      *##formtool_buttonStart($parentGroup $element $loopIndex)#*
-      *##formtool_submit ($element $loopIndex)#*
-      *##formtool_buttonEnd($parentGroup $element $loopIndex)#*
--- selections
-  *##elseif( $element.type == 'selectMany' || $element.type == 'selectOne' || $element.type == 'dynamicSelectOne')#*
-      *##formtool_select ($parentGroup $element $loopIndex)#*
--- hidden
-  *##elseif( $element.type == 'hidden' )#formtool_hidden ($element $loopIndex)#*
--- htmlarea
-  *##elseif( $element.type == 'htmlarea' )#*
-      *##formtool_htmlareaStart($parentGroup $element $loopIndex)#*
-      *##formtool_htmlarea($element $loopIndex)#*
-      *##formtool_htmlareaEnd($parentGroup $element $loopIndex)#*
--- controls
-  *##else#*
-      *##formtool_controlStart($parentGroup $element $loopIndex)#*
-      *##if(     $element.type == 'input'    )#formtool_input    ($element $loopIndex)#*
-      *##elseif( $element.type == 'output'   )#formtool_output   ($element $loopIndex)#*
-      *##elseif( $element.type == 'secret'   )#formtool_secret   ($element $loopIndex)#*
-      *##elseif( $element.type == 'textarea' )#formtool_textarea ($element $loopIndex)#*
-      *##elseif( $element.type == 'date'     )#formtool_date     ($element $loopIndex)#*
-      *##elseif( $element.type == 'upload'   )#formtool_upload   ($element $loopIndex)#*
-      *##elseif( $element.type == 'range'    )#formtool_range    ($element $loopIndex)#*
--- error occurred
-      *##else <!-- formtool ERROR: Unknown control type!!! -->#end#*
-      *##formtool_controlEnd($parentGroup $element $loopIndex)#*
-  *##end##
+
+  #if( $element.type == 'repeat' )
+     #foreach ( $subTree in $element.getChildren($instance) )
+        ## -- repeat subtree
+        #formtool_repeatSubTreeStart($element $subTree $loopIndex)
+          #foreach ( $subElement in $subTree.children )  
+             #formtool_element($element $subElement $velocityCount) 
+          #end
+          #formtool_repeatSubTreeEnd($element $subTree $loopIndex)
+       #end
+     ## group
+   
+    #elseif( $element.type == 'group' )
+      #formtool_groupStart($parentGroup $element $loopIndex)
+       #set( $treeDepth = $treeDepth + 1 )
+	   #foreach ( $subElement in $element.children )
+         #formtool_element($element $subElement $velocityCount)	
+       #end
+       #set( $treeDepth = $treeDepth - 1 )
+       #formtool_groupEnd($parentGroup $element $loopIndex)
+       
+    ## -- switch
+    #elseif( $element.type == 'switch' )
+      #formtool_switchStart($parentGroup $element $loopIndex)
+      #set( $case = $element.getCase($instance) )
+      #formtool_caseStart($parentGroup $case $loopIndex)
+      #foreach ( $subElement in $case.children )
+		#formtool_element($case $subElement $velocityCount)	
+	  #end
+	  #formtool_caseEnd($parentGroup $case $loopIndex)
+	  
+	  #formtool_switchEnd($parentGroup $element $loopIndex)
+
+	  ## -- buttons
+  #elseif( $element.type == 'button')
+  	#formtool_buttonStart($parentGroup $element $loopIndex)	
+  	#formtool_button ($element $loopIndex)
+  	#formtool_buttonEnd($parentGroup $element $loopIndex)
+  #elseif( $element.type == 'submit' )
+  	#formtool_buttonStart($parentGroup $element $loopIndex)
+  	  #formtool_submit ($element $loopIndex) 
+      #formtool_buttonEnd($parentGroup $element $loopIndex)
+      
+  ## -- selections
+  #elseif( $element.type == 'selectMany' || $element.type == 'selectOne' || $element.type == 'dynamicSelectOne')
+     #formtool_select ($parentGroup $element $loopIndex)
+  ##-- hidden
+  #elseif( $element.type == 'hidden' )
+  	#formtool_hidden ($element $loopIndex)
+  ##-- htmlarea
+  #elseif( $element.type == 'htmlarea' )
+    #formtool_htmlareaStart($parentGroup $element $loopIndex)
+    #formtool_htmlarea($element $loopIndex)
+    #formtool_htmlareaEnd($parentGroup $element $loopIndex)
+  ##-- controls
+  #else
+    #formtool_controlStart($parentGroup $element $loopIndex)
+    #if(     $element.type == 'input'    )
+      #formtool_input    ($element $loopIndex)
+    #elseif( $element.type == 'output'   )#formtool_output   ($element $loopIndex)
+      #elseif( $element.type == 'secret'   )#formtool_secret   ($element $loopIndex)
+      #elseif( $element.type == 'textarea' )#formtool_textarea ($element $loopIndex)
+      #elseif( $element.type == 'date'     )#formtool_date     ($element $loopIndex)
+      #elseif( $element.type == 'upload'   )#formtool_upload   ($element $loopIndex)
+      #elseif( $element.type == 'range'    )#formtool_range    ($element $loopIndex)
+
+   ## -- error occurred
+   #else <!-- formtool ERROR: Unknown control type!!! -->#end
+      #formtool_controlEnd($parentGroup $element $loopIndex)
+  #end
 #end

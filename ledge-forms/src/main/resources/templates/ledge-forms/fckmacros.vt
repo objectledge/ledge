@@ -1,4 +1,4 @@
-#**
+#*
   FCK Editor HTML area.
   @param instance    - current form instance.
   @param field       - current UI node.

@@ -1,13 +1,13 @@
-#**
+#*
   This set of macros displays formtool controls as XHTML 1.0 controls.
 
   'uiPath' is being used instead of 'id' for HTML control's 'id',
   because it is unique in case of use of 'repeat' control.
 
   @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
-  @version $Id: HTMLArea.vt,v 1.4 2008-07-24 17:06:19 rafal Exp $
+  @version $Id: HTMLArea.vt,v 1.5 2008-08-28 15:52:17 rafal Exp $
 *#
-#**
+#*
   HTMLarea - html text input.
   @param instance   - current form instance.
   @param field      - current UI node.
@@ -41,11 +41,6 @@
 #end
 #end
 #*
-
-
-
-*###
-#**
   HTML area implementation for old browsers.
   @param instance    - current form instance.
   @param field       - current UI node.
