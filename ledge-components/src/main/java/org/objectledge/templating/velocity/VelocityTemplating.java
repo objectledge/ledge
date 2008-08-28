@@ -54,7 +54,7 @@ import org.objectledge.templating.TemplatingContext;
  *
  *
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
- * @version $Id: VelocityTemplating.java,v 1.29 2008-05-25 21:20:00 rafal Exp $
+ * @version $Id: VelocityTemplating.java,v 1.30 2008-08-28 15:52:47 rafal Exp $
  */
 public class VelocityTemplating implements Templating, LogSystem
 {
@@ -207,7 +207,7 @@ public class VelocityTemplating implements Templating, LogSystem
             for (int i = 0; i < paths.length; i++)
             {
                 String path = paths[i] + name + extension;
-                if (engine.templateExists(path))
+                if (engine.resourceExists(path))
                 {
                     exists = true;
                     break;
@@ -265,7 +265,7 @@ public class VelocityTemplating implements Templating, LogSystem
             for (int i = 0; i < paths.length; i++)
             {
                 path = paths[i] + name + extension;
-                if (engine.templateExists(path))
+                if (engine.resourceExists(path))
                 {
                     template = new VelocityTemplate(this, name, engine.getTemplate(path));
                 }
@@ -331,7 +331,7 @@ public class VelocityTemplating implements Templating, LogSystem
             ((VelocityTemplate)template).getTemplate().
             	merge(((VelocityContext)context).getContext(), target);
             // re-enable rendering if #stop directive was encountered in the nested template in Velocity 1.5+
-            // ((org.apache.velocity.VelocityContext)((VelocityContext)context).getContext()).setAllowRendering(true);
+            ((org.apache.velocity.VelocityContext)((VelocityContext)context).getContext()).setAllowRendering(true);
         }
         catch(MethodInvocationException e)
         {
@@ -370,6 +370,7 @@ public class VelocityTemplating implements Templating, LogSystem
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("deprecation")
     public void logVelocityMessage(int level, String message)
     {
         switch (level)
