@@ -63,7 +63,7 @@ import org.objectledge.utils.StringUtils;
  * A valve that counts processed HTTP requests and sessions.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: RequestTrackingValve.java,v 1.6 2008-01-20 15:17:18 rafal Exp $
+ * @version $Id: RequestTrackingValve.java,v 1.7 2008-10-02 15:32:32 rafal Exp $
  */
 public class RequestTrackingValve
     extends ReflectiveStatisticsProvider
@@ -106,6 +106,9 @@ public class RequestTrackingValve
     private long lastCurrentTime;
     
     private final MuninGraph[] graphs;
+    
+    /** Context attribute key where request marker string can be found */
+    public static final String REQUEST_MARKER_KEY = RequestTrackingValve.class.getName() + ".RequestMarker";
     
     /**
      * Creates new RequestTrackingValve instance.
@@ -208,8 +211,10 @@ public class RequestTrackingValve
             HttpContext httpContext = HttpContext.getHttpContext(context);
             r = totalRequests++;
             concurrentRequests++;
-            s = trackSession(httpContext).getId(); 
-            NDC.push("R"+r+" S"+s);
+            s = trackSession(httpContext).getId();
+            String requestMarker = "R"+r+" S"+s;
+            context.setAttribute(REQUEST_MARKER_KEY, requestMarker);
+            NDC.push(requestMarker);
             requestUrl = getRequestUrl(httpContext);
             if(log.isInfoEnabled())
             {
