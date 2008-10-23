@@ -28,6 +28,8 @@
 
 package org.objectledge.templating.velocity;
 
+import java.util.Arrays;
+
 import org.objectledge.templating.TemplatingContext;
 
 /**
@@ -35,7 +37,7 @@ import org.objectledge.templating.TemplatingContext;
  * templating engine.
  *
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: VelocityContext.java,v 1.2 2004-01-14 14:08:28 fil Exp $
+ * @version $Id: VelocityContext.java,v 1.3 2008-10-23 14:44:30 rafal Exp $
  */
 public class VelocityContext
     extends TemplatingContext
@@ -117,5 +119,27 @@ public class VelocityContext
     org.apache.velocity.context.Context getContext()
     {
         return context;
+    }
+    
+    /**
+     * Returns a string dump of the context's contents, for debugging purposes.
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        StringBuilder buff = new StringBuilder();
+        String[] keys = getKeys();
+        Arrays.sort(keys);
+        for(String k : keys)
+        {
+            buff.append(k).append(" = ");
+            if(context.get(k) != this) // avoid infinite recursion on self refernces
+            {
+                buff.append(context.get(k).toString());
+            }
+            buff.append("\n");              
+        }
+        return buff.toString();
     }
 }
