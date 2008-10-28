@@ -111,7 +111,7 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  * </pre>
  * 
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: LedgeServlet.java,v 1.19 2005-07-07 08:29:27 zwierzem Exp $
+ * @version $Id: LedgeServlet.java,v 1.20 2008-10-28 16:09:06 rafal Exp $
  */
 public class LedgeServlet extends HttpServlet
 {
@@ -132,8 +132,8 @@ public class LedgeServlet extends HttpServlet
             super.service(request, response);
         }
     }
-
-    /**
+    
+     /**
      * {@inheritDoc}
      */
     public void init(ServletConfig servletConfig) throws ServletException
@@ -197,5 +197,12 @@ public class LedgeServlet extends HttpServlet
             log.error("dispatcher component is missing");
             throw new ServletException("dispatcher component is missing");
         }
+    }
+
+    @Override
+    public void destroy()
+    {
+        container.killContainer();
+        super.destroy();
     }
 }
