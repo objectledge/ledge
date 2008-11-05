@@ -54,7 +54,7 @@ import bak.pcj.map.CharKeyCharOpenHashMap;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.43 2008-11-05 01:06:36 rafal Exp $
+ * @version $Id: StringUtils.java,v 1.44 2008-11-05 22:59:16 rafal Exp $
  */
 public class StringUtils
 {
@@ -1321,5 +1321,29 @@ public class StringUtils
             }
         }
         return buff.toString();
+    }
+    
+    /**
+     * Recover unicode chars from a string that that was encoded in UTF-8 but then the interpeted as ISO-8859-1 by Java.
+     * 
+     * <p>
+     * Useful for recovering unicode strings that were placed as UTF-8 into MIME headers without proper transfer encoding.
+     * </p>
+     * 
+     * @param in a mangled Unicode string 
+     * @return hopefuly, a recovered unicode string.
+     */
+    public static String iso1toUtf8(String in)
+    {
+        byte[] bytes;
+        try
+        {
+            bytes = in.getBytes("ISO-8859-1");
+            return new String(bytes, "UTF-8");
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

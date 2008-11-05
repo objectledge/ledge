@@ -224,4 +224,12 @@ public class StringUtilsTest extends TestCase
         assertEquals("ACELONSZZ", StringUtils.unaccentLatinChars("ĄĆĘŁÓŃŚŹŻ"));
         assertEquals("acelonszz", StringUtils.unaccentLatinChars("ąćęłóńśźż"));
     }
+    
+    public void testIso1ToUtf8() throws UnsupportedEncodingException
+    {
+        String a = "łąśŁĄŚ";
+        byte[] b = a.getBytes("UTF-8");
+        String a2 = new String(b, "ISO-8859-1");
+        assertEquals(a, StringUtils.iso1toUtf8(a2));
+    }
 }
