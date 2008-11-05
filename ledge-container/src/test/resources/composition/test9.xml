@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<container>
-  <component class="org.objectledge.context.Context"/>
-  <alias key="a1" class-ref="org.objectledge.context.Context"/>
-  <component key="factory" class="org.objectledge.pico.xml.AlternateComponentAdapterFactory"/>
-  <factory key="factory">
-    <alias key="a2" ref="a1"/>
-  </factory>
-</container>

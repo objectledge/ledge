@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<container>
-  <component class="org.objectledge.pico.xml.FooComponent">
-    <parameter value="foo"/>
-  </component>
-</container>
