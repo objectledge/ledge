@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 -->
-<!-- $Id: project.xml,v 1.55 2008-08-28 15:52:48 rafal Exp $ -->
+<!-- $Id: project.xml,v 1.56 2008-11-05 23:49:01 rafal Exp $ -->
 
 <project>
   <pomVersion>3</pomVersion>
@@ -194,6 +194,13 @@
       <version>1.0-b2</version>
       <url>http://radeox.org</url>
     </dependency>
+    <dependency>
+      <groupId>pcj</groupId>
+      <artifactId>pcj</artifactId>
+      <version>1.2</version>
+      <url>http://pcj.sourceforge.net</url>
+    </dependency>
+    
     
     <!-- findbugs seems to need that -->
 
