@@ -44,6 +44,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import bak.pcj.map.CharKeyCharMap;
+import bak.pcj.map.CharKeyCharOpenHashMap;
+
 /**
  * This class contains various functions for manipulating Java Strings.
  *
@@ -51,7 +54,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
- * @version $Id: StringUtils.java,v 1.42 2006-06-30 12:07:29 zwierzem Exp $
+ * @version $Id: StringUtils.java,v 1.43 2008-11-05 01:06:36 rafal Exp $
  */
 public class StringUtils
 {
@@ -1279,5 +1282,44 @@ public class StringUtils
         }
     }
     
-}
+    private static String UNACCENTED_CHARS = "ĄAĆCĘEŁLÓOŃNŚSŹZŻZąaćcęełlóońnśsźzżz";
 
+    private static CharKeyCharMap UNACCENTED_CHAR_MAP = new CharKeyCharOpenHashMap();
+
+    static
+    {
+        char[] uac = UNACCENTED_CHARS.toCharArray(); 
+        for (int i = 0; i < uac.length / 2; i++)
+        {
+            UNACCENTED_CHAR_MAP.put(uac[2 * i], uac[2 * i + 1]);
+        }
+    }
+
+    /**
+     * Replace accented latin characters with their unaccented eqivalents.
+     * 
+     * <p>
+     * Currently implemented for Polish language.
+     * </p>
+     * 
+     * @param a string
+     * @return the string with accented Latin characters replaced with their unaccented eqivalents.
+     */
+    public static String unaccentLatinChars(String in)
+    {
+        StringBuilder buff = new StringBuilder(in.length());
+        for (int i = 0; i < in.length(); i++)
+        {
+            char c = in.charAt(i);
+            if(UNACCENTED_CHAR_MAP.containsKey(c))
+            {
+                buff.append(UNACCENTED_CHAR_MAP.get(c));
+            }
+            else
+            {
+                buff.append(c);
+            }
+        }
+        return buff.toString();
+    }
+}

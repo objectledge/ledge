@@ -217,4 +217,11 @@ public class StringUtilsTest extends TestCase
         assertEquals(-1L, StringUtils.parseBytesSize(null));
     }
 
+    public void testUnaccent()
+    {
+        assertEquals("las", StringUtils.unaccentLatinChars("las"));
+        assertEquals("las", StringUtils.unaccentLatinChars("łąś"));
+        assertEquals("ACELONSZZ", StringUtils.unaccentLatinChars("ĄĆĘŁÓŃŚŹŻ"));
+        assertEquals("acelonszz", StringUtils.unaccentLatinChars("ąćęłóńśźż"));
+    }
 }
