@@ -44,21 +44,21 @@ import java.util.Map;
  * Comparable interface itself)</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MapComparator.java,v 1.1 2005-02-07 21:05:13 zwierzem Exp $
+ * @version $Id: MapComparator.java,v 1.2 2008-12-11 17:09:56 rafal Exp $
  */
-public class MapComparator
-    implements Comparator
+public class MapComparator<K, V extends Comparable<V>>
+    implements Comparator<Map<K,V>>
 {
-    private Object key;
+    private K key;
 
-    private Comparator comparator;
+    private Comparator<V> comparator;
 
 	/**
 	 * Creates a map comparator which compares maps by using <code>Comparable</code> objects
 	 * stored in maps under a given key.
 	 * @param key key which maps to compared objects.
 	 */
-    public MapComparator(Object key)
+    public MapComparator(K key)
     {
         this.key = key;
     }
@@ -69,7 +69,7 @@ public class MapComparator
 	 * @param key key which maps to compared objects.
 	 * @param comparator comparator to be used in comparisons.
 	 */
-    public MapComparator(Object key, Comparator comparator)
+    public MapComparator(K key, Comparator<V> comparator)
     {
         this(key);
         this.comparator = comparator;
@@ -78,12 +78,10 @@ public class MapComparator
 	/** 
 	 * {@inheritDoc}
 	 */
-    public int compare(Object o1, Object o2)
+    public int compare(Map<K,V> l1, Map<K,V> l2)
     {
-        Map l1 = (Map)o1;
-        Map l2 = (Map)o2;
-        o1 = l1.get(key);
-        o2 = l2.get(key);
+        V o1 = l1.get(key);
+        V o2 = l2.get(key);
         if(comparator != null)
         {
             return comparator.compare(o1, o2);
@@ -106,7 +104,7 @@ public class MapComparator
                 }
                 return 1;
             }
-            return ((Comparable)o1).compareTo(o2);
+            return ((Comparable<V>)o1).compareTo(o2);
         }
     }
 }
