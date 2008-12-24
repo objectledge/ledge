@@ -46,6 +46,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.codec.binary.Base64;
+
 /**
  * An implementation of {@link DefaultOutputRecord}.
  *
@@ -222,8 +224,8 @@ public class DefaultOutputRecord implements OutputRecord
     {
         try
         {
-            sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
-            String encoded = encoder.encodeBuffer(value);
+            Base64 encoder = new Base64();
+            String encoded = new String(encoder.encode(value), "US-ASCII");
             fields.put(field, encoded);
         }
         catch(Exception e)

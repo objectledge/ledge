@@ -40,6 +40,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.apache.commons.codec.binary.Base64;
 import org.objectledge.database.DatabaseUtils;
 
 /**
@@ -263,8 +264,8 @@ public class DefaultInputRecord implements InputRecord
         try
         {
             String encoded = rs.getString(field);
-            sun.misc.BASE64Decoder decoder = new sun.misc.BASE64Decoder();
-            return decoder.decodeBuffer(encoded);
+            Base64 decoder = new Base64();
+            return decoder.decode(encoded.getBytes("US-ASCII"));
         }
         catch(Exception e)
         {
