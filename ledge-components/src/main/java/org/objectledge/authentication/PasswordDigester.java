@@ -30,11 +30,10 @@ package org.objectledge.authentication;
 
 import java.security.MessageDigest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
-
-import sun.misc.BASE64Encoder;
 
 /**
  * Default implementation of password digester.
@@ -48,6 +47,9 @@ public class PasswordDigester
 
     /** the local message digest pool */
     private ObjectPool messageDigestPool = new GenericObjectPool(new MessageDigestFactory());
+    
+    /** Base64 codec */
+    private final Base64 base64 = new Base64();
 
     /**
      * component constructor.
@@ -78,12 +80,11 @@ public class PasswordDigester
                 digest = (MessageDigest)messageDigestPool.borrowObject();
                 byte[] hash = digest.digest(password.getBytes());
                 messageDigestPool.returnObject(digest);
-                BASE64Encoder enc = new BASE64Encoder();
                 StringBuilder encoded = new StringBuilder();
                 encoded.append('{');
                 encoded.append(algorithm.toLowerCase());
                 encoded.append('}');
-                encoded.append(enc.encode(hash));
+                encoded.append(base64.encode(hash));
                 return encoded.toString();
             }
             catch (Exception e)
