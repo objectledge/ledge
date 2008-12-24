@@ -48,9 +48,6 @@ public class PasswordDigester
     /** the local message digest pool */
     private ObjectPool messageDigestPool = new GenericObjectPool(new MessageDigestFactory());
     
-    /** Base64 codec */
-    private final Base64 base64 = new Base64();
-
     /**
      * component constructor.
      * 
@@ -84,7 +81,8 @@ public class PasswordDigester
                 encoded.append('{');
                 encoded.append(algorithm.toLowerCase());
                 encoded.append('}');
-                encoded.append(base64.encode(hash));
+                Base64 encoder = new Base64();
+                encoded.append(new String(encoder.encode(hash), "US-ASCII"));
                 return encoded.toString();
             }
             catch (Exception e)
