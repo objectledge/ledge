@@ -44,7 +44,7 @@ import java.util.Map;
  * Comparable interface itself)</p>
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MapComparator.java,v 1.2 2008-12-11 17:09:56 rafal Exp $
+ * @version $Id: MapComparator.java,v 1.3 2008-12-25 20:55:08 rafal Exp $
  */
 public class MapComparator<K, V extends Comparable<V>>
     implements Comparator<Map<K,V>>
@@ -88,22 +88,6 @@ public class MapComparator<K, V extends Comparable<V>>
         }
         else
         {
-            if(o1 instanceof Boolean)
-            {
-                if(o2 != null && o2 instanceof Boolean )
-                {
-                    if(((Boolean)o1).booleanValue() == ((Boolean)o2).booleanValue())
-                    {
-                        return 0;
-                    }
-                    if(((Boolean)o1).booleanValue())
-                    {
-                        return 1;
-                    }
-                    return -1;
-                }
-                return 1;
-            }
             return ((Comparable<V>)o1).compareTo(o2);
         }
     }
