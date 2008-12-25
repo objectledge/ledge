@@ -253,8 +253,8 @@
               </goals>
             </execution>
             <execution>
-              <id>test</id>
-              <!-- listings of test resources -->
+              <id>test-tes</id>
+              <!-- listing of test resources -->
               <phase>process-test-resources</phase>
               <goals>
                 <goal>listing</goal>
@@ -262,6 +262,14 @@
               <configuration>
                 <dir>${project.build.testOutputDirectory}</dir>
               </configuration>
+            </execution>
+            <execution>
+              <id>test-main</id>
+              <!-- listing of main resources for test -->
+              <phase>process-test-resources</phase>
+              <goals>
+                <goal>listing</goal>
+              </goals>
             </execution>
           </executions>
         </plugin>
