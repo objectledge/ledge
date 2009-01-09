@@ -28,6 +28,7 @@
 
 package org.objectledge.table.generic;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,27 +48,27 @@ import org.objectledge.table.TableState;
  * the UI on the fly, the toolkit provides {@link PathTreeElement} class.
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: PathTreeTableModel.java,v 1.7 2005-09-16 13:30:50 zwierzem Exp $
+ * @version $Id: PathTreeTableModel.java,v 1.8 2009-01-09 16:16:38 rafal Exp $
  */
-public class PathTreeTableModel
-    implements ExtendedTableModel
+public class PathTreeTableModel<T>
+    implements ExtendedTableModel<T>
 {
     // instance variables ////////////////////////////////////////////////////
 
     /** The columns of the list. */
-    protected TableColumn[] columns;
+    protected TableColumn<T>[] columns;
 
     /** Maps names to objects. */
-    protected Map objectByPath = new HashMap();
+    protected Map<String, T> objectByPath = new HashMap<String, T>();
 
     /** Maps ids to objects. */
-    protected Map objectById = new HashMap();
+    protected Map<String, T> objectById = new HashMap<String, T> ();
 
     /** Maps objects to ids. */
-    protected Map idByObject = new HashMap();
+    protected Map<T, String>  idByObject = new HashMap<T, String>();
 
     /** Maps objects to sets of children objects. */
-    protected Map childrenByObject = new HashMap();
+    protected Map<T, Set<T>> childrenByObject = new HashMap<T, Set<T>>();
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -76,7 +77,7 @@ public class PathTreeTableModel
      *
      * @param columns the table columns.
      */
-    public PathTreeTableModel(TableColumn[] columns)
+    public PathTreeTableModel(TableColumn<T>[] columns)
     {
         this.columns = columns;
     }
@@ -86,15 +87,15 @@ public class PathTreeTableModel
     /**
      * {@inheritDoc}
      */
-    public TableRowSet getRowSet(TableState state, TableFilter[] filters)
+    public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters)
     {
         if(state.getTreeView())
         {
-			return new GenericTreeRowSet(state, filters, this);
+			return new GenericTreeRowSet<T>(state, filters, this);
         }
         else
         {
-			return new GenericListRowSet(state, filters, this);
+			return new GenericListRowSet<T>(state, filters, this);
         }
     }
 
@@ -104,7 +105,7 @@ public class PathTreeTableModel
      *
      * @return array of <code>TableColumn</code> objects
      */
-    public TableColumn[] getColumns()
+    public TableColumn<T>[] getColumns()
     {
         return columns;
     }
@@ -117,18 +118,23 @@ public class PathTreeTableModel
      * @param parent the parent
      * @return table of children
      */
-    public Object[] getChildren(Object parent)
+    public T[] getChildren(T parent)
     {
+        // TODO this does not seem quite right. Should we require Class<T> ctor parameter? Is the model expected to be type-homogenous?
         if(parent == null)
         {
-            Object[] root = new Object[1];
-            root[0] = getObjectByPath("/");
+            T rootObject = getObjectByPath("/");
+            T[] root = (T[])Array.newInstance(rootObject.getClass(), 1);
+            root[0] = rootObject;
             return root;
         }
-        Set children = (Set)childrenByObject.get(parent);
-        Object[] result = new Object[children.size()];
-        children.toArray(result);
-        return result;
+        else
+        {
+            Set<T> children = childrenByObject.get(parent);
+            T[] result = (T[])Array.newInstance(parent.getClass(), children.size());
+            children.toArray(result);
+            return result;
+        }
     }
 
     /**
@@ -137,7 +143,7 @@ public class PathTreeTableModel
      * @param id the id of the object
      * @return model object
      */
-    public Object getObject(String id)
+    public T getObject(String id)
     {
         return objectById.get(id);
     }
@@ -149,9 +155,9 @@ public class PathTreeTableModel
      * @param child model object.
      * @return the id of the object.
      */
-    public String getId(String parent, Object child)
+    public String getId(String parent, T child)
     {
-        return (String)idByObject.get(child);
+        return idByObject.get(child);
     }
 
     // PathTreeTableModel specific public interface //////////////////////////
@@ -162,16 +168,16 @@ public class PathTreeTableModel
      * @param path the path in the tree.
      * @param object the object.
      */
-    public void bind(String path, Object object)
+    public void bind(String path, T object)
     {
-        Object old = getObjectByPath(path);
+        T old = getObjectByPath(path);
         if(old != null)
         {
             // rebinding
-            Object id = idByObject.remove(old);
+            String id = idByObject.remove(old);
             idByObject.put(object, id);
             objectById.put(id, object);
-            Object children = childrenByObject.remove(old);
+            Set<T> children = childrenByObject.remove(old);
             childrenByObject.put(object, children);
             objectByPath.put(path, object);
         }
@@ -186,10 +192,10 @@ public class PathTreeTableModel
             String id = Integer.toString(path.hashCode());
             idByObject.put(object, id);
             objectById.put(id, object);
-            childrenByObject.put(object, new HashSet());
+            childrenByObject.put(object, new HashSet<T>());
             if(!path.equals("/"))
             {
-                Set siblings = (Set)childrenByObject.get(objectByPath.get(parent));
+                Set<T> siblings = childrenByObject.get(objectByPath.get(parent));
                 siblings.add(object);
             }
             objectByPath.put(path, object);
@@ -204,12 +210,12 @@ public class PathTreeTableModel
      */
     public Object unbind(String path)
     {
-        Object obj = objectByPath.get(path);
+        T obj = objectByPath.get(path);
         if(obj == null)
         {
             throw new IllegalArgumentException(path+" is not bound");
         }
-        Set children = (Set)childrenByObject.get(obj);
+        Set<T> children = childrenByObject.get(obj);
         if(children.size() > 0)
         {
             throw new IllegalStateException(path+" has "+children.size()+" child bindings");
@@ -217,7 +223,7 @@ public class PathTreeTableModel
         Object id = idByObject.remove(obj);
         objectById.remove(id);
         childrenByObject.remove(obj);
-        Set siblings = (Set)childrenByObject.get(objectByPath.get(parentPath(path)));
+        Set<T> siblings = childrenByObject.get(objectByPath.get(parentPath(path)));
         siblings.remove(obj);
         objectByPath.remove(path);
         return obj;
@@ -229,7 +235,7 @@ public class PathTreeTableModel
      * @param path the path in the tree.
      * @return object bound by given path
      */
-    public Object getObjectByPath(String path)
+    public T getObjectByPath(String path)
     {
         return objectByPath.get(path);
     }
