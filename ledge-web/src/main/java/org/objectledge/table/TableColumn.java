@@ -48,7 +48,7 @@ import java.util.Map;
  * 
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: TableColumn.java,v 1.7 2006-04-03 18:38:51 zwierzem Exp $
+ * @version $Id: TableColumn.java,v 1.8 2009-01-23 10:44:56 rafal Exp $
  */
 public class TableColumn<T> implements Comparable<TableColumn<T>>
 {
@@ -145,7 +145,6 @@ public class TableColumn<T> implements Comparable<TableColumn<T>>
      * @param value the value of the property
      * @return this column object for easy use in multiple calls to this method
      */
-    @SuppressWarnings("unchecked")
     public TableColumn<T> set(String key, Object value)
     {
         properties.put(key,value);
@@ -198,7 +197,7 @@ public class TableColumn<T> implements Comparable<TableColumn<T>>
      * @param o compared column
      * @return result of column names comparison.
      */
-    public int compareTo(TableColumn o)
+    public int compareTo(TableColumn<T> o)
     {
         return this.name.compareTo(o.name);
     }
