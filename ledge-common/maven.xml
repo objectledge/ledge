@@ -42,10 +42,4 @@
     </j:if>
   </j:if>
    
-  <j:if test="${context.getVariable('maven.mode.online') == true}">
-    <postGoal name="xdoc:register-reports">
-      <attainGoal name="maven-statcvs-plugin:register"/>
-    </postGoal>
-  </j:if>
-
 </project>         
