@@ -18,16 +18,12 @@
 
   <inceptionYear>2003</inceptionYear>
   <package>org.objectledge</package>
-  <issueTrackingUrl>http://objectledge.org/jira/secure/BrowseProject.jspa?id=10000</issueTrackingUrl>
-  <url>http://objectledge.org/</url>
-  <siteAddress>objectledge.org</siteAddress>
-  <siteDirectory>/home/caltha/objectledge/www</siteDirectory>
-  <distributionSite>objectledge.org</distributionSite>
-  <distributionDirectory>/home/caltha/objectledge/builds</distributionDirectory>
+  <issueTrackingUrl>http://objectledge.org/jira/browse/LEDGE</issueTrackingUrl>
+  <url>http://objectledge.org/confluence/display/LEDGE</url>
   <repository>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.caltha.pl:/cvsroot/ledge:${pom.artifactId}</developerConnection>
-    <connection>scm:cvs:pserver:anoncvs@objectledge.org:/cvsroot/ledge:${pom.artifactId}</connection>
-    <url>http://objectledge.org/fisheye/browse/${pom.groupId}/${pom.artifactId}</url>
+    <developerConnection>scm:svn:http://objectledge.org/ledge/${pom.artifactId}</developerConnection>
+    <connection>scm:svn:http://objectledge.org/ledge/${pom.artifactId}</connection>
+    <url>http://objectledge.org/fisheye/browse/ledge</url>
   </repository>
   <versions>
     <version>
