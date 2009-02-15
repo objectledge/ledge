@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<container>
+
+  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
+             class="org.objectledge.pico.LedgeStringToObjectConverter"/>
+    
+  <component key="org.objectledge.filesystem.FileSystemProvider:local" 
+             class="org.objectledge.filesystem.LocalFileSystemProvider">
+    <parameter value="local"/>
+    <parameter key="org.objectledge.filesystem.FileSystem:root"/>
+  </component>
+    
+  <component key="org.objectledge.filesystem.FileSystemProvider:classpath" 
+             class="org.objectledge.filesystem.ClasspathFileSystemProvider">
+    <parameter value="classpath"/>
+    <parameter/>
+  </component>
+    
+  <component class="org.objectledge.filesystem.FileSystem">
+    <sequence>
+      <parameter key="org.objectledge.filesystem.FileSystemProvider:local"/>
+      <parameter key="org.objectledge.filesystem.FileSystemProvider:classpath"/>
+    </sequence>
+    <parameter value="4096"/>
+    <parameter value="4096"/>
+  </component>
+    
+  <component class="org.objectledge.xml.XMLGrammarCache"/>
+  <component class="org.objectledge.xml.XMLValidator"/>
+
+  <component class="org.objectledge.configuration.ConfigurationFactory">
+    <parameter/>
+    <parameter/>
+    <parameter value="/config"/>
+  </component>
+  <component class="org.objectledge.configuration.CustomizedConfigurationProvider"/>
+  <component class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+    <parameter class="java.lang.Class" value="org.jcontainer.dna.Configuration"/>
+    <parameter class-key="org.objectledge.configuration.CustomizedConfigurationProvider"/>
+  </component>
+
+  <component class="org.objectledge.logging.LoggingConfigurator"/>
+    
+  <component class="org.objectledge.logging.LoggerFactory"/>
+  <component class="org.objectledge.pico.customization.CustomizedComponentAdapter">
+    <parameter class="java.lang.Class" value="org.jcontainer.dna.Logger"/>
+    <parameter class-key="org.objectledge.logging.LoggerFactory"/>
+  </component>
+
+  <component key="ledgeFactory" class="org.picocontainer.defaults.CachingComponentAdapterFactory">
+    <component anon="true" class="org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory"/>
+  </component>
+
+  <!-- end of core config -->
+
+  <factory key="ledgeFactory">
+    <component class="org.objectledge.test.FooComponent"/>
+  </factory>
+    
+</container>
