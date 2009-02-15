@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Http Context</title>
+  </properties>
+
+  <body>
+    <section name="HttpContext">
+      <subsection name="Description">
+        <p>
+        The HttpContext is a simple wrapping object for http servlet request/response objects.
+        Once initialized can be easly accessed from thread context.
+       </p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>HttpContext <a href="../apidocs/org/objectledge/web/HttpContext.html">JavaDoc</a></li>
+            <li>HttpContext <a href="../xref/org/objectledge/web/HttpContext.html">XRef</a></li>
+            <li>HttpContext <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/HttpContext.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">none</td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">        
+        <p>
+          <table>
+	        <tr>
+	   	      <th>position</th>
+		      <th>type</th>
+		      <th widht="100%">descritpion</th>
+		    </tr>
+		    <tr>
+		      <td>1</td>
+		      <td>javax.servlet.http.HttpServletRequest</td>
+		      <td>The http servlet request.</td>
+		    </tr>
+		    <tr>
+		      <td>2</td>
+		      <td>javax.servlet.http.HttpServletResponse</td>
+		      <td>The http servlet response.</td>
+		    </tr>		    
+          </table>
+        </p>        
+      </subsection>
+    </section>
+  </body>
+</document>
