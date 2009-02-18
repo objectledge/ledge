@@ -1,0 +1,63 @@
+$pageTool.appendTitleSuffix('Scheduled jobs')##
+$viewEnclosureTool.override('system.Default')##
+
+#i18nResult()
+
+#macro(yesno $flag)
+#if($flag)
+yes
+#else
+no
+#end
+#end
+
+#set($detailView = "scheduler.EditJob")
+
+<table border="0" align="center" width="80%">
+  <tr>
+    <td>Name</td>
+    <td>Job</td>
+    <td>Schedule type</td>
+    <td>Schedule config</td>
+    <td>Run count</td>
+    <td>Last run</td>
+    <td>Running</td>
+    <td>Enabled</td>
+  </tr>
+#foreach($job in $jobs)
+  <tr>
+     <td><a href="$link.view($detailView).set("name",$job.name)">$job.name</a></td>
+     <td>$job.jobClassName</td>
+     <td>$job.schedule.type</td>
+     <td>$job.schedule.config</td>
+     <td>$job.runCount</td>
+     #if($job.lastRunTime)
+     <td>$format.format($job.lastRunTime)</td>
+     #else
+     <td>unknown</td>
+     #end
+     <td>#yesno($job.isRunning())</td>
+     <td>
+     #if($allowsModifications)
+	   <a href="$link.action("scheduler.ToggleEnabled").set("name",$job.name)">
+       #if($job.isEnabled()) yes #else no #end
+       </a>
+     #else
+       #yesno($job.isEnabled())
+     #end
+     </td>
+  </tr>
+#end
+  <tr>
+      <td colspan="8">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="8">
+<a href="$link.self()">Refresh</a>
+#if($allowsModifications)
+<a href="$link.view('scheduler.CreateJob')">New job</a>
+#end
+    </td>
+  </tr>
+</table>
+
