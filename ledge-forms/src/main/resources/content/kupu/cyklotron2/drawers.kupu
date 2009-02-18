@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<kupu:feature
+    name="drawers"
+    implementation="cyklotron2"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    >
+
+  <kupu:part name="styles">
+    $pageTool.addStyleLink('kupu/common/kupudrawerstyles.css')
+  </kupu:part>
+
+  <kupu:part name="jsincludes">
+    $pageTool.addScriptLink('kupu/common/kupudrawers.js')
+  </kupu:part>
+
+  <kupu:part name="xmlconfig">
+    <image_xsl_uri>$link.content('kupu/common/kupudrawers/drawer.xsl')</image_xsl_uri>
+    <link_xsl_uri>$link.content('kupu/common/kupudrawers/drawer.xsl')</link_xsl_uri>
+    <image_libraries_uri>$link.view('files,ImageLibrary').set('site_id', $site.id)</image_libraries_uri>
+    <link_libraries_uri>$link.view('structure,NodeLibrary').set('site_id', $site.id)</link_libraries_uri>
+    <search_images_uri> </search_images_uri>
+    <search_links_uri> </search_links_uri>
+  </kupu:part>
+
+</kupu:feature>
