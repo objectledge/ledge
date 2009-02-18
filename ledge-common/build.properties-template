@@ -1,0 +1,6 @@
+# Create a copy of this file in the same directory named 'build.properties',
+# inserting your actual workspace name below.
+#
+# $Id$
+
+maven.build.dir=WORKSPACE-targets/${pom.artifactId}

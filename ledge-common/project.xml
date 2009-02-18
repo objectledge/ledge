@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: project.xml,v 1.15 2006-05-31 10:27:15 rafal Exp $ -->
+
+<project>
+  <pomVersion>3</pomVersion>
+  <!-- project info -->
+
+  <id>ledge-common</id>
+  <groupId>objectledge</groupId>
+  <currentVersion>${versions.ledge}</currentVersion>
+  <organization>
+    <name>objectledge.org</name>
+    <url>http://objectledge.org/</url>
+    <logo>/images/caltha-logo.gif</logo>
+  </organization>
+  <!-- logo -->
+
+  <inceptionYear>2003</inceptionYear>
+  <package>org.objectledge</package>
+  <issueTrackingUrl>http://objectledge.org/jira/browse/LEDGE</issueTrackingUrl>
+  <url>http://objectledge.org/confluence/display/LEDGE</url>
+  <repository>
+    <developerConnection>scm:svn:http://objectledge.org/ledge/${pom.artifactId}</developerConnection>
+    <connection>scm:svn:http://objectledge.org/ledge/${pom.artifactId}</connection>
+    <url>http://objectledge.org/fisheye/browse/ledge</url>
+  </repository>
+  <versions>
+    <version>
+      <id>0.1</id>
+      <name>0.1</name>
+      <tag>RELEASE-0_1</tag>
+    </version>
+    <version>
+      <id>0.2</id>
+      <name>0.2</name>
+      <tag>RELEASE-0_2</tag>
+    </version>
+    <version>
+      <id>0.3</id>
+      <name>0.3</name>
+      <tag>RELEASE-0_3</tag>
+    </version>
+  </versions>
+  <licenses>
+    <license>
+      <name>BSD</name>
+      <url>http://objectledge.org/license.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <mailingLists>
+    <mailingList>
+      <name>ObjectLedge release announcements</name>
+      <subscribe>objectledge-announce-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-announce-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-announce/</archive>
+    </mailingList>
+    <mailingList>
+      <name>ObjectLedge users discussion</name>
+      <subscribe>objectledge-user-request@lists.objectledge.org</subscribe>
+      <unsubscribe>objectledge-user-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-user/</archive>
+    </mailingList>
+    <mailingList>
+      <name>ObjectLedge developers discussion</name>
+      <subscribe>objectledge-dev-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-dev-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-dev/</archive>
+    </mailingList>
+    <mailingList>
+      <name>ObjectLedge commit messages</name>
+      <subscribe>objectledge-cvs-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-cvs-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-cvs/</archive>
+    </mailingList>
+    <mailingList>
+      <name>ObjectLedge commit messages (html version)</name>
+      <subscribe>objectledge-cvshtml-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-cvshtml-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
+    </mailingList>
+    <mailingList>
+      <name>ObjectLedge issue tracking</name>
+      <subscribe>objectledge-issues-request@lists.objectledge.org?subject=subscribe</subscribe>
+      <unsubscribe>objectledge-issues-request@lists.objectledge.org?subject=unsubscribe</unsubscribe>
+      <archive>http://lists.objectledge.org/pipermail/objectledge-issues/</archive>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <name>Rafal Krzewski</name>
+      <id>fil</id>
+      <email>rafal@caltha.pl</email>
+      <organization>Caltha Sp.J.</organization>
+      <timezone>+1</timezone>
+      <roles>
+        <role>project leader</role>
+        <role>release engineer</role>
+        <role>java developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Pawel Potempski</name>
+      <id>pablo</id>
+      <email>pablo@caltha.pl</email>
+      <organization>Caltha Sp.J.</organization>
+      <timezone>+1</timezone>
+      <roles>
+        <role>java developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Michal Mach</name>
+      <id>mover</id>
+      <email>mover@caltha.pl</email>
+      <organization>Caltha Sp.J.</organization>
+      <timezone>+1</timezone>
+      <roles>
+        <role>java developer</role>
+        <role>documentation engineer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Damian Gajda</name>
+      <id>zwierzem</id>
+      <email>zwierzem@caltha.pl</email>
+      <organization>Caltha Sp.J.</organization>
+      <timezone>+1</timezone>
+      <roles>
+        <role>java developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <!-- contributors -->
+
+  <reports>
+    <report>maven-license-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-tasklist-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-checkstyle-plugin</report>
+    <report>maven-pmd-plugin</report>
+    <report>maven-findbugs-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-simian-plugin</report>
+    <report>maven-faq-plugin</report>
+  </reports>
+</project>
