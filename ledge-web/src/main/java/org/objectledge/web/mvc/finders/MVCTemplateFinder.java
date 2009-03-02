@@ -71,6 +71,7 @@ public interface MVCTemplateFinder
         private final String originalView;
         private final Template template;
         private final String actualView;
+        private final boolean last;
         
         /**
          * Creates a new Result instance.
@@ -79,11 +80,12 @@ public interface MVCTemplateFinder
          * @param template resolved template.
          * @param actualView the actual view associated with the resolved template.
          */
-        public Result(String originalView, Template template, String actualView)
+        public Result(String originalView, Template template, String actualView, boolean last)
         {
             this.originalView = originalView;
             this.template = template;
             this.actualView = actualView;
+            this.last = last;
         }
 
         /**
@@ -116,6 +118,14 @@ public interface MVCTemplateFinder
         public boolean fallbackPerformed()
         {
             return !originalView.equals(actualView);
+        }
+        
+        /**
+         * @return Tell wether this result is the last element of the fallback sequece.
+         */
+        public boolean isLastFallback()
+        {
+            return last;
         }
     }
 }
