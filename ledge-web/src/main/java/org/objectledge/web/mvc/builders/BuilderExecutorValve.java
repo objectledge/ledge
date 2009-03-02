@@ -208,7 +208,9 @@ public class BuilderExecutorValve
             template = templateResult.getTemplate();
             
             if(enclosures == 0 &&
-               builderResult.fallbackPerformed() && templateResult.fallbackPerformed())
+               builderResult.fallbackPerformed() && builderResult.isLastFallback() && 
+               templateResult.fallbackPerformed() && templateResult.isLastFallback()
+               )
             {
                 throw new MissingViewException(
                     "originalViewName="+originalViewName+", viewName="+viewName);
