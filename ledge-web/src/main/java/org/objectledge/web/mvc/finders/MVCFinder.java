@@ -231,6 +231,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 				logger.debug(methodName+": trying "+name);
                 if(templating.templateExists(name))
                 {
+                    logger.debug(methodName+": found "+name);
                     try
                     {
                         return templating.getTemplate(name);
@@ -241,7 +242,10 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
                     }
                 }
 			}
+            logger.debug(methodName+": not found");
+            return null;
 		}
+		logger.debug(methodName+": empty name");
 		return null;
 	}
 
@@ -256,11 +260,12 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
                 logger.debug(methodName+": trying "+name);
                 if(templating.templateExists(name))
                 {
+                    logger.debug(methodName+": found "+name);
                     try
                     {
                         Template template = templating.getTemplate(name);
                         return new MVCTemplateFinder.Result(
-                            templateName, template, sequence.currentView());
+                            templateName, template, sequence.currentView(), !sequence.hasNext());
                     }
                     catch(TemplateNotFoundException e)
                     {
@@ -268,9 +273,11 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
                     }
                 }
             }
-            return new MVCTemplateFinder.Result(templateName, null, sequence.currentView());
+            logger.debug(methodName+": not found");
+            return new MVCTemplateFinder.Result(templateName, null, sequence.currentView(), true);
         }
-        return new MVCTemplateFinder.Result(templateName, null, null);
+        logger.debug(methodName+": empty name");
+        return new MVCTemplateFinder.Result(templateName, null, null, true);
     }
 
     /**
@@ -302,10 +309,12 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
 				Object obj = getClassInstance(name);
                 if(obj != null)
                 {
+                    logger.debug(methodName+": found "+name);
                     return obj;
                 }
 			}
 		}
+		logger.debug(methodName+": not found");
 		return null;
 	}
 
@@ -322,13 +331,16 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
                 Object obj = getClassInstance(name);
                 if(obj != null)
                 {
+                    logger.debug(methodName+": found "+name);
                     return new MVCClassFinder.Result(className, (Builder)obj, sequence
-                        .currentView());
+                        .currentView(), !sequence.hasNext());
                 }
             }
-            return new MVCClassFinder.Result(className, (Builder) null, sequence.currentView());
+            logger.debug(methodName+": not found");
+            return new MVCClassFinder.Result(className, (Builder) null, sequence.currentView(), true);
         }
-        return new MVCClassFinder.Result(className, (Builder) null, null);
+        logger.debug(methodName+": empty name");
+        return new MVCClassFinder.Result(className, (Builder) null, null, true);
     }
     
     private Object getClassInstance(String className)
