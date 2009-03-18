@@ -167,6 +167,18 @@
       <version>3.1.2</version>
       <url>https://hibernate.org/</url>
     </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xerces</artifactId>
+      <version>2.4.0</version>
+      <url>http://xerces.apache.org/xerces2-j/</url>
+    </dependency>
+    <dependency>
+      <groupId>nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+      <version>1.9.6.2</version>
+      <url>http://sourceforge.net/projects/nekohtml</url>
+    </dependency>
     <!-- runtime -->
 
     <dependency>
