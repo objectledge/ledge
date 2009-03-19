@@ -17,8 +17,9 @@ public interface HTMLService
 
     public static final String LOGGING_FACILITY = "html";
 
-    public String encodeHTML(String html, String encodingName)
-        throws Exception;
+    public String encodeHTML(String html, String encodingName);
+    
+    public String encodeHTMLAttribute(String html, String encodingName);
 
     public String htmlToText(String html)
         throws HTMLException;
