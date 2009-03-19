@@ -183,7 +183,12 @@
       <id>dom4j</id>
       <version>1.4</version>
       <url>http://www.dom4j.org/</url>
-    </dependency>    
+    </dependency>
+    <dependency>
+      <id>tidy</id>
+      <version>damian</version>
+    </dependency>
+    <dependency>    
     <!-- runtime -->
 
     <dependency>
