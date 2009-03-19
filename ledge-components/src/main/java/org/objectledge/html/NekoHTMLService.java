@@ -25,13 +25,13 @@ import org.objectledge.ComponentInitializationError;
  * @author <a href="mailto:lukasz@caltha.pl">Łukasz Urbański</a>
  * @version $Id:
  */
-public class HTMLService
+public class NekoHTMLService
 {
     final private Logger log;
 
     final private Map<String, Configuration> profilesMap = new HashMap<String, Configuration>();
 
-    public HTMLService(Logger logger, Configuration config)
+    public NekoHTMLService(Logger logger, Configuration config)
         throws ComponentInitializationError, ConfigurationException
     {
         this.log = logger;
