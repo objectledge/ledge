@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 
+import org.objectledge.html.HTMLService;
 import org.objectledge.html.TidyWrapper;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.Attributes;
@@ -25,6 +26,8 @@ import pl.caltha.forms.internal.model.InstanceImpl;
  */
 public class NodeControlHTML extends NodeControl
 {
+    private HTMLService htmlService;
+    
     public NodeControlHTML(String type, Attributes atts)
     throws ConstructionException
     {
@@ -86,7 +89,7 @@ public class NodeControlHTML extends NodeControl
               outputValue = outputStream.toString("UTF-8");
             }
             // 2.3. Remove HTML headers and footers
-            outputValue = stripHTMLHead(outputValue);
+            outputValue = htmlService.stripHTMLHead(outputValue);
             
             super.setValue(instance, outputValue);
         }
@@ -97,32 +100,6 @@ public class NodeControlHTML extends NodeControl
         
         // return tidy wrapper to the pool
         
-    }
-
-    /** Removes everything but <code>&lt;body&gt;</code> tag contents. */
-    private String stripHTMLHead(String htmlDoc)
-    {
-        int bodyStartIndex = htmlDoc.indexOf("<body");
-        int bodyEndIndex = htmlDoc.indexOf("</body>");
-
-        if(bodyStartIndex > -1)
-        {
-            for(int i = bodyStartIndex; i < bodyEndIndex; i++)
-            {
-                if(htmlDoc.charAt(i) == '>')
-                {
-                    bodyStartIndex = i+1;
-                    break;
-                }
-            }
-
-            if(bodyStartIndex < bodyEndIndex)
-            {
-                return htmlDoc.substring(bodyStartIndex, bodyEndIndex);
-            }
-        }
-        
-        return htmlDoc;
     }
     
     public boolean hasError(InstanceImpl instance)
@@ -150,5 +127,6 @@ public class NodeControlHTML extends NodeControl
         {
             tidyConfiguration = formToolService.getTidyConfiguration();
         }
+        htmlService = ui.getForm().getHtmlService();
     }
 }
