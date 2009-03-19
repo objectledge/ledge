@@ -22,7 +22,6 @@
 ## TODO: this should go into Appearance (skin)
 #if ($field.hasError($instance))
 <div>
-<b>$htmlarea_i18n.get('tidy.log.title')</b>
 <pre>$field.getTidyErrorLog($instance)</pre>
 </div>
 #end
