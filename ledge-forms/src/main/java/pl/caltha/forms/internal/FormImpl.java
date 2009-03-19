@@ -2,6 +2,7 @@ package pl.caltha.forms.internal;
 
 import java.util.HashMap;
 
+import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
 
 import pl.caltha.forms.ConstructionException;
@@ -29,6 +30,9 @@ public class FormImpl implements Form
     /** XMLService is used to get validators. */
     private XMLService xmlService;
 
+    /** Used for HTML manipulation in WYSIWIG text edit control. */
+    private HTMLService htmlService;
+    
     /** I18nService is used to localise strings. */
     //private I18nService i18nService;
 
@@ -61,13 +65,14 @@ public class FormImpl implements Form
     //private Parameters parameters;
 
     /** Creates new Form */
-    public FormImpl(FormsService formToolService, XMLService xmlService,
+    public FormImpl(FormsService formToolService, XMLService xmlService, HTMLService htmlService,
         String definitionURI, String id)
     {
         this.definitionURI = definitionURI;
         this.id = id;
         this.formToolService = formToolService;
         this.xmlService = xmlService;
+        this.htmlService = htmlService;
     }
 
     //------------------------------------------------------------------------
@@ -231,6 +236,11 @@ public class FormImpl implements Form
     public FormsService getFormToolService()
     {
         return formToolService;
+    }
+    
+    public HTMLService getHtmlService()
+    {
+        return htmlService;
     }
     
     public String getEditorName() {

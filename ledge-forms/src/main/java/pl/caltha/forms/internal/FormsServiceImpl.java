@@ -7,6 +7,7 @@ import org.dom4j.Document;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.html.HTMLService;
 import org.objectledge.web.HttpContext;
 import org.xml.sax.InputSource;
 
@@ -57,15 +58,18 @@ implements FormsService
      /** WYSIWIG editor name */
      private String editorName;
 
+    private final HTMLService htmlService;
+
     //------------------------------------------------------------------------
 
     /** Called when the broker is starting.
      */
-    public FormsServiceImpl(Configuration config, Logger logger, XMLService xmlService
-        )
+    public FormsServiceImpl(Configuration config, Logger logger, XMLService xmlService,
+        HTMLService htmlService)
     {
         this.log = logger;
         this.xmlService = xmlService;
+        this.htmlService = htmlService;
         reloadFormDefinitions = config.getChild("form.definition.reload").getValueAsBoolean(false);
         formSchemaURI = config.getChild("uri.schema.form").getValue("classpath:pl/caltha/forms/internal/formtool-form.xsd");
         uiSchemaURI   = config.getChild("uri.schema.ui").getValue("classpath:pl/caltha/forms/internal/formtool-ui.xsd");
@@ -173,7 +177,7 @@ implements FormsService
         XMLDataReader reader = getXMLDataReader();
         org.xml.sax.InputSource is = getInputSource(formDefinitionURI);
         FormBuilder formBuilder = new FormBuilder(FormsService.ACCEPTED_NS_FORM, formSchemaURI);
-        FormImpl form =  new FormImpl(this, xmlService, formDefinitionURI, formId);
+        FormImpl form =  new FormImpl(this, xmlService, htmlService, formDefinitionURI, formId);
         form.setEditorName(this.editorName);
         formBuilder.build(form, reader, is, errorHandler);
 
