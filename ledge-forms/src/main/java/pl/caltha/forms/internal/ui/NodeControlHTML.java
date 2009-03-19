@@ -6,13 +6,13 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 
+import org.objectledge.html.TidyWrapper;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.Attributes;
 
 import pl.caltha.forms.ConstructionException;
 import pl.caltha.forms.FormsService;
 import pl.caltha.forms.internal.model.InstanceImpl;
-import pl.caltha.forms.internal.util.TidyWrapper;
 
 /**
  * HTML input control. Includes:
