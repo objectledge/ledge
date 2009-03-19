@@ -61,8 +61,10 @@ public class NodeControlHTML extends NodeControl
             outputValue = value;
             // set error information in state because ErrorCollector
             // does not allow to store errors explicitly
-            String errorLog = errorWriter.toString();
+            String errorLog = htmlService.encodeHTMLAttribute(errorWriter.toString(), "UTF-8");
             instance.setStateValue(contextNode, TIDY_ERROR_LOG, errorLog);
+			// make sure validation of the form fails
+            instance.setError(contextNode, "HTML_VALIDATION_ERROR");
         }
         // 2.3. Remove HTML headers and footers
         outputValue = htmlService.stripHTMLHead(outputValue);
