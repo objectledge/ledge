@@ -179,6 +179,11 @@
       <version>1.9.6.2</version>
       <url>http://sourceforge.net/projects/nekohtml</url>
     </dependency>
+    <dependency>
+      <id>dom4j</id>
+      <version>1.4</version>
+      <url>http://www.dom4j.org/</url>
+    </dependency>    
     <!-- runtime -->
 
     <dependency>
