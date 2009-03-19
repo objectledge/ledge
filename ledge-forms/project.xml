@@ -117,10 +117,6 @@
       <url>https://sourceforge.net/projects/relaxng</url>
     </dependency>
     <dependency>
-      <id>tidy</id>
-      <version>damian</version>
-    </dependency>
-    <dependency>
       <id>steadystate-css2</id>
       <jar>steadystate-css2.jar</jar>
     </dependency>

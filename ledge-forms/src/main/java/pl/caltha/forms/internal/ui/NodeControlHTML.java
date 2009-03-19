@@ -1,14 +1,9 @@
 package pl.caltha.forms.internal.ui;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 
 import org.objectledge.html.HTMLService;
-import org.objectledge.html.TidyWrapper;
-import org.w3c.tidy.Tidy;
 import org.xml.sax.Attributes;
 
 import pl.caltha.forms.ConstructionException;
