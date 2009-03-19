@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.List;
+import java.util.Properties;
 
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
@@ -125,6 +127,44 @@ public class HTMLServiceImpl
         }
         
         return dom4jDoc;
+    }
+
+    public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter, Properties tidyConfiguration)
+    {
+        // do HTML processing
+        // 1. clean up the value using jTidy
+        // 1.1. get tidy
+        TidyWrapper tidyWrap = TidyWrapper.getInstance();
+        try
+        {
+            // 1.2. setup tidy
+            Tidy tidy = tidyWrap.getTidy();
+            tidy.setConfigurationFromProps(tidyConfiguration);
+            tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+            tidy.setXHTML(true);
+            tidy.setShowWarnings(false);
+            // 1.3. setup streams
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes("UTF-8"));
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(value.length()+256);
+            // 1.4. setup error information writer
+            tidy.setErrout(new PrintWriter(errorWriter));
+            // 1.5. run cleanup
+            tidy.parse(inputStream, outputStream);
+            // dump buffer to output writer
+            outputWriter.write(outputStream.toString("UTF-8"));
+            outputWriter.flush();
+            // return true if there were no errors
+            return tidy.getParseErrors() == 0;
+        }
+        catch(IOException e)
+        {
+            throw new RuntimeException("unexpected exception", e);
+        }
+        finally
+        {
+            // return tidy wrapper to the pool
+            tidyWrap.release();
+        }
     }
 
     public String serializeHTML(org.dom4j.Document dom4jDoc)

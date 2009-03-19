@@ -49,57 +49,30 @@ public class NodeControlHTML extends NodeControl
         // clean last error log
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);
         instance.setStateValue(contextNode, TIDY_ERROR_LOG, null);
-
-        // do HTML processing
-        // 1. clean up the value using jTidy
-        // 1.1. get tidy
-        TidyWrapper tidyWrap = new TidyWrapper();
-
-        try
+        // set up buffers
+        StringWriter outputWriter = new StringWriter(value.length() + 256);
+        StringWriter errorWriter = new StringWriter(256);
+        String outputValue;
+        // 1.5. run cleanup
+        // 2.1. check tidy if there were any errors.
+        if(htmlService.cleanUpAndValidate(value, outputWriter, errorWriter, tidyConfiguration))
         {
-            // 1.2. setup tidy
-            Tidy tidy = tidyWrap.getTidy();
-            tidy.setConfigurationFromProps(tidyConfiguration);
-            tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-            tidy.setXHTML(true);
-            tidy.setShowWarnings(false);
-            // 1.3. setup streams
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes("UTF-8"));
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(value.length()+256);
-            // 1.4. setup error information writer
-            StringWriter errorWriter = new StringWriter(256);
-            tidy.setErrout(new PrintWriter(errorWriter));
-            // 1.5. run cleanup
-            tidy.parse(inputStream, outputStream);
-            // 2. set the value
-            String outputValue;
-            // 2.1. check tidy if there were any errors.
-            if(tidy.getParseErrors() > 0)
-            {
-                // user must correct the HTML
-                outputValue = value;
-                // set error information in state because ErrorCollector
-                // does not allow to store errors explicitly
-                String errorLog = errorWriter.toString();
-                instance.setStateValue(contextNode, TIDY_ERROR_LOG, errorLog);
-            }
-            else
             // 2.2. get cleaned HTML as String
-            {
-              outputValue = outputStream.toString("UTF-8");
-            }
-            // 2.3. Remove HTML headers and footers
-            outputValue = htmlService.stripHTMLHead(outputValue);
-            
-            super.setValue(instance, outputValue);
+            outputValue = outputWriter.toString();
         }
-        catch(java.io.UnsupportedEncodingException e)
+        else
         {
-            // should never happen
+            // user must correct the HTML
+            outputValue = value;
+            // set error information in state because ErrorCollector
+            // does not allow to store errors explicitly
+            String errorLog = errorWriter.toString();
+            instance.setStateValue(contextNode, TIDY_ERROR_LOG, errorLog);
         }
+        // 2.3. Remove HTML headers and footers
+        outputValue = htmlService.stripHTMLHead(outputValue);
         
-        // return tidy wrapper to the pool
-        
+        super.setValue(instance, outputValue);
     }
     
     public boolean hasError(InstanceImpl instance)

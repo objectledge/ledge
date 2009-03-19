@@ -1,5 +1,8 @@
 package org.objectledge.html;
 
+import java.io.Writer;
+import java.util.Properties;
+
 import org.dom4j.Document;
 
 /**
@@ -40,4 +43,6 @@ public interface HTMLService
     public String stripHTMLHead(String htmlDoc);
 
     public Document emptyHtmlDom();
+
+    public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter, Properties tidyConfiguration);
 }
