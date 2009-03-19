@@ -172,6 +172,20 @@ public class InstanceImpl extends AbstractInstance
         return errorCollector.getErrorsByNode().containsKey(contextNode);
     }
 
+    /**
+     * Set error flag for a Node explicitly.
+     * <p>
+     * This is necessary that nodes that have validation process different that XML schema (most
+     * notably NodeControlHTML) can bring their validation problem to the attention of form instance
+     * and further the controller components. At this point it's implemented as a hack - exposed
+     * internal state of errorCollector object is modified directly.
+     * </p>
+     */
+    public void setError(Node contextNode, Object error)
+    {
+        errorCollector.getErrorsByNode().put(contextNode, error);
+    }
+
     //------------------------------------------------------------------------
     // State Values access
     /** Sets a UI state value for this instance. */
