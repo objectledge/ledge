@@ -188,7 +188,6 @@
       <id>tidy</id>
       <version>damian</version>
     </dependency>
-    <dependency>    
     <!-- runtime -->
 
     <dependency>
