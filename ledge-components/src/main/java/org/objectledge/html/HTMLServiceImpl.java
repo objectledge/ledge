@@ -13,7 +13,9 @@ import java.util.Properties;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.DOMReader;
+import org.dom4j.io.HTMLWriter;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
 import org.objectledge.encodings.HTMLEntityEncoder;
@@ -187,10 +189,13 @@ public class HTMLServiceImpl
         format.setExpandEmptyElements(true);
         format.setTrimText(false);
         format.setIndent(false);
-        MyHTMLWriter htmlWriter = new MyHTMLWriter(writer, format);
+        HTMLWriter htmlWriter = new HTMLWriter(writer, format);
         try
         {
-            htmlWriter.write(dom4jDoc);
+            for(Element element : (List<Element>)dom4jDoc.getRootElement().element("body").elements())
+            {
+                htmlWriter.write(element);
+            }
             html = writer.toString();
         }
         catch(IOException e)
@@ -198,10 +203,10 @@ public class HTMLServiceImpl
             throw new HTMLException("Could not serialize the document", e);
         }
 
-        // remove head
-        html = stripHTMLHead(html);
-        // hack: decode &apos; 
+        // hack: decode &apos;
         html = html.replace("&apos;","'");
+        // rafal: I have no idea why the hack above would be necessary. ' does not get encoded as
+        // &apos; by HTMLWriter. Clues anyone?
         return html;
     }
 
