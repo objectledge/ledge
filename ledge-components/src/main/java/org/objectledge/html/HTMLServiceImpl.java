@@ -6,30 +6,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.html.dom.HTMLDocumentImpl;
-import org.cyberneko.html.parsers.DOMFragmentParser;
+import org.apache.xerces.xni.parser.XMLDocumentFilter;
+import org.apache.xerces.xni.parser.XMLInputSource;
+import org.cyberneko.html.filters.Purifier;
+import org.cyberneko.html.parsers.SAXParser;
 import org.dom4j.Comment;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.Text;
-import org.dom4j.io.DOMReader;
 import org.dom4j.io.HTMLWriter;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
 import org.objectledge.encodings.HTMLEntityEncoder;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.html.HTMLDocument;
-import org.w3c.tidy.Configuration;
 import org.w3c.tidy.Tidy;
-import org.xml.sax.InputSource;
 
 /** Implementation of the DocumentService.
  *
@@ -80,22 +75,22 @@ public class HTMLServiceImpl
     
     public org.dom4j.Document parseHTML(String html) throws HTMLException
     {
-    	try
-    	{
-    		DOMFragmentParser parser = new DOMFragmentParser();
-    		parser.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
-    		HTMLDocument document = new HTMLDocumentImpl();
-    		DocumentFragment fragment = document.createDocumentFragment();
-    		InputSource source = new InputSource(new StringReader(html));
-    		parser.parse(source, fragment);
-    		document.getBody().appendChild(fragment);
-    		DOMReader domReader = new DOMReader();
-    		return domReader.read(document);
-    	}
-    	catch(Exception e)
-    	{
-    		throw new HTMLException("failed to parse HTML document", e);
-    	}
+        try
+        {
+            SAXParser parser = new org.cyberneko.html.parsers.SAXParser();
+            Dom4jDocumentBuilder dom4jBuilder = new Dom4jDocumentBuilder();
+            XMLDocumentFilter[] filters = { new Purifier(), dom4jBuilder };
+            parser.setProperty("http://cyberneko.org/html/properties/filters", filters);
+
+            XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");
+            parser.parse(source);
+
+            return dom4jBuilder.getDocument();
+        }
+        catch(Exception e)
+        {
+            throw new HTMLException("failed to parse HTML document", e);
+        }
     }
 
     public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter, Properties tidyConfiguration)
