@@ -4,24 +4,32 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.html.dom.HTMLDocumentImpl;
+import org.cyberneko.html.parsers.DOMFragmentParser;
+import org.dom4j.Comment;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.Text;
 import org.dom4j.io.DOMReader;
 import org.dom4j.io.HTMLWriter;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.html.HTMLDocument;
 import org.w3c.tidy.Configuration;
 import org.w3c.tidy.Tidy;
+import org.xml.sax.InputSource;
 
 /** Implementation of the DocumentService.
  *
@@ -69,75 +77,25 @@ public class HTMLServiceImpl
 		parseHTML(html).accept(collector);
 		return collector.getText();
 	}
-
-    public org.dom4j.Document parseHTML(String html)
-	throws HTMLException
+    
+    public org.dom4j.Document parseHTML(String html) throws HTMLException
     {
-        if(html == null || html.length() == 0)
-        {
-            throw new HTMLException("HTML document is empty");
-        }
-        
-        org.dom4j.Document dom4jDoc = null;
-
-        int bodyStartIndex = html.indexOf("<body");
-        if(bodyStartIndex == -1)
-        {
-            html = "<html><head><title></title></head><body>"+html+"</body></html>";
-        }
-
-        // 1. parse the value using jTidy
-		// 1.1. setup streams
-		ByteArrayInputStream inputStream = null;
-		ByteArrayOutputStream outputStream = null;
-		try
-		{
-			inputStream = new ByteArrayInputStream(html.getBytes("UTF-8"));
-			outputStream = new ByteArrayOutputStream(html.length()+256);
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			// never happens
-			throw new HTMLException("Problems parsing HTML document", e);
-		}
-
-        // 1.2. get tidy wrapper
-        TidyWrapper tidyWrap = TidyWrapper.getInstance();
-
-        // 1.3. setup tidy
-        Tidy tidy = tidyWrap.getTidy();
-        tidy.setTidyMark(false);
-        tidy.setCharEncoding(Configuration.UTF8);
-        tidy.setXHTML(true);
-        tidy.setShowWarnings(false);
-        tidy.setSpaces(0);
-        tidy.setQuoteAmpersand(true);
-        tidy.setQuoteNbsp(true);
-
-        // 1.4. setup error information writer
-        StringWriter errorWriter = new StringWriter(256);
-        tidy.setErrout(new PrintWriter(errorWriter));
-
-        // 1.5. run parse
-        Document doc = tidy.parseDOM(inputStream, outputStream);
-
-        // 2. check tidy if there were any errors.
-        //    if there were no errors create a Dom4j document
-        if(tidy.getParseErrors() == 0)
-        {
-            DOMReader domReader = new DOMReader();
-            dom4jDoc = domReader.read(doc);
-        }
-        // return tidy wrapper to the pool
-        tidyWrap.release();
-
-        //check if anything bad happened
-        if(dom4jDoc == null)
-        {
-            throw new HTMLException("Errors while parsing HTML document");
-        }
-        
-        return dom4jDoc;
+    	try
+    	{
+    		DOMFragmentParser parser = new DOMFragmentParser();
+    		parser.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
+    		HTMLDocument document = new HTMLDocumentImpl();
+    		DocumentFragment fragment = document.createDocumentFragment();
+    		InputSource source = new InputSource(new StringReader(html));
+    		parser.parse(source, fragment);
+    		document.getBody().appendChild(fragment);
+    		DOMReader domReader = new DOMReader();
+    		return domReader.read(document);
+    	}
+    	catch(Exception e)
+    	{
+    		throw new HTMLException("failed to parse HTML document", e);
+    	}
     }
 
     public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter, Properties tidyConfiguration)
@@ -192,9 +150,20 @@ public class HTMLServiceImpl
         HTMLWriter htmlWriter = new HTMLWriter(writer, format);
         try
         {
-            for(Element element : (List<Element>)dom4jDoc.getRootElement().element("body").elements())
+            for(Node node : (List<Node>)dom4jDoc.getRootElement().element("BODY").content())
             {
-                htmlWriter.write(element);
+            	if(node instanceof Element)
+            	{
+            		htmlWriter.write((Element)node);
+            	}
+            	if(node instanceof Text)
+            	{
+            		writer.append(node.getText());
+            	}
+            	if(node instanceof Comment)
+            	{
+            		writer.append("<!--").append(node.getText()).append("-->");
+            	}
             }
             html = writer.toString();
         }
@@ -291,9 +260,9 @@ public class HTMLServiceImpl
     {
         DocumentFactory factory = DocumentFactory.getInstance();
         org.dom4j.Document document = factory.createDocument();
-        Element html = document.addElement("html");
-        Element head = html.addElement("head").addElement("title");
-        Element body = html.addElement("body");
+        Element html = document.addElement("HTML");
+        html.addElement("HEAD").addElement("TITLE");
+        html.addElement("BODY");
         return document;
     }
 }
