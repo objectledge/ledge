@@ -19,8 +19,8 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * An implemention of Xerces XMLDocumentFilter that builds a Dom4j document from incoming XML
- * events.
+ * An implemention of Xerces XMLDocumentFilter that builds a Dom4j document from incoming XNI
+ * parsing events.
  * <p>
  * This class can be used as a filter in NekoHTML parsing pipeline to create Dom4j Document
  * directly, without creating intermediate org.w3c.dom Document.
@@ -132,6 +132,7 @@ public class Dom4jDocumentBuilder
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void startDocument(XMLLocator locator, String encoding, NamespaceContext nscontext,
         Augmentations augs)
