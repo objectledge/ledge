@@ -63,15 +63,15 @@ public class HTMLServiceImpl
         return encodedHtml;
     }   
 	
-	public String htmlToText(String html)
+	public String collectText(String html)
 	throws HTMLException
 	{
 		HTMLTextCollectorVisitor collector = new HTMLTextCollectorVisitor();
-		parseHTML(html).accept(collector);
+		textToDom4j(html).accept(collector);
 		return collector.getText();
 	}
     
-    public org.dom4j.Document parseHTML(String html) throws HTMLException
+    public org.dom4j.Document textToDom4j(String html) throws HTMLException
     {
         try
         {
@@ -124,7 +124,7 @@ public class HTMLServiceImpl
     }
 
     @SuppressWarnings("unchecked")
-    public String serializeHTML(org.dom4j.Document dom4jDoc)
+    public String dom4jToText(org.dom4j.Document dom4jDoc)
     throws HTMLException
     {
         String html;
@@ -184,7 +184,7 @@ public class HTMLServiceImpl
     }
 
     @SuppressWarnings("unchecked")
-    public String getAllText(org.dom4j.Document metaDom, String xpath)
+    public String selectAllText(org.dom4j.Document metaDom, String xpath)
     {
         StringBuilder buf = new StringBuilder(256);
         collectText((List<Element>)metaDom.selectNodes(xpath), buf);
@@ -202,7 +202,7 @@ public class HTMLServiceImpl
     }
 
     @SuppressWarnings("unchecked")
-    public String getFirstText(org.dom4j.Document metaDom, String xpath)
+    public String selectFirstText(org.dom4j.Document metaDom, String xpath)
     {
         List<Element> elements = (List<Element>)metaDom.selectNodes(xpath);
         if(elements.size() == 0)
@@ -244,7 +244,7 @@ public class HTMLServiceImpl
         return htmlDoc;
     }
 
-    public org.dom4j.Document emptyHtmlDom()
+    public org.dom4j.Document emptyDom4j()
     {
         DocumentFactory factory = DocumentFactory.getInstance();
         org.dom4j.Document document = factory.createDocument();

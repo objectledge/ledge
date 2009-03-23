@@ -13,37 +13,66 @@ import org.dom4j.Document;
  */
 public interface HTMLService
 {
-    public static final String SERVICE_NAME = "html";
-
-    public static final String LOGGING_FACILITY = "html";
-
     public String encodeHTML(String html, String encodingName);
-    
+
     public String encodeHTMLAttribute(String html, String encodingName);
 
-    public String htmlToText(String html)
+    /**
+     * Collect all text content in a HTML document.
+     * <p>
+     * Provided for building full text search indexes.
+     * </p>
+     * 
+     * @param html HTML document.
+     * @return collected text content.
+     * @throws HTMLException if the document could not be parsed.
+     */
+    public String collectText(String html)
         throws HTMLException;
 
-    public Document parseHTML(String html)
+    /**
+     * Create Dom4j tree representing an empty HTML document.
+     * 
+     * @return empty document.
+     */
+    public Document emptyDom4j();
+
+    /**
+     * Parse HTML text into a Dom4j document.
+     * <p>
+     * This method attempts to silently fix any problems encountered in HTML. Only fatal errors will
+     * be reported.
+     * </p>
+     * 
+     * @param html HTML text.
+     * @return HTML document.
+     * @throws HTMLException if the document could not be parsed.
+     */
+    public Document textToDom4j(String html)
         throws HTMLException;
 
-    public String serializeHTML(Document dom4jDoc)
+    /**
+     * Serialized HTML document from Dom4j tree into text.
+     * <p>
+     * Document will be pretty printed as XHTML.
+     * </p>
+     * 
+     * @throws HTMLException if the document could not be serialized.
+     */
+    public String dom4jToText(Document dom4jDoc)
         throws HTMLException;
 
+    // the following three methods don't belong here - it's not HTML processing
     public Document parseXmlAttribute(String value, String attributeName)
         throws HTMLException;
 
-    public String getAllText(org.dom4j.Document metaDom, String xpath);
+    public String selectAllText(Document dom4jDoc, String xpath);
 
-    public String getFirstText(Document metaDom, String xpath);
+    public String selectFirstText(Document dom4jDoc, String xpath);
 
-    /**
-     * Removes everything but <code>&lt;body&gt;</code> tag contents. This one is stupid and assumes
-     * that there is no > cahractr in any of body tags attribute values.
-     */
+    // ...
     public String stripHTMLHead(String htmlDoc);
 
-    public Document emptyHtmlDom();
-
-    public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter, Properties tidyConfiguration);
+    public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter,
+        Properties tidyConfiguration);
 }
