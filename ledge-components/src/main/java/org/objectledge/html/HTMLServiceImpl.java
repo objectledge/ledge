@@ -1,9 +1,6 @@
 package org.objectledge.html;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -12,6 +9,8 @@ import java.util.Properties;
 
 import org.apache.xerces.xni.parser.XMLDocumentFilter;
 import org.apache.xerces.xni.parser.XMLInputSource;
+import org.apache.xerces.xni.parser.XMLParserConfiguration;
+import org.cyberneko.html.HTMLConfiguration;
 import org.cyberneko.html.filters.Purifier;
 import org.cyberneko.html.parsers.SAXParser;
 import org.dom4j.Comment;
@@ -24,7 +23,6 @@ import org.dom4j.io.HTMLWriter;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
 import org.objectledge.encodings.HTMLEntityEncoder;
-import org.w3c.tidy.Tidy;
 
 /** Implementation of the DocumentService.
  *
@@ -93,41 +91,35 @@ public class HTMLServiceImpl
         }
     }
 
-    public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter, Properties tidyConfiguration)
+    public boolean cleanUpAndValidate(String html, Writer outputWriter, Writer errorWriter,
+        Properties tidyConfiguration)
     {
-        // do HTML processing
-        // 1. clean up the value using jTidy
-        // 1.1. get tidy
-        TidyWrapper tidyWrap = TidyWrapper.getInstance();
         try
         {
-            // 1.2. setup tidy
-            Tidy tidy = tidyWrap.getTidy();
-            tidy.setConfigurationFromProps(tidyConfiguration);
-            tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-            tidy.setXHTML(true);
-            tidy.setShowWarnings(false);
-            // 1.3. setup streams
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes("UTF-8"));
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(value.length()+256);
-            // 1.4. setup error information writer
-            tidy.setErrout(new PrintWriter(errorWriter));
-            // 1.5. run cleanup
-            tidy.parse(inputStream, outputStream);
-            // dump buffer to output writer
-            outputWriter.write(outputStream.toString("UTF-8"));
-            outputWriter.flush();
-            // return true if there were no errors
-            return tidy.getParseErrors() == 0;
+            XMLParserConfiguration parser = new HTMLConfiguration();
+            org.cyberneko.html.filters.Writer nekoWriter = new org.cyberneko.html.filters.Writer(
+                outputWriter, "UTF-8");
+            XMLDocumentFilter[] filters = { new Purifier(), nekoWriter };
+            parser.setProperty("http://cyberneko.org/html/properties/filters", filters);
+
+            XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");
+            parser.parse(source);
+
+            return true;
         }
-        catch(IOException e)
+        catch(Exception e)
         {
-            throw new RuntimeException("unexpected exception", e);
-        }
-        finally
-        {
-            // return tidy wrapper to the pool
-            tidyWrap.release();
+            try
+            {
+                errorWriter.append("failed to validate HTML: "+e.getMessage());
+                errorWriter.flush();
+            }
+            catch(IOException e1)
+            {
+                throw new RuntimeException("unexpected exception", e);
+            }
+            log.error("HTML validation error", e);
+            return false;
         }
     }
 
