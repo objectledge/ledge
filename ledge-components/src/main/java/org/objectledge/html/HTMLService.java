@@ -39,10 +39,12 @@ public interface HTMLService
      * <p>
      * Document will be pretty printed as XHTML.
      * </p>
+     * @param writer writer to receive text.
+     * @param bodyContentOnly only children nodes of BODY element will be serialized when enabled.
      * 
      * @throws HTMLException if the document could not be serialized.
      */
-    public String dom4jToText(Document dom4jDoc)
+    public void dom4jToText(Document dom4jDoc, Writer writer, boolean bodyContentOnly)
         throws HTMLException;
 
     /**

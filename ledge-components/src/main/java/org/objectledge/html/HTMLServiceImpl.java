@@ -100,12 +100,9 @@ public class HTMLServiceImpl
     }
 
     @SuppressWarnings("unchecked")
-    public String dom4jToText(org.dom4j.Document dom4jDoc)
+    public void dom4jToText(org.dom4j.Document dom4jDoc, Writer writer, boolean bodyContentOnly)
     throws HTMLException
-    {
-        String html;
-        
-        StringWriter writer = new StringWriter(4096);
+    {       
         OutputFormat format = new OutputFormat();
         format.setXHTML(true);
         format.setExpandEmptyElements(true);
@@ -114,33 +111,34 @@ public class HTMLServiceImpl
         HTMLWriter htmlWriter = new HTMLWriter(writer, format);
         try
         {
-            for(Node node : (List<Node>)dom4jDoc.getRootElement().element("BODY").content())
+            if(!bodyContentOnly)
             {
-            	if(node instanceof Element)
-            	{
-            		htmlWriter.write((Element)node);
-            	}
-            	if(node instanceof Text)
-            	{
-            		writer.append(node.getText());
-            	}
-            	if(node instanceof Comment)
-            	{
-            		writer.append("<!--").append(node.getText()).append("-->");
-            	}
+                htmlWriter.write(dom4jDoc);
             }
-            html = writer.toString();
+            else
+            {
+                for(Node node : (List<Node>)dom4jDoc.getRootElement().element("BODY").content())
+                {
+                    if(node instanceof Element)
+                    {
+                        htmlWriter.write((Element)node);
+                    }
+                    if(node instanceof Text)
+                    {
+                        writer.append(node.getText());
+                    }
+                    if(node instanceof Comment)
+                    {
+                        writer.append("<!--").append(node.getText()).append("-->");
+                    }
+                }
+            }
+            writer.flush();
         }
         catch(IOException e)
         {
             throw new HTMLException("Could not serialize the document", e);
         }
-
-        // hack: decode &apos;
-        html = html.replace("&apos;","'");
-        // rafal: I have no idea why the hack above would be necessary. ' does not get encoded as
-        // &apos; by HTMLWriter. Clues anyone?
-        return html;
     }
 
     public org.dom4j.Document parseXmlAttribute(String value, String attributeName)
