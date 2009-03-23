@@ -56,7 +56,10 @@ public class NodeControlHTML extends NodeControl
         try
         {
             dom4jDoc = htmlService.textToDom4j(value, errorWriter, tidyConfiguration);
-            htmlService.dom4jToText(dom4jDoc, outputWriter, true);
+            if(dom4jDoc != null)
+            {
+                htmlService.dom4jToText(dom4jDoc, outputWriter, true);
+            }
         }
         catch(HTMLException e)
         {
