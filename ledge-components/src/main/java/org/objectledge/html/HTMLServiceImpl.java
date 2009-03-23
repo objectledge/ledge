@@ -19,7 +19,6 @@ import org.dom4j.Node;
 import org.dom4j.Text;
 import org.dom4j.io.HTMLWriter;
 import org.dom4j.io.OutputFormat;
-import org.jcontainer.dna.Logger;
 
 /** Implementation of the DocumentService.
  *
@@ -29,22 +28,24 @@ import org.jcontainer.dna.Logger;
 public class HTMLServiceImpl
 	implements HTMLService
 {
-    private Logger log;
-    
-    public HTMLServiceImpl(Logger logger)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+	public org.dom4j.Document emptyDom4j()
     {
-        log = logger;
+        DocumentFactory factory = DocumentFactory.getInstance();
+        org.dom4j.Document document = factory.createDocument();
+        Element html = document.addElement("HTML");
+        html.addElement("HEAD").addElement("TITLE");
+        html.addElement("BODY");
+        return document;
     }
 
-    // net.cyklotron.cms.documents.HTMLService methods /////////////////////////////////////////
-	
-	public String collectText(Document html)	
-	{
-		HTMLTextCollectorVisitor collector = new HTMLTextCollectorVisitor();
-		html.accept(collector);
-		return collector.getText();
-	}
-    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Document textToDom4j(String html) throws HTMLException
     {
         try
@@ -65,6 +66,10 @@ public class HTMLServiceImpl
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Document textToDom4j(String html,  Writer errorWriter,
         Properties tidyConfiguration) throws HTMLException
     {
@@ -86,6 +91,10 @@ public class HTMLServiceImpl
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @SuppressWarnings("unchecked")
     public void dom4jToText(org.dom4j.Document dom4jDoc, Writer writer, boolean bodyContentOnly)
     throws HTMLException
@@ -128,13 +137,14 @@ public class HTMLServiceImpl
         }
     }
 
-    public org.dom4j.Document emptyDom4j()
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String collectText(Document html)	
     {
-        DocumentFactory factory = DocumentFactory.getInstance();
-        org.dom4j.Document document = factory.createDocument();
-        Element html = document.addElement("HTML");
-        html.addElement("HEAD").addElement("TITLE");
-        html.addElement("BODY");
-        return document;
+    	HTMLTextCollectorVisitor collector = new HTMLTextCollectorVisitor();
+    	html.accept(collector);
+    	return collector.getText();
     }
 }
