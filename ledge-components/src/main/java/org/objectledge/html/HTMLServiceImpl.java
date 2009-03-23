@@ -75,7 +75,7 @@ public class HTMLServiceImpl
     {
         try
         {
-            SAXParser parser = new org.cyberneko.html.parsers.SAXParser();
+            XMLParserConfiguration parser = new HTMLConfiguration();
             Dom4jDocumentBuilder dom4jBuilder = new Dom4jDocumentBuilder();
             XMLDocumentFilter[] filters = { new Purifier(), dom4jBuilder };
             parser.setProperty("http://cyberneko.org/html/properties/filters", filters);
@@ -123,6 +123,7 @@ public class HTMLServiceImpl
         }
     }
 
+    @SuppressWarnings("unchecked")
     public String serializeHTML(org.dom4j.Document dom4jDoc)
     throws HTMLException
     {
