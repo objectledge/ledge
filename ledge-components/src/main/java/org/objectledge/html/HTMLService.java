@@ -75,12 +75,4 @@ public interface HTMLService
      * @throws HTMLException if the document could not be parsed.
      */
     public String collectText(Document dom4jDoc);
-
-    // the following three methods don't belong here - it's not HTML processing
-    public Document parseXmlAttribute(String value, String attributeName)
-        throws HTMLException;
-
-    public String selectAllText(Document dom4jDoc, String xpath);
-
-    public String selectFirstText(Document dom4jDoc, String xpath);
 }

@@ -14,7 +14,6 @@ import org.cyberneko.html.filters.Purifier;
 import org.dom4j.Comment;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.Text;
@@ -126,54 +125,6 @@ public class HTMLServiceImpl
         catch(IOException e)
         {
             throw new HTMLException("Could not serialize the document", e);
-        }
-    }
-
-    public org.dom4j.Document parseXmlAttribute(String value, String attributeName)
-        throws HTMLException
-    {
-        // parse a document fragment
-        org.dom4j.Document fragment = null;
-        try
-        {
-            fragment = DocumentHelper.parseText(value);
-        }
-        catch(org.dom4j.DocumentException e)
-        {
-            throw new HTMLException("The XML value for attribute '" + attributeName + "' is invalid", e);
-        }
-        return fragment;
-    }
-
-    @SuppressWarnings("unchecked")
-    public String selectAllText(org.dom4j.Document metaDom, String xpath)
-    {
-        StringBuilder buf = new StringBuilder(256);
-        collectText((List<Element>)metaDom.selectNodes(xpath), buf);
-        return buf.toString().trim();        
-    }
-
-    @SuppressWarnings("unchecked")
-    private void collectText(List<Element> elements, StringBuilder buff)  
-    {
-        for(Element e : elements)
-        {
-            buff.append(e.getTextTrim()).append(' ');
-            collectText((List<Element>)e.elements(), buff);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public String selectFirstText(org.dom4j.Document metaDom, String xpath)
-    {
-        List<Element> elements = (List<Element>)metaDom.selectNodes(xpath);
-        if(elements.size() == 0)
-        {
-            return "";
-        }
-        else
-        {
-            return elements.get(0).getTextTrim();
         }
     }
 
