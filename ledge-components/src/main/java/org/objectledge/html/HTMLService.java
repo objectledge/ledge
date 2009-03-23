@@ -43,12 +43,13 @@ public interface HTMLService
      * 
      * @param html HTML text.
      * @param errorWriter writer to receive error messages.
-     * @param cleanupProfile cleanup settings.
+     * @param cleanupProfile name of the cleanup profile to be used, or <code>null</code> to skip
+     *        cleanup.
      * @return HTML document or <code>null</code> on unsuccessful validation.
      * @throws HTMLException if the there is a technical problem running the validation. All that
      *         end user can possibly fix will be reported to errorWriter.
      */
-    public Document textToDom4j(String html, Writer errorWriter, Properties cleanupProfile)
+    public Document textToDom4j(String html, Writer errorWriter, String cleanupProfile)
         throws HTMLException;
 
     /**

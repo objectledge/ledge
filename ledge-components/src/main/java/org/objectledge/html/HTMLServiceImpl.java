@@ -5,11 +5,10 @@ import static java.util.Collections.unmodifiableSet;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.xerces.xni.XNIException;
@@ -175,15 +174,21 @@ public class HTMLServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public Document textToDom4j(String html, Writer errorWriter, Properties tidyConfiguration)
+    public Document textToDom4j(String html, Writer errorWriter, String cleanupProfile)
         throws HTMLException
     {
         try
         {
             XMLParserConfiguration parser = new HTMLConfiguration();
+            List<XMLDocumentFilter> filters = new ArrayList<XMLDocumentFilter>(2);
+            filters.add(new Purifier());
+            if(cleanupProfile != null)
+            {
+                filters.add(getElementRemover(cleanupProfile));
+            }
             Dom4jDocumentBuilder dom4jBuilder = new Dom4jDocumentBuilder();
-            XMLDocumentFilter[] filters = { new Purifier(), dom4jBuilder };
-            parser.setProperty("http://cyberneko.org/html/properties/filters", filters);
+            filters.add(dom4jBuilder);
+            parser.setProperty("http://cyberneko.org/html/properties/filters", filters.toArray());
             parser.setFeature("http://cyberneko.org/html/features/report-errors", true);
             ValidationErrorCollector errorCollector = new ValidationErrorCollector(errorWriter);
             parser.setErrorHandler(errorCollector);
