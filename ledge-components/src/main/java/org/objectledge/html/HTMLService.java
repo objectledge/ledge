@@ -14,19 +14,6 @@ import org.dom4j.Document;
 public interface HTMLService
 {
     /**
-     * Collect all text content in a HTML document.
-     * <p>
-     * Provided for building full text search indexes.
-     * </p>
-     * 
-     * @param html HTML document.
-     * @return collected text content.
-     * @throws HTMLException if the document could not be parsed.
-     */
-    public String collectText(String html)
-        throws HTMLException;
-
-    /**
      * Create Dom4j tree representing an empty HTML document.
      * 
      * @return empty document.
@@ -57,6 +44,18 @@ public interface HTMLService
      */
     public String dom4jToText(Document dom4jDoc)
         throws HTMLException;
+
+    /**
+     * Collect all text content in a HTML document.
+     * <p>
+     * Provided for building full text search indexes.
+     * </p>
+     * 
+     * @param dom4jDoc HTML document.
+     * @return collected text content.
+     * @throws HTMLException if the document could not be parsed.
+     */
+    public String collectText(Document dom4jDoc);
 
     // the following three methods don't belong here - it's not HTML processing
     public Document parseXmlAttribute(String value, String attributeName)

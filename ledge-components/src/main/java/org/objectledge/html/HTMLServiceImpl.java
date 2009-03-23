@@ -12,8 +12,8 @@ import org.apache.xerces.xni.parser.XMLInputSource;
 import org.apache.xerces.xni.parser.XMLParserConfiguration;
 import org.cyberneko.html.HTMLConfiguration;
 import org.cyberneko.html.filters.Purifier;
-import org.cyberneko.html.parsers.SAXParser;
 import org.dom4j.Comment;
+import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -22,7 +22,6 @@ import org.dom4j.Text;
 import org.dom4j.io.HTMLWriter;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Logger;
-import org.objectledge.encodings.HTMLEntityEncoder;
 
 /** Implementation of the DocumentService.
  *
@@ -41,11 +40,10 @@ public class HTMLServiceImpl
 
     // net.cyklotron.cms.documents.HTMLService methods /////////////////////////////////////////
 	
-	public String collectText(String html)
-	throws HTMLException
+	public String collectText(Document html)	
 	{
 		HTMLTextCollectorVisitor collector = new HTMLTextCollectorVisitor();
-		textToDom4j(html).accept(collector);
+		html.accept(collector);
 		return collector.getText();
 	}
     
