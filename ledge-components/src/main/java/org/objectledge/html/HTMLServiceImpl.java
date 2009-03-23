@@ -47,7 +47,7 @@ public class HTMLServiceImpl
 		return collector.getText();
 	}
     
-    public org.dom4j.Document textToDom4j(String html) throws HTMLException
+    public Document textToDom4j(String html) throws HTMLException
     {
         try
         {
@@ -67,35 +67,24 @@ public class HTMLServiceImpl
         }
     }
 
-    public boolean cleanUpAndValidate(String html, Writer outputWriter, Writer errorWriter,
-        Properties tidyConfiguration)
+    public Document textToDom4j(String html,  Writer errorWriter,
+        Properties tidyConfiguration) throws HTMLException
     {
         try
         {
             XMLParserConfiguration parser = new HTMLConfiguration();
-            org.cyberneko.html.filters.Writer nekoWriter = new org.cyberneko.html.filters.Writer(
-                outputWriter, "UTF-8");
-            XMLDocumentFilter[] filters = { new Purifier(), nekoWriter };
+            Dom4jDocumentBuilder dom4jBuilder = new Dom4jDocumentBuilder();
+            XMLDocumentFilter[] filters = { new Purifier(), dom4jBuilder };
             parser.setProperty("http://cyberneko.org/html/properties/filters", filters);
 
             XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");
             parser.parse(source);
 
-            return true;
+            return dom4jBuilder.getDocument();        
         }
         catch(Exception e)
         {
-            try
-            {
-                errorWriter.append("failed to validate HTML: "+e.getMessage());
-                errorWriter.flush();
-            }
-            catch(IOException e1)
-            {
-                throw new RuntimeException("unexpected exception", e);
-            }
-            log.error("HTML validation error", e);
-            return false;
+            throw new HTMLException("failed to parse HTML document", e);            
         }
     }
 

@@ -3,7 +3,9 @@ package pl.caltha.forms.internal.ui;
 import java.io.StringWriter;
 import java.util.Properties;
 
+import org.dom4j.Document;
 import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.xml.sax.Attributes;
 
@@ -50,11 +52,23 @@ public class NodeControlHTML extends NodeControl
         StringWriter errorWriter = new StringWriter(256);
         String outputValue;
         // 1.5. run cleanup
+        Document dom4jDoc = null;
+        try
+        {
+            dom4jDoc = htmlService.textToDom4j(value, errorWriter, tidyConfiguration);
+            htmlService.dom4jToText(dom4jDoc, outputWriter, true);
+        }
+        catch(HTMLException e)
+        {
+            errorWriter.append(e.getMessage());
+            // in case validation passes but serialization fails
+            dom4jDoc = null;
+        }
         // 2.1. check tidy if there were any errors.
-        if(htmlService.cleanUpAndValidate(value, outputWriter, errorWriter, tidyConfiguration))
+        if(dom4jDoc != null)
         {
             // 2.2. get cleaned HTML as String
-            outputValue = outputWriter.toString();
+            outputValue = outputWriter.toString(); 
         }
         else
         {
@@ -67,10 +81,7 @@ public class NodeControlHTML extends NodeControl
             instance.setStateValue(contextNode, TIDY_ERROR_LOG, errorLog);
 			// make sure validation of the form fails
             instance.setError(contextNode, "HTML_VALIDATION_ERROR");
-        }
-        // 2.3. Remove HTML headers and footers
-        outputValue = htmlService.stripHTMLHead(outputValue);
-        
+        }        
         super.setValue(instance, outputValue);
     }
     

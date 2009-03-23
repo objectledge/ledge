@@ -35,13 +35,30 @@ public interface HTMLService
         throws HTMLException;
 
     /**
+     * Parse HTML text into a Dom4j document with cleanup and validation.
+     * <p>
+     * This method will fix trivial errors like improperly closed tags or missing quotes on
+     * attributes but will fail on serious errors illegal tags.
+     * </p>
+     * 
+     * @param html HTML text.
+     * @param errorWriter writer to receive error messages.
+     * @param cleanupProfile cleanup settings.
+     * @return HTML document or <code>null</code> on unsuccessful validation.
+     * @throws HTMLException if the there is a technical problem running the validation. All that
+     *         end user can possibly fix will be reported to errorWriter.
+     */
+    public Document textToDom4j(String html, Writer errorWriter, Properties cleanupProfile)
+        throws HTMLException;
+
+    /**
      * Serialized HTML document from Dom4j tree into text.
      * <p>
      * Document will be pretty printed as XHTML.
      * </p>
+     * 
      * @param writer writer to receive text.
      * @param bodyContentOnly only children nodes of BODY element will be serialized when enabled.
-     * 
      * @throws HTMLException if the document could not be serialized.
      */
     public void dom4jToText(Document dom4jDoc, Writer writer, boolean bodyContentOnly)
@@ -70,6 +87,4 @@ public interface HTMLService
     // ...
     public String stripHTMLHead(String htmlDoc);
 
-    public boolean cleanUpAndValidate(String value, Writer outputWriter, Writer errorWriter,
-        Properties tidyConfiguration);
 }
