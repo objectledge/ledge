@@ -3,6 +3,7 @@ package pl.caltha.forms.internal.ui;
 import java.io.StringWriter;
 import java.util.Properties;
 
+import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.html.HTMLService;
 import org.xml.sax.Attributes;
 
@@ -61,7 +62,8 @@ public class NodeControlHTML extends NodeControl
             outputValue = value;
             // set error information in state because ErrorCollector
             // does not allow to store errors explicitly
-            String errorLog = htmlService.encodeHTMLAttribute(errorWriter.toString(), "UTF-8");
+            HTMLEntityEncoder encoder = new HTMLEntityEncoder();
+            String errorLog = encoder.encodeAttribute(errorWriter.toString(), "UTF-8");
             instance.setStateValue(contextNode, TIDY_ERROR_LOG, errorLog);
 			// make sure validation of the form fails
             instance.setError(contextNode, "HTML_VALIDATION_ERROR");

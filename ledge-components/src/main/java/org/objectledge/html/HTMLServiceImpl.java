@@ -33,8 +33,6 @@ public class HTMLServiceImpl
 	implements HTMLService
 {
     private Logger log;
-
-    private HTMLEntityEncoder encoder = new HTMLEntityEncoder();
     
     public HTMLServiceImpl(Logger logger)
     {
@@ -42,26 +40,6 @@ public class HTMLServiceImpl
     }
 
     // net.cyklotron.cms.documents.HTMLService methods /////////////////////////////////////////
-
-	public String encodeHTML(String html, String encodingName)
-	{ 
-		String encodedHtml = "";
-		if(html != null && html.length() > 0)
-		{
-			encodedHtml = encoder.encodeHTML(html, encodingName);
-		}
-		return encodedHtml;
-	}    
-
-    public String encodeHTMLAttribute(String html, String encodingName)
-    {
-        String encodedHtml = "";
-        if(html != null && html.length() > 0)
-        {
-            encodedHtml = encoder.encodeAttribute(html, encodingName);
-        }
-        return encodedHtml;
-    }   
 	
 	public String collectText(String html)
 	throws HTMLException

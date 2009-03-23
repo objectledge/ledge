@@ -13,10 +13,6 @@ import org.dom4j.Document;
  */
 public interface HTMLService
 {
-    public String encodeHTML(String html, String encodingName);
-
-    public String encodeHTMLAttribute(String html, String encodingName);
-
     /**
      * Collect all text content in a HTML document.
      * <p>
