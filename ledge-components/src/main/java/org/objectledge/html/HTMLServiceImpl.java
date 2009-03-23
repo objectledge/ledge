@@ -6,8 +6,11 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.parser.XMLDocumentFilter;
+import org.apache.xerces.xni.parser.XMLErrorHandler;
 import org.apache.xerces.xni.parser.XMLInputSource;
+import org.apache.xerces.xni.parser.XMLParseException;
 import org.apache.xerces.xni.parser.XMLParserConfiguration;
 import org.cyberneko.html.HTMLConfiguration;
 import org.cyberneko.html.filters.Purifier;
@@ -79,11 +82,14 @@ public class HTMLServiceImpl
             Dom4jDocumentBuilder dom4jBuilder = new Dom4jDocumentBuilder();
             XMLDocumentFilter[] filters = { new Purifier(), dom4jBuilder };
             parser.setProperty("http://cyberneko.org/html/properties/filters", filters);
+            parser.setFeature("http://cyberneko.org/html/features/report-errors", true);
+            ValidationErrorCollector errorCollector = new ValidationErrorCollector(errorWriter);
+            parser.setErrorHandler(errorCollector);
 
             XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");
             parser.parse(source);
 
-            return dom4jBuilder.getDocument();        
+            return !errorCollector.errorDetected() ? dom4jBuilder.getDocument() : null;
         }
         catch(Exception e)
         {
@@ -146,5 +152,71 @@ public class HTMLServiceImpl
     	HTMLTextCollectorVisitor collector = new HTMLTextCollectorVisitor();
     	html.accept(collector);
     	return collector.getText();
+    }
+
+
+    // helper classes
+    
+    private final class ValidationErrorCollector
+        implements XMLErrorHandler
+    {
+        private final Writer errorWriter;
+        
+        private boolean errorDetected = false;
+    
+        private ValidationErrorCollector(Writer errorWriter)
+        {
+            this.errorWriter = errorWriter;
+        }
+    
+        @Override
+        public void fatalError(String domain, String key, XMLParseException exception)
+            throws XNIException
+        {
+            throw exception;
+        }
+    
+        @Override
+        public void error(String domain, String key, XMLParseException exception)
+            throws XNIException
+        {
+            errorDetected = true;
+            report("error", exception);
+        }
+    
+        @Override
+        public void warning(String domain, String key, XMLParseException exception)
+            throws XNIException
+        {
+            report("warning", exception);
+        }
+    
+        public boolean errorDetected()
+        {
+            return errorDetected;
+        }
+        
+        private void report(String severity, XMLParseException exception)
+            throws XNIException
+        {
+            try
+            {
+                errorWriter.append(severity).append(" at ");
+                if(exception.getExpandedSystemId().length() > 0)
+                {
+                    errorWriter.append(exception.getExpandedSystemId()).append(" ");
+                }
+                errorWriter.append("line ").append(
+                    Integer.toString(exception.getLineNumber()));
+                errorWriter.append(" column ").append(
+                    Integer.toString(exception.getColumnNumber())).append(": ");
+                errorWriter.append(exception.getMessage()).append("\n");
+                errorWriter.flush();
+            }
+            catch(IOException e)
+            {
+                throw new XNIException(e);
+            }
+        }
     }
 }
