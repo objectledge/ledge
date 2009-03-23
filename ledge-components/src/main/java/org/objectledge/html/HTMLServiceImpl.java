@@ -3,7 +3,10 @@ package org.objectledge.html;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.xerces.xni.XNIException;
@@ -13,6 +16,7 @@ import org.apache.xerces.xni.parser.XMLInputSource;
 import org.apache.xerces.xni.parser.XMLParseException;
 import org.apache.xerces.xni.parser.XMLParserConfiguration;
 import org.cyberneko.html.HTMLConfiguration;
+import org.cyberneko.html.filters.ElementRemover;
 import org.cyberneko.html.filters.Purifier;
 import org.dom4j.Comment;
 import org.dom4j.Document;
@@ -22,6 +26,10 @@ import org.dom4j.Node;
 import org.dom4j.Text;
 import org.dom4j.io.HTMLWriter;
 import org.dom4j.io.OutputFormat;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.ComponentInitializationError;
 
 /** Implementation of the DocumentService.
  *
@@ -31,6 +39,68 @@ import org.dom4j.io.OutputFormat;
 public class HTMLServiceImpl
 	implements HTMLService
 {
+    final private Map<String, Configuration> cleanupProfiles = new HashMap<String, Configuration>();
+
+    public HTMLServiceImpl(Logger logger, Configuration config)
+        throws ComponentInitializationError, ConfigurationException
+    {
+        Configuration[] profilesDefs = config.getChildren("cleanupProfile");
+
+        for(Configuration profileDef : profilesDefs)
+        {
+            String name = profileDef.getAttribute("name");
+            cleanupProfiles.put(name, profileDef);
+        }
+    }
+
+    private ElementRemover getElementRemover(String profileName)
+    {
+        ElementRemover elementRemover = new ElementRemover();
+        Configuration[] acceptElements = cleanupProfiles.get(profileName).getChild("acceptElements")
+            .getChildren("element");
+        Configuration[] removeElements = cleanupProfiles.get(profileName).getChild("removeElements")
+            .getChildren("element");
+
+        try
+        {
+            for(int i = 0; i < acceptElements.length; i++)
+            {
+
+                String element = acceptElements[i].getAttribute("name");
+                String[] attrs = null;
+
+                Configuration[] attrDefs = acceptElements[i].getChildren("attribute");
+                if(attrDefs.length > 0)
+                {
+                    attrs = new String[attrDefs.length];
+                    for(int j = 0; j < attrDefs.length; j++)
+                    {
+                        attrs[j] = attrDefs[j].getAttribute("name");
+                    }
+                }
+                elementRemover.acceptElement(element, attrs);
+            }
+
+            for(int i = 0; i < removeElements.length; i++)
+            {
+                String element = removeElements[i].getAttribute("name");
+                elementRemover.removeElement(element);
+            }
+
+            return elementRemover;
+
+        }
+        catch(ConfigurationException e)
+        {
+            throw new IllegalArgumentException("Invalid configuration", e);
+        }
+    }
+    
+    public List<String> getCleanupProfileNames()
+    {   
+        return new ArrayList<String>(cleanupProfiles.keySet());
+    }        
+    
     /**
      * {@inheritDoc}
      */
