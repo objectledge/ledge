@@ -2,7 +2,6 @@ package org.objectledge.html;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
@@ -176,35 +175,6 @@ public class HTMLServiceImpl
         {
             return elements.get(0).getTextTrim();
         }
-    }
-
-    /** Removes everything but <code>&lt;body&gt;</code> tag contents.
-     *  This one is stupid and assumes that there is no > cahractr in any of body
-     *  tags attribute values.
-     */
-    public String stripHTMLHead(String htmlDoc)
-    {
-        int bodyStartIndex = htmlDoc.indexOf("<body");
-        int bodyEndIndex = htmlDoc.indexOf("</body>");
-    
-        if(bodyStartIndex > -1)
-        {
-            for(int i = bodyStartIndex; i < bodyEndIndex; i++)
-            {
-                if(htmlDoc.charAt(i) == '>')
-                {
-                    bodyStartIndex = i+1;
-                    break;
-                }
-            }
-    
-            if(bodyStartIndex < bodyEndIndex)
-            {
-                return htmlDoc.substring(bodyStartIndex, bodyEndIndex);
-            }
-        }
-        
-        return htmlDoc;
     }
 
     public org.dom4j.Document emptyDom4j()

@@ -83,8 +83,4 @@ public interface HTMLService
     public String selectAllText(Document dom4jDoc, String xpath);
 
     public String selectFirstText(Document dom4jDoc, String xpath);
-
-    // ...
-    public String stripHTMLHead(String htmlDoc);
-
 }
