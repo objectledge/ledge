@@ -188,7 +188,8 @@ public class HTMLServiceImpl
             }
             Dom4jDocumentBuilder dom4jBuilder = new Dom4jDocumentBuilder();
             filters.add(dom4jBuilder);
-            parser.setProperty("http://cyberneko.org/html/properties/filters", filters.toArray());
+            parser.setProperty("http://cyberneko.org/html/properties/filters", filters
+                .toArray(new XMLDocumentFilter[filters.size()]));
             parser.setFeature("http://cyberneko.org/html/features/report-errors", true);
             ValidationErrorCollector errorCollector = new ValidationErrorCollector(errorWriter);
             parser.setErrorHandler(errorCollector);
