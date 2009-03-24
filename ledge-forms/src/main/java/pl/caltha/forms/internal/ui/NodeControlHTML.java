@@ -1,7 +1,6 @@
 package pl.caltha.forms.internal.ui;
 
 import java.io.StringWriter;
-import java.util.Properties;
 
 import org.dom4j.Document;
 import org.objectledge.encodings.HTMLEntityEncoder;
@@ -10,8 +9,8 @@ import org.objectledge.html.HTMLService;
 import org.xml.sax.Attributes;
 
 import pl.caltha.forms.ConstructionException;
-import pl.caltha.forms.FormsService;
 import pl.caltha.forms.internal.model.InstanceImpl;
+import pl.caltha.forms.internal.util.Util;
 
 /**
  * HTML input control. Includes:
@@ -26,15 +25,15 @@ public class NodeControlHTML extends NodeControl
 {
     private HTMLService htmlService;
     
+    private String cleanupProfile;
+    
     public NodeControlHTML(String type, Attributes atts)
     throws ConstructionException
     {
         super(type, atts);
+        // Optional, may be null. Null value is accepted by HTMLService.
+        cleanupProfile = Util.createAttribute(atts, "cleanupProfile", null);
     }
-
-    /** Tidy configuration. */
-    private static Properties tidyConfiguration;
-    /** PoolService is used to pool jTidy objects. */
 
     //------------------------------------------------------------------------
     // Control methods
@@ -55,7 +54,7 @@ public class NodeControlHTML extends NodeControl
         Document dom4jDoc = null;
         try
         {
-            dom4jDoc = htmlService.textToDom4j(value, errorWriter, tidyConfiguration);
+            dom4jDoc = htmlService.textToDom4j(value, errorWriter, cleanupProfile);
             if(dom4jDoc != null)
             {
                 htmlService.dom4jToText(dom4jDoc, outputWriter, true);
@@ -105,14 +104,9 @@ public class NodeControlHTML extends NodeControl
     /** Gets a Tidy instance which will be used by this control.
      */
     protected void init(UI ui)
-    throws ConstructionException
+        throws ConstructionException
     {
         super.init(ui);
-        FormsService formToolService = ui.getForm().getFormToolService();
-        if(tidyConfiguration == null)
-        {
-            tidyConfiguration = formToolService.getTidyConfiguration();
-        }
         htmlService = ui.getForm().getHtmlService();
     }
 }

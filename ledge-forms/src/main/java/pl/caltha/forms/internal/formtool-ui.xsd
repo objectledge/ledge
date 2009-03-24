@@ -163,6 +163,7 @@ User Interface form controls
       <xsd:attributeGroup ref="formtool:bindFirstAttributes"/>
       <xsd:attributeGroup ref="formtool:commonUIAttributes"/>
       <xsd:attributeGroup ref="formtool:linkingAttributes"/>
+      <xsd:attribute name="cleanupProfile" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
