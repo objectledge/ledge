@@ -1,12 +1,15 @@
 package org.objectledge.html;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableSet;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -264,9 +267,17 @@ public class HTMLServiceImpl
 
     // helper classes
 
-    private final class ValidationErrorCollector
+    private static final class ValidationErrorCollector
         implements XMLErrorHandler
     {
+        static final Set<List<String>> IGNORED = new HashSet<List<String>>();
+        
+        static
+        {
+            IGNORED.add(asList("http://cyberneko.org/html", "HTML1011"));
+            IGNORED.add(asList("http://cyberneko.org/html", "HTML2000"));
+        }        
+        
         private final Writer errorWriter;
 
         private boolean errorDetected = false;
@@ -287,15 +298,21 @@ public class HTMLServiceImpl
         public void error(String domain, String key, XMLParseException exception)
             throws XNIException
         {
-            errorDetected = true;
-            report("error", exception);
+            if(!IGNORED.contains(asList(domain, key)))
+            {
+                errorDetected = true;
+                report("error", domain, key, exception);
+            }
         }
 
         @Override
         public void warning(String domain, String key, XMLParseException exception)
             throws XNIException
         {
-            report("warning", exception);
+            if(!IGNORED.contains(asList(domain, key)))
+            {
+                report("warning", domain, key, exception);
+            }                
         }
 
         public boolean errorDetected()
@@ -303,12 +320,13 @@ public class HTMLServiceImpl
             return errorDetected;
         }
 
-        private void report(String severity, XMLParseException exception)
+        private void report(String severity, String domain, String key, XMLParseException exception)
             throws XNIException
         {
             try
             {
-                errorWriter.append(severity).append(" at ");
+                errorWriter.append(severity).append(" ");
+                errorWriter.append(domain).append(" ").append(key).append(" at ");
                 if(exception.getExpandedSystemId().length() > 0)
                 {
                     errorWriter.append(exception.getExpandedSystemId()).append(" ");
