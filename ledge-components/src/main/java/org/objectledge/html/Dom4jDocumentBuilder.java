@@ -69,6 +69,23 @@ public class Dom4jDocumentBuilder
         }
     }
 
+    
+    @Override
+    public void emptyElement(QName element, XMLAttributes attributes, Augmentations augs)
+        throws XNIException
+    {
+        try
+        {
+            contentHandler.startElement(element.uri, element.localpart, element.rawname,
+                new AttributesAdapter(attributes));
+            contentHandler.endElement(element.uri, element.localpart, element.rawname);
+        }
+        catch(SAXException e)
+        {
+            throw new XNIException(e);
+        }
+    }
+
     @Override
     public void endDocument(Augmentations augs)
         throws XNIException
