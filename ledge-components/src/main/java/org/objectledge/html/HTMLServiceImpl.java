@@ -47,6 +47,14 @@ public class HTMLServiceImpl
      * Configured HTML cleanup profiles.
      */
     final private Map<String, Configuration> cleanupProfiles = new HashMap<String, Configuration>();
+    
+    private final static Set<List<String>> IGNORED_ERRORS = new HashSet<List<String>>();
+    
+    static
+    {
+        IGNORED_ERRORS.add(asList("http://cyberneko.org/html", "HTML1011"));
+        IGNORED_ERRORS.add(asList("http://cyberneko.org/html", "HTML2000"));
+    }        
 
     /**
      * Creates an instance of HTMLService
@@ -194,7 +202,7 @@ public class HTMLServiceImpl
             parser.setProperty("http://cyberneko.org/html/properties/filters", filters
                 .toArray(new XMLDocumentFilter[filters.size()]));
             parser.setFeature("http://cyberneko.org/html/features/report-errors", true);
-            ValidationErrorCollector errorCollector = new ValidationErrorCollector(errorWriter);
+            ValidationErrorCollector errorCollector = new ValidationErrorCollector(errorWriter, IGNORED_ERRORS);
             parser.setErrorHandler(errorCollector);
 
             XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");
@@ -270,21 +278,16 @@ public class HTMLServiceImpl
     private static final class ValidationErrorCollector
         implements XMLErrorHandler
     {
-        static final Set<List<String>> IGNORED = new HashSet<List<String>>();
-        
-        static
-        {
-            IGNORED.add(asList("http://cyberneko.org/html", "HTML1011"));
-            IGNORED.add(asList("http://cyberneko.org/html", "HTML2000"));
-        }        
-        
+        final Set<List<String>> ignored;
+  
         private final Writer errorWriter;
 
         private boolean errorDetected = false;
 
-        private ValidationErrorCollector(Writer errorWriter)
+        private ValidationErrorCollector(Writer errorWriter, Set<List<String>> ignored)
         {
             this.errorWriter = errorWriter;
+            this.ignored = ignored;
         }
 
         @Override
@@ -298,7 +301,7 @@ public class HTMLServiceImpl
         public void error(String domain, String key, XMLParseException exception)
             throws XNIException
         {
-            if(!IGNORED.contains(asList(domain, key)))
+            if(!ignored.contains(asList(domain, key)))
             {
                 errorDetected = true;
                 report("error", domain, key, exception);
@@ -309,7 +312,7 @@ public class HTMLServiceImpl
         public void warning(String domain, String key, XMLParseException exception)
             throws XNIException
         {
-            if(!IGNORED.contains(asList(domain, key)))
+            if(!ignored.contains(asList(domain, key)))
             {
                 report("warning", domain, key, exception);
             }                
