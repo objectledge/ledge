@@ -48,13 +48,8 @@ public class HTMLServiceImpl
      */
     final private Map<String, Configuration> cleanupProfiles = new HashMap<String, Configuration>();
     
-    private final static Set<List<String>> IGNORED_ERRORS = new HashSet<List<String>>();
-    
-    static
-    {
-        IGNORED_ERRORS.add(asList("http://cyberneko.org/html", "HTML1011"));
-        IGNORED_ERRORS.add(asList("http://cyberneko.org/html", "HTML2000"));
-    }        
+    private final Set<List<String>> ignoredErrors = new HashSet<List<String>>();
+  
 
     /**
      * Creates an instance of HTMLService
@@ -71,6 +66,21 @@ public class HTMLServiceImpl
         {
             String name = profileDef.getAttribute("name");
             cleanupProfiles.put(name, profileDef);
+        }
+        
+        for(Configuration ignoreConf : config.getChildren("ignoreErrors"))
+        {
+            for(Configuration domainConf : ignoreConf.getChildren("domain"))
+            {
+                for(Configuration errorConf : domainConf.getChildren("error"))
+                {
+                    ignoredErrors.add(asList(domainConf.getAttribute("name"), errorConf.getAttribute("key")));
+                }
+            }
+            for(Configuration errorConf : ignoreConf.getChildren("error"))
+            {
+                ignoredErrors.add(asList(errorConf.getAttribute("domain"), errorConf.getAttribute("key")));
+            }
         }
     }
 
@@ -202,7 +212,7 @@ public class HTMLServiceImpl
             parser.setProperty("http://cyberneko.org/html/properties/filters", filters
                 .toArray(new XMLDocumentFilter[filters.size()]));
             parser.setFeature("http://cyberneko.org/html/features/report-errors", true);
-            ValidationErrorCollector errorCollector = new ValidationErrorCollector(errorWriter, IGNORED_ERRORS);
+            ValidationErrorCollector errorCollector = new ValidationErrorCollector(errorWriter, ignoredErrors);
             parser.setErrorHandler(errorCollector);
 
             XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");

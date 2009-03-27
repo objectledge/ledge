@@ -34,7 +34,10 @@
   <start>
     <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
       <zeroOrMore>
-  	 	<ref name="cleanupProfile"/>      
+        <choice>
+  	 	  <ref name="cleanupProfile"/>
+          <ref name="ignoreErrors"/>
+        </choice>
   	  </zeroOrMore>    
 	</element>
   </start>
@@ -74,6 +77,27 @@
     	</element>
       </oneOrMore>
     </element>
+</define>
+
+<define name="ignoreErrors">
+  <element name="ignoreErrors">
+    <oneOrMore>
+      <choice>
+        <element name="error">
+          <attribute name="domain"/>
+          <attribute name="key"/>
+        </element> 
+        <element name="domain">
+          <attribute name="name"/>
+          <oneOrMore>  
+            <element name="error">
+              <attribute name="key"/>
+            </element>
+          </oneOrMore>
+        </element>
+      </choice>
+    </oneOrMore>
+  </element>
 </define>
 
 </grammar> 
