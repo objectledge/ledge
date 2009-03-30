@@ -63,6 +63,10 @@ public class NodeControlHTML extends NodeControl
         catch(HTMLException e)
         {
             errorWriter.append(e.getMessage());
+            if(e.getCause() != null)
+            {
+                errorWriter.append(": ").append(e.getCause().getMessage());
+            }            
             // in case validation passes but serialization fails
             dom4jDoc = null;
         }
