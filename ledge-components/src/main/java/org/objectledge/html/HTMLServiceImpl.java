@@ -248,6 +248,10 @@ public class HTMLServiceImpl
             }
             else
             {
+                if(!"HTML".equals(dom4jDoc.getRootElement().getName()) || dom4jDoc.getRootElement().element("BODY") == null)
+                {
+                    throw new HTMLException("invalid document: missing HTML and/or BODY tags");
+                }
                 for(Node node : (List<Node>)dom4jDoc.getRootElement().element("BODY").content())
                 {
                     if(node instanceof Element)
