@@ -39,13 +39,13 @@ public class NodeControlHTML extends NodeControl
     // Control methods
     //
     /** Key for Tidy error log state value. */
-    private String TIDY_ERROR_LOG = "htmlarea.tidyErrorLog";
+    private String ERROR_LOG = "htmlarea.tidyErrorLog";
 
     void setValue(InstanceImpl instance, String value)
     {
         // clean last error log
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);
-        instance.setStateValue(contextNode, TIDY_ERROR_LOG, null);
+        instance.setStateValue(contextNode, ERROR_LOG, null);
         // set up buffers
         StringWriter outputWriter = new StringWriter(value.length() + 256);
         StringWriter errorWriter = new StringWriter(256);
@@ -84,7 +84,7 @@ public class NodeControlHTML extends NodeControl
             // does not allow to store errors explicitly
             HTMLEntityEncoder encoder = new HTMLEntityEncoder();
             String errorLog = encoder.encodeAttribute(errorWriter.toString(), "UTF-8");
-            instance.setStateValue(contextNode, TIDY_ERROR_LOG, errorLog);
+            instance.setStateValue(contextNode, ERROR_LOG, errorLog);
 			// make sure validation of the form fails
             instance.setError(contextNode, "HTML_VALIDATION_ERROR");
         }        
@@ -93,13 +93,13 @@ public class NodeControlHTML extends NodeControl
     
     public boolean hasError(InstanceImpl instance)
     {
-        return (getTidyErrorLog(instance) != null);
+        return (getErrorLog(instance) != null);
     }
 
-    public String getTidyErrorLog(InstanceImpl instance)
+    public String getErrorLog(InstanceImpl instance)
     {
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);
-        return (String)(instance.getStateValue(contextNode, TIDY_ERROR_LOG));
+        return (String)(instance.getStateValue(contextNode, ERROR_LOG));
     }
 
     //------------------------------------------------------------------------
