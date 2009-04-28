@@ -116,7 +116,7 @@ public class ExceptionRedirectorValve implements Valve
         {
             Class leafException = null;
             Throwable tt;
-            for(tt = t; t != null; tt = tt.getCause()){
+            for(tt = t; tt != null; tt = tt.getCause()){
 
                 Iterator i = exceptionViewMap.keySet().iterator();
                 while (i.hasNext())
