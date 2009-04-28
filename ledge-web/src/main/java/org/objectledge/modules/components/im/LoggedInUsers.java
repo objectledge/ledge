@@ -51,6 +51,8 @@ import org.objectledge.parameters.directory.DirectoryParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.components.AbstractComponent;
+import org.objectledge.web.mvc.security.SecurityChecking;
+
 
 /**
  * A component that displays logged in users along with relevan IM information.
@@ -60,6 +62,7 @@ import org.objectledge.web.mvc.components.AbstractComponent;
  */
 public class LoggedInUsers
     extends AbstractComponent
+    implements SecurityChecking
 {
     /**
      * Compares principal by name.
@@ -190,4 +193,32 @@ public class LoggedInUsers
             throw new ProcessingException("failed to retrieve user information", e);
         }
     }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresSecureChannel(Context context)
+        throws ProcessingException
+    {
+        return false;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean requiresAuthenticatedUser(Context context)
+        throws ProcessingException
+    {
+        return true;
+    }
+    
+    /**
+     * @{inheritDoc}
+     */
+    public boolean checkAccessRights(Context context)
+        throws ProcessingException
+    {
+        return true;
+    }
+    
 }

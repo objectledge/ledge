@@ -114,27 +114,30 @@ public class ExceptionRedirectorValve implements Valve
         Throwable t = (Throwable)context.getAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION);
         if (t != null)
         {
-
             Class leafException = null;
-            Iterator i = exceptionViewMap.keySet().iterator();
-            while (i.hasNext())
-            {
-                Class temp = (Class)i.next();
-                if (temp.isAssignableFrom(t.getClass()))
+            Throwable tt;
+            for(tt = t; t != null; tt = tt.getCause()){
+
+                Iterator i = exceptionViewMap.keySet().iterator();
+                while (i.hasNext())
                 {
-                    if (leafException == null || leafException.isAssignableFrom(temp))
+                    Class temp = (Class)i.next();
+                    if (temp.isAssignableFrom(tt.getClass()))
                     {
-                        leafException = temp;
+                        if (leafException == null || leafException.isAssignableFrom(temp))
+                        {
+                            leafException = temp;
+                        }
                     }
                 }
             }
-            log((String)exceptionLoggingLevelMap.get(leafException), t);
+            log((String)exceptionLoggingLevelMap.get(leafException), tt);
             String view = (String)exceptionViewMap.get(leafException);
             TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
             if (templatingContext != null)
             {
                 templatingContext.put("originalView", mvcContext.getView());
-                templatingContext.put("stackTrace", new StackTrace(t).toString());
+                templatingContext.put("stackTrace", new StackTrace(tt).toString());
             }
             mvcContext.setView(view);
         }
