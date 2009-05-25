@@ -218,7 +218,12 @@ public class HTMLServiceImpl
             XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");
             parser.parse(source);
 
-            return !errorCollector.errorDetected() ? dom4jBuilder.getDocument() : null;
+            Document doc = dom4jBuilder.getDocument();
+            if(doc.getRootElement().content().isEmpty())
+            {
+                doc = emptyDom4j();
+            }
+            return !errorCollector.errorDetected() ? doc : null;
         }
         catch(Exception e)
         {
