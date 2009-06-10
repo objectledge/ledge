@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ObjectLedge components">
+
+  <title>ObjectLedge Maven plugin</title>
+  <body>
+    <links>
+      <item name="home" href="../../index.html"/>
+      <item name="wiki" href="http://objectledge.org/confluence/display/LEDGE"/>
+      <item name="issues" href="http://objectledge.org/jira/secure/BrowseProject.jspa?id=10000"/>
+      <item name="fisheye" href="http://objectledge.org/fisheye/browse/ledge/ledge-maven-plugin"/>
+    </links>
+    <menu name="Reference">
+      <item name="Goals" href="goals.html" collapse="true"/>
+      <item name="Properties" href="properties.html" collapse="true"/>
+    </menu>
+  </body>
+</project>
+  
