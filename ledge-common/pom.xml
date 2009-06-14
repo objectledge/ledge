@@ -279,7 +279,7 @@
               </goals>
             </execution>
             <execution>
-              <id>test-tes</id>
+              <id>list-test-resources</id>
               <!-- listing of test resources -->
               <phase>process-test-resources</phase>
               <goals>
@@ -290,7 +290,7 @@
               </configuration>
             </execution>
             <execution>
-              <id>test-main</id>
+              <id>list-main-resources</id>
               <!-- listing of main resources for test -->
               <phase>process-test-resources</phase>
               <goals>
