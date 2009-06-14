@@ -227,6 +227,15 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <issueManagement>
+  	<system>Jira</system>
+  	<url>http://objectledge.org/jira/browse/LEDGE</url>
+  </issueManagement>
+  <scm>
+  	<connection>scm:svn:http://objectledge.org/svn/ledge</connection>
+  	<developerConnection>scm:svn:http://objectledge.org/svn/ledge</developerConnection>
+  	<url>http://objectledge.org/fisheye/browse/ledge</url>
+  </scm>
   <build>
     <pluginManagement>
       <plugins>
@@ -309,4 +318,16 @@
       </build>
     </profile>
   </profiles>
+  <distributionManagement>
+  	<repository>
+  		<id>releases</id>
+  		<name>ObjectLedge releases Nexus repository</name>
+  		<url>http://objectledge.org/nexus/content/repositories/m2releases/</url>
+  	</repository>
+  	<snapshotRepository>
+  		<id>snapshots</id>
+  		<name>ObjectLedge snapshots Nexus repository</name>
+  		<url>http://objectledge.org/nexus/content/repositories/m2snapshots/</url>
+  	</snapshotRepository>
+  </distributionManagement>
 </project>
