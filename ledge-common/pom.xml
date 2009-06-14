@@ -30,22 +30,22 @@
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-components</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-container</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-web</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-lgpl</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>dna</groupId>
@@ -267,7 +267,7 @@
         <plugin>
           <groupId>org.objectledge</groupId>
           <artifactId>ledge-maven-plugin</artifactId>
-          <version>1.0.0-SNAPSHOT</version>
+          <version>${project.version}</version>
           <executions>
             <execution>
               <id>package</id>
