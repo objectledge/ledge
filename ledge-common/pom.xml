@@ -337,14 +337,14 @@
   </profiles>
   <distributionManagement>
   	<repository>
-  		<id>releases</id>
+  		<id>ledge.releases</id>
   		<name>ObjectLedge releases Nexus repository</name>
-  		<url>http://objectledge.org/nexus/content/repositories/m2releases/</url>
+  		<url>http://objectledge.org/nexus/content/repositories/m2releases</url>
   	</repository>
   	<snapshotRepository>
-  		<id>snapshots</id>
+  		<id>ledge.snapshots</id>
   		<name>ObjectLedge snapshots Nexus repository</name>
-  		<url>http://objectledge.org/nexus/content/repositories/m2snapshots/</url>
+  		<url>http://objectledge.org/nexus/content/repositories/m2snapshots</url>
   	</snapshotRepository>
   </distributionManagement>
 </project>
