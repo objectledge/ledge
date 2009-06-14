@@ -221,7 +221,8 @@
         <groupId>dom4j</groupId>
         <artifactId>dom4j</artifactId>
         <version>1.4</version>
-      </dependency>      <dependency>
+      </dependency>      
+      <dependency>
         <groupId>jwebunit</groupId>
         <artifactId>jwebunit</artifactId>
         <version>1.2</version>
@@ -230,11 +231,6 @@
         <groupId>org.objectledge.ext</groupId>
         <artifactId>maxq</artifactId>
         <version>0.99c</version>
-      </dependency>
-      <dependency>
-        <groupId>org.objectledge.ext</groupId>
-        <artifactId>tidy</artifactId>
-        <version>damian</version>
       </dependency>
       <dependency>
         <groupId>org.objectledge.ext</groupId>

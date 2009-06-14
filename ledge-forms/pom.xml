@@ -31,10 +31,6 @@
     </dependency>
     <dependency>
       <groupId>org.objectledge.ext</groupId>
-      <artifactId>tidy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.objectledge.ext</groupId>
       <artifactId>sosnoski-xmls</artifactId>
     </dependency>
   </dependencies>
