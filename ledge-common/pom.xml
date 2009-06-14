@@ -218,6 +218,10 @@
         <version>1.9.11</version>
       </dependency>
       <dependency>
+        <groupId>dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+        <version>1.4</version>
+      </dependency>      <dependency>
         <groupId>jwebunit</groupId>
         <artifactId>jwebunit</artifactId>
         <version>1.2</version>

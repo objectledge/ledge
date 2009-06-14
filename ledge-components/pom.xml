@@ -90,7 +90,11 @@
     <dependency>
       <groupId>nekohtml</groupId>
       <artifactId>nekohtml</artifactId>
-    </dependency>    
+    </dependency>
+    <dependency>
+        <groupId>dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+    </dependency>      
     <dependency>
       <groupId>javax.resource</groupId>
       <artifactId>connector-api</artifactId>
