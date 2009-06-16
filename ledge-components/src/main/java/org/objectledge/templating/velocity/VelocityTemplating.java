@@ -111,8 +111,10 @@ public class VelocityTemplating implements Templating, LogSystem
      */
     public void restart() 
         throws ComponentInitializationError
-    {
-        engine = new VelocityEngine();
+    {        
+        // create and initialize a new engine
+        VelocityEngine engine = new VelocityEngine();
+        
         extension = config.getChild("extension").getValue(".vt");
         encoding = config.getChild("encoding").getValue("ISO-8859-1");
         cache = config.getChild("cache").getValueAsBoolean(false);
@@ -174,6 +176,9 @@ public class VelocityTemplating implements Templating, LogSystem
 		///CLOVER:ON
         templateCache = new HashMap<String, Template>();
         templateExistsCache = new HashMap<String, Boolean>();
+
+        // replace old engine with new one
+        this.engine = engine;
     }
 
     /**
