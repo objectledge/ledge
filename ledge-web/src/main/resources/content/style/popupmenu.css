@@ -1,0 +1,26 @@
+.ledge-popupmenubutton span
+{
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+.ledge-popupmenu
+{
+  position: absolute;
+  visibility: hidden;
+  background-color: white;
+  border: solid 1px black;
+  padding: 1px;
+}
+
+.ledge-popupmenu a
+{
+  display: block;
+  padding: 2px;
+}
+
+.ledge-popupmenu a:hover
+{
+  background-color: yellow;
+}
