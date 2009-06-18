@@ -1,8 +1,12 @@
-browserUtil.addEventListener(document, "mousemove", function (event)
+// BrowserUtil.js must be loaded before WinPopup.js when 'mouse' positionType of popups is used.
+if(browserUtil != null)
 {
-    window._winPopups_mouseX = event.screenX;
-    window._winPopups_mouseY = event.screenY;
-});
+	browserUtil.addEventListener(document, "mousemove", function (event)
+	{
+	    window._winPopups_mouseX = event.screenX;
+	    window._winPopups_mouseY = event.screenY;
+	});
+}
 
 function getWinPopup(popupId)
 {
