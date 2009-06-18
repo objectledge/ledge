@@ -1,5 +1,5 @@
 // BrowserUtil.js must be loaded before WinPopup.js when 'mouse' positionType of popups is used.
-if(browserUtil != null)
+if(typeof(browserUtil) != "undefined")
 {
 	browserUtil.addEventListener(document, "mousemove", function (event)
 	{
