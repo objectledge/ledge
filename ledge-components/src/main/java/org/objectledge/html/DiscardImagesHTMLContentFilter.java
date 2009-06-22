@@ -23,7 +23,7 @@ public class DiscardImagesHTMLContentFilter implements HTMLContentFilter
     public Document filter(Document dom)
     {
         Document outDom = (Document)(dom.clone());
-		List images = outDom.selectNodes("//img");
+		List images = outDom.selectNodes("//IMG");
 		for(Iterator i=images.iterator(); i.hasNext();)
 		{
 			Element element = (Element)(i.next());
