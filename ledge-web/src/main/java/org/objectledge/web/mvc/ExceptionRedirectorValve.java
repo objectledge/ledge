@@ -131,13 +131,13 @@ public class ExceptionRedirectorValve implements Valve
                     }
                 }
             }
-            log((String)exceptionLoggingLevelMap.get(leafException), tt);
+            log((String)exceptionLoggingLevelMap.get(leafException), t);
             String view = (String)exceptionViewMap.get(leafException);
             TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
             if (templatingContext != null)
             {
                 templatingContext.put("originalView", mvcContext.getView());
-                templatingContext.put("stackTrace", new StackTrace(tt).toString());
+                templatingContext.put("stackTrace", new StackTrace(t).toString());
             }
             mvcContext.setView(view);
         }
