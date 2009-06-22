@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+<module name="Checker">
+<property name="severity" value="warning"/>
+<module name="TreeWalker">
+<module name="FileContentsHolder">
+</module>
+<module name="ArrayTypeStyle">
+</module>
+<module name="ModifierOrder">
+</module>
+<module name="UpperEll">
+</module>
+<module name="AvoidNestedBlocks">
+</module>
+<module name="EmptyBlock">
+<property name="option" value="text"/>
+<property name="tokens" value="LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_IF, LITERAL_FOR, LITERAL_TRY, LITERAL_WHILE, STATIC_INIT"/>
+</module>
+<module name="NeedBraces">
+<property name="tokens" value="LITERAL_DO, LITERAL_ELSE, LITERAL_IF, LITERAL_FOR, LITERAL_WHILE"/>
+</module>
+<module name="DoubleCheckedLocking">
+</module>
+<module name="EmptyStatement">
+</module>
+<module name="EqualsHashCode">
+</module>
+<module name="HiddenField">
+<property name="tokens" value="VARIABLE_DEF"/>
+</module>
+<module name="InnerAssignment">
+<property name="tokens" value="ASSIGN, BAND_ASSIGN, BOR_ASSIGN, BSR_ASSIGN, BXOR_ASSIGN, DIV_ASSIGN, MINUS_ASSIGN, MOD_ASSIGN, PLUS_ASSIGN, SL_ASSIGN, SR_ASSIGN, STAR_ASSIGN"/>
+</module>
+<module name="MissingSwitchDefault">
+</module>
+<module name="RedundantThrows">
+<property name="allowUnchecked" value="true"/>
+<property name="allowSubclasses" value="true"/>
+</module>
+<module name="SimplifyBooleanExpression">
+</module>
+<module name="SimplifyBooleanReturn">
+</module>
+<module name="HideUtilityClassConstructor">
+</module>
+<module name="InterfaceIsType">
+</module>
+<module name="VisibilityModifier">
+<property name="protectedAllowed" value="true"/>
+</module>
+<module name="AvoidStarImport">
+</module>
+<module name="RedundantImport">
+</module>
+<module name="UnusedImports">
+</module>
+<module name="JavadocMethod">
+<property name="scope" value="protected"/>
+<property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
+</module>
+<module name="JavadocType">
+<property name="tokens" value="CLASS_DEF, INTERFACE_DEF"/>
+</module>
+<module name="JavadocVariable">
+<property name="scope" value="protected"/>
+</module>
+<module name="ConstantName">
+<property name="format" value="^[A-Z](_?[A-Z0-9]+)*$"/>
+</module>
+<module name="LocalFinalVariableName">
+</module>
+<module name="LocalVariableName">
+</module>
+<module name="MemberName">
+</module>
+<module name="MethodName">
+</module>
+<module name="PackageName">
+<property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+</module>
+<module name="ParameterName">
+</module>
+<module name="StaticVariableName">
+</module>
+<module name="TypeName">
+<property name="tokens" value="CLASS_DEF, INTERFACE_DEF"/>
+</module>
+<module name="LineLength">
+<property name="max" value="104"/>
+</module>
+</module>
+</module>
