@@ -1,0 +1,18 @@
+# This is mime.type file.
+application/octet-stream	bin dms lha lzh exe class
+application/pdf			pdf
+application/postscript		ai eps ps
+application/zip			zip
+audio/midi			mid midi kar
+audio/mpeg			mpga mp2 mp3
+image/gif			gif
+image/jpeg			jpeg jpg jpe
+image/png			png
+image/tiff			tiff tif
+model/vrml			wrl vrml
+text/rtf			rtf
+text/sgml			sgml sgm
+text/xml			xml
+video/mpeg			mpeg mpg mpe
+video/quicktime			qt mov
+text/html			html htm
