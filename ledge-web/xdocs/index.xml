@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Home</title>
+  </properties>
+  
+  <body>
+    <section name="ObjectLedge web">
+    <subsection name="Introduction">
+      <p>
+         ObjectLedge Web module contains classes necessary for running ObjectLedge applications
+         in the J2EE Servlet environment.
+      </p>
+      <p>
+         As of 0.1 release, this includes an entry point <a href="servlet/LedgeServlet.html">Servlet</a>
+         and <a href="servlet/HttpDispatcher.html">dispatcher</a> interface, that a component must
+         conform to in order to handle the HTTP requests on behalf of the Servlet.
+      </p>
+      <p>
+         Future releases will include a flexible request handling pipeline, and a MVC framework
+         for fast and easy creation of expressive, robust and mantainable user interfaces.
+      </p>
+    </subsection>
+    </section>
+  </body>
+</document>
+  

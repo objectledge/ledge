@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>LinkToolFactory</title>
+  </properties>
+
+  <body>
+    <section name="LinkToolFactory">
+      <subsection name="Description">
+        <p>
+          The component produces the context tool used to generate links within the view.
+          Learn more about <a href="../../../ledge-components/docs/components/templating/ContextToolFactory.html">ContextTools</a>
+        </p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>LinkToolFactory <a href="../apidocs/org/objectledge/web/mvc/tools/LinkToolFactory.html">JavaDoc</a></li>
+            <li>LinkToolFactory <a href="../xref/org/objectledge/web/mvc/tools/LinkToolFactory.html">XRef</a></li>
+            <li>LinkToolFactory <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/mvc/tools/LinkToolFactory.java">CVS log</a></li>
+          </ul>
+        </p>
+        <p>
+          <ul>
+            <li>LinkToolFactoryImpl <a href="../apidocs/org/objectledge/web/mvc/tools/LinkToolFactoryImpl.html">JavaDoc</a></li>
+            <li>LinkToolFactoryImpl <a href="../xref/org/objectledge/web/mvc/tools/LinkToolFactoryImpl.html">XRef</a></li>
+            <li>LinkToolFactoryImpl <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/mvc/tools/LinkToolFactoryImpl.java">CVS log</a></li>
+          </ul>
+        </p>
+        <p>
+          <ul>
+            <li>LinkTool <a href="../apidocs/org/objectledge/web/mvc/tools/LinkTool.html">JavaDoc</a></li>
+            <li>LinkTool <a href="../xref/org/objectledge/web/mvc/tools/LinkTool.html">XRef</a></li>
+            <li>LinkTool <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/mvc/tools/LinkTool.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="../components/MVCClassFinder.html">MVCClassFinder</a>,
+                <a href="../components/MVCTemplateFinder.html">MVCTemplateFinder</a>,
+                <a href="../../../ledge-components/docs/components/Context.html">Context</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">        
+        <p>
+          <table>
+	        <tr>
+	   	      <th>position</th>
+		      <th>type</th>
+		      <th widht="100%">descritpion</th>
+		    </tr>
+  		    <tr>
+		      <td>1</td>
+		      <td>org.objectledge.context.Context</td>
+		      <td>The logger.</td>
+		    </tr>
+		    <tr>
+		      <td>2</td>
+		      <td>org.objectledge.web.mvc.finders.MVCClassFinder</td>
+		      <td>The logger.</td>
+		    </tr>
+		    <tr>
+		      <td>3</td>
+		      <td>org.objectledge.web.mvc.finders.MVCTemplateFinder</td>
+		      <td>The logger.</td>
+		    </tr>
+          </table>
+        </p>        
+      </subsection>
+      
+      
+    </section>
+  </body>
+</document>
