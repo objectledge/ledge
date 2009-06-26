@@ -1,68 +1,43 @@
 package org.objectledge.diff;
 
-import org.incava.util.diff.Diff;
-import org.incava.util.diff.Difference;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import org.incava.util.diff.Diff;
+import org.incava.util.diff.Difference;
 
 public class StringsDifferencer
 {
     /** The name of The empty line (<code>""</code>). */
     private final static String EMPTY_LINE = "";
 
-    /** The name of default blocks separator (<code>"\n"</code>). */
-    public final static String BLOCKS_SEPARATOR = "\n\r";
-
-    /** The name of default elements separator (<code>"\\b"</code>). */
-    public final static String ELEMENTS_SEPARATOR = "\\b";
-
     private List<String> leftBlocks;
 
     private List<String> rightBlocks;
 
-    private String blocksSeparator;
+    private Splitter elementSplitter;
 
-    private String elementsSeparator;
-
-    public StringsDifferencer(String oldStringsBlock, String newStringsBlock)
+    public StringsDifferencer(String oldStringsBlock, String newStringsBlock, Splitter blockSplitter)
     {
-        blocksSeparator = BLOCKS_SEPARATOR;
-        elementsSeparator = ELEMENTS_SEPARATOR;
-
-        leftBlocks = new ArrayList<String>(Arrays.asList(oldStringsBlock.split(blocksSeparator)));
-        rightBlocks = new ArrayList<String>(Arrays.asList(newStringsBlock.split(blocksSeparator)));
+        leftBlocks = blockSplitter.split(oldStringsBlock);
+        rightBlocks = blockSplitter.split(newStringsBlock);
     }
 
     public StringsDifferencer(String oldStringsBlock, String newStringsBlock,
-        String blockSeparator, String elementSeparator)
-    {
-        blocksSeparator = blockSeparator;
-        elementsSeparator = elementSeparator;
-
-        leftBlocks = new ArrayList<String>(Arrays.asList(oldStringsBlock.split(blockSeparator)));
-        rightBlocks = new ArrayList<String>(Arrays.asList(newStringsBlock.split(blockSeparator)));
-    }
-
-    public StringsDifferencer(List<String> oldStringsList, List<String> newStringsList)
-    {
-        blocksSeparator = BLOCKS_SEPARATOR;
-        elementsSeparator = ELEMENTS_SEPARATOR;
-
-        leftBlocks = oldStringsList;
-        rightBlocks = newStringsList;
+        Splitter blockSplitter, Splitter elementSplitter)
+    {       
+        leftBlocks = blockSplitter.split(oldStringsBlock);
+        rightBlocks = blockSplitter.split(newStringsBlock);
+        this.elementSplitter = elementSplitter;
     }
 
     public StringsDifferencer(List<String> oldStringsList, List<String> newStringsList,
-        String blockSeparator, String elementSeparator)
+        Splitter elementSplitter)
     {
-        blocksSeparator = blockSeparator;
-        elementsSeparator = elementSeparator;
-
         leftBlocks = oldStringsList;
         rightBlocks = newStringsList;
+        this.elementSplitter = elementSplitter;
     }
 
     public List<String> getLeftBlocks()
@@ -73,16 +48,6 @@ public class StringsDifferencer
     public List<String> getRightBlocks()
     {
         return rightBlocks;
-    }
-
-    public String getBlocksSeparator()
-    {
-        return blocksSeparator;
-    }
-
-    public String getElementsSeparator()
-    {
-        return elementsSeparator;
     }
 
     public List<Element<String>> diffBlocks()
@@ -107,10 +72,8 @@ public class StringsDifferencer
             diffElementsList = new Sequence<String>();
             if(diffBlock.getState().equals(State.CHANGED))
             {
-                leftElementsList = new ArrayList<String>(Arrays.asList(diffBlock.getLeft()
-                    .split(elementsSeparator)));
-                rightElementsList = new ArrayList<String>(Arrays.asList(diffBlock.getRight()
-                    .split(elementsSeparator)));
+                leftElementsList = elementSplitter.split(diffBlock.getLeft());
+                rightElementsList = elementSplitter.split(diffBlock.getRight());
 
                 diffElementsList.addAll(splitDiff(leftElementsList, rightElementsList));
                 diffElementsList.setState(State.CHANGED);
