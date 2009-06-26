@@ -35,6 +35,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -133,6 +134,15 @@ public class ClasspathFileSystemProviderTest
     {
         List<String> list = new ArrayList<String>(provider.list("/org/objectledge/filesystem/impl"));
         Collections.sort(list);
+        // Filter out Clover generated classes
+        Iterator<String> i = list.iterator();
+        while(i.hasNext())
+        {
+            if(i.next().contains("$__CLR"))
+            {
+                i.remove();
+            }
+        }
         assertEquals(4, list.size());
         assertEquals("LocalRandomAccessFile.class", list.get(0));
         assertEquals("ReadOnlyFileSystemProvider.class", list.get(1));
