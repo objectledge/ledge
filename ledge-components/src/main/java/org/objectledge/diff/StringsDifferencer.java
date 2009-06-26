@@ -9,51 +9,22 @@ import org.incava.util.diff.Difference;
 
 public class StringsDifferencer
 {
-    private List<String> leftBlocks;
-
-    private List<String> rightBlocks;
-
-    private Splitter elementSplitter;
-
-    public StringsDifferencer(String oldStringsBlock, String newStringsBlock, Splitter blockSplitter)
+    private StringsDifferencer()
     {
-        leftBlocks = blockSplitter.split(oldStringsBlock);
-        rightBlocks = blockSplitter.split(newStringsBlock);
+        // cannot be instantiated, intended for static method use
     }
-
-    public StringsDifferencer(String oldStringsBlock, String newStringsBlock,
-        Splitter blockSplitter, Splitter elementSplitter)
-    {       
-        leftBlocks = blockSplitter.split(oldStringsBlock);
-        rightBlocks = blockSplitter.split(newStringsBlock);
-        this.elementSplitter = elementSplitter;
-    }
-
-    public StringsDifferencer(List<String> oldStringsList, List<String> newStringsList,
-        Splitter elementSplitter)
+    
+    public Sequence<Element<String>> diff(String left, String right, Splitter blockSplitter)
     {
-        leftBlocks = oldStringsList;
-        rightBlocks = newStringsList;
-        this.elementSplitter = elementSplitter;
-    }
-
-    public List<String> getLeftBlocks()
-    {
-        return leftBlocks;
-    }
-
-    public List<String> getRightBlocks()
-    {
-        return rightBlocks;
-    }
-
-    public Sequence<Element<String>> diffBlocks()
-    {
+        List<String> leftBlocks = blockSplitter.split(left);
+        List<String> rightBlocks = blockSplitter.split(right);
         return diff(leftBlocks, rightBlocks);
     }
 
-    public Sequence<Sequence<Element<String>>> diffElements()
+    public static Sequence<Sequence<Element<String>>> diff(String left, String right, Splitter blockSplitter, Splitter elementSplitter)
     {
+        List<String> leftBlocks = blockSplitter.split(left);
+        List<String> rightBlocks = blockSplitter.split(right);
         Sequence<Element<String>> tier1diff = diff(leftBlocks, rightBlocks);
         Sequence<Sequence<Element<String>>> tier1sequence = new Sequence<Sequence<Element<String>>>(tier1diff.getState());
         for (Element<String> diffBlock : tier1diff)
@@ -68,7 +39,7 @@ public class StringsDifferencer
         return tier1sequence;
     }
    
-    private <T> Sequence<Element<T>> diff(List<T> left, List<T> right)
+    public static <T> Sequence<Element<T>> diff(List<T> left, List<T> right)
     {
         Sequence<Element<T>> sequence;
 
