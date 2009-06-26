@@ -35,7 +35,7 @@ public class Sequence<U>
     public State getState()
     {
         return state;
-    }
+    }    
 
     @Override
     public Iterator<U> iterator()
@@ -48,4 +48,9 @@ public class Sequence<U>
     {
         elements.add(elem);
     }    
+
+    U get(int index)
+    {
+        return elements.get(index);
+    }
 }
