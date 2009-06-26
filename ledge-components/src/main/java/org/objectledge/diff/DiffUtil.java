@@ -14,7 +14,7 @@ public class DiffUtil
         // cannot be instantiated, intended for static method use
     }
     
-    public Sequence<Element<String>> diff(String left, String right, Splitter blockSplitter)
+    public static Sequence<Element<String>> diff(String left, String right, Splitter blockSplitter)
     {
         List<String> leftBlocks = blockSplitter.split(left);
         List<String> rightBlocks = blockSplitter.split(right);
