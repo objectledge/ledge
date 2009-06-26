@@ -4,27 +4,29 @@
 package org.objectledge.diff;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class Sequence<T>
+public class Sequence<U>
+    implements Iterable<U>
 {
-    private List<Element<T>> elements;
+    private List<U> elements;
 
     private State state;
 
-    public Sequence()
+    public Sequence(State state)
     {
-        elements = new ArrayList<Element<T>>();
-        state = State.EQUAL;
+        elements = new ArrayList<U>();
+        this.state = state;
     }
 
-    public Sequence(List<Element<T>> elem)
+    public Sequence(List<U> elem)
     {
         elements = elem;
         state = State.EQUAL;
     }
 
-    public Sequence(List<Element<T>> elem, State s)
+    public Sequence(List<U> elem, State s)
     {
         elements = elem;
         state = s;
@@ -35,28 +37,15 @@ public class Sequence<T>
         return state;
     }
 
-    public void setState(State state)
+    @Override
+    public Iterator<U> iterator()
     {
-        this.state = state;
+        return elements.iterator();
     }
 
-    public void add(Element<T> elem)
+    // package private
+    void add(U elem)
     {
         elements.add(elem);
-    }
-    
-    public void add(T left, T right, State state)
-    {
-        elements.add(new Element<T>(left, right, state));
-    }
-
-    public void addAll(List<Element<T>> elem)
-    {
-        elements = elem;
-    }
-
-    public List<Element<T>> getElements()
-    {
-        return elements;
-    }
+    }    
 }
