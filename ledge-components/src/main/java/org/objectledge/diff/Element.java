@@ -5,11 +5,11 @@ package org.objectledge.diff;
 
 public class Element<T>
 {
-    T left;
+    private final T left;
 
-    T right;
+    private final T right;
 
-    private State state;
+    private final State state;
 
     public Element(T left, T right)
     {
@@ -28,11 +28,6 @@ public class Element<T>
     public State getState()
     {
         return state;
-    }
-
-    public void setState(State state)
-    {
-        this.state = state;
     }
 
     public T getLeft()

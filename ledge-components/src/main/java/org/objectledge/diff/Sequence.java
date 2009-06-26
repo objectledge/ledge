@@ -59,14 +59,4 @@ public class Sequence<T>
     {
         return elements;
     }
-
-    public void clear()
-    {
-        elements.clear();
-    }
-
-    public int getSize()
-    {
-        return elements.size();
-    }
 }
