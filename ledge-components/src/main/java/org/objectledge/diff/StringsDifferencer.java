@@ -13,55 +13,6 @@ public class StringsDifferencer
     /** The name of The empty line (<code>""</code>). */
     private final static String EMPTY_LINE = "";
 
-    private enum State
-    {
-        DIFF, EQUALS, ADDED, DEL
-    }
-
-    public class Element
-    {
-
-        private String leftElement;
-
-        private String rightElement;
-
-        private State state;
-
-        public Element(String left, String right)
-        {
-            leftElement = left;
-            rightElement = right;
-            state = State.EQUALS;
-        }
-
-        public Element(String left, String right, State s)
-        {
-            leftElement = left;
-            rightElement = right;
-            state = s;
-        }
-
-        public final State getState()
-        {
-            return state;
-        }
-
-        public void setState(State state)
-        {
-            this.state = state;
-        }
-
-        public final String getLeftElement()
-        {
-            return leftElement;
-        }
-
-        public final String getRightElement()
-        {
-            return rightElement;
-        }
-    }
-
     public class Block
     {
         private List<Element> elements;
@@ -71,13 +22,13 @@ public class StringsDifferencer
         public Block()
         {
             elements = new ArrayList<Element>();
-            state = State.EQUALS;
+            state = State.EQUAL;
         }
 
         public Block(List<Element> elem)
         {
             elements = elem;
-            state = State.EQUALS;
+            state = State.EQUAL;
         }
 
         public Block(List<Element> elem, State s)
@@ -229,15 +180,15 @@ public class StringsDifferencer
         for (Element diffBlock : diffBlocksList)
         {
             diffElementsList = new Block();
-            if(diffBlock.getState().equals(State.DIFF))
+            if(diffBlock.getState().equals(State.CHANGED))
             {
-                leftElementsList = new ArrayList<String>(Arrays.asList(diffBlock.leftElement
+                leftElementsList = new ArrayList<String>(Arrays.asList(diffBlock.getLeft()
                     .split(elementsSeparator)));
-                rightElementsList = new ArrayList<String>(Arrays.asList(diffBlock.rightElement
+                rightElementsList = new ArrayList<String>(Arrays.asList(diffBlock.getRight()
                     .split(elementsSeparator)));
 
                 diffElementsList.addAll(splitDiff(leftElementsList, rightElementsList));
-                diffElementsList.setState(State.DIFF);
+                diffElementsList.setState(State.CHANGED);
                 diffList.add(diffElementsList);
             }
             else
@@ -282,7 +233,7 @@ public class StringsDifferencer
                     && rightBlockIndex > difference.getDeletedEnd())
                 {
                     diffList.add(new Element(leftBlocksItr.next(), rightBlocksItr.next(),
-                        State.EQUALS));
+                        State.EQUAL));
                     rightBlockIndex++;
                     leftBlockIndex++;
                 }
@@ -301,7 +252,7 @@ public class StringsDifferencer
                     && rightBlockIndex >= difference.getDeletedStart()
                     && rightBlockIndex <= difference.getDeletedEnd())
                 {
-                    diffList.add(new Element(leftBlocksItr.next(), EMPTY_LINE, State.DEL));
+                    diffList.add(new Element(leftBlocksItr.next(), EMPTY_LINE, State.DELETED));
                     rightBlockIndex++;
                 }
                 // modified
@@ -311,7 +262,7 @@ public class StringsDifferencer
                     && leftBlockIndex <= difference.getAddedEnd())
                 {
                     diffList.add(new Element(leftBlocksItr.next(), rightBlocksItr.next(),
-                        State.DIFF));
+                        State.CHANGED));
                     rightBlockIndex++;
                     leftBlockIndex++;
                 }
@@ -321,7 +272,7 @@ public class StringsDifferencer
                     && (leftBlockIndex < difference.getAddedStart() || leftBlockIndex > difference
                         .getAddedEnd()) && -1 != difference.getAddedEnd())
                 {
-                    diffList.add(new Element(leftBlocksItr.next(), EMPTY_LINE, State.DIFF));
+                    diffList.add(new Element(leftBlocksItr.next(), EMPTY_LINE, State.CHANGED));
                     rightBlockIndex++;
                 }
                 // modified
@@ -331,7 +282,7 @@ public class StringsDifferencer
                     && leftBlockIndex >= difference.getAddedStart()
                     && leftBlockIndex <= difference.getAddedEnd())
                 {
-                    diffList.add(new Element(EMPTY_LINE, rightBlocksItr.next(), State.DIFF));
+                    diffList.add(new Element(EMPTY_LINE, rightBlocksItr.next(), State.CHANGED));
                     leftBlockIndex++;
                 }
 
@@ -347,7 +298,7 @@ public class StringsDifferencer
             while(rightBlocksItr.hasNext() && leftBlocksItr.hasNext())
             {
                 diffList
-                    .add(new Element(leftBlocksItr.next(), rightBlocksItr.next(), State.EQUALS));
+                    .add(new Element(leftBlocksItr.next(), rightBlocksItr.next(), State.EQUAL));
             }
         }
         return diffList;
