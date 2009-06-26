@@ -242,6 +242,11 @@
         <artifactId>steadystate-css2</artifactId>
         <version>1.0</version>
       </dependency>
+      <dependency>
+      	<groupId>net.java.dev.java-diff</groupId>
+      	<artifactId>java-diff</artifactId>
+      	<version>1.1.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <issueManagement>

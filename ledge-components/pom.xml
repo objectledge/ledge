@@ -113,6 +113,10 @@
       <artifactId>dbunit</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>net.java.dev.java-diff</groupId>
+    	<artifactId>java-diff</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <resources>

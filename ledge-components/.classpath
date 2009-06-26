@@ -36,5 +36,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/nekohtml/jars/nekohtml-1.9.11.jar" sourcepath="/EXT_SOURCE/nekohtml-1.9.11"/>
 	<classpathentry kind="var" path="MAVEN_REPO/xerces/jars/xercesImpl-2.8.1.jar" sourcepath="/EXT_SOURCE/xerces-2.8.1"/>
 	<classpathentry kind="var" path="MAVEN_REPO/dom4j/jars/dom4j-1.4.jar" sourcepath="/EXT_SOURCE/dom4j-1.4"/>
+	<classpathentry kind="var" path="MAVEN_REPO/net.java.dev.java-diff/jars/java-diff-1.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

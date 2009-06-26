@@ -184,6 +184,12 @@
       <version>1.4</version>
       <url>http://www.dom4j.org/</url>
     </dependency>
+    <dependency>
+      <groupId>net.java.dev.java-diff</groupId>
+      <id>java-diff</id>
+      <version>1.1.0</version>
+      <url>https://java-diff.dev.java.net/</url>
+    </dependency>
     <!-- runtime -->
 
     <dependency>
