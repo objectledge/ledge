@@ -88,99 +88,79 @@ public class StringsDifferencer
    
     private <T> Sequence<T> diff(List<T> left, List<T> right)
     {
-        Difference difference;
-
-        Diff<T> diff = new Diff<T>(left, right);
-        List<Difference> differences = diff.diff();
         Sequence<T> sequence = new Sequence<T>();
 
-        Iterator<Difference> differencesItr;
-        Iterator<T> rightBlocksItr, leftBlocksItr;
+        Iterator<T> lefItr = left.iterator();
+        Iterator<T> rightItr = right.iterator();
+        Iterator<Difference> diffItr = new Diff<T>(left, right).diff().iterator();
+       
+        int leftIdx = 0;
+        int rightIdx = 0;
 
-        int rightBlockIndex = 0;
-        int leftBlockIndex = 0;
-
-        sequence.clear();
-        differencesItr = differences.iterator();
-        rightBlocksItr = right.iterator();
-        leftBlocksItr = left.iterator();
-
-        if(differencesItr.hasNext())
+        if(diffItr.hasNext())
         {
-            difference = differencesItr.next();
-            while(rightBlocksItr.hasNext() || leftBlocksItr.hasNext())
+            Difference diff = diffItr.next();
+            while(rightItr.hasNext() || lefItr.hasNext())
             {
-
                 // equals
-                if(leftBlockIndex < difference.getAddedStart()
-                    && rightBlockIndex < difference.getDeletedStart()
-                    || leftBlockIndex > difference.getAddedEnd()
-                    && rightBlockIndex > difference.getDeletedEnd())
+                if(leftIdx < diff.getAddedStart() && rightIdx < diff.getDeletedStart()
+                    || leftIdx > diff.getAddedEnd() && rightIdx > diff.getDeletedEnd())
                 {
-                    sequence.add(leftBlocksItr.next(), rightBlocksItr.next(), State.EQUAL);
-                    rightBlockIndex++;
-                    leftBlockIndex++;
+                    sequence.add(lefItr.next(), rightItr.next(), State.EQUAL);
+                    rightIdx++;
+                    leftIdx++;
                 }
                 // added
-                else if(rightBlockIndex == difference.getDeletedStart()
-                    && difference.getDeletedEnd() == -1
-                    && leftBlockIndex >= difference.getAddedStart()
-                    && leftBlockIndex <= difference.getAddedEnd())
+                else if(rightIdx == diff.getDeletedStart() && diff.getDeletedEnd() == -1
+                    && leftIdx >= diff.getAddedStart() && leftIdx <= diff.getAddedEnd())
                 {
-                    sequence.add(null, rightBlocksItr.next(), State.ADDED);
-                    leftBlockIndex++;
+                    sequence.add(null, rightItr.next(), State.ADDED);
+                    leftIdx++;
                 }
                 // removed
-                else if(leftBlockIndex == difference.getAddedStart()
-                    && difference.getAddedEnd() == -1
-                    && rightBlockIndex >= difference.getDeletedStart()
-                    && rightBlockIndex <= difference.getDeletedEnd())
+                else if(leftIdx == diff.getAddedStart() && diff.getAddedEnd() == -1
+                    && rightIdx >= diff.getDeletedStart() && rightIdx <= diff.getDeletedEnd())
                 {
-                    sequence.add(leftBlocksItr.next(), null, State.DELETED);
-                    rightBlockIndex++;
+                    sequence.add(lefItr.next(), null, State.DELETED);
+                    rightIdx++;
                 }
                 // modified
-                else if(rightBlockIndex >= difference.getDeletedStart()
-                    && rightBlockIndex <= difference.getDeletedEnd()
-                    && leftBlockIndex >= difference.getAddedStart()
-                    && leftBlockIndex <= difference.getAddedEnd())
+                else if(rightIdx >= diff.getDeletedStart() && rightIdx <= diff.getDeletedEnd()
+                    && leftIdx >= diff.getAddedStart() && leftIdx <= diff.getAddedEnd())
                 {
-                    sequence.add(leftBlocksItr.next(), rightBlocksItr.next(), State.CHANGED);
-                    rightBlockIndex++;
-                    leftBlockIndex++;
+                    sequence.add(lefItr.next(), rightItr.next(), State.CHANGED);
+                    rightIdx++;
+                    leftIdx++;
                 }
                 // modified
-                else if(rightBlockIndex >= difference.getDeletedStart()
-                    && rightBlockIndex <= difference.getDeletedEnd()
-                    && (leftBlockIndex < difference.getAddedStart() || leftBlockIndex > difference
-                        .getAddedEnd()) && -1 != difference.getAddedEnd())
+                else if(rightIdx >= diff.getDeletedStart() && rightIdx <= diff.getDeletedEnd()
+                    && (leftIdx < diff.getAddedStart() || leftIdx > diff.getAddedEnd())
+                    && -1 != diff.getAddedEnd())
                 {
-                    sequence.add(leftBlocksItr.next(), null, State.CHANGED);
-                    rightBlockIndex++;
+                    sequence.add(lefItr.next(), null, State.CHANGED);
+                    rightIdx++;
                 }
                 // modified
-                else if((rightBlockIndex < difference.getDeletedStart() || rightBlockIndex > difference
-                    .getDeletedEnd())
-                    && -1 != difference.getDeletedEnd()
-                    && leftBlockIndex >= difference.getAddedStart()
-                    && leftBlockIndex <= difference.getAddedEnd())
+                else if((rightIdx < diff.getDeletedStart() || rightIdx > diff.getDeletedEnd())
+                    && -1 != diff.getDeletedEnd() && leftIdx >= diff.getAddedStart()
+                    && leftIdx <= diff.getAddedEnd())
                 {
-                    sequence.add(null, rightBlocksItr.next(), State.CHANGED);
-                    leftBlockIndex++;
+                    sequence.add(null, rightItr.next(), State.CHANGED);
+                    leftIdx++;
                 }
 
-                if(leftBlockIndex > difference.getAddedEnd()
-                    && rightBlockIndex > difference.getDeletedEnd() && differencesItr.hasNext())
+                if(leftIdx > diff.getAddedEnd() && rightIdx > diff.getDeletedEnd()
+                    && diffItr.hasNext())
                 {
-                    difference = differencesItr.next();
+                    diff = diffItr.next();
                 }
             }
         }
         else
         {
-            while(rightBlocksItr.hasNext() && leftBlocksItr.hasNext())
+            while(rightItr.hasNext() && lefItr.hasNext())
             {
-                sequence.add(leftBlocksItr.next(), rightBlocksItr.next(), State.EQUAL);
+                sequence.add(lefItr.next(), rightItr.next(), State.EQUAL);
             }
         }
         return sequence;
