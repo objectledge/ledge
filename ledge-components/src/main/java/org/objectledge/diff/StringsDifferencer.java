@@ -47,7 +47,7 @@ public class StringsDifferencer
         return rightBlocks;
     }
 
-    public List<Element<String>> diffBlocks()
+    public Sequence<String> diffBlocks()
     {
         return diff(leftBlocks, rightBlocks);
     }
@@ -57,14 +57,14 @@ public class StringsDifferencer
         List<String> leftElementsList;
         List<String> rightElementsList;
 
-        List<Element<String>> diffBlocksList;
+        Sequence<String> diffBlocksList;
         Sequence<String> diffElementsList;
         List<Sequence<String>> diffList;
 
         diffList = new ArrayList<Sequence<String>>();
 
         diffBlocksList = diff(leftBlocks, rightBlocks);
-        for (Element<String> diffBlock : diffBlocksList)
+        for (Element<String> diffBlock : diffBlocksList.getElements())
         {
             diffElementsList = new Sequence<String>();
             if(diffBlock.getState().equals(State.CHANGED))
@@ -72,7 +72,7 @@ public class StringsDifferencer
                 leftElementsList = elementSplitter.split(diffBlock.getLeft());
                 rightElementsList = elementSplitter.split(diffBlock.getRight());
 
-                diffElementsList.addAll(diff(leftElementsList, rightElementsList));
+                diffElementsList.addAll(diff(leftElementsList, rightElementsList).getElements());
                 diffElementsList.setState(State.CHANGED);
                 diffList.add(diffElementsList);
             }
@@ -86,13 +86,13 @@ public class StringsDifferencer
         return diffList;
     }
    
-    private <T> List<Element<T>> diff(List<T> leftList, List<T> rightList)
+    private <T> Sequence<T> diff(List<T> left, List<T> right)
     {
         Difference difference;
 
-        Diff<T> diff = new Diff<T>(leftList, rightList);
+        Diff<T> diff = new Diff<T>(left, right);
         List<Difference> differences = diff.diff();
-        List<Element<T>> diffList = new ArrayList<Element<T>>();
+        Sequence<T> sequence = new Sequence<T>();
 
         Iterator<Difference> differencesItr;
         Iterator<T> rightBlocksItr, leftBlocksItr;
@@ -100,10 +100,10 @@ public class StringsDifferencer
         int rightBlockIndex = 0;
         int leftBlockIndex = 0;
 
-        diffList.clear();
+        sequence.clear();
         differencesItr = differences.iterator();
-        rightBlocksItr = rightList.iterator();
-        leftBlocksItr = leftList.iterator();
+        rightBlocksItr = right.iterator();
+        leftBlocksItr = left.iterator();
 
         if(differencesItr.hasNext())
         {
@@ -117,8 +117,7 @@ public class StringsDifferencer
                     || leftBlockIndex > difference.getAddedEnd()
                     && rightBlockIndex > difference.getDeletedEnd())
                 {
-                    diffList.add(new Element<T>(leftBlocksItr.next(), rightBlocksItr.next(),
-                        State.EQUAL));
+                    sequence.add(leftBlocksItr.next(), rightBlocksItr.next(), State.EQUAL);
                     rightBlockIndex++;
                     leftBlockIndex++;
                 }
@@ -128,7 +127,7 @@ public class StringsDifferencer
                     && leftBlockIndex >= difference.getAddedStart()
                     && leftBlockIndex <= difference.getAddedEnd())
                 {
-                    diffList.add(new Element<T>(null, rightBlocksItr.next(), State.ADDED));
+                    sequence.add(null, rightBlocksItr.next(), State.ADDED);
                     leftBlockIndex++;
                 }
                 // removed
@@ -137,7 +136,7 @@ public class StringsDifferencer
                     && rightBlockIndex >= difference.getDeletedStart()
                     && rightBlockIndex <= difference.getDeletedEnd())
                 {
-                    diffList.add(new Element<T>(leftBlocksItr.next(), null, State.DELETED));
+                    sequence.add(leftBlocksItr.next(), null, State.DELETED);
                     rightBlockIndex++;
                 }
                 // modified
@@ -146,8 +145,7 @@ public class StringsDifferencer
                     && leftBlockIndex >= difference.getAddedStart()
                     && leftBlockIndex <= difference.getAddedEnd())
                 {
-                    diffList.add(new Element<T>(leftBlocksItr.next(), rightBlocksItr.next(),
-                        State.CHANGED));
+                    sequence.add(leftBlocksItr.next(), rightBlocksItr.next(), State.CHANGED);
                     rightBlockIndex++;
                     leftBlockIndex++;
                 }
@@ -157,7 +155,7 @@ public class StringsDifferencer
                     && (leftBlockIndex < difference.getAddedStart() || leftBlockIndex > difference
                         .getAddedEnd()) && -1 != difference.getAddedEnd())
                 {
-                    diffList.add(new Element<T>(leftBlocksItr.next(), null, State.CHANGED));
+                    sequence.add(leftBlocksItr.next(), null, State.CHANGED);
                     rightBlockIndex++;
                 }
                 // modified
@@ -167,7 +165,7 @@ public class StringsDifferencer
                     && leftBlockIndex >= difference.getAddedStart()
                     && leftBlockIndex <= difference.getAddedEnd())
                 {
-                    diffList.add(new Element<T>(null, rightBlocksItr.next(), State.CHANGED));
+                    sequence.add(null, rightBlocksItr.next(), State.CHANGED);
                     leftBlockIndex++;
                 }
 
@@ -182,10 +180,9 @@ public class StringsDifferencer
         {
             while(rightBlocksItr.hasNext() && leftBlocksItr.hasNext())
             {
-                diffList
-                    .add(new Element<T>(leftBlocksItr.next(), rightBlocksItr.next(), State.EQUAL));
+                sequence.add(leftBlocksItr.next(), rightBlocksItr.next(), State.EQUAL);
             }
         }
-        return diffList;
+        return sequence;
     }
 }
