@@ -13,81 +13,6 @@ public class StringsDifferencer
     /** The name of The empty line (<code>""</code>). */
     private final static String EMPTY_LINE = "";
 
-    public class Block
-    {
-        private List<Element<String>> elements;
-
-        private State state;
-
-        public Block()
-        {
-            elements = new ArrayList<Element<String>>();
-            state = State.EQUAL;
-        }
-
-        public Block(List<Element<String>> elem)
-        {
-            elements = elem;
-            state = State.EQUAL;
-        }
-
-        public Block(List<Element<String>> elem, State s)
-        {
-            elements = elem;
-            state = s;
-        }
-
-        public final State getState()
-        {
-            return state;
-        }
-
-        public void setState(State state)
-        {
-            this.state = state;
-        }
-
-        public void add(Element<String> elem)
-        {
-            elements.add(elem);
-        }
-
-        public void addAll(List<Element<String>> elem)
-        {
-            elements = elem;
-        }
-
-        public final List<Element<String>> getElements()
-        {
-            return elements;
-        }
-
-        public void clear()
-        {
-            elements.clear();
-        }
-
-        public final int getSize()
-        {
-            return elements.size();
-        }
-    }
-
-    /*
-     *  parse example
-     *    
-          stringA      stringB  ia  ib     Difference 
-             
-            "a",         "a",    0, 0
-                         "x",    1, 1     [1,-1], [1,2]
-                         "y",    1, 2
-            "b",         "b".    1, 3
-            "c",         "c",    2, 4
-            "d",         "j",    3, 5     [3, 3], [5,5]
-            "e"          "e",    4, 6
-            
-    */
-    
     /** The name of default blocks separator (<code>"\n"</code>). */
     public final static String BLOCKS_SEPARATOR = "\n\r";
 
@@ -165,21 +90,21 @@ public class StringsDifferencer
         return splitDiff(leftBlocks, rightBlocks);
     }
 
-    public List<Block> diffElements()
+    public List<Sequence<String>> diffElements()
     {
         List<String> leftElementsList;
         List<String> rightElementsList;
 
         List<Element<String>> diffBlocksList;
-        Block diffElementsList;
-        List<Block> diffList;
+        Sequence<String> diffElementsList;
+        List<Sequence<String>> diffList;
 
-        diffList = new ArrayList<Block>();
+        diffList = new ArrayList<Sequence<String>>();
 
         diffBlocksList = splitDiff(leftBlocks, rightBlocks);
         for (Element<String> diffBlock : diffBlocksList)
         {
-            diffElementsList = new Block();
+            diffElementsList = new Sequence<String>();
             if(diffBlock.getState().equals(State.CHANGED))
             {
                 leftElementsList = new ArrayList<String>(Arrays.asList(diffBlock.getLeft()
