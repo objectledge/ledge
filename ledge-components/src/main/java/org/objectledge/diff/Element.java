@@ -3,22 +3,22 @@
  */
 package org.objectledge.diff;
 
-public class Element
+public class Element<T>
 {
-    String left;
+    T left;
 
-    String right;
+    T right;
 
     private State state;
 
-    public Element(String left, String right)
+    public Element(T left, T right)
     {
         this.left = left;
         this.right = right;
         this.state = State.EQUAL;
     }
 
-    public Element(String left, String right, State state)
+    public Element(T left, T right, State state)
     {
         this.left = left;
         this.right = right;
@@ -35,12 +35,12 @@ public class Element
         this.state = state;
     }
 
-    public String getLeft()
+    public T getLeft()
     {
         return left;
     }
 
-    public String getRight()
+    public T getRight()
     {
         return right;
     }
