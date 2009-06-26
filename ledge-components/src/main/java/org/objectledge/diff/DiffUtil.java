@@ -7,9 +7,9 @@ import java.util.List;
 import org.incava.util.diff.Diff;
 import org.incava.util.diff.Difference;
 
-public class StringsDifferencer
+public class DiffUtil
 {
-    private StringsDifferencer()
+    private DiffUtil()
     {
         // cannot be instantiated, intended for static method use
     }
