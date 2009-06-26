@@ -44,6 +44,11 @@ public class Sequence<T>
     {
         elements.add(elem);
     }
+    
+    public void add(T left, T right, State state)
+    {
+        elements.add(new Element<T>(left, right, state));
+    }
 
     public void addAll(List<Element<T>> elem)
     {
