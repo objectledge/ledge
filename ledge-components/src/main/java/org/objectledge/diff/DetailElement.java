@@ -11,7 +11,7 @@ public class DetailElement<T> implements Element
 
     private final State state;
 
-    DetailElement(T left, T right, State state)
+    public DetailElement(T left, T right, State state)
     {
         this.left = left;
         this.right = right;
