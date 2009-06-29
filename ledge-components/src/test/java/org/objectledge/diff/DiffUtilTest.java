@@ -16,11 +16,11 @@ public class DiffUtilTest
     {
         List<Integer> left = Arrays.asList(1, 2, 3);
         List<Integer> right = Arrays.asList(1, 2, 3);
-        Sequence<Element<Integer>> diff = DiffUtil.diff(left, right);
-        assertEquals(State.EQUAL, diff.getState());
-        for(Element<Integer> elem : diff)
+        Sequence<DetailElement<Integer>> diff = DiffUtil.diff(left, right);
+        assertEquals(Element.State.EQUAL, diff.getState());
+        for(Element elem : diff)
         {
-            assertEquals(State.EQUAL, elem.getState());
+            assertEquals(Element.State.EQUAL, elem.getState());
         }
     }    
 
@@ -28,42 +28,42 @@ public class DiffUtilTest
     {
         List<Integer> left = Arrays.asList(1, 2, 3);
         List<Integer> right = Arrays.asList(0, 1, 2, 3);
-        Sequence<Element<Integer>> diff = DiffUtil.diff(left, right);
-        assertEquals(State.CHANGED, diff.getState());
-        assertEquals(State.ADDED, diff.get(0).getState());
+        Sequence<DetailElement<Integer>> diff = DiffUtil.diff(left, right);
+        assertEquals(Element.State.CHANGED, diff.getState());
+        assertEquals(Element.State.ADDED, diff.get(0).getState());
         assertNull(diff.get(0).getLeft());
         assertEquals(0, diff.get(0).getRight().intValue());
     }
     
     public void test1TierEqual()
     {
-        Sequence<Element<String>> diff = DiffUtil.diff("a,b,c", "a,b,c", COMMA_SPLITTER);
-        assertEquals(State.EQUAL, diff.getState());
-        for(Element<String> elem : diff)
+        Sequence<DetailElement<String>> diff = DiffUtil.diff("a,b,c", "a,b,c", COMMA_SPLITTER);
+        assertEquals(Element.State.EQUAL, diff.getState());
+        for(Element elem : diff)
         {
-            assertEquals(State.EQUAL, elem.getState());
+            assertEquals(Element.State.EQUAL, elem.getState());
         }
     }
 
     public void test1TierChangedMiddle()
     {
-        Sequence<Element<String>> diff = DiffUtil.diff("a,b,c", "a,bb,c", COMMA_SPLITTER);
-        assertEquals(State.CHANGED, diff.getState());
-        assertEquals(State.EQUAL, diff.get(0).getState());
-        assertEquals(State.CHANGED, diff.get(1).getState());
-        assertEquals(State.EQUAL, diff.get(2).getState());
+        Sequence<DetailElement<String>> diff = DiffUtil.diff("a,b,c", "a,bb,c", COMMA_SPLITTER);
+        assertEquals(Element.State.CHANGED, diff.getState());
+        assertEquals(Element.State.EQUAL, diff.get(0).getState());
+        assertEquals(Element.State.CHANGED, diff.get(1).getState());
+        assertEquals(Element.State.EQUAL, diff.get(2).getState());
     }
     
     public void test2TierEqual()
     {
-        Sequence<Sequence<Element<String>>> tier1 = DiffUtil.diff("a,b,c;a,b;a", "a,b,c;a,b;a", SEMI_SPLITTER, COMMA_SPLITTER);
-        assertEquals(State.EQUAL, tier1.getState());
-        for(Sequence<Element<String>> tier2 : tier1)
+        Sequence<Sequence<DetailElement<String>>> tier1 = DiffUtil.diff("a,b,c;a,b;a", "a,b,c;a,b;a", SEMI_SPLITTER, COMMA_SPLITTER);
+        assertEquals(Element.State.EQUAL, tier1.getState());
+        for(Sequence<DetailElement<String>> tier2 : tier1)
         {
-            assertEquals(State.EQUAL, tier2.getState());
-            for(Element<String> elem : tier2)
+            assertEquals(Element.State.EQUAL, tier2.getState());
+            for(Element elem : tier2)
             {
-                assertEquals(State.EQUAL, elem.getState());                
+                assertEquals(Element.State.EQUAL, elem.getState());                
             }
         }
     }

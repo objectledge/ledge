@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Sequence<U>
-    implements Iterable<U>
+public class Sequence<U extends Element>
+    implements Iterable<U>, Element
 {
     private final List<U> elements;
 
@@ -23,7 +23,7 @@ public class Sequence<U>
     public State getState()
     {
         return state;
-    }    
+    }
 
     @Override
     public Iterator<U> iterator()
@@ -35,7 +35,7 @@ public class Sequence<U>
     void add(U elem)
     {
         elements.add(elem);
-    }    
+    }
 
     U get(int index)
     {

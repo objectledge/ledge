@@ -1,35 +1,11 @@
-/**
- * 
- */
 package org.objectledge.diff;
 
-public class Element<T>
+public interface Element
 {
-    private final T left;
-
-    private final T right;
-
-    private final State state;
-
-    Element(T left, T right, State state)
+    public enum State
     {
-        this.left = left;
-        this.right = right;
-        this.state = state;
+        CHANGED, EQUAL, ADDED, DELETED
     }
-
-    public State getState()
-    {
-        return state;
-    }
-
-    public T getLeft()
-    {
-        return left;
-    }
-
-    public T getRight()
-    {
-        return right;
-    }
+    
+    public abstract State getState();
 }

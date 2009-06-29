@@ -14,34 +14,34 @@ public class DiffUtil
         // cannot be instantiated, intended for static method use
     }
     
-    public static Sequence<Element<String>> diff(String left, String right, Splitter blockSplitter)
+    public static Sequence<DetailElement<String>> diff(String left, String right, Splitter blockSplitter)
     {
         List<String> leftBlocks = blockSplitter.split(left);
         List<String> rightBlocks = blockSplitter.split(right);
         return diff(leftBlocks, rightBlocks);
     }
 
-    public static Sequence<Sequence<Element<String>>> diff(String left, String right, Splitter blockSplitter, Splitter elementSplitter)
+    public static Sequence<Sequence<DetailElement<String>>> diff(String left, String right, Splitter blockSplitter, Splitter elementSplitter)
     {
         List<String> leftBlocks = blockSplitter.split(left);
         List<String> rightBlocks = blockSplitter.split(right);
-        Sequence<Element<String>> tier1diff = diff(leftBlocks, rightBlocks);
-        Sequence<Sequence<Element<String>>> tier1sequence = new Sequence<Sequence<Element<String>>>(tier1diff.getState());
-        for (Element<String> diffBlock : tier1diff)
+        Sequence<DetailElement<String>> tier1diff = diff(leftBlocks, rightBlocks);
+        Sequence<Sequence<DetailElement<String>>> tier1sequence = new Sequence<Sequence<DetailElement<String>>>(tier1diff.getState());
+        for (DetailElement<String> diffBlock : tier1diff)
         {
             List<String> tier2left = diffBlock.getLeft() != null ? elementSplitter.split(diffBlock
                 .getLeft()) : new ArrayList<String>();
             List<String> tier2right = diffBlock.getRight() != null ? elementSplitter
                 .split(diffBlock.getRight()) : new ArrayList<String>();
-            Sequence<Element<String>> tier2diff = diff(tier2left, tier2right);
+            Sequence<DetailElement<String>> tier2diff = diff(tier2left, tier2right);
             tier1sequence.add(tier2diff);
         }
         return tier1sequence;
     }
    
-    public static <T> Sequence<Element<T>> diff(List<T> left, List<T> right)
+    public static <T> Sequence<DetailElement<T>> diff(List<T> left, List<T> right)
     {
-        Sequence<Element<T>> sequence;
+        Sequence<DetailElement<T>> sequence;
 
         Iterator<T> lefItr = left.iterator();
         Iterator<T> rightItr = right.iterator();
@@ -52,8 +52,8 @@ public class DiffUtil
 
         if(diffItr.hasNext())
         {
-            sequence = new Sequence<Element<T>>(left.isEmpty() ? State.ADDED
-                : right.isEmpty() ? State.DELETED : State.CHANGED);
+            sequence = new Sequence<DetailElement<T>>(left.isEmpty() ? Element.State.ADDED
+                : right.isEmpty() ? Element.State.DELETED : Element.State.CHANGED);
             Difference diff = diffItr.next();
             while(rightItr.hasNext() || lefItr.hasNext())
             {
@@ -61,7 +61,7 @@ public class DiffUtil
                 if(leftIdx < diff.getAddedStart() && rightIdx < diff.getDeletedStart()
                     || leftIdx > diff.getAddedEnd() && rightIdx > diff.getDeletedEnd())
                 {
-                    sequence.add(new Element<T>(lefItr.next(), rightItr.next(), State.EQUAL));
+                    sequence.add(new DetailElement<T>(lefItr.next(), rightItr.next(), Element.State.EQUAL));
                     rightIdx++;
                     leftIdx++;
                 }
@@ -69,21 +69,21 @@ public class DiffUtil
                 else if(rightIdx == diff.getDeletedStart() && diff.getDeletedEnd() == -1
                     && leftIdx >= diff.getAddedStart() && leftIdx <= diff.getAddedEnd())
                 {
-                    sequence.add(new Element<T>(null, rightItr.next(), State.ADDED));
+                    sequence.add(new DetailElement<T>(null, rightItr.next(), Element.State.ADDED));
                     leftIdx++;
                 }
                 // removed
                 else if(leftIdx == diff.getAddedStart() && diff.getAddedEnd() == -1
                     && rightIdx >= diff.getDeletedStart() && rightIdx <= diff.getDeletedEnd())
                 {
-                    sequence.add(new Element<T>(lefItr.next(), null, State.DELETED));
+                    sequence.add(new DetailElement<T>(lefItr.next(), null, Element.State.DELETED));
                     rightIdx++;
                 }
                 // modified
                 else if(rightIdx >= diff.getDeletedStart() && rightIdx <= diff.getDeletedEnd()
                     && leftIdx >= diff.getAddedStart() && leftIdx <= diff.getAddedEnd())
                 {
-                    sequence.add(new Element<T>(lefItr.next(), rightItr.next(), State.CHANGED));
+                    sequence.add(new DetailElement<T>(lefItr.next(), rightItr.next(), Element.State.CHANGED));
                     rightIdx++;
                     leftIdx++;
                 }
@@ -92,7 +92,7 @@ public class DiffUtil
                     && (leftIdx < diff.getAddedStart() || leftIdx > diff.getAddedEnd())
                     && -1 != diff.getAddedEnd())
                 {
-                    sequence.add(new Element<T>(lefItr.next(), null, State.CHANGED));
+                    sequence.add(new DetailElement<T>(lefItr.next(), null, Element.State.CHANGED));
                     rightIdx++;
                 }
                 // modified
@@ -100,7 +100,7 @@ public class DiffUtil
                     && -1 != diff.getDeletedEnd() && leftIdx >= diff.getAddedStart()
                     && leftIdx <= diff.getAddedEnd())
                 {
-                    sequence.add(new Element<T>(null, rightItr.next(), State.CHANGED));
+                    sequence.add(new DetailElement<T>(null, rightItr.next(), Element.State.CHANGED));
                     leftIdx++;
                 }
 
@@ -113,10 +113,10 @@ public class DiffUtil
         }
         else
         {
-            sequence = new Sequence<Element<T>>(State.EQUAL);
+            sequence = new Sequence<DetailElement<T>>(Element.State.EQUAL);
             while(rightItr.hasNext() && lefItr.hasNext())
             {
-                sequence.add(new Element<T>(lefItr.next(), rightItr.next(), State.EQUAL));
+                sequence.add(new DetailElement<T>(lefItr.next(), rightItr.next(), Element.State.EQUAL));
             }
         }
         return sequence;
