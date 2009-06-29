@@ -11,14 +11,7 @@ public class Element<T>
 
     private final State state;
 
-    public Element(T left, T right)
-    {
-        this.left = left;
-        this.right = right;
-        this.state = State.EQUAL;
-    }
-
-    public Element(T left, T right, State state)
+    Element(T left, T right, State state)
     {
         this.left = left;
         this.right = right;

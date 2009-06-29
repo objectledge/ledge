@@ -10,26 +10,14 @@ import java.util.List;
 public class Sequence<U>
     implements Iterable<U>
 {
-    private List<U> elements;
+    private final List<U> elements;
 
-    private State state;
+    private final State state;
 
-    public Sequence(State state)
+    Sequence(State state)
     {
         elements = new ArrayList<U>();
         this.state = state;
-    }
-
-    public Sequence(List<U> elem)
-    {
-        elements = elem;
-        state = State.EQUAL;
-    }
-
-    public Sequence(List<U> elem, State s)
-    {
-        elements = elem;
-        state = s;
     }
 
     public State getState()
