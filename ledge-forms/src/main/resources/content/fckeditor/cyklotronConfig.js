@@ -114,10 +114,11 @@ FCKConfig.ToolbarSets["Default"] = [
 
 
 FCKConfig.ToolbarSets["Restricted"] = [
-	['Bold','Italic','Underline'],
+	['Bold'],
 	['Cut','Copy','Paste','PasteText','PasteWord','-','SpellCheck'],
 	['Undo','Redo','-','Find','Replace'],
-	['Link','Unlink','Anchor']
+	['OrderedList','UnorderedList'],
+	['Link','Unlink']
 ] ;
 
 FCKConfig.ToolbarSets["Basic"] = [
