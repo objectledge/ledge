@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.xerces.xni.Augmentations;
+import org.apache.xerces.xni.QName;
+import org.apache.xerces.xni.XMLAttributes;
 import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.parser.XMLDocumentFilter;
 import org.apache.xerces.xni.parser.XMLErrorHandler;
@@ -20,6 +23,7 @@ import org.apache.xerces.xni.parser.XMLInputSource;
 import org.apache.xerces.xni.parser.XMLParseException;
 import org.apache.xerces.xni.parser.XMLParserConfiguration;
 import org.cyberneko.html.HTMLConfiguration;
+import org.cyberneko.html.filters.DefaultFilter;
 import org.cyberneko.html.filters.ElementRemover;
 import org.cyberneko.html.filters.Purifier;
 import org.dom4j.Comment;
@@ -139,6 +143,32 @@ public class HTMLServiceImpl
             throw new IllegalArgumentException("Invalid configuration", e);
         }
     }
+    
+    private XMLDocumentFilter getElementReplacer(String profileName)
+    {
+        if(cleanupProfiles.get(profileName).getChild("replaceElements", false) != null)
+        {
+            try
+            {
+                Configuration[] replaceElements = cleanupProfiles.get(profileName).getChild(
+                "replaceElements").getChildren("element");
+                Map<String, String> nameMap = new HashMap<String, String>();
+                for(Configuration replaceElement : replaceElements)
+                {
+                    nameMap.put(replaceElement.getAttribute("from"), replaceElement.getAttribute("to"));
+                }
+                return new ElementReplacer(nameMap);
+            }
+            catch(ConfigurationException e)
+            {
+                throw new IllegalArgumentException("Invalid configuration", e);
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     /**
      * Return the configured profile names.
@@ -208,6 +238,11 @@ public class HTMLServiceImpl
             filters.add(new Purifier());
             if(cleanupProfile != null)
             {
+                XMLDocumentFilter replacer = getElementReplacer(cleanupProfile);
+                if(replacer != null)
+                {
+                    filters.add(replacer);
+                }
                 filters.add(getElementRemover(cleanupProfile));
             }
             Dom4jDocumentBuilder dom4jBuilder = new Dom4jDocumentBuilder();
@@ -365,6 +400,44 @@ public class HTMLServiceImpl
             catch(IOException e)
             {
                 throw new XNIException(e);
+            }
+        }
+    }
+    
+    private static final class ElementReplacer extends DefaultFilter
+    {
+        private final Map<String, String> nameMap;
+
+        public ElementReplacer(Map<String,String> nameMap)
+        {
+            this.nameMap = nameMap;            
+        }
+        
+        @Override
+        public void startElement(QName element, XMLAttributes attributes, Augmentations augs)
+            throws XNIException
+        {
+            super.startElement(getQName(element), attributes, augs);
+        }
+
+        @Override
+        public void endElement(QName element, Augmentations augs)
+            throws XNIException
+        {
+            super.endElement(getQName(element), augs);
+        }
+
+        private QName getQName(QName oldQName)
+        {
+            String oldName = oldQName.localpart;
+            String newName = nameMap.get(oldName);
+            if(newName != null)
+            {
+                return new QName(oldQName.prefix, newName, oldQName.rawname.replace(oldName, newName), oldQName.uri);
+            }
+            else
+            {
+                return oldQName;
             }
         }
     }
