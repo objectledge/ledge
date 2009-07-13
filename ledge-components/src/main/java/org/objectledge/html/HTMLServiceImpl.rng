@@ -49,6 +49,9 @@
           <ref name="acceptElements"/>
       	</optional>
       	<optional>
+          <ref name="replaceElements"/>
+	    </optional>
+      	<optional>
           <ref name="removeElements"/>
 		</optional>
     </element>
@@ -65,6 +68,17 @@
     	     </element>
     	   </zeroOrMore>
     	</element>
+      </oneOrMore>
+    </element>
+</define>
+
+<define name="replaceElements">
+    <element name="replaceElements">
+       <oneOrMore> 
+        <element name="element">
+           <attribute name="from" />
+           <attribute name="to" />
+        </element>
       </oneOrMore>
     </element>
 </define>
