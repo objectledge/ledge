@@ -16,15 +16,19 @@ public class DiffUtil
     
     public static Sequence<DetailElement<String>> diff(String left, String right, Splitter blockSplitter)
     {
-        List<String> leftBlocks = blockSplitter.split(left);
-        List<String> rightBlocks = blockSplitter.split(right);
+        List<String> leftBlocks = left != null ? blockSplitter.split(left)
+            : new ArrayList<String>();
+        List<String> rightBlocks = right != null ? blockSplitter.split(right)
+            : new ArrayList<String>();
         return diff(leftBlocks, rightBlocks);
     }
 
     public static Sequence<Sequence<DetailElement<String>>> diff(String left, String right, Splitter blockSplitter, Splitter elementSplitter)
     {
-        List<String> leftBlocks = blockSplitter.split(left);
-        List<String> rightBlocks = blockSplitter.split(right);
+        List<String> leftBlocks = left != null ? blockSplitter.split(left)
+            : new ArrayList<String>();
+        List<String> rightBlocks = right != null ? blockSplitter.split(right)
+            : new ArrayList<String>();
         Sequence<DetailElement<String>> tier1diff = diff(leftBlocks, rightBlocks);
         Sequence<Sequence<DetailElement<String>>> tier1sequence = new Sequence<Sequence<DetailElement<String>>>(tier1diff.getState());
         for (DetailElement<String> diffBlock : tier1diff)
