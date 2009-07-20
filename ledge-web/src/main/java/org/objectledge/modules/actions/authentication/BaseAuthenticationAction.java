@@ -34,6 +34,7 @@ import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.pipeline.Valve;
 
 /**
  * Base class for the Login/Logout actions.
@@ -41,7 +42,8 @@ import org.objectledge.authentication.UserManager;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: BaseAuthenticationAction.java,v 1.3 2004-12-27 05:18:30 rafal Exp $
  */
-public class BaseAuthenticationAction
+public abstract class BaseAuthenticationAction
+    implements Valve
 {
     /** login parameter name. */
     public static final String LOGIN_PARAM = "login";
