@@ -1,7 +1,6 @@
 package org.objectledge.html;
 
 import java.io.Writer;
-import java.util.Properties;
 
 import org.dom4j.Document;
 
@@ -76,4 +75,11 @@ public interface HTMLService
      * @throws HTMLException if the document could not be parsed.
      */
     public String collectText(Document dom4jDoc);
+
+    /**
+     * Removes from the documents all P tags that contain only whitespace.
+     * 
+     * @param html a HTML document.
+     */
+    public void removeEmptyParas(Document html);
 }

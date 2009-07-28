@@ -32,6 +32,8 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.Text;
+import org.dom4j.Visitor;
+import org.dom4j.VisitorSupport;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -328,6 +330,36 @@ public class HTMLServiceImpl
         HTMLTextCollectorVisitor collector = new HTMLTextCollectorVisitor();
         html.accept(collector);
         return collector.getText();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeEmptyParas(Document html)
+    {
+        final List<Element> emptyParas = new ArrayList<Element>();
+        Visitor visitor = new VisitorSupport()
+            {
+                @Override
+                public void visit(Element node)
+                {
+                    if(node.getName().equals("P"))
+                    {
+                        String content = node.getText();
+                        content = content.replace('\u00A0', ' '); // U+00AO = &nbsp;
+                        if(content.trim().length() == 0)
+                        {
+                            emptyParas.add(node);
+                        }
+                    }
+                }
+            };
+        html.accept(visitor);
+        for(Element para : emptyParas)
+        {
+            para.detach();
+        }
     }
 
     // helper classes
