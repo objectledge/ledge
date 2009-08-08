@@ -1,0 +1,41 @@
+$pageTool.appendTitleSuffix('System configuration')
+
+<style type="text/css">
+<!--
+.parameters, .config {
+  padding: 5px;
+}
+.component {
+  padding: 5px;
+  border-bottom: solid 1px black;
+}
+-->
+</style>
+
+#foreach($component in $components)
+<div class="component">
+<a name="$component.componentKey"></a>
+<strong>$component.componentKey</strong> ($component.componentClass) <br/>
+#if($component.parameters && $component.parameters.size() > 0)
+parameters
+<div class="parameters">
+#foreach($param in $component.parameters)
+#if($param.startsWith("component "))
+<a href="$link.fragment($param.substring(10))">$param.substring(10)</a>
+#else
+$param 
+#end
+#if($velocityCount < $components.parameters.size()), #end
+#end
+</div>
+#end
+#if($component.config && $component.config.size() > 0)
+configuration entries
+<div class="config">
+#foreach($configEntry in  $component.config)
+$configEntry <br/>
+#end
+</div>
+#end
+</div>
+#end
