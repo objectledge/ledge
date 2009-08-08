@@ -1,0 +1,68 @@
+#*
+  This set of macros displays formtool controls as XHTML 1.0 controls.
+
+  'uiPath' is being used instead of 'id' for HTML control's 'id',
+  because it is unique in case of use of 'repeat' control.
+
+  @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+  @version $Id: HTMLArea.vt,v 1.5 2008-08-28 15:52:17 rafal Exp $
+*#
+#*
+  HTMLarea - html text input.
+  @param instance   - current form instance.
+  @param field      - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_htmlarea $field $loopIndex)
+## i18n setup
+#set($htmlarea_i18n = $i18n.usePrefix('ledge-forms'))
+##
+## Show error information
+## TODO: this should go into Appearance (skin)
+#if ($field.hasError($instance))
+<div>
+<pre>$field.getErrorLog($instance)</pre>
+</div>
+#end
+## Choose editor name
+#if($editorName == 'kupu')
+## Choose a proper control type depending on UserAgent
+  #if($userAgentTool.org == 'microsoft' && $userAgentTool.family == 'ie' && $userAgentTool.majorVersion > 3)
+    #formtool_htmlarea_kupu($field $loopIndex)
+  #elseif($userAgentTool.family == 'gecko')
+    #formtool_htmlarea_kupu($field $loopIndex)
+  #else
+    #formtool_htmlarea_old($field $loopIndex)
+  #end
+#else
+#formtool_htmlarea_fckeditor($field $loopIndex)
+#end
+#end
+#*
+  HTML area implementation for old browsers.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_htmlarea_old $field $loopIndex)
+#set($htmlValue = $htmlEncoder.encodeHTML($field.getValue($instance)) )
+<textarea
+ name="$field.name" id="$field.name"##
+ #if($field.hasAction()) onchange="formtool_dispatch_event('$formtool_form_id', '$field.name');"#end##
+ #if(!$field.ref.bind.getRelevant($instance, $field)) disabled="disabled"#end##
+ #if($field.ref.bind.getReadOnly($instance, $field)) readonly="readonly"#end##
+ #if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end##
+ class="#if ($field.ref.bind.getRequired($instance, $field)) formtool-required#end $!field.vis.CSSClass"##
+ style="width: 100%; $!field.vis.CSSStyle"##
+ cols="$!field.cols" rows="$!field.rows">
+$!htmlValue
+</textarea>
+<!-- TODO: -->
+<div>
+<b>HTML</b>
+<div>$!htmlValue</div>
+</div>
+#end
+
