@@ -344,7 +344,7 @@ public class HTMLServiceImpl
                 @Override
                 public void visit(Element node)
                 {
-                    if(node.getName().equals("P"))
+                    if(node.getName().equals("P") && node.isTextOnly())
                     {
                         String content = node.getText();
                         content = content.replace('\u00A0', ' '); // U+00AO = &nbsp;
