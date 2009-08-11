@@ -35,14 +35,6 @@
       <artifactId>httpunit</artifactId>
     </dependency>
     <dependency>
-      <groupId>jwebunit</groupId>
-      <artifactId>jwebunit</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.objectledge.ext</groupId>
-      <artifactId>maxq</artifactId>
-    </dependency>
-    <dependency>
       <groupId>jmock</groupId>
       <artifactId>jmock</artifactId>
       <scope>test</scope>
