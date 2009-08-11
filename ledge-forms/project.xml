@@ -117,8 +117,14 @@
       <url>https://sourceforge.net/projects/relaxng</url>
     </dependency>
     <dependency>
-      <id>steadystate-css2</id>
-      <jar>steadystate-css2.jar</jar>
+      <groupId>net.sourceforge.cssparser</groupId>
+      <id>cssparser</id>
+      <version>0.9.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.w3c.css</groupId>
+      <id>sac</id>
+      <version>1.3</version>
     </dependency>
     <dependency>
       <id>sosnoski-xmls</id>

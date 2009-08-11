@@ -27,11 +27,11 @@
     </dependency>
     <dependency>
       <groupId>org.objectledge.ext</groupId>
-      <artifactId>steadystate-css2</artifactId>
+      <artifactId>sosnoski-xmls</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.objectledge.ext</groupId>
-      <artifactId>sosnoski-xmls</artifactId>
+    	<groupId>net.sourceforge.cssparser</groupId>
+    	<artifactId>cssparser</artifactId>
     </dependency>
   </dependencies>
 </project>
