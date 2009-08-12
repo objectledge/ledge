@@ -26,6 +26,7 @@ import org.cyberneko.html.HTMLConfiguration;
 import org.cyberneko.html.filters.DefaultFilter;
 import org.cyberneko.html.filters.ElementRemover;
 import org.cyberneko.html.filters.Purifier;
+import org.dom4j.Branch;
 import org.dom4j.Comment;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
@@ -346,9 +347,7 @@ public class HTMLServiceImpl
                 {
                     if(node.getName().equals("P") && node.isTextOnly())
                     {
-                        String content = node.getText();
-                        content = content.replace('\u00A0', ' '); // U+00AO = &nbsp;
-                        if(content.trim().length() == 0)
+                        if(isWhitespace(node.getText()))
                         {
                             emptyParas.add(node);
                         }
@@ -358,8 +357,21 @@ public class HTMLServiceImpl
         html.accept(visitor);
         for(Element para : emptyParas)
         {
+            Branch parent = para.getParent();
+            Node followingSibling = parent.node(parent.indexOf(para) + 1);
+            if(followingSibling != null && followingSibling instanceof Text
+                && isWhitespace(followingSibling.getText()))
+            {
+                followingSibling.detach();
+            }
             para.detach();
         }
+    }
+
+    private boolean isWhitespace(String text)
+    {
+        // U+00AO = &nbsp;
+        return text.replace('\u00A0', ' ').trim().length() == 0;
     }
 
     // helper classes
