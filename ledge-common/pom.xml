@@ -227,10 +227,10 @@
         <version>1.4</version>
       </dependency>      
       <dependency>
-        <groupId>org.objectledge.ext</groupId>
-        <artifactId>sosnoski-xmls</artifactId>
-        <version>1.0</version>
-      </dependency>
+		<groupId>net.sourceforge.xbis</groupId>
+		<artifactId>xbis</artifactId>
+		<version>0.9.5</version>
+	  </dependency>
       <dependency>
       	<groupId>net.java.dev.java-diff</groupId>
       	<artifactId>java-diff</artifactId>
