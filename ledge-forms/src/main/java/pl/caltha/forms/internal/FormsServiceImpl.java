@@ -295,7 +295,7 @@ implements FormsService
                 +"' is not an instance for form definition '"+form.getDefinitionURI()+"'");
         }
 
-        return (Instance)instance;
+        return instance;
     }
 
     /** Returns an Instance object creating it from a given saved state.
@@ -318,11 +318,30 @@ implements FormsService
         FormData formData = getFormData(httpContext);
 
         // create new Instance
-        InstanceImpl instance = ((FormImpl)form).createInstance(formName, savedState);
+        InstanceImpl instance = form.createInstance(formName, savedState);
         // store it in FormData
         formData.put(instance);
 
-        return (Instance)instance;
+        return instance;
+    }
+
+    /**
+     * Serializes an Instance for offline storage.
+     * 
+     * @param formName Form's system wide identifier, this one is used to allow same form
+     *        definitions to be used in different site contexts.
+     * @param httpContext HttpConext for current request.
+     * @return Serialized Instance data.
+     * @throws FormsException
+     * @throws Exception thrown on problems with serialization.
+     */
+    public byte[] serializeInstance(String formName, HttpContext httpContext)
+        throws Exception
+    {
+        InstanceImpl instance = (InstanceImpl)getInstance(formName, httpContext);
+        FormImpl form = (FormImpl)(formsByName.get(formName)); // non null on account previous call
+                                                               // succeeding
+        return form.serializeInstance(instance);
     }
 
     /** Removes an instance from users session - it should be used after instance

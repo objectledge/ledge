@@ -1,5 +1,9 @@
 package pl.caltha.forms.internal.model;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import org.dom4j.Document;
 
 import pl.caltha.forms.ConstructionException;
@@ -64,5 +68,21 @@ public class DefaultInstance extends InstanceImpl
         }
 
         return instance;
+    }
+
+    /**
+     * Serializes an instance object
+     * 
+     * @param instance the Instance to be serialized
+     * @return serialized instance state
+     */
+    public byte[] serializeInstance(InstanceImpl instance)
+        throws IOException
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
+        ObjectOutputStream out = new ObjectOutputStream(baos);
+        out.writeObject(instance);
+        out.close();
+        return baos.toByteArray();
     }
 }

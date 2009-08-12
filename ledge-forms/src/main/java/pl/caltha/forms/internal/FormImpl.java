@@ -212,6 +212,13 @@ public class FormImpl implements Form
         return defaultInstance.createInstance(instanceId, savedState);
     }
 
+    /** Serializes an instance object */
+    byte[] serializeInstance(InstanceImpl instance)
+        throws Exception
+    {
+        return defaultInstance.serializeInstance(instance);
+    }
+
     // methods used in UI
     public Bind getBind(String id)
     throws ConstructionException

@@ -68,21 +68,30 @@ public interface FormsService
     public Instance getInstance( String formName,HttpContext httpContext )
         throws FormsException;
 
-
     /**
      * Returns an Instance object creating it from a given saved state.
-     *
-     * @param formName    Form's system wide identifier, this one is used to
-     *      allow same form definitions to be used in different site contexts.
+     * 
+     * @param formName Form's system wide identifier, this one is used to allow same form
+     *        definitions to be used in different site contexts.
      * @param httpContext HttpConext for current request.
-     *      be stored in this user's session.
-     * @param savedState  Serialized Instance data.
-     * @return            Deserialized Instance object.
-     * @throws Exception  thrown on problems with deserialization.
+     * @param savedState Serialized Instance data.
+     * @return Deserialized Instance object.
+     * @throws Exception thrown on problems with deserialization.
      */
-    public Instance getInstance( String formName, HttpContext httpContext, byte[] savedState )
+  public Instance getInstance( String formName, HttpContext httpContext, byte[] savedState )
         throws Exception;
 
+    /**
+     * Serializes Instance state for offline storage.
+     * 
+     * @param formName Form's system wide identifier, this one is used to allow same form
+     *        definitions to be used in different site contexts.
+     * @param httpContext HttpConext for current request.
+     * @return Serialized Instance data.
+     * @throws Exception thrown on problems with serialization.
+     */
+    public byte[] serializeInstance(String formName, HttpContext httpContext)
+        throws Exception;
 
     /**
      * Removes an instance from users session - it should be used after
