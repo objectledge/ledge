@@ -26,8 +26,8 @@
       <artifactId>isorelax</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.objectledge.ext</groupId>
-      <artifactId>sosnoski-xmls</artifactId>
+	  <groupId>net.sourceforge.xbis</groupId>
+	  <artifactId>xbis</artifactId>
     </dependency>
     <dependency>
     	<groupId>net.sourceforge.cssparser</groupId>

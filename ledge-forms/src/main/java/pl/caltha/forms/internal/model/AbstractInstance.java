@@ -5,6 +5,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.dom4j.Document;
+import org.dom4j.io.SAXContentHandler;
+import org.dom4j.io.SAXWriter;
+import org.xbis.SAXToXBISAdapter;
+import org.xbis.XBISToSAXAdapter;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Container for DOM instance documents.
@@ -39,22 +45,41 @@ implements java.io.Serializable
 
     //------------------------------------------------------------------------
     public static byte[] documentAsByteArray(Document document)
-    throws IOException
+        throws IOException
     {
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-        com.sosnoski.xmls.XmlsOutput sout = new com.sosnoski.xmls.Dom4jOutput();
-        sout.writeDocument(document, out);
-        return out.toByteArray();
+        SAXToXBISAdapter sax2xbis = new SAXToXBISAdapter();
+        sax2xbis.setStream(out);
+        SAXWriter dom4j2sax = new SAXWriter(sax2xbis, sax2xbis, sax2xbis);
+        try
+        {
+            dom4j2sax.write(document);
+            return out.toByteArray();
+        }
+        catch(SAXException e)
+        {
+            throw new IOException("failed to deserialize xbis encoded document", e);
+        }
     }
 
     public static Document documentFromByteArray(byte[] bytes)
-    throws IOException
+        throws IOException
     {
-        com.sosnoski.xmls.XmlsInput sin = new com.sosnoski.xmls.Dom4jInput();
-        ByteArrayInputStream dis = new ByteArrayInputStream(bytes);
-        Document document = (Document)(sin.readDocument(dis));
-        //("Exception reading serialized form at byte " + (bytes.length-dis.available()-sin.getBytesRemaining()-1));
-        return document;
+        InputSource inputSource = new InputSource(new ByteArrayInputStream(bytes));
+        XBISToSAXAdapter xbis2sax = new XBISToSAXAdapter();
+        SAXContentHandler sax2dom4j = new SAXContentHandler();
+        xbis2sax.setContentHandler(sax2dom4j);
+        xbis2sax.setDTDHandler(sax2dom4j);
+        xbis2sax.setEntityResolver(sax2dom4j);
+        try
+        {
+            xbis2sax.parse(inputSource);
+            return sax2dom4j.getDocument();
+        }
+        catch(SAXException e)
+        {
+            throw new IOException("failed to deserialize xbis encoded document", e);
+        }
     }
 
     private void writeObject(java.io.ObjectOutputStream out)
