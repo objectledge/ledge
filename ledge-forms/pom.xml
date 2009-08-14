@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -26,12 +25,49 @@
       <artifactId>isorelax</artifactId>
     </dependency>
     <dependency>
-	  <groupId>net.sourceforge.xbis</groupId>
-	  <artifactId>xbis</artifactId>
+      <groupId>net.sourceforge.xbis</groupId>
+      <artifactId>xbis</artifactId>
     </dependency>
     <dependency>
-    	<groupId>net.sourceforge.cssparser</groupId>
-    	<artifactId>cssparser</artifactId>
+      <groupId>net.sourceforge.cssparser</groupId>
+      <artifactId>cssparser</artifactId>
     </dependency>
   </dependencies>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>content/**</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.objectledge</groupId>
+            <artifactId>ledge-maven-assemblies</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>content-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>content-jar.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
