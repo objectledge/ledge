@@ -28,6 +28,7 @@
     <dependency>
       <groupId>radeox</groupId>
       <artifactId>radeox</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>httpunit</groupId>

@@ -40,6 +40,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>jotm</groupId>
@@ -64,6 +65,7 @@
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>msv</groupId>
@@ -90,6 +92,7 @@
     <dependency>
       <groupId>net.sourceforge.nekohtml</groupId>
       <artifactId>nekohtml</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
         <groupId>dom4j</groupId>
@@ -116,6 +119,7 @@
     <dependency>
     	<groupId>net.java.dev.java-diff</groupId>
     	<artifactId>java-diff</artifactId>
+    	<optional>true</optional>
     </dependency>
   </dependencies>
   <build>
