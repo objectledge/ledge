@@ -10,6 +10,7 @@
   <name>ObjectLedge master project</name>
   <modules>
     <module>../ledge-maven-plugin</module>
+    <module>../ledge-maven-assemblies</module>
     <module>../ledge-components</module>
     <module>../ledge-container</module>
     <module>../ledge-gpl</module>
