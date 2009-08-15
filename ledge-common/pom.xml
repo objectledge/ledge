@@ -66,11 +66,75 @@
         <groupId>picocontainer</groupId>
         <artifactId>picocontainer</artifactId>
         <version>1.1</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>xpp3</artifactId>
+            <groupId>xpp3</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>xstream</artifactId>
+            <groupId>xstream</groupId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>nanocontainer</groupId>
         <artifactId>nanocontainer</artifactId>
         <version>1.0</version>
+        <exclusions>
+        	<exclusion>
+        		<artifactId>groovy-all</artifactId>
+        		<groupId>groovy</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>xstream</artifactId>
+        		<groupId>xstream</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>commons-cli</artifactId>
+        		<groupId>commons-cli</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>js</artifactId>
+        		<groupId>rhino</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>jython</artifactId>
+        		<groupId>jython</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>bsh</artifactId>
+        		<groupId>bsh</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>aopalliance</artifactId>
+        		<groupId>aopalliance</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>dynaop</artifactId>
+        		<groupId>dynaop</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>cglib-asm</artifactId>
+        		<groupId>cglib</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>picocontainer-tck</artifactId>
+        		<groupId>picocontainer</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>nanocontainer-testmodel</artifactId>
+        		<groupId>nanocontainer</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>xpp3_min</artifactId>
+        		<groupId>xpp3</groupId>
+        	</exclusion>
+        	<exclusion>
+        		<artifactId>oro</artifactId>
+        		<groupId>oro</groupId>
+        	</exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>commons-cli</groupId>
@@ -121,6 +185,12 @@
         <groupId>velocity</groupId>
         <artifactId>velocity</artifactId>
         <version>1.5</version>
+        <exclusions>
+        	<exclusion>
+        		<artifactId>oro</artifactId>
+        		<groupId>oro</groupId>
+        	</exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>jotm</groupId>

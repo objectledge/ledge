@@ -33,6 +33,7 @@
     <dependency>
       <groupId>httpunit</groupId>
       <artifactId>httpunit</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>jmock</groupId>

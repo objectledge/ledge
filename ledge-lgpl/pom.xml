@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -28,6 +27,26 @@
     <dependency>
       <groupId>org.objectledge.ext</groupId>
       <artifactId>gnu-hylafax</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>howl</groupId>
+      <artifactId>howl-logger</artifactId>
+      <version>0.1.11</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <type>jar</type>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
