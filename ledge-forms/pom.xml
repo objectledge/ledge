@@ -32,6 +32,10 @@
       <groupId>net.sourceforge.cssparser</groupId>
       <artifactId>cssparser</artifactId>
     </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <resources>
