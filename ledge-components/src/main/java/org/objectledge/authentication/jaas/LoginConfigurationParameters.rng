@@ -1,7 +1,7 @@
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
   <sequence>
     <element name="loginConfiguration">
-      <attribute name="name">
+      <attribute name="name" />
       <sequence>
         <element name="loginModule">
           <attribute name="class">
