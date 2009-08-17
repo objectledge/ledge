@@ -49,7 +49,6 @@
     <dependency>
       <groupId>pcj</groupId>
       <artifactId>pcj</artifactId>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>velocity</groupId>
@@ -122,6 +121,11 @@
     <dependency>
     	<groupId>junit</groupId>
     	<artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>javax.resource</groupId>
+    	<artifactId>connector-api</artifactId>
+    	<scope>test</scope>
     </dependency>
   </dependencies>
   <build>
