@@ -402,12 +402,12 @@
   </profiles>
   <distributionManagement>
     <repository>
-      <id>ledge.releases</id>
+      <id>nexus.objectledge.org</id>
       <name>ObjectLedge releases Nexus repository</name>
       <url>http://objectledge.org/nexus/content/repositories/m2releases</url>
     </repository>
     <snapshotRepository>
-      <id>ledge.snapshots</id>
+      <id>nexus.objectledge.org</id>
       <name>ObjectLedge snapshots Nexus repository</name>
       <url>http://objectledge.org/nexus/content/repositories/m2snapshots</url>
     </snapshotRepository>
