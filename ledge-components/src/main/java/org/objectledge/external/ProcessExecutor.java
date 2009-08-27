@@ -153,6 +153,8 @@ public class ProcessExecutor
             Process process;
             if(redirect)
             {
+                // if the command path contain spaces, these need to be escaped
+                args[0] = args[0].replace(" ", "\\ ");
                 args = StringUtils.push(shellTokens, concat(args));
                 cmd = concat(args);
             }
