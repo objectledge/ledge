@@ -65,7 +65,7 @@ public class ScriptDirectoryTest
         
         if(linux)
         {
-            Runtime.getRuntime().exec(scriptDir.getPath("test.sh"));
+            Runtime.getRuntime().exec(new String[] { scriptDir.getPath("test.sh") });
         }        
     }
     
@@ -78,7 +78,7 @@ public class ScriptDirectoryTest
         
         if(linux)
         {
-            Runtime.getRuntime().exec(scriptDir.getPath("test.sh"));
+            Runtime.getRuntime().exec(new String[] { scriptDir.getPath("test.sh") });
         }        
     }
     
