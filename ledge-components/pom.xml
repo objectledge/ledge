@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -61,7 +60,7 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
@@ -96,10 +95,28 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-        <groupId>dom4j</groupId>
-        <artifactId>dom4j</artifactId>
-        <optional>true</optional>
-    </dependency>      
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <artifactId>isorelax</artifactId>
+          <groupId>isorelax</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>relaxngDatatype</artifactId>
+          <groupId>relaxngDatatype</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>saxpath</artifactId>
+          <groupId>saxpath</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jaxen</artifactId>
+          <groupId>jaxen</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>jmock</groupId>
       <artifactId>jmock</artifactId>
@@ -114,18 +131,18 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>net.java.dev.java-diff</groupId>
-    	<artifactId>java-diff</artifactId>
-    	<optional>true</optional>
+      <groupId>net.java.dev.java-diff</groupId>
+      <artifactId>java-diff</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
-    	<groupId>junit</groupId>
-    	<artifactId>junit</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
     <dependency>
-    	<groupId>javax.resource</groupId>
-    	<artifactId>connector-api</artifactId>
-    	<scope>test</scope>
+      <groupId>javax.resource</groupId>
+      <artifactId>connector-api</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -164,7 +181,7 @@
           </execution>
         </executions>
         <configuration>
-           <sourceDirectory>src/main/java</sourceDirectory>
+          <sourceDirectory>src/main/java</sourceDirectory>
         </configuration>
       </plugin>
     </plugins>
