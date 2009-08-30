@@ -8,55 +8,63 @@
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <name>ObjectLedge application development toolkit</name>
+  <inceptionYear>2003</inceptionYear>
+  <description>
+  Object Ledge is a platform for building applications in Java 2 Standard and Enterprise Edition 
+  environments. ObjectLedge follows component / container and Inversion Of Control design paradigms implemented 
+  with the excellent PicoContainer (http://picocontainer.org) package. ObjectLedge provides a number of components - 
+  basic building blocks of the applications, a few extensions to the Pico framework, customized containers for 
+  easy deployment of applications in command line, daemon, and J2EE servlet environments.
+  </description>
   <organization>
-  	<name>ObjectLedge</name>
-  	<url>http://objectledge.org/</url>
+    <name>ObjectLedge</name>
+    <url>http://objectledge.org/</url>
   </organization>
   <developers>
-  	<developer>
-  		<id>rafal</id>
-  		<name>Rafal Krzewski</name>
-  		<email>rafal.krzewski@caltha.pl</email>
-  		<organization>Caltha</organization>
-  		<organizationUrl>http://caltha.pl</organizationUrl>
-  		<timezone>+1</timezone>
-  		<roles>
-  			<role>project leader</role>
-  			<role>developer</role>
-  		</roles>
-  	</developer>
-  	<developer>
-  		<id>pablo</id>
-  		<name>Paweł Potempski</name>
-  		<email>pawel.potempski@caltha.pl</email>
-  		<organization>Caltha</organization>
-  		<organizationUrl>http://caltha.pl</organizationUrl>
-  		<timezone>+1</timezone>
-  		<roles>
-  			<role>developer</role>
-  		</roles>
-  	</developer>
-  	<developer>
-  		<id>zwierzem</id>
-  		<name>Damian Gajda</name>
-  		<email>damian.gajda@gmail.com</email>
-  		<organization>Google</organization>
-  		<timezone>+1</timezone>
-  		<roles>
-  			<role>retired developer</role>
-  		</roles>
-  	</developer>
-  	<developer>
-  		<id>lukasz</id>
-  		<name>Łukasz Urbański</name>
-  		<email>lukasz.urbanski@caltha.pl</email>
-  		<organization>Caltha</organization>
-  		<organizationUrl>http://caltha.pl</organizationUrl>
-  		<timezone>+1</timezone>
-  		<roles>
-  			<role>developer</role>
-  		</roles>
-  	</developer>
+    <developer>
+      <id>rafal</id>
+      <name>Rafal Krzewski</name>
+      <email>rafal.krzewski@caltha.pl</email>
+      <organization>Caltha</organization>
+      <organizationUrl>http://caltha.pl</organizationUrl>
+      <timezone>+1</timezone>
+      <roles>
+        <role>project leader</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>pablo</id>
+      <name>Paweł Potempski</name>
+      <email>pawel.potempski@caltha.pl</email>
+      <organization>Caltha</organization>
+      <organizationUrl>http://caltha.pl</organizationUrl>
+      <timezone>+1</timezone>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>zwierzem</id>
+      <name>Damian Gajda</name>
+      <email>damian.gajda@gmail.com</email>
+      <organization>Google</organization>
+      <timezone>+1</timezone>
+      <roles>
+        <role>retired developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>lukasz</id>
+      <name>Łukasz Urbański</name>
+      <email>lukasz.urbanski@caltha.pl</email>
+      <organization>Caltha</organization>
+      <organizationUrl>http://caltha.pl</organizationUrl>
+      <timezone>+1</timezone>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
   </developers>
   <scm>
     <connection>scm:svn:http://objectledge.org/svn/ledge</connection>
@@ -68,8 +76,8 @@
     <url>http://objectledge.org/jira/browse/LEDGE</url>
   </issueManagement>
   <ciManagement>
-  	<system>Hudson</system>
-  	<url>http://objectledge.org/hudson/view/ledge</url>
+    <system>Hudson</system>
+    <url>http://objectledge.org/hudson/view/ledge</url>
   </ciManagement>
   <modules>
     <module>../ledge-maven-plugin</module>
@@ -145,58 +153,58 @@
         <artifactId>nanocontainer</artifactId>
         <version>1.0</version>
         <exclusions>
-        	<exclusion>
-        		<artifactId>groovy-all</artifactId>
-        		<groupId>groovy</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>xstream</artifactId>
-        		<groupId>xstream</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>commons-cli</artifactId>
-        		<groupId>commons-cli</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>js</artifactId>
-        		<groupId>rhino</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>jython</artifactId>
-        		<groupId>jython</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>bsh</artifactId>
-        		<groupId>bsh</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>aopalliance</artifactId>
-        		<groupId>aopalliance</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>dynaop</artifactId>
-        		<groupId>dynaop</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>cglib-asm</artifactId>
-        		<groupId>cglib</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>picocontainer-tck</artifactId>
-        		<groupId>picocontainer</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>nanocontainer-testmodel</artifactId>
-        		<groupId>nanocontainer</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>xpp3_min</artifactId>
-        		<groupId>xpp3</groupId>
-        	</exclusion>
-        	<exclusion>
-        		<artifactId>oro</artifactId>
-        		<groupId>oro</groupId>
-        	</exclusion>
+          <exclusion>
+            <artifactId>groovy-all</artifactId>
+            <groupId>groovy</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>xstream</artifactId>
+            <groupId>xstream</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>commons-cli</artifactId>
+            <groupId>commons-cli</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>js</artifactId>
+            <groupId>rhino</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>jython</artifactId>
+            <groupId>jython</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>bsh</artifactId>
+            <groupId>bsh</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>aopalliance</artifactId>
+            <groupId>aopalliance</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>dynaop</artifactId>
+            <groupId>dynaop</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>cglib-asm</artifactId>
+            <groupId>cglib</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>picocontainer-tck</artifactId>
+            <groupId>picocontainer</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>nanocontainer-testmodel</artifactId>
+            <groupId>nanocontainer</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>xpp3_min</artifactId>
+            <groupId>xpp3</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>oro</artifactId>
+            <groupId>oro</groupId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -249,10 +257,10 @@
         <artifactId>velocity</artifactId>
         <version>1.5</version>
         <exclusions>
-        	<exclusion>
-        		<artifactId>oro</artifactId>
-        		<groupId>oro</groupId>
-        	</exclusion>
+          <exclusion>
+            <artifactId>oro</artifactId>
+            <groupId>oro</groupId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
