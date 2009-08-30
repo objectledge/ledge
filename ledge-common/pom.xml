@@ -16,6 +16,13 @@
   basic building blocks of the applications, a few extensions to the Pico framework, customized containers for 
   easy deployment of applications in command line, daemon, and J2EE servlet environments.
   </description>
+  <licenses>
+    <license>
+      <name>BSD</name>
+      <url>http://opensource.org/licenses/bsd-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <organization>
     <name>ObjectLedge</name>
     <url>http://objectledge.org/</url>
