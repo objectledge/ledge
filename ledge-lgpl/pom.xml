@@ -63,5 +63,14 @@
         </includes>
       </resource>
     </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/java</directory>
+        <includes>
+          <include>**/*.rng</include>
+          <include>**/*.sql</include>
+        </includes>
+      </testResource>
+    </testResources>
   </build>
 </project>
