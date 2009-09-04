@@ -67,14 +67,13 @@
         </dependencies>
         <executions>
           <execution>
-            <id>content-jar</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
             <configuration>
               <descriptors>
-                <descriptor>content-jar.xml</descriptor>
+                <descriptor>content-war.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
