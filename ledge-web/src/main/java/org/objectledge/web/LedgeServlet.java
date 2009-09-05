@@ -139,7 +139,7 @@ public class LedgeServlet extends HttpServlet
     public void init(ServletConfig servletConfig) throws ServletException
     {
         BasicConfigurator.configure();
-        Logger log = Logger.getLogger(ServletConfig.class);
+        Logger log = Logger.getLogger(LedgeServlet.class);
 
         ServletContext context = servletConfig.getServletContext();
         String ctxRootParam = servletConfig.getServletName()+".root";

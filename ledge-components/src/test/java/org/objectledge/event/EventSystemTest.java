@@ -30,7 +30,6 @@ package org.objectledge.event;
 
 import java.lang.reflect.Method;
 
-import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
@@ -63,8 +62,6 @@ public class EventSystemTest extends LedgeTestCase
     
     public void setUp()
     {
-        BasicConfigurator.resetConfiguration();
-        BasicConfigurator.configure();
         Context context = new Context();
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));

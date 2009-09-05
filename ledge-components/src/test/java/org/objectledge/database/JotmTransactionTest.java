@@ -32,7 +32,6 @@ import javax.transaction.UserTransaction;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.context.Context;
@@ -65,8 +64,6 @@ public class JotmTransactionTest extends TestCase
     public void setUp()
         throws Exception
     {
-        BasicConfigurator.resetConfiguration();
-        BasicConfigurator.configure();
         log = new Log4JLogger(org.apache.log4j.Logger.getLogger(JotmTransactionTest.class));
         context = new Context();
         context.clearAttributes();

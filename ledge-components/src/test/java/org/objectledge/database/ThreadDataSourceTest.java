@@ -33,7 +33,6 @@ import javax.sql.DataSource;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
@@ -67,8 +66,6 @@ public class ThreadDataSourceTest extends TestCase
     public void setUp(int tracing)
         throws Exception
     {
-        BasicConfigurator.resetConfiguration();
-        BasicConfigurator.configure();
         DefaultConfiguration conf = new DefaultConfiguration("config","","/");
         DefaultConfiguration url = new DefaultConfiguration("url","","/config");
         url.setValue("jdbc:hsqldb:."); 

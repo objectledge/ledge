@@ -40,7 +40,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
@@ -68,8 +67,6 @@ public class XaPoolDataSourceTest extends TestCase
     public void setUp()
         throws Exception
     {
-        BasicConfigurator.resetConfiguration();
-        BasicConfigurator.configure();
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         transaction = new JotmTransaction(0, 120, new Context(), log, null);
         
