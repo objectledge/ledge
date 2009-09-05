@@ -499,9 +499,9 @@ public class DefaultParameters implements Parameters
      *
      * @param keys the set of keys.
      */
-    public void remove(Set keys)
+    public void remove(Set<String> keys)
     {
-        Iterator it = keys.iterator();
+        Iterator<String> it = keys.iterator();
         while (it.hasNext())
         {
             map.remove(it.next());
@@ -513,12 +513,12 @@ public class DefaultParameters implements Parameters
      *
      * @param keys the set of names.
      */
-    public void removeExcept(Set keys)
+    public void removeExcept(Set<String> keys)
     {
-        Iterator it = map.keySet().iterator();
+        Iterator<String> it = map.keySet().iterator();
         while (it.hasNext())
         {
-            String key = (String)it.next();
+            String key = it.next();
             if (!keys.contains(key))
             {
                 it.remove();

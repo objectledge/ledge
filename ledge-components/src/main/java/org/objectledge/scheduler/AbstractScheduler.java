@@ -74,16 +74,16 @@ public abstract class AbstractScheduler
     protected ThreadPool threadPool;
 
     /** The registered schedule types factories. */
-    private Map scheduleFactory = new HashMap();
+    private Map<String, ScheduleFactory> scheduleFactory = new HashMap<String, ScheduleFactory>();
 
     /** The registered jobs. */
-    protected Map jobs = new HashMap();
+    protected Map<String, AbstractJobDescriptor> jobs = new HashMap<String, AbstractJobDescriptor>();
 
     /** The job queue. */
-    private SortedMap queue = new TreeMap();
+    private SortedMap<Long, Set<AbstractJobDescriptor>> queue = new TreeMap<Long, Set<AbstractJobDescriptor>>();
 
     /** Runners of a specific job. */
-    private Map runners = new HashMap();
+    private Map<AbstractJobDescriptor, Set<RunnerTask>> runners = new HashMap<AbstractJobDescriptor, Set<RunnerTask>>();
 
     /** The date format to be used for the UI. */
     protected DateFormat format;
@@ -118,10 +118,10 @@ public abstract class AbstractScheduler
     public void start()
     {
         loadJobs();
-        Iterator i = jobs.values().iterator();
+        Iterator<AbstractJobDescriptor> i = jobs.values().iterator();
         while(i.hasNext())
         {
-            AbstractJobDescriptor job = (AbstractJobDescriptor)i.next();
+            AbstractJobDescriptor job = i.next();
             if(job.getSchedule().atStartup())
             {
                 run(job);
@@ -256,7 +256,7 @@ public abstract class AbstractScheduler
      */
     public AbstractJobDescriptor getJobDescriptor(String name)
     {
-        return (AbstractJobDescriptor)jobs.get(name);
+        return jobs.get(name);
     }
 
     /**
@@ -282,7 +282,7 @@ public abstract class AbstractScheduler
     public Schedule createSchedule(String type, String config)
         throws InvalidScheduleException
     {
-        ScheduleFactory factory = (ScheduleFactory)scheduleFactory.get(type);
+        ScheduleFactory factory = scheduleFactory.get(type);
         if(factory == null)
         {
             throw new InvalidScheduleException("Schedule factory for type '" + type
@@ -352,10 +352,10 @@ public abstract class AbstractScheduler
                     if(countLimit < 0 || job.getRunCount() < countLimit)
                     {
                         Long target = new Long(nextRun.getTime());
-                        Set set = (Set)queue.get(target);
+                        Set<AbstractJobDescriptor> set = queue.get(target);
                         if(set == null)
                         {
-                            set = new HashSet();
+                            set = new HashSet<AbstractJobDescriptor>();
                             queue.put(target, set);
                         }
                         set.add(job);
@@ -388,13 +388,13 @@ public abstract class AbstractScheduler
     {
         synchronized(runners)
         {
-            Set set = (Set)runners.get(job);
+            Set<RunnerTask> set = runners.get(job);
             if(set != null)
             {
-                Iterator i = set.iterator();
+                Iterator<RunnerTask> i = set.iterator();
                 while(i.hasNext())
                 {
-                    ((RunnerTask)i.next()).terminate();
+                    (i.next()).terminate();
                 }
             }
         }
@@ -432,7 +432,7 @@ public abstract class AbstractScheduler
         String className = job.getJobClassName();
         try
         {
-            Class clazz = Class.forName(className);
+            Class<?> clazz = Class.forName(className);
             if(container.getComponentInstance(clazz) == null)
             {
                 container.registerComponentImplementation(clazz);
@@ -470,10 +470,10 @@ public abstract class AbstractScheduler
         {
             synchronized(runners)
             {
-                Set set = (Set)runners.get(job);
+                Set<RunnerTask> set = runners.get(job);
                 if(set == null)
                 {
-                    set = new HashSet();
+                    set = new HashSet<RunnerTask>();
                     runners.put(job, set);
                 }
                 set.add(this);
@@ -506,7 +506,7 @@ public abstract class AbstractScheduler
                 {
                     synchronized(runners)
                     {
-                        Set set = (Set)runners.get(job);
+                        Set<RunnerTask> set = runners.get(job);
                         if(set != null)
                         {
                             set.remove(this);
@@ -595,16 +595,16 @@ public abstract class AbstractScheduler
                     }
                     // there is something in the queue
                     now = System.currentTimeMillis();
-                    Long first = (Long)queue.firstKey();
+                    Long first = queue.firstKey();
                     while(!queue.isEmpty() && first.longValue() <= now)
                     {
                         // the first element of the que has reached or passed
                         // it's target time
-                        Set set = (Set)queue.remove(first);
-                        Iterator i = set.iterator();
+                        Set<AbstractJobDescriptor> set = queue.remove(first);
+                        Iterator<AbstractJobDescriptor> i = set.iterator();
                         while(i.hasNext())
                         {
-                            AbstractJobDescriptor job = (AbstractJobDescriptor)i.next();
+                            AbstractJobDescriptor job = i.next();
                             AbstractScheduler.this.run(job);
                             if(job.isReentrant())
                             {
@@ -613,7 +613,7 @@ public abstract class AbstractScheduler
                         }
                         if(!queue.isEmpty())
                         {
-                            first = (Long)queue.firstKey();
+                            first = queue.firstKey();
                         }
                     }
                     // wait for the first element's target time

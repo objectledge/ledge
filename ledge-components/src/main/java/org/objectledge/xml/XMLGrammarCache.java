@@ -79,7 +79,7 @@ public class XMLGrammarCache
     {
         if(grammars.containsKey(grammarURI))
         {
-            return (Grammar)grammars.get(grammarURI);
+            return grammars.get(grammarURI);
         }
 
         Grammar grammar = null;

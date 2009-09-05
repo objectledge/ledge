@@ -54,7 +54,7 @@ public class RemoteInvocationHandler implements InvocationHandler
     private Remote remote;
     
     /** The method map. */
-    private Map methodMap = new HashMap();
+    private Map<Method, Method> methodMap = new HashMap<Method, Method>();
 
     /**
      * Constructs the invocation handler.
@@ -64,29 +64,29 @@ public class RemoteInvocationHandler implements InvocationHandler
      * @throws IllegalArgumentException if the interface cannot be mapped on
      *        the remote object.
      */
-    public RemoteInvocationHandler(Class iface, Remote remote)
+    public RemoteInvocationHandler(Class<?> iface, Remote remote)
         throws IllegalArgumentException
     {
         if(!iface.isInterface())
         {
             throw new IllegalArgumentException(iface.getName()+" is not an interface");
         }
-        Class remoteClass = remote.getClass();
+        Class<? extends Remote> remoteClass = remote.getClass();
         Method[] methods = iface.getMethods();
         for(int i=0; i<methods.length; i++)
         {
             try
             {
                 Method remoteMethod = remoteClass.
-                    getMethod(methods[i].getName(), (Class[])methods[i].getParameterTypes());
+                    getMethod(methods[i].getName(), methods[i].getParameterTypes());
 
                 if(!methods[i].getReturnType().equals(remoteMethod.getParameterTypes()))
                 {
                     throw new NoSuchMethodException("");
                 }
 
-                Class[] remoteMethodExceptions = remoteMethod.getExceptionTypes();
-                Class[] ifaceMethodExceptions = methods[i].getExceptionTypes();
+                Class<?>[] remoteMethodExceptions = remoteMethod.getExceptionTypes();
+                Class<?>[] ifaceMethodExceptions = methods[i].getExceptionTypes();
                 loop: for(int j=0; j<remoteMethodExceptions.length; j++)
                 {
                     if(!remoteMethodExceptions[j].equals(RemoteException.class))
@@ -118,7 +118,7 @@ public class RemoteInvocationHandler implements InvocationHandler
     {
         try
         {
-            return ((Method)methodMap.get(method)).invoke(remote, args);
+            return methodMap.get(method).invoke(remote, args);
         }
         catch(VirtualMachineError t)
         {

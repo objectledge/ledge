@@ -143,9 +143,9 @@ public class IntrospectionVariables
     {
         String capitalizedProperty = Character.toUpperCase(property.charAt(0))+
             property.substring(1);
-        Class[] emptyArgsSpec = new Class[0];
+        Class<?>[] emptyArgsSpec = new Class[0];
         Object[] args = new Object[0];
-        Class clazz = object.getClass();
+        Class<?> clazz = object.getClass();
         Method method;
         try
         {

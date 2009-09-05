@@ -44,7 +44,7 @@ public class DatabaseInitialDirContextFactory implements InitialContextFactory
     /**
      * {@inheritDoc}
      */
-    public Context getInitialContext(Hashtable environment) throws NamingException
+    public Context getInitialContext(Hashtable<?, ?> environment) throws NamingException
     {
         return new DatabaseDirContext(environment);
     }

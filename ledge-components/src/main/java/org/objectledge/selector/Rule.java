@@ -230,7 +230,7 @@ class Rule
         throws EvaluationException
     {
         Object[] args = evaluateArguments(node, variables, Object.class, Class.class);
-        return ((Class)args[1]).isAssignableFrom(args[0].getClass());
+        return ((Class<?>)args[1]).isAssignableFrom(args[0].getClass());
     }
     
     protected boolean evaluateSame(Configuration node, Variables variables)
@@ -246,13 +246,19 @@ class Rule
         Object[] args = evaluateArguments(node, variables, Object.class, Object.class);
         return args[0].equals(args[1]); 
     }
+    
+    @SuppressWarnings("unchecked")
+    private Comparable<Object> castToComparable(Object[] object)
+    {
+        return ((Comparable<Object>)object[0]);
+    }
 
     protected boolean evaluateLesser(Configuration node, Variables variables)
         throws EvaluationException
     {
         Object[] args = evaluateArguments(node, variables, Comparable.class, 
             Comparable.class);
-        return ((Comparable)args[0]).compareTo(args[1]) < 0; 
+        return castToComparable(args).compareTo(args[1]) < 0; 
     }
                 
     protected boolean evaluateLesserEquals(Configuration node, Variables variables)
@@ -260,7 +266,7 @@ class Rule
     {
         Object[] args = evaluateArguments(node, variables, Comparable.class, 
             Comparable.class);
-        return ((Comparable)args[0]).compareTo(args[1]) <= 0; 
+        return castToComparable(args).compareTo(args[1]) <= 0; 
     }
 
     protected boolean evaluateGreater(Configuration node, Variables variables)
@@ -268,7 +274,7 @@ class Rule
     {
         Object[] args = evaluateArguments(node, variables, Comparable.class, 
             Comparable.class);
-        return ((Comparable)args[0]).compareTo(args[1]) > 0; 
+        return castToComparable(args).compareTo(args[1]) > 0; 
     }
                 
     protected boolean evaluateGreaterEquals(Configuration node, Variables variables)
@@ -276,7 +282,7 @@ class Rule
     {
         Object[] args = evaluateArguments(node, variables, Comparable.class, 
             Comparable.class);
-        return ((Comparable)args[0]).compareTo(args[1]) >= 0; 
+        return castToComparable(args).compareTo(args[1]) >= 0; 
     }
 
     protected boolean evaluateMatches(Configuration node, Variables variables)
@@ -289,7 +295,7 @@ class Rule
     // arguments ////////////////////////////////////////////////////////////////////////////
                 
     protected Object[] evaluateArguments(Configuration node, Variables variables,
-        Class expectedLType, Class expectedRType)
+        Class<?> expectedLType, Class<?> expectedRType)
         throws EvaluationException
     {
         Configuration[] children = node.getChildren();
@@ -445,7 +451,7 @@ class Rule
         }
     }
     
-    protected Class evaluateClassLiteral(Configuration node)
+    protected Class<?> evaluateClassLiteral(Configuration node)
         throws EvaluationException
     {
         try

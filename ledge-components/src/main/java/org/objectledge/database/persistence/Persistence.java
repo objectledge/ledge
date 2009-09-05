@@ -65,7 +65,7 @@ public interface Persistence
      * @return the list of presistent objects.
      * @throws PersistenceException if any exception occured.
      */
-    public List load(String where, PersistentFactory factory) throws PersistenceException;
+    public List<Persistent> load(String where, PersistentFactory factory) throws PersistenceException;
 
     /**
      * Saves an object in the database.

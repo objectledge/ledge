@@ -216,7 +216,7 @@ public class DelegatingConnection
     /** 
      * {@inheritDoc}
      */
-    public Map getTypeMap() throws SQLException
+    public Map<String, Class<?>> getTypeMap() throws SQLException
     {
         return delegate.getTypeMap();
     }
@@ -451,7 +451,7 @@ public class DelegatingConnection
     /** 
      * {@inheritDoc}
      */
-    public void setTypeMap(Map map) throws SQLException
+    public void setTypeMap(Map<String, Class<?>> map) throws SQLException
     {
         delegate.setTypeMap(map);
     }

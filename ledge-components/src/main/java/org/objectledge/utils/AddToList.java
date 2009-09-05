@@ -39,17 +39,17 @@ import org.jmock.core.Stub;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: AddToList.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
  */
-public class AddToList
+public class AddToList<T>
 	implements SelfDescribing, Stub
 {
-    private List list;
+    private List<T> list;
     
     /**
      * Creates new AddToList Stub instance.
      * 
      * @param list to add objects to.
      */
-    public AddToList(List list)
+    public AddToList(List<T> list)
     {
         this.list = list;
     }
@@ -65,13 +65,14 @@ public class AddToList
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public Object invoke(Invocation invocation)
     {
         if(invocation.parameterValues.size() != 1)
         {
             throw new IllegalStateException("one argument expected");
         }
-        list.add(invocation.parameterValues.get(0));
+        list.add((T)invocation.parameterValues.get(0));
         return null;
     }
 }

@@ -37,7 +37,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeServices;
-import org.apache.velocity.runtime.log.LogSystem;
+import org.apache.velocity.runtime.log.LogChute;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
@@ -56,10 +56,10 @@ import org.objectledge.templating.TemplatingContext;
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
  * @version $Id: VelocityTemplating.java,v 1.30 2008-08-28 15:52:47 rafal Exp $
  */
-public class VelocityTemplating implements Templating, LogSystem
+public class VelocityTemplating implements Templating
 {
     /** logger */
-    private Logger logger;
+    private DNALogChute logger;
 
     /** velocity engine */
     private VelocityEngine engine;
@@ -99,7 +99,7 @@ public class VelocityTemplating implements Templating, LogSystem
     public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem)
     {
         this.config = config;
-        this.logger = logger;
+        this.logger = new DNALogChute(logger);
         this.fileSystem = fileSystem;
         restart();
     }
@@ -146,7 +146,7 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             throw new ComponentInitializationError("failed to initialze Velocity", e);
         }
-        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, this);
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, logger);
         engine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
         engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "objectledge");
         engine.setProperty("objectledge.resource.loader.class",
@@ -154,7 +154,7 @@ public class VelocityTemplating implements Templating, LogSystem
         engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LEDGE_FILE_SYSTEM,
         	 fileSystem);
         engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
-             this);
+             logger);
         engine.setProperty(RuntimeConstants.INPUT_ENCODING, encoding);
         try
         {
@@ -199,7 +199,7 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             synchronized(templateCache)
             {
-                Boolean exists = (Boolean)templateExistsCache.get(name);
+                Boolean exists = templateExistsCache.get(name);
                 if(exists != null)
                 {
                     return exists.booleanValue();
@@ -244,12 +244,12 @@ public class VelocityTemplating implements Templating, LogSystem
         {
             synchronized(templateCache)
             {
-                Boolean exists = (Boolean)templateExistsCache.get(name);
+                Boolean exists = templateExistsCache.get(name);
                 if(exists != null)
                 {
                     if(exists.booleanValue())
                     {
-                        Template template = (Template)templateCache.get(name);
+                        Template template = templateCache.get(name);
                         if(template != null)
                         {
                             return template;
@@ -371,32 +371,6 @@ public class VelocityTemplating implements Templating, LogSystem
     {
         // does nothing
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("deprecation")
-    public void logVelocityMessage(int level, String message)
-    {
-        switch (level)
-        {
-            case LogSystem.DEBUG_ID :
-                logger.debug(message);
-                break;
-            case LogSystem.ERROR_ID :
-                logger.error(message);
-                break;
-            case LogSystem.WARN_ID :
-                logger.warn(message);
-                break;
-            case LogSystem.INFO_ID :
-                logger.info(message);
-                break;
-            default :
-                logger.debug(message);
-                break;
-        }
-    }
     
     /**
      * {@inheritDoc}
@@ -409,6 +383,99 @@ public class VelocityTemplating implements Templating, LogSystem
             {
                 templateCache.remove(name);
                 templateExistsCache.remove(name);
+            }
+        }
+    }
+
+    /**
+     * A passthrough between Velocity LogChute and DNA logging.
+     * 
+     * @author rafal
+     */
+    private static class DNALogChute implements LogChute 
+    {
+        /** The delegate DNA logger. */
+        private Logger logger;
+
+        /**
+         * Creates a new DNALogChute instance.
+         * 
+         * @param logger the delegate DNA logger.
+         */
+        public DNALogChute(Logger logger)
+        {
+            this.logger = logger;            
+        }      
+        
+        @Override
+        public void init(RuntimeServices rs)
+        throws Exception
+        {
+        }
+        
+        @Override
+        public boolean isLevelEnabled(int level)
+        {
+            switch (level)
+            {
+            case LogChute.DEBUG_ID :
+                return logger.isDebugEnabled();
+            case LogChute.ERROR_ID :
+                return logger.isErrorEnabled();
+            case LogChute.WARN_ID :
+                return logger.isWarnEnabled();
+            case LogChute.INFO_ID :
+                return logger.isInfoEnabled();
+            default :
+                return logger.isDebugEnabled();
+            }    
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void log(int level, String message)
+        {
+            switch (level)
+            {
+                case LogChute.DEBUG_ID :
+                    logger.debug(message);
+                    break;
+                case LogChute.ERROR_ID :
+                    logger.error(message);
+                    break;
+                case LogChute.WARN_ID :
+                    logger.warn(message);
+                    break;
+                case LogChute.INFO_ID :
+                    logger.info(message);
+                    break;
+                default :
+                    logger.debug(message);
+                    break;
+            }
+        }
+
+        @Override
+        public void log(int level, String message, Throwable e)
+        {
+            switch (level)
+            {
+                case LogChute.DEBUG_ID :
+                    logger.debug(message, e);
+                    break;
+                case LogChute.ERROR_ID :
+                    logger.error(message, e);
+                    break;
+                case LogChute.WARN_ID :
+                    logger.warn(message, e);
+                    break;
+                case LogChute.INFO_ID :
+                    logger.info(message, e);
+                    break;
+                default :
+                    logger.debug(message, e);
+                    break;
             }
         }
     }

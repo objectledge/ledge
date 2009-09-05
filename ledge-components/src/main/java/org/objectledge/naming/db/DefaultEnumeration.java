@@ -39,17 +39,17 @@ import javax.naming.NamingException;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class DefaultEnumeration implements NamingEnumeration
+public class DefaultEnumeration<T> implements NamingEnumeration<T>
 {
     /** the delegate iterator */
-    private Iterator delegate;
+    private Iterator<T> delegate;
 
     /** 
      * The enumeration constructor.
      * 
      * @param list the list of objects.
      */
-    public DefaultEnumeration(List list)
+    public DefaultEnumeration(List<T> list)
     {
         delegate = list.iterator();
     }
@@ -57,7 +57,7 @@ public class DefaultEnumeration implements NamingEnumeration
     /**
      * {@inheritDoc}
      */
-    public Object next() throws NamingException
+    public T next() throws NamingException
     {
         return delegate.next();
     }
@@ -89,7 +89,7 @@ public class DefaultEnumeration implements NamingEnumeration
     /**
      * {@inheritDoc}
      */
-    public Object nextElement()
+    public T nextElement()
     {
         return delegate.next();
     }

@@ -131,7 +131,7 @@ public class DirectoryParameters extends DefaultParameters
             }
             String[] values = new String[attr.size()];
             int i = 0;
-            NamingEnumeration e=attr.getAll();
+            NamingEnumeration<?> e=attr.getAll();
             while(e.hasMore())
             {
                 values[i++] = e.next().toString();
@@ -158,7 +158,7 @@ public class DirectoryParameters extends DefaultParameters
             }
             String[] keys = new String[attrs.size()];
             int i = 0;
-            NamingEnumeration e=attrs.getIDs();
+            NamingEnumeration<String> e=attrs.getIDs();
             while(e.hasMore())
             {
                 keys[i++] = e.next().toString();
@@ -253,13 +253,13 @@ public class DirectoryParameters extends DefaultParameters
      *
      * @param keys the set of keys.
      */
-    public void remove(Set keys)
+    public void remove(Set<String> keys)
     {
         try
         {
             Attributes attrs = ctx.getAttributes("");
             List<String> filteredKeys = new ArrayList<String>(keys.size());
-            NamingEnumeration e = attrs.getIDs();
+            NamingEnumeration<String> e = attrs.getIDs();
             while(e.hasMore())
             {
                 String name = e.next().toString();
@@ -272,7 +272,7 @@ public class DirectoryParameters extends DefaultParameters
             for(int i = 0; i < filteredKeys.size(); i++)
             {
                 items[i] =  new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
-                    new BasicAttribute((String)filteredKeys.get(i)));
+                    new BasicAttribute(filteredKeys.get(i)));
             }
             ctx.modifyAttributes("", items);
         }
@@ -289,13 +289,13 @@ public class DirectoryParameters extends DefaultParameters
      *
      * @param keys the set of names.
      */
-    public void removeExcept(Set keys)
+    public void removeExcept(Set<String> keys)
     {
         try
         {
             Attributes attrs = ctx.getAttributes("");
             List<String> filteredKeys = new ArrayList<String>(keys.size());
-            NamingEnumeration e = attrs.getIDs();
+            NamingEnumeration<String> e = attrs.getIDs();
             while(e.hasMore())
             {
                 String name = e.next().toString();
@@ -308,7 +308,7 @@ public class DirectoryParameters extends DefaultParameters
             for(int i = 0; i < filteredKeys.size(); i++)
             {
                 items[i] =  new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
-                    new BasicAttribute((String)filteredKeys.get(i)));
+                    new BasicAttribute(filteredKeys.get(i)));
             }
             ctx.modifyAttributes("", items);
         }

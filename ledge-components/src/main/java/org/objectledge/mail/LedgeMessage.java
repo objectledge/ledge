@@ -60,9 +60,6 @@ public class LedgeMessage
     /** Message body character encoding. */
     private String encoding = "UTF-8";
 
-    /** The logger. */
-    private Logger logger;
-
     /** The MailSystem. */
     private MailSystem mailSystem;
 
@@ -73,7 +70,7 @@ public class LedgeMessage
     private List<DataSource> attachments = new ArrayList<DataSource>();
     
     /** Related content map. */
-    private Map related = new HashMap();
+    private Map<String, DataSource> related = new HashMap<String, DataSource>();
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -89,7 +86,6 @@ public class LedgeMessage
     					Templating templating, Session session) 
     {
         this.mailSystem = mailSystem;
-        this.logger = logger;
         this.templating = templating;
         message = new MimeMessage(session);
     }
@@ -107,7 +103,6 @@ public class LedgeMessage
                         Templating templating, Session session, Message message)
     {
         this.mailSystem = mailSystem;
-        this.logger = logger;
         this.templating = templating;
         this.message = message;
         this.prepared = true;
@@ -225,7 +220,7 @@ public class LedgeMessage
      *
      * @return the related content map.
      */
-    public Map getRelatedContent()
+    public Map<String, DataSource> getRelatedContent()
     {
         return related;
     }
@@ -308,12 +303,12 @@ public class LedgeMessage
             BodyPart relatedBodyPart = new MimeBodyPart();
             relatedBodyPart.setContent(content, contentType);
             relatedMultipart.addBodyPart(relatedBodyPart);
-            Iterator i = related.entrySet().iterator();
+            Iterator<Map.Entry<String, DataSource>> i = related.entrySet().iterator();
             while(i.hasNext())
             {
-                Map.Entry mapping = (Map.Entry)i.next();
-                String cid = (String)mapping.getKey();
-                DataSource part = (DataSource)mapping.getValue();
+                Map.Entry<String, DataSource> mapping = i.next();
+                String cid = mapping.getKey();
+                DataSource part = mapping.getValue();
                 relatedBodyPart = new MimeBodyPart();
                 relatedBodyPart.setDisposition(Part.INLINE);
                 relatedBodyPart.setHeader("Content-ID", cid);
@@ -334,10 +329,10 @@ public class LedgeMessage
             {
                 mixedBodyPart.setContent(content, contentType);
             }
-            Iterator i = attachments.iterator();
+            Iterator<DataSource> i = attachments.iterator();
             while(i.hasNext())
             {
-                DataSource part = (DataSource)i.next();
+                DataSource part = i.next();
                 mixedBodyPart = new MimeBodyPart();
                 mixedBodyPart.setDisposition(Part.ATTACHMENT);
                 mixedBodyPart.setDataHandler(new DataHandler(part));

@@ -51,9 +51,6 @@ public class DefaultPersistence implements Persistence
     /** The Database. */
     private Database database;
     
-    /** The logger */
-    private Logger logger;
-
     /**
      * Component constructor.
      * 
@@ -62,7 +59,6 @@ public class DefaultPersistence implements Persistence
      */
     public DefaultPersistence(Database database, Logger logger)
     {
-        this.logger = logger;
         this.database = database;
     }
 
@@ -116,7 +112,7 @@ public class DefaultPersistence implements Persistence
      * @return the list of presistent objects.
      * @throws PersistenceException if any exception occured.
      */
-    public List load(String where, PersistentFactory factory) throws PersistenceException
+    public List<Persistent> load(String where, PersistentFactory factory) throws PersistenceException
     {
         Connection conn = null;
         try
@@ -126,7 +122,7 @@ public class DefaultPersistence implements Persistence
             PreparedStatement statement = DefaultInputRecord.getSelectStatement(where, obj, conn);
             ResultSet rs = statement.executeQuery();
             InputRecord record = new DefaultInputRecord(rs);
-            ArrayList list = new ArrayList();
+            ArrayList<Persistent> list = new ArrayList<Persistent>();
             while (rs.next())
             {
                 obj.setData(record);

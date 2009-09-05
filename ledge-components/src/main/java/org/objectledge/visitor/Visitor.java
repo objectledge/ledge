@@ -81,7 +81,7 @@ public abstract class Visitor<T>
      * 
      * @param o the visited object.
      */
-    protected void visitOther(T o)
+    protected void visitOther(Object o)
     {
         
     }
@@ -102,7 +102,7 @@ public abstract class Visitor<T>
      */
     public void traverseDepthFirst(T o)
     {
-        traverseDepthFirst(o, new HashSet());
+        traverseDepthFirst(o, new HashSet<T>());
     }
     
     /**
@@ -113,7 +113,7 @@ public abstract class Visitor<T>
      */
     public void traverseBreadthFirst(T o)
     {
-        traverseBreadthFirst(o, new HashSet());        
+        traverseBreadthFirst(o, new HashSet<T>());        
     }
     
     /**
@@ -122,7 +122,7 @@ public abstract class Visitor<T>
      * @param o traversal origin.
      * @param s seen objects set.
      */
-    private void traverseDepthFirst(T o, Set s)
+    private void traverseDepthFirst(T o, Set<T> s)
     {
         if(!s.contains(o))
         {
@@ -143,7 +143,7 @@ public abstract class Visitor<T>
      * @param o traversal origin.
      * @param s seen objects set.
      */
-    private void traverseBreadthFirst(T o, Set s)
+    private void traverseBreadthFirst(T o, Set<T> s)
     {
         if(!s.contains(o))
         {
@@ -162,7 +162,7 @@ public abstract class Visitor<T>
      */
     private static class MethodMap
     {
-        private final Map<Class, Method> methodMap = new LinkedHashMap<Class, Method>();
+        private final Map<Class<?>, Method> methodMap = new LinkedHashMap<Class<?>, Method>();
         
         /**
          * Prepares method map for the specific class.
@@ -172,11 +172,11 @@ public abstract class Visitor<T>
          * 
          * @param c the class.
          */
-        private MethodMap(Class c)
+        private MethodMap(Class<?> c)
         {
             Method[] methods = c.getMethods();
             List<Method> ordered = new ArrayList<Method>();
-            Map<Class, Method> unordered = new HashMap();
+            Map<Class<?>, Method> unordered = new HashMap<Class<?>, Method>();
             for(int i = 0; i < methods.length; i++)
             {
                 if(methods[i].getName().equals("visit")
@@ -215,13 +215,13 @@ public abstract class Visitor<T>
          * @param v the visitor instance.
          * @param o the object.
          */
-        public void invoke(Visitor v, Object o)
+        public <T> void invoke(Visitor<T> v, Object o)
         {
             Method m = methodMap.get(o.getClass());
             if(m == null)
             {
                 // look for inexact match
-                loop: for(Class c : methodMap.keySet())
+                loop: for(Class<?> c : methodMap.keySet())
                 {
                     if(c.isAssignableFrom(o.getClass()))
                     {
@@ -251,9 +251,9 @@ public abstract class Visitor<T>
             }
         }
  
-        private static final Map<Class, MethodMap> CLASS_MAPS = new HashMap<Class, MethodMap>(); 
+        private static final Map<Class<?>, MethodMap> CLASS_MAPS = new HashMap<Class<?>, MethodMap>(); 
         
-        public static synchronized MethodMap getInstance(Class c)
+        public static synchronized MethodMap getInstance(Class<?> c)
         {
             MethodMap map = CLASS_MAPS.get(c);
             if(map == null)

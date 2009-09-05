@@ -64,7 +64,7 @@ public class OutboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void addListener(Class iface, Object listener, Object object)
+    public void addListener(Class<?> iface, Object listener, Object object)
         throws IllegalArgumentException
     {
         throw new IllegalStateException("can't register listeners with on an outbound forwarder");
@@ -73,7 +73,7 @@ public class OutboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void removeListener(Class iface, Object listener, Object object)
+    public void removeListener(Class<?> iface, Object listener, Object object)
     {
         throw new IllegalStateException("can't register listeners with on an outbound forwarder");
     }
@@ -81,7 +81,7 @@ public class OutboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void addRemoteListener(Class iface, Remote listener, Object object)
+    public void addRemoteListener(Class<?> iface, Remote listener, Object object)
         throws IllegalArgumentException
     {
         throw new IllegalStateException("can't register listeners with on an outbound forwarder");
@@ -90,7 +90,7 @@ public class OutboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void removeRemoteListener(Class iface, Remote listener, Object object)
+    public void removeRemoteListener(Class<?> iface, Remote listener, Object object)
     {
         throw new IllegalStateException("can't register listeners with on an outbound forwarder");
     }

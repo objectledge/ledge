@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class StackTrace
 {    
-    private static final Class[] EMPTY_FORMAL_ARGS = new Class[0];
+    private static final Class<?>[] EMPTY_FORMAL_ARGS = new Class[0];
 
     private static final Object[] EMPTY_ACTUAL_ARGS = new Object[0];
 
@@ -114,8 +114,8 @@ public class StackTrace
             int[] skip = new int[traces.size()];
             for (int i = 1; i < traces.size(); i++)
             {
-                StackTraceElement[] frames = (StackTraceElement[])traces.get(i);
-                StackTraceElement[] prevFrames = (StackTraceElement[])traces.get(i - 1);
+                StackTraceElement[] frames = traces.get(i);
+                StackTraceElement[] prevFrames = traces.get(i - 1);
                 skip[i] = frames.length;
                 inner: for (int j = 0; j < frames.length && j < prevFrames.length; j++)
                 {
@@ -143,7 +143,7 @@ public class StackTrace
 
             for (int i = traces.size() - 1; i > 0; i--)
             {
-                StackTraceElement[] frames = (StackTraceElement[])traces.get(i);
+                StackTraceElement[] frames = traces.get(i);
                 if(i < traces.size() - 1)
                 {
                     buff.append("rethrown as ");

@@ -72,12 +72,12 @@ public class DatatypeSetManager
 	public synchronized DatatypeSet getDatatypeSet(String name)
 		throws DatatypeSetCreationException
 	{
-		DatatypeSet set = (DatatypeSet) datatypeSets.get(name);
+		DatatypeSet set = datatypeSets.get(name);
 		if(set == null)
 		{
-			for (Iterator iter = factories.iterator(); iter.hasNext();)
+			for (Iterator<DatatypeSetFactory> iter = factories.iterator(); iter.hasNext();)
         	{
-            	DatatypeSetFactory element = (DatatypeSetFactory) iter.next();
+            	DatatypeSetFactory element = iter.next();
 				set = element.createDatatypeSet(name);
 				if(set != null)
 				{

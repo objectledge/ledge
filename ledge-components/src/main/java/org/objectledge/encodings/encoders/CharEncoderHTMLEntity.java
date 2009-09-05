@@ -732,7 +732,7 @@ null,null,null,null,null,null,null,null
 
 		// Named entity: name ="&" followed by a name
 		String key = name.substring(1, length-1);
-		MappingEntry ent = (MappingEntry)ENTITIES_BY_NAME.get(key);
+		MappingEntry ent = ENTITIES_BY_NAME.get(key);
 		if(ent != null)
 		{
 			return ent.getUnicodeCode();

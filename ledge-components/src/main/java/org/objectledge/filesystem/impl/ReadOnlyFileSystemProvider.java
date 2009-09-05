@@ -498,7 +498,7 @@ public abstract class ReadOnlyFileSystemProvider
 	{
 		if(listing != null)
 		{
-			Long mod = (Long)times.get(FileSystem.normalizedPath(path));
+			Long mod = times.get(FileSystem.normalizedPath(path));
             if(mod != null)
             {
                 return mod.longValue();
@@ -546,7 +546,7 @@ public abstract class ReadOnlyFileSystemProvider
 	{
 		if(listing != null)
 		{
-			Long mod = (Long)lengths.get(FileSystem.normalizedPath(path));
+			Long mod = lengths.get(FileSystem.normalizedPath(path));
             if(mod != null)
             {
                 return mod.longValue();

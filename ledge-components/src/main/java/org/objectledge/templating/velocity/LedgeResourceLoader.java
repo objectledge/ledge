@@ -32,7 +32,7 @@ import java.io.InputStream;
 
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.apache.velocity.runtime.log.LogSystem;
+import org.apache.velocity.runtime.log.LogChute;
 import org.apache.velocity.runtime.resource.Resource;
 import org.apache.velocity.runtime.resource.loader.ResourceLoader;
 import org.objectledge.filesystem.FileSystem;
@@ -55,7 +55,7 @@ public class LedgeResourceLoader extends ResourceLoader
 	private FileSystem fileSystem;
     
     /** the logger */
-    private LogSystem logSystem;
+    private LogChute logChute;
 	
 	/**
 	 * {@inheritDoc}
@@ -63,7 +63,7 @@ public class LedgeResourceLoader extends ResourceLoader
 	public void init(ExtendedProperties properties)
 	{		
 		fileSystem = (FileSystem)properties.get(LEDGE_FILE_SYSTEM);
-        logSystem = (LogSystem)properties.get(LOG_SYSTEM);
+        logChute = (LogChute)properties.get(LOG_SYSTEM);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class LedgeResourceLoader extends ResourceLoader
 	public InputStream getResourceStream(String name) 
 			throws ResourceNotFoundException
 	{
-        logSystem.logVelocityMessage(LogSystem.DEBUG_ID, "LedgeResourceLoader: opening "+name);
+        logChute.log(LogChute.DEBUG_ID, "LedgeResourceLoader: opening "+name);
 		InputStream is = fileSystem.getInputStream(name);
 		if(is == null)
 		{

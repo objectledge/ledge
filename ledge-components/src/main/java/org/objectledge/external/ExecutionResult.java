@@ -40,7 +40,6 @@ import org.objectledge.utils.StringUtils;
  */
 public class ExecutionResult
 {
-    private static final int BUFFER_SIZE = 65536;
     private final int exitValue;
     private final byte[] output;
     private final byte[] error;

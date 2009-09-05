@@ -91,7 +91,7 @@ public class DefaultDBParametersManager implements DBParametersManager
         Long key = new Long(id);
         if (localCache.containsKey(key))
         {
-            return (Parameters)localCache.get(key);
+            return localCache.get(key);
         }
         parameters = new DefaultParameters();
         Connection conn = null;

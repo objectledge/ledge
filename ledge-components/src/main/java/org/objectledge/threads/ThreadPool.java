@@ -140,10 +140,10 @@ public class ThreadPool
     {
         synchronized(threads)
         {
-            Iterator i = threads.iterator();
+            Iterator<Daemon> i = threads.iterator();
             while(i.hasNext())
             {
-                Startable thread = (Startable)i.next();
+                Startable thread = i.next();
                 thread.stop();
                 i.remove();
             }

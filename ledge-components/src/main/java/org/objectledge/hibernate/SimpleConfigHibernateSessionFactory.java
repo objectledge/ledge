@@ -109,7 +109,7 @@ extends AbstractHibernateSessionFactory
                 {
                     try
                     {
-                        Class clazz = Class.forName(mapping.getAttribute("class"));
+                        Class<?> clazz = Class.forName(mapping.getAttribute("class"));
                         cfg.addClass(clazz);
                     }
                     catch(ClassNotFoundException e)

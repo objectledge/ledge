@@ -175,7 +175,7 @@ public abstract class AbstractI18n implements I18n
 	 */
 	public String getLocaleName(Locale locale)
 	{
-	    return (String)localeNames.get(locale);
+	    return localeNames.get(locale);
 	}
 	
     /**
@@ -227,10 +227,10 @@ public abstract class AbstractI18n implements I18n
     {
         String value = null;
         // get selected bundle
-        Map bundle = (Map)localeMap.get(locale.toString());
+        Map<String, String> bundle = localeMap.get(locale.toString());
         if(bundle != null)
         {
-            value = (String)bundle.get(key);
+            value = bundle.get(key);
             if(value != null)
             {
                 return value;
@@ -241,10 +241,10 @@ public abstract class AbstractI18n implements I18n
             }
         }
         // get default bundle
-        bundle = (Map)localeMap.get(defaultLocale.toString());
+        bundle = localeMap.get(defaultLocale.toString());
         if(bundle != null)
         {
-            value = (String)bundle.get(key);
+            value = bundle.get(key);
         }
         return value;
     }

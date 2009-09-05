@@ -73,7 +73,7 @@ public class CompoundParameters implements Parameters
     public CompoundParameters(List<Parameters> list)
     {
         containers = list;
-        Iterator i = list.iterator();
+        Iterator<Parameters> i = list.iterator();
         while(i.hasNext())
         {
             Object obj = i.next();
@@ -90,10 +90,10 @@ public class CompoundParameters implements Parameters
      */
     public boolean isDefined(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return true;
@@ -108,10 +108,10 @@ public class CompoundParameters implements Parameters
     public String[] getParameterNames()
     {
         SortedSet<String> keys = new TreeSet<String>();
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             keys.addAll(Arrays.asList(c.getParameterNames()));
         }
         String[] result = new String[keys.size()];
@@ -124,10 +124,10 @@ public class CompoundParameters implements Parameters
      */
     public String get(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.get(name);
@@ -141,10 +141,10 @@ public class CompoundParameters implements Parameters
      */
     public String get(String name, String defaultValue)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.get(name);
@@ -158,10 +158,10 @@ public class CompoundParameters implements Parameters
      */
     public String[] getStrings(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getStrings(name);
@@ -175,10 +175,10 @@ public class CompoundParameters implements Parameters
      */
     public boolean getBoolean(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getBoolean(name);
@@ -192,10 +192,10 @@ public class CompoundParameters implements Parameters
      */
     public boolean getBoolean(String name, boolean defaultValue)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getBoolean(name);
@@ -209,10 +209,10 @@ public class CompoundParameters implements Parameters
      */
     public boolean[] getBooleans(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getBooleans(name);
@@ -226,10 +226,10 @@ public class CompoundParameters implements Parameters
      */
     public Date getDate(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getDate(name);
@@ -243,10 +243,10 @@ public class CompoundParameters implements Parameters
      */
     public Date getDate(String name, Date defaultValue)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getDate(name, defaultValue);
@@ -260,10 +260,10 @@ public class CompoundParameters implements Parameters
      */
     public Date[] getDates(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getDates(name);
@@ -277,10 +277,10 @@ public class CompoundParameters implements Parameters
      */
     public int getInt(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getInt(name);
@@ -294,10 +294,10 @@ public class CompoundParameters implements Parameters
      */
     public int getInt(String name, int defaultValue)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getInt(name, defaultValue);
@@ -311,10 +311,10 @@ public class CompoundParameters implements Parameters
      */
     public int[] getInts(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getInts(name);
@@ -328,10 +328,10 @@ public class CompoundParameters implements Parameters
      */
     public long getLong(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getLong(name);
@@ -345,10 +345,10 @@ public class CompoundParameters implements Parameters
      */
     public long getLong(String name, long defaultValue)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getLong(name, defaultValue);
@@ -362,10 +362,10 @@ public class CompoundParameters implements Parameters
      */
     public long[] getLongs(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getLongs(name);
@@ -379,10 +379,10 @@ public class CompoundParameters implements Parameters
      */
     public float getFloat(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getFloat(name);
@@ -396,10 +396,10 @@ public class CompoundParameters implements Parameters
      */
     public float getFloat(String name, float defaultValue)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getFloat(name, defaultValue);
@@ -413,10 +413,10 @@ public class CompoundParameters implements Parameters
      */
     public float[] getFloats(String name)
     {
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             if(c.isDefined(name))
             {
                 return c.getFloats(name);
@@ -431,10 +431,10 @@ public class CompoundParameters implements Parameters
     public Parameters getChild(String prefix)
     {
         List<Parameters> list = new ArrayList<Parameters>();
-        Iterator i = containers.iterator();
+        Iterator<Parameters> i = containers.iterator();
         while(i.hasNext())
         {
-            Parameters c = (Parameters)i.next();
+            Parameters c = i.next();
             list.add(c.getChild(prefix));
         }
         return new CompoundParameters(list);
@@ -503,7 +503,7 @@ public class CompoundParameters implements Parameters
      *
      * @param keys the set of keys.
      */
-    public void remove(Set keys)
+    public void remove(Set<String> keys)
     {
         throw new UnsupportedOperationException();
     }
@@ -513,7 +513,7 @@ public class CompoundParameters implements Parameters
      *
      * @param keys the set of names.
      */
-    public void removeExcept(Set keys)
+    public void removeExcept(Set<String> keys)
     {
         throw new UnsupportedOperationException();
     }

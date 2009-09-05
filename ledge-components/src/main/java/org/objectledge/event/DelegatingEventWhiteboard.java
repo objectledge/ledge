@@ -81,7 +81,7 @@ public class DelegatingEventWhiteboard implements EventWhiteboard
     /** 
      * {@inheritDoc}
      */
-    public void addListener(Class iface, Object listener, Object object)
+    public void addListener(Class<?> iface, Object listener, Object object)
         throws IllegalArgumentException
     {
         checkDelegate();
@@ -91,7 +91,7 @@ public class DelegatingEventWhiteboard implements EventWhiteboard
     /** 
      * {@inheritDoc}
      */
-    public void removeListener(Class iface, Object listener, Object object)
+    public void removeListener(Class<?> iface, Object listener, Object object)
     {
         checkDelegate();
         delegate.removeListener(iface, listener, object);
@@ -100,7 +100,7 @@ public class DelegatingEventWhiteboard implements EventWhiteboard
     /** 
      * {@inheritDoc}
      */
-    public void addRemoteListener(Class iface, Remote listener, Object object)
+    public void addRemoteListener(Class<?> iface, Remote listener, Object object)
         throws IllegalArgumentException
     {
         checkDelegate();
@@ -110,7 +110,7 @@ public class DelegatingEventWhiteboard implements EventWhiteboard
     /** 
      * {@inheritDoc}
      */
-    public void removeRemoteListener(Class iface, Remote listener, Object object)
+    public void removeRemoteListener(Class<?> iface, Remote listener, Object object)
     {
         checkDelegate();
         delegate.removeRemoteListener(iface, listener, object);        

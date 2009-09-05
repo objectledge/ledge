@@ -53,18 +53,18 @@ public class CollectionUtils
     }
 
     /**
-     * Converst a list of two element lists (key, value) into a map.
+     * Converts a list of two element lists (key, value) into a map.
      *
      * @param list the list
      * @return a map
      */
-    public static Map listToMap(List list)
+    public static <T> Map<T, T> listToMap(List<List<T>> list)
     {
-        Map map = new HashMap(list.size());
-        Iterator i = list.iterator();
+        Map<T, T> map = new HashMap<T, T>(list.size());
+        Iterator<List<T>> i = list.iterator();
         while(i.hasNext())
         {
-            List l = (List)i.next();
+            List<T> l = i.next();
             map.put(l.get(0), l.get(1));
         }
         return map;

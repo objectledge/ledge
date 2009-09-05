@@ -49,9 +49,6 @@ public class MailSystem
     /** logger */
     private Logger logger;
 
-    /** thread pool */
-    private ThreadPool threadPool;
-
     /** file service */
     private FileSystem fileSystem;
     
@@ -103,7 +100,6 @@ public class MailSystem
 		this.logger = logger;
 		this.fileSystem = fileSystem;
 		this.templating = templating;
-        this.threadPool = threadPool;
         try
         {
             String mimeTypeFilePath = config.getChild("mime_type_file_path")
@@ -177,7 +173,7 @@ public class MailSystem
      */
     public Session getSession(String name) 
     {
-        return (Session)sessionsMap.get(name);
+        return sessionsMap.get(name);
     }
 
     /**
@@ -354,7 +350,7 @@ public class MailSystem
 		 */
         public void addCredentials(String protocol, String username, String password)
         {
-			Map<String,String> protocolCredentials = authInfo.get(protocol);
+			Map<String, String> protocolCredentials = authInfo.get(protocol);
 			if(protocolCredentials == null)
 			{
 				protocolCredentials = new HashMap<String,String>();
@@ -368,10 +364,10 @@ public class MailSystem
 		 */
         public PasswordAuthentication getPasswordAuthentication()
         {
-            Map credentials = (Map)authInfo.get(getRequestingProtocol());
+            Map<String, String> credentials = authInfo.get(getRequestingProtocol());
             if(credentials == null)
             {
-                credentials = (Map)authInfo.get("");
+                credentials = authInfo.get("");
             }
             if(credentials != null)
             {
@@ -380,7 +376,7 @@ public class MailSystem
                 {
                     user = (String)credentials.keySet().toArray()[0];
                 }
-                String pass = (String)credentials.get(user);
+                String pass = credentials.get(user);
                 if(pass != null)
                 {
                     return new PasswordAuthentication(user, pass);

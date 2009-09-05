@@ -88,9 +88,9 @@ public abstract class TemplatingContext
      * 
      * @return keys of all objects.
      */
-    public List getSortedKeys()
+    public List<String> getSortedKeys()
     {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         String[] keys = getKeys();
         for(String key: keys)
         {

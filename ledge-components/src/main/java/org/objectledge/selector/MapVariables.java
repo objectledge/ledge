@@ -37,14 +37,14 @@ import java.util.Map;
  */
 public class MapVariables implements Variables
 {
-    private Map values;
+    private Map<String, Object> values;
 
     /**
      * Constructs a new Variables instance.
      * 
      * @param values the variable values.
      */    
-    public MapVariables(Map values)
+    public MapVariables(Map<String, Object> values)
     {
         this.values = values;
     }

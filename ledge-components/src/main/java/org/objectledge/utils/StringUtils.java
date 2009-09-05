@@ -773,26 +773,26 @@ public class StringUtils
      * @param t the macros (token -&gt; value)
      * @return an expanded String
      */
-    public static String expand(String s, Map t)
+    public static String expand(String s, Map<String, String> t)
     {
         if(t==null || t.size()==0)
         {
             return s;
         }
         StringBuilder buff = new StringBuilder(s.length());
-        Iterator keys = t.keySet().iterator();
+        Iterator<String> keys = t.keySet().iterator();
         int pos, lastpos;
         String k, v;
         while(keys.hasNext())
         {
-            k = (String)keys.next();
+            k = keys.next();
             pos = s.indexOf(k);
             if(pos < 0)
             {
                 continue;
             }
             lastpos = 0;
-            v = (String)t.get(k);
+            v = t.get(k);
             buff.setLength(0);
             while(pos >= 0)
             {

@@ -109,14 +109,14 @@ public class EncoderGenerator
             {
                 prefixIndex[i] = definedPrefixIndex;
                 // fill group suffixes
-                HashMap group = (HashMap)(groups.get(prefix));
+                Map<Short,MappingEntry> group = groups.get(prefix);
 
                 for(int j = 0; j < 256; j++)
                 {
                     Short suffix = new Short((short)j);
                     if(group.containsKey(suffix))
                     {
-                        MappingEntry entry = (MappingEntry)(group.get(suffix));
+                        MappingEntry entry = group.get(suffix);
                         suffixIndex[definedPrefixIndex + j] = entry;
                     }
                 }
@@ -373,7 +373,7 @@ public class EncoderGenerator
             MappingEntry[] outTable = new MappingEntry[mappingEntries.size()];
             for(int j=0, s=mappingEntries.size(); j<s; j++)
             {
-                outTable[j] = (MappingEntry)(mappingEntries.get(j));
+                outTable[j] = (mappingEntries.get(j));
             }
 
             // prepare file to write to

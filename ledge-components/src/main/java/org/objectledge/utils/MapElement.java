@@ -37,9 +37,9 @@ import org.jmock.core.Constraint;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: MapElement.java,v 1.3 2004-12-23 07:16:47 rafal Exp $
  */
-public class MapElement implements Constraint
+public class MapElement<K> implements Constraint
 {
-    private Object key;
+    private K key;
     private Constraint c;
     
     /**
@@ -48,7 +48,7 @@ public class MapElement implements Constraint
      * @param key the key of the element to check.
      * @param c the constraint.
      */
-    public MapElement(Object key, Constraint c)
+    public MapElement(K key, Constraint c)
     {
         this.key = key;
         this.c = c;
@@ -57,9 +57,10 @@ public class MapElement implements Constraint
     /** 
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public boolean eval(Object o)
     {
-        return c.eval(((Map)o).get(key));
+        return c.eval(((Map<K,?>)o).get(key));
     }
     
     /** 

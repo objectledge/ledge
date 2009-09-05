@@ -40,17 +40,17 @@ import org.jmock.core.Stub;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: ReturnListValuesAsArray.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
  */
-public class ReturnListValuesAsArray
+public class ReturnListValuesAsArray<T>
 	implements SelfDescribing, Stub
 {
-    private List list;
+    private List<T> list;
     
     /**
      * Creates new ReturnListValuesAsArray Stub instance.
      * 
      * @param list the list to be returned.
      */
-    public ReturnListValuesAsArray(List list)
+    public ReturnListValuesAsArray(List<T> list)
     {
         this.list = list;
     }
@@ -68,7 +68,7 @@ public class ReturnListValuesAsArray
      */
     public Object invoke(Invocation invocation) throws Throwable
     {
-        Class type = invocation.invokedMethod.getReturnType().getComponentType();
+        Class<?> type = invocation.invokedMethod.getReturnType().getComponentType();
         if(type == null)
         {
             throw new IllegalStateException("not an array returing method called");

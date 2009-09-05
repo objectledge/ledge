@@ -188,6 +188,7 @@ import org.xml.sax.SAXException;
   * @author Laramie Crocker
   * @version $Revision: 1.15 $
  */
+@SuppressWarnings("unchecked")
 public class HTMLWriter extends XMLWriter {
 
     public HTMLWriter(Writer writer) {
@@ -545,7 +546,7 @@ public class HTMLWriter extends XMLWriter {
 
         String qualifiedName = element.getQualifiedName();
         String saveLastText = m_lastText;
-        int size = element.nodeCount();
+        // int size = element.nodeCount();
         if (  isPreformattedTag(qualifiedName)  ) {
             OutputFormat currentFormat = getOutputFormat();
             boolean saveNewlines = currentFormat.isNewlines();

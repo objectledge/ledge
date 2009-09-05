@@ -409,7 +409,7 @@ public class LocalFileSystemProvider
     {
         if(exists(path))
         {
-            return getFile(path).toURL();
+            return getFile(path).toURI().toURL();
         }
         else
         {

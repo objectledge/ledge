@@ -325,21 +325,27 @@ public class ThreadDataSource
         }
     }
     
+    @SuppressWarnings("unchecked")
+    private static Map<ThreadDataSource, Map<String, Connection>> getThreadMap(Context context) {
+    	return (Map<ThreadDataSource, Map<String, Connection>>) context
+    	.getAttribute(THREAD_MAP);
+    }
+    
     /**
      * @param conn a new connection for the thread.
      */
     void setCachedConnection(Connection conn, String user)
     {
-        Map threadMap = (Map)context.getAttribute(THREAD_MAP);
+		Map<ThreadDataSource, Map<String, Connection>> threadMap = getThreadMap(context);
         if(threadMap == null)
         {
-            threadMap = new HashMap();
+            threadMap = new HashMap<ThreadDataSource, Map<String, Connection>>();
             context.setAttribute(THREAD_MAP, threadMap);
         }
-        Map userMap = (Map)threadMap.get(this);
+        Map<String, Connection> userMap = threadMap.get(this);
         if(userMap == null)
         {
-            userMap = new HashMap();
+            userMap = new HashMap<String, Connection>();
             threadMap.put(this, userMap);
         }
         if(conn != null)
@@ -357,12 +363,12 @@ public class ThreadDataSource
      */
     private Connection getCachedConnection(String user)
     {
-        Map threadMap = (Map)context.getAttribute(THREAD_MAP);
+		Map<ThreadDataSource, Map<String, Connection>> threadMap = getThreadMap(context);
         if(threadMap == null)
         {
             return null;
         }
-        Map userMap = (Map)threadMap.get(this);
+        Map<String, Connection> userMap = threadMap.get(this);
         if(userMap == null)
         {
             return null;
@@ -398,14 +404,14 @@ public class ThreadDataSource
      */
     public static boolean hasOpenConnections(Context context)
     {
-        Map threadMap = (Map)context.getAttribute(THREAD_MAP);
+        Map<ThreadDataSource, Map<String, Connection>> threadMap = getThreadMap(context);
         if(threadMap != null)
         {
-            Iterator i = threadMap.values().iterator();
+            Iterator<Map<String, Connection>> i = threadMap.values().iterator();
             while(i.hasNext())
             {
-                Map userMap = (Map)i.next();
-                Iterator j = userMap.values().iterator();
+            	Map<String, Connection> userMap = i.next();
+                Iterator<Connection> j = userMap.values().iterator();
                 while(j.hasNext())
                 {
                     ThreadConnection conn = (ThreadConnection)j.next();
@@ -435,16 +441,16 @@ public class ThreadDataSource
      */
     static void cleanupState(Context context, Logger log)
     {
-        Map threadMap = (Map)context.getAttribute(THREAD_MAP);
+    	Map<ThreadDataSource, Map<String, Connection>> threadMap = getThreadMap(context);
         if(threadMap != null)
         {
-            Iterator i = threadMap.values().iterator();
+            Iterator<Map<String, Connection>> i = threadMap.values().iterator();
             while(i.hasNext())
             {
-                Map userMap = (Map)i.next();
+                Map<String, Connection> userMap = i.next();
                 if(userMap != null && !userMap.isEmpty())
                 {
-                    Iterator j = userMap.values().iterator();
+                    Iterator<Connection> j = userMap.values().iterator();
                     while(j.hasNext())
                     {
                         ThreadConnection conn = (ThreadConnection)j.next();

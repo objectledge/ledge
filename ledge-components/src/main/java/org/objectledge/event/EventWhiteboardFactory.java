@@ -180,7 +180,7 @@ public class EventWhiteboardFactory
                             break loop;
                         }
                     }
-                    event = (Event)queue.remove(0);
+                    event = queue.remove(0);
                 }
                 event.getForwarder().dispatchEvent(event.getMethod(), event.getArgs(),
                                                    event.getObject());

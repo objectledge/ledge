@@ -106,7 +106,7 @@ public class AtSchedule
         this.config = config;
         
         StringTokenizer st = new StringTokenizer(config, ";");
-        ArrayList temp = new ArrayList();
+        ArrayList<Date> temp = new ArrayList<Date>();
         try
         {
             while(st.hasMoreTokens())

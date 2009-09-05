@@ -172,7 +172,7 @@ public class DateFormatTool
      * @param date the date to split.
      * @return list of date fields, as described above.
      */
-    public List getFields(Date date)
+    public List<Integer> getFields(Date date)
     {
         return getFields(date, TimeZone.getDefault());
     }
@@ -195,7 +195,7 @@ public class DateFormatTool
      * @param zone the timezone to use.
      * @return list of date fields, as described above.
      */
-    public List getFields(Date date, TimeZone zone)
+    public List<Integer> getFields(Date date, TimeZone zone)
     {
         ArrayList<Integer> list = new ArrayList<Integer>(7);
         if(date == null)
@@ -230,7 +230,7 @@ public class DateFormatTool
      * 
      * @return list of recognized time zone ids.
      */
-    public List getTimeZoneIds()
+    public List<String> getTimeZoneIds()
     {
         return Arrays.asList(TimeZone.getAvailableIDs());
     }

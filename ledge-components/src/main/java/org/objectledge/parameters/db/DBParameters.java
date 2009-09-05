@@ -55,9 +55,6 @@ import org.objectledge.parameters.ScopedParameters;
  */
 public class DBParameters implements Parameters
 {
-	/** the logger */
-	private Logger logger;
-
 	/** db access component */
 	private Database database;
 	
@@ -84,7 +81,6 @@ public class DBParameters implements Parameters
     public DBParameters(Parameters parameters, long id, Database database, Logger logger)
     {
         modified = new HashSet<String>();
-    	this.logger = logger;
     	this.database = database;
     	if(parameters != null)
     	{
@@ -654,7 +650,7 @@ public class DBParameters implements Parameters
 		try
 		{
 			conn = database.getConnection();
-			Iterator iterator = modified.iterator();
+			Iterator<String> iterator = modified.iterator();
 			PreparedStatement deleteStmt = conn.prepareStatement(
 				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = "+id+
 				" AND name = ?");
@@ -663,7 +659,7 @@ public class DBParameters implements Parameters
 				" VALUES ("+id+", ?, ?)");
 			while(iterator.hasNext())
 			{
-				String name = (String)iterator.next();
+				String name = iterator.next();
                 if(!areValuesEqual(name))
                 {
     				String[] values = container.getStrings(name);

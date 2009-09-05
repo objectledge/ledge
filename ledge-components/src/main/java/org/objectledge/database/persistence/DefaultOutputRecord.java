@@ -399,11 +399,11 @@ public class DefaultOutputRecord implements OutputRecord
     public String getWhereClause()
         throws PersistenceException
     {
-        Set keyFields = getKeyFields();
+        Set<String> keyFields = getKeyFields();
         StringBuilder buff = new StringBuilder();
-        for(Iterator i = fields.keySet().iterator(); i.hasNext();)
+        for(Iterator<String> i = fields.keySet().iterator(); i.hasNext();)
         {
-            String field = (String)i.next();
+            String field = i.next();
             if(keyFields.contains(field))
             {
                 buff.append(field);
@@ -434,7 +434,7 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append("INSERT INTO ");
         buff.append(object.getTable());
         buff.append(" (");
-        for(Iterator i = fields.keySet().iterator(); i.hasNext();)
+        for(Iterator<String> i = fields.keySet().iterator(); i.hasNext();)
         {
             String field = (String)i.next();
             buff.append(field);
@@ -465,12 +465,12 @@ public class DefaultOutputRecord implements OutputRecord
     public PreparedStatement getUpdateStatement(Connection conn)
         throws PersistenceException, SQLException
     {
-        Set keyFields = getKeyFields();
+        Set<String> keyFields = getKeyFields();
         StringBuilder buff = new StringBuilder();
         buff.append("UPDATE ");
         buff.append(object.getTable());
         buff.append(" SET ");
-        Iterator i = fields.keySet().iterator();
+        Iterator<String> i = fields.keySet().iterator();
         while(i.hasNext())
         {
             String field = (String)i.next();
@@ -498,7 +498,7 @@ public class DefaultOutputRecord implements OutputRecord
     /**
      * @return set of key field names.
      */
-    private Set getKeyFields()
+    private Set<String> getKeyFields()
     {
         return new HashSet<String>(Arrays.asList(object.getKeyColumns()));
     }
@@ -577,9 +577,9 @@ public class DefaultOutputRecord implements OutputRecord
     public void setValues(PreparedStatement stmt, boolean includeKeys, boolean includeNonKeys)
         throws SQLException
     {
-        Set keyFields = getKeyFields();
+        Set<String> keyFields = getKeyFields();
         int pos = 1;
-        for(Iterator i = fields.keySet().iterator(); i.hasNext();)
+        for(Iterator<String> i = fields.keySet().iterator(); i.hasNext();)
         {
             Object field = i.next();
             boolean isKey = keyFields.contains(field);

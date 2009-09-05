@@ -25,17 +25,14 @@ import org.picocontainer.PicoContainer;
  */
 public class ContextFactory
 {
-	/** the logger */
-	private Logger logger;
-	
     /** Initial environments. */
-    private Map initial = new HashMap();
+    private Map<String, Hashtable<String, Object>> initial = new HashMap<String, Hashtable<String, Object>>();
 
     /** Context aliases. */
-    private Map alias = new HashMap();
+    private Map<String, String> alias = new HashMap<String, String>();
 
     /** Cached contexts. */
-    private Map context = new HashMap();
+    private Map<String, Context> context = new HashMap<String, Context>();
 
 	/**
 	 * Component constructor.
@@ -48,11 +45,10 @@ public class ContextFactory
   	public ContextFactory(PicoContainer container, Configuration config, Logger logger)
         throws ConfigurationException
   	{
-  		this.logger = logger;
         Configuration[] contexts = config.getChildren("context");
         for (int i = 0; i < contexts.length; i++)
         {
-            Hashtable env = new Hashtable();
+            Hashtable<String, Object> env = new Hashtable<String, Object>();
             String name = contexts[i].getAttribute("name");
             // initial factory is required.
             String initialFactory = contexts[i].getAttribute("initial_factory");
@@ -110,7 +106,7 @@ public class ContextFactory
                                 componentProperties[j].getPath(), 
                                 componentProperties[j].getLocation());
                         }
-                        component = container.getComponentInstanceOfType((Class)key);
+                        component = container.getComponentInstanceOfType((Class<?>)key);
                     }
                 }
                 if(component == null)
@@ -126,7 +122,7 @@ public class ContextFactory
             for (int j = 0; j < aliases.length; j++)
             {
                 String aliasName = aliases[j].getAttribute("name");
-                String prevContext = (String)alias.get(aliasName);
+                String prevContext = alias.get(aliasName);
                 if(prevContext != null)
                 {
                     throw new ComponentInitializationError("alias used" +
@@ -149,12 +145,12 @@ public class ContextFactory
     {
         if(alias.containsKey(name))
         {
-            name = (String)alias.get(name);
+            name = alias.get(name);
         }
-        Context ctx = (Context)context.get(name);
+        Context ctx = context.get(name);
         if(ctx == null)
         {
-            Hashtable props = (Hashtable)initial.get(name);
+            Hashtable<String, Object> props = initial.get(name);
             if(props == null || props.isEmpty())
             {
                 throw new NamingException("context "+name+" was not found");
@@ -177,12 +173,12 @@ public class ContextFactory
     {
         if(alias.containsKey(name))
         {
-            name = (String)alias.get(name);
+            name = alias.get(name);
         }
         DirContext ctx = (DirContext)context.get(name);
         if(ctx == null)
         {
-            Hashtable props = (Hashtable)initial.get(name);
+            Hashtable<String, Object> props = initial.get(name);
             if(props == null || props.isEmpty())
             {
                 throw new NamingException("context "+name+" was not found");
@@ -205,7 +201,7 @@ public class ContextFactory
     {
         if(alias.containsKey(name))
         {
-            name = (String)alias.get(name);
+            name = alias.get(name);
         }
         context.remove(name);
     }

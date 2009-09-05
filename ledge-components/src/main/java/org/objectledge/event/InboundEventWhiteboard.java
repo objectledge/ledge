@@ -65,7 +65,7 @@ public class InboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void addListener(Class iface, Object listener, Object object)
+    public void addListener(Class<?> iface, Object listener, Object object)
         throws IllegalArgumentException
     {
         delegate.addListener(iface, listener, object);
@@ -74,7 +74,7 @@ public class InboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void removeListener(Class iface, Object listener, Object object)
+    public void removeListener(Class<?> iface, Object listener, Object object)
     {
         delegate.removeListener(iface, listener, object);
     }
@@ -82,7 +82,7 @@ public class InboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void addRemoteListener(Class iface, Remote listener, Object object)
+    public void addRemoteListener(Class<?> iface, Remote listener, Object object)
         throws IllegalArgumentException
     {
         delegate.addRemoteListener(iface, listener, object);
@@ -91,7 +91,7 @@ public class InboundEventWhiteboard implements EventWhiteboard
     /**
      * {@inheritDoc}
      */
-    public void removeRemoteListener(Class iface, Remote listener, Object object)
+    public void removeRemoteListener(Class<?> iface, Remote listener, Object object)
     {
         delegate.removeRemoteListener(iface, listener, object);
     }

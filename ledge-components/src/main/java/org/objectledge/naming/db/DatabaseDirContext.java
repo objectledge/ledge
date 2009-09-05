@@ -56,6 +56,7 @@ import javax.naming.directory.SearchResult;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.PersistenceException;
+import org.objectledge.database.persistence.Persistent;
 
 /**
  * Database based implementation of java.naming.directory.DirContext interface.
@@ -69,7 +70,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
      * 
      * @param env the environment. 
      */
-    public DatabaseDirContext(Hashtable env)
+    public DatabaseDirContext(Hashtable<?, ?> env)
     {
         super(env);
     }
@@ -82,7 +83,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
      * @param persistence the persistence.
      * @throws NamingException if operation failed.
      */
-    protected DatabaseDirContext(Hashtable env, PersistentContext context, Persistence persistence)
+    protected DatabaseDirContext(Hashtable<?, ?> env, PersistentContext context, Persistence persistence)
         throws NamingException
     {
         super(env, context, persistence);
@@ -98,7 +99,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
             return new DatabaseDirContext(env, context, persistence);
         }
         String dn = getDN(name);
-        List list = lookupContext(dn);
+        List<Persistent> list = lookupContext(dn);
         if(list.size() == 0)
         {
             throw new NamingException("faled to retrieve context '"+dn+"' from database");
@@ -154,7 +155,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         {
             return;
         }
-        NamingEnumeration enumerator = attrs.getAll();
+        NamingEnumeration<?> enumerator = attrs.getAll();
         ModificationItem[] items = new ModificationItem[attrs.size()];
         int i = 0;
         while(enumerator.hasMoreElements())
@@ -178,7 +179,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
      */
     public void modifyAttributes(Name name, ModificationItem[] mods) throws NamingException
     {
-        List failures = new ArrayList();
+        List<ModificationItem> failures = new ArrayList<ModificationItem>();
         DatabaseDirContext ctx = (DatabaseDirContext)lookup(name);
         boolean transactionControler;
         try
@@ -192,7 +193,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         for (int i=0; i<mods.length; i++)
         {      
             Attribute attribute = mods[i].getAttribute();
-            NamingEnumeration values = attribute.getAll();
+            NamingEnumeration<?> values = attribute.getAll();
             switch (mods[i].getModificationOp())
             {
                 case ADD_ATTRIBUTE:
@@ -426,20 +427,20 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, Attributes matchingAttributes, 
+    public NamingEnumeration<SearchResult> search(Name name, Attributes matchingAttributes, 
                                      String[] attributesToReturn)
         throws NamingException
     {
-        List searchResult = new ArrayList();
+        List<SearchResult> searchResult = new ArrayList<SearchResult>();
         DatabaseDirContext ctx = (DatabaseDirContext)lookup(name);
         long contextId = ctx.getDelegate().getContextId();
-        Map attributeMap = getChildrenAttributes(contextId);
-        Iterator it = attributeMap.keySet().iterator();
+        Map<String, Attributes> attributeMap = getChildrenAttributes(contextId);
+        Iterator<String> it = attributeMap.keySet().iterator();
         while(it.hasNext())
         {
-            String dn = (String)it.next();        
-            Attributes attributes = (Attributes)attributeMap.get(dn);
-            NamingEnumeration enumeration = matchingAttributes.getAll();
+            String dn = it.next();        
+            Attributes attributes = attributeMap.get(dn);
+            NamingEnumeration<?> enumeration = matchingAttributes.getAll();
             if(attributes == null && enumeration.hasMore())
             {
                 break;
@@ -448,13 +449,13 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
             outer: while(enumeration.hasMore())
             {
                 Attribute searchAttr = (Attribute)enumeration.next();
-                Attribute attr = (Attribute)attributes.get(searchAttr.getID());
+                Attribute attr = attributes.get(searchAttr.getID());
                 if(attr == null)
                 {
                     found = false;
                     break;
                 }
-                NamingEnumeration values = searchAttr.getAll();
+                NamingEnumeration<?> values = searchAttr.getAll();
                 while (values.hasMore())
                 {
                     String value = (String)values.next();
@@ -473,13 +474,13 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                 searchResult.add(result);
             }
         }
-        return new DefaultEnumeration(searchResult);
+        return new DefaultEnumeration<SearchResult>(searchResult);
     }
 
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, Attributes matchingAttributes, 
+    public NamingEnumeration<SearchResult> search(String name, Attributes matchingAttributes, 
                                      String[] attributesToReturn)
         throws NamingException
     {
@@ -489,7 +490,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, Attributes matchingAttributes)
+    public NamingEnumeration<SearchResult> search(Name name, Attributes matchingAttributes)
         throws NamingException
     {
         return search(name, matchingAttributes, null);
@@ -498,7 +499,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, Attributes matchingAttributes)
+    public NamingEnumeration<SearchResult> search(String name, Attributes matchingAttributes)
         throws NamingException
     {
         return search(new CompositeName(name), matchingAttributes);
@@ -507,7 +508,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, String filter, SearchControls cons)
+    public NamingEnumeration<SearchResult> search(Name name, String filter, SearchControls cons)
         throws NamingException
     {
         throw new UnsupportedOperationException();
@@ -516,7 +517,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, String filter, SearchControls cons)
+    public NamingEnumeration<SearchResult> search(String name, String filter, SearchControls cons)
         throws NamingException
     {
         return search(new CompositeName(name), filter, cons);
@@ -525,7 +526,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(Name name, String filterExpr, 
+    public NamingEnumeration<SearchResult> search(Name name, String filterExpr, 
                                      Object[] filterArgs, SearchControls cons) 
         throws NamingException
     {
@@ -535,7 +536,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration search(String name, String filterExpr,
+    public NamingEnumeration<SearchResult> search(String name, String filterExpr,
                                      Object[] filterArgs, SearchControls cons)
         throws NamingException
     {
@@ -555,7 +556,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         Attributes attrs = new BasicAttributes();
         try
         {
-            List list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
+            List<Persistent> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
             for(int i = 0; i < list.size(); i++)
             {
                 PersistentAttribute attribute = (PersistentAttribute)list.get(i);
@@ -588,10 +589,9 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     private void deleteAllAttributes(long contextId)
         throws NamingException
     {
-        Attributes attrs = new BasicAttributes();
         try
         {
-            List list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
+            List<Persistent> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
             for(int i = 0; i < list.size(); i++)
             {
                 PersistentAttribute attribute = (PersistentAttribute)list.get(i);
@@ -636,10 +636,10 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
      * @return the map with attributes grouped by contexts.
      * @throws NamingException thrown if operation fails.
      */
-    private Map getChildrenAttributes(long parentId)
+    private Map<String, Attributes> getChildrenAttributes(long parentId)
         throws NamingException
     {
-        Map map = new HashMap();
+        Map<String, Attributes> map = new HashMap<String, Attributes>();
         Connection conn = null;
         try
         {
@@ -653,7 +653,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                 String dn = rs.getString("dn");
                 String name = rs.getString("name");
                 String value = rs.getString("value");
-                Attributes attributes = (Attributes)map.get(dn);
+                Attributes attributes = map.get(dn);
                 if(attributes == null)
                 {
                     attributes = new BasicAttributes();

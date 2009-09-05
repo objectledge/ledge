@@ -88,7 +88,7 @@ public abstract class AbstractEncoder
 			Object encoderInstance = container.getComponentInstance(encodingName); 
 			if(encoderInstance == null)
 			{
-				Class clazz = Class.forName(ENCODER_CLASS_PREFIX + encodingName);
+				Class<?> clazz = Class.forName(ENCODER_CLASS_PREFIX + encodingName);
 				container.registerComponentImplementation(encodingName, clazz);
 				encoderInstance = container.getComponentInstance(encodingName);
 			}

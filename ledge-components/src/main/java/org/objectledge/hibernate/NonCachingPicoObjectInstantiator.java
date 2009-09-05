@@ -57,7 +57,7 @@ public class NonCachingPicoObjectInstantiator
      * @param clazz the class of the object to be instantiated.
      * @return the newly instantiated object.
      */
-    public Object instantiate(Class clazz)
+    public Object instantiate(Class<?> clazz)
     {
         if(container.getComponentAdapter(clazz) == null)
         {

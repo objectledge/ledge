@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.naming.Binding;
 import javax.naming.CompositeName;
 import javax.naming.Context;
 import javax.naming.InvalidNameException;
@@ -44,6 +45,7 @@ import javax.naming.NamingException;
 
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.PersistenceException;
+import org.objectledge.database.persistence.Persistent;
 
 /**
  * Database implementation of java.naming.Context interface.
@@ -59,7 +61,7 @@ public class DatabaseContext implements Context
     protected Persistence persistence;
     
     /** The enviroment. */
-    protected Hashtable env;
+    protected Hashtable<?, ?> env;
 
     /** The default parser. */
     protected static NameParser parser = new DefaultNameParser();
@@ -72,7 +74,7 @@ public class DatabaseContext implements Context
      * 
      * @param env the environment 
      */
-    public DatabaseContext(Hashtable env)
+    public DatabaseContext(Hashtable<?, ?> env)
     {
         this.env = env;
         persistence = (Persistence)env.get(PERSISTENCE);
@@ -81,7 +83,7 @@ public class DatabaseContext implements Context
             throw new RuntimeException("failed to retrieve the persistence " +                                        "component from environment");
         }
         String dn = (String)env.get(Context.PROVIDER_URL);
-        List list = null;
+        List<Persistent> list = null;
         try
         {
             list = persistence.load("dn = '"+dn+"'", PersistentContext.FACTORY);
@@ -109,7 +111,7 @@ public class DatabaseContext implements Context
      * @param persistence the persistence.
      * @throws NamingException if operation failed.
      */
-    protected DatabaseContext(Hashtable env, PersistentContext context, Persistence persistence)
+    protected DatabaseContext(Hashtable<?, ?> env, PersistentContext context, Persistence persistence)
         throws NamingException
     {
         
@@ -128,7 +130,7 @@ public class DatabaseContext implements Context
             return new DatabaseContext(env, context, persistence);
         }
         String dn = getDN(name);
-        List list = lookupContext(dn);
+        List<Persistent> list = lookupContext(dn);
         if(list.size() == 0)
         {
             throw new NamingException("faled to retrieve context '"+dn+"' form database");
@@ -210,7 +212,7 @@ public class DatabaseContext implements Context
             throw new InvalidNameException("Invalid target name");
         }
         String dn = getDN(oldName);
-        List list = lookupContext(dn);
+        List<Persistent> list = lookupContext(dn);
         if(list.size() == 0)
         {
             throw new NamingException("faled to retrieve context '"+dn+"' form database");
@@ -243,20 +245,20 @@ public class DatabaseContext implements Context
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration list(Name name) throws NamingException
+    public NamingEnumeration<NameClassPair> list(Name name) throws NamingException
     {
         DatabaseContext ctx = (DatabaseContext)lookup(name);
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
-            List target = new ArrayList();
+            List<Persistent> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<NameClassPair> target = new ArrayList<NameClassPair>();
             for(int i = 0; i < list.size(); i++)
             {
                 PersistentContext delegate = (PersistentContext)list.get(0);
                 target.add(new NameClassPair(delegate.getDN(), this.getClass().getName()));
             }
-            return new DefaultEnumeration(target);            
+            return new DefaultEnumeration<NameClassPair>(target);            
         }
         catch(PersistenceException e)
         {
@@ -267,7 +269,7 @@ public class DatabaseContext implements Context
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration list(String name) throws NamingException
+    public NamingEnumeration<NameClassPair> list(String name) throws NamingException
     {
         return list(new CompositeName(name));
     }
@@ -275,7 +277,7 @@ public class DatabaseContext implements Context
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration listBindings(Name name) throws NamingException
+    public NamingEnumeration<Binding> listBindings(Name name) throws NamingException
     {
         throw new UnsupportedOperationException();
     }
@@ -283,7 +285,7 @@ public class DatabaseContext implements Context
     /**
      * {@inheritDoc}
      */
-    public NamingEnumeration listBindings(String name) throws NamingException
+    public NamingEnumeration<Binding> listBindings(String name) throws NamingException
     {
         return listBindings(new CompositeName(name));
     }
@@ -301,7 +303,7 @@ public class DatabaseContext implements Context
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<Persistent> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
             if(list.size()>0)
             {
                 throw new NamingException("failed to destroy not empty subcontext");
@@ -405,13 +407,14 @@ public class DatabaseContext implements Context
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public Object addToEnvironment(String propName, Object propVal) throws NamingException
     {
         if (env == null) 
         {
             env = new Hashtable();
         } 
-        return env.put(propName, propVal);
+        return ((Hashtable<String,Object>)env).put(propName, propVal);
     }
 
     /**
@@ -429,7 +432,8 @@ public class DatabaseContext implements Context
     /**
      * {@inheritDoc}
      */
-    public Hashtable getEnvironment() throws NamingException
+    @SuppressWarnings("unchecked")
+    public Hashtable<?, ?> getEnvironment() throws NamingException
     {
         return new Hashtable(env);
     }
@@ -460,7 +464,7 @@ public class DatabaseContext implements Context
      * @return the list of contexts with given dn.
      * @throws NamingException if operation fails.
      */
-    protected List lookupContext(String dn)
+    protected List<Persistent> lookupContext(String dn)
         throws NamingException
     {
         try
@@ -498,7 +502,7 @@ public class DatabaseContext implements Context
         throws NamingException
     {
         String dn = getDN(name);
-        List list = lookupContext(dn);
+        List<Persistent> list = lookupContext(dn);
         if(list.size() > 0)
         {
             throw new NameAlreadyBoundException("context '"+dn+"' already exists");

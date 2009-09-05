@@ -13,10 +13,10 @@ import java.util.Set;
 public class HTMLTagTypes
 {
 	/** empty tags. */
-	public final static Set EMPTY_TAGS;
+	public final static Set<String> EMPTY_TAGS;
 	static
 	{
-		Set emptyTags = new HashSet(); 
+		Set<String> emptyTags = new HashSet<String>(); 
 		emptyTags.add("AREA"); 		
 		emptyTags.add("BASE"); 		
 		emptyTags.add("BASEFONT"); 		
@@ -34,10 +34,10 @@ public class HTMLTagTypes
 	}
 
     /** block tags. */
-    public final static Set BLOCK_TAGS;
+    public final static Set<String> BLOCK_TAGS;
     static
     {
-    	Set tempBlockTags = new HashSet(); 
+    	Set<String> tempBlockTags = new HashSet<String>(); 
         tempBlockTags.add("ADDRESS"); 		
         tempBlockTags.add("BLOCKQUOTE"); 		
         tempBlockTags.add("CENTER");
@@ -63,10 +63,10 @@ public class HTMLTagTypes
     }
 
 	/** inline tags. */
-	public final static Set INLINE_TAGS;
+	public final static Set<String> INLINE_TAGS;
 	static
 	{
-		Set tempInlineTags = new HashSet();
+		Set<String> tempInlineTags = new HashSet<String>();
 		tempInlineTags.add("TT");
 		tempInlineTags.add("I");
 		tempInlineTags.add("B");
@@ -101,10 +101,10 @@ public class HTMLTagTypes
 	}
 
 	/** tags which need space addition to avoid word concatenation. */
-	public final static Set SPACE_ADD_TAGS;
+	public final static Set<String> SPACE_ADD_TAGS;
 	static
 	{
-		Set tempSpaceAddTags = new HashSet();
+		Set<String> tempSpaceAddTags = new HashSet<String>();
 		tempSpaceAddTags.add("ADDRESS"); 		
 		tempSpaceAddTags.add("APPLET");
 		tempSpaceAddTags.add("BDO"); 		
@@ -159,10 +159,10 @@ public class HTMLTagTypes
 	}
 
     /** attributes which contain meaningful text. */
-    public final static Set TEXT_ATTRIBUTES;
+    public final static Set<String> TEXT_ATTRIBUTES;
     static
     {
-        Set tempTextAttributes = new HashSet();
+        Set<String> tempTextAttributes = new HashSet<String>();
         tempTextAttributes.add("ABBR");
         tempTextAttributes.add("ALT");
         tempTextAttributes.add("CONTENT");

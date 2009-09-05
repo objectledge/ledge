@@ -108,7 +108,7 @@ public class ConfigurationFactory
      * @param componentClass the implementation class of the component.
      * @return the configuration.
      */
-    public Configuration getConfig(String componentName, Class componentClass)
+    public Configuration getConfig(String componentName, Class<?> componentClass)
     {
         String path = getComponentConfigurationPath(componentName);
         InputSource source = getConfigurationSource(componentName, componentClass);
@@ -144,7 +144,7 @@ public class ConfigurationFactory
      * @param componentImplementation the implementation class of the component.
      * @return the configuration.
      */
-    public Configuration getConfig(Class componentRole, Class componentImplementation)
+    public Configuration getConfig(Class<?> componentRole, Class<?> componentImplementation)
     {
         return getConfig(componentRole.getName(), componentImplementation);
     }
@@ -156,7 +156,7 @@ public class ConfigurationFactory
      * @param componentClass the implementation class of the component.
      * @return the input source.
      */
-    public InputSource getConfigurationSource(String componentName, Class componentClass)
+    public InputSource getConfigurationSource(String componentName, Class<?> componentClass)
     {
         String path = getComponentConfigurationPath(componentName);
         InputSource source = getRawConfigurationSource(componentName);
@@ -220,7 +220,7 @@ public class ConfigurationFactory
      * @param componentClass the implementation class of the component.
      * @return the input source.
      */
-    public InputSource getConfigurationSource(Class componentRole, Class componentClass)
+    public InputSource getConfigurationSource(Class<?> componentRole, Class<?> componentClass)
     {
         return getConfigurationSource(componentRole.getName(), componentClass);
     }
@@ -259,9 +259,9 @@ public class ConfigurationFactory
      * @param componentImplementation the implementation class of the component.
      * @return path the configuration file path.
      */
-    protected String getComponentConfigurationSchemaPath(Class componentImplementation)
+    protected String getComponentConfigurationSchemaPath(Class<?> componentImplementation)
     {
-        return ((Class)componentImplementation).getName().replace('.','/')+".rng";
+        return ((Class<?>)componentImplementation).getName().replace('.','/')+".rng";
     }
 
     /**

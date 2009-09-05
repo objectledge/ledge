@@ -67,7 +67,7 @@ public class LedgeDOMConfigurator
         dependencyContainer.registerComponentInstance(FileSystem.class, fileSystem);
     }
     
-    private Class loadClass(String className) 
+    private Class<?> loadClass(String className) 
         throws ClassNotFoundException
     {
         ClassLoader cl = null;
@@ -86,7 +86,7 @@ public class LedgeDOMConfigurator
         }
     }        
 
-    private Object newInstance(Class clazz) throws InstantiationException
+    private Object newInstance(Class<?> clazz) throws InstantiationException
     {
         ComponentAdapter adapter = new ConstructorInjectionComponentAdapter(clazz, clazz, null);
         return adapter.getComponentInstance(dependencyContainer); 

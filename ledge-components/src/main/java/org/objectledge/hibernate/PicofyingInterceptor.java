@@ -47,7 +47,7 @@ public class PicofyingInterceptor
 {
     private SessionFactory sessionFactory;
     private NonCachingPicoObjectInstantiator objectInstantiator;
-    private Map<String, Class> classByName = new HashMap<String, Class>();
+    private Map<String, Class<?>> classByName = new HashMap<String, Class<?>>();
     
     /**
      * Creates a new <code>HibernatePicofier</code> object.
@@ -76,7 +76,7 @@ public class PicofyingInterceptor
         try
         {
             // get persistent object
-            Class clazz = classByName.get(entityName);
+            Class<?> clazz = classByName.get(entityName);
             if(clazz == null)
             {
                 clazz = Class.forName(entityName);

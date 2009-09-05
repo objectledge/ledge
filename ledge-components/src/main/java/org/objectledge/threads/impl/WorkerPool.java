@@ -147,10 +147,10 @@ public class WorkerPool
     {
         synchronized(workerSet)
         {
-            Iterator i = workerSet.iterator();
+            Iterator<Worker> i = workerSet.iterator();
             while(i.hasNext())
             {
-                Startable thread = (Startable)i.next();
+                Startable thread = i.next();
                 thread.stop();
                 i.remove();
             }
@@ -193,7 +193,7 @@ public class WorkerPool
                             continue loop;
                         }
                     }
-                    task = (Task)queue.removeFirst();
+                    task = queue.removeFirst();
                 }
                 try
                 {

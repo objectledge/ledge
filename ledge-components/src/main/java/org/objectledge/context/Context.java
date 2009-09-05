@@ -50,7 +50,7 @@ import java.util.Map;
 public class Context
 {
     /** storage of the context attributes, specific to a thread. */
-    private static ThreadLocal threadAttributes = new ThreadLocal();
+	private static ThreadLocal<Map<String, Object>> threadAttributes = new ThreadLocal<Map<String, Object>>();
 
     /**
      * Return the value of a context attribute.
@@ -72,6 +72,7 @@ public class Context
      * @param key a Class key of the attribute.
      * @return the value of the attribute.
      */
+    @SuppressWarnings("unchecked")
     public <T> T getAttribute(Class<T> key)
     {
         return (T)getAttributes().get(key.getName()); 
@@ -95,12 +96,17 @@ public class Context
      * <p>Class object and the class name String are considered to be equivalent keys.</p>
      *       
      * @param key Class key of the attribute.
-     * @param value the new value of the attribute.
+     * @param value the new value of the attribute, must be castable to key class.
      * @return the old value of the attribute.
      */    
-    public Object setAttribute(Class key, Object value)
+    @SuppressWarnings("unchecked")
+    public <T> T setAttribute(Class<T> key, T value)
     {
-        return getAttributes().put(key.getName(), value);
+        if(!key.isAssignableFrom(value.getClass()))
+        {
+            throw new ClassCastException();
+        }                        
+        return (T)getAttributes().put(key.getName(), value);
     }
     
     /**
@@ -122,9 +128,10 @@ public class Context
      * @param key Class key of the attribute.
      * @return the old value of the attribute.
      */
-    public Object removeAttribute(Class key)
+    @SuppressWarnings("unchecked")
+    public <T> T removeAttribute(Class<T> key)
     {
-        return getAttributes().remove(key.getName());
+        return (T)getAttributes().remove(key.getName());
     }
     
     /**
@@ -137,12 +144,12 @@ public class Context
     
     // - implementation -----------------------------------------------------
     
-    private Map getAttributes()
+    private Map<String, Object> getAttributes()
     {
-        Map attributes = (Map)threadAttributes.get();
+        Map<String, Object> attributes = threadAttributes.get();
         if(attributes == null)
         {
-            attributes = new HashMap();
+            attributes = new HashMap<String, Object>();
             threadAttributes.set(attributes);
         }
         return attributes;

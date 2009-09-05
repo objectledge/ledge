@@ -181,6 +181,7 @@ public abstract class LedgeTestCase extends MockObjectTestCase
      * @param roleName mocked object role name
      * @return a CoreMock object.
      */
+    @SuppressWarnings("unchecked")
     protected DynamicMock newCoreMock(Class mockedType, String roleName)
     {
         if((mockedType.getModifiers() & Modifier.INTERFACE) == Modifier.INTERFACE)
@@ -200,8 +201,8 @@ public abstract class LedgeTestCase extends MockObjectTestCase
      * @param c the constraint to check on the element.
      * @return Constraint instance.
      */
-    public Constraint mapElement(Object key, Constraint c)
+    public <T> Constraint mapElement(T key, Constraint c)
     {
-        return new MapElement(key, c);
+        return new MapElement<T>(key, c);
     }
 }

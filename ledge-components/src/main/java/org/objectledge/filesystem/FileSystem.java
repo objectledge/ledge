@@ -131,7 +131,7 @@ public class FileSystem
     {
         for (int i = 0; i < providers.size(); i++)
         {
-            FileSystemProvider fp = (FileSystemProvider)providers.get(i);
+            FileSystemProvider fp = providers.get(i);
             if (fp.getName().equals(name))
             {
                 return fp;
@@ -150,9 +150,9 @@ public class FileSystem
     public URL getResource(String path)
         throws MalformedURLException
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             URL url = fp.getResource(path);
             if (url != null)
             {
@@ -170,9 +170,9 @@ public class FileSystem
      */
     public InputStream getInputStream(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             InputStream is = fp.getInputStream(path);
             if (is != null)
             {
@@ -215,9 +215,9 @@ public class FileSystem
      */
     public OutputStream getOutputStream(String path, boolean append)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             OutputStream os = fp.getOutputStream(path, append);
             if (os != null)
             {
@@ -292,9 +292,9 @@ public class FileSystem
      */
     public RandomAccessFile getRandomAccess(String path, String mode)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             RandomAccessFile ra = fp.getRandomAccess(path, mode);
             if (ra != null)
             {
@@ -314,9 +314,9 @@ public class FileSystem
      */
     public boolean exists(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(path))
             {
                 return true;
@@ -335,9 +335,9 @@ public class FileSystem
      */
     public boolean isFile(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(path))
             {
                 return fp.isFile(path);
@@ -356,9 +356,9 @@ public class FileSystem
      */
     public boolean isDirectory(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(path))
             {
                 return fp.isDirectory(path);
@@ -377,9 +377,9 @@ public class FileSystem
      */
     public boolean canRead(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(path))
             {
                 return fp.canRead(path);
@@ -398,9 +398,9 @@ public class FileSystem
      */
     public boolean canWrite(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(path))
             {
                 return fp.canWrite(path);
@@ -421,9 +421,9 @@ public class FileSystem
      */
     public long lastModified(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(path))
             {
                 return fp.lastModified(path);
@@ -442,9 +442,9 @@ public class FileSystem
      */
     public long length(String path)
     {
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(path))
             {
                 return fp.length(path);
@@ -552,9 +552,9 @@ public class FileSystem
         {
             throw new IOException(dir + ": access denied");
         }
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(dir))
             {
                 return fp.createNewFile(path);
@@ -589,9 +589,9 @@ public class FileSystem
                     throw new IOException(dir + " exists and is not a directory");
                 }
             }
-            inner : for (Iterator i = providers.iterator(); i.hasNext();)
+            inner : for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
             {
-                FileSystemProvider fp = (FileSystemProvider)i.next();
+                FileSystemProvider fp = i.next();
                 if (fp.canWrite(parent) && !fp.exists(dir))
                 {
                     fp.mkdirs(dir);
@@ -621,9 +621,9 @@ public class FileSystem
         {
             throw new IOException(dir + " : access denied");
         }
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(dir))
             {
                 fp.delete(path);
@@ -661,9 +661,9 @@ public class FileSystem
 		{
 			throw new IOException(dir + " : access denied");
 		}
-		for (Iterator i = providers.iterator(); i.hasNext();)
+		for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
 		{
-			FileSystemProvider fp = (FileSystemProvider)i.next();
+			FileSystemProvider fp = i.next();
 			if (fp.exists(dir))
 			{
 				fp.delete(path);
@@ -697,9 +697,9 @@ public class FileSystem
         {
             throw new IOException(dir + " : access denied");
         }
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (fp.exists(dir))
             {
                 fp.rename(from, to);
@@ -1105,9 +1105,9 @@ public class FileSystem
         {
             return false;
         }
-        for (Iterator i = providers.iterator(); i.hasNext();)
+        for (Iterator<FileSystemProvider> i = providers.iterator(); i.hasNext();)
         {
-            FileSystemProvider fp = (FileSystemProvider)i.next();
+            FileSystemProvider fp = i.next();
             if (!fp.checkPathChars(path))
             {
                 return false;
