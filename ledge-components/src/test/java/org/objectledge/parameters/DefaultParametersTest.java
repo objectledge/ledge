@@ -905,7 +905,6 @@ public class DefaultParametersTest extends TestCase
         
         source = "bar=foo\nfoo=ba\\,r,foo\n";
         params = new DefaultParameters(source);
-        System.out.println("WYNIK:"+params.toString());
         assertEquals(params.toString(),source);
     }
 
