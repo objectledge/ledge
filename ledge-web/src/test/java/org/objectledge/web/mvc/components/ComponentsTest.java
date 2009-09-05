@@ -62,6 +62,8 @@ public class ComponentsTest extends TestCase
     private ComponentToolFactory componentToolFactory;
     
     private ComponentTool componentTool;
+
+    private Logger logger;
     /**
      * Constructor for ActionExecutorValveTest.
      * @param arg0
@@ -86,7 +88,7 @@ public class ComponentsTest extends TestCase
             NameSequenceFactory nameSequenceFactory = new NameSequenceFactory(config);
             config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
             LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
-            Logger logger = loggerFactory.getLogger(Templating.class);
+            logger = loggerFactory.getLogger(Templating.class);
             Templating templating = new VelocityTemplating(config, logger, fs);
             logger = loggerFactory.getLogger(MVCFinder.class);
             MutablePicoContainer container = new DefaultPicoContainer();
@@ -137,7 +139,7 @@ public class ComponentsTest extends TestCase
             TemplatingContext tContext = TemplatingContext.getTemplatingContext(context);
             tContext.put("test", this);
             componentTool.embed("Exc");
-            System.out.println("RES:"+componentTool.embed("Exc"));
+            logger.debug("RES:"+componentTool.embed("Exc"));
             fail("should throw the exception");
         }
         catch(ProcessingException e)
