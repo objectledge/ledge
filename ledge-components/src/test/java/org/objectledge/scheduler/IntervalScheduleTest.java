@@ -75,10 +75,11 @@ public class IntervalScheduleTest
         try
         {
             schedule.setConfig("10");
+            fail("exception expected");
         }
         catch(InvalidScheduleException e)
         {
-            e.printStackTrace();
+            // OK
         }
     }
 }
