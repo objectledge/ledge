@@ -164,6 +164,7 @@
           <include>**/*.sql</include>
           <include>**/*.munin</include>
           <include>**/*.lst</include>
+          <include>log4j.properties</include>
         </includes>
       </testResource>
     </testResources>
