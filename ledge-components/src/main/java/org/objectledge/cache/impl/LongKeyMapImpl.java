@@ -6,9 +6,9 @@ import org.objectledge.cache.spi.ConfigurableMap;
 import bak.pcj.adapter.LongKeyMapToMapAdapter;
 import bak.pcj.map.LongKeyMap;
 
-public abstract class LongKeyMapImpl
-    extends DelegateMap
-    implements ConfigurableMap
+public abstract class LongKeyMapImpl<V>
+    extends DelegateMap<Long, V>
+    implements ConfigurableMap<Long, V>
 {
 
     public void configure(CacheFactorySPI caching, String name, String config)

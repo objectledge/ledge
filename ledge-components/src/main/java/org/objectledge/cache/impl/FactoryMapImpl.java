@@ -41,14 +41,14 @@ import org.objectledge.cache.spi.FactoryMap;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: FactoryMapImpl.java,v 1.4 2008-01-02 22:36:37 rafal Exp $
  */
-public class FactoryMapImpl
-    extends DelegateMap
-    implements FactoryMap, ConfigurableMap
+public class FactoryMapImpl<K, V>
+    extends DelegateMap<K, V>
+    implements FactoryMap<K, V>, ConfigurableMap<K, V>
 {
     // member objects ////////////////////////////////////////////////////////
 
     /** The value factory. */
-    private ValueFactory factory;
+    private ValueFactory<K, V> factory;
     
     // initialization ///////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@ public class FactoryMapImpl
      * @param factory the value factory.
      * @param delegate the storage delegate
      */
-    public FactoryMapImpl(ValueFactory factory, Map delegate)
+    public FactoryMapImpl(ValueFactory<K, V> factory, Map<K, V> delegate)
     {
         super(delegate);
         this.factory = factory;
@@ -94,7 +94,7 @@ public class FactoryMapImpl
      *
      * @param factory the factory.
      */
-    public void setFactory(ValueFactory factory)
+    public void setFactory(ValueFactory<K, V> factory)
     {
         this.factory = factory;
     }
@@ -104,7 +104,7 @@ public class FactoryMapImpl
      *
      * @return the factory.
      */
-    public ValueFactory getFactory()
+    public ValueFactory<K, V> getFactory()
     {
         return factory;
     }
@@ -117,15 +117,15 @@ public class FactoryMapImpl
      * @param key the key.
      * @return the value
      */
-    public Object get(Object key)
+    public V get(Object key)
     {
-        Object value = delegate.get(key);
+        V value = delegate.get(key);
         if(value == null && factory != null)
         {
-            value = factory.getValue(key);
+            value = factory.getValue((K)key);
             if(value != null)
             {
-                delegate.put(key, value);
+                delegate.put((K)key, value);
             }
         }
         return value;

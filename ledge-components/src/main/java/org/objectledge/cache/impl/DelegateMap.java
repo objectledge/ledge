@@ -29,7 +29,6 @@
 package org.objectledge.cache.impl;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,13 +40,13 @@ import org.objectledge.cache.spi.LayeredMap;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: DelegateMap.java,v 1.2 2005-02-10 17:47:03 rafal Exp $
  */
-public abstract class DelegateMap
-    implements LayeredMap
+public abstract class DelegateMap<K, V>
+    implements LayeredMap<K, V>
 {
     // memeber objects ///////////////////////////////////////////////////////
     
     /** The delegate object. */
-    protected Map delegate;
+    protected Map<K, V> delegate;
     
     // initialization ////////////////////////////////////////////////////////
 
@@ -64,7 +63,7 @@ public abstract class DelegateMap
      *
      * @param delegate the delegate object.
      */
-    public DelegateMap(Map delegate)
+    public DelegateMap(Map<K, V> delegate)
     {
         this.delegate = delegate;
     }
@@ -74,7 +73,7 @@ public abstract class DelegateMap
      *
      * @param map the delegate map.
      */
-    public void setDelegate(Map map)
+    public void setDelegate(Map<K, V> map)
     {
         delegate = map;
     }
@@ -84,7 +83,7 @@ public abstract class DelegateMap
      *
      * @return the delegate map.
      */
-    public Map getDelegate()
+    public Map<K, V> getDelegate()
     {
         return delegate;
     }
@@ -118,7 +117,7 @@ public abstract class DelegateMap
     /**
      * {@inheritDoc}
      */
-    public Set entrySet()
+    public Set<Map.Entry<K, V>> entrySet()
     {
         return delegate.entrySet();
     }
@@ -134,7 +133,7 @@ public abstract class DelegateMap
     /**
      * {@inheritDoc}
      */
-    public Object get(Object key)
+    public V get(Object key)
     {
         return delegate.get(key);
     }
@@ -158,7 +157,7 @@ public abstract class DelegateMap
     /**
      * {@inheritDoc}
      */
-    public Set keySet()
+    public Set<K> keySet()
     {
         return delegate.keySet();
     }
@@ -166,7 +165,7 @@ public abstract class DelegateMap
     /**
      * {@inheritDoc}
      */
-    public Object put(Object key, Object value)
+    public V put(K key, V value)
     {
         return delegate.put(key, value);
     }
@@ -174,13 +173,10 @@ public abstract class DelegateMap
     /**
      * {@inheritDoc}
      */
-    public void putAll(Map map)
-    {
-        Set entries = map.entrySet();
-        Iterator i = entries.iterator();
-        while(i.hasNext())
+    public void putAll(Map<? extends K, ? extends V> map)
+    {        
+        for(Map.Entry<? extends K, ? extends V> entry : map.entrySet())
         {
-            Map.Entry entry = (Map.Entry)i.next();
             put(entry.getKey(), entry.getValue());
         }
     }
@@ -188,7 +184,7 @@ public abstract class DelegateMap
     /**
      * {@inheritDoc}
      */
-    public Object remove(Object key)
+    public V remove(Object key)
     {
         return delegate.remove(key);
     }
@@ -204,7 +200,7 @@ public abstract class DelegateMap
     /**
      * {@inheritDoc}
      */
-    public Collection values()
+    public Collection<V> values()
     {
         return delegate.values();
     }   

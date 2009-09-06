@@ -39,8 +39,8 @@ import org.objectledge.cache.spi.ForgetfullMap;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: ForgetfullMapImpl.java,v 1.1 2005-04-25 05:06:51 pablo Exp $
  */
-public class ForgetfullMapImpl
-    extends HashMap implements ForgetfullMap
+public class ForgetfullMapImpl<K, V>
+    extends HashMap<K, V> implements ForgetfullMap<K, V>
 {
     // Map interface /////////////////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ public class ForgetfullMapImpl
      * @param key the key.
      * @return the value
      */
-    public Object put(Object key, Object value)
+    public V put(K key, V value)
     {
         return null;
     }

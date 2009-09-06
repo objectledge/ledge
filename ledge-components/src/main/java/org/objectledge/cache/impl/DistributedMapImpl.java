@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.objectledge.cache.NoLongerValidException;
 import org.objectledge.cache.Refreshable;
@@ -48,9 +49,9 @@ import org.objectledge.notification.NotificationReceiver;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: DistributedMapImpl.java,v 1.3 2004-02-26 11:34:28 fil Exp $
  */
-public class DistributedMapImpl
-    extends DelegateMap
-    implements DistributedMap, ConfigurableMap,
+public class DistributedMapImpl<K extends Serializable, V>
+    extends DelegateMap<K, V>
+    implements DistributedMap<K, V>, ConfigurableMap<K, V>,
                NotificationReceiver
 {
     // constants /////////////////////////////////////////////////////////////
@@ -116,7 +117,7 @@ public class DistributedMapImpl
     /**
      * {@inheritDoc}
      */
-    public void updated(Object key)
+    public void updated(K key)
     {
         notify(true, key);
     }
@@ -126,7 +127,7 @@ public class DistributedMapImpl
     /**
      * {@inheritDoc}
      */
-    public Object put(Object key, Object value)
+    public V put(K key, V value)
     {
         notify(false, key);
         return delegate.put(key, value);
@@ -135,7 +136,7 @@ public class DistributedMapImpl
     /**
      * {@inheritDoc}
      */
-    public Object remove(Object key)
+    public V remove(K key)
     {
         notify(false, key);
         return delegate.remove(key);
@@ -186,7 +187,7 @@ public class DistributedMapImpl
 
     // implementation ////////////////////////////////////////////////////////
     
-    private void notify(boolean update, Object key)
+    private void notify(boolean update, K key)
     {
         byte[] message;
         try

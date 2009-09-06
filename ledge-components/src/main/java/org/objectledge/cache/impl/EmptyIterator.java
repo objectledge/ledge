@@ -37,8 +37,8 @@ import java.util.NoSuchElementException;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: EmptyIterator.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
  */
-public class  EmptyIterator
-    implements Iterator
+public class  EmptyIterator<T>
+    implements Iterator<T>
 {
     /**
      * {@inheritDoc}
@@ -51,7 +51,7 @@ public class  EmptyIterator
     /**
      * {@inheritDoc}
      */
-    public Object next()
+    public T next()
     {
         throw new NoSuchElementException();
     }

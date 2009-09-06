@@ -42,9 +42,9 @@ import org.objectledge.cache.spi.StatisticsMap;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: StatisticsMapImpl.java,v 1.4 2005-02-21 16:15:16 zwierzem Exp $
  */
-public class StatisticsMapImpl
-    extends DelegateMap
-    implements StatisticsMap, ConfigurableMap
+public class StatisticsMapImpl<K, V>
+    extends DelegateMap<K, V>
+    implements StatisticsMap<K, V>, ConfigurableMap<K, V>
 {
     // constants /////////////////////////////////////////////////////////////
 
@@ -78,7 +78,7 @@ public class StatisticsMapImpl
      * @param name the name.
      * @param delegate the delegate map.
      */
-    public StatisticsMapImpl(String name, Map delegate)
+    public StatisticsMapImpl(String name, Map<K, V> delegate)
     {
         super(delegate);
         this.name = name;
@@ -176,9 +176,9 @@ public class StatisticsMapImpl
      * @param key the key.
      * @return the value
      */
-    public Object get(Object key)
+    public V get(Object key)
     {
-        Object result = delegate.get(key);
+        V result = delegate.get(key);
         requests++;
         if(result != null)
         {

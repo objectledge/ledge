@@ -3,8 +3,8 @@ package org.objectledge.cache.impl;
 import bak.pcj.map.LongKeyMap;
 import bak.pcj.map.LongKeyOpenHashMap;
 
-public class LongKeyChainedHashMapImpl
-    extends LongKeyMapImpl
+public class LongKeyChainedHashMapImpl<V>
+    extends LongKeyMapImpl<V>
 {
     protected LongKeyMap newLongKeyMap(int capacity, double loadFactor, double growthFactor)
     {

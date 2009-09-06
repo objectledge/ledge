@@ -1,7 +1,6 @@
 package org.objectledge.cache.impl;
 
 import java.util.LinkedHashMap;
-
 import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.LRUMap;
@@ -11,9 +10,9 @@ import org.objectledge.cache.spi.LRUMap;
  * 
  * @author Rafał Krzewski
  */
-public class LRUMapImpl
-    extends DelegateMap
-    implements LRUMap, ConfigurableMap
+public class LRUMapImpl<K, V>
+    extends DelegateMap<K, V>
+    implements LRUMap<K, V>, ConfigurableMap<K, V>
 {
     /** Default capacity o the map (1000) */
     private static final int CAPACITY_DEFAULT = 1000;
@@ -22,15 +21,15 @@ public class LRUMapImpl
     private static final float LOAD_FACTOR_DEFAULT = 0.75f;
 
     /** Strongly typed delegate method reference, for setCapacity()/getCapacity() access */
-    private Storage map;
+    private Storage<K, V> map;
 
     /**
      * Creates an instance of the map with the default parameters.
      */
     public LRUMapImpl()
     {
-        super(new Storage(CAPACITY_DEFAULT, LOAD_FACTOR_DEFAULT));
-        map = (Storage)getDelegate();
+        super(new Storage<K, V>(CAPACITY_DEFAULT, LOAD_FACTOR_DEFAULT));
+        map = (Storage<K,V>)getDelegate();
     }
 
     // ConfigurableMap interface /////////////////////////////////////////////////////////////////
@@ -61,8 +60,8 @@ public class LRUMapImpl
                 }
                 int capacity = Integer.parseInt(c[0]);
                 float loadFactor = Float.parseFloat(c[1]);
-                setDelegate(new Storage(capacity, loadFactor));
-                map = (Storage)getDelegate();
+                setDelegate(new Storage<K, V>(capacity, loadFactor));
+                map = (Storage<K,V>)getDelegate();
             }
             else
             {
@@ -96,8 +95,8 @@ public class LRUMapImpl
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     
-    private static class Storage
-        extends LinkedHashMap<Object, Object>
+    private static class Storage<K, V>
+        extends LinkedHashMap<K, V>
     {
         /** Map capacity */
         private int capacity;
@@ -116,7 +115,7 @@ public class LRUMapImpl
         }
 
         @Override
-        protected boolean removeEldestEntry(Entry<Object, Object> eldest)
+        protected boolean removeEldestEntry(Entry<K, V> eldest)
         {
             return size() >= capacity + 1;
         }
