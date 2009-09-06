@@ -39,11 +39,11 @@ import org.picocontainer.PicoContainer;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: PicoPersistentFactory.java,v 1.3 2005-07-07 08:30:03 zwierzem Exp $
  */
-public class PicoPersistentFactory implements PersistentFactory
+public class PicoPersistentFactory<V extends Persistent> implements PersistentFactory<V>
 {
     private PicoContainer container;
     
-    private Class type;
+    private Class<V> type;
     
     /**
      * Crates an instantiator instance.
@@ -52,7 +52,7 @@ public class PicoPersistentFactory implements PersistentFactory
      * @param type an implmentation of {@link org.objectledge.database.persistence.Persistent} interface.
      * @throws IllegalArgumentException if the clazz does not implement required interface.
      */
-    public PicoPersistentFactory(PicoContainer container, Class type)
+    public PicoPersistentFactory(PicoContainer container, Class<V> type)
         throws IllegalArgumentException
     {
         this.container = container;
@@ -67,9 +67,9 @@ public class PicoPersistentFactory implements PersistentFactory
     /** 
      * {@inheritDoc}
      */
-    public Persistent newInstance() throws Exception
+    public V newInstance() throws Exception
     {
         ComponentAdapter adapter = new CustomizingConstructorComponentAdapter(type, type, null);
-        return (Persistent)adapter.getComponentInstance(container); 
+        return (V)adapter.getComponentInstance(container); 
     }
 }

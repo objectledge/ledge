@@ -50,7 +50,7 @@ public interface Persistence
      * @return the presistent object.
      * @throws PersistenceException if any exception occured.
      */
-    public Persistent load(long id, PersistentFactory factory)
+    public <V extends Persistent> V load(long id, PersistentFactory<V> factory)
         throws PersistenceException;
 
     /**
@@ -65,7 +65,7 @@ public interface Persistence
      * @return the list of presistent objects.
      * @throws PersistenceException if any exception occured.
      */
-    public List<Persistent> load(String where, PersistentFactory factory) throws PersistenceException;
+    public <V extends Persistent> List<V> load(String where, PersistentFactory<V> factory) throws PersistenceException;
 
     /**
      * Saves an object in the database.
@@ -101,7 +101,7 @@ public interface Persistence
      * @param factory the object instance factory.
      * @throws PersistenceException if any exception occured.
      */
-    public void delete(String where, PersistentFactory factory) throws PersistenceException;
+    public <V extends Persistent> void delete(String where, PersistentFactory<V> factory) throws PersistenceException;
 
     /**
      * An utility method for checking for existence of rows.

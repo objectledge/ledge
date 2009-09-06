@@ -50,9 +50,9 @@ public class PersistentAttribute implements Persistent
     public static final String[] KEY_COLUMNS = new String[] { "context_id", "name", "value" };
     
     /** the object factory. */
-    public static final PersistentFactory FACTORY = new PersistentFactory()
+    public static final PersistentFactory<PersistentAttribute> FACTORY = new PersistentFactory<PersistentAttribute>()
     {
-        public Persistent newInstance()
+        public PersistentAttribute newInstance()
         {
             return new PersistentAttribute();
         }

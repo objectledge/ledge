@@ -56,7 +56,6 @@ import javax.naming.directory.SearchResult;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.PersistenceException;
-import org.objectledge.database.persistence.Persistent;
 
 /**
  * Database based implementation of java.naming.directory.DirContext interface.
@@ -99,7 +98,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
             return new DatabaseDirContext(env, context, persistence);
         }
         String dn = getDN(name);
-        List<Persistent> list = lookupContext(dn);
+        List<PersistentContext> list = lookupContext(dn);
         if(list.size() == 0)
         {
             throw new NamingException("faled to retrieve context '"+dn+"' from database");
@@ -108,7 +107,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         {
             throw new NamingException("ambigious context '"+dn+"' in database");
         }
-        return new DatabaseDirContext(env, (PersistentContext)list.get(0), persistence);        
+        return new DatabaseDirContext(env, list.get(0), persistence);        
     }
 
     /**
@@ -556,10 +555,10 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         Attributes attrs = new BasicAttributes();
         try
         {
-            List<Persistent> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
+            List<PersistentAttribute> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
             for(int i = 0; i < list.size(); i++)
             {
-                PersistentAttribute attribute = (PersistentAttribute)list.get(i);
+                PersistentAttribute attribute = list.get(i);
                 Attribute attr = attrs.get(attribute.getName());
                 if (attr != null)
                 {
@@ -591,10 +590,10 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     {
         try
         {
-            List<Persistent> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
+            List<PersistentAttribute> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
             for(int i = 0; i < list.size(); i++)
             {
-                PersistentAttribute attribute = (PersistentAttribute)list.get(i);
+                PersistentAttribute attribute = list.get(i);
                 persistence.delete(attribute);
             }
         }

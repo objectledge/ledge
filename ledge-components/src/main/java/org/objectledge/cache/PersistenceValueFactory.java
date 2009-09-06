@@ -48,7 +48,7 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
     /**
      * The persistent factory.
      */
-    private PersistentFactory factory;
+    private PersistentFactory<V> factory;
 
     /**
      * The persistence.
@@ -68,9 +68,9 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
         {
             throw new IllegalArgumentException(cl.getName()+" does not implement " +                                                "Persistent interface");
         }
-        factory = new PersistentFactory()
+        factory = new PersistentFactory<V>()
             {
-                public Persistent newInstance()
+                public V newInstance()
                     throws PersistenceException
                 {
                     try

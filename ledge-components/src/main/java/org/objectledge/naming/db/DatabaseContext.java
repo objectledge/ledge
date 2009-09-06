@@ -45,7 +45,6 @@ import javax.naming.NamingException;
 
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.database.persistence.PersistenceException;
-import org.objectledge.database.persistence.Persistent;
 
 /**
  * Database implementation of java.naming.Context interface.
@@ -83,7 +82,7 @@ public class DatabaseContext implements Context
             throw new RuntimeException("failed to retrieve the persistence " +                                        "component from environment");
         }
         String dn = (String)env.get(Context.PROVIDER_URL);
-        List<Persistent> list = null;
+        List<PersistentContext> list = null;
         try
         {
             list = persistence.load("dn = '"+dn+"'", PersistentContext.FACTORY);
@@ -100,7 +99,7 @@ public class DatabaseContext implements Context
         {
             throw new RuntimeException("ambiguous context '"+dn+"' in database");
         }
-        context = (PersistentContext)list.get(0);
+        context = list.get(0);
     }
 
     /**
@@ -130,7 +129,7 @@ public class DatabaseContext implements Context
             return new DatabaseContext(env, context, persistence);
         }
         String dn = getDN(name);
-        List<Persistent> list = lookupContext(dn);
+        List<PersistentContext> list = lookupContext(dn);
         if(list.size() == 0)
         {
             throw new NamingException("faled to retrieve context '"+dn+"' form database");
@@ -139,7 +138,7 @@ public class DatabaseContext implements Context
         {
             throw new NamingException("ambigious context '"+dn+"' in database");
         }
-        return new DatabaseContext(env, (PersistentContext)list.get(0), persistence);
+        return new DatabaseContext(env, list.get(0), persistence);
     }
 
     /**
@@ -212,7 +211,7 @@ public class DatabaseContext implements Context
             throw new InvalidNameException("Invalid target name");
         }
         String dn = getDN(oldName);
-        List<Persistent> list = lookupContext(dn);
+        List<PersistentContext> list = lookupContext(dn);
         if(list.size() == 0)
         {
             throw new NamingException("faled to retrieve context '"+dn+"' form database");
@@ -221,7 +220,7 @@ public class DatabaseContext implements Context
         {
             throw new NamingException("ambigious context '"+dn+"' in database");
         }
-        PersistentContext delegate = (PersistentContext)list.get(0);
+        PersistentContext delegate = list.get(0);
         String newDn = getDN(newName);
         delegate.setDN(newDn);
         try
@@ -251,11 +250,11 @@ public class DatabaseContext implements Context
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List<Persistent> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<PersistentContext> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
             List<NameClassPair> target = new ArrayList<NameClassPair>();
             for(int i = 0; i < list.size(); i++)
             {
-                PersistentContext delegate = (PersistentContext)list.get(0);
+                PersistentContext delegate = list.get(0);
                 target.add(new NameClassPair(delegate.getDN(), this.getClass().getName()));
             }
             return new DefaultEnumeration<NameClassPair>(target);            
@@ -303,7 +302,7 @@ public class DatabaseContext implements Context
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List<Persistent> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<PersistentContext> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
             if(list.size()>0)
             {
                 throw new NamingException("failed to destroy not empty subcontext");
@@ -464,7 +463,7 @@ public class DatabaseContext implements Context
      * @return the list of contexts with given dn.
      * @throws NamingException if operation fails.
      */
-    protected List<Persistent> lookupContext(String dn)
+    protected List<PersistentContext> lookupContext(String dn)
         throws NamingException
     {
         try
@@ -502,7 +501,7 @@ public class DatabaseContext implements Context
         throws NamingException
     {
         String dn = getDN(name);
-        List<Persistent> list = lookupContext(dn);
+        List<PersistentContext> list = lookupContext(dn);
         if(list.size() > 0)
         {
             throw new NameAlreadyBoundException("context '"+dn+"' already exists");

@@ -50,9 +50,9 @@ public class PersistentContext implements Persistent
     public static final String[] KEY_COLUMNS = new String[] { "context_id" };
 
     /** the object factory. */
-    public static final PersistentFactory FACTORY = new PersistentFactory()
+    public static final PersistentFactory<PersistentContext> FACTORY = new PersistentFactory<PersistentContext>()
     {
-        public Persistent newInstance()
+        public PersistentContext newInstance()
         {
             return new PersistentContext(null, -1);
         }

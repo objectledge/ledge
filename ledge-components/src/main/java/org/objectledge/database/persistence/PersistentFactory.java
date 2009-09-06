@@ -35,7 +35,7 @@ package org.objectledge.database.persistence;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: PersistentFactory.java,v 1.1 2004-01-22 15:53:14 pablo Exp $
  */
-public interface PersistentFactory
+public interface PersistentFactory<V extends Persistent>
 {
     /**
      * Returns a blank instance of {@link Persistent} object ready to be
@@ -44,6 +44,6 @@ public interface PersistentFactory
      * @return a blank {@link Persistent} object.
      * @throws Exception if factory cannot create new instance.
      */
-    public Persistent newInstance()
+    public V newInstance()
         throws Exception;
 }

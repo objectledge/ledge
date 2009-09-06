@@ -84,16 +84,16 @@ public class PersistenceTest extends TestCase
      */
     public void testLoadlongPersistentFactory() throws Exception
     {
-        TestObject object = (TestObject)persistence.load(1, testFactory);
+        TestObject object = persistence.load(1, testFactory);
         assertNull(object);
-        object = (TestObject)persistence.load(0, testFactory);
+        object = persistence.load(0, testFactory);
         assertNull(object);
-        List<Persistent> list;
+        List<TestObject> list;
         list = persistence.load(null, testFactory);
         assertEquals(list.size(), 0);
         object = new TestObject("foo", new Date());
         persistence.save(object);
-        object = (TestObject)persistence.load(object.getId(), testFactory);
+        object = persistence.load(object.getId(), testFactory);
         assertNotNull(object);
         list = persistence.load(null, testFactory);
         assertEquals(list.size(), 1);
@@ -212,9 +212,9 @@ public class PersistenceTest extends TestCase
         return ds;
     }
 
-    private PersistentFactory testFactory = new PersistentFactory()
+    private PersistentFactory<TestObject> testFactory = new PersistentFactory<TestObject>()
     {
-        public Persistent newInstance()
+        public TestObject newInstance()
         {
             return new TestObject();
         }

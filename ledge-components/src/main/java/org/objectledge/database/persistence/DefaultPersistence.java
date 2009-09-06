@@ -72,13 +72,13 @@ public class DefaultPersistence implements Persistence
      * @return the presistent object.
      * @throws PersistenceException if any exception occured.
      */
-    public Persistent load(long id, PersistentFactory factory) throws PersistenceException
+    public <V extends Persistent> V load(long id, PersistentFactory<V> factory) throws PersistenceException
     {
         Connection conn = null;
         try
         {
             conn = database.getConnection();
-            Persistent obj = factory.newInstance();
+            V obj = factory.newInstance();
             PreparedStatement statement = DefaultInputRecord.getSelectStatement(id, obj, conn);
             ResultSet rs = statement.executeQuery();
             if (!rs.next())
@@ -112,17 +112,17 @@ public class DefaultPersistence implements Persistence
      * @return the list of presistent objects.
      * @throws PersistenceException if any exception occured.
      */
-    public List<Persistent> load(String where, PersistentFactory factory) throws PersistenceException
+    public <V extends Persistent> List<V> load(String where, PersistentFactory<V> factory) throws PersistenceException
     {
         Connection conn = null;
         try
         {
             conn = database.getConnection();
-            Persistent obj = factory.newInstance();
+            V obj = factory.newInstance();
             PreparedStatement statement = DefaultInputRecord.getSelectStatement(where, obj, conn);
             ResultSet rs = statement.executeQuery();
             InputRecord record = new DefaultInputRecord(rs);
-            ArrayList<Persistent> list = new ArrayList<Persistent>();
+            List<V> list = new ArrayList<V>();
             while (rs.next())
             {
                 obj.setData(record);
@@ -280,7 +280,7 @@ public class DefaultPersistence implements Persistence
      * @param factory the object instance factory.
      * @throws PersistenceException if any exception occured.
      */
-    public void delete(String where, PersistentFactory factory) throws PersistenceException
+    public <V extends Persistent> void delete(String where, PersistentFactory<V> factory) throws PersistenceException
     {
         Connection conn = null;
         try

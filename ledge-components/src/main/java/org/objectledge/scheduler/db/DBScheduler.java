@@ -52,7 +52,7 @@ import org.picocontainer.MutablePicoContainer;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class DBScheduler extends AbstractScheduler
-    implements PersistentFactory
+    implements PersistentFactory<DBJobDescriptor>
 {
     //  instance variables ///////////////////////////////////////////////////
 
@@ -87,10 +87,9 @@ public class DBScheduler extends AbstractScheduler
      * {@inheritDoc}
      */
 
-    public Persistent newInstance()
+    public DBJobDescriptor newInstance()
     {
-        DBJobDescriptor job = new DBJobDescriptor(persistence, this);
-        return (Persistent)job;
+        return new DBJobDescriptor(persistence, this);
     }
 
     //  abstract scheduler impementation    //////////////////////////////////////////////
@@ -109,7 +108,7 @@ public class DBScheduler extends AbstractScheduler
         DBJobDescriptor job = null;
         try
         {
-            job = (DBJobDescriptor)newInstance();
+            job = newInstance();
         }
         catch (Exception e)
         {
@@ -164,11 +163,11 @@ public class DBScheduler extends AbstractScheduler
     {
         try
         {
-            List<Persistent> jobList = persistence.load(null, this);
-            Iterator<Persistent> i = jobList.iterator();
+            List<DBJobDescriptor> jobList = persistence.load(null, this);
+            Iterator<DBJobDescriptor> i = jobList.iterator();
             while (i.hasNext())
             {
-                AbstractJobDescriptor job = (AbstractJobDescriptor)i.next();
+                AbstractJobDescriptor job = i.next();
                 jobs.put(job.getName(), job);
             }
         }
