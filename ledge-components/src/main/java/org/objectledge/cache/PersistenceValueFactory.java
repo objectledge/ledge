@@ -42,8 +42,8 @@ import org.objectledge.database.persistence.PersistentFactory;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: PersistenceValueFactory.java,v 1.5 2005-02-10 17:49:17 rafal Exp $
  */
-public class PersistenceValueFactory
-    implements ConfigurableValueFactory
+public class PersistenceValueFactory<K extends Number, V extends Persistent>
+    implements ConfigurableValueFactory<K, V>
 {
     /**
      * The persistent factory.
@@ -61,7 +61,7 @@ public class PersistenceValueFactory
      * @param persistence the persistence.
      * @param cl the class of the values.
      */
-    public void init(final Class cl, Persistence persistence)
+    public void init(final Class<V> cl, Persistence persistence)
     {
         this.persistence = persistence;
         if(!Persistent.class.isAssignableFrom(cl))
@@ -75,7 +75,7 @@ public class PersistenceValueFactory
                 {
                     try
                     {
-                        return (Persistent)cl.newInstance();
+                        return cl.newInstance();
                     }
                     catch(Exception e)
                     {
@@ -94,13 +94,13 @@ public class PersistenceValueFactory
      * @param key the key.
      * @return the object.
      */
-    public Object getValue(Object key)
+    public V getValue(K key)
     {
         if(key instanceof Number)
         {
             try
             {
-                return persistence.load(((Number)key).longValue(), factory);
+                return (V)persistence.load(key.longValue(), factory);
             }
             catch(PersistenceException e)
             {
@@ -129,10 +129,10 @@ public class PersistenceValueFactory
         {
             throw new IllegalArgumentException("required parameter valueClass is missing");
         }
-        Class cl = null;
+        Class<V> cl = null;
         try
         {
-            cl = Class.forName(vClass);
+            cl = (Class<V>)Class.forName(vClass);
         }
         catch(Exception e)
         {

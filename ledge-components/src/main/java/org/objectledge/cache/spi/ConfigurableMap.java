@@ -36,8 +36,8 @@ import java.util.Map;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>*
  * @version $Id: ConfigurableMap.java,v 1.2 2004-02-26 11:34:28 fil Exp $
  */
-public interface ConfigurableMap
-    extends Map
+public interface ConfigurableMap<K, V>
+    extends Map<K, V>
 {
     /**
      * Configures the map according to properties file settings.

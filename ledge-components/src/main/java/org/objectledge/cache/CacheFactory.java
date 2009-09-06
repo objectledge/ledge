@@ -50,17 +50,17 @@ public interface CacheFactory
      * @param type the type.
      * @return the map. 
      */
-    public abstract Map getMap(String type);
+    public abstract <K, V> Map<K, V>  getMap(String type);
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getInstance(String name);
+    public abstract <K, V> Map<K, V>  getInstance(String name);
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getInstance(String name, String configAlias) throws ConfigurationException;
+    public abstract <K, V> Map<K, V> getInstance(String name, String configAlias) throws ConfigurationException;
 
     /**
      * Returns the names of all currently active map instances.
@@ -72,49 +72,48 @@ public interface CacheFactory
     /**
      * {@inheritDoc}
      */
-    public abstract ValueFactory getValueFactory(String factory, String map);
+    public abstract <K, V> ValueFactory<K, V> getValueFactory(String factory, String map);
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getHashMap();
+    public abstract <K, V> Map<K, V> getHashMap();
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getTimeoutMap(long timeoutMillis);
+    public abstract <K, V> Map<K, V> getTimeoutMap(long timeoutMillis);
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getLRUMap(int capacity);
+    public abstract <K, V> Map<K, V> getLRUMap(int capacity);
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getSoftMap(int protect);
+    public abstract <K, V> Map<K, V> getSoftMap(int protect);
 
     /**
      * {@inheritDoc}
      */
-    public abstract org.objectledge.cache.DistributedMap getDistributedMap(
-        String name,
-        Map delegate);
+    public abstract <K, V> org.objectledge.cache.DistributedMap<K, V> getDistributedMap(
+        String name, Map<K, V> delegate);
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getFactoryMap(ValueFactory factory, Map delegate);
+    public abstract <K, V> Map<K, V> getFactoryMap(ValueFactory<K, V> factory, Map<K, V> delegate);
 
     /**
      * {@inheritDoc}
      */
-    public abstract Map getStatisticsMap(String name, Map delegate);
+    public abstract <K, V> Map<K, V> getStatisticsMap(String name, Map<K, V> delegate);
 
     /**
      * {@inheritDoc}
      */
-    public abstract ValueFactory getPersitenceValueFactory(Class valueClass);
+    public abstract <K, V> ValueFactory<K, V> getPersitenceValueFactory(Class<V> valueClass);
 
     /**
      * {@inheritDoc}

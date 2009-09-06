@@ -36,15 +36,15 @@ import java.util.Map;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: LayeredMap.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
  */
-public interface LayeredMap
-    extends Map
+public interface LayeredMap<K, V>
+    extends Map<K, V>
 {
     /**
      * Sets the map that provides value storage.
      *
      * @param map the delegate map.
      */
-    public void setDelegate(Map map);
+    public void setDelegate(Map<K, V> map);
 
     /**
      * Returns the map that provides value storage.
@@ -54,5 +54,5 @@ public interface LayeredMap
      * 
      * @return the delegate map.
      */
-    public Map getDelegate();
+    public Map<K, V> getDelegate();
 }

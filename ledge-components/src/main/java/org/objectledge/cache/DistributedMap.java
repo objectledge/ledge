@@ -41,8 +41,8 @@ import java.util.Map;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>*
  * @version $Id: DistributedMap.java,v 1.1 2004-02-12 11:41:27 pablo Exp $
  */
-public interface DistributedMap
-    extends Map
+public interface DistributedMap<K, V>
+    extends Map<K, V>
 {
     /**
      * Notifies peer nodes that the mappig value was modified.
@@ -58,5 +58,5 @@ public interface DistributedMap
      * 
      * @param key the object key.
      */
-    public void updated(Object key);
+    public void updated(K key);
 }

@@ -36,7 +36,7 @@ package org.objectledge.cache;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>*
  * @version $Id: ValueFactory.java,v 1.3 2005-02-08 00:35:42 rafal Exp $
  */
-public interface ValueFactory
+public interface ValueFactory<K, V>
 {
     /**
      * Produces a value that corresponds to a given key.
@@ -44,5 +44,5 @@ public interface ValueFactory
      * @param key the key.
      * @return the object.
      */
-    public Object getValue(Object key);
+    public V getValue(K key);
 }

@@ -46,7 +46,7 @@ public interface CacheFactorySPI
      *
      * @param map the map
      */
-    public void addStatisticsMap(StatisticsMap map);
+    public <K, V> void addStatisticsMap(StatisticsMap<K, V> map);
     
     /**
      * Get the notification system.

@@ -37,8 +37,8 @@ import org.objectledge.notification.Notification;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>*
  * @version $Id: DistributedMap.java,v 1.1 2004-02-12 11:41:25 pablo Exp $
  */
-public interface DistributedMap
-    extends org.objectledge.cache.DistributedMap, LayeredMap
+public interface DistributedMap<K, V>
+    extends org.objectledge.cache.DistributedMap<K, V>, LayeredMap<K, V>
 {
     /**
      * Attaches the map to the notification distribution system.

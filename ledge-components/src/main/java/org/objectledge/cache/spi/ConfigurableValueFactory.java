@@ -37,8 +37,8 @@ import org.objectledge.cache.ValueFactory;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: ConfigurableValueFactory.java,v 1.3 2004-02-26 11:34:28 fil Exp $
  */
-public interface ConfigurableValueFactory
-    extends ValueFactory
+public interface ConfigurableValueFactory<K, V>
+    extends ValueFactory<K, V>
 {
     /**
      * Configures a new instance of the factory.

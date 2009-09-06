@@ -39,20 +39,20 @@ import org.objectledge.cache.ValueFactory;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>*
  * @version $Id: FactoryMap.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
  */
-public interface FactoryMap
-    extends Map, LayeredMap
+public interface FactoryMap<K, V>
+    extends Map<K, V>, LayeredMap<K, V>
 {
     /**
      * Sets the <code>ValueFactory</code> to use.
      *
      * @param factory the factory.
      */
-    public void setFactory(ValueFactory factory);
+    public void setFactory(ValueFactory<K, V> factory);
 
     /**
      * Returns the current factory in use.
      *
      * @return the factory.
      */
-    public ValueFactory getFactory();
+    public ValueFactory<K, V> getFactory();
 }

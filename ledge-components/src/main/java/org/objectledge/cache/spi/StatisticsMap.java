@@ -36,8 +36,8 @@ package org.objectledge.cache.spi;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: StatisticsMap.java,v 1.3 2005-06-15 13:17:38 zwierzem Exp $
  */
-public interface StatisticsMap
-    extends LayeredMap
+public interface StatisticsMap<K, V>
+    extends LayeredMap<K, V>
 {
     /**
      * Returns the request/hit/miss statistics.

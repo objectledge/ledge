@@ -37,8 +37,8 @@ import java.util.Map;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: LRUMap.java,v 1.1 2004-02-12 11:41:26 pablo Exp $
  */
-public interface LRUMap
-    extends Map
+public interface LRUMap<K, V>
+    extends Map<K, V>
 {
     /**
      * Sets the map capacity.

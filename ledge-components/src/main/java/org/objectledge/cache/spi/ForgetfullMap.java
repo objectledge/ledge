@@ -37,7 +37,7 @@ import java.util.Map;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: ForgetfullMap.java,v 1.1 2005-04-25 05:06:47 pablo Exp $
  */
-public interface ForgetfullMap
-    extends Map
+public interface ForgetfullMap<K, V>
+    extends Map<K, V>
 {
 }
