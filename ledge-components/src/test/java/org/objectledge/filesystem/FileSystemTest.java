@@ -190,7 +190,7 @@ public class FileSystemTest extends TestCase
         ptr = file.getFilePointer();
         assertTrue(0L == ptr);
         assertTrue(4L == file.length());
-        int r = file.read();
+        file.read();
         ptr = file.getFilePointer();
         assertTrue(1L == ptr);
         int rb = file.read(buff);

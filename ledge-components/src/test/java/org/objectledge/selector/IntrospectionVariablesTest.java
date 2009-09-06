@@ -66,7 +66,7 @@ public class IntrospectionVariablesTest extends TestCase
         // TODO caveat!
         // assertFalse(variables.isDefined("undefined"));
         
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("defined", "defined");
         map.put("null", null);
         variables = new IntrospectionVariables(map);
@@ -162,6 +162,7 @@ public class IntrospectionVariablesTest extends TestCase
         }
     }
     
+    @SuppressWarnings("unused")
     private static class PlainObject
     {
         public String getPublicMethod()
@@ -200,6 +201,7 @@ public class IntrospectionVariablesTest extends TestCase
         }
     }
     
+    @SuppressWarnings("unused")
     private static class StringGetObject
     {
         public String get(String name)
@@ -219,6 +221,7 @@ public class IntrospectionVariablesTest extends TestCase
         }
     }
     
+    @SuppressWarnings("unused")
     private static class FailingObjectGetObject
     {
         public Object get(Object param)

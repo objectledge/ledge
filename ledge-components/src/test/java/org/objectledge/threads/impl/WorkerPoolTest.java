@@ -47,7 +47,7 @@ public class WorkerPoolTest extends TestCase
 {
     private static final int TASK_DURATION = 300;
     
-    private static Map whiteboard = new HashMap();
+    private static Map<String, String> whiteboard = new HashMap<String, String>();
     
     private WorkerPool pool;
     

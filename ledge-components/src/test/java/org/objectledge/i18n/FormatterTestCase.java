@@ -44,13 +44,13 @@ public abstract class FormatterTestCase extends LedgeTestCase
         FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         XMLValidator xv = new XMLValidator(new XMLGrammarCache());
         ConfigurationFactory cf = new ConfigurationFactory(fs, xv, "config");
-        Class formatterClass = getFormatterClass();
+        Class<?> formatterClass = getFormatterClass();
         Configuration config = cf.getConfig(formatterClass.getName(), formatterClass);
         i18nMock.expects(never()).method("getDefaultLocale").will(returnValue(plLocale));
         createFormatter(config, i18n);
     }
 
-    protected abstract Class getFormatterClass();
+    protected abstract Class<?> getFormatterClass();
     
     protected abstract void createFormatter(Configuration config, I18n i18n)
     throws ConfigurationException;

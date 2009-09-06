@@ -53,7 +53,7 @@ public class MapVariablesTest extends TestCase
     
     public void setUp()
     {
-        Map values = new HashMap();
+        Map<String, Object> values = new HashMap<String, Object>();
         values.put("object", "object");
         values.put("null", null);
         variables = new MapVariables(values);

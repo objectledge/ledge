@@ -48,7 +48,7 @@ public class MockInitialContextFactory implements InitialContextFactory
     /**
      * {@inheritDoc}
      */
-    public Context getInitialContext(Hashtable environment) 
+    public Context getInitialContext(Hashtable<?, ?> environment) 
         throws NamingException
     {
         Mock mockContext = new Mock(DirContext.class);

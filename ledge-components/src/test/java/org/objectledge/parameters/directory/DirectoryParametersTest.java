@@ -152,7 +152,7 @@ public class DirectoryParametersTest extends LedgeTestCase
         parameters.add("bar","foo");
         parameters.add("foo","bar");
         assertEquals(parameters.getParameterNames().length,2);
-        HashSet set = new HashSet();
+        HashSet<String> set = new HashSet<String>();
         set.add("foo");
         parameters.remove(set);
         assertEquals(parameters.get("bar","bar"),"foo");

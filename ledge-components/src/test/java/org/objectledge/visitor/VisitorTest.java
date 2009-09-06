@@ -94,9 +94,10 @@ public class VisitorTest
     public void testInnerVisitor()
     {
         Item g = new Item("a", new SubItem("b", new SubSubItem("c", null)));
-        final List localRecorder = new ArrayList();
+        final List<String> localRecorder = new ArrayList<String>();
         ItemVisitor iv = new ItemVisitor()
         {
+            @SuppressWarnings("unused")
             public void visit(Item i)
             {
                 localRecorder.add(i.value());

@@ -38,9 +38,6 @@ public class StackTraceTest extends LedgeTestCase
 {
     private Thingy thingy = new Thingy();
     
-    // enable trace output during the test
-    private boolean printTraces = false; 
-    
     public void testTracingException()
     {
         String[] trace = new StackTrace(new TracingException(4)).toStringArray();

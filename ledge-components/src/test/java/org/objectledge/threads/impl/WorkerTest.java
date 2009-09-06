@@ -48,7 +48,7 @@ public class WorkerTest extends TestCase
 {
     private static final int DELAY = 200;
     
-    private static Map whiteboard = new HashMap();
+    private static Map<String, String> whiteboard = new HashMap<String, String>();
     
     private static Logger log = 
         new Log4JLogger(org.apache.log4j.Logger.getLogger(WorkerTest.class));

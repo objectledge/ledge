@@ -189,7 +189,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Principal principal = userManager.createAccount("foo",dn, "bar");
         Parameters parameters = new DirectoryParameters(userManager.getPersonalData(principal));
         assertEquals(parameters.get("uid"),"foo");
-        Principal principal2 = userManager.getUserByLogin("foo");
+        userManager.getUserByLogin("foo");
         try
         {
             userManager.getUserByLogin("bar");
@@ -264,7 +264,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        userManager.createAccount("foo",dn, "bar");
         Principal[] results = userManager.lookupAccounts("foo","bar");
         assertEquals(results.length,0);
         results = userManager.lookupAccounts("uid","foo");
@@ -277,7 +277,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        userManager.createAccount("foo",dn, "bar");
         /*
         Principal[] results = userManager.lookupAccounts("(foo=bar)");
         assertEquals(results.length,0);

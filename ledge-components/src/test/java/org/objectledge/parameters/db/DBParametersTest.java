@@ -46,11 +46,6 @@ import org.objectledge.database.DefaultDatabase;
 import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
-import org.objectledge.database.persistence.DefaultPersistence;
-import org.objectledge.database.persistence.Persistence;
-import org.objectledge.database.persistence.Persistent;
-import org.objectledge.database.persistence.PersistentFactory;
-import org.objectledge.database.persistence.TestObject;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
@@ -67,8 +62,6 @@ public class DBParametersTest extends TestCase
     protected long anyTimeStamp = 123123132L;
     protected long anyTimeStamp2 = 232342445L;
 
-    private Persistence persistence;
-
     /**
      * Constructor for DBParametersTest.
      * @param arg0
@@ -81,7 +74,6 @@ public class DBParametersTest extends TestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger, null);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
-        persistence = new DefaultPersistence(database, logger);
         manager = new DefaultDBParametersManager(database, logger);
     }
 
@@ -584,7 +576,7 @@ public class DBParametersTest extends TestCase
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
         params.set("bar", "foo");
-        Set set = new HashSet();
+        Set<String> set = new HashSet<String>();
         set.add("foo");
         params.remove(set);
         assertEquals(params.isDefined("foo"), false);
@@ -599,7 +591,7 @@ public class DBParametersTest extends TestCase
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
         params.set("bar", "foo");
-        Set set = new HashSet();
+        Set<String> set = new HashSet<String>();
         set.add("foo");
         params.removeExcept(set);
         assertEquals(params.isDefined("bar"), false);
@@ -924,13 +916,4 @@ public class DBParametersTest extends TestCase
             fs.getReader("sql/parameters/db/DBParametersTest.sql", "UTF-8"));
         return ds;
     }
-
-    private PersistentFactory testFactory = new PersistentFactory()
-    {
-        public Persistent newInstance()
-        {
-            return new TestObject();
-        }
-    };
-
 }

@@ -88,7 +88,7 @@ public class ScriptDirectoryTest
         checkSchema("config/org.objectledge.external.ScriptDirectory.xml",
             "org/objectledge/external/ScriptDirectory.rng");
         final FileSystem fs = getFileSystem();
-        ScriptDirectory scriptDir = new ScriptDirectory(fs, getConfig(fs,
+        new ScriptDirectory(fs, getConfig(fs,
             "config/org.objectledge.external.ScriptDirectory.xml"));
     }
 }

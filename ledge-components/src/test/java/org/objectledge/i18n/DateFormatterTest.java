@@ -25,7 +25,7 @@ public class DateFormatterTest extends FormatterTestCase
     }
 
     @Override
-    protected Class getFormatterClass()
+    protected Class<?> getFormatterClass()
     {
         return DateFormatter.class;
     }

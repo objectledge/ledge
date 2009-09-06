@@ -67,7 +67,7 @@ public class ClasspathFileSystemProviderTest
     {
         super.setUp();
         provider = new ClasspathFileSystemProvider("classpath", ClasspathFileSystemProvider.class
-            .getClassLoader(), Collections.EMPTY_LIST);
+            .getClassLoader(), new ArrayList<URL>());
     }
 
     public void testGetName()

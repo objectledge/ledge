@@ -15,7 +15,7 @@ public class NumberFormatterTest extends FormatterTestCase
     private final static double value = 1234567890.987654d;
 
     @Override
-    protected Class getFormatterClass()
+    protected Class<?> getFormatterClass()
     {
         return NumberFormatter.class;
     }

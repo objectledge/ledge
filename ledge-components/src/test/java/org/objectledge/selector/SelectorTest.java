@@ -79,7 +79,7 @@ public class SelectorTest extends LedgeTestCase
         objects[1] = new Integer(1);
         objects[2] = new Integer(2);
         Selector selector = new Selector(config, objects);
-        Map values = new HashMap();
+        Map<String, Object> values = new HashMap<String, Object>();
         Variables vars = new IntrospectionVariables(values);
         values.put("number", new Integer(0));
         Integer i = (Integer)selector.select(vars);
@@ -100,7 +100,7 @@ public class SelectorTest extends LedgeTestCase
         objects[0] = new Integer(0);
         objects[1] = new Integer(1);
         Selector selector = new Selector(config, objects);
-        Map values = new HashMap();
+        Map<String, Object> values = new HashMap<String, Object>();
         Variables vars = new IntrospectionVariables(values);
         values.put("number", new Integer(0));
         Integer i = (Integer)selector.select(vars);

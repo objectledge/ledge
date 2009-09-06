@@ -88,7 +88,8 @@ public class PersistenceTest extends TestCase
         assertNull(object);
         object = (TestObject)persistence.load(0, testFactory);
         assertNull(object);
-        List list = persistence.load(null, testFactory);
+        List<Persistent> list;
+        list = persistence.load(null, testFactory);
         assertEquals(list.size(), 0);
         object = new TestObject("foo", new Date());
         persistence.save(object);

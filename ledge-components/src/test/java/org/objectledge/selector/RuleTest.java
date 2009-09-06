@@ -76,7 +76,7 @@ public class RuleTest extends LedgeTestCase
             expected[i] = tests[i].getAttribute("result");
         }
         
-        Map values = new HashMap();
+        Map<String, Object> values = new HashMap<String, Object>();
         values.put("string", "string");
         values.put("string2", "string");
         values.put("one", new Integer(1));

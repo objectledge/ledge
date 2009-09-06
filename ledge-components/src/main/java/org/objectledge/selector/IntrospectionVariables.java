@@ -77,7 +77,7 @@ public class IntrospectionVariables
      * 
      * @param objects the objects to introspect.
      */
-    public IntrospectionVariables(Map objects)
+    public IntrospectionVariables(Map<String, Object> objects)
     {
         this((Object)objects);
     }
