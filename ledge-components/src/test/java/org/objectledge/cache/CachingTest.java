@@ -100,7 +100,7 @@ public class CachingTest extends LedgeTestCase
 
     public void testGetMap()
     {
-        Map map = caching.getMap("LRUMap");
+        Map<?, ?> map = caching.getMap("LRUMap");
         assertNotNull(map);
         assertNotNull(caching.getMap("foo"));
         try
@@ -121,7 +121,7 @@ public class CachingTest extends LedgeTestCase
     {
         Object cache = caching.getInstance("instance1"); 
         assertNotNull(cache);
-        assertNotNull(((DelegateMap)cache).getDelegate());
+        assertNotNull(((DelegateMap<?, ?>)cache).getDelegate());
         assertNotNull(caching.getInstance("instance2"));
         try
         {
@@ -142,7 +142,7 @@ public class CachingTest extends LedgeTestCase
     {
         Object cache = caching.getInstance("not_configured","alias1"); 
         assertNotNull(cache);
-        assertNotNull(((DelegateMap)cache).getDelegate());
+        assertNotNull(((DelegateMap<?, ?>)cache).getDelegate());
         Object cache2 = caching.getInstance("not_configured","aliasXXX");
         assertNotNull(cache2);
         assertEquals(cache, cache2);
@@ -163,12 +163,12 @@ public class CachingTest extends LedgeTestCase
         assertNotNull(caching.getHashMap());
         assertNotNull(caching.getLRUMap(4));
         assertNotNull(caching.getSoftMap(4));
-        assertNotNull(caching.getStatisticsMap("xxx",new HashMap()));
+        assertNotNull(caching.getStatisticsMap("xxx",new HashMap<Object, Object>()));
         assertNotNull(caching.getTimeoutMap(1000));
-        ValueFactory valueFactory = caching.getPersitenceValueFactory(TestValue.class); 
+        ValueFactory<Long, TestValue> valueFactory = caching.getPersitenceValueFactory(TestValue.class); 
         assertNotNull(valueFactory);
-        assertNotNull(caching.getFactoryMap(valueFactory, new HashMap()));
-        assertNotNull(caching.getDistributedMap("yyy", new HashMap()));
+        assertNotNull(caching.getFactoryMap(valueFactory, new HashMap<Long, TestValue>()));
+        assertNotNull(caching.getDistributedMap("yyy", new HashMap<Object, Object>()));
     }
     
     
@@ -182,7 +182,7 @@ public class CachingTest extends LedgeTestCase
     {
         try
         {
-            Map map = caching.getInstance("timeout");
+            Map<String, String> map = caching.getInstance("timeout");
             map.put("k1","v");
             Thread.sleep(500);
             assertNotNull("@500", map.get("k1"));
@@ -197,7 +197,7 @@ public class CachingTest extends LedgeTestCase
 
     public void testLRU()
     {
-        Map map = caching.getInstance("LRU");
+        Map<String, String> map = caching.getInstance("LRU");
         map.put("k1","v");
         map.put("k2","v");
         map.put("k3","v");
@@ -219,7 +219,7 @@ public class CachingTest extends LedgeTestCase
 
     public void testSoft()
     {
-        Map map = caching.getInstance("soft");
+        Map<Integer, Object> map = caching.getInstance("soft");
         // allocate 100MB. The test fails with OutOfMemoryError when the
         // "hash" instance is used instead.
         int count = 100;
@@ -241,19 +241,19 @@ public class CachingTest extends LedgeTestCase
 
     public void testStatistics()
     {
-        Map map = caching.getInstance("statistics");
+        Map<String, String> map = caching.getInstance("statistics");
         map.put("k1","v");
         map.put("k2","v");
         map.put("k3","v");
         map.get("k1");
         map.get("k2");
         map.get("k4");
-        assertEquals(stats,((StatisticsMap)map).getStatistics());
+        assertEquals(stats,((StatisticsMap<?, ?>)map).getStatistics());
     }
 
     public void testDistributed()
     {
-        Map map = caching.getInstance("distributed");
+        Map<Object, Object> map = caching.getInstance("distributed");
         /*
         byte[] msg = "proceed".getBytes();
         map.put("k","v");
@@ -275,7 +275,7 @@ public class CachingTest extends LedgeTestCase
     
     public void testFactory()
     {
-        Map map = caching.getInstance("factory");
+        Map<Object, Object> map = caching.getInstance("factory");
         /**
         TestValue v = (TestValue)map.get(new Long(1));
         assertNotNull("v@1",v);
@@ -290,20 +290,17 @@ public class CachingTest extends LedgeTestCase
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw, true);
         caching.getStatus(pw);
-        String status = sw.getBuffer().toString();
-        //you dont know the test sequence
-        //assertEquals("global stats", stats, status);
     }
 
     public void testConfigAlias()
     {
-        Map map = caching.getInstance("shared");
+        Map<?, ?> map = caching.getInstance("shared");
         assertTrue("shared=LRUMap", LRUMap.class.isAssignableFrom(map.getClass()));
     }
 
     public void testCustom()
     {
-        Map map = caching.getInstance("custom");
+        Map<?, ?> map = caching.getInstance("custom");
         assertTrue("custom=LRUMap", LRUMap.class.isAssignableFrom(map.getClass()));
     }
 

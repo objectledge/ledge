@@ -52,9 +52,8 @@ import org.objectledge.cache.spi.SoftMap;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: SoftMapImpl.java,v 1.4 2005-02-09 22:02:24 rafal Exp $
  */
-public class SoftMapImpl
-    extends DelegateMap
-    implements SoftMap, ConfigurableMap
+public class SoftMapImpl<K, V>
+    implements SoftMap<K, V>, ConfigurableMap<K, V>
 {
     // constants /////////////////////////////////////////////////////////////
     
@@ -76,7 +75,9 @@ public class SoftMapImpl
     private int pos;
 
     /** The reference queue. */
-    private ReferenceQueue queue = new ReferenceQueue();
+    private ReferenceQueue<V> queue = new ReferenceQueue<V>();
+    
+    private Map<K, Entry<K,V>> delegate = new HashMap<K,Entry<K,V>>();
 
     // initailization ////////////////////////////////////////////////////////
 
@@ -85,7 +86,6 @@ public class SoftMapImpl
      */
     public SoftMapImpl()
     {
-        super((Map)new HashMap());
         this.ring = new Object[protect];
         this.pos = 0;
     }
@@ -145,13 +145,13 @@ public class SoftMapImpl
     public boolean containsValue(Object value)
     {
         cleanup();
-        Collection values = delegate.values();
-        Iterator i = values.iterator();
+        Collection<Entry<K,V>> values = delegate.values();
+        Iterator<Entry<K,V>> i = values.iterator();
         if(value == null)
         {
             while(i.hasNext())
             {
-                Entry ref = (Entry)i.next();
+                Entry<K, V> ref = i.next();
                 if(ref.isValid() && ref.getValue() == null)
                 {
                     return true;
@@ -162,7 +162,7 @@ public class SoftMapImpl
         {
             while(i.hasNext())
             {
-                Entry ref = (Entry)i.next();
+                Entry<K,V> ref = i.next();
                 if(ref.isValid() && value.equals(ref.getValue()))
                 {
                     return true;
@@ -175,12 +175,12 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    public Set entrySet()
+    public Set<Map.Entry<K,V>> entrySet()
     {
         cleanup();
-        return new AbstractSet()
+        return new AbstractSet<Map.Entry<K,V>>()
             {
-                public Iterator iterator()
+                public Iterator<Map.Entry<K,V>> iterator()
                 {
                     return getEntryIterator();
                 }
@@ -192,7 +192,7 @@ public class SoftMapImpl
                 
                 public boolean remove(Object o)
                 {
-                    unprotectValue(((Entry)o).get());
+                    unprotectValue(((Entry<K,V>)o).get());
                     return delegate.values().remove(o);
                 }
                 
@@ -212,17 +212,17 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    public Object get(Object key)
+    public V get(Object key)
     {
         cleanup();
-        Entry ref = (Entry)delegate.get(key);
+        Entry<K, V> ref = delegate.get(key);
         if(ref==null || ref.isEnqueued())
         {
             return null;
         }
         else
         {
-            Object obj = ref.get();
+            V obj = ref.get();
             protectValue(obj);
             return obj;
         }
@@ -231,11 +231,11 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    public Object put(Object key, Object value)
+    public V put(Object key, Object value)
     {
         cleanup();
-        Entry newRef = new Entry(key, value);
-        Entry oldRef = (Entry)delegate.put(key, newRef);
+        Entry<K, V> newRef = new Entry<K, V>((K)key, (V)value);
+        Entry<K, V> oldRef = delegate.put((K)key, newRef);
         protectValue(value);
         if(oldRef == null || oldRef.isEnqueued())
         {
@@ -243,7 +243,7 @@ public class SoftMapImpl
         }
         else
         {
-            Object old = oldRef.get();
+            V old = oldRef.get();
             unprotectValue(old);
             return old;
         }
@@ -252,11 +252,11 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    public Object remove(Object key)
+    public V remove(Object key)
     {
         cleanup();
-        Object old = null;
-        Entry oldRef = (Entry)delegate.remove(key);
+        V old = null;
+        Entry<K, V> oldRef = delegate.remove(key);
         if(oldRef != null)
         {
             old = oldRef.get();
@@ -268,12 +268,12 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    public Collection values()
+    public Collection<V> values()
     {
         cleanup();
-        return new AbstractCollection()
+        return new AbstractCollection<V>()
             {
-                public Iterator iterator()
+                public Iterator<V> iterator()
                 {
                     return getValueIterator();
                 }
@@ -301,27 +301,27 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    Iterator getValueIterator()
+    Iterator<V> getValueIterator()
     {
         if(delegate.isEmpty())
         {
-            return new EmptyIterator();
+            return new EmptyIterator<V>();
         }
         else
         {
-            final Iterator i = delegate.values().iterator();
-            return new Iterator()
+            final Iterator<Entry<K, V>> i = delegate.values().iterator();
+            return new Iterator<V>()
                 {
-                    private Entry last = null;
+                    private Entry<K, V> last = null;
                     
                     public boolean hasNext()
                     {
                         return i.hasNext();
                     }
                     
-                    public Object next()
+                    public V next()
                     {
-                        last = (Entry)i.next();
+                        last = i.next();
                         return last.get();
                     }
                     
@@ -337,29 +337,29 @@ public class SoftMapImpl
     /**
      * {@inheritDoc}
      */
-    Iterator getEntryIterator()
+    Iterator<Map.Entry<K, V>> getEntryIterator()
     {
         if(delegate.isEmpty())
         {
-            return new EmptyIterator();
+            return new EmptyIterator<Map.Entry<K, V>>();
         }
         else
         {
-            final Iterator i = delegate.entrySet().iterator();
-            return new Iterator()
+            final Iterator<Map.Entry<K,Entry<K, V>>> i = delegate.entrySet().iterator();
+            return new Iterator<Map.Entry<K, V>>()
                 {
-                    private Entry last = null;
+                    private Entry<K,V> last = null;
                     
                     public boolean hasNext()
                     {
                         return i.hasNext();
                     }
                     
-                    public Object next()
+                    public Map.Entry<K, V> next()
                     {
-                        Map.Entry mapEntry = (Map.Entry)i.next();
-                        last = (Entry)mapEntry.getValue();
-                        return mapEntry;
+                        Map.Entry<K,Entry<K, V>> mapEntry = i.next();
+                        last = mapEntry.getValue();
+                        return last;
                     }
                     
                     public void remove()
@@ -422,7 +422,7 @@ public class SoftMapImpl
         {
             while(true)
             {
-                Entry ref = (Entry)queue.poll();
+                Entry<K, V> ref = (Entry<K, V>)queue.poll();
                 if(ref == null)
                 {
                     return;
@@ -438,15 +438,15 @@ public class SoftMapImpl
     /**
      * Entry
      */
-    private class Entry
-        extends SoftReference
-        implements Map.Entry
+    private class Entry<KK, VV>
+        extends SoftReference<VV>
+        implements Map.Entry<KK, VV>
     {
-        private Object key;
+        private KK key;
 
-        public Entry(Object key, Object value)
+        public Entry(KK key, VV value)
         {
-            super(value, queue);
+            super(value, (ReferenceQueue<? super VV>)queue);
             this.key = key;
         }
 
@@ -456,9 +456,9 @@ public class SoftMapImpl
             return super.enqueue();
         }
 
-        public Object get()
+        public VV get()
         {
-            Object o = super.get();
+            VV o = super.get();
             if(o != null)
             {
                 protectValue(o);
@@ -466,17 +466,17 @@ public class SoftMapImpl
             return o;
         }
         
-        public Object getKey()
+        public KK getKey()
         {
             return key;
         }
         
-        public Object getValue()
+        public VV getValue()
         {
             return get();
         }
         
-        public Object setValue(Object value)
+        public VV setValue(Object value)
         {
             throw new UnsupportedOperationException(
                 "setting values through entry set is not supported"); 
@@ -487,8 +487,8 @@ public class SoftMapImpl
          */
         public boolean equals(Object o)
         {
-            Entry e1 = this;
-            Entry e2 = (Entry)o;
+            Entry<KK, VV> e1 = this;
+            Entry<KK, VV> e2 = (Entry<KK, VV>)o;
             return (e1.getKey()==null ? e2.getKey()==null :
                     e1.getKey().equals(e2.getKey())) && 
                 (e1.getValue()==null ? e2.getValue()==null :
@@ -507,5 +507,44 @@ public class SoftMapImpl
         {
             return !isEnqueued();
         }
+    }
+
+    @Override
+    public void clear()
+    {
+        delegate.clear();     
+    }
+
+    @Override
+    public boolean containsKey(Object key)
+    {
+        return delegate.containsKey(key);
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return delegate.isEmpty();
+    }
+
+    @Override
+    public Set<K> keySet()
+    {
+        return delegate.keySet();
+    }
+
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m)
+    {
+        for(Map.Entry<?, ?> e : m.entrySet())
+        {
+            put(e.getKey(), e.getValue());
+        }
+    }
+
+    @Override
+    public int size()
+    {
+        return delegate.size();
     }
 }

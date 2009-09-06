@@ -125,9 +125,16 @@ public abstract class DelegateMap<K, V>
     /**
      * {@inheritDoc}
      */
-    public boolean equals(Object o)
+    public boolean equals(Object o)    
     {
-        return delegate.equals(o);
+        if(o instanceof DelegateMap)
+        {
+            return delegate.equals(((DelegateMap<K,V>)o).getDelegate());
+        }
+        else
+        {
+            return delegate.equals(o);
+        }
     }
 
     /**
