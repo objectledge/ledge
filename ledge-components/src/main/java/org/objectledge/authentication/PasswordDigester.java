@@ -60,7 +60,8 @@ public class PasswordDigester
 
     /**
      * Digests a given password using a chosen algorithm.
-     * @param password the password to be digested.
+     * 
+     * @param password the password to be digested, <code>null</code> value is allowed
      */
     public String digestPassword(String password)
     {
