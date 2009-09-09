@@ -27,24 +27,30 @@
 //
 package org.objectledge.hibernate;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 
 /**
  * Pipeline processing valve that closes hibernate session.
+ * This valve execution should NOT throw any exceptions to allow
+ * all finally valves execution.
  * 
  * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionFinallyValve.java,v 1.4 2006-05-04 13:25:04 zwierzem Exp $
+ * @version $Id: HibernateSessionFinallyValve.java,v 1.4 2009-04-02 09:19:35 mgolebsk Exp $
  */
 public class HibernateSessionFinallyValve
     implements Valve
 {
+    private final Logger logger;
+    
+    private final HibernateSessionValve hibernateSessionValve;
 
-    private HibernateSessionValve hibernateSessionValve;
-
-    public HibernateSessionFinallyValve(HibernateSessionValve hibernateSessionValve)
+    public HibernateSessionFinallyValve(final Logger logger, 
+            final HibernateSessionValve hibernateSessionValve)
     {
+        this.logger = logger;
         this.hibernateSessionValve = hibernateSessionValve;
     }
     
@@ -54,9 +60,16 @@ public class HibernateSessionFinallyValve
      * @param context the thread's processing context.
      * @throws ProcessingException if authentication failed.
      */
-    public void process(Context context)
+    public void process(final Context context)
         throws ProcessingException
     {
-        hibernateSessionValve.closeSession();
+        try
+        {
+            hibernateSessionValve.closeSession();
+        }
+        catch(Exception e)
+        {
+            logger.error("Exception during HibernateSession close", e);
+        }
     }
 }

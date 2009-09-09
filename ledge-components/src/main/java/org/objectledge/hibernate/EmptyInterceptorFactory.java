@@ -31,12 +31,31 @@ import org.hibernate.Interceptor;
 import org.hibernate.SessionFactory;
 
 /**
- *  The factory for creation of hibernate interceptors.
- *   
- * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: InterceptorFactory.java,v 1.1 2006-01-11 22:15:14 zwierzem Exp $
+ * The empty interceptor factory. It is used to configure 
+ * {@link HibernateSessionFactory} to not use any interceptors.
+ * 
+ * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
+ * @version $Id: EmptyInterceptorFactory.java,v 1.1 2009-03-26 14:26:17 mgolebsk Exp $
  */
-public interface InterceptorFactory
+public class EmptyInterceptorFactory
+    implements InterceptorFactory
 {
-    public Interceptor createInterceptor(SessionFactory sessionFactory);
+    /**
+     * Creates <code>EmptyInterceptorFactory</code> objects.
+     */
+    public EmptyInterceptorFactory()
+    {
+    }
+
+    /**
+     * Creates the interceptor.
+     * 
+     * @param sessionFactory the hibernate session factory. 
+     * @return the newly instantiated picofier  object.
+     */
+    @SuppressWarnings("unused")
+    public Interceptor createInterceptor(final SessionFactory sessionFactory)
+    {
+        return null;
+    }
 }

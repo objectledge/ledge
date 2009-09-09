@@ -85,7 +85,11 @@ implements HibernateSessionFactory
 
         if(interceptorFactory != null)
         {
-            this.interceptor = interceptorFactory.createInterceptor(sessionFactory);
+            Interceptor interceptor = interceptorFactory.createInterceptor(sessionFactory);
+            if(interceptor != null)
+            {
+                this.interceptor = interceptor;
+            }
         }       
         logger.info("HibernateConfig started");
     }

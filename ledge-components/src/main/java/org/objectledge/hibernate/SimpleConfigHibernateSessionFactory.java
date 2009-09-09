@@ -60,7 +60,8 @@ import org.objectledge.filesystem.FileSystem;
  *     &lt;property name="query.substitutions">true 1, false 0&lt;/property>
  *     
  *     &lt;!--     Hibernate Security Service -->
- *     &lt;mapping class="org.objectledge.security.hibernate.HibernatePermission"/>
+ *     &lt;mapping class="org.objectledge.security.hibernate.HibernatePermission"
+ *         resource="org/objectledge/security/hibernate/HibernatePermission.hbm.xml"/>
  *     &lt;mapping class="org.objectledge.security.hibernate.HibernateResourceGroup"/>
  *     &lt;mapping class="org.objectledge.security.hibernate.HibernateRole"/>
  *     &lt;mapping class="org.objectledge.security.hibernate.HibernateRolePermission"/>
@@ -71,8 +72,14 @@ import org.objectledge.filesystem.FileSystem;
  * &lt;/hibernate-configuration>
  *</pre>
  *
+ *<p>
+ * <b>Warning!</b> When both <code>class</code> and <code>resource</code>
+ * is present <code>resource</code> has priority (<code>class</code> is ignored).
+ *</p>
+ *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SimpleConfigHibernateSessionFactory.java,v 1.2 2006-01-19 16:06:43 zwierzem Exp $
+ * @author <a href="mailto:mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
+ * @version $Id: SimpleConfigHibernateSessionFactory.java,v 1.2 2009-03-30 20:22:52 mgolebsk Exp $
  */
 public class SimpleConfigHibernateSessionFactory 
 extends AbstractHibernateSessionFactory
@@ -109,8 +116,20 @@ extends AbstractHibernateSessionFactory
                 {
                     try
                     {
-                        Class<?> clazz = Class.forName(mapping.getAttribute("class"));
-                        cfg.addClass(clazz);
+                        final String resourceName = mapping.getAttribute("resource", null);
+                        if(resourceName != null)
+                        {
+                            cfg.addResource(resourceName);
+                        }
+                        else
+                        {
+                            final String className = mapping.getAttribute("class", null);
+                            if(className != null)
+                            {
+                                final Class<?> clazz = Class.forName(className);
+                                cfg.addClass(clazz);
+                            }
+                        }
                     }
                     catch(ClassNotFoundException e)
                     {

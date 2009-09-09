@@ -36,7 +36,7 @@ import org.objectledge.pipeline.Valve;
  * Pipeline processing valve that initialize hibernate session.
  *
  * @author <a href="mgolebsk@elka.pw.edu.pl">Marcin Golebski</a>
- * @version $Id: HibernateSessionValve.java,v 1.4 2006-05-04 13:25:04 zwierzem Exp $
+ * @version $Id: HibernateSessionValve.java,v 1.4 2009-07-14 16:19:48 mgolebsk Exp $
  */
 public class HibernateSessionValve 
     implements Valve
@@ -62,8 +62,7 @@ public class HibernateSessionValve
      */
     public Session getSession()
     {
-        HibernateSessionContext hibernateSessionContext = context
-            .getAttribute(HibernateSessionContext.class);
+        HibernateSessionContext hibernateSessionContext = context.getAttribute(HibernateSessionContext.class);
         if(hibernateSessionContext == null)
         {
             try
@@ -81,8 +80,7 @@ public class HibernateSessionValve
 
     public void closeSession()
     {
-        HibernateSessionContext hibernateSessionContext = context
-            .getAttribute(HibernateSessionContext.class);
+        HibernateSessionContext hibernateSessionContext = context.getAttribute(HibernateSessionContext.class);
         if(hibernateSessionContext != null)
         {
             Session session = hibernateSessionContext.getSession();
@@ -95,7 +93,8 @@ public class HibernateSessionValve
     }
     
     /**
-     * Run the pipeline valve - create session.
+     * Run the pipeline valve - create session. Hibernate session
+     * is intialized only during first method call per request.
      * 
      * @param context the thread's processing context.
      * @throws ProcessingException if authentication failed.
@@ -103,8 +102,11 @@ public class HibernateSessionValve
     public void process(Context context)
         throws ProcessingException
     {
-        Session session = hibernateSessionFactory.openHibernateSession();
-        HibernateSessionContext hibernateSessionContext = new HibernateSessionContext(session);
-        context.setAttribute(HibernateSessionContext.class, hibernateSessionContext);
+        if(context.getAttribute(HibernateSessionContext.class) == null)
+        {
+            Session session = hibernateSessionFactory.openHibernateSession();
+            HibernateSessionContext hibernateSessionContext = new HibernateSessionContext(session);
+            context.setAttribute(HibernateSessionContext.class, hibernateSessionContext);
+        }
     }
 }
