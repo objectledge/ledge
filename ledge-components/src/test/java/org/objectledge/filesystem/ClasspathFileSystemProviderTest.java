@@ -31,23 +31,27 @@ package org.objectledge.filesystem;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
+
 /**
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
- * @version $Id: ClasspathFileSystemProviderTest.java,v 1.9 2008-02-28 16:56:15 rafal Exp $
+ *
+ * @version $Id: ClasspathFileSystemProviderTest.java,v 1.3 2009-09-07 21:00:50 mgolebsk Exp $
  */
 public class ClasspathFileSystemProviderTest
     extends TestCase
 {
     protected ClasspathFileSystemProvider provider;
+    
+    /**Test resource provider.*/
+    protected FileSystemProvider lfs;
 
     /**
      * Constructor for LocalFileProviderTest.
@@ -57,6 +61,7 @@ public class ClasspathFileSystemProviderTest
     public ClasspathFileSystemProviderTest(String arg0)
     {
         super(arg0);
+        lfs = new LocalFileSystemProvider("local", "src/test/resources");
     }
 
     /*
@@ -132,22 +137,42 @@ public class ClasspathFileSystemProviderTest
     public void testList()
         throws Exception
     {
-        List<String> list = new ArrayList<String>(provider.list("/org/objectledge/filesystem/impl"));
-        Collections.sort(list);
-        // Filter out Clover generated classes
-        Iterator<String> i = list.iterator();
-        while(i.hasNext())
+        String location = "jar:file:/some/path/ledge-tutorial-webapp/WEB-INF/lib/dojo-1.1.1.jar!/files.lst";
+        
+        InputStream is = lfs.getInputStream("filesystem/files.lst");
+        Method processListingMethod = 
+            ReadOnlyFileSystemProvider.class.getDeclaredMethod("processListing", 
+                    new Class[] {String.class, InputStream.class});
+        processListingMethod.setAccessible(true);
+        Object[] args = new Object[] {location, is};
+        
+        processListingMethod.invoke(provider, args);
+        
+        String[] dirPaths = new String[] {
+                "/dojo/", 
+                "/dojo/some  double  spaced  path/"};
+        String[] filePaths = new String[] {
+                "/dojo/dojo.css",
+                "/dojo/some  double  spaced  path/dojo.css", 
+                "/dojo/some  double  spaced  path/double  spaced  filename.css"};
+        
+        for(final String dirPath : dirPaths)
         {
-            if(i.next().contains("$__CLR"))
-            {
-                i.remove();
-            }
+            assertTrue("The resource should be a directory", provider.isDirectory(dirPath));
+            assertFalse("The resource should NOT be a directory", provider.isFile(dirPath));
+            assertEquals("Modification time should equal -1 for directory", -1,  provider.lastModified(dirPath));
+            assertEquals("Length should equal -1 for directory", -1,  provider.length(dirPath));
         }
-        assertEquals(4, list.size());
-        assertEquals("LocalRandomAccessFile.class", list.get(0));
-        assertEquals("ReadOnlyFileSystemProvider.class", list.get(1));
-        assertEquals("URLConnectionImpl.class", list.get(2));
-        assertEquals("URLStreamHandlerImpl.class", list.get(3));
+        
+        int length = 1842;
+        long lastModified = 1251794098;
+        for(final String filePath : filePaths)
+        {
+            assertFalse("The resource should NOT be a file", provider.isDirectory(filePath));
+            assertTrue("The resource should be a file", provider.isFile(filePath));
+            assertEquals("The file lenght is incorrect", length++, provider.length(filePath));
+            assertEquals("The file modification date is incorrect", lastModified++, provider.lastModified(filePath));
+        }
     }
 
     public void testCreateNewFile()
