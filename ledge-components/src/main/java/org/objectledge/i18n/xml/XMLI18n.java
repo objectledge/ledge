@@ -32,10 +32,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,15 +63,6 @@ public class XMLI18n extends AbstractI18n
 {
     /** localization file schema path */
     private static final String LOCALIZATION_SCHEMA = "org/objectledge/i18n/xml/localization.rng";
-    
-    /* files / directories that can be safely ignored. */
-    private static final Set<String> SAFE_TO_IGNORE = new HashSet<String>();
-
-    static 
-    {
-    	SAFE_TO_IGNORE.add("CVS");
-    	SAFE_TO_IGNORE.add(".svn");
-    }
     
 	/** the file system */
 	private FileSystem fileSystem;
@@ -139,7 +128,7 @@ public class XMLI18n extends AbstractI18n
 				String[] files = fileSystem.list(localeDir);
 				for(int i=0; i<files.length; i++)
 				{
-					if(SAFE_TO_IGNORE.contains(files[i]))
+					if(!files[i].endsWith(".xml"))
 					{
 						continue;
 					}
@@ -194,9 +183,9 @@ public class XMLI18n extends AbstractI18n
 		catch(SAXParseException e)
 		{
 			throw new ComponentInitializationError("error parsing "+file+
-				 " on line "+((SAXParseException)e).getLineNumber()+
-                 ", column "+((SAXParseException)e).getColumnNumber()+
-                 ", message '"+((SAXParseException)e).getMessage()+
+				 " on line "+(e).getLineNumber()+
+                 ", column "+(e).getColumnNumber()+
+                 ", message '"+(e).getMessage()+
                  "'", e);
 		}
 	}
