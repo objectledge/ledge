@@ -165,15 +165,11 @@ public class FileDownload
      * Dumps the <code>InputStream</code> contents as a direct response with current time as last
      * modification time and unknown size.
      * 
-     * @param is
-     *            the input stream of data to be downloaded
-     * @param contentType
-     *            the content-type of downloaded data
-     * @param fileName
-     *            the filename of downloaded data, if null or empty no header content-disposition
-     *            will be attached.
-     * @throws IOException
-     *             thrown on errors while downloading
+     * @param is the input stream of data to be downloaded
+     * @param contentType the content-type of downloaded data
+     * @param fileName the filename of downloaded data, if null or empty no header
+     *        content-disposition will be attached.
+     * @throws IOException thrown on errors while downloading
      */
     public void dumpData(InputStream is, String contentType, String fileName)
         throws IOException
