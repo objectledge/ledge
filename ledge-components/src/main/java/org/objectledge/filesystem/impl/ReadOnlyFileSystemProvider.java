@@ -38,13 +38,14 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.objectledge.ComponentInitializationError;
@@ -56,7 +57,7 @@ import org.objectledge.filesystem.RandomAccessFile;
  * A base class for read only FileSystem backend implemetations. 
  * 
  *  @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.26 2008-04-10 15:22:51 rafal Exp $
+ *  @version $Id: ReadOnlyFileSystemProvider.java,v 1.3 2009-09-07 21:00:50 mgolebsk Exp $
  */
 public abstract class ReadOnlyFileSystemProvider 
 	implements FileSystemProvider
@@ -74,6 +75,12 @@ public abstract class ReadOnlyFileSystemProvider
     /** the character encoding used in file listings. */
     public static final String LISTING_ENCODING = "UTF-8";
 	
+    /** the regexp pattern of file entry in files.lst list.*/
+    private static final Pattern FILE_PATTERN = Pattern.compile("^(.*) ([0-9]+) ([0-9]+)$");
+    
+    /** Marker object stored in the listing to represent files. It satisfies listing.containsKey(path) and !(listing.get(path) instanceof Map) */
+    private static final Object FILE = new Object(); 
+    
 	// instance variables ///////////////////////////////////////////////////
 
     /** Providers's name. */
@@ -151,50 +158,32 @@ public abstract class ReadOnlyFileSystemProvider
                 listing = new HashMap<String,Object>();
                 listing.put("/", directoryTree);
             }
-			ArrayList<String> tempList = new ArrayList<String>();
-			StringBuilder tempBuffer = new StringBuilder();
 			while(reader.ready())
 			{
-				String line = reader.readLine();
-				String path = null;
-				String length = null;
-				String time = null;
-				StringTokenizer lt = new StringTokenizer(line," ");
-				if(lt.countTokens() > 3)
-				{
-					tempList.clear();
-					tempList.ensureCapacity(lt.countTokens());
-					while(lt.hasMoreTokens())
-					{
-						tempList.add(lt.nextToken());
-					}
-					tempBuffer.setLength(0);
-					for(int i=0; i<tempList.size()-2; i++)
-					{
-						tempBuffer.append((String)tempList.get(i));
-						tempBuffer.append(' ');
-					}
-					path = tempBuffer.substring(0, tempBuffer.length()-1);
-					length = (String)tempList.get(tempList.size()-2);
-					time = (String)tempList.get(tempList.size()-1);
-				}
-				else if(lt.countTokens() == 3)
-				{
-					path = lt.nextToken();
-					length = lt.nextToken();
-					time = lt.nextToken();
-				}
-				else
-				{
-					path = line;
-					length = "-1";
-					time = "-1";
-				}
+				final String line = reader.readLine();
+                
+				String path;
+				final String length;
+				final String time;
+                
+                final Matcher matcher = FILE_PATTERN.matcher(line);
+                if(matcher.matches())
+                {
+                    path = matcher.group(1);
+                    length = matcher.group(2);
+                    time = matcher.group(3);
+                }
+                else
+                {
+                    path = line;
+                    length = "-1";
+                    time = "-1";
+                }
 				Long lengthObj;
 				Long timeObj;
 				try
 				{
-					lengthObj = new Long(length);
+					lengthObj = Long.parseLong(length);
 				}
 				catch(NumberFormatException e)
 				{
@@ -203,7 +192,7 @@ public abstract class ReadOnlyFileSystemProvider
 				}
 				try
 				{
-					timeObj = new Long(time);
+					timeObj = Long.parseLong(time);
 				}
 				catch(NumberFormatException e)
 				{
@@ -239,7 +228,7 @@ public abstract class ReadOnlyFileSystemProvider
 						}
 						else
 						{
-							item = new Object();
+							item = FILE;
 						}
 						current.put(token, item);
 						listing.put(path, item);
