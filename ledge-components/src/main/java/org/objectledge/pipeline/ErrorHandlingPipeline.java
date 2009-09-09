@@ -135,10 +135,10 @@ public class ErrorHandlingPipeline
             ///CLOVER:ON
             catch(Throwable ee)
             {
-                context.setAttribute(PIPELINE_EXCEPTION, 
-                    new ProcessingException("exception occured while handling the exception: "+
-                        e.toString()+" see logs for detailed message", ee));
-                logger.error("Exception in catch section", e);
+                context.setAttribute(PIPELINE_EXCEPTION, new ProcessingException(
+                    "exception occured while handling the exception: " + e.toString()
+                        + " see logs for detailed message", ee));
+                logger.error("Exception in catch section", ee);
             }
         }
         finally
