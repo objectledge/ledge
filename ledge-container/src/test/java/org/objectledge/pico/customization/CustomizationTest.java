@@ -38,7 +38,7 @@ import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
-import org.objectledge.foo.FooComponent;
+import org.objectledge.test.FooComponent;
 import org.objectledge.logging.LoggerFactory;
 import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.xml.XMLGrammarCache;

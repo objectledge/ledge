@@ -31,7 +31,7 @@ package org.objectledge.container;
 import junit.framework.TestCase;
 
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.foo.FooComponent;
+import org.objectledge.test.FooComponent;
 
 /**
  *
