@@ -88,7 +88,7 @@
   </ciManagement>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>    
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
   <modules>
     <module>../ledge-maven-plugin</module>
@@ -112,6 +112,12 @@
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-components</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.objectledge</groupId>
+        <artifactId>ledge-components</artifactId>
+        <type>test-jar</type>
         <version>${project.version}</version>
       </dependency>
       <dependency>
