@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// Copyright (c) 2003,2004 , Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 // All rights reserved. 
 // 
 // Redistribution and use in source and binary forms, with or without modification,  
@@ -25,53 +25,54 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.utils;
+package org.objectledge.test;
 
-import java.util.Map;
+import java.util.List;
 
-import org.jmock.core.Constraint;
+import org.jmock.core.Invocation;
+import org.jmock.core.SelfDescribing;
+import org.jmock.core.Stub;
 
 /**
- * A constraint for Map elements.
- * 
+ * A Stub for adding objects to a predefined list.
+ *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: MapElement.java,v 1.3 2004-12-23 07:16:47 rafal Exp $
+ * @version $Id: AddToList.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
  */
-public class MapElement<K> implements Constraint
+public class AddToList<T>
+	implements SelfDescribing, Stub
 {
-    private K key;
-    private Constraint c;
+    private List<T> list;
     
     /**
-     * Creates a Map element constaraint.
+     * Creates new AddToList Stub instance.
      * 
-     * @param key the key of the element to check.
-     * @param c the constraint.
+     * @param list to add objects to.
      */
-    public MapElement(K key, Constraint c)
+    public AddToList(List<T> list)
     {
-        this.key = key;
-        this.c = c;
+        this.list = list;
     }
 
-    /** 
+    /**
+     * {@inheritDoc}
+     */
+    public StringBuffer describeTo(StringBuffer buff)
+    {
+        return buff.append("addToList("+list+")");
+    }
+    
+    /**
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public boolean eval(Object o)
+    public Object invoke(Invocation invocation)
     {
-        return c.eval(((Map<K,?>)o).get(key));
-    }
-    
-    /** 
-     * {@inheritDoc}
-     */
-    public StringBuffer describeTo(StringBuffer buffer)
-    {
-        buffer.append("get(");
-        buffer.append(key.toString());
-        buffer.append(") ");
-        c.describeTo(buffer);
-        return buffer;
+        if(invocation.parameterValues.size() != 1)
+        {
+            throw new IllegalStateException("one argument expected");
+        }
+        list.add((T)invocation.parameterValues.get(0));
+        return null;
     }
 }

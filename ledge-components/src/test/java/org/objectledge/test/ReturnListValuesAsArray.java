@@ -25,8 +25,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.utils;
+package org.objectledge.test;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import org.jmock.core.Invocation;
@@ -34,45 +35,46 @@ import org.jmock.core.SelfDescribing;
 import org.jmock.core.Stub;
 
 /**
- * A Stub for adding objects to a predefined list.
+ * A Stub for returing values of a predefined list as an array. 
  *
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: AddToList.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
+ * @version $Id: ReturnListValuesAsArray.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
  */
-public class AddToList<T>
+public class ReturnListValuesAsArray<T>
 	implements SelfDescribing, Stub
 {
     private List<T> list;
     
     /**
-     * Creates new AddToList Stub instance.
+     * Creates new ReturnListValuesAsArray Stub instance.
      * 
-     * @param list to add objects to.
+     * @param list the list to be returned.
      */
-    public AddToList(List<T> list)
+    public ReturnListValuesAsArray(List<T> list)
     {
         this.list = list;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public StringBuffer describeTo(StringBuffer buff)
-    {
-        return buff.append("addToList("+list+")");
     }
     
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
-    public Object invoke(Invocation invocation)
+    public StringBuffer describeTo(StringBuffer buff)
     {
-        if(invocation.parameterValues.size() != 1)
+        return buff.append("getListValuesAsArray("+list+")");
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Object invoke(Invocation invocation) throws Throwable
+    {
+        Class<?> type = invocation.invokedMethod.getReturnType().getComponentType();
+        if(type == null)
         {
-            throw new IllegalStateException("one argument expected");
+            throw new IllegalStateException("not an array returing method called");
         }
-        list.add((T)invocation.parameterValues.get(0));
-        return null;
+        Object result = Array.newInstance(type, list.size());
+        list.toArray((Object[])result);
+        return result;
     }
 }

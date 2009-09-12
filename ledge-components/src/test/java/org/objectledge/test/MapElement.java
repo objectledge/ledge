@@ -1,5 +1,5 @@
 // 
-// Copyright (c) 2003,2004 , Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
 // All rights reserved. 
 // 
 // Redistribution and use in source and binary forms, with or without modification,  
@@ -25,56 +25,53 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.utils;
+package org.objectledge.test;
 
-import java.lang.reflect.Array;
-import java.util.List;
+import java.util.Map;
 
-import org.jmock.core.Invocation;
-import org.jmock.core.SelfDescribing;
-import org.jmock.core.Stub;
+import org.jmock.core.Constraint;
 
 /**
- * A Stub for returing values of a predefined list as an array. 
- *
+ * A constraint for Map elements.
+ * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ReturnListValuesAsArray.java,v 1.2 2004-12-22 08:35:04 rafal Exp $
+ * @version $Id: MapElement.java,v 1.3 2004-12-23 07:16:47 rafal Exp $
  */
-public class ReturnListValuesAsArray<T>
-	implements SelfDescribing, Stub
+public class MapElement<K> implements Constraint
 {
-    private List<T> list;
+    private K key;
+    private Constraint c;
     
     /**
-     * Creates new ReturnListValuesAsArray Stub instance.
+     * Creates a Map element constaraint.
      * 
-     * @param list the list to be returned.
+     * @param key the key of the element to check.
+     * @param c the constraint.
      */
-    public ReturnListValuesAsArray(List<T> list)
+    public MapElement(K key, Constraint c)
     {
-        this.list = list;
+        this.key = key;
+        this.c = c;
     }
-    
-    /**
+
+    /** 
      * {@inheritDoc}
      */
-    public StringBuffer describeTo(StringBuffer buff)
+    @SuppressWarnings("unchecked")
+    public boolean eval(Object o)
     {
-        return buff.append("getListValuesAsArray("+list+")");
+        return c.eval(((Map<K,?>)o).get(key));
     }
     
-    /**
+    /** 
      * {@inheritDoc}
      */
-    public Object invoke(Invocation invocation) throws Throwable
+    public StringBuffer describeTo(StringBuffer buffer)
     {
-        Class<?> type = invocation.invokedMethod.getReturnType().getComponentType();
-        if(type == null)
-        {
-            throw new IllegalStateException("not an array returing method called");
-        }
-        Object result = Array.newInstance(type, list.size());
-        list.toArray((Object[])result);
-        return result;
+        buffer.append("get(");
+        buffer.append(key.toString());
+        buffer.append(") ");
+        c.describeTo(buffer);
+        return buffer;
     }
 }

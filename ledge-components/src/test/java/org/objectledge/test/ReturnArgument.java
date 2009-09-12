@@ -25,7 +25,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
-package org.objectledge.utils;
+package org.objectledge.test;
 
 import org.jmock.core.Invocation;
 import org.jmock.core.SelfDescribing;
