@@ -31,6 +31,12 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-components</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>httpunit</groupId>
       <artifactId>httpunit</artifactId>
       <scope>test</scope>
