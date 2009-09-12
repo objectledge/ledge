@@ -35,5 +35,13 @@
   <preGoal name="java:compile">
     <attainGoal name="ledge:javacc"/>
   </preGoal>
+  
+  <preGoal name="jar:jar">
+    <ant:copy toDir="${maven.build.dest}" overwrite="true">
+      <ant:fileset dir="${maven.test.dest}">
+        <ant:include name="org/objectledge/test/**.class"/>
+      </ant:fileset>
+    </ant:copy>
+  </preGoal>
          
 </project>
