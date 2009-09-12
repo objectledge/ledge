@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <container>
 
-  <component class="org.objectledge.test.FooComponent"/>
+  <component class="org.objectledge.foo.FooComponent"/>
     
 </container>

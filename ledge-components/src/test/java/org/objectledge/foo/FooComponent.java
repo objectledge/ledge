@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package org.objectledge.test;
+package org.objectledge.foo;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
