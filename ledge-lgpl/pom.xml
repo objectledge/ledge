@@ -45,12 +45,16 @@
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <type>jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.resource</groupId>
       <artifactId>connector-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
