@@ -33,7 +33,7 @@ import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.xml.sax.SAXParseException;

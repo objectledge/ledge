@@ -28,7 +28,7 @@
 
 package org.objectledge.scheduler;
 
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  *

@@ -31,7 +31,7 @@ package org.objectledge.templating.tools;
 import org.jmock.Mock;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityContext;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  * Context tools test.

@@ -38,8 +38,8 @@ import org.jmock.Mock;
 import org.objectledge.cache.CacheFactory;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.threads.ThreadPool;
-import org.objectledge.utils.LedgeTestCase;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>

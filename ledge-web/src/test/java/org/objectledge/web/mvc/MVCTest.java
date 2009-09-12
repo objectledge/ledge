@@ -43,7 +43,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.pipeline.ErrorHandlingPipeline;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.web.ContentTypeInitializerValve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.PrintExceptionValve;

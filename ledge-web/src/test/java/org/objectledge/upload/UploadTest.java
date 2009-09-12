@@ -47,8 +47,8 @@ import org.objectledge.mail.MailSystem;
 import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.threads.ThreadPool;
-import org.objectledge.utils.LedgeTestCase;
 import org.objectledge.web.HttpContext;
 
 /**

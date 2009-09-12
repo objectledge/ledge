@@ -32,7 +32,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  * Test for the ScriptDirectory class.

@@ -43,7 +43,7 @@ import org.objectledge.filesystem.FileSystemProvider;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.i18n.xml.XMLI18n;
 import org.objectledge.logging.LedgeDOMConfigurator;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.w3c.dom.Document;

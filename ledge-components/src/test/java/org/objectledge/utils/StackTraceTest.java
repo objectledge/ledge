@@ -27,6 +27,8 @@
 // 
 package org.objectledge.utils;
 
+import org.objectledge.test.LedgeTestCase;
+
 
 /**
  * 

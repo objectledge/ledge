@@ -75,7 +75,7 @@ public class ConfigurationFactoryTest
         throws ConfigurationException
     {
         Configuration config = cf.getConfig("org.objectledge.test.FooComponent", 
-            org.objectledge.test.FooComponent.class);
+            org.objectledge.foo.FooComponent.class);
         Configuration a = config.getChild("a");
         assertEquals(a.getValue(), "a");
         Configuration b = config.getChild("b");

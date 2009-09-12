@@ -49,7 +49,7 @@ import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.TemplatingContextLoaderValve;
 import org.objectledge.templating.velocity.VelocityTemplating;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConfigurator;
 import org.objectledge.xml.XMLGrammarCache;

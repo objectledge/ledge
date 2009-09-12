@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Mock;
 import org.objectledge.context.Context;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.web.HttpContext;
 
 /**

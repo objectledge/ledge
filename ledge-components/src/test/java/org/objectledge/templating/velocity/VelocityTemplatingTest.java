@@ -56,7 +56,7 @@ import org.objectledge.templating.tools.ContextToolFactory;
 import org.objectledge.templating.tools.ContextToolPopulatorValve;
 import org.objectledge.templating.tools.ContextToolRecyclerValve;
 import org.objectledge.templating.tools.ContextTools;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 

@@ -32,7 +32,7 @@ import org.jcontainer.dna.Configuration;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  *

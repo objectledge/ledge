@@ -178,9 +178,9 @@ public class CompositionContentHandlerTest
             "src/test/resources");
         parse("adapter");
         PicoContainer result = compositionContentHandler.getResult();
-        org.objectledge.test.FooComponent foo = 
-            (org.objectledge.test.FooComponent)result.getComponentInstance(
-                org.objectledge.test.FooComponent.class);
+        org.objectledge.foo.FooComponent foo = 
+            (org.objectledge.foo.FooComponent)result.getComponentInstance(
+                org.objectledge.foo.FooComponent.class);
         assertNotNull(foo);
     }
 }

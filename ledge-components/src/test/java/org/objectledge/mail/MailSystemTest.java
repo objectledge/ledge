@@ -44,8 +44,8 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.templating.velocity.VelocityTemplating;
+import org.objectledge.test.LedgeTestCase;
 import org.objectledge.threads.ThreadPool;
-import org.objectledge.utils.LedgeTestCase;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>

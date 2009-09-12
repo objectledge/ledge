@@ -32,7 +32,7 @@ import java.util.Locale;
 import org.jmock.Mock;
 import org.objectledge.i18n.I18n;
 import org.objectledge.i18n.I18nContext;
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 public class I18nViewLookupSequenceTest
     extends LedgeTestCase

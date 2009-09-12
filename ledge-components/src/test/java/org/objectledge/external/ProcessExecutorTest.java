@@ -30,7 +30,7 @@ package org.objectledge.external;
 
 import java.io.IOException;
 
-import org.objectledge.utils.LedgeTestCase;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  * Test for the ProcessExecutor class.
