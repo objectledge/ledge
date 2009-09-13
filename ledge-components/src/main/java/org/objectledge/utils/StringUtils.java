@@ -971,7 +971,7 @@ public class StringUtils
      * @param str string to be checked.
      * @return true if the string is <code>null</code> or empty.
      */
-    public static boolean isEmpty(String str)
+    public static boolean isEmpty(final String str)
     {
         if( str == null)
         { 

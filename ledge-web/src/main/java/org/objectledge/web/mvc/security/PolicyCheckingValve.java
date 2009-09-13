@@ -49,13 +49,13 @@ import org.objectledge.web.mvc.ProcessingStage;
 public class PolicyCheckingValve implements Valve
 {
     /** the logger */
-    private Logger logger;
+    final private Logger logger;
 
     /** the web configurator */
-    private WebConfigurator webConfigurator;
+    final private WebConfigurator webConfigurator;
     
     /** policy system */
-    private PolicySystem policySystem;
+    final private PolicySystem policySystem;
     
     /**
      * Compnent constructor.
@@ -64,8 +64,8 @@ public class PolicyCheckingValve implements Valve
      * @param webConfigurator the web configurator.
      * @param policySystem the policy system component.
      */
-    public PolicyCheckingValve(Logger logger, WebConfigurator webConfigurator, 
-                                PolicySystem policySystem)
+    public PolicyCheckingValve(final Logger logger, final WebConfigurator webConfigurator, 
+            final PolicySystem policySystem)
     {
         this.logger = logger;
         this.webConfigurator = webConfigurator;
