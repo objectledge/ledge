@@ -32,7 +32,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -577,49 +576,41 @@ public class LinkTool
         {
             return target;
         }
-        Map<String,String> paramsMap = parseURLParams(url.substring(index), "&=?/");
+        target.setFromURL(url.substring(index));
         
-        for( String name: paramsMap.keySet())
-        {
-            if(config.viewToken.equals(name))
-            {
-                target.view = paramsMap.get(name);
-                continue;
-            }
-            if( config.actionToken.equals(name))
-            {
-                target.action = paramsMap.get(name);
-                continue;
-            }
-            target.parameters.add(name, paramsMap.get(name));
-        }
         return target;
     }
     
     private static final int START = 0;
     private static final int NAME = 1;
     private static final int SEPARATOR_AFTER_NAME = 2;
-    private static final int VALUE = 3;
-    private static final int SEPARATOR_AFTER_VALUE = 4;
+    private static final int VALUE_PARAM = 3;
+    private static final int VALUE_VIEW = 4;
+    private static final int VALUE_ACTION = 5;
+    private static final int SEPARATOR_AFTER_VALUE = 6;
+    private static final String URL_SEPARATOR_CHARS = "&=?/";
     
-    private Map<String,String> parseURLParams(String urlPart, String separator)
+    private void setFromURL(String url)
     {       
-        Map<String, String> paramsMap = new HashMap<String, String>();
-        if (urlPart == null)
+        if (url == null)
         {
-            return paramsMap;
+            return;
         }
-        
         try
         {
-            StringTokenizer st = new StringTokenizer(urlPart, separator, true);
+            StringTokenizer st = new StringTokenizer(url, URL_SEPARATOR_CHARS, true);
             int state = START;
             String name = null;
-            while (st.hasMoreTokens())
+            while (st.hasMoreTokens() || state != NAME)
             {
-                String token = st.nextToken();
-                // separators
-                if(token.length() == 1 && separator.indexOf(token.charAt(0)) > -1 )
+                String token = null;
+                boolean hasMoreTokens = st.hasMoreTokens();
+                if( hasMoreTokens)
+                {
+                    token = st.nextToken();
+                }
+                // separators and empty values
+                if(!hasMoreTokens || (token.length() == 1 && URL_SEPARATOR_CHARS.indexOf(token.charAt(0)) > -1) )
                 {
                     switch(state)
                     {
@@ -627,13 +618,34 @@ public class LinkTool
                         state = NAME;
                         break;
                     case SEPARATOR_AFTER_NAME:
-                        state = VALUE;
+                        if( config.viewToken.equals(name))
+                        {
+                            state = VALUE_VIEW;
+                        }
+                        else if( config.actionToken.equals(name)) 
+                        {
+                            state = VALUE_ACTION;
+                        }
+                        else
+                        {
+                            state = VALUE_PARAM;
+                        }
                         break;
                     case SEPARATOR_AFTER_VALUE:
                         state = NAME;
                         break;
-                    case VALUE:
-                        add(name, "");
+                    case VALUE_ACTION:
+                        action = null;
+                        name = null;
+                        state = NAME;
+                        break;
+                    case VALUE_VIEW:
+                        view = null;
+                        name = null;
+                        state = NAME;
+                        break;
+                    case VALUE_PARAM:
+                        parameters.add(name, "");
                         name = null;
                         state = NAME;
                         break;
@@ -651,12 +663,21 @@ public class LinkTool
                     {
                     case START:
                     case NAME:
-                        name = URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING);
-                        paramsMap.put(name,"");
+                        name = URLDecoder.decode(token, PARAMETER_ENCODING);
                         state = SEPARATOR_AFTER_NAME;
                         break;
-                    case VALUE:
-                        paramsMap.put(name, URLDecoder.decode(token, LinkTool.PARAMETER_ENCODING));
+                    case VALUE_PARAM:
+                        parameters.add(name, URLDecoder.decode(token, PARAMETER_ENCODING));
+                        name = null;
+                        state = SEPARATOR_AFTER_VALUE;
+                        break;
+                    case VALUE_ACTION:
+                        action = URLDecoder.decode(token, PARAMETER_ENCODING);
+                        name = null;
+                        state = SEPARATOR_AFTER_VALUE;
+                        break;
+                    case VALUE_VIEW:
+                        view = URLDecoder.decode(token, PARAMETER_ENCODING);
                         name = null;
                         state = SEPARATOR_AFTER_VALUE;
                         break;
@@ -665,7 +686,6 @@ public class LinkTool
                     }
                 }
             }
-            return paramsMap;
         }
         ///CLOVER:OFF
         catch (UnsupportedEncodingException e)
