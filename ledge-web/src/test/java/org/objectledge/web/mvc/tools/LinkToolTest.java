@@ -304,6 +304,8 @@ public class LinkToolTest extends LedgeTestCase
         assertEquals(linkTool.getReferer().toString(), "/test/ledge");
         mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1"));
         assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=&rowId=44914871&tableId=1"));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId=1");
         mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList"));
         assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList");
         mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login"));
@@ -312,5 +314,8 @@ public class LinkToolTest extends LedgeTestCase
         assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=");
         mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId="));
         assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId=");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?personId=4&rowId=3&rowId=&tableId="));
+        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?personId=4&rowId=3&rowId=&tableId=");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=dean.studies.subjects.SubjectEditAction&Subject.first=0&Subject.maxSize=20&embed=SubjectEdit&idprzedmiotu=1&idzakladu=&nazwaprzedmiotu=&nazwiskowprowadzajacego=&nazwiskowykladowcy=&nrkatalogowy=&semestrprowadzenia="));
     }
 }
