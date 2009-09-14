@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Overview of Utils</title>
+  </properties>
+  <body>
+    <section name="Utils">
+      <subsection name="RequestParameters">
+        <p>RequestParamteres is a implementation of <code>Parameters</code> interface based on 
+         <code>DefaultParameters</code> used to wrap the parameters that comes in http request.</p>
+        <p class="more"><a href="RequestParameters.html">more</a></p>
+      </subsection>
+      <subsection name="HttpContext">
+        <p>The HttpContext is a simple wrapping object for http servlet request/response objects.</p>
+        <p class="more"><a href="HttpContext.html">more</a></p>
+      </subsection>
+      <subsection name="MVCContext">
+        <p>The MVCContext is a simple container to keep all needed parameters in one easly accessed place
+        througout the whole mvc pipeline processing.</p>
+        <p class="more"><a href="MVCContext.html">more</a></p>
+      </subsection>
+    </section>
+  </body>
+</document>
+  
