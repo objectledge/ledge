@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Home</title>
+  </properties>
+  
+  <body>
+    <section name="ObjectLedge Maven plugin">
+    <subsection name="Introduction">
+      <p>
+        ObjectLedge Maven plugin was created in order to automate some tasks performed during 
+        development of applications. We use Maven for developing ObjectLedge and our ObjectLedge
+        applications so this was the most convinien solution.
+      </p>
+      <p>
+        In the future the plugin will conain infrastructure necessary to embed an ObjectLedge
+        container in Maven, and expose any Pico-compatible components as Jelly tags. This way
+        users will be able to use their components in yet another environment, writting very
+        little glue code.
+      </p>
+    </subsection>
+    </section>
+  </body>
+</document>
+  
