@@ -339,22 +339,19 @@ public class HTMLServiceImpl
     @Override
     public void removeEmptyParas(Document html)
     {
-        final List<Element> emptyParas = new ArrayList<Element>();
-        Visitor visitor = new VisitorSupport()
-            {
-                @Override
-                public void visit(Element node)
-                {
-                    if(node.getName().equals("P") && node.isTextOnly())
-                    {
-                        if(isWhitespace(node.getText()))
-                        {
-                            emptyParas.add(node);
-                        }
-                    }
-                }
-            };
-        html.accept(visitor);
+        List<Element> emptyParas = new ArrayList<Element>();
+        outer: for(Element para : (List<Element>)html.selectNodes("//P"))
+        {
+        	for(Text node : (List<Text>)para.selectNodes("descendant::text()"))
+        	{
+        		if(!isWhitespace(node.getText()))
+        		{
+        			continue outer;
+        		}
+        	} 
+        	emptyParas.add(para);
+        }        
+        
         for(Element para : emptyParas)
         {
             Branch parent = para.getParent();
@@ -365,6 +362,84 @@ public class HTMLServiceImpl
                 followingSibling.detach();
             }
             para.detach();
+        }
+    }
+    
+    public void trimBreaksFromParas(Document html)
+    {
+    	for(Element para : (List<Element>)html.selectNodes("//P"))
+    	{
+    		List<Element> brs = para.selectNodes("BR");
+    		if(brs.size() > 0)
+    		{
+    			Element leading = brs.get(0);
+    			boolean retain = false;
+    			for(int i = 0; i < para.indexOf(leading); i++)
+    			{
+    				if(!isWhitespace(para.node(i).getText()))
+    				{
+    					retain = true;
+    				}
+    			}
+    			if(!retain)
+    			{
+    				leading.detach();
+    			}
+    			Element trailing = brs.get(brs.size()-1);
+    			retain = false;
+    			{
+    				for(int i = para.indexOf(trailing)+1; i < brs.size(); i++)
+    				{
+    					if(!isWhitespace(para.node(i).getText()))
+        				{
+        					retain = true;
+        				}
+    				}    		
+    			}
+    			if(!retain)
+    			{
+    				trailing.detach();
+    			}
+    		}
+    	}
+    }
+    
+    public void collapseSubsequentBreaksInParas(Document html)
+    {
+        List<Node> toDetach = new ArrayList<Node>();
+        for(Element para : (List<Element>)html.selectNodes("//P"))
+        {
+            boolean inBreakSeq = false;
+            for(int i = 0; i < para.nodeCount(); i++)
+            {
+                if((para.node(i) instanceof Element) && para.node(i).getName().equals("BR"))
+                {
+                    if(inBreakSeq)
+                    {
+                        toDetach.add(para.node(i));
+                    }
+                    else
+                        
+                    {
+                        inBreakSeq = true;
+                    }
+                }
+                else if(isWhitespace(para.node(i).getText()))
+                {
+                    if(inBreakSeq)
+                    {
+                        toDetach.add(para.node(i));
+                    }
+                }
+                else
+                {
+                    inBreakSeq = false;
+                }
+            }
+        }
+        for(Node node : toDetach)
+        {
+            node.detach();
         }
     }
 

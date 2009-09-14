@@ -79,7 +79,21 @@ public interface HTMLService
     /**
      * Removes from the documents all P tags that contain only whitespace.
      * 
-     * @param html a HTML document.
+     * @param html a HTML document that will be altered.
      */
     public void removeEmptyParas(Document html);
+    
+    /**
+     * Removes those BR tags from within P tags that are either preceded by whitespace content only, or followed by whitespace content only.
+     * 
+     * @param html a HTML document that will be altered.
+     */
+    public void trimBreaksFromParas(Document html);
+    
+    /**
+     * Collapses each sequence of BR elements (whith possible intervening whitestpace) into a single BR element in each P element of the document.
+     * 
+     * @param html a HTML document that will be altered.
+     */
+    public void collapseSubsequentBreaksInParas(Document html);
 }
