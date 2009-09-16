@@ -329,7 +329,7 @@ class Rule
             if(!expectedRType.isAssignableFrom(values[1].getClass()))
             {
                 throw new EvaluationException("second argument of type "+
-                    expectedLType.getName()+" expected at "+node.getLocation());
+                    expectedRType.getName()+" expected at "+node.getLocation());
             }
         }
         return values;
