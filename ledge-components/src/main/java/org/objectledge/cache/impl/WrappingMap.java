@@ -181,6 +181,7 @@ public abstract class WrappingMap<K, V>
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void putAll(Map<? extends K, ? extends V> m)
     {
         for(Map.Entry<K, V> me : ((Map<K, V>)m).entrySet())
@@ -226,12 +227,14 @@ public abstract class WrappingMap<K, V>
             return newEntryIterator();
         }
         
+        @SuppressWarnings("unchecked")
         public boolean contains(Object entry)
         {
             V value = get(((Map.Entry<K, V>)entry).getKey());
             return WrappingMap.this.equals(value, ((Map.Entry<?, ?>)entry).getValue());
         }
         
+        @SuppressWarnings("unchecked")
         public boolean remove(Object entry)
         {
             K key = ((Map.Entry<K, V>)entry).getKey();
@@ -442,6 +445,7 @@ public abstract class WrappingMap<K, V>
             return old;
         }
 
+        @SuppressWarnings("unchecked")
         public boolean equals(Object o) 
         {
             if (!(o instanceof Map.Entry<?, ?>))

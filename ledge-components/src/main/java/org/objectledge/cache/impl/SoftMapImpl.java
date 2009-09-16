@@ -77,7 +77,7 @@ public class SoftMapImpl<K, V>
     /** The reference queue. */
     private ReferenceQueue<V> queue = new ReferenceQueue<V>();
     
-    private Map<K, Entry<K,V>> delegate = new HashMap<K,Entry<K,V>>();
+    private Map<K, Entry> delegate = new HashMap<K,Entry>();
 
     // initailization ////////////////////////////////////////////////////////
 
@@ -145,13 +145,13 @@ public class SoftMapImpl<K, V>
     public boolean containsValue(Object value)
     {
         cleanup();
-        Collection<Entry<K,V>> values = delegate.values();
-        Iterator<Entry<K,V>> i = values.iterator();
+        Collection<Entry> values = delegate.values();
+        Iterator<Entry> i = values.iterator();
         if(value == null)
         {
             while(i.hasNext())
             {
-                Entry<K, V> ref = i.next();
+                Entry ref = i.next();
                 if(ref.isValid() && ref.getValue() == null)
                 {
                     return true;
@@ -162,7 +162,7 @@ public class SoftMapImpl<K, V>
         {
             while(i.hasNext())
             {
-                Entry<K,V> ref = i.next();
+                Entry ref = i.next();
                 if(ref.isValid() && value.equals(ref.getValue()))
                 {
                     return true;
@@ -175,12 +175,12 @@ public class SoftMapImpl<K, V>
     /**
      * {@inheritDoc}
      */
-    public Set<Map.Entry<K,V>> entrySet()
+    public Set<Map.Entry<K, V>> entrySet()
     {
         cleanup();
-        return new AbstractSet<Map.Entry<K,V>>()
+        return new AbstractSet<Map.Entry<K, V>>()
             {
-                public Iterator<Map.Entry<K,V>> iterator()
+                public Iterator<Map.Entry<K, V>> iterator()
                 {
                     return getEntryIterator();
                 }
@@ -192,7 +192,7 @@ public class SoftMapImpl<K, V>
                 
                 public boolean remove(Object o)
                 {
-                    unprotectValue(((Entry<K,V>)o).get());
+                    unprotectValue(((Entry)o).get());
                     return delegate.values().remove(o);
                 }
                 
@@ -215,7 +215,7 @@ public class SoftMapImpl<K, V>
     public V get(Object key)
     {
         cleanup();
-        Entry<K, V> ref = delegate.get(key);
+        Entry ref = delegate.get(key);
         if(ref==null || ref.isEnqueued())
         {
             return null;
@@ -231,11 +231,12 @@ public class SoftMapImpl<K, V>
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public V put(Object key, Object value)
     {
         cleanup();
-        Entry<K, V> newRef = new Entry<K, V>((K)key, (V)value);
-        Entry<K, V> oldRef = delegate.put((K)key, newRef);
+        Entry newRef = new Entry((K)key, (V)value);
+        Entry oldRef = delegate.put((K)key, newRef);
         protectValue(value);
         if(oldRef == null || oldRef.isEnqueued())
         {
@@ -256,7 +257,7 @@ public class SoftMapImpl<K, V>
     {
         cleanup();
         V old = null;
-        Entry<K, V> oldRef = delegate.remove(key);
+        Entry oldRef = delegate.remove(key);
         if(oldRef != null)
         {
             old = oldRef.get();
@@ -309,10 +310,10 @@ public class SoftMapImpl<K, V>
         }
         else
         {
-            final Iterator<Entry<K, V>> i = delegate.values().iterator();
+            final Iterator<Entry> i = delegate.values().iterator();
             return new Iterator<V>()
                 {
-                    private Entry<K, V> last = null;
+                    private Entry last = null;
                     
                     public boolean hasNext()
                     {
@@ -345,10 +346,10 @@ public class SoftMapImpl<K, V>
         }
         else
         {
-            final Iterator<Map.Entry<K,Entry<K, V>>> i = delegate.entrySet().iterator();
+            final Iterator<Map.Entry<K,Entry>> i = delegate.entrySet().iterator();
             return new Iterator<Map.Entry<K, V>>()
                 {
-                    private Entry<K,V> last = null;
+                    private Entry last = null;
                     
                     public boolean hasNext()
                     {
@@ -357,7 +358,7 @@ public class SoftMapImpl<K, V>
                     
                     public Map.Entry<K, V> next()
                     {
-                        Map.Entry<K,Entry<K, V>> mapEntry = i.next();
+                        Map.Entry<K,Entry> mapEntry = i.next();
                         last = mapEntry.getValue();
                         return last;
                     }
@@ -422,7 +423,7 @@ public class SoftMapImpl<K, V>
         {
             while(true)
             {
-                Entry<K, V> ref = (Entry<K, V>)queue.poll();
+                Entry ref = (Entry)queue.poll();
                 if(ref == null)
                 {
                     return;
@@ -438,15 +439,15 @@ public class SoftMapImpl<K, V>
     /**
      * Entry
      */
-    private class Entry<KK, VV>
-        extends SoftReference<VV>
-        implements Map.Entry<KK, VV>
+    private class Entry
+        extends SoftReference<V>
+        implements Map.Entry<K, V>
     {
-        private KK key;
+        private K key;
 
-        public Entry(KK key, VV value)
+        public Entry(K key, V value)
         {
-            super(value, (ReferenceQueue<? super VV>)queue);
+            super(value, queue);
             this.key = key;
         }
 
@@ -456,9 +457,9 @@ public class SoftMapImpl<K, V>
             return super.enqueue();
         }
 
-        public VV get()
+        public V get()
         {
-            VV o = super.get();
+            V o = super.get();
             if(o != null)
             {
                 protectValue(o);
@@ -466,17 +467,17 @@ public class SoftMapImpl<K, V>
             return o;
         }
         
-        public KK getKey()
+        public K getKey()
         {
             return key;
         }
         
-        public VV getValue()
+        public V getValue()
         {
             return get();
         }
         
-        public VV setValue(Object value)
+        public V setValue(Object value)
         {
             throw new UnsupportedOperationException(
                 "setting values through entry set is not supported"); 
@@ -487,8 +488,8 @@ public class SoftMapImpl<K, V>
          */
         public boolean equals(Object o)
         {
-            Entry<KK, VV> e1 = this;
-            Entry<KK, VV> e2 = (Entry<KK, VV>)o;
+            Entry e1 = this;
+            Entry e2 = (Entry)o;
             return (e1.getKey()==null ? e2.getKey()==null :
                     e1.getKey().equals(e2.getKey())) && 
                 (e1.getValue()==null ? e2.getValue()==null :

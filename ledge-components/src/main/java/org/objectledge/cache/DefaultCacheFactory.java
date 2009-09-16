@@ -324,6 +324,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getMap(String type)
     {
         Class<?> cl = implClasses.get(type);
@@ -354,6 +355,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public synchronized <K, V> Map<K, V> getInstance(String name)
     {
         Map<K, V> map = (Map<K, V>)instances.get(name);
@@ -368,6 +370,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public synchronized <K, V> Map<K, V> getInstance(String name, String configAlias)
         throws ConfigurationException
     {
@@ -398,6 +401,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> ValueFactory<K, V> getValueFactory(String factory, String map)
     {
         Configuration factoryConfig = factoryConfigurations.get(factory);
@@ -441,6 +445,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getTimeoutMap(long timeoutMillis)
     {
         TimeoutMap<K, V> map = (TimeoutMap<K, V>)getMap(TIMEOUT_MAP_TYPE);
@@ -451,6 +456,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getLRUMap(int capacity)
     {
         LRUMap<K, V> map = (LRUMap<K, V>)getMap(LRU_MAP_TYPE);
@@ -461,6 +467,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getSoftMap(int protect)
     {
         SoftMap<K, V> map = (SoftMap<K, V>)getMap(SOFT_MAP_TYPE);
@@ -471,6 +478,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> org.objectledge.cache.DistributedMap<K, V> getDistributedMap(String name, Map<K, V> delegate)
     {
         DistributedMap<K, V> map = (DistributedMap<K, V>)getMap(DISTRIBUTED_MAP_TYPE);
@@ -482,6 +490,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getFactoryMap(ValueFactory<K, V> factory, Map<K, V> delegate)
     {
         FactoryMap<K, V> map = (FactoryMap<K, V>)getMap(FACTORY_MAP_TYPE);
@@ -493,6 +502,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getStatisticsMap(String name, Map<K, V> delegate)
     {
         StatisticsMap<K, V> map = (StatisticsMap<K, V>)getMap(STATISTICS_MAP_TYPE);

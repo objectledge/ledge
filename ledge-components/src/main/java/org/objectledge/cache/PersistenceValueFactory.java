@@ -100,7 +100,7 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
         {
             try
             {
-                return (V)persistence.load(key.longValue(), factory);
+                return persistence.load(key.longValue(), factory);
             }
             catch(PersistenceException e)
             {
@@ -114,6 +114,7 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public void configure(CacheFactorySPI caching, String name, Configuration config)
     {
         Configuration[] parameters = config.getChildren("parameter");

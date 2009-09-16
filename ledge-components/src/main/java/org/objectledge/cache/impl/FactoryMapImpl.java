@@ -117,6 +117,7 @@ public class FactoryMapImpl<K, V>
      * @param key the key.
      * @return the value
      */
+    @SuppressWarnings("unchecked")
     public V get(Object key)
     {
         V value = delegate.get(key);
