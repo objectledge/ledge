@@ -31,6 +31,7 @@ package org.objectledge.cache.impl;
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -42,29 +43,34 @@ import java.util.Set;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: WrappingMap.java,v 1.4 2005-02-10 17:49:44 rafal Exp $
  */
-public abstract class WrappingMap 
-    extends DelegateMap
+public abstract class WrappingMap<K, V> 
+    implements Map<K, V>
 {
+    protected final Map<K, WrappingEntry<V>> delegate;
+    
     // initialization ///////////////////////////////////////////////////////
 
     /**
      * Map constructor.
-     * 
-     * @param delegate the delegate map.
      */    
-    public WrappingMap(Map delegate)
+    public WrappingMap()
     {
-        super(delegate);
+        delegate = new HashMap<K, WrappingEntry<V>>();
     }
 
+    public WrappingMap(Map<K, WrappingEntry<V>> delegate)
+    {
+        this.delegate = delegate;
+    }
+    
     // Map interface ////////////////////////////////////////////////////////
     
     /**
      * {@inheritDoc}
      */
-    public Object get(Object key)
+    public V get(Object key)
     { 
-        WrappingEntry entry = (WrappingEntry)delegate.get(key);
+        WrappingEntry<V> entry = delegate.get(key);
         if(entry != null)
         {
             entry.touch();
@@ -79,10 +85,10 @@ public abstract class WrappingMap
     /**
      * {@inheritDoc}
      */    
-    public Object put(Object key, Object value)
+    public V put(K key, V value)
     {
-        WrappingEntry entry = newWrappingEntry(value);
-        entry = (WrappingEntry)delegate.put(key, entry);
+        WrappingEntry<V> entry = newWrappingEntry(value);
+        entry = delegate.put(key, entry);
         if(entry != null)
         {
             return entry.getValue();
@@ -96,19 +102,18 @@ public abstract class WrappingMap
     /**
      * {@inheritDoc}
      */
-    protected abstract WrappingEntry newWrappingEntry(Object value);
+    protected abstract WrappingEntry<V> newWrappingEntry(V value);
     
     /**
      * {@inheritDoc}
      */
     public boolean containsValue(Object value)
     {
-        Iterator i = delegate.entrySet().iterator();
-        while(i.hasNext())
+        for(WrappingEntry<V> entry : delegate.values())
         {
-            Map.Entry e = (Map.Entry)i.next();
-            if(equals(((WrappingEntry)e.getValue()).getValue(), value))
+            if(equals(entry.getValue(), value))
             {
+                entry.touch();
                 return true;
             }
         }
@@ -122,7 +127,7 @@ public abstract class WrappingMap
     {
         if(delegate.containsKey(key))
         {
-            WrappingEntry we = (WrappingEntry)delegate.get(key);
+            WrappingEntry<V> we = delegate.get(key);
             we.touch();
             return true;
         }
@@ -134,43 +139,102 @@ public abstract class WrappingMap
 
     // entry set 
 
-    private Set entrySet;
+    private Set<Map.Entry<K, V>> entrySet;
     
     /**
      * {@inheritDoc}
      */
-    public Set entrySet()
+    public Set<Map.Entry<K, V>> entrySet()
     {
-        Set es = entrySet;
+        Set<Map.Entry<K, V>> es = entrySet;
         return (es != null ? es : (entrySet = new EntrySet()));
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clear()
+    {
+        delegate.clear();        
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return delegate.isEmpty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<K> keySet()
+    {
+        return delegate.keySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m)
+    {
+        for(Map.Entry<K, V> me : ((Map<K, V>)m).entrySet())
+        {
+            put(me.getKey(), me.getValue());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V remove(Object key)
+    {
+        return delegate.remove(key).getValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int size()
+    {
+        return delegate.size();
+    }
+    
+    // implementation classes ------------------------------------------------
 
     /**
      * EntrySet 
      *
      */    
     private class EntrySet
-        extends AbstractSet
+        extends AbstractSet<Map.Entry<K, V>>
     {
         public int size()
         {
             return delegate.size();
         }
 
-        public Iterator iterator()
+        public Iterator<Map.Entry<K, V>> iterator()
         {
             return newEntryIterator();
         }
         
         public boolean contains(Object entry)
         {
-            Object value = get(((Map.Entry)entry).getKey());
-            return WrappingMap.this.equals(value, ((Map.Entry)entry).getValue());
+            V value = get(((Map.Entry<K, V>)entry).getKey());
+            return WrappingMap.this.equals(value, ((Map.Entry<?, ?>)entry).getValue());
         }
         
         public boolean remove(Object entry)
         {
-            Object key = ((Map.Entry)entry).getKey();
+            K key = ((Map.Entry<K, V>)entry).getKey();
             boolean present = delegate.containsKey(key);
             delegate.remove(key);
             return present;
@@ -182,7 +246,7 @@ public abstract class WrappingMap
         }
     }
     
-    Iterator newEntryIterator()
+    Iterator<Map.Entry<K, V>> newEntryIterator()
     {
         return new EntryIterator();
     }
@@ -192,26 +256,25 @@ public abstract class WrappingMap
      * 
      */
     private class EntryIterator
-        extends WrappingMapIterator
+        extends WrappingMapIterator<Map.Entry<K, V>>
     {
-        public Object next()
+        public Map.Entry<K, V> next()
         {
-            Map.Entry me = nextEntry();
-            WrappingEntry we = (WrappingEntry)me.getValue();
-            return new Entry(me.getKey(), we.getValue());
+            Map.Entry<K, V> me = nextEntry();
+            return me;
         }
     }
 
     // values
     
-    private Collection values;
+    private Collection<V> values;
     
     /**
      * {@inheritDoc}
      */    
-    public Collection values()
+    public Collection<V> values()
     {
-        Collection v = values;
+        Collection<V> v = values;
         return (v != null ? v : (values = new Values()));
     }
 
@@ -219,7 +282,7 @@ public abstract class WrappingMap
      * {@inheritDoc}
      */    
     private class Values
-        extends AbstractCollection
+        extends AbstractCollection<V>
     {
         public int size()
         {
@@ -236,7 +299,7 @@ public abstract class WrappingMap
             return containsValue(v);
         }
         
-        public Iterator iterator()
+        public Iterator<V> iterator()
         {
             return newValuesIterator();
         }
@@ -246,7 +309,7 @@ public abstract class WrappingMap
     /**
      * {@inheritDoc}
      */
-    Iterator newValuesIterator()
+    Iterator<V> newValuesIterator()
     {
         return new ValuesIterator();
     }
@@ -255,13 +318,12 @@ public abstract class WrappingMap
      * {@inheritDoc}
      */
     private class ValuesIterator
-        extends WrappingMapIterator
-    {
-        public Object next()
+        extends WrappingMapIterator<V>
+    {        
+        public V next()
         {
-            Map.Entry me = nextEntry();
-            WrappingEntry we = (WrappingEntry)me.getValue();
-            return we.getValue();
+            Map.Entry<K, V> me = nextEntry();            
+            return me.getValue();
         }
     }
     
@@ -270,16 +332,16 @@ public abstract class WrappingMap
      * Wrapping entry.
      * 
      */
-    protected abstract class WrappingEntry
+    protected abstract class WrappingEntry<T>
     {
-        private Object value;
+        private T value;
         
         /**
          * Creates a new WrappingEntry instance.
          * 
          * @param value the value.
          */
-        public WrappingEntry(Object value)
+        public WrappingEntry(T value)
         {
             this.value = value;
         }
@@ -289,7 +351,7 @@ public abstract class WrappingMap
          * 
          * @return the object
          */
-        public Object getValue()
+        public T getValue()
         {
             return value;
         }
@@ -303,10 +365,10 @@ public abstract class WrappingMap
     /**
      * Customized Iterator implementation for the WrappingMap.
      */
-    protected abstract class WrappingMapIterator
-        implements Iterator
+    protected abstract class WrappingMapIterator<T>
+        implements Iterator<T>
     {
-        private Iterator i;
+        private Iterator<Map.Entry<K, WrappingEntry<V>>> i;
        
         /**
          * Creates a new WrappingMapIterator instance. 
@@ -339,12 +401,11 @@ public abstract class WrappingMap
          * 
          * @return the map entry.
          */
-        protected Map.Entry nextEntry()
+        protected Map.Entry<K, V> nextEntry()
         {
-            Map.Entry me = (Map.Entry)i.next();
-            WrappingEntry we = (WrappingEntry)me.getValue();
-            we.touch();
-            return me;
+            Map.Entry<K, WrappingEntry<V>> me = i.next();
+            me.getValue().touch();
+            return new Entry(me.getKey(), me.getValue().getValue());
         }
     }
     
@@ -352,42 +413,42 @@ public abstract class WrappingMap
      * Entry
      */
     private class Entry
-        implements Map.Entry
+        implements Map.Entry<K, V>
     {
-        private Object key;
+        private K key;
         
-        private Object value;
+        private V value;
 
-        public Entry(Object key, Object value)
+        public Entry(K key, V value)
         {
             this.key = key;
             this.value = value;
         }
 
-        public Object getKey()
+        public K getKey()
         {
             return key;
         }
 
-        public Object getValue()
+        public V getValue()
         {
             return value;
         }
 
-        public Object setValue(Object value)
+        public V setValue(V value)
         {
-            Object old = value;
+            V old = value;
             this.value = value;
             return old;
         }
 
         public boolean equals(Object o) 
         {
-            if (!(o instanceof Map.Entry))
+            if (!(o instanceof Map.Entry<?, ?>))
             {
                 return false;
             }
-            Map.Entry e = (Map.Entry)o;
+            Map.Entry<K, V> e = (Map.Entry<K, V>)o;
             Object k1 = getKey();
             Object k2 = e.getKey();
             if (k1 == k2 || (k1 != null && k1.equals(k2))) 

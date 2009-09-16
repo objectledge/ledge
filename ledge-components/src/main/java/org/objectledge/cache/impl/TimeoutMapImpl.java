@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import org.objectledge.cache.DelayedUpdate;
 import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableMap;
@@ -48,9 +47,9 @@ import org.objectledge.cache.spi.TimeoutMap;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: TimeoutMapImpl.java,v 1.2 2004-02-26 11:34:28 fil Exp $
  */
-public class TimeoutMapImpl
-    extends WrappingMap
-    implements TimeoutMap, ConfigurableMap, DelayedUpdate
+public class TimeoutMapImpl<K, V>
+    extends WrappingMap<K, V>
+    implements TimeoutMap<K, V>, ConfigurableMap<K, V>, DelayedUpdate
 {
     
     // constants /////////////////////////////////////////////////////////////
@@ -67,7 +66,7 @@ public class TimeoutMapImpl
     private CacheFactorySPI caching;
     
     /** Time when last update (cache cleanup occured). */
-    private long lastUpdate;
+    private long lastUpdate;    
 
     // initailization ////////////////////////////////////////////////////////
 
@@ -76,7 +75,7 @@ public class TimeoutMapImpl
      */
     public TimeoutMapImpl()
     {
-        super(Collections.synchronizedMap(new HashMap()));
+        super(Collections.synchronizedMap(new HashMap<K, WrappingEntry<V>>()));
         lastUpdate = -1;
     }
  
@@ -155,11 +154,11 @@ public class TimeoutMapImpl
         long limit = now - ttl;
         synchronized(delegate)
         {
-            Iterator i = delegate.entrySet().iterator();
+            Iterator<Map.Entry<K, WrappingEntry<V>>> i = delegate.entrySet().iterator();
             while(i.hasNext())
             {
-                Map.Entry mapEntry = (Map.Entry)i.next();
-                Entry entry = (Entry)mapEntry.getValue();
+                Map.Entry<K, WrappingEntry<V>> mapEntry = i.next();
+                Entry<V> entry = (Entry<V>)mapEntry.getValue();
                 if(entry.expired(limit))
                 {
                     i.remove();
@@ -182,26 +181,26 @@ public class TimeoutMapImpl
     /**
      * {@inheritDoc}
      */    
-    protected WrappingEntry newWrappingEntry(Object value)
+    protected WrappingEntry<V> newWrappingEntry(V value)
     {
-        return new Entry(value);
+        return new Entry<V>(value);
     }
 
     /**
      * {@inheritDoc}
      */    
-    private class Entry
-        extends WrappingEntry
+    private class Entry<T>
+        extends WrappingEntry<T>
     {
         private long last;
 
-        public Entry(Object value)
+        public Entry(T value)
         {
             super(value);
             last = System.currentTimeMillis();
         }
                 
-        public Object getValue()
+        public T getValue()
         {
             last = System.currentTimeMillis();
             return super.getValue();
@@ -224,9 +223,9 @@ public class TimeoutMapImpl
     /**
      * {@inheritDoc}
      */
-    public Object put(Object key, Object value)
+    public V put(K key, V value)
     {
-        Object old = super.put(key, value);
+        V old = super.put(key, value);
         scheduleUpdate();
         return old;
     }
