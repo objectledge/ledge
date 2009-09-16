@@ -36,6 +36,11 @@ package org.objectledge.authentication;
 public class UserAlreadyExistsException extends AuthenticationException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructor.
      * 
      * @param message the message.

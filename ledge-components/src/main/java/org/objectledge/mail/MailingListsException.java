@@ -36,6 +36,11 @@ package org.objectledge.mail;
 public class MailingListsException extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates a new exception instance.
      * 
      * @param msg the detail message.

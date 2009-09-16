@@ -41,6 +41,11 @@ public class InvalidScheduleException
     extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs a InvalidScheduleException.
      *
      * @param msg the detail message.

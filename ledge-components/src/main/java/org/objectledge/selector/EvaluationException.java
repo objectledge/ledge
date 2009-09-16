@@ -37,6 +37,11 @@ public class EvaluationException
     extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs new instance of the exception.
      *
      * <p>Child classes using this constructor should override <code>getMessage()</code> method.

@@ -36,6 +36,10 @@ package org.objectledge.selector;
 public class UndefinedVariableException 
     extends EvaluationException
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private String variable;
     
     /**

@@ -45,6 +45,11 @@ public class ForgetfullMapImpl<K, V>
     // Map interface /////////////////////////////////////////////////////////
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Fake put implementation
      *
      * @param key the key.

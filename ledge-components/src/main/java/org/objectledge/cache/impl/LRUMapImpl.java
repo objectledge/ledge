@@ -98,6 +98,10 @@ public class LRUMapImpl<K, V>
     private static class Storage<K, V>
         extends LinkedHashMap<K, V>
     {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
         /** Map capacity */
         private int capacity;
 

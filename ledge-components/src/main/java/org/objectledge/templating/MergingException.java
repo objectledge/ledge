@@ -38,6 +38,11 @@ package org.objectledge.templating;
 public class MergingException extends Exception
 {
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
 	 * Empty constructor. 
 	 */
 	public MergingException()

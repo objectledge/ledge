@@ -39,6 +39,11 @@ public class UndefinedParameterException
     extends RuntimeException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs a new UndefinedParameterException with the default message.
      */
     public UndefinedParameterException()

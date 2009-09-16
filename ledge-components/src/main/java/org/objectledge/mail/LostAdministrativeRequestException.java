@@ -39,6 +39,11 @@ public class LostAdministrativeRequestException
     extends MailingListsException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates a new LostAdministrativeRequestException instance.
      *
      * @param msg

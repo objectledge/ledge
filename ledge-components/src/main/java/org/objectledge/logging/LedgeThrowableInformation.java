@@ -39,6 +39,11 @@ import org.objectledge.utils.StackTrace;
 public class LedgeThrowableInformation extends ThrowableInformation
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates new LedgeThrowableInformation instance.
      * 
      * @param throwable the throwable.

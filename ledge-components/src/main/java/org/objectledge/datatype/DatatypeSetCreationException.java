@@ -36,6 +36,11 @@ package org.objectledge.datatype;
 public class DatatypeSetCreationException extends DatatypeException
 {
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
 	 * {@inheritDoc}
 	 */
     public DatatypeSetCreationException(String msg)

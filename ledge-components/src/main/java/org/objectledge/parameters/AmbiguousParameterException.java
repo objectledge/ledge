@@ -39,6 +39,11 @@ public class AmbiguousParameterException
     extends RuntimeException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs a new AmbiguousParameterException with the default message.
      */
     public AmbiguousParameterException()

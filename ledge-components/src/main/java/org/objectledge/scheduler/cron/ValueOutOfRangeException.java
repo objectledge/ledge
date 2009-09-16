@@ -31,6 +31,11 @@ package org.objectledge.scheduler.cron;
 public class ValueOutOfRangeException
     extends RuntimeException
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public Token token;
     
     public int value;

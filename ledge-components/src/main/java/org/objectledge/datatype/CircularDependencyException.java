@@ -36,6 +36,11 @@ package org.objectledge.datatype;
 public class CircularDependencyException extends DatatypeException
 {
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
 	 * {@inheritDoc}
 	 */
     public CircularDependencyException(String msg)

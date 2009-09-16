@@ -36,6 +36,11 @@ package org.objectledge.parameters.db;
 public class DBParametersException extends Exception
 {
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
 	 * Exception constructor.
 	 * 
 	 * @param message the exeption message.

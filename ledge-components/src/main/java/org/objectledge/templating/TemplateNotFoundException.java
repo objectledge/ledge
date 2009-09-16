@@ -38,6 +38,11 @@ package org.objectledge.templating;
 public class TemplateNotFoundException extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Empty constructor. 
      */
     public TemplateNotFoundException()

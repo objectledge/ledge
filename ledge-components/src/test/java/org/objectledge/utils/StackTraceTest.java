@@ -152,6 +152,10 @@ public class StackTraceTest extends LedgeTestCase
     public static class LegacyException
     	extends Exception
     {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
         private Throwable cause;
         
         public LegacyException(String message, Throwable cause)

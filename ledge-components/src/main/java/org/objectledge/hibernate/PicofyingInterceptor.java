@@ -45,6 +45,10 @@ import org.hibernate.SessionFactory;
 public class PicofyingInterceptor
     extends EmptyInterceptor
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private SessionFactory sessionFactory;
     private NonCachingPicoObjectInstantiator objectInstantiator;
     private Map<String, Class<?>> classByName = new HashMap<String, Class<?>>();

@@ -35,6 +35,11 @@ public class JobNotFoundException
     extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs a JobNotFoundException.
      *
      * @param msg the detail message.

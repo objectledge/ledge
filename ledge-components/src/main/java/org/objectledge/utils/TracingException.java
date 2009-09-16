@@ -36,6 +36,10 @@ package org.objectledge.utils;
 public class TracingException
 	extends Exception
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     /** The requested depth of the stack trace. */
     private int depth = 0;
 

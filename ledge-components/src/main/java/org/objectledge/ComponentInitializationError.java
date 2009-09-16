@@ -39,6 +39,11 @@ public class ComponentInitializationError extends Error
 {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates an instance of the error without sepecifying message nor cause.
      */
     public ComponentInitializationError()

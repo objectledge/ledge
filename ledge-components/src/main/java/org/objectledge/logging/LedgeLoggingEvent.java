@@ -42,6 +42,10 @@ import org.apache.log4j.spi.ThrowableInformation;
 public class LedgeLoggingEvent
 	extends LoggingEvent
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private LedgeThrowableInformation ledgeThrowableInfo = null;
     
     /**

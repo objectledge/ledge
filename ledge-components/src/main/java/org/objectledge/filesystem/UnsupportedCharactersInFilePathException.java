@@ -37,6 +37,11 @@ package org.objectledge.filesystem;
 public class UnsupportedCharactersInFilePathException extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs a new UnsupportedCharactersInFilePathException with a custom message.
      * 
      * @param message the detail message.

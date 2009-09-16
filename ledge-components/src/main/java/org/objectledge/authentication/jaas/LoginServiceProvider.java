@@ -6,6 +6,11 @@ import java.security.Security;
 public class LoginServiceProvider
     extends Provider
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public LoginServiceProvider()
     {
         super("ObjectLedge Security provider", 1.0d, "");

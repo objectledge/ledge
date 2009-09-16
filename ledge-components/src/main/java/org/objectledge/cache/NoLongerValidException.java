@@ -36,6 +36,11 @@ package org.objectledge.cache;
 public class NoLongerValidException extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Exception constructor.
      * 
      * @param message the message;
