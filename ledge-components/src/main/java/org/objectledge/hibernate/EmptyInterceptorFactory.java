@@ -53,7 +53,6 @@ public class EmptyInterceptorFactory
      * @param sessionFactory the hibernate session factory. 
      * @return the newly instantiated picofier  object.
      */
-    @SuppressWarnings("unused")
     public Interceptor createInterceptor(final SessionFactory sessionFactory)
     {
         return null;
