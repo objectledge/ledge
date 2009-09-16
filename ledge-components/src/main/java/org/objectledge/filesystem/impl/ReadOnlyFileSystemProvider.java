@@ -78,8 +78,8 @@ public abstract class ReadOnlyFileSystemProvider
     /** the regexp pattern of file entry in files.lst list.*/
     private static final Pattern FILE_PATTERN = Pattern.compile("^(.*) ([0-9]+) ([0-9]+)$");
     
-    /** Marker object stored in the listing to represent files. It satisfies listing.containsKey(path) and !(listing.get(path) instanceof Map) */
-    private static final Object FILE = new Object(); 
+    /** Marker object stored in the listing to represent files. */
+    private static final FileItem FILE = new FileItem(); 
     
 	// instance variables ///////////////////////////////////////////////////
 
@@ -87,10 +87,10 @@ public abstract class ReadOnlyFileSystemProvider
     protected String name;
 
 	/** The file listing. */	
-	private Map<String,Object> listing = null;
+	private DirectoryItem listing = null;
 
     /** The directory tree. */
-    private Map<String,Object> directoryTree = new HashMap<String,Object>();
+    private DirectoryItem directoryTree = new DirectoryItem();
 
 	/** The file listing. */	
 	private Map<String,Long> times = new HashMap<String,Long>();
@@ -155,7 +155,7 @@ public abstract class ReadOnlyFileSystemProvider
                new InputStreamReader(is, LISTING_ENCODING));
             if(listing == null)
             {
-                listing = new HashMap<String,Object>();
+                listing = new DirectoryItem();
                 listing.put("/", directoryTree);
             }
 			while(reader.ready())
@@ -200,13 +200,13 @@ public abstract class ReadOnlyFileSystemProvider
 				}
 				StringTokenizer st = new StringTokenizer(path,"/");
 				String token = null;
-                Map<String,Object> current = directoryTree;
+                DirectoryItem current = directoryTree;
 				tokenLoop: while(st.hasMoreTokens())
 				{
 					token = st.nextToken();
 					if(st.hasMoreTokens())
 					{
-						current = (Map<String,Object>)current.get(token);
+						current = (DirectoryItem)current.get(token);
 						if(current == null)
 						{
 							throw new ComponentInitializationError("missing parent directory for "+
@@ -215,15 +215,15 @@ public abstract class ReadOnlyFileSystemProvider
 					}
 					else
 					{
-						if(current.containsKey(token))
+						if(current.contains(token))
 						{
 							// we seem to be merging indices
 							continue tokenLoop;
 						}
-						Object item;
+						ListingItem item;
 						if(path.endsWith("/"))
 						{
-							item = new HashMap();
+							item = new DirectoryItem();
 							path = path.substring(0, path.length()-1);
 						}
 						else
@@ -272,7 +272,7 @@ public abstract class ReadOnlyFileSystemProvider
     {
 		if(listing != null)
 		{
-			return listing.containsKey(FileSystem.normalizedPath(path));
+			return listing.contains(FileSystem.normalizedPath(path));
 		}
 		return getInputStream(path) != null;
     }
@@ -330,7 +330,7 @@ public abstract class ReadOnlyFileSystemProvider
 		if(listing != null)
 		{
 		    path = FileSystem.normalizedPath(path);
-			return listing.containsKey(path) && !(listing.get(path) instanceof Map);
+			return listing.contains(path) && !(listing.get(path) instanceof DirectoryItem);
 		}
 		else
 		{
@@ -346,7 +346,7 @@ public abstract class ReadOnlyFileSystemProvider
 		if(listing != null)
 		{
 		    path = FileSystem.normalizedPath(path);
-			return listing.containsKey(path) && listing.get(path) instanceof Map;
+			return listing.contains(path) && listing.get(path) instanceof DirectoryItem;
 		}
 		else
 		{
@@ -378,10 +378,10 @@ public abstract class ReadOnlyFileSystemProvider
     {
 		if(listing != null)
 		{
-			Object obj = listing.get(FileSystem.normalizedPath(path));
-			if(obj instanceof Map)
+			ListingItem item = listing.get(FileSystem.normalizedPath(path));
+			if(item instanceof DirectoryItem)
 			{
-				Set names = ((Map)obj).keySet();
+				Set<String> names = ((DirectoryItem)item).list();
 				return names;
 			}
 			else
@@ -574,5 +574,42 @@ public abstract class ReadOnlyFileSystemProvider
                 throw new RuntimeException("malformed path", e);
             }
 		}
-	}    
+	}  
+	
+	private static abstract class ListingItem 
+	{
+	    
+	}
+	
+    private static class DirectoryItem
+        extends ListingItem
+    {
+        private final Map<String, ListingItem> items = new HashMap<String, ListingItem>();
+        
+        public void put(String name, ListingItem item)
+        {
+            items.put(name, item);
+        }
+
+        public Set<String> list()
+        {            
+            return items.keySet();
+        }
+
+        public ListingItem get(String name)
+        {
+            return items.get(name);
+        }
+
+        public boolean contains(String name)
+        {
+            return items.containsKey(name);
+        }
+    }
+    
+    private static class FileItem
+        extends ListingItem
+    {
+        
+    }
 }
