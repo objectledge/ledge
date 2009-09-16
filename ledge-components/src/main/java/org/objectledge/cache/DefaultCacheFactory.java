@@ -185,14 +185,8 @@ public class DefaultCacheFactory
     /** Registered WeakHashMap objects. */
     private List<WeakReference<WeakHashMap<?,?>>> weakHashMaps = new LinkedList<WeakReference<WeakHashMap<?,?>>>();
     
-    /** The configuration */
-    private Configuration config;
-    
     /** The logging facility. */
     private Logger logger;
-    
-    /** The thread pool */
-    private ThreadPool threadPool;
     
     /** The notification */
     private Notification notification;
@@ -222,9 +216,7 @@ public class DefaultCacheFactory
                     Persistence persistence, FileSystem fileSystem)
         throws ConfigurationException, ClassNotFoundException
     {
-        this.config = config;
         this.logger = logger;
-        this.threadPool = threadPool;
         this.notification = notification;
         this.persistence = persistence;
         
