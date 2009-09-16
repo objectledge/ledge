@@ -253,8 +253,9 @@ public class CachingTest extends LedgeTestCase
 
     public void testDistributed()
     {
-        Map<Object, Object> map = caching.getInstance("distributed");
+        caching.getInstance("distributed");
         /*
+        Map<Object, Object> map = caching.getInstance("distributed");
         byte[] msg = "proceed".getBytes();
         map.put("k","v");
         //TODO when notification implemented
@@ -275,8 +276,9 @@ public class CachingTest extends LedgeTestCase
     
     public void testFactory()
     {
-        Map<Object, Object> map = caching.getInstance("factory");
+        caching.getInstance("factory");
         /**
+        Map<Object, Object> map =caching.getInstance("factory"); 
         TestValue v = (TestValue)map.get(new Long(1));
         assertNotNull("v@1",v);
         assertEquals("apples",v.getName());
