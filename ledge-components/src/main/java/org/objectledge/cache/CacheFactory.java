@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.database.persistence.Persistent;
 
 /**
  * A factory of cache objects, which are variants of java.util.Map with additional functionality.
@@ -113,7 +114,7 @@ public interface CacheFactory
     /**
      * {@inheritDoc}
      */
-    public abstract <K, V> ValueFactory<K, V> getPersitenceValueFactory(Class<V> valueClass);
+    public abstract <K extends Number, V extends Persistent> ValueFactory<K, V> getPersitenceValueFactory(Class<V> valueClass);
 
     /**
      * {@inheritDoc}

@@ -59,6 +59,7 @@ import org.objectledge.cache.spi.StatisticsMap;
 import org.objectledge.cache.spi.TimeoutMap;
 import org.objectledge.context.Context;
 import org.objectledge.database.persistence.Persistence;
+import org.objectledge.database.persistence.Persistent;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.notification.Notification;
 import org.objectledge.pipeline.ProcessingException;
@@ -161,10 +162,10 @@ public class DefaultCacheFactory
     // member objects ////////////////////////////////////////////////////////
     
     /** The registered StatisticsMaps */
-    private List<StatisticsMap> statistics = new ArrayList<StatisticsMap>();
+    private List<StatisticsMap<?,?>> statistics = new ArrayList<StatisticsMap<?,?>>();
 
     /** Mapping of *_TYPE constants into configured implementation classes. */
-    private Map<String,Class> implClasses = new HashMap<String,Class>();
+    private Map<String,Class<?>> implClasses = new HashMap<String,Class<?>>();
 
     /** instance prepared configurations map. */
     private Map<String,Configuration> instanceConfigurations = new HashMap<String,Configuration>();
@@ -173,7 +174,7 @@ public class DefaultCacheFactory
     private Map<String,Configuration> factoryConfigurations = new HashMap<String,Configuration>();
 
     /** Configured map instances. */
-    private Map<String,Map> instances = new HashMap<String,Map>();
+    private Map<String,Map<?,?>> instances = new HashMap<String,Map<?,?>>();
 
     /** DelayedUpdate queue (target update time -&gt; object)*/
     private SortedMap<Long,Set<DelayedUpdate>> queue = new TreeMap<Long,Set<DelayedUpdate>>();
@@ -239,7 +240,7 @@ public class DefaultCacheFactory
         classMap.put(STATISTICS_MAP_TYPE, STATISTICS_MAP_CLASS_DEFALUT);
         classMap.put(FORGETFULL_MAP_TYPE, FORGETFULL_MAP_CLASS_DEFALUT);
         
-        Map<String, Class> ifaceMap = new HashMap<String, Class>();
+        Map<String, Class<?>> ifaceMap = new HashMap<String, Class<?>>();
         ifaceMap.put(TIMEOUT_MAP_TYPE, TimeoutMap.class);
         ifaceMap.put(LRU_MAP_TYPE, LRUMap.class);
         ifaceMap.put(SOFT_MAP_TYPE, SoftMap.class);
@@ -254,12 +255,12 @@ public class DefaultCacheFactory
             String clazz = custom[i].getAttribute("class");
             classMap.put(type,clazz);
         }
-        Iterator it = classMap.keySet().iterator();
+        Iterator<String> it = classMap.keySet().iterator();
         while(it.hasNext())
         {
-            String type = (String)it.next();
-            String clazz = (String)classMap.get(type);
-            Class iface = (Class)ifaceMap.get(type);
+            String type = it.next();
+            String clazz = classMap.get(type);
+            Class<?> iface = ifaceMap.get(type);
             if(iface == null)
             {
                 iface = Map.class;
@@ -288,23 +289,23 @@ public class DefaultCacheFactory
             String alias = instanceNodes[i].getAttribute("alias",null);
             if(alias != null)
             {
-                instanceConfig = (Configuration)instanceConfigurations.get(alias);
+                instanceConfig = instanceConfigurations.get(alias);
                 if(instanceConfig == null)
                 {
                     throw new ComponentInitializationError(
                         "cannot find conifured alias: '"+alias+"'");
                 }
             }
-            Map map = buildInstance(name, instanceConfig);
+            Map<?, ?> map = buildInstance(name, instanceConfig);
             instances.put(name, map);
             boolean graphRequested  = instanceNodes[i].getAttributeAsBoolean("graph", false);
             if(graphRequested && fileSystem != null)
             {
-                if(map instanceof StatisticsMap)
+                if(map instanceof StatisticsMap<?, ?>)
                 {
-                    graphList.add(new CacheSizeGraph(name, (StatisticsMap)map, fileSystem));
-                    graphList.add(new CacheRequestsGraph(name, (StatisticsMap)map, fileSystem));
-                    graphList.add(new CacheEfficiencyGraph(name, (StatisticsMap)map, fileSystem));
+                    graphList.add(new CacheSizeGraph(name, (StatisticsMap<?, ?>)map, fileSystem));
+                    graphList.add(new CacheRequestsGraph(name, (StatisticsMap<?, ?>)map, fileSystem));
+                    graphList.add(new CacheEfficiencyGraph(name, (StatisticsMap<?, ?>)map, fileSystem));
                 }
                 else
                 {
@@ -331,16 +332,16 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public Map getMap(String type)
+    public <K, V> Map<K, V> getMap(String type)
     {
-        Class cl = (Class)implClasses.get(type);
+        Class<?> cl = implClasses.get(type);
         if(cl == null)
         {
             throw new IllegalArgumentException("unknown map type "+type);
         }
         try
         {
-            return (Map)cl.newInstance();
+            return (Map<K, V>)cl.newInstance();
         }
         ///CLOVER:OFF
         catch(VirtualMachineError t)
@@ -361,9 +362,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public synchronized Map getInstance(String name)
+    public synchronized <K, V> Map<K, V> getInstance(String name)
     {
-        Map map = (Map)instances.get(name);
+        Map<K, V> map = (Map<K, V>)instances.get(name);
         if(map == null)
         {
             throw new IllegalArgumentException("configuration "+name+
@@ -375,14 +376,14 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public synchronized Map getInstance(String name, String configAlias)
+    public synchronized <K, V> Map<K, V> getInstance(String name, String configAlias)
         throws ConfigurationException
     {
-        Map map = (Map)instances.get(name);
+        Map<K, V> map = (Map<K, V>)instances.get(name);
         if(map == null)
         {
             Configuration instanceConfiguration = 
-                (Configuration)instanceConfigurations.get(configAlias);
+                instanceConfigurations.get(configAlias);
             if(instanceConfiguration == null)
             {
                 throw new IllegalArgumentException("configuration "+configAlias+
@@ -405,9 +406,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public ValueFactory getValueFactory(String factory, String map)
+    public <K, V> ValueFactory<K, V> getValueFactory(String factory, String map)
     {
-        Configuration factoryConfig = (Configuration)factoryConfigurations.get(factory);
+        Configuration factoryConfig = factoryConfigurations.get(factory);
         String fclass = factoryConfig.getAttribute("class",null);
         Object obj;
         if(fclass == null)
@@ -427,30 +428,30 @@ public class DefaultCacheFactory
             throw new IllegalArgumentException(fclass+" not found");
         }
         
-        if(!(obj instanceof ConfigurableValueFactory))
+        if(!(obj instanceof ConfigurableValueFactory<?, ?>))
         {
             throw new IllegalArgumentException(fclass+" does not implement " +
                                                "ConfigurableValueFactory interface");
         } 
-        ((ConfigurableValueFactory)obj).configure(this, map, factoryConfig);
-        return (ValueFactory)obj;
+        ((ConfigurableValueFactory<K, V>)obj).configure(this, map, factoryConfig);
+        return (ValueFactory<K, V>)obj;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map getHashMap()
+    public <K, V> Map<K, V> getHashMap()
     {
-        Map map = getMap(HASH_MAP_TYPE);
+        Map<K, V> map = getMap(HASH_MAP_TYPE);
         return map;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map getTimeoutMap(long timeoutMillis)
+    public <K, V> Map<K, V> getTimeoutMap(long timeoutMillis)
     {
-        TimeoutMap map = (TimeoutMap)getMap(TIMEOUT_MAP_TYPE);
+        TimeoutMap<K, V> map = (TimeoutMap<K, V>)getMap(TIMEOUT_MAP_TYPE);
         map.setTimeout(timeoutMillis);
         return map;
     }
@@ -458,9 +459,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public Map getLRUMap(int capacity)
+    public <K, V> Map<K, V> getLRUMap(int capacity)
     {
-        LRUMap map = (LRUMap)getMap(LRU_MAP_TYPE);
+        LRUMap<K, V> map = (LRUMap<K, V>)getMap(LRU_MAP_TYPE);
         map.setCapacity(capacity);
         return map;
     }
@@ -468,9 +469,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public Map getSoftMap(int protect)
+    public <K, V> Map<K, V> getSoftMap(int protect)
     {
-        SoftMap map = (SoftMap)getMap(SOFT_MAP_TYPE);
+        SoftMap<K, V> map = (SoftMap<K, V>)getMap(SOFT_MAP_TYPE);
         map.setProtect(protect);
         return map;
     }
@@ -478,9 +479,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public org.objectledge.cache.DistributedMap getDistributedMap(String name, Map delegate)
+    public <K, V> org.objectledge.cache.DistributedMap<K, V> getDistributedMap(String name, Map<K, V> delegate)
     {
-        DistributedMap map = (DistributedMap)getMap(DISTRIBUTED_MAP_TYPE);
+        DistributedMap<K, V> map = (DistributedMap<K, V>)getMap(DISTRIBUTED_MAP_TYPE);
         map.setDelegate(delegate);
         map.attach(notification, name);
         return map;
@@ -489,9 +490,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public Map getFactoryMap(ValueFactory factory, Map delegate)
+    public <K, V> Map<K, V> getFactoryMap(ValueFactory<K, V> factory, Map<K, V> delegate)
     {
-        FactoryMap map = (FactoryMap)getMap(FACTORY_MAP_TYPE);
+        FactoryMap<K, V> map = (FactoryMap<K, V>)getMap(FACTORY_MAP_TYPE);
         map.setDelegate(delegate);
         map.setFactory(factory);
         return map;
@@ -500,9 +501,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public Map getStatisticsMap(String name, Map delegate)
+    public <K, V> Map<K, V> getStatisticsMap(String name, Map<K, V> delegate)
     {
-        StatisticsMap map = (StatisticsMap)getMap(STATISTICS_MAP_TYPE);
+        StatisticsMap<K, V> map = (StatisticsMap<K, V>)getMap(STATISTICS_MAP_TYPE);
         map.setDelegate(delegate);
         map.setName(name);
         addStatisticsMap(map);
@@ -512,9 +513,9 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public ValueFactory getPersitenceValueFactory(Class valueClass)
+    public <K extends Number, V extends Persistent> ValueFactory<K, V> getPersitenceValueFactory(Class<V> valueClass)
     {
-        PersistenceValueFactory factory = new PersistenceValueFactory();
+        PersistenceValueFactory<K, V> factory = new PersistenceValueFactory<K, V>();
         factory.init(valueClass, persistence);
         return factory;
     }
@@ -528,7 +529,7 @@ public class DefaultCacheFactory
         {
             // queue helper provides a reverse mapping, so we don't need have
             // to perform liner search
-            Long target = (Long)queueHelper.get(object);
+            Long target = queueHelper.get(object);
             Set<DelayedUpdate> set;
             if(target != null)
             {
@@ -571,7 +572,7 @@ public class DefaultCacheFactory
         {
             for(int i=0; i<statistics.size(); i++)
             {
-                out.print(((StatisticsMap)statistics.get(i)).getStatistics());
+                out.print(statistics.get(i).getStatistics());
             }
         }
     }
@@ -579,7 +580,7 @@ public class DefaultCacheFactory
     /**
      * {@inheritDoc}
      */
-    public void addStatisticsMap(StatisticsMap map)
+    public <K, V> void addStatisticsMap(StatisticsMap<K, V> map)
     {
         synchronized(statistics)
         {
@@ -612,10 +613,10 @@ public class DefaultCacheFactory
      * @param iface the interface the implementation class must support.
      * @throws ClassNotFoundException if class couldn't be found.
      */
-    private void initImpl(String type, String className, Class iface)
+    private void initImpl(String type, String className, Class<?> iface)
         throws ClassNotFoundException
     {
-        Class cl = Class.forName(className);
+        Class<?> cl = Class.forName(className);
         String reason = null;
         int mod = cl.getModifiers();
         if(Modifier.isInterface(mod) || Modifier.isAbstract(mod))
@@ -648,11 +649,11 @@ public class DefaultCacheFactory
      * @param name instance's name.
      * @param conf inststance's configuration elements.
      */ 
-    private Map buildInstance(String name, Configuration conf)
+    private <K, V> Map<K, V> buildInstance(String name, Configuration conf)
         throws ConfigurationException
     {
-        Map previous = null;
-        Map current = null;
+        Map<K, V> previous = null;
+        Map<K, V> current = null;
         Configuration[] mapConfigs = conf.getChildren("config"); 
         for(int i=0; i < mapConfigs.length; i++)
         {
@@ -674,9 +675,9 @@ public class DefaultCacheFactory
             current = getMap(type);
             if(i > 0)
             {
-                if(current instanceof LayeredMap)
+                if(current instanceof LayeredMap<?, ?>)
                 {
-                    ((LayeredMap)current).setDelegate(previous);
+                    ((LayeredMap<K, V>)current).setDelegate(previous);
                 }
                 else
                 {
@@ -685,9 +686,9 @@ public class DefaultCacheFactory
                         "implementation does not support LayeredMap interface");
                 }
             }
-            if(current instanceof ConfigurableMap)
+            if(current instanceof ConfigurableMap<?, ?>)
             {
-                ((ConfigurableMap)current).configure(this,name,mapConfig);
+                ((ConfigurableMap<K, V>)current).configure(this,name,mapConfig);
             }
             else
             {
@@ -734,16 +735,16 @@ public class DefaultCacheFactory
                     }
                     // there is something in the queue
                     now = System.currentTimeMillis();
-                    Long first = (Long)queue.firstKey();
+                    Long first = queue.firstKey();
                     while(!queue.isEmpty() && first.longValue() <= now)
                     {
                         // the first element of the que has reached or passed
                         // it's target time
-                        Set set = (Set)queue.remove(first);
-                        Iterator i = set.iterator();
+                        Set<DelayedUpdate> set = queue.remove(first);
+                        Iterator<DelayedUpdate> i = set.iterator();
                         while(i.hasNext())
                         {
-                            DelayedUpdate obj = (DelayedUpdate)i.next();
+                            DelayedUpdate obj = i.next();
                             queueHelper.remove(obj);
                             try
                             {
@@ -766,7 +767,7 @@ public class DefaultCacheFactory
                         }
                         if(!queue.isEmpty())
                         {
-                            first = (Long)queue.firstKey();
+                            first = queue.firstKey();
                         }
                     }
                     // wait for the first element's target time
@@ -854,9 +855,9 @@ public class DefaultCacheFactory
         extends AbstractMuninGraph
     {
         protected final String name;
-        protected final StatisticsMap map;
+        protected final StatisticsMap<?, ?> map;
     
-        public AbstractCacheStatisticsGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        public AbstractCacheStatisticsGraph(String name, StatisticsMap<?, ?> map, FileSystem fileSystem)
         {
             super(fileSystem);
             this.name = name;
@@ -873,7 +874,7 @@ public class DefaultCacheFactory
     public class CacheEfficiencyGraph
         extends AbstractCacheStatisticsGraph
     {
-        public CacheEfficiencyGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        public CacheEfficiencyGraph(String name, StatisticsMap<?, ?> map, FileSystem fileSystem)
         {
             super(name, map, fileSystem);
         }
@@ -904,7 +905,7 @@ public class DefaultCacheFactory
     public class CacheSizeGraph
         extends AbstractCacheStatisticsGraph
     {
-        public CacheSizeGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        public CacheSizeGraph(String name, StatisticsMap<?, ?> map, FileSystem fileSystem)
         {
             super(name, map, fileSystem);
         }
@@ -923,7 +924,7 @@ public class DefaultCacheFactory
     public class CacheRequestsGraph
         extends AbstractCacheStatisticsGraph
     {
-        public CacheRequestsGraph(String name, StatisticsMap map, FileSystem fileSystem)
+        public CacheRequestsGraph(String name, StatisticsMap<?, ?> map, FileSystem fileSystem)
         {
             super(name, map, fileSystem);
         }
