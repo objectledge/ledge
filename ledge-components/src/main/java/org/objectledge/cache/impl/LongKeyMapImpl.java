@@ -11,6 +11,7 @@ public abstract class LongKeyMapImpl<V>
     implements ConfigurableMap<Long, V>
 {
 
+    @SuppressWarnings("unchecked")
     public void configure(CacheFactorySPI caching, String name, String config)
     {
         String[] configTokens = config.split(",");

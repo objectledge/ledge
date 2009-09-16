@@ -30,6 +30,7 @@ public class UserManagerLoginModule
 
     private UserManager userManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler,
         Map<String, ? > sharedState, Map<String, ? > options)

@@ -20,6 +20,7 @@ public class DiscardImagesHTMLContentFilter implements HTMLContentFilter
     /* (non-Javadoc)
      * @see net.cyklotron.cms.documents.HTMLContentFilter#filter(org.dom4j.Document)
      */
+    @SuppressWarnings("unchecked")
     public Document filter(Document dom)
     {
         Document outDom = (Document)(dom.clone());

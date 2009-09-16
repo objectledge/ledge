@@ -334,6 +334,7 @@ public class HTMLServiceImpl
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void removeEmptyParas(Document html)
     {
@@ -363,6 +364,7 @@ public class HTMLServiceImpl
         }
     }
     
+    @SuppressWarnings("unchecked")
     public void trimBreaksFromParas(Document html)
     {
     	for(Element para : (List<Element>)html.selectNodes("//P"))
@@ -402,6 +404,7 @@ public class HTMLServiceImpl
     	}
     }
     
+    @SuppressWarnings("unchecked")
     public void collapseSubsequentBreaksInParas(Document html)
     {
         List<Node> toDetach = new ArrayList<Node>();
