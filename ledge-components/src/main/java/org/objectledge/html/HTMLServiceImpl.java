@@ -33,8 +33,6 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.Text;
-import org.dom4j.Visitor;
-import org.dom4j.VisitorSupport;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
