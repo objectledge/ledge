@@ -44,6 +44,11 @@ import org.picocontainer.defaults.ComponentParameter;
 public class CustomizingComponentParameter
     extends ComponentParameter 
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /** A CustomizedComponentParameter with null componentKey */
     public static final Parameter DEFAULT = new CustomizingComponentParameter();
     

@@ -39,6 +39,11 @@ public class CollectionInstantiationException
     extends PicoInstantiationException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates an exception instance.
      * 
      * @param msg the detail message.

@@ -41,6 +41,11 @@ public class AlternateContainer
     extends DefaultPicoContainer
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates new AlternateContainer instance.
      * 
      * @param parent

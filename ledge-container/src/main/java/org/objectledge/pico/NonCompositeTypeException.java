@@ -41,6 +41,11 @@ import org.picocontainer.PicoIntrospectionException;
 public class NonCompositeTypeException extends PicoIntrospectionException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates a new instance of the exception.
      * 
      * @param message the detail message.

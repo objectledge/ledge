@@ -42,6 +42,11 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
 public class CustomizingConstructorComponentAdapter extends ConstructorInjectionComponentAdapter
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates new CustomizingConstructorComponentAdapter instance.
      * 
      * @param componentKey the component key.

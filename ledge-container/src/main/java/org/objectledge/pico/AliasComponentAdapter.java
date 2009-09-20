@@ -39,6 +39,11 @@ import org.picocontainer.defaults.DecoratingComponentAdapter;
 public class AliasComponentAdapter
     extends DecoratingComponentAdapter
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
     /** The key of the alias. */
     private final Object aliasKey;
     

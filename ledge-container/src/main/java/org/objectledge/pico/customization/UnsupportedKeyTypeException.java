@@ -42,6 +42,11 @@ public class UnsupportedKeyTypeException
     extends PicoIntrospectionException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates a new instance of the exception object.
      *  
      * @param message the detail message.
