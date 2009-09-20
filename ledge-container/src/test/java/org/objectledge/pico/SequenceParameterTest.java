@@ -30,7 +30,6 @@ package org.objectledge.pico;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.LocalFileSystemProvider;
@@ -48,8 +47,6 @@ import org.picocontainer.defaults.DefaultPicoContainer;
  */
 public class SequenceParameterTest extends TestCase
 {
-    private Logger log = Logger.getLogger(SequenceParameterTest.class);
-
     /**
      * Constructor for SequenceParameterTest.
      * @param arg0

@@ -32,11 +32,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 class CompositionContentHandler extends DefaultHandler
 {
-    private static final Class<?>[] NO_ARG = new Class[] { };
     private static final Class<?>[] PICOCONTAINER_ARGS = new Class[] { ComponentAdapterFactory.class,
         PicoContainer.class };
-    private static final Class<?>[] COMPONENT_ADAPTER_FACTORY_ARG = 
-        new Class[] { ComponentAdapterFactory.class };
     private static final Class<? extends MutablePicoContainer> DEFAULT_CONTAINER_IMPL = DefaultPicoContainer.class;
     private static final Parameter[] NO_PARAMETERS = new Parameter[] { };
     

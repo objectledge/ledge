@@ -35,7 +35,6 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
@@ -63,6 +62,6 @@ public class LedgeContainerBuilderTest
         
         URL composition = fileSystem.getResource("src/test/resources/composition/adapter.xml");
         LedgeContainerBuilder builder = new LedgeContainerBuilder(composition, classLoader);
-        PicoContainer container = builder.createContainerFromScript(parentContainer, null);
+        builder.createContainerFromScript(parentContainer, null);
     }
 }

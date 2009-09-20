@@ -145,6 +145,7 @@ public class CompositionContentHandlerTest
         Test6c t6c2 = (Test6c)result.getComponentInstance("t6c2");
         assertEquals("[string a, string b, int 9]", t6c2.dump());
         Test6d t6d = (Test6d)result.getComponentInstance("t6d");
+        assertNotNull(t6d);
     }
     
     public void test9()
