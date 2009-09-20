@@ -41,6 +41,7 @@ import org.picocontainer.defaults.ComponentParameter;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: CustomizingComponentParameter.java,v 1.1 2005-02-04 02:28:25 rafal Exp $
  */
+@SuppressWarnings("unchecked")
 public class CustomizingComponentParameter
     extends ComponentParameter 
 {

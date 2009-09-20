@@ -54,6 +54,7 @@ import org.picocontainer.PicoVisitor;
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
  * @version $Id: SequenceParameter.java,v 1.6 2005-07-07 08:30:04 zwierzem Exp $
  */
+@SuppressWarnings("unchecked")
 public class SequenceParameter implements Parameter
 {
     private Parameter[] elements;

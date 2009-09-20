@@ -39,6 +39,7 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
  * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.9 2005-02-04 02:28:15 rafal Exp $
  */
+@SuppressWarnings("unchecked")
 public class CustomizingConstructorComponentAdapter extends ConstructorInjectionComponentAdapter
 {
     /**

@@ -45,6 +45,7 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
  * @version $Revision: 1.8 $ $Date: 2005-02-10 17:49:01 $
  */
+@SuppressWarnings("unchecked")
 public class CustomizingConstructorComponentAdapterFactory 
     implements ComponentAdapterFactory
 {

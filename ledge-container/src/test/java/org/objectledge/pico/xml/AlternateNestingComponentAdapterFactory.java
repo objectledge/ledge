@@ -56,6 +56,7 @@ public class AlternateNestingComponentAdapterFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public ComponentAdapter createComponentAdapter(Object componentKey,
         Class componentImplementation, Parameter[] parameters)
         throws PicoIntrospectionException, AssignabilityRegistrationException,
