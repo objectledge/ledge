@@ -50,7 +50,7 @@ public class CustomizingComponentParameter
     private static final long serialVersionUID = 1L;
 
     /** A CustomizedComponentParameter with null componentKey */
-    public static final Parameter DEFAULT = new CustomizingComponentParameter();
+    public static final Parameter DEFAULT_PARAMETER = new CustomizingComponentParameter();
     
     // TODO copied from pico 
     private Object componentKey;

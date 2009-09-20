@@ -101,7 +101,7 @@ public class CustomizingConstructorComponentAdapter extends ConstructorInjection
         Parameter[] componentParameters = new Parameter[parameters.length];
         for(int i = 0; i < parameters.length; i++)
         {
-            componentParameters[i] = CustomizingComponentParameter.DEFAULT;
+            componentParameters[i] = CustomizingComponentParameter.DEFAULT_PARAMETER;
         }
         return componentParameters;
     }
