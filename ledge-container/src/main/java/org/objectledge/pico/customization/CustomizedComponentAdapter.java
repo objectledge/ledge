@@ -47,6 +47,7 @@ import org.picocontainer.PicoVisitor;
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl </a>
  * @version $Id: CustomizedComponentAdapter.java,v 1.15 2005-02-04 02:28:00 rafal Exp $
  */
+@SuppressWarnings("unchecked")
 public class CustomizedComponentAdapter
     implements ComponentAdapter
 {
