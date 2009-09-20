@@ -129,7 +129,7 @@ public class LoggerFactory
      * {@inheritDoc}
      */
     public Object getCustomizedComponentInstance(PicoContainer container, 
-        Object componentKey, Class componentImplementaion)
+        Object componentKey, Class<?> componentImplementaion)
         throws PicoInitializationException, PicoIntrospectionException, UnsupportedKeyTypeException
     {
         return getLogger(getComponentMarker(componentKey));
@@ -138,7 +138,7 @@ public class LoggerFactory
     /**
      * {@inheritDoc}
      */
-    public Class getCustomizedComponentImplementation()
+    public Class<?> getCustomizedComponentImplementation()
     {
         return Logger.class;
     }
@@ -161,9 +161,9 @@ public class LoggerFactory
      */
     protected String getComponentMarker(Object key)
     {
-        if(key instanceof Class)
+        if(key instanceof Class<?>)
         {
-            return ((Class)key).getName();
+            return ((Class<?>)key).getName();
         }
         else
         {

@@ -60,7 +60,7 @@ public class CustomizedConfigurationProvider
      * {@inheritDoc}
      */
     public Object getCustomizedComponentInstance(PicoContainer container, Object componentKey, 
-        Class componentImplementation)
+        Class<?> componentImplementation)
         throws PicoInitializationException, PicoIntrospectionException
     {
         String componentName = getComponentName(componentKey);
@@ -70,7 +70,7 @@ public class CustomizedConfigurationProvider
     /**
      * {@inheritDoc}
      */
-    public Class getCustomizedComponentImplementation()
+    public Class<?> getCustomizedComponentImplementation()
     {
         return Configuration.class;
     }
@@ -95,9 +95,9 @@ public class CustomizedConfigurationProvider
     protected String getComponentName(Object componentKey)
         throws UnsupportedKeyTypeException
     {
-        if(componentKey instanceof Class)
+        if(componentKey instanceof Class<?>)
         {
-            return ((Class)componentKey).getName();
+            return ((Class<?>)componentKey).getName();
         }
         else if(componentKey instanceof String)
         {

@@ -30,8 +30,9 @@ package org.objectledge.pico;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.picocontainer.ComponentAdapter;
 import org.picocontainer.Parameter;
@@ -56,7 +57,7 @@ import org.picocontainer.PicoVisitor;
 public class SequenceParameter implements Parameter
 {
     private Parameter[] elements;
-    private Class implClass;
+    private Class<?> implClass;
     
     /**
      * Creates a sequence parameter.
@@ -77,11 +78,11 @@ public class SequenceParameter implements Parameter
         Class expectedType)
         throws PicoInitializationException
     {
-        Class elementType = getElementType(expectedType);
-        Object[] items = new Object[elements.length];
+        Class<?> elementType = getElementType(expectedType);
+        List<Object> items = new ArrayList<Object>(elements.length);
         for(int i = 0; i < elements.length; i++)
         {
-            items[i] = elements[i].resolveInstance(container, adapter, elementType);
+            items.add(elements[i].resolveInstance(container, adapter, elementType));
         }
         if(expectedType.getComponentType() != null)
         {
@@ -91,11 +92,11 @@ public class SequenceParameter implements Parameter
         {
             if(implClass != null)
             {
-                return toCollection(items, implClass);
+                return toCollection(items, (Class<Collection<Object>>)implClass);
             }
             else
             {
-                return toCollection(items, expectedType);
+                return toCollection(items, (Class<Collection<Object>>)expectedType);
             }
         }
         throw new PicoIntrospectionException("not a collection nor array type");
@@ -109,7 +110,7 @@ public class SequenceParameter implements Parameter
     {
         try
         {
-            Class elementType = getElementType(expectedType);
+            Class<?> elementType = getElementType(expectedType);
             for(Parameter element : elements)
             {
                 if(!element.isResolvable(container, adapter, elementType))
@@ -132,7 +133,7 @@ public class SequenceParameter implements Parameter
     public void verify(PicoContainer container, ComponentAdapter adapter, Class expectedType)
         throws PicoIntrospectionException
     {
-        Class elementType = getElementType(expectedType);
+        Class<?> elementType = getElementType(expectedType);
         for(Parameter element : elements)
         {
             element.verify(container, adapter, expectedType);
@@ -151,7 +152,7 @@ public class SequenceParameter implements Parameter
         }
     }
     
-    private Class getElementType(Class expectedType)
+    private Class<?> getElementType(Class<?> expectedType)
     {
         if(expectedType.getComponentType() != null)
         {
@@ -168,29 +169,29 @@ public class SequenceParameter implements Parameter
         throw new PicoIntrospectionException("not a collection nor array type");
     }
     
-    private Object toArray(Object[] source, Class targetType)
+    private <T> T[] toArray(List<T> source, Class<T> targetType)
     {
-        Object target = Array.newInstance(targetType.getComponentType(), source.length);
-        System.arraycopy(source, 0, target, 0, source.length);
+        T[] target = (T[])Array.newInstance(targetType.getComponentType(), source.size());
+        source.toArray(target);
         return target;
     }
     
-    private Object toCollection(Object[] source, Class targetType)
+    private <T, C extends Collection<T>> C toCollection(List<T> source, Class<C> targetType)
     {
-        Collection target;
+        C target;
         try
         {
             try
             {
-                Constructor ctor = targetType.getConstructor(new Class[] { Integer.TYPE });
-                target = (Collection)ctor.newInstance(new Object[] { new Integer(source.length) });
+                Constructor<C> ctor = targetType.getConstructor(new Class[] { Integer.TYPE });
+                target = ctor.newInstance(new Object[] { new Integer(source.size()) });
             }
             catch(NoSuchMethodException e)
             {
                 try
                 {
-                    Constructor ctor = targetType.getConstructor(new Class[0]);
-                    target = (Collection)ctor.newInstance(new Object[0]);
+                    Constructor<C> ctor = targetType.getConstructor(new Class[0]);
+                    target = ctor.newInstance(new Object[0]);
                 }
                 catch(NoSuchMethodException ee)
                 {
@@ -211,7 +212,7 @@ public class SequenceParameter implements Parameter
                     + targetType.getName(), e);
             }
         }
-        target.addAll(Arrays.asList(source));
+        target.addAll(source);
         return target;
     }
 }

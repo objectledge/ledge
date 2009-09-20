@@ -46,6 +46,7 @@ import org.picocontainer.PicoVisitor;
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
  * @version $Id: StringParameter.java,v 1.4 2005-02-04 02:28:13 rafal Exp $
  */
+@SuppressWarnings("unchecked")
 public class StringParameter 
     implements Parameter
 {
@@ -53,7 +54,7 @@ public class StringParameter
     private String stringValue;
     
     /** the parmeter class */
-    private Class parameterType;
+    private Class<?> parameterType;
     
     /**
      * Creates a new StringParamter instance.
@@ -144,7 +145,7 @@ public class StringParameter
             if(expectedType.isPrimitive())
             {
                 final Field field = parameterType.getField("TYPE");
-                final Class type = (Class)field.get(null);
+                final Class<?> type = (Class<?>)field.get(null);
                 return expectedType.isAssignableFrom(type);
             }
         }

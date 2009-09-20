@@ -32,12 +32,12 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 class CompositionContentHandler extends DefaultHandler
 {
-    private static final Class[] NO_ARG = new Class[] { };
-    private static final Class[] PICOCONTAINER_ARGS = new Class[] { ComponentAdapterFactory.class,
+    private static final Class<?>[] NO_ARG = new Class[] { };
+    private static final Class<?>[] PICOCONTAINER_ARGS = new Class[] { ComponentAdapterFactory.class,
         PicoContainer.class };
-    private static final Class[] COMPONENT_ADAPTER_FACTORY_ARG = 
+    private static final Class<?>[] COMPONENT_ADAPTER_FACTORY_ARG = 
         new Class[] { ComponentAdapterFactory.class };
-    private static final Class DEFAULT_CONTAINER_IMPL = DefaultPicoContainer.class;
+    private static final Class<? extends MutablePicoContainer> DEFAULT_CONTAINER_IMPL = DefaultPicoContainer.class;
     private static final Parameter[] NO_PARAMETERS = new Parameter[] { };
     
     private final PicoContainer topLevelParentContainer;
@@ -185,7 +185,7 @@ class CompositionContentHandler extends DefaultHandler
         {
             new SAXParseException("component "+key+" not found", locator);
         }
-        if(ComponentAdapterFactory.class.isAssignableFrom(factory.getClass()))
+        else if(ComponentAdapterFactory.class.isAssignableFrom(factory.getClass()))
         {
             new SAXParseException(factory.getClass() + " does not implement " + 
                 ComponentAdapterFactory.class, locator);
@@ -203,7 +203,7 @@ class CompositionContentHandler extends DefaultHandler
         throws SAXException
     {
         Object key = makeKey(attributes, true);
-        Class implClass = loadClass(attributes, null);
+        Class<?> implClass = loadClass(attributes, null);
         if(implClass == null)
         {
             throw new SAXParseException("missing class attribute", locator);
@@ -252,7 +252,7 @@ class CompositionContentHandler extends DefaultHandler
         String value = attributes.getValue("value");
         if(value != null)
         {
-            Class valueClass = loadClass(attributes, null);
+            Class<?> valueClass = loadClass(attributes, null);
             parameter = new StringParameter(value, valueClass);
         }
         else
@@ -438,8 +438,9 @@ class CompositionContentHandler extends DefaultHandler
      * @param defaultClass class name to return if "class" attribute is not defined.
      * @return the class.
      * @throws SAXException if the class could not be loaded.
-     */   
-    private Class loadClass(Attributes attributes, Class defaultClass)
+     */  
+    @SuppressWarnings("unchecked")
+    private <T> Class<T> loadClass(Attributes attributes, Class<T> defaultClass)
         throws SAXException
     {
         String className = attributes.getValue("class");
@@ -447,7 +448,7 @@ class CompositionContentHandler extends DefaultHandler
         {
             return defaultClass;
         }
-        return loadClass(className);
+        return (Class<T>)loadClass(className);
     }
     
     private static final Map<String,String> PRIMITIVE_TO_BOXED = new HashMap<String,String>();
@@ -475,7 +476,7 @@ class CompositionContentHandler extends DefaultHandler
      * @return the class.
      * @throws SAXException if the class could not be loaded.
      */   
-    private Class loadClass(String className)
+    private Class<?> loadClass(String className)
         throws SAXException
     {
         try
@@ -494,10 +495,10 @@ class CompositionContentHandler extends DefaultHandler
     private static class ComponentInfo
     {
         private final Object key;
-        private final Class implClass;
+        private final Class<?> implClass;
         private List<Parameter> parameters;
         
-        public ComponentInfo(final Object key, final Class implClass)
+        public ComponentInfo(final Object key, final Class<?> implClass)
         {
             this.key = key;
             this.implClass = implClass;
@@ -534,9 +535,9 @@ class CompositionContentHandler extends DefaultHandler
     private static class SequenceInfo
     {
         private final List<Parameter> parameters = new ArrayList<Parameter>();
-        private final Class implClass;
+        private final Class<?> implClass;
         
-        public SequenceInfo(final Class implClass)
+        public SequenceInfo(final Class<?> implClass)
         {
             this.implClass = implClass;
         }

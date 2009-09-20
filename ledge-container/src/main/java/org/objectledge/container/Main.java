@@ -30,6 +30,7 @@ package org.objectledge.container;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -163,7 +164,7 @@ public class Main
                 {
                     String componentClassName = (String)line.getArgList().get(0);
                     String[] componentArgs = new String[componentArgCount];
-                    line.getArgList().subList(1, componentArgCount).toArray(componentArgs);
+                    ((List<String>)line.getArgList()).subList(1, componentArgCount).toArray(componentArgs);
                     run(root, config, componentClassName, componentArgs);
                 }
             }
@@ -217,7 +218,7 @@ public class Main
         {
             log.error("Container composition failed", e);
         }
-        Class componentClass = null;
+        Class<?> componentClass = null;
         Object component = null;
         if(container != null)
         {

@@ -54,7 +54,7 @@ public interface CustomizedComponentProvider
      * @throws UnsupportedKeyTypeException if the componentKey has unsupported type.
      */
     public Object getCustomizedComponentInstance(PicoContainer container, Object componentKey,
-        Class componentImplementaion)
+        Class<?> componentImplementaion)
         throws PicoInitializationException, PicoIntrospectionException, UnsupportedKeyTypeException;
     
     /**
@@ -62,7 +62,7 @@ public interface CustomizedComponentProvider
      * 
      * @return the type of the customized components.
      */
-    public Class getCustomizedComponentImplementation();
+    public Class<?> getCustomizedComponentImplementation();
     
     /**
      * Verifies if the customized component can be instantiated using the dependencies present

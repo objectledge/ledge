@@ -114,7 +114,7 @@ public class CustomizingComponentParameter
                 try
                 {
                     final Field field = result.getComponentImplementation().getField("TYPE");
-                    final Class type = (Class)field.get(result.getComponentInstance(null));
+                    final Class<?> type = (Class<?>)field.get(result.getComponentInstance(null));
                     if(expectedType.isAssignableFrom(type))
                     {
                         return result;

@@ -67,6 +67,7 @@ public class PicoPersistentFactory<V extends Persistent> implements PersistentFa
     /** 
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public V newInstance() throws Exception
     {
         ComponentAdapter adapter = new CustomizingConstructorComponentAdapter(type, type, null);
