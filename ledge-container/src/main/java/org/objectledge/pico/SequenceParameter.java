@@ -134,6 +134,7 @@ public class SequenceParameter implements Parameter
     public void verify(PicoContainer container, ComponentAdapter adapter, Class expectedType)
         throws PicoIntrospectionException
     {
+        // TODO this looks really suspicious, but I'll leave it as is until Pico upgrade.
         Class<?> elementType = getElementType(expectedType);
         for(Parameter element : elements)
         {
