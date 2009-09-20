@@ -168,7 +168,6 @@ class CompositionContentHandler extends DefaultHandler
     }
 
     void endContainer()
-        throws SAXException
     {
         PicoContainer container = containerStack.removeLast();
         if(containerStack.isEmpty())
@@ -194,7 +193,6 @@ class CompositionContentHandler extends DefaultHandler
     }
 
     void endFactory()
-        throws SAXException
     {
         factoryStack.removeLast();
     }
