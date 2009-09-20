@@ -164,7 +164,7 @@ public class Main
                 {
                     String componentClassName = (String)line.getArgList().get(0);
                     String[] componentArgs = new String[componentArgCount];
-                    ((List<String>)line.getArgList()).subList(1, componentArgCount).toArray(componentArgs);
+                    getArgList(line).subList(1, componentArgCount).toArray(componentArgs);
                     run(root, config, componentClassName, componentArgs);
                 }
             }
@@ -173,6 +173,12 @@ public class Main
         {
             System.err.println("Command line parsing failed: " + exp.getMessage());
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<String> getArgList(CommandLine line)
+    {
+        return line.getArgList();
     }
     
     /**
