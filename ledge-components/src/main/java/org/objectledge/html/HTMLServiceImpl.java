@@ -33,8 +33,6 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.Text;
-import org.dom4j.Visitor;
-import org.dom4j.VisitorSupport;
 import org.dom4j.io.OutputFormat;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -405,41 +403,61 @@ public class HTMLServiceImpl
     }
     
     public void collapseSubsequentBreaksInParas(Document html)
-    {
-        List<Node> toDetach = new ArrayList<Node>();
+    {        
         for(Element para : (List<Element>)html.selectNodes("//P"))
         {
-            boolean inBreakSeq = false;
+            List<List<Node>> contentSequences = new ArrayList<List<Node>>();
+            int numBreaks = 0;
+            int contentStart = 0;
+            int contentEnd = 0;
+            boolean leadIn = true;
             for(int i = 0; i < para.nodeCount(); i++)
             {
-                if((para.node(i) instanceof Element) && para.node(i).getName().equals("BR"))
+                if(para.node(i) instanceof Element && para.node(i).getName().equals("BR"))
                 {
-                    if(inBreakSeq)
-                    {
-                        toDetach.add(para.node(i));
-                    }
-                    else
-                        
-                    {
-                        inBreakSeq = true;
-                    }
+                    numBreaks++;
                 }
-                else if(isWhitespace(para.node(i).getText()))
+                else if(para.node(i) instanceof Text && isWhitespace(para.node(i).getText()))
                 {
-                    if(inBreakSeq)
-                    {
-                        toDetach.add(para.node(i));
-                    }
+                    // blank
                 }
                 else
                 {
-                    inBreakSeq = false;
-                }
+                    if(leadIn)
+                    {
+                        contentStart = i;
+                        contentEnd = i+1;
+                        leadIn = false;
+                    }
+                    if(numBreaks > 1)
+                    {
+                        List<Node> contentSequence = new ArrayList<Node>(para.content().subList(contentStart, contentEnd));
+                        contentSequences.add(contentSequence);
+                        contentStart = i;
+                    }
+                    contentEnd = i+1;
+                    numBreaks = 0;
+                }                
             }
-        }
-        for(Node node : toDetach)
-        {
-            node.detach();
+            if(contentStart < para.nodeCount())
+            {
+                List<Node> contentSequence = new ArrayList<Node>(para.content().subList(contentStart, contentEnd));
+                contentSequences.add(contentSequence);
+            }
+            List<Node> parentContent = para.getParent().content();
+            int paraPosition = parentContent.indexOf(para);
+            parentContent.remove(paraPosition);
+            for(List<Node> contentSequence : contentSequences)
+            {
+                Element paraCopy = para.createCopy();
+                paraCopy.clearContent();
+                for(Node contentNode : contentSequence)
+                {
+                    contentNode.detach();
+                    paraCopy.add(contentNode);
+                }
+                parentContent.add(paraPosition++, paraCopy);
+            }
         }
     }
 
