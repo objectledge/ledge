@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+
+  $Id: package.html,v 1.1 2005-07-07 08:26:13 zwierzem Exp $
+
+ Copyright (c) 2003-2005, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+       this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+       this list of conditions and the following disclaimer in the documentation  
+       and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+       nor the names of its contributors may be used to endorse or promote products  
+       derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+ 
+-->
+</head>
+<body>
+
+ObjectLedge container class for application composition and main class for command line
+applications.
+
+<h2>Introduction</h2>
+
+<p>
+A container a provides the environment in which components may operate.
+It instantiates the components, connects them together (this is called compositioning), 
+manages their lifecycle (notifies them about system startup and shutdown), provides them with 
+logging facilities and configuration. The container may also provide run-time administrative 
+functionality, from log verbosity adjustments, through component reconfiguration and JMX-enabled 
+components management to aspect weaving/unweawing and component implementation hot swapping.
+</p>
+
+<p>
+ObjectLedge container builds on the excelent
+<a href="http://picocontainer.org" class="externalLink" title="External Link">PicoContainer</a> 
+and <a href="http://nanocontainer.org" class="externalLink" title="External Link">NanoContainer</a> 
+packages. Thanks to their flexible design, we were able to create a number of 
+{@link org.objectledge.pico extensions} necessary to implement configuration and
+logging facilities of our container that can be seamlessly plugged into Pico/Nano.
+</p>
+
+<h2>Compositioning</h2>
+<p>
+The composition of components is described using an XML file. We are using a custom
+implementation of the <code>org.picoextras.script.xml.XmlFrontEnd</code> that is 
+a bit more expressive than the one found in NanoContainer (but we'd love to see our changes
+folded back to Nano!) See the {@link org.objectledge.pico extensions} page for 
+more details.
+</p>
+
+<h2>Configuration</h2>
+<p>
+The components are configured using separate XML files. This makes locating the settings
+of a particular component easier than with a single XML or properties file. It is also
+more friendly to revision control systems, splitting the configuration into semantically
+distinct items. All of the configuration files are subject to schema checking in order to 
+detect configuration problems early, and without the need to write boiler plate java code.
+We have chosen <a href="http://relaxng.org" class="externalLink" title="External Link">RelaxNG</a> schema language, because it is 
+compact and easy to read. We use simple naming scheme to associate the component with it's
+configuration file and the configuration schema. If a component class name is 
+<code>com.wombat.Printer</code> the configuration file name is 
+<code>com.wombat.Printer.xml</code> and the schema file path in the classpath is
+<code>com/wombat/Printer.rng</code>. To be more specific, the containter derives the
+names from the <i>role</i> of the component in the system. In simple cases it is equivalent
+to the component's class name, but usually it is the name of an interface the component
+implements, that the other components depend on.
+</p>
+<p>
+The configuration of a component, read from the XML file is passed to the component as an
+instance of <code>org.jcontainer.dna.Configuration</code> interface. All you need to do
+is to declare a parameter of that type in your component's constructor.
+</p>
+
+<h2>Logging</h2>
+<p>
+A similar facility is provided for logging. If your component declares an
+<code>org.jcontainer.dna.Logger</code> parameter in the constructor, it will be passed
+a logger instance. All the loggers are configured by a single component, the 
+{@link org.objectledge.logging.LoggingConfigurator}, 
+that will also provide runtime verbosity adjustment facilities in the future.
+</p>
+
+<h2>Lifecycle</h2>
+<p>
+We are using standard facilities of the PicoContainer for the management. A component
+that implements <code>org.picocontainer.lifecycle.Lifecycle</code> will be notified about
+the container's startup, shutdown, and disposal.
+</p>
+
+<h2>Related Documentation</h2>
+
+For overviews, tutorials, examples, guides, and tool documentation, please see:
+<ul>
+  <li><a href="">##### REFER TO NON-SPEC DOCUMENTATION HERE #####</a>
+</ul>
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>
