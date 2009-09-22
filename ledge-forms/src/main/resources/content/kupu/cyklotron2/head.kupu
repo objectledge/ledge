@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<kupu:feature
+    name="head"
+    implementation="cyklotron2"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
+    >
+
+  <kupu:part name="head">
+    <kupu:define-slot name="head" />
+  </kupu:part>
+
+  <kupu:part name="meta">
+  </kupu:part>
+
+  <kupu:part name="styles">
+$pageTool.addStyleLink('kupu/common/kupustyles.css')##
+$pageTool.addStyleLink('kupu/cyklotron2/kupucyklotronstyles.css')##
+  </kupu:part>
+
+  <kupu:part name="jsincludes">
+$pageTool.addScriptLink('kupu/common/sarissa.js')##
+$pageTool.addScriptLink('kupu/common/kupuhelpers.js')##
+$pageTool.addScriptLink('kupu/common/kupueditor.js')##
+$pageTool.addScriptLink('kupu/common/kupubasetools.js')##
+$pageTool.addScriptLink('kupu/common/kupuloggers.js')##
+$pageTool.addScriptLink('kupu/common/kupucontentfilters.js')##
+##
+$pageTool.addScriptLink('kupu/cyklotron2/kuputoolboxtoggler.js')##
+$pageTool.addScriptLink('kupu/cyklotron2/kupuanchortool.js')##
+$pageTool.addScriptLink('kupu/cyklotron2/kupuextendedimagetool.js')##
+$pageTool.addScriptLink('kupu/cyklotron2/kupucyklotrontools.js')##
+  </kupu:part>
+
+  <!-- XXX this could be a separate feature, maybe -->
+  <kupu:part name="bootstrap-editor">
+$pageTool.addScriptLink('kupu/cyklotron2/kupuinit_cyklotron.js')##
+$pageTool.addScriptLink('kupu/cyklotron2/kupustart_cyklotron.js')##
+  </kupu:part>
+
+</kupu:feature>
