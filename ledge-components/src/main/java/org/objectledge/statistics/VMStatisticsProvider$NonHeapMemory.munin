@@ -1,0 +1,11 @@
+graph_title Non-heap memory
+graph_order used free
+graph_vlabel bytes
+graph_category memory
+graph_args --base 1024
+used.label used
+used.type GAUGE
+used.draw AREA
+free.label free
+free.type GAUGE
+free.draw STACK
