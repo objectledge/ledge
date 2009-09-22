@@ -1,0 +1,169 @@
+$pageTool.appendTitleSuffix('Virtual machine')
+
+#macro(memSize $bytes)
+$stringTool.bytesSize($bytes)
+#end
+
+#macro(memoryUsage $usage)
+#if($usage)
+init: #memSize($usage.init) committed: #memSize($usage.committed) max: #memSize($usage.max) used: #memSize($usage.used)
+#else
+unknown
+#end
+#end
+
+#macro(strings $array)
+#set($list = $stringTool.arrayToList($array))
+#foreach($s in $list)$s#if($velocityCount < $list.size()), #end#end
+#end
+
+#macro(interval $ms)
+$stringTool.millisecondsInterval($ms)
+#end
+
+#macro(nanoInterval $ns)
+$stringTool.nanosecondsInterval($ns)
+#end
+
+#macro(splitPath $path)
+#set($tokens = $stringTool.arrayToList($path.split($runtime.systemProperties.get('path.separator'))))
+#foreach($token in $tokens)$token#if($velocityCount < $tokens.size()), #end#end
+#end
+
+<style type="text/css">
+<!--
+div.d1 {
+ padding: 5px;
+}
+-->
+</style>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Class loading</h3>
+<div class="d1">
+loaded classes = $classLoading.loadedClassCount <br/>
+total loaded classes = $classLoading.totalLoadedClassCount<br/>
+unloaded class count = $classLoading.unloadedClassCount
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Compilation</h3>
+<div class="d1">
+jit compiler = $compilation.name <br/>
+#if($compilation.compilationTimeMonitoringSupported)
+total compilation time = #interval($compilation.totalCompilationTime)
+#end
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Garbage collectors</h3>
+<div class="d1">
+#foreach($garbageCollector in $garbageCollectors)
+<h4>$garbageCollector.name</h4>
+<div class="d1">
+collection count = $garbageCollector.collectionCount <br/>
+total collection time = #interval($garbageCollector.collectionTime)
+</div>
+#end
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Memory managers</h3>
+<div class="d1">
+#foreach($memoryManager in $memoryManagers)
+<h4>$memoryManager.name</h4>
+<div class="d1">
+vaild = $memoryManager.valid <br/>
+managed pools = #strings($memoryManager.memoryPoolNames)
+</div>
+#end
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Memory</h3>
+<div class="d1">
+heap memory = #memoryUsage($memory.heapMemoryUsage) <br/>
+non-heap memory = #memoryUsage($memory.nonHeapMemoryUsage) <br/>
+object pending finalization count = $memory.objectPendingFinalizationCount
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Memory pools</h3>
+<div class="d1">
+#foreach($memoryPool in $memoryPools)
+<h4>$memoryPool.name</h4>
+<div class="d1">
+type = $memoryPool.type <br/>
+valid = $memoryPool.valid <br/>
+memory managers = #strings($memoryPool.memoryManagerNames) <br/>
+collection usage = #memoryUsage($memoryPool.collectionUsage) <br/>
+#if($memoryPool.collectionUsageThresholdSupported)
+collection usage threshold = $memoryPool.collectionUsageThreshold <br/>
+collectoin usage threshold count = $memoryPool.collectionUsageThresholdCount <br/>
+collection usage threshold exceeded = $memoryPool.collectionUsageThresholdExceeded <br/>
+#end
+peak usage = #memoryUsage($memoryPool.peakUsage) <br/>
+current usage = #memoryUsage($memoryPool.usage) <br/>
+#if($memoryPool.usageThresholdSupported)
+usage threshold = $memoryPool.usageThreshold <br/>
+usage threshold count = $memoryPool.usageThresholdCount <br/>
+usage threshold exceeded = $memoryPool.usageThresholdExceeded <br/>
+#end
+</div>
+#end
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Operating system</h3>
+<div class="d1">
+arch = $operatingSystem.arch <br/>
+available processors = $operatingSystem.availableProcessors <br/>
+name = $operatingSystem.name <br/>
+version = $operatingSystem.version <br/>
+</div>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Runtime</h3>
+<div class="d1">
+#if($runtime.bootClassPathSupported)
+boot classpath = #splitPath($runtime.bootClassPath) <br/>
+#end
+classpath = #splitPath($runtime.classPath) <br/>
+library path = #splitPath($runtime.libraryPath) <br/>
+<br/>
+specification name = $runtime.specName <br/>
+specification vendor = $runtime.specVendor <br/>
+specification version = $runtime.specVersion <br/>
+<br/>
+implementation name = $runtime.vmName <br/>
+implementation vendor = $runtime.vmVendor <br/>
+implementation version = $runtime.vmVersion <br/>
+<br/>
+management specification version = $runtime.managementSpecVersion <br/>
+<br/>
+VM name = $runtime.name <br/>
+input arguments = #foreach($arg in $runtime.inputArguments)$arg #end <br/>
+<br/>
+start time = $format_date.format($runtime.startTime) <br/>
+uptime = #interval($runtime.uptime) <br/>
+<br/>
+system properties:
+<div class="d1">
+#set($props = $runtime.systemProperties)
+#set($filtered = ['java.name','java.vendor','java.version','java.vm.specification.name','java.vm.specification.vendor','java.vm.specification.version','java.specification.name','java.specification.version','java.specification.vendor','java.vm.name','java.vm.vendor','java.vm.version','java.runtime.name','java.runtime.vendor','java.runtime.version','java.class.path','java.boot.class.path','sun.boot.class.path','java.library.path','os.arch','os.name','os.version'])
+#foreach($prop in $stringTool.sort($props.keySet(),$i18n.locale))
+#if(!$filtered.contains($prop))
+$prop = $props.get($prop) <br/>
+#end
+#end
+</div>
+</div>
+
