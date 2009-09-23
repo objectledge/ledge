@@ -1,13 +1,14 @@
+package org.objectledge.mail;
 
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.mail.MailmanMailingList;
 import org.objectledge.mail.MailmanMailingListsManager;
 
-public class Tescik
+public class IntegrationTest
 {
 
-    public Tescik()
+    public IntegrationTest()
     {
         super();
     }
@@ -18,7 +19,7 @@ public class Tescik
     public static void main(String[] args)
         throws Exception
     {
-        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(Tescik.class));
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(IntegrationTest.class));
         MailmanMailingListsManager mml = 
             new MailmanMailingListsManager(logger, 
                 "http://potenilla.caltha.pl/mailman/RPC2", "12345");
