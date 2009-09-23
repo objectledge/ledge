@@ -81,7 +81,7 @@ public class ViewEnclosureManager implements ContextToolFactory
     public EnclosingView getEnclosingView(EnclosingView enclosingView)
     {
         EnclosingView templateEnclosingView =
-            (EnclosingView) context.getAttribute(EnclosingView.class);
+            context.getAttribute(EnclosingView.class);
         context.removeAttribute(EnclosingView.class);
         if(templateEnclosingView == null)
         {

@@ -46,12 +46,12 @@ import java.util.List;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: ListComparator.java,v 1.1 2005-02-07 21:05:13 zwierzem Exp $
  */
-public class ListComparator
-    implements Comparator
+public class ListComparator<T>
+    implements Comparator<List<T>>
 {
     private int index;
 
-    private Comparator comparator;
+    private Comparator<T> comparator;
 
 	/**
 	 * Creates a list comparator which compares lists by using <code>Comparable</code> objects
@@ -69,7 +69,7 @@ public class ListComparator
 	 * @param index index which points to compared objects.
 	 * @param comparator comparator to be used in comparisons.
 	 */
-    public ListComparator(int index, Comparator comparator)
+    public ListComparator(int index, Comparator<T> comparator)
     {
         this(index);
         this.comparator = comparator;
@@ -78,19 +78,18 @@ public class ListComparator
 	/** 
 	 * {@inheritDoc}
 	 */
-    public int compare(Object o1, Object o2)
+    @SuppressWarnings("unchecked")
+    public int compare(List<T> l1, List<T> l2)
     {
-        List l1 = (List)o1;
-        List l2 = (List)o2;
-        o1 = l1.get(index);
-        o2 = l2.get(index);
+        T o1 = l1.get(index);
+        T o2 = l2.get(index);
         if(comparator != null)
         {
             return comparator.compare(o1, o2);
         }
         else
         {
-            return ((Comparable)o1).compareTo(o2);
+            return ((Comparable<T>)o1).compareTo(o2);
         }
     }
 }

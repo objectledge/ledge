@@ -73,7 +73,7 @@ public class Versions
     {
         try
         {
-            List temp = new ArrayList();
+            List<List<String>> temp = new ArrayList<List<String>>();
             String dir = "/META-INF/versions/";
             if(fileSystem.exists(dir) && fileSystem.isDirectory(dir) && fileSystem.canRead(dir))
             {
@@ -107,14 +107,14 @@ public class Versions
         /////////////////////////////////////////////////////////////////////////////////////////
 
         Package[] packages = Package.getPackages();
-        Arrays.sort(packages, new Comparator()
+        Arrays.sort(packages, new Comparator<Package>()
             {
-                public int compare(Object o1, Object o2)
+                public int compare(Package p1, Package p2)
                 {
-                    return ((Package)o1).getName().compareTo(((Package)o2).getName());
+                    return p1.getName().compareTo(p2.getName());
                 }
             });
-        List topLevelPackages = new ArrayList();
+        List<Package> topLevelPackages = new ArrayList<Package>();
         outer: for(int i=0; i<packages.length; i++)
         {
             for(int j=i-1; j>=0; j--)

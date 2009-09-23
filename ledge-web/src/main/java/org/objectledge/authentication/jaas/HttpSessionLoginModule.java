@@ -25,6 +25,7 @@ public class HttpSessionLoginModule
     private Map<String, Object> sharedState;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void initialize(Subject subject, CallbackHandler callbackHandler,
         Map<String, ? > sharedState, Map<String, ? > options)
     {

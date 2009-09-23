@@ -184,7 +184,7 @@ public class NameSequenceFactory
      * @param infix the path infix ("actions", "views","components")
      * @return the view name.
      */    
-    public String getView(String infix, Class clazz)
+    public String getView(String infix, Class<?> clazz)
     {
         return getView(clazz.getName(), "class", infix, classPrefices, classSeparator);
     }

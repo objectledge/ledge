@@ -98,7 +98,7 @@ public class AnyParametersTool
     public List<String> getStringsList(String name)
     {
         String[] a = parameters.getStrings(name);
-        List<String> l = new ArrayList(a.length);
+        List<String> l = new ArrayList<String>(a.length);
         l.addAll(Arrays.asList(a));
         return l;
     }

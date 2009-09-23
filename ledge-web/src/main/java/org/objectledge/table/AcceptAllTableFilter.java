@@ -7,15 +7,12 @@ package org.objectledge.table;
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: AcceptAllTableFilter.java,v 1.1 2005-11-18 12:38:54 rafal Exp $
  */
-public class AcceptAllTableFilter implements TableFilter
-{
-    /** The singleton instance of AcceptAllTableFilter */
-    public static final AcceptAllTableFilter INSTANCE = new AcceptAllTableFilter();
-    
+public class AcceptAllTableFilter<T> implements TableFilter<T>
+{   
     /**
      * Private ctor to enforce {@link #INSTANCE} use.
      */
-    private AcceptAllTableFilter()
+    public AcceptAllTableFilter()
     {
         // intentionally left blank
     }
@@ -23,7 +20,7 @@ public class AcceptAllTableFilter implements TableFilter
     /**
      * {@inheritDoc}
      */
-    public boolean accept(Object object)
+    public boolean accept(T object)
     {
         return true;
     }

@@ -53,7 +53,7 @@ import org.objectledge.security.RoleChecking;
 public class PolicySystem
 {
     /** the policies. */
-    private Map policies = new HashMap();
+    private Map<String, Policy> policies = new HashMap<String, Policy>();
 
     /** logging service */
     private Logger logger;
@@ -174,7 +174,7 @@ public class PolicySystem
     public Policy getPolicy(String name)
         throws IllegalArgumentException
     {
-        Policy policy = (Policy)policies.get(name);
+        Policy policy = policies.get(name);
         if(policy == null)
         {
             throw new IllegalArgumentException("unknown policy "+name);
@@ -211,10 +211,10 @@ public class PolicySystem
      */
     public Policy getPolicy(String view, String action)
     {
-        Iterator i = policies.values().iterator();
+        Iterator<Policy> i = policies.values().iterator();
         while(i.hasNext())
         {
-            Policy policy = (Policy)i.next();
+            Policy policy = i.next();
             if(policy.matchesRequest(view, action))
             {
                 return policy;
@@ -266,7 +266,7 @@ public class PolicySystem
     public void removePolicy(String name)
         throws IllegalArgumentException
     {
-        Policy policy = (Policy)policies.remove(name);
+        Policy policy = policies.remove(name);
         if(policy == null)
         {
             throw new IllegalArgumentException("unknown policy "+name);
@@ -314,10 +314,10 @@ public class PolicySystem
      */
     public boolean requiresSSL(String view, String action)
     {
-        Iterator i = policies.values().iterator();
+        Iterator<Policy> i = policies.values().iterator();
         while(i.hasNext())
         {
-            Policy policy = (Policy)i.next();
+            Policy policy = i.next();
             if(policy.matchesRequest(view,action))
             {
                 return policy.requiresSSL();
@@ -337,10 +337,10 @@ public class PolicySystem
      */
     public boolean requiresLogin(String view, String action)
     {
-        Iterator i = policies.values().iterator();
+        Iterator<Policy> i = policies.values().iterator();
         while(i.hasNext())
         {
-            Policy policy = (Policy)i.next();
+            Policy policy = i.next();
             if(policy.matchesRequest(view,action))
             {
                 return policy.requiresLogin();
@@ -361,10 +361,10 @@ public class PolicySystem
     public boolean checkAccess(String view, String action, Principal principal, 
                                 boolean authenticated)
     {
-        Iterator i = policies.values().iterator();
+        Iterator<Policy> i = policies.values().iterator();
         while(i.hasNext())
         {
-            Policy policy = (Policy)i.next();
+            Policy policy = i.next();
             if(policy.matchesRequest(view,action))
             {
                 return checkPolicy(principal,authenticated, policy);

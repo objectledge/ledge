@@ -68,7 +68,7 @@ public class Locales extends AbstractComponent
     {
         Locale[] locales = i18n.getSupportedLocales();
         tContext.put("locales", Arrays.asList(locales));
-        Map localeNames = new HashMap(locales.length);
+        Map<Locale, String> localeNames = new HashMap<Locale, String>(locales.length);
         for(int i=0; i<locales.length; i++)
         {
             localeNames.put(locales[i], i18n.getLocaleName(locales[i]));

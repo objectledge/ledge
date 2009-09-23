@@ -38,12 +38,9 @@ import java.util.Comparator;
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: ComparableComparator.java,v 1.1 2005-12-19 13:50:56 rafal Exp $
  */
-public class ComparableComparator<T extends Comparable>
+public class ComparableComparator<T extends Comparable<T>>
     implements Comparator<T>
-{
-    /** The singleton instance of the comparator. */
-    public static final ComparableComparator INSTANCE = new ComparableComparator();
-    
+{  
     /**
      * Private ctor to enforce static access.
      */

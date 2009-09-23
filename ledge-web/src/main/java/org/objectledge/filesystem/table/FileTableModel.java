@@ -102,9 +102,9 @@ public class FileTableModel implements ExtendedTableModel<FileObject>
     {
         TableColumn<FileObject>[] columns = new TableColumn[comparatorByColumnName.size()];
         int i=0;
-        for(Iterator iter = comparatorByColumnName.keySet().iterator(); iter.hasNext(); i++)
+        for(Iterator<String> iter = comparatorByColumnName.keySet().iterator(); iter.hasNext(); i++)
         {
-            String columnName = (String)(iter.next());
+            String columnName = (iter.next());
             Comparator<FileObject> comparator =  comparatorByColumnName.get(columnName);
             try
             {

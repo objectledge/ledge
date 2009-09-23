@@ -291,11 +291,11 @@ public class PageTool
      */
     public List<StyleLink> getStyleLinks()
     {
-        Collections.sort(styleLinks, new Comparator()
+        Collections.sort(styleLinks, new Comparator<StyleLink>()
 	        {
-				public int compare(Object o1, Object o2)
+				public int compare(StyleLink l1, StyleLink l2)
 				{
-					return ((StyleLink)o1).getPriority() - ((StyleLink)o2).getPriority();
+					return l1.getPriority() - l2.getPriority();
 				}
 	        }
         );
@@ -442,7 +442,7 @@ public class PageTool
      */
     public List<ScriptLink> getScriptLinks()
     {
-        ArrayList returnScriptLinks = new ArrayList();
+        ArrayList<ScriptLink> returnScriptLinks = new ArrayList<ScriptLink>();
         if(scriptLinks.size() > 0)
         {
             returnScriptLinks.addAll(autoLoadScriptLinks);

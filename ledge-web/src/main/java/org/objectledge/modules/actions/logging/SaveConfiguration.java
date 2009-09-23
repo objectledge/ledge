@@ -111,6 +111,7 @@ public class SaveConfiguration
         pw.println("  </appender>");
     }
     
+    @SuppressWarnings("unchecked")
     private void emitLogger(Logger logger, boolean root, PrintWriter pw)
     {
         if(root)
@@ -126,10 +127,10 @@ public class SaveConfiguration
         {
             pw.println("    <level value=\""+logger.getEffectiveLevel().toString()+"\"/>");
         }
-        Enumeration appenders = logger.getAllAppenders();
+        Enumeration<Appender> appenders = logger.getAllAppenders();
         while(appenders.hasMoreElements())
         {
-            Appender appender = (Appender)appenders.nextElement();
+            Appender appender = appenders.nextElement();
             pw.println("    <appender-ref ref=\""+ appender.getName()+ "\"/>");
         }
         if(root)
@@ -156,6 +157,7 @@ public class SaveConfiguration
     
     // ------------------------------------------------------------------------------------------
     
+    @SuppressWarnings("unchecked")
     private List<Logger> getLoggers()
     {
         Enumeration<Logger> loggerEnumeration = LogManager.getCurrentLoggers();
@@ -164,36 +166,33 @@ public class SaveConfiguration
         {
             loggerList.add(loggerEnumeration.nextElement());
         }
-        Collections.sort(loggerList, new Comparator()
+        Collections.sort(loggerList, new Comparator<Logger>()
             {
-            public int compare(Object o1, Object o2)
+            public int compare(Logger l1, Logger l2)
             {
-                Logger l1 = (Logger)o1;
-                Logger l2 = (Logger)o2;
                 return l1.getName().compareTo(l2.getName());
             }
         });
         return loggerList;
     }
     
+    @SuppressWarnings("unchecked")
     private List<Appender> getAppenders(List<Logger> loggers)
     {
         List<Appender> appenderList = new ArrayList<Appender>();
         for(Logger l : loggers)
         {
-            Enumeration allAppenders = l.getAllAppenders();
+            Enumeration<Appender> allAppenders = l.getAllAppenders();
             while(allAppenders.hasMoreElements())
             {
-                appenderList.add((Appender)allAppenders.nextElement());
+                appenderList.add(allAppenders.nextElement());
             }
         }
-        Collections.sort(appenderList, new Comparator()
+        Collections.sort(appenderList, new Comparator<Appender>()
             {
-            public int compare(Object o1, Object o2)
+            public int compare(Appender a1, Appender a2)
             {
-                Appender a1 = (Appender)o1;
-                Appender r2 = (Appender)o2;
-                return a1.getName().compareTo(r2.getName());
+                return a1.getName().compareTo(a2.getName());
             }
         });
         return appenderList;

@@ -95,7 +95,7 @@ public class GenericListRowSet<T> extends BaseGenericRowSet<T>
      *
      * @param childrenList list of children nodes for current subtree.
      */
-    protected void sortChildren(List childrenList)
+    protected void sortChildren(List<T> childrenList)
     {
         // WARN: no need to sort incoming children collections
         // - only the final row list will be sorted

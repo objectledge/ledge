@@ -95,7 +95,7 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
 
             list = getCurrentPageRows(list);
 
-            rows = (TableRow<T>[])list.toArray(new TableRow[list.size()]);
+            rows = list.toArray(new TableRow[list.size()]);
         }
 
         return rows;
@@ -151,7 +151,7 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
         TableRow<T>[] children = rowsByParent.get(ancestorRow);
 
         // check whether child that was found is on the end of children list
-        TableRow lastChildRow = children[children.length-1];
+        TableRow<T> lastChildRow = children[children.length-1];
         return (childRow != lastChildRow);
     }
 
@@ -296,7 +296,7 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
             sortChildren(childrenList);
 
             // WARN: create TableRow array for children caching
-            TableRow<T>[] children = (TableRow<T>[]) new TableRow[childrenList.size()];
+            TableRow<T>[] children = new TableRow[childrenList.size()];
 
             // 4. add children to rowList collection
             for(int i = 0; i< childrenList.size(); i++)

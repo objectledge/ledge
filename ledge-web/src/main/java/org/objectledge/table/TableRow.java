@@ -158,6 +158,8 @@ public class TableRow<T>
      * @param object the object to be compared
      * @return the comparison result
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object object)
     {
         if(object instanceof TableRow)

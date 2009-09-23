@@ -357,7 +357,7 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
             {
                 try
                 {
-                    Class clazz = Class.forName(className);
+                    Class<?> clazz = Class.forName(className);
                     if(container.getComponentAdapter(clazz) == null)
                     {
                         container.registerComponentImplementation(clazz);

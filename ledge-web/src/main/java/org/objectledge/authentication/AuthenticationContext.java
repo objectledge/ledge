@@ -49,7 +49,7 @@ public class AuthenticationContext
 	 */
 	public static AuthenticationContext getAuthenticationContext(Context context)
 	{
-		return (AuthenticationContext)context.getAttribute(AuthenticationContext.class);
+		return context.getAttribute(AuthenticationContext.class);
 	}
 
 	/** the user. */

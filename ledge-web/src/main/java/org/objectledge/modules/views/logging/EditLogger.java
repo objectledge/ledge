@@ -100,6 +100,7 @@ public class EditLogger
      * @param logger the logger.
      * @param appenders attached to the logger.
      */
+    @SuppressWarnings("unchecked")
     private void getAppenders(Logger logger, List<Appender> appenders)
     {
         Enumeration<Appender> appenderEnumeration = logger.getAllAppenders();

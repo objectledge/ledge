@@ -141,16 +141,19 @@ public class PathTreeElement
      * and must implement Comparable interface themselves.</p>
      *
      * @param property the property to compare on.
+     * @param propertyClass expected class of the property, must implement Comparable interface.
      * @return an instance of Comparator interface.
      */
-    public static Comparator<PathTreeElement> getComparator(final String property)
+    public static <T extends Comparable<T>> Comparator<PathTreeElement> getComparator(
+        final String property, final Class<T> propertyClass)
     {
         return new Comparator<PathTreeElement>()
         {
+            @SuppressWarnings("unchecked")
             public int compare(PathTreeElement e1, PathTreeElement e2)
             {
-                Comparable p1 = (Comparable)e1.get(property);
-                Comparable p2 = (Comparable)e2.get(property);
+                T p1 = (T)e1.get(property);
+                T p2 = (T)e2.get(property);
                 return p1.compareTo(p2);
             }
         };

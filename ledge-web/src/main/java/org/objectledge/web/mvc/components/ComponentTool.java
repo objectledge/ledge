@@ -99,7 +99,7 @@ public class ComponentTool
     public String embed(String componentName) 
         throws BuildException, ProcessingException
     {
-        return embed(componentName, (Map)null);
+        return embed(componentName, (Map<String, String>)null);
     }
     
     /**
@@ -111,7 +111,7 @@ public class ComponentTool
      * @throws BuildException on problems with component building
      * @throws ProcessingException if processing fails.
      */
-    public String embed(String componentName, List config) 
+    public String embed(String componentName, List<List<String>> config) 
         throws BuildException, ProcessingException
     {
         return embed(componentName, CollectionUtils.listToMap(config));
@@ -126,7 +126,7 @@ public class ComponentTool
 	 * @throws BuildException on problems with component building
      * @throws ProcessingException if processing fails.
 	 */
-	public String embed(String componentName, Map config) 
+	public String embed(String componentName, Map<String, String> config) 
         throws BuildException, ProcessingException
 	{
 		Component component = classFinder.getComponent(componentName);
@@ -162,10 +162,10 @@ public class ComponentTool
 	            Map<String, Object> store = new HashMap<String, Object>();
 	            TemplatingContext tContext = 
 	                 TemplatingContext.getTemplatingContext(context);
-	            Iterator i = config.keySet().iterator();
+	            Iterator<String> i = config.keySet().iterator();
 	            while(i.hasNext())
 	            {
-	                String key = (String)i.next();
+	                String key = i.next();
 	                store.put(key, tContext.get(key));
 	                tContext.put(key, config.get(key));
 	            }
@@ -173,7 +173,7 @@ public class ComponentTool
 	            i = config.keySet().iterator();
 	            while(i.hasNext())
 	            {
-	                String key = (String)i.next();
+	                String key = i.next();
 	                tContext.put(key, store.get(key));
 	            }
 	        }

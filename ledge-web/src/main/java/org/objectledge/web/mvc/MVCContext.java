@@ -47,7 +47,7 @@ public class MVCContext
 	 */
 	public static MVCContext getMVCContext(Context context)
 	{
-		return (MVCContext)context.getAttribute(MVCContext.class);
+		return context.getAttribute(MVCContext.class);
 	}
 
     /** request parameters used to override params. */ 

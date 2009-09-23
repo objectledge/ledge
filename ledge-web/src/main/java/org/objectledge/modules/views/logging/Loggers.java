@@ -57,22 +57,18 @@ import org.objectledge.web.mvc.security.PolicySystem;
 public class Loggers
     extends PolicyProtectedBuilder
 {
-    private static final Comparator LOGGER_NAME_COMPARATOR = new Comparator()
+    private static final Comparator<Logger> LOGGER_NAME_COMPARATOR = new Comparator<Logger>()
     {
-        public int compare(Object o1, Object o2)
+        public int compare(Logger l1, Logger l2)
         {
-            Logger l1 = (Logger)o1;
-            Logger l2 = (Logger)o2;
             return l1.getName().compareTo(l2.getName());
         }
     };
 
-    private static final Comparator LOGGER_DESCRIPTOR_COMPARATOR = new Comparator()
+    private static final Comparator<LoggerDescriptor> LOGGER_DESCRIPTOR_COMPARATOR = new Comparator<LoggerDescriptor>()
     {
-        public int compare(Object o1, Object o2)
+        public int compare(LoggerDescriptor l1, LoggerDescriptor l2)
         {
-            LoggerDescriptor l1 = (LoggerDescriptor)o1;
-            LoggerDescriptor l2 = (LoggerDescriptor)o2;
             return l1.getName().compareTo(l2.getName());
         }
     };
@@ -102,14 +98,14 @@ public class Loggers
         List<Logger> loggerList = getLoggers();
         try
         {
-            TableModel model = getLoggerHierarchyModel(loggerList, LogManager.getRootLogger());
+            TableModel<LoggerDescriptor> model = getLoggerHierarchyModel(loggerList, LogManager.getRootLogger());
             TableState state = tableStateManager.getState(context, getClass().getName());
             if(state.isNew())
             {
                 state.setTreeView(true);
                 state.setSortColumnName("name");
             }
-            TableTool tableTool = new TableTool(state, null, model);
+            TableTool<LoggerDescriptor> tableTool = new TableTool<LoggerDescriptor>(state, null, model);
             templatingContext.put("table", tableTool);
         }
         catch(Exception e)
@@ -119,6 +115,7 @@ public class Loggers
         templatingContext.put("loggerList", loggerList);
     }        
     
+    @SuppressWarnings("unchecked")
     private List<Logger> getLoggers()
     {
         Enumeration<Logger> loggerEnumeration = LogManager.getCurrentLoggers();
@@ -130,12 +127,12 @@ public class Loggers
         return loggerList;
     }
     
-    private TableModel getLoggerHierarchyModel(List<Logger> loggerList, Logger rootLogger)
+    private TableModel<LoggerDescriptor> getLoggerHierarchyModel(List<Logger> loggerList, Logger rootLogger)
         throws TableException
     {
-        TableColumn[] columns = new TableColumn[1];
-        columns[0] = new TableColumn("name", LOGGER_DESCRIPTOR_COMPARATOR);
-        PathTreeTableModel model = new PathTreeTableModel(columns);
+        TableColumn<LoggerDescriptor>[] columns = new TableColumn[1];
+        columns[0] = new TableColumn<LoggerDescriptor>("name", LOGGER_DESCRIPTOR_COMPARATOR);
+        PathTreeTableModel<LoggerDescriptor> model = new PathTreeTableModel<LoggerDescriptor>(columns);
         model.bind("/", new LoggerDescriptor("root", "root", rootLogger.getEffectiveLevel()
             .toString()));
         Collections.sort(loggerList, LOGGER_NAME_COMPARATOR);
@@ -147,7 +144,7 @@ public class Loggers
         return model;
     }
 
-    private void bindLogger(PathTreeTableModel model, String[] tokens, String level)
+    private void bindLogger(PathTreeTableModel<LoggerDescriptor> model, String[] tokens, String level)
     {
         for(int i = 1; i <= tokens.length; i++)
         {

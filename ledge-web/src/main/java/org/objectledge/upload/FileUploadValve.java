@@ -86,7 +86,7 @@ public class FileUploadValve
         {
             try
             {
-                Map uploadMap = new HashMap();
+                Map<String, UploadContainer> uploadMap = new HashMap<String, UploadContainer>();
                 Session session = mailSystem.getSession();
                 String headers = "Content-Type: " + 
                 	   httpContext.getRequest().getContentType() +"\n\n";
@@ -129,7 +129,7 @@ public class FileUploadValve
         }
     }
 
-    private void parsePart(Context context, Part part, Map uploadMap)
+    private void parsePart(Context context, Part part, Map<String, UploadContainer> uploadMap)
         throws MessagingException, IOException
     {
 		//HttpContext httpContext;

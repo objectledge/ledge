@@ -101,13 +101,13 @@ public class Cache
 
         private final String hitRatio;
 
-        public Info(String name, Map map)
+        public Info(String name, Map<?, ?> map)
         {
             this.name = name;
             this.size = map.size();
-            if(map instanceof StatisticsMap)
+            if(map instanceof StatisticsMap<?, ?>)
             {
-                StatisticsMap sMap = (StatisticsMap)map;
+                StatisticsMap<?, ?> sMap = (StatisticsMap<?, ?>)map;
                 statistics = true;
                 requests = sMap.getRequestCount();
                 hits = sMap.getHitCount();

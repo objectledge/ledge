@@ -44,12 +44,12 @@ import org.objectledge.table.TableState;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: EmptyTableModel.java,v 1.2 2004-07-01 11:40:06 zwierzem Exp $
  */
-public class EmptyTableModel implements TableModel
+public class EmptyTableModel<T> implements TableModel<T>
 {
 	/** 
 	 * {@inheritDoc}
 	 */
-    public TableRowSet getRowSet(TableState state, TableFilter[] filters)
+    public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters)
     {
         return new EmptyRowSet(state);
     }
@@ -57,7 +57,7 @@ public class EmptyTableModel implements TableModel
 	/** 
 	 * {@inheritDoc}
 	 */
-    public TableColumn[] getColumns()
+    public TableColumn<T>[] getColumns()
     {
         return new TableColumn[0];
     }
@@ -65,7 +65,7 @@ public class EmptyTableModel implements TableModel
     // row set implementation
 
 	/** An empty implementation of a rowset. */
-    private static class EmptyRowSet implements TableRowSet
+    private class EmptyRowSet implements TableRowSet<T>
     {
         private TableState state;
 
@@ -79,17 +79,17 @@ public class EmptyTableModel implements TableModel
             return 0;
         }
 
-        public TableRow getParentRow(TableRow childRow)
+        public TableRow<T> getParentRow(TableRow<T> childRow)
         {
             return null;
         }
 
-        public TableRow getRootRow()
+        public TableRow<T> getRootRow()
         {
             return null;
         }
 
-        public TableRow[] getRows()
+        public TableRow<T>[] getRows()
         {
             return new TableRow[0];
         }
@@ -104,7 +104,7 @@ public class EmptyTableModel implements TableModel
             return 0;
         }
 
-        public boolean hasMoreChildren(TableRow ancestorRow, TableRow descendantRow)
+        public boolean hasMoreChildren(TableRow<T> ancestorRow, TableRow<T> descendantRow)
         {
             return false;
         }

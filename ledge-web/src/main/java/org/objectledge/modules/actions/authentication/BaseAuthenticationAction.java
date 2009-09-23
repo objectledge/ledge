@@ -75,18 +75,19 @@ public abstract class BaseAuthenticationAction
      * 
      * @param session the http session.
      */
+    @SuppressWarnings("unchecked")
     protected void clearSession(HttpSession session)
     {
-        Enumeration attrNames = session.getAttributeNames();
-        ArrayList temp = new ArrayList();
+        Enumeration<String> attrNames = session.getAttributeNames();
+        ArrayList<String> temp = new ArrayList<String>();
         while (attrNames.hasMoreElements())
         {
-            String name = (String)attrNames.nextElement();
+            String name = attrNames.nextElement();
             temp.add(name);
         }
         for (int i = 0; i < temp.size(); i++)
         {
-            String name = (String)temp.get(i);
+            String name = temp.get(i);
             session.removeAttribute(name);
         }
     }

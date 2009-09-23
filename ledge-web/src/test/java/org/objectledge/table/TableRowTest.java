@@ -52,7 +52,7 @@ public class TableRowTest extends TestCase
     	int depth = 2;
     	int childCount = 3;
     	int visibleChildCount = 2;
-    	TableRow row = new TableRow(id, o, depth, childCount, visibleChildCount);
+    	TableRow<Integer> row = new TableRow<Integer>(id, o, depth, childCount, visibleChildCount);
     	
     	assertEquals(row.getId(), id);
     	assertEquals(row.getObject(), o);
@@ -62,10 +62,10 @@ public class TableRowTest extends TestCase
     	
 		assertFalse(row.equals(o));
 
-		TableRow row2 = new TableRow(id, null, 1, 1, 1);
+		TableRow<Object> row2 = new TableRow<Object>(id, null, 1, 1, 1);
 		assertTrue(row.equals(row2));
 
-		TableRow row3 = new TableRow("other-id", null, 1, 1, 1);
+		TableRow<Object> row3 = new TableRow<Object>("other-id", null, 1, 1, 1);
 		assertFalse(row.equals(row3));
 
 		assertEquals(row.hashCode(), row.hashCode());

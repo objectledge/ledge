@@ -29,7 +29,6 @@ package org.objectledge.table;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -71,23 +70,23 @@ public class TableToolTest extends TestCase
     
 	public void testGetId() throws TableException
     {
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
     	assertEquals(table.getId(), state.getId());
     }
     
 	public void testGetAscSort() throws TableException
     {
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
     	assertEquals(table.getAscSort(), state.getAscSort());
     }
     
 	public void testGetColumn() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		
     	try
         {
-            TableColumn column = table.getColumn("column1");
+            TableColumn<Object> column = table.getColumn("column1");
             assertNotNull(column.getComparator());
 			column = table.getColumn("column2");
 			assertNull(column.getComparator());
@@ -102,19 +101,19 @@ public class TableToolTest extends TestCase
 	
 	public void testGetCurrentPage() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getCurrentPage(), 1);
 	}
 	
 	public void testGetNumPages() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getNumPages(), 1);
 	}
 	
 	public void testGetPageNumber() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getPageNumber(10), 1);
 		assertEquals(table.getPageNumber(1), 1);
 		assertEquals(table.getPageNumber(-10), 1);
@@ -122,37 +121,37 @@ public class TableToolTest extends TestCase
 
 	public void testGetPageRowCount() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getPageRowCount(), 8);
 	}
 
 	public void testGetPageSize() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getPageSize(), 0);
 	}
 
 	public void testGetParent() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
-		List rows = table.getRows();
-		assertEquals(table.getParent((TableRow) rows.get(1)), rows.get(0));
-		assertEquals(table.getParent((TableRow) rows.get(4)), rows.get(2));
-		assertNull(table.getParent((TableRow) rows.get(0)));
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
+		List<TableRow<Object>> rows = table.getRows();
+		assertEquals(table.getParent(rows.get(1)), rows.get(0));
+		assertEquals(table.getParent(rows.get(4)), rows.get(2));
+		assertNull(table.getParent(rows.get(0)));
 	}
 
 	public void testGetRelativePageNumber() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getRelativePageNumber(-2), 1);
 		assertEquals(table.getRelativePageNumber(2), 1);
 	}
 
 	public void testGetReverseAncestors() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
-		List rows = table.getRows();
-		List revAncestors = table.getReverseAncestors((TableRow) rows.get(4));
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
+		List<TableRow<Object>> rows = table.getRows();
+		List<TableRow<Object>> revAncestors = table.getReverseAncestors(rows.get(4));
 		assertEquals(revAncestors.get(0), rows.get(2));
 		assertEquals(revAncestors.get(1), rows.get(1));
 		assertEquals(revAncestors.get(2), rows.get(0));
@@ -160,49 +159,49 @@ public class TableToolTest extends TestCase
 
 	public void testGetRootRow() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
-		List rows = table.getRows();
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
+		List<TableRow<Object>> rows = table.getRows();
 		assertEquals(table.getRootRow(), rows.get(0));
 	}
 
 	public void testGetRows() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
-		List rows = table.getRows();
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
+		List<TableRow<Object>> rows = table.getRows();
 		assertEquals(rows.size(), 8);
 	}
 
 	public void testGetShowRoot() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getShowRoot(), state.getShowRoot());
     }
 
 	public void testGetSortColumn() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertNull(table.getSortColumn());
 	}
 
 	public void testGetTotalRowCount() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getTotalRowCount(), 8);
 	}
 
 	public void testGetViewAsTree() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
 		assertEquals(table.getViewAsTree(), state.getTreeView());
 	}
 
 	public void testHasMoreChildren() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
-		List rows = table.getRows();
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
+		List<TableRow<Object>> rows = table.getRows();
 		try
 		{
-			table.hasMoreChildren((TableRow) rows.get(4), (TableRow) rows.get(4));
+			table.hasMoreChildren(rows.get(4), rows.get(4));
 			fail("should throw an exception");
 		}
 		catch (Exception e)
@@ -212,7 +211,7 @@ public class TableToolTest extends TestCase
 
 		try
 		{
-			table.hasMoreChildren((TableRow) rows.get(1), (TableRow) rows.get(0));
+			table.hasMoreChildren(rows.get(1), rows.get(0));
 			fail("should throw an exception");
 		}
 		catch (Exception e)
@@ -220,210 +219,210 @@ public class TableToolTest extends TestCase
 			// ok
 		}
 		
-		assertTrue(table.hasMoreChildren((TableRow) rows.get(0), (TableRow) rows.get(1)));
-		assertTrue(table.hasMoreChildren((TableRow) rows.get(0), (TableRow) rows.get(2)));
-		assertTrue(table.hasMoreChildren((TableRow) rows.get(0), (TableRow) rows.get(3)));
-		assertTrue(table.hasMoreChildren((TableRow) rows.get(0), (TableRow) rows.get(4)));
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(0), (TableRow) rows.get(5)));
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(0), (TableRow) rows.get(6)));
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(0), (TableRow) rows.get(7)));
+		assertTrue(table.hasMoreChildren(rows.get(0), rows.get(1)));
+		assertTrue(table.hasMoreChildren(rows.get(0), rows.get(2)));
+		assertTrue(table.hasMoreChildren(rows.get(0), rows.get(3)));
+		assertTrue(table.hasMoreChildren(rows.get(0), rows.get(4)));
+		assertFalse(table.hasMoreChildren(rows.get(0), rows.get(5)));
+		assertFalse(table.hasMoreChildren(rows.get(0), rows.get(6)));
+		assertFalse(table.hasMoreChildren(rows.get(0), rows.get(7)));
 
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(1), (TableRow) rows.get(2)));
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(1), (TableRow) rows.get(3)));
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(1), (TableRow) rows.get(4)));
+		assertFalse(table.hasMoreChildren(rows.get(1), rows.get(2)));
+		assertFalse(table.hasMoreChildren(rows.get(1), rows.get(3)));
+		assertFalse(table.hasMoreChildren(rows.get(1), rows.get(4)));
 
-		assertTrue(table.hasMoreChildren((TableRow) rows.get(2), (TableRow) rows.get(3)));
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(2), (TableRow) rows.get(4)));
+		assertTrue(table.hasMoreChildren(rows.get(2), rows.get(3)));
+		assertFalse(table.hasMoreChildren(rows.get(2), rows.get(4)));
 
-		assertTrue(table.hasMoreChildren((TableRow) rows.get(5), (TableRow) rows.get(6)));
-		assertFalse(table.hasMoreChildren((TableRow) rows.get(5), (TableRow) rows.get(7)));
+		assertTrue(table.hasMoreChildren(rows.get(5), rows.get(6)));
+		assertFalse(table.hasMoreChildren(rows.get(5), rows.get(7)));
 	}
 
 	public void testIsExpanded() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
-		List rows = table.getRows();
-		for (Iterator iter = rows.iterator(); iter.hasNext();)
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
+		List<TableRow<Object>> rows = table.getRows();
+		for (TableRow<Object> row : rows)
         {
-            TableRow row = (TableRow) iter.next();
+            
 			assertEquals(table.isExpanded(row), state.isExpanded(row.getId()));
         }
 	}
 
 	public void testLinesAndFolders() throws TableException
 	{
-		TableTool table = new TableTool(state, null, new MockTableModel());
-		List rows = table.getRows();
+		TableTool<Object> table = new TableTool<Object>(state, null, new MockTableModel());
+		List<TableRow<Object>> rows = table.getRows();
 		
-		List laf = table.linesAndFolders((TableRow) rows.get(0));
+		List<TableTool.LinesAndFoldersBox> laf = table.linesAndFolders(rows.get(0));
 		assertEquals(laf.size(), 1);
-		TableTool.LinesAndFoldersBox box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		TableTool.LinesAndFoldersBox box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(1));
+		laf = table.linesAndFolders(rows.get(1));
 		assertEquals(laf.size(), 2);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Tminus");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
+		box = laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(2));
+		laf = table.linesAndFolders(rows.get(2));
 		assertEquals(laf.size(), 3);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "I");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
+		box = laf.get(1); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Lminus");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
+		box = laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(3));
+		laf = table.linesAndFolders(rows.get(3));
 		assertEquals(laf.size(), 4);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "I");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
+		box = laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
+		box = laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "T");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(3); 
+		box = laf.get(3); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(4));
+		laf = table.linesAndFolders(rows.get(4));
 		assertEquals(laf.size(), 4);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "I");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
+		box = laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
+		box = laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "L");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(3); 
+		box = laf.get(3); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(5));
+		laf = table.linesAndFolders(rows.get(5));
 		assertEquals(laf.size(), 2);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Lminus");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
+		box = laf.get(1); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(6));
+		laf = table.linesAndFolders(rows.get(6));
 		assertEquals(laf.size(), 3);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
+		box = laf.get(1); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Tplus");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
+		box = laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(7));
+		laf = table.linesAndFolders(rows.get(7));
 		assertEquals(laf.size(), 3);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "blank");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(1); 
+		box = laf.get(1); 
 		assertEquals(box.getLinkType(), "toggle-expand");
 		assertEquals(box.getType(), "Lplus");
         assertFalse(box.isIcon());
-		box = (TableTool.LinesAndFoldersBox) laf.get(2); 
+		box = laf.get(2); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
         assertTrue(box.isIcon());
 		
 		// list view
 		state.setTreeView(false); 
-		table = new TableTool(state, null, new MockTableModel());
+		table = new TableTool<Object>(state, null, new MockTableModel());
 		rows = table.getRows();
 		
-		laf = table.linesAndFolders((TableRow) rows.get(0));
+		laf = table.linesAndFolders(rows.get(0));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(1));
+		laf = table.linesAndFolders(rows.get(1));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(2));
+		laf = table.linesAndFolders(rows.get(2));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(3));
+		laf = table.linesAndFolders(rows.get(3));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(4));
+		laf = table.linesAndFolders(rows.get(4));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "file");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(5));
+		laf = table.linesAndFolders(rows.get(5));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folderopen");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(6));
+		laf = table.linesAndFolders(rows.get(6));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
         assertTrue(box.isIcon());
 
-		laf = table.linesAndFolders((TableRow) rows.get(7));
+		laf = table.linesAndFolders(rows.get(7));
 		assertEquals(laf.size(), 1);
-		box = (TableTool.LinesAndFoldersBox) laf.get(0); 
+		box = laf.get(0); 
 		assertEquals(box.getLinkType(), "none");
 		assertEquals(box.getType(), "folder");
         assertTrue(box.isIcon());
@@ -432,14 +431,14 @@ public class TableToolTest extends TestCase
 
     // implementation -----------------------------------------------------------------------------
 
-    private class MockTableModel implements TableModel
+    private class MockTableModel implements TableModel<Object>
     {
-		private TableColumn[] columns;
+		private TableColumn<Object>[] columns;
 
 		public MockTableModel() throws TableException
 		{
 			columns = new TableColumn[] {
-				new TableColumn("column1", new IntegerComparator()),
+				new TableColumn("column1", new MockComparator()),
 				new TableColumn("column2", null)
 			};
 		}
@@ -447,7 +446,7 @@ public class TableToolTest extends TestCase
 	    /**
 		 * {@inheritDoc}
 		 */
-		public TableColumn[] getColumns()
+		public TableColumn<Object>[] getColumns()
 		{
 			return columns;
 		}
@@ -455,43 +454,40 @@ public class TableToolTest extends TestCase
 		/**
 		 * {@inheritDoc}
 		 */
-		public TableRowSet getRowSet(TableState state, TableFilter[] filters)
+		public TableRowSet<Object> getRowSet(TableState state, TableFilter<Object>[] filters)
 		{
 			return new MockRowSet(state, filters);
 		}
 	}
 
-    private class IntegerComparator implements Comparator
+    private class MockComparator implements Comparator<Object>
     {
         /**
          * {@inheritDoc}
          */
         public int compare(Object o1, Object o2)
         {
-            return ((Integer)o1).intValue() - ((Integer)o2).intValue();
+            return 0;
         }
     }
 
-	private class MockRowSet implements TableRowSet
+	private class MockRowSet implements TableRowSet<Object>
 	{
-		private TableState state;
-		private TableRow[] pagedRows;
-		private TableRow[] rows;
-		private Map<TableRow, TableRow> rowsByChild = new HashMap<TableRow, TableRow>();
+		private TableRow<Object>[] pagedRows;
+		private TableRow<Object>[] rows;
+		private Map<TableRow<Object>, TableRow<Object>> rowsByChild = new HashMap<TableRow<Object>, TableRow<Object>>();
 		
-		public MockRowSet (TableState state, TableFilter[] filters)
-		{
-			this.state = state;
-			
+		public MockRowSet (TableState state, TableFilter<Object>[] filters)
+		{		
 			rows = new TableRow[] {
-				new TableRow("0", null, 0, 2, 2),
-				new TableRow("1", null, 1, 1, 1),
-				new TableRow("2", null, 2, 2, 2),
-				new TableRow("3", null, 3, 0, 0),
-				new TableRow("4", null, 3, 0, 0),
-				new TableRow("5", null, 1, 2, 2),
-				new TableRow("6", null, 2, 1, 0),
-				new TableRow("7", null, 2, 1, 0)
+				new TableRow<Object>("0", null, 0, 2, 2),
+				new TableRow<Object>("1", null, 1, 1, 1),
+				new TableRow<Object>("2", null, 2, 2, 2),
+				new TableRow<Object>("3", null, 3, 0, 0),
+				new TableRow<Object>("4", null, 3, 0, 0),
+				new TableRow<Object>("5", null, 1, 2, 2),
+				new TableRow<Object>("6", null, 2, 1, 0),
+				new TableRow<Object>("7", null, 2, 1, 0)
 			};
 			
 			pagedRows = rows;
@@ -517,7 +513,7 @@ public class TableToolTest extends TestCase
         /**
          * {@inheritDoc}
          */
-        public TableRow[] getRows()
+        public TableRow<Object>[] getRows()
         {
             return rows;
         }
@@ -525,7 +521,7 @@ public class TableToolTest extends TestCase
         /**
          * {@inheritDoc}
          */
-        public TableRow getRootRow()
+        public TableRow<Object> getRootRow()
         {
             return rows[0];
         }
@@ -533,20 +529,20 @@ public class TableToolTest extends TestCase
         /**
          * {@inheritDoc}
          */
-        public TableRow getParentRow(TableRow childRow)
+        public TableRow<Object> getParentRow(TableRow<Object> childRow)
         {
-            return (TableRow) rowsByChild.get(childRow);
+            return rowsByChild.get(childRow);
         }
 
         /**
          * {@inheritDoc}
          */
-        public boolean hasMoreChildren(TableRow ancestorRow, TableRow descendantRow)
+        public boolean hasMoreChildren(TableRow<Object> ancestorRow, TableRow<Object> descendantRow)
         {
-        	TableRow ancestor = (TableRow) rowsByChild.get(descendantRow);
+        	TableRow<Object> ancestor = rowsByChild.get(descendantRow);
         	while(ancestor != null && ancestor != ancestorRow)
         	{
-				ancestor = (TableRow) rowsByChild.get(ancestor);
+				ancestor = rowsByChild.get(ancestor);
         	}
         	if(ancestor != null)
         	{

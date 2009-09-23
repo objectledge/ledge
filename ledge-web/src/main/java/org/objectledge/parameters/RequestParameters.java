@@ -72,7 +72,7 @@ public class RequestParameters extends SortedParameters
 	 */
 	public static RequestParameters getRequestParameters(Context context)
 	{
-		return (RequestParameters)context.getAttribute(RequestParameters.class);
+		return context.getAttribute(RequestParameters.class);
 	}
 	
     /**
@@ -89,6 +89,7 @@ public class RequestParameters extends SortedParameters
      * @param request the request
      * @throws IllegalArgumentException if illegal escape sequences appears.
      */
+    @SuppressWarnings("unchecked")
     public RequestParameters(HttpServletRequest request)
     	throws IllegalArgumentException
     {
@@ -99,21 +100,21 @@ public class RequestParameters extends SortedParameters
 
         // copy querystring params to extract only post params from request params parsed by the
         // servlet container
-        HashMap queryStringParams = new HashMap();
+        Map<String, String[]> queryStringParams = new HashMap<String, String[]>();
         queryStringParams.putAll(this.map);
         queryParams.addAll(queryStringParams.keySet());
         
         // post parameters
-        Enumeration names = request.getParameterNames();
+        Enumeration<String> names = request.getParameterNames();
         while (names.hasMoreElements())
         {
-            String name = (String)names.nextElement();
+            String name = names.nextElement();
             String[] values = request.getParameterValues(name);
             // avoid duplicate parameters from queryString
             int start = 0;
             if(queryStringParams.containsKey(name))
             {
-                start = ((String[])(queryStringParams.get(name))).length;
+                start = queryStringParams.get(name).length;
             }
             for (int i = start; i < values.length; i++)
             {
@@ -124,7 +125,7 @@ public class RequestParameters extends SortedParameters
         for(String name : map.keySet())
         {
             if(queryStringParams.containsKey(name)
-                && ((String[])queryStringParams.get(name)).length == getStrings(name).length)
+                && (queryStringParams.get(name)).length == getStrings(name).length)
             {
                 postParams.remove(name);
             }
@@ -137,8 +138,7 @@ public class RequestParameters extends SortedParameters
         pathParams.removeAll(postParams);        
 
         // speed up sorted parameters retrieval
-        Map tmp = new LinkedHashMap(map);
-        map = tmp;
+        map = new LinkedHashMap<String, String[]>(map);
     }
     
     private static final int START = 0;

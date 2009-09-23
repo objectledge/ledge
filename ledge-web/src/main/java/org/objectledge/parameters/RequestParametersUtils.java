@@ -62,7 +62,7 @@ public class RequestParametersUtils
     throws Exception 
     {
         
-        Class beanClass = bean.getClass();
+        Class<? extends Object> beanClass = bean.getClass();
         PropertyDescriptor[] props
                 = Introspector.getBeanInfo(beanClass).getPropertyDescriptors();
 
@@ -97,7 +97,7 @@ public class RequestParametersUtils
     throws Exception 
     {
         
-        Class beanClass = bean.getClass();
+        Class<? extends Object> beanClass = bean.getClass();
         PropertyDescriptor[] props
                 = Introspector.getBeanInfo(beanClass).getPropertyDescriptors();
 
@@ -171,7 +171,7 @@ public class RequestParametersUtils
                     " is a read only property");
         }
 
-        Class propclass = prop.getPropertyType();
+        Class<?> propclass = prop.getPropertyType();
         Object[] args = {null};
 
         if (propclass == String.class)

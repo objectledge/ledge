@@ -73,7 +73,7 @@ public class TableColumnTest extends TestCase
     {
 		try
 		{
-			TableColumn tableColumn = new TableColumn(null);
+			TableColumn<Object> tableColumn = new TableColumn<Object>(null);
             tableColumn.getName();
     		fail("Should raise a TableException");
 		}
@@ -84,7 +84,7 @@ public class TableColumnTest extends TestCase
 
 		try
 		{
-			TableColumn tableColumn = new TableColumn("");
+			TableColumn<Object> tableColumn = new TableColumn<Object>("");
             tableColumn.getName();
 			fail("Should raise a TableException");
 		}
@@ -93,10 +93,10 @@ public class TableColumnTest extends TestCase
             //ok!
         }
 
-		TableColumn tableColumn = null;
+		TableColumn<Object> tableColumn = null;
     	try
         {
-            tableColumn = new TableColumn("name");
+            tableColumn = new TableColumn<Object>("name");
         }
         catch (TableException e)
         {
@@ -115,11 +115,10 @@ public class TableColumnTest extends TestCase
     /*
      * Test for void TableColumn(String, Comparator)
      */
-    @SuppressWarnings("unchecked")
     public void testTableColumnStringComparator()
     throws TableException
     {
-		TableColumn tableColumn = new TableColumn("name", comparator);
+		TableColumn<String> tableColumn = new TableColumn<String>("name", comparator);
 		assertSame(tableColumn.getComparator(), comparator);
 		assertNotNull(tableColumn.getReverseComparator());
 		assertNotSame(tableColumn.getReverseComparator(), tableColumn.getComparator());
@@ -131,12 +130,11 @@ public class TableColumnTest extends TestCase
     /*
      * Test for void TableColumn(String, Comparator, Comparator)
      */
-    @SuppressWarnings("unchecked")
     public void testTableColumnStringComparatorComparator()
     	throws TableException
     {
         
-		TableColumn tableColumn = new TableColumn("name", comparator, reverseComparator);
+		TableColumn<String> tableColumn = new TableColumn<String>("name", comparator, reverseComparator);
 		assertSame(tableColumn.getComparator(), comparator);
 		assertSame(tableColumn.getReverseComparator(), reverseComparator);
 		assertNotSame(tableColumn.getReverseComparator(), comparator);
@@ -144,7 +142,7 @@ public class TableColumnTest extends TestCase
 		assertEquals(tableColumn.getReverseComparator().compare(a, b),
 					tableColumn.getComparator().compare(b, a));
 
-		tableColumn = new TableColumn("name", null, reverseComparator);
+		tableColumn = new TableColumn<String>("name", null, reverseComparator);
 		assertNotNull(tableColumn.getComparator());
 		assertNotSame(tableColumn.getComparator(), reverseComparator);
 		assertSame(tableColumn.getReverseComparator(), reverseComparator);

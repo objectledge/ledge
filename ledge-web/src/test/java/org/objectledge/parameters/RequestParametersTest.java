@@ -66,7 +66,7 @@ public class RequestParametersTest extends LedgeTestCase
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
-        Vector parameterNames = new Vector();
+        Vector<String> parameterNames = new Vector<String>();
         parameterNames.add("mixed");
         parameterNames.add("post");
         parameterNames.add("get");

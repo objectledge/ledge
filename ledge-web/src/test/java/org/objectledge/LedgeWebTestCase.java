@@ -42,7 +42,7 @@ public abstract class LedgeWebTestCase extends LedgeTestCase
 {
     private ConfigurationFactory configFactory;
         
-    protected Configuration getConfig(FileSystem fs, Class role, Class impl) throws Exception
+    protected Configuration getConfig(FileSystem fs, Class<?> role, Class<?> impl) throws Exception
     {
         if(configFactory == null)
         {
@@ -52,7 +52,7 @@ public abstract class LedgeWebTestCase extends LedgeTestCase
         return configFactory.getConfig(role, impl);
     }      
 
-    protected Configuration getConfig(FileSystem fs, String component, Class impl) throws Exception
+    protected Configuration getConfig(FileSystem fs, String component, Class<?> impl) throws Exception
     {
         if(configFactory == null)
         {

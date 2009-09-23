@@ -105,7 +105,7 @@ public class UploadTest extends LedgeTestCase
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue(contentType));
-        Vector parameterNames = new Vector();
+        Vector<String> parameterNames = new Vector<String>();
         parameterNames.add("foo");
         mockHttpServletRequest.stubs().method("getCharacterEncoding").
             will(returnValue("ISO-8859-2"));

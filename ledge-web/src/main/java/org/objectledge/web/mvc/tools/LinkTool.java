@@ -549,12 +549,13 @@ public class LinkTool
      * Prepare link tool pointed to referer page
      * @return the link tool
      */
+    @SuppressWarnings("unchecked")
     public LinkTool getReferer()
     {
-        Enumeration enumeration = httpContext.getRequest().getHeaders("referer");
+        Enumeration<String> enumeration = httpContext.getRequest().getHeaders("referer");
         if( enumeration != null && enumeration.hasMoreElements())
         {
-            return parseURL(enumeration.nextElement().toString());
+            return parseURL(enumeration.nextElement());
         }
         else
         {
@@ -1344,10 +1345,10 @@ public class LinkTool
         public static final String DEFAULT_BASE_CONTENT_PATH = "/content";
 
         /** the sticky parameters keys */
-        private Set stickyParameterNames = new HashSet();
+        private Set<String> stickyParameterNames = new HashSet<String>();
     
         /** the pathinfo parameters keys */
-        private Set pathinfoParameterNames = new HashSet();
+        private Set<String> pathinfoParameterNames = new HashSet<String>();
     
         /** the query separator */
         private String queryStringSeparator;

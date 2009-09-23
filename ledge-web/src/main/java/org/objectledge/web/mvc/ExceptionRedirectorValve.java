@@ -59,10 +59,10 @@ public class ExceptionRedirectorValve implements Valve
     private String errorLevel;
 
     /** exception - view mapping */
-    private Map exceptionViewMap;
+    private Map<Class<?>, String> exceptionViewMap;
 
     /** exception - log level mapping */
-    private Map exceptionLoggingLevelMap;
+    private Map<Class<?>, String> exceptionLoggingLevelMap;
 
     /**
      * Component constructor.
@@ -73,9 +73,8 @@ public class ExceptionRedirectorValve implements Valve
     public ExceptionRedirectorValve(Configuration config, Logger logger)
     {
         this.logger = logger;
-        Object sessions = null;
-        exceptionViewMap = new HashMap();
-        exceptionLoggingLevelMap = new HashMap();
+        exceptionViewMap = new HashMap<Class<?>, String>();
+        exceptionLoggingLevelMap = new HashMap<Class<?>, String>();
 
         try
         {
@@ -87,7 +86,7 @@ public class ExceptionRedirectorValve implements Valve
                 String name = exception[i].getAttribute("class");
                 String view = exception[i].getAttribute("view");
                 String level = exception[i].getAttribute("level");
-                Class clazz = Class.forName(name);
+                Class<?> clazz = Class.forName(name);
                 exceptionViewMap.put(clazz, view);
                 exceptionLoggingLevelMap.put(clazz, level);
             }
@@ -114,14 +113,14 @@ public class ExceptionRedirectorValve implements Valve
         Throwable t = (Throwable)context.getAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION);
         if (t != null)
         {
-            Class leafException = null;
+            Class<?> leafException = null;
             Throwable tt;
             for(tt = t; tt != null; tt = tt.getCause()){
 
-                Iterator i = exceptionViewMap.keySet().iterator();
+                Iterator<Class<?>> i = exceptionViewMap.keySet().iterator();
                 while (i.hasNext())
                 {
-                    Class temp = (Class)i.next();
+                    Class<?> temp = i.next();
                     if (temp.isAssignableFrom(tt.getClass()))
                     {
                         if (leafException == null || leafException.isAssignableFrom(temp))
@@ -131,8 +130,8 @@ public class ExceptionRedirectorValve implements Valve
                     }
                 }
             }
-            log((String)exceptionLoggingLevelMap.get(leafException), t);
-            String view = (String)exceptionViewMap.get(leafException);
+            log(exceptionLoggingLevelMap.get(leafException), t);
+            String view = exceptionViewMap.get(leafException);
             TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
             if (templatingContext != null)
             {

@@ -85,6 +85,7 @@ public class FileUpload
      * @return the upload container, or <code>null</code> if not available.
      * @throws UploadLimitExceededException thrown on upload limit exceeding
      */
+    @SuppressWarnings("unchecked")
     public UploadContainer getContainer(String name)
     throws UploadLimitExceededException
     {
@@ -100,7 +101,7 @@ public class FileUpload
             // upload limit exceeded - message is the limit value
             throw (UploadLimitExceededException) value;
         }
-        else if(value instanceof Map)
+        else if(value instanceof Map<?, ?>)
         {
             // upload successful - return a requested container
             // (it may also be null for not uploaded items)
