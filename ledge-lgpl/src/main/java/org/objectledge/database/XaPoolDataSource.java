@@ -51,8 +51,6 @@ import org.picocontainer.Startable;
 public class XaPoolDataSource extends DelegatingDataSource
     implements XADataSource, Startable
 {
-    private Transaction transaction;
-    private Configuration config;
     
     /**
      * Constructs a DataSource instance.
@@ -68,8 +66,6 @@ public class XaPoolDataSource extends DelegatingDataSource
         throws ConfigurationException, SQLException
     {
         super(getDataSource(transaction, config));
-        this.transaction = transaction;
-        this.config = config;
     }
 
     /**
