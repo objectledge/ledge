@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -62,10 +61,7 @@ import org.objectledge.utils.StringUtils;
  * @version $Id: MailmanMailingListsManager.java,v 1.32 2006-05-15 11:57:23 rafal Exp $
  */
 public class MailmanMailingListsManager implements MailingListsManager
-{
-    /** List-Id header as defined by RFC2919 */
-    private static final String LIST_ID_HEADER_NAME = "List-Id";
-    
+{  
     /** List-Post header as defined by RFC2369 */
     private static final String LIST_POST_HEADER_NAME = "List-Post";
     
@@ -152,28 +148,16 @@ public class MailmanMailingListsManager implements MailingListsManager
         String[] administrators, String password, 
         boolean notify, Locale locale, boolean moderated) throws MailingListsException
     {
-        Object[] params = new Object[]{
-            adminPassword, name, domain, "", true, administrators,
-            password, notify, vector(locale.toString())};
-        Object result = null;
-        result = executeMethod("Mailman.createList", params);
-        if(result == null)
+        String newPassword = executeMethod("Mailman.createList", adminPassword, name,
+            domain, "", true, administrators, password, notify, vector(locale.toString()));
+        MailingList list = getList(name, newPassword);
+        if(monitoringAddress.length() > 0)
         {
-            throw new MailingListsException("Null result of rpc method invocation");
+            list.addMember(monitoringAddress, "Mailiman - Ledge integration", "", false, true,
+                false, false);
         }
-        if(result instanceof String)
-        {
-            String newPassword = (String)result;
-            MailingList list = getList(name, newPassword); 
-            if(monitoringAddress.length() > 0)
-            {
-                list.addMember(monitoringAddress, "Mailiman - Ledge integration", "", false, true,
-                    false, false);
-            }
-            list.setPostingModerated(moderated);
-            return newPassword;
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        list.setPostingModerated(moderated);
+        return newPassword;
     }
 
     /**
@@ -181,22 +165,11 @@ public class MailmanMailingListsManager implements MailingListsManager
      */
     public void deleteList(String name, boolean deleteArchives) throws MailingListsException
     {
-        Object[] params = new Object[]{
-                        adminPassword, name, deleteArchives};
-        Object result = executeMethod("Mailman.deleteList", params);
-        if(result instanceof Boolean)
+        Boolean result = executeMethod("Mailman.deleteList", adminPassword, name, deleteArchives);
+        if(!result)
         {
-            if(!((Boolean)result).booleanValue())
-            {
-                throw new MailingListsException("failed to delete list - result false");
-            }
-            return;
+            throw new MailingListsException("operation failed");
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -223,26 +196,16 @@ public class MailmanMailingListsManager implements MailingListsManager
         return getLists("");
     }
     
-    private List<String> getLists(String filter) throws MailingListsException
+    private List<String> getLists(String filter)
+        throws MailingListsException
     {
-        Object[] params = new Object[]{
-                        adminPassword, filter};
-        Object result = executeMethod("Mailman.listAllLists", params);
-        if(result instanceof List)
+        List<List<String>> infos = executeMethod("Mailman.listAllLists", adminPassword, filter);
+        List<String> names = new ArrayList<String>(infos.size());
+        for(List<String> info : infos)
         {
-            List<List<String>> infos = (List<List<String>>)result;
-            List<String> names = new ArrayList<String>(infos.size());
-            for(List<String> info : infos)
-            {
-                names.add(info.get(0));
-            }
-            return names;
+            names.add(info.get(0));
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        return names;
     }
 
     /**
@@ -258,22 +221,13 @@ public class MailmanMailingListsManager implements MailingListsManager
      */
     public List<String> getPublicLists(String filter) throws MailingListsException
     {
-        Object[] params = new Object[]{filter};
-        Object result = executeMethod("Mailman.listAdvertisedLists", params);
+        List<List<String>> result = executeMethod("Mailman.listAdvertisedLists", filter);
         List<String> names = new ArrayList<String>();
-        if(result instanceof List)
+        for(List<String> el : result)
         {
-            for(List<String> el: ((List<List<String>>)result))
-            {
-                names.add(el.get(0));
-            }
-            return names;
+            names.add(el.get(0));
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        return names;
     }
 
     /**
@@ -282,26 +236,13 @@ public class MailmanMailingListsManager implements MailingListsManager
     public List<Locale> getAvailableLocales()
         throws MailingListsException
     {
-        Object[] params = new Object[] { adminPassword };
-        Object result = executeMethod("Mailman.getAvailableLocales", params);
-        List<String> names = new ArrayList<String>();
-        if(result instanceof Collection)
+        Collection<List<String>> list = executeMethod("Mailman.getAvailableLocales", adminPassword);
+        ArrayList<Locale> codes = new ArrayList<Locale>();
+        for(List<String> innerList : list)
         {
-            Collection list = (Collection)result;
-            ArrayList<Locale> codes = new ArrayList<Locale>();
-            Iterator it = list.iterator();
-            while(it.hasNext())
-            {
-                List innerList = (List)it.next();
-                codes.add(StringUtils.getLocale((String)innerList.get(0)));
-            }
-            return codes;
+            codes.add(StringUtils.getLocale(innerList.get(0)));
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        return codes;
     }
 
     /**
@@ -310,25 +251,13 @@ public class MailmanMailingListsManager implements MailingListsManager
     public List<String> getAvailableDomains()
         throws MailingListsException
     {
-        Object[] params = new Object[] { adminPassword };
-        Object result = executeMethod("Mailman.getAvailableDomains", params);        
-        List<String> names = new ArrayList<String>();
-        if(result instanceof Collection)
+        Collection<String> list = executeMethod("Mailman.getAvailableDomains", adminPassword);        
+        ArrayList<String> domains = new ArrayList<String>();
+        for(String item : list)
         {
-            Collection list = (Collection)result;
-            ArrayList<String> domains = new ArrayList<String>();
-            Iterator it = list.iterator();
-            while(it.hasNext())
-            {
-                domains.add((String)it.next());
-            }
-            return domains;
+            domains.add(item);
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        return domains;
     }
     
     private void checkMessageStore()
@@ -442,12 +371,18 @@ public class MailmanMailingListsManager implements MailingListsManager
         boolean digest, boolean ignoreCreationPolicy, boolean acknowledge, boolean notifyAdmins)
             throws MailingListsException
     {
-        Object[] params = new Object[] { listName, adminPassword, address, name, password, digest,
-                        ignoreCreationPolicy, acknowledge, notifyAdmins };
-        Object result = null;
         try
         {
-            result = executeMethod("Mailman.addMember", params);
+            Boolean result = executeMethod("Mailman.addMember", listName, adminPassword, address,
+                name, password, digest, ignoreCreationPolicy, acknowledge, notifyAdmins);
+            if(result)
+            {
+                return MailingList.OperationStatus.COMPLETED;
+            }
+            else
+            {
+                throw new MailingListsException("operation failed");
+            }
         }
         catch(NeedApprovalException e)
         {
@@ -457,18 +392,6 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             return MailingList.OperationStatus.NEEDS_CONFIRMATION;
         }
-        if(result instanceof Boolean)
-        {
-            if(((Boolean)result))
-            {
-                return MailingList.OperationStatus.COMPLETED;
-            }
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -477,22 +400,12 @@ public class MailmanMailingListsManager implements MailingListsManager
     void changeMemberAddress(String listName, String adminPassword, 
         String oldAddress, String newAddress, boolean keepOld) throws MailingListsException
     {
-        Object[] params = new Object[]{
-                        listName, adminPassword, address, oldAddress, 
-                        newAddress, keepOld};
-        Object result = executeMethod("Mailman.changeMemberAddress", params);
-        if(result instanceof Boolean)
+        Boolean result = executeMethod("Mailman.changeMemberAddress", listName, adminPassword, address, oldAddress, 
+            newAddress, keepOld);
+        if(!result)
         {
-            if(((Boolean)result))
-            {
-               return;
-            }
+            throw new MailingListsException("operation failed");
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
 
     /**
@@ -506,12 +419,18 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             throw new MailingListsException("monitoring account cannot be unsubscribed from a list");
         }
-        Object[] params = new Object[] { listName, adminPassword, address, ignoreDeletingPolicy,
-                        acknowledge, notifyAdmins };
-        Object result = null;
         try
         {
-            result = executeMethod("Mailman.deleteMember", params);
+            Boolean result = executeMethod("Mailman.deleteMember", listName, adminPassword,
+                address, ignoreDeletingPolicy, acknowledge, notifyAdmins);
+            if(result)
+            {
+                return MailingList.OperationStatus.COMPLETED;
+            }
+            else
+            {
+                throw new MailingListsException("operation failed");
+            }
         }
         catch(NeedApprovalException e)
         {
@@ -521,19 +440,6 @@ public class MailmanMailingListsManager implements MailingListsManager
         {
             return MailingList.OperationStatus.NEEDS_CONFIRMATION;
         }
-        if(result instanceof Boolean)
-        {
-            if(((Boolean)result))
-            {
-                return MailingList.OperationStatus.COMPLETED;
-            }
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result value: '"+result+
-            "' or class: "+result.getClass().getName());    
     }
 
     /**
@@ -542,70 +448,42 @@ public class MailmanMailingListsManager implements MailingListsManager
     List<String> getMembers(String listName, String adminPassword)
         throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword};
-        Object result = executeMethod("Mailman.getMembers", params);
-        if(result instanceof List)
-        {
-            List<String> members = (List<String>)result;
-            members.remove(monitoringAddress);
-            return members;
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        List<String> members = executeMethod("Mailman.getMembers", listName, adminPassword);
+        members.remove(monitoringAddress);
+        return members;
     }
 
     /**
      * {@inheritDoc}
      */
-    Object getOption(String listName, String adminPassword, String key)
+    @SuppressWarnings("cast")
+    <T> T getOption(String listName, String adminPassword, String key)
         throws MailingListsException
     {
-        Object[] params = new Object[]{
-                        listName, adminPassword, new String[]{key}};
-        Object result = executeMethod("Mailman.getOptions", params);
-        if(result instanceof Map)
-        {
-            return ((Map)result).get(key);
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result value: '"+result+"' or class: "+result.getClass().getName());    
+        Map<String, T> result = executeMethod("Mailman.getOptions", listName, adminPassword,
+            new String[] { key });
+        return (T)result.get(key);
     }
 
     /**
      * {@inheritDoc}
      */
-    void setOption(String listName, String adminPassword, 
-        String key, Object value) throws MailingListsException
+    <T> void setOption(String listName, String adminPassword, 
+        String key, T value) throws MailingListsException
     {
-        Hashtable<String, Object> map = new Hashtable<String, Object>();
+        Hashtable<String, T> map = new Hashtable<String, T>();
         map.put(key, value);
-        Object[] params = new Object[]{
-                        listName, adminPassword, map};
-        Object result = executeMethod("Mailman.setOptions", params);
-        if(result instanceof Boolean)
+        Boolean result = executeMethod("Mailman.setOptions", listName, adminPassword, map);
+        if(!result)
         {
-            if(((Boolean)result))
-            {
-                return;
-            }
+            throw new MailingListsException("failed to set options");
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result value: '"+result+"' or class: "+result.getClass().getName());
     }
     
-    void addOptionValue(String listName, String adminPassword, String key, Object value)
+    void addOptionValue(String listName, String adminPassword, String key, String value)
         throws MailingListsException
     {
-        List values = (List)getOption(listName, adminPassword, key);
+        List<String> values = getOption(listName, adminPassword, key);
         values.add(value);
         setOption(listName, adminPassword, key, values);
     }
@@ -613,7 +491,7 @@ public class MailmanMailingListsManager implements MailingListsManager
     void removeOptionValue(String listName, String adminPassword, String key, Object value)
         throws MailingListsException
     {
-        List values = (List)getOption(listName, adminPassword, key);
+        List<String> values = getOption(listName, adminPassword, key);
         values.remove(value);
         setOption(listName, adminPassword, key, values);
     }
@@ -624,17 +502,9 @@ public class MailmanMailingListsManager implements MailingListsManager
     String setPassword(String listName, String adminPassword, 
         String password) throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword, password};
-        Object result = executeMethod("Mailman.resetListPassword", params);
-        if(result instanceof String)
-        {
-            return ((String)result);
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        String result = executeMethod("Mailman.resetListPassword", listName, adminPassword,
+            password);
+        return result;
     }
     
     /**
@@ -642,17 +512,8 @@ public class MailmanMailingListsManager implements MailingListsManager
      */
     List<String> getPendingPosts(String listName, String adminPassword) throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword};
-        Object result = executeMethod("Mailman.getPendingMessages", params);
-        if(result instanceof List)
-        {
-            return toStringList((List<Integer>)result);
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        List<Integer> result = executeMethod("Mailman.getPendingMessages", listName, adminPassword);
+        return toStringList(result);
     }
 
     /**
@@ -661,17 +522,9 @@ public class MailmanMailingListsManager implements MailingListsManager
     List<String> getPendingSubscriptions(String listName, String adminPassword)
         throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword};
-        Object result = executeMethod("Mailman.getPendingSubscriptions", params);
-        if(result instanceof List)
-        {
-            return toStringList((List<Integer>)result);
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        List<Integer> result = executeMethod("Mailman.getPendingSubscriptions", listName,
+            adminPassword);
+        return toStringList(result);
     }
 
     /**
@@ -680,143 +533,90 @@ public class MailmanMailingListsManager implements MailingListsManager
     List<String> getPendingUnsubscriptions(String listName, String adminPassword)
         throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword};
-        Object result = executeMethod("Mailman.getPendingUnsubscriptions", params);
-        if(result instanceof List)
-        {
-            return toStringList((List<Integer>)result);
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        List<Integer> result = executeMethod("Mailman.getPendingUnsubscriptions", listName,
+            adminPassword);
+        return toStringList(result);
     }    
 
     List<String> getNewPendingTasks(String listName, String adminPassword)
         throws MailingListsException
     {
         int lastId = getLastId(listName);
-        Object[] params = new Object[]{listName, adminPassword, lastId};
-        Object result = executeMethod("Mailman.getNewPendingTasks", params);
-        if(result instanceof List)
+        List<Integer> list = executeMethod("Mailman.getNewPendingTasks", listName, adminPassword,
+            lastId);
+
+        if(!list.isEmpty())
         {
-            List list = (List)result;
-            if(!list.isEmpty())
-            {
-                setLastId(listName, (Integer)list.get(list.size() - 1));
-            }
-            return toStringList(list);
+            setLastId(listName, list.get(list.size() - 1));
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        return toStringList(list);
     }
 
     Message getPendingTask(String listName, String adminPassword, String id)
         throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword, Integer.parseInt(id)};
-        Object result = executeMethod("Mailman.getPendingTask", params);
-        if(result instanceof String)
+        String msg = executeMethod("Mailman.getPendingTask", listName, adminPassword, Integer
+            .parseInt(id));
+
+        Session session = mailSystem.getSession();
+        try
         {
-            String msg = (String)result;
-            Session session = mailSystem.getSession();
-            try 
-            {
-                InputStream is = new ByteArrayInputStream(msg.getBytes("UTF-8"));
-                MimeMessage message = new MimeMessage(session, is);
-                return message;
-            }
-            catch(Exception e)
-            {
-                throw new MailingListsException("Failed to deserialize message", e);
-            }
+            InputStream is = new ByteArrayInputStream(msg.getBytes("UTF-8"));
+            MimeMessage message = new MimeMessage(session, is);
+            return message;
         }
-        if(result == null)
+        catch(Exception e)
         {
-            throw new MailingListsException("Null result of rpc method invocation");
+            throw new MailingListsException("Failed to deserialize message", e);
         }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
         
     Integer getPendingTaskType(String listName, String adminPassword, String id)
         throws MailingListsException
     {
-        Object[] params = new Object[]{listName, adminPassword, Integer.parseInt(id)};
-        Object result = executeMethod("Mailman.getPendingTaskType", params);
-        if(result instanceof Integer)
-        {
-            return (Integer)result;
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        Integer result = executeMethod("Mailman.getPendingTaskType", listName, adminPassword,
+            Integer.parseInt(id));
+        return result;
     }
     
     void handleModeratorRequest(String listName, String adminPassword,
         String id, int command, String comment)
             throws MailingListsException
     {
-        Object[] params;
+        Boolean result;
         if(comment != null)
         {
-            params = new Object[]{listName, adminPassword, Integer.parseInt(id), command};
+            result = executeMethod("Mailman.handleModeratorRequest", listName, adminPassword, Integer.parseInt(id), command);
         }
         else
         {
-            params = new Object[]{listName, adminPassword, Integer.parseInt(id), command, comment};            
+            result = executeMethod(listName, adminPassword, Integer.parseInt(id), command, comment);
         }
-        Object result = executeMethod("Mailman.handleModeratorRequest", params);
-        if(result instanceof Boolean && ((Boolean)result))
+        if(!result)
         {
-            return;
+            throw new MailingListsException("failed to set options");
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
     }
     
     void postMessage(String listName, String adminPassword, String message)
         throws MailingListsException
     {
-        Object[] params = new Object[] { listName, adminPassword, message };
-        Object result = executeMethod("Mailman.postMessage", params);
-        if(result instanceof Boolean && ((Boolean)result))
+        Boolean result = executeMethod("Mailman.postMessage", listName, adminPassword, message);
+        if(!result)
         {
-            return;
+            throw new MailingListsException("failed to set options");
         }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: " + result.getClass().getName());
     }
 
     String getInterfaceBaseURL(String domain)
         throws MailingListsException
     {
-        Object[] params = new Object[] { adminPassword, domain };
-        Object result = executeMethod("Mailman.getInterfaceBaseURL", params);
-        if(result instanceof String)
-        {
-            return (String)result;
-        }
-        if(result == null)
-        {
-            throw new MailingListsException("Null result of rpc method invocation");
-        }
-        throw new MailingListsException("Invalid result class: "+result.getClass().getName());
+        String result = executeMethod("Mailman.getInterfaceBaseURL", adminPassword, domain);
+        return result;
     }
     
     // -- private methods -----------------------------------------------------------------------
-    
+      
     /**
      * RPC method executor.
      * It resolve XmlRpcException codes into Java Exceptions.
@@ -825,13 +625,18 @@ public class MailmanMailingListsManager implements MailingListsManager
      * @param parameters arguments of the method.
      * @return result of method invocation.
      */
-    private Object executeMethod(String method, Object[] parameters)
+    @SuppressWarnings("unchecked")
+    private <T> T executeMethod(String method, Object ... parameters)
         throws MailingListsException
     {
-        Object result = null;
+        T result = null;
         try
         {
-            result = client.execute(method, getParameters(parameters));
+            result = (T)client.execute(method, getParameters(parameters));
+        }
+        catch(ClassCastException e)
+        {
+            throw new MailingListsException("unexpected response type", e);
         }
         catch(Exception e)
         {
@@ -840,6 +645,10 @@ public class MailmanMailingListsManager implements MailingListsManager
         if(result instanceof XmlRpcException)
         {
             throw unwrapException((XmlRpcException)result);
+        }
+        if(result == null)
+        {
+            throw new MailingListsException("null result of rpc invocation");
         }
         return result;
     }
@@ -880,20 +689,20 @@ public class MailmanMailingListsManager implements MailingListsManager
      * @param params list of objects.
      * @return vector of objects.
      */
-    private Vector getParameters(Object[] params)
+    private <T> Vector<T> getParameters(T[] params)
     {
-        Vector vector = new Vector();
-        for(Object ob: params)
+        Vector<T> vector = new Vector<T>();
+        for(T ob: params)
         {
             vector.add(ob);
         }
         return vector;
     }
     
-    private Vector vector(Object ... params)
+    private <T> Vector<T> vector(T ... params)
     {
-        Vector vector = new Vector();
-        for(Object obj: params)
+        Vector<T> vector = new Vector<T>();
+        for(T obj: params)
         {
             vector.add(obj);
         }
