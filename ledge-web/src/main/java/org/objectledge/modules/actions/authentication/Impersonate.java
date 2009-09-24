@@ -50,11 +50,7 @@ import org.objectledge.web.WebConstants;
  */
 public class Impersonate 
     extends BaseAuthenticationAction
-{
-    private UserManager userManager;
-    
-    private Logger logger;
-    
+{  
     /**
      * Action constructor.
      * 
