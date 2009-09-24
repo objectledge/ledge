@@ -324,8 +324,8 @@ public class EncoderGenerator
                     }
 
                     // get field values
-                    String mapping = (String)( fields.get(0) );
-                    String unicodeString = (String)( fields.get(1) );
+                    String mapping = ( fields.get(0) );
+                    String unicodeString = ( fields.get(1) );
 
                     // avoid undefined unicode values
                     if(unicodeString.startsWith("#"))

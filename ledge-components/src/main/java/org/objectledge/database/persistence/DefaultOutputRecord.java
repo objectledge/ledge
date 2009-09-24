@@ -436,7 +436,7 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(" (");
         for(Iterator<String> i = fields.keySet().iterator(); i.hasNext();)
         {
-            String field = (String)i.next();
+            String field = i.next();
             buff.append(field);
             Object value = fields.get(field);
             appendValueString(buff2, value);
@@ -473,7 +473,7 @@ public class DefaultOutputRecord implements OutputRecord
         Iterator<String> i = fields.keySet().iterator();
         while(i.hasNext())
         {
-            String field = (String)i.next();
+            String field = i.next();
             if(!keyFields.contains(field))
             {
                 buff.append(field);

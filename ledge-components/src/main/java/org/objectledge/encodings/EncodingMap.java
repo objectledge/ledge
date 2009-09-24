@@ -393,7 +393,7 @@ public class EncodingMap
      */
     public static String getIANA2JavaMapping( String ianaEncoding )
     {
-        return ( String ) IANA_2_JAVA_MAP.get( ianaEncoding );
+        return IANA_2_JAVA_MAP.get( ianaEncoding );
     }
 
     /**
@@ -404,7 +404,7 @@ public class EncodingMap
      */
     public static String getJava2IANAMapping( String javaEncoding )
     {
-        return ( String ) JAVA_2_IANA_MAP.get( javaEncoding );
+        return JAVA_2_IANA_MAP.get( javaEncoding );
     }
 }
 

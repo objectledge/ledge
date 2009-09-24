@@ -110,6 +110,6 @@ public abstract class TemplatingContext
      */
     public static TemplatingContext getTemplatingContext(Context context)
     {
-        return (TemplatingContext)context.getAttribute(TemplatingContext.class);
+        return context.getAttribute(TemplatingContext.class);
     }
 }

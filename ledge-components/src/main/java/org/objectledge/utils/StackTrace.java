@@ -148,7 +148,7 @@ public class StackTrace
                 {
                     buff.append("rethrown as ");
                 }
-                buff.append((String)messages.get(i));
+                buff.append(messages.get(i));
                 traceLines.add(buff.toString());
                 buff.setLength(0);
                 for (int j = 0; j < frames.length - skip[i]; j++)

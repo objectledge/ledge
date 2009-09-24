@@ -96,19 +96,14 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
      */
     public V getValue(K key)
     {
-        if(key instanceof Number)
+        try
         {
-            try
-            {
-                return persistence.load(key.longValue(), factory);
-            }
-            catch(PersistenceException e)
-            {
-                throw new RuntimeException("failed to produce value", e);
-            }
+            return persistence.load(key.longValue(), factory);
         }
-        throw new IllegalArgumentException(key.getClass().getName()+
-                                            " does not extend java.lang.Number");
+        catch(PersistenceException e)
+        {
+            throw new RuntimeException("failed to produce value", e);
+        }
     }
 
     /**

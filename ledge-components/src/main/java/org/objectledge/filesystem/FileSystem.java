@@ -1029,7 +1029,7 @@ public class FileSystem
         StringBuilder sb = new StringBuilder();
         for(int i=0; i<temp.size(); i++)
         {
-            sb.append('/').append((String)temp.get(i));
+            sb.append('/').append(temp.get(i));
         }
         return sb.toString();
     }

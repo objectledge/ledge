@@ -348,7 +348,7 @@ public class ScopedParameters implements Parameters
             }
         }
         String[] result = new String[list.size()];
-        return (String[])list.toArray(result);
+        return list.toArray(result);
     }
     
     /**
