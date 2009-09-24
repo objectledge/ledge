@@ -34,9 +34,6 @@ import java.util.Vector;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
@@ -64,10 +61,6 @@ public class UploadTest extends LedgeTestCase
 
     private Mock mockHttpServletRequest;
     private HttpServletRequest httpServletRequest;
-    private Mock mockHttpSession;
-    private HttpSession httpSession;
-    private Mock mockHttpServletResponse;
-    private HttpServletResponse httpServletResponse;
 
     public void setUp() throws Exception
     {
@@ -123,7 +116,7 @@ public class UploadTest extends LedgeTestCase
             will(returnValue((int)fs.length("up.txt")));
         mockHttpServletRequest.stubs().method("getInputStream").will(returnValue(sis));
 
-        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+        HttpContext httpContext = new HttpContext(httpServletRequest, null);
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);

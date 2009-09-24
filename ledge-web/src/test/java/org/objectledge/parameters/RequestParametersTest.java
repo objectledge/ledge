@@ -31,8 +31,6 @@ package org.objectledge.parameters;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.jmock.Mock;
 import org.objectledge.context.Context;
 import org.objectledge.test.LedgeTestCase;
@@ -50,8 +48,6 @@ public class RequestParametersTest extends LedgeTestCase
 
     private Mock mockHttpServletRequest;
     private HttpServletRequest httpServletRequest;
-    private Mock mockHttpServletResponse;
-    private HttpServletResponse httpServletResponse;
     
     private RequestParameters parameters;
 
@@ -66,6 +62,7 @@ public class RequestParametersTest extends LedgeTestCase
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
+        
         Vector<String> parameterNames = new Vector<String>();
         parameterNames.add("mixed");
         parameterNames.add("post");
@@ -81,7 +78,7 @@ public class RequestParametersTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue("get=get&mixed=mixed1"));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("path/path"));
 
-        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+        HttpContext httpContext = new HttpContext(httpServletRequest, null);
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);
@@ -134,7 +131,7 @@ public class RequestParametersTest extends LedgeTestCase
         	will(returnValue(new Vector<String>().elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(null));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("path/path;jsessionid=8435A845CF71GB5E"));
-        HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);
+        HttpContext httpContext = new HttpContext(httpServletRequest, null);
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();
         paramsLoader.process(context);
