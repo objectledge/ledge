@@ -1,7 +1,6 @@
 package org.objectledge.modules.actions.logging;
 
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -34,7 +33,6 @@ public class CreateLogger
     {
         RequestParameters requestParameters = RequestParameters.getRequestParameters(context);
         String id = requestParameters.get("id");
-        Logger logger;
         if(id.equals("root") || LogManager.exists(id) != null)
         {
             throw new ProcessingException("logger "+id+" already exists");

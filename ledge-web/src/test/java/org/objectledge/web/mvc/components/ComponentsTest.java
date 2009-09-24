@@ -120,7 +120,6 @@ public class ComponentsTest extends TestCase
     
     public void testTool() throws Exception
     {
-        MVCContext mvcContext = MVCContext.getMVCContext(context);
         componentTool = (ComponentTool)componentToolFactory.getTool();
         assertNull(componentTool.embed("DefaultComponent"));
         try

@@ -39,7 +39,6 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.parameters.directory.DirectoryParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
-import org.objectledge.templating.TemplatingContext;
 
 /**
  * Removes an IM contact from user's personal data.
@@ -73,7 +72,6 @@ public class RemoveContact
         throws ProcessingException
     {
         RequestParameters parameters = RequestParameters.getRequestParameters(context);
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         String user = parameters.get("user");
         InstantMessagingContact contact = InstantMessagingContact.fromString(parameters
             .get("contact"), instantMessaging);

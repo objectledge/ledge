@@ -80,7 +80,6 @@ public abstract class AbstractI18nValve
      */
     protected Cookie getCookie(HttpContext httpContext, String cookieName)
     {
-        String value = null;
         Cookie[] cookies = httpContext.getRequest().getCookies();
         if (cookies != null)
         {
