@@ -139,10 +139,9 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
         while(descendantRow != null && descendantRow != ancestorRow)
         {
             childRow = descendantRow;
-            descendantRow = rowsByChild.get(descendantRow);
         }
 
-        if(descendantRow == null)
+        if(rowsByChild.get(descendantRow) == null)
         {
             throw new IllegalStateException("Ancestor is not a real ancestor of a given row");
         }
@@ -208,7 +207,7 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
             }
             end = (end < listSize)? end: listSize;
 
-            list = list.subList(start, end);
+            return list.subList(start, end);
         }
 
         return list;
@@ -289,10 +288,7 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
 
         if(continueRecursion)
         {
-            // 3.0. increase depth
-            depth++;
-
-            // 3.1. sort children collection for tree or forest view
+            // 3. sort children collection for tree or forest view
             sortChildren(childrenList);
 
             // WARN: create TableRow array for children caching
@@ -305,7 +301,7 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
                 String childId = model.getId(rootId, childObject);
 
                 // go down the tree
-                TableRow<T> childRow = getSubTree(childId, childObject, depth, rowList);
+                TableRow<T> childRow = getSubTree(childId, childObject, depth + 1, rowList);
 
                 // WARN: add TableRow to array created for children caching
                 children[i] = childRow;

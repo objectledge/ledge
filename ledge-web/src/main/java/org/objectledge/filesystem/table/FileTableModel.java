@@ -202,7 +202,7 @@ public class FileTableModel implements ExtendedTableModel<FileObject>
 	{
 		if(path.charAt(path.length()-1) == '/')
 		{
-			path = path.substring(0, path.length()-2);
+		    return path.substring(0, path.length()-2);
 		}
 		return path;
 	}

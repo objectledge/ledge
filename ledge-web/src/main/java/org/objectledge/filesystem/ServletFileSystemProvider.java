@@ -100,8 +100,7 @@ public class ServletFileSystemProvider
      */
     public InputStream getInputStream(String path) 
     {
-        path = normalizedPath(path);
-		return context.getResourceAsStream(path);
+        return context.getResourceAsStream(normalizedPath(path));
     }
     
     /**
@@ -110,10 +109,10 @@ public class ServletFileSystemProvider
     public URL getResource(String path)
         throws MalformedURLException
     {
-        path = normalizedPath(path);
-        if(context.getResourceAsStream(path) != null)
+        String normalized = normalizedPath(path);
+        if(context.getResourceAsStream(normalized) != null)
         {
-            return context.getResource(path);
+            return context.getResource(normalized);
         }
         else
         {

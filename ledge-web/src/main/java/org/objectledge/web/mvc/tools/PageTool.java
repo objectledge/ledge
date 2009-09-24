@@ -468,11 +468,7 @@ public class PageTool
         ScriptLink(ContentLink srcLink, String charset)
         {
             this.resLink = srcLink;
-            if(charset == null)
-            {
-                charset = "UTF-8";
-            }
-            this.charset = charset;
+            this.charset = charset != null ? charset : "UTF-8";
         }
 
         /** Getter for <code>src</code> attribute value.

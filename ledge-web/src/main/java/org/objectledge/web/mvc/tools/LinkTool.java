@@ -297,19 +297,20 @@ public class LinkTool
      */
     public LinkTool content(String path)
     {
+        String relativeContentPath;
         if (path.length() == 0)
         {
-            path = config.baseContentPath;
+            relativeContentPath = config.baseContentPath;
         }
         else if (path.charAt(0) != '/')
         {
-            path = config.baseContentPath + '/' + path;
+            relativeContentPath = config.baseContentPath + '/' + path;
         }
         else
         {
-            path = config.baseContentPath + path;
+            relativeContentPath = config.baseContentPath + path;
         }
-        return rootContent(path);
+        return rootContent(relativeContentPath);
     }
 
     // parameter set methods ---------------------------------------------------------------------- 
@@ -611,7 +612,7 @@ public class LinkTool
                     token = st.nextToken();
                 }
                 // separators and empty values
-                if(!hasMoreTokens || (token.length() == 1 && URL_SEPARATOR_CHARS.indexOf(token.charAt(0)) > -1) )
+                if(!hasMoreTokens || (token.length() == 1 && URL_SEPARATOR_CHARS.indexOf(token.charAt(0)) > -1))
                 {
                     switch(state)
                     {

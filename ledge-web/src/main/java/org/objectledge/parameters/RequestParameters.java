@@ -158,7 +158,8 @@ public class RequestParameters extends SortedParameters
         int pos = urlPart.indexOf(';');
         if (pos >= 0)
         {
-        	urlPart = urlPart.substring(0, pos);
+            addURLParams(urlPart.substring(0, pos), separator);
+            return;
         }
         
         try

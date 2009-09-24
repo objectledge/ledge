@@ -84,17 +84,12 @@ public class FileDownload
         throws IOException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        // TODO: Decide whether to put default content type into HttpContext
-        if( StringUtils.isEmpty(contentType))
+        httpContext.setContentType(StringUtils.isEmpty(contentType) ? OCTET_STREAM_CONTENT_TYPE : contentType);
+        if(!StringUtils.isEmpty(fileName))
         {
-            contentType = OCTET_STREAM_CONTENT_TYPE;
+            httpContext.getResponse().setHeader("Content-Disposition",
+                "attachment; filename=" + fileName);
         }
-        if( !StringUtils.isEmpty(fileName))
-        {
-            httpContext.getResponse().setHeader(
-                "Content-Disposition", "attachment; filename="+fileName);
-        }
-        httpContext.setContentType(contentType);
         if(bytesSize > 0)
         {
             httpContext.getResponse().addIntHeader("Content-Length", bytesSize);

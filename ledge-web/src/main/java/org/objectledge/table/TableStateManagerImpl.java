@@ -71,7 +71,6 @@ public class TableStateManagerImpl
         TableState state = getTableState(tableData, id);
         if(state == null)
         {
-            name = name.intern(); // save space for names in the 
             state = createTableState(name, id);
             tableData.put(id, state);
         }
@@ -119,7 +118,6 @@ public class TableStateManagerImpl
             id = new Integer(nextId);
             nextId++;
             //create mappings
-            name = name.intern();
             byNameMapping.put(name, id);
             byIdMapping.put(id, name);
         }
