@@ -93,7 +93,6 @@ public class ClasspathFileSystemProviderTest
     }
 
     public void testIsFile()
-        throws IOException
     {
         assertTrue("should be a file", provider
             .isFile("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
@@ -189,7 +188,6 @@ public class ClasspathFileSystemProviderTest
     }
 
     public void testMkdirs()
-        throws IOException
     {
         try
         {

@@ -316,7 +316,6 @@ public class FileSystemTest extends TestCase
     }
     
     public void testDelete()
-        throws IOException
     {
         try
         {

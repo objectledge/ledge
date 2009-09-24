@@ -86,7 +86,7 @@ public class LedgeDOMConfigurator
         }
     }        
 
-    private Object newInstance(Class<?> clazz) throws InstantiationException
+    private Object newInstance(Class<?> clazz)
     {
         ComponentAdapter adapter = new ConstructorInjectionComponentAdapter(clazz, clazz, null);
         return adapter.getComponentInstance(dependencyContainer); 

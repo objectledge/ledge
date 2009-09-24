@@ -118,7 +118,6 @@ public class ClasspathFileSystemWithListingTest
     }
 
     public void testMkdirs()
-        throws IOException
     {
         try
         {
