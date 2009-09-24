@@ -220,7 +220,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection();
-            conn = new ThreadConnection(conn, null, statementLog);
+            conn = new ThreadConnection(conn, null);
             setCachedConnection(conn, null);
         }
         else
@@ -240,7 +240,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection(user, password);
-            conn = new ThreadConnection(conn, user, statementLog);
+            conn = new ThreadConnection(conn, user);
             setCachedConnection(conn, user);
         }
         else
@@ -373,7 +373,7 @@ public class ThreadDataSource
         {
             return null;
         }
-        return (Connection)userMap.get(user);
+        return userMap.get(user);
     }
 
     /**
@@ -501,8 +501,6 @@ public class ThreadDataSource
     {
         private final String user;
         
-        private final Logger statementLog;
-        
         private int refCount = 1;        
         
         private int reads = 0;
@@ -513,11 +511,10 @@ public class ThreadDataSource
         
         private long totalTimeMillis = 0L;
         
-        ThreadConnection(Connection conn, String user, Logger statementLog)
+        ThreadConnection(Connection conn, String user)
         {
             super(conn);
             this.user = user;
-            this.statementLog = statementLog;
             trace(true, user, refCount);
         }
 
