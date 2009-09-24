@@ -40,6 +40,11 @@ import org.objectledge.pipeline.ProcessingException;
 public class AccessDeniedException extends ProcessingException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Exception constructor.
      * 
      * @param message the message.

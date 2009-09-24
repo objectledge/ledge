@@ -115,6 +115,11 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  */
 public class LedgeServlet extends HttpServlet
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /** The request dispatcher. */
     protected HttpDispatcher dispatcher;
     

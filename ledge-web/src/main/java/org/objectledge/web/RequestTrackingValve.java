@@ -291,6 +291,11 @@ public class RequestTrackingValve
      */
     static class SessionMarker implements HttpSessionBindingListener, Serializable
     {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         public static final String KEY = SessionMarker.class.getName();
         
         private transient WeakReference<RequestTrackingValve> valveRef;

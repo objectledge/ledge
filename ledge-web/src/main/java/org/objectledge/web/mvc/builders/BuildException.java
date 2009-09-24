@@ -37,6 +37,11 @@ package org.objectledge.web.mvc.builders;
 public class BuildException extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates new BuildException instance.
      */
     public BuildException()

@@ -38,6 +38,11 @@ import org.objectledge.pipeline.ProcessingException;
 public class UndefinedViewParameterException extends ProcessingException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates new UndefinedViewParameterException instance.
      */
     public UndefinedViewParameterException()

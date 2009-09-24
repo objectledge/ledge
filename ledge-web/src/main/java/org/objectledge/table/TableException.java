@@ -37,6 +37,11 @@ package org.objectledge.table;
 public class TableException extends Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates a new instance of <code>TableException</code> without detail message.
      */
     public TableException()

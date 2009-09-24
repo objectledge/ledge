@@ -38,6 +38,11 @@ import org.objectledge.pipeline.ProcessingException;
 public class MissingViewException extends ProcessingException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates a new MissingViewException instance.
      * 
      * @param message detail message.

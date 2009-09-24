@@ -39,6 +39,11 @@ import org.objectledge.pipeline.ProcessingException;
 public class UploadLimitExceededException extends ProcessingException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Creates new UploadLimitExceededException instance.
      * 
      * @param message the detail message
