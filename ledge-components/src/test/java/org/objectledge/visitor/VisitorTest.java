@@ -114,7 +114,7 @@ public class VisitorTest
         {
             recorder.add(i.value());
         }
-    };
+    }
     
     public class SubItemOnlyRecorderVisitor
         extends ItemVisitor

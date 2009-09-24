@@ -88,8 +88,7 @@ public class ClasspathFileSystemProviderTest
     public void testExists()
     {
         assertTrue("should exist", provider
-            .exists("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));
-        ;
+            .exists("org/objectledge/filesystem/ClasspathFileSystemProvider.class"));        
         assertFalse("should not exist", provider.exists("nonexistent_file"));
     }
 
