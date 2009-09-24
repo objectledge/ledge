@@ -53,7 +53,6 @@ public class ListTableModel<T>
      * @param list the list to build model for.
      * @param columns the columns of the table, <code>null</code> to disable sorting.
      */
-    @SuppressWarnings("unchecked")
     public ListTableModel(List<T> list, TableColumn<T> ... columns)
     {
         super(columns);

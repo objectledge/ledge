@@ -37,7 +37,6 @@ import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.security.LoginRequiredException;
@@ -52,7 +51,6 @@ import org.objectledge.web.mvc.security.LoginRequiredException;
  */
 public class Login 
     extends BaseAuthenticationAction
-    implements Valve
 {
     /**
      * Action constructor.

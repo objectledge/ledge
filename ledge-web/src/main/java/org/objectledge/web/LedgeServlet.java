@@ -148,7 +148,7 @@ public class LedgeServlet extends HttpServlet
         String root = servletConfig.getInitParameter("root");
         if(root == null)
         {
-            root = (String)context.getInitParameter(ctxRootParam);
+            root = context.getInitParameter(ctxRootParam);
         }
         if(root == null)
         {
@@ -166,7 +166,7 @@ public class LedgeServlet extends HttpServlet
         String config = servletConfig.getInitParameter("config");
         if(config == null)
         {
-            config = (String)context.getInitParameter(ctxConfigParam);
+            config = context.getInitParameter(ctxConfigParam);
         }
         if(config == null)
         {

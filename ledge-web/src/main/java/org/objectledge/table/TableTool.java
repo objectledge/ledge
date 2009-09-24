@@ -249,7 +249,6 @@ public class TableTool<T>
      * @return the sorted list of <code>TableColumn</code> objects.
      */
     public List<TableColumn<T>> getColumns()
-    throws TableException
     {
         List<TableColumn<T>> lcolumns = new ArrayList<TableColumn<T>>(columnsByName.values());
         Collections.sort(lcolumns);

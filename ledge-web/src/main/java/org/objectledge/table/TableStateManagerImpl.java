@@ -159,7 +159,7 @@ public class TableStateManagerImpl
 
     private final TableState getTableState(TableData tableData, Integer id)
     {
-        TableState state = (TableState)tableData.get(id);
+        TableState state = tableData.get(id);
         if(state != null)
         {
             state.setOld();

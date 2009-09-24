@@ -69,6 +69,6 @@ public class EmailTool
      */
     private String bin2Hex(char c)
     {
-        return Integer.toHexString((int)c);
+        return Integer.toHexString(c);
     }
 }

@@ -49,7 +49,7 @@ public class I18nContext
 	 */
 	public static I18nContext getI18nContext(Context context)
 	{
-		return (I18nContext)context.getAttribute(I18nContext.class);
+		return context.getAttribute(I18nContext.class);
 	}
 
 	/** the locale */

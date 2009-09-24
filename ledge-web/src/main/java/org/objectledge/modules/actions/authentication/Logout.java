@@ -35,7 +35,6 @@ import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 
 /**
@@ -47,7 +46,6 @@ import org.objectledge.web.HttpContext;
  */
 public class Logout 
     extends BaseAuthenticationAction
-    implements Valve
 {
     /**
      * Action constructor.

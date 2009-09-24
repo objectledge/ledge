@@ -28,7 +28,6 @@
 
 package org.objectledge.filesystem;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
