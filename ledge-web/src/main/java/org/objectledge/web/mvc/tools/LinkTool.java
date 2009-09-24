@@ -592,6 +592,7 @@ public class LinkTool
     private static final int SEPARATOR_AFTER_VALUE = 6;
     private static final String URL_SEPARATOR_CHARS = "&=?/";
     
+    @SuppressWarnings("null")
     private void setFromURL(String url)
     {       
         if (url == null)
