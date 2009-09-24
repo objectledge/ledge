@@ -97,19 +97,19 @@ public class TableColumnTest extends TestCase
     	try
         {
             tableColumn = new TableColumn<Object>("name");
+
+            assertEquals(tableColumn.getName(), "name");
+            assertSame(tableColumn.set("style", "width:10%;"), tableColumn);
+            assertEquals(tableColumn.get("style"), "width:10%;");
+            assertNull(tableColumn.getComparator());
+            assertNull(tableColumn.getReverseComparator());
+            assertEquals(tableColumn.isSortable(), false);
+            assertEquals(tableColumn.toString(), "");
         }
         catch (TableException e)
         {
 			fail("There should be no exceptions");
-        }
-        
-		assertEquals(tableColumn.getName(), "name");
-        assertSame(tableColumn.set("style", "width:10%;"), tableColumn);
-        assertEquals(tableColumn.get("style"), "width:10%;");
-        assertNull(tableColumn.getComparator());
-		assertNull(tableColumn.getReverseComparator());
-		assertEquals(tableColumn.isSortable(), false);
-		assertEquals(tableColumn.toString(), "");
+        }        
     }
 
     /*
