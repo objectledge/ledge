@@ -131,7 +131,7 @@ public class RequestParametersTest extends LedgeTestCase
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getParameterNames").
-        	will(returnValue(new Vector().elements()));
+        	will(returnValue(new Vector<String>().elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(null));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("path/path;jsessionid=8435A845CF71GB5E"));
         HttpContext httpContext = new HttpContext(httpServletRequest, httpServletResponse);

@@ -93,7 +93,7 @@ public class ExceptionRedirectorValveTest extends LedgeTestCase
             httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
             mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
             mockHttpServletRequest.stubs().method("getParameterNames").
-                will(returnValue((new Vector()).elements()));
+                will(returnValue((new Vector<String>()).elements()));
             mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
             mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("view/Default"));
             mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));

@@ -35,18 +35,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.Logger;
 import org.jmock.Mock;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.logging.LoggerFactory;
-import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParametersLoaderValve;
-import org.objectledge.templating.Templating;
-import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.LedgeTestCase;
 import org.objectledge.test.ReturnArgument;
 import org.objectledge.web.HttpContext;
@@ -79,11 +74,7 @@ public class LinkToolTest extends LedgeTestCase
         XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         ConfigurationFactory configFactory = new ConfigurationFactory(fs, validator, ".");
 
-        Configuration config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        LoggerFactory loggerFactory = new LoggerFactory(new LoggingConfigurator());
-        Logger logger = loggerFactory.getLogger(Templating.class);
-        Templating templating = new VelocityTemplating(config, logger, fs);
-        config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
+        Configuration config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
         WebConfigurator webConfigurator = new WebConfigurator(config);
         config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactoryImpl.class);
         linkToolFactory = new LinkToolFactoryImpl(config, context, webConfigurator);
@@ -92,7 +83,7 @@ public class LinkToolTest extends LedgeTestCase
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getParameterNames").
-            will(returnValue((new Vector()).elements()));
+            will(returnValue((new Vector<String>()).elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("/view/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
@@ -250,10 +241,6 @@ public class LinkToolTest extends LedgeTestCase
         context = new Context();
         validator = new XMLValidator(new XMLGrammarCache());
         configFactory = new ConfigurationFactory(fs, validator, ".");
-        config = configFactory.getConfig(Templating.class, VelocityTemplating.class);
-        loggerFactory = new LoggerFactory(new LoggingConfigurator());
-        logger = loggerFactory.getLogger(Templating.class);
-        templating = new VelocityTemplating(config, logger, fs);
         config = configFactory.getConfig(WebConfigurator.class, WebConfigurator.class);
         webConfigurator = new WebConfigurator(config);
         config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactoryImpl.class);
@@ -263,7 +250,7 @@ public class LinkToolTest extends LedgeTestCase
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
         mockHttpServletRequest.stubs().method("getContentType").will(returnValue("text/html"));
         mockHttpServletRequest.stubs().method("getParameterNames").
-            will(returnValue((new Vector()).elements()));
+            will(returnValue((new Vector<String>()).elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
@@ -297,7 +284,7 @@ public class LinkToolTest extends LedgeTestCase
 
         //referer test
         Mock mockEnumeration = mock(Enumeration.class);
-        Enumeration enumeration = (Enumeration)mockEnumeration.proxy();
+        Enumeration<String> enumeration = (Enumeration<String>)mockEnumeration.proxy();
         mockEnumeration.stubs().method("hasMoreElements").will(returnValue(true));
         mockHttpServletRequest.stubs().method("getHeaders").will(returnValue(enumeration));
         mockEnumeration.stubs().method("nextElement").will(returnValue("https://www.objectledge.org/index.html"));
