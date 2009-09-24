@@ -82,22 +82,22 @@ public abstract class AbstractEncoder
     		return null;    		
     	}
     	
+    	String javaEncodingName = EncodingMap.getIANA2JavaMapping(encodingName);
 		try
 		{
-			encodingName = EncodingMap.getIANA2JavaMapping(encodingName);
-			Object encoderInstance = container.getComponentInstance(encodingName); 
+			Object encoderInstance = container.getComponentInstance(javaEncodingName); 
 			if(encoderInstance == null)
 			{
-				Class<?> clazz = Class.forName(ENCODER_CLASS_PREFIX + encodingName);
-				container.registerComponentImplementation(encodingName, clazz);
-				encoderInstance = container.getComponentInstance(encodingName);
+				Class<?> clazz = Class.forName(ENCODER_CLASS_PREFIX + javaEncodingName);
+				container.registerComponentImplementation(javaEncodingName, clazz);
+				encoderInstance = container.getComponentInstance(javaEncodingName);
 			}
 			return (CharEncoder) encoderInstance;
 		}
 		catch (ClassNotFoundException e)
 		{
 			throw new IllegalArgumentException(
-				"unknown or unsupported encoding '"+encodingName+"'"); 
+				"unknown or unsupported encoding '"+javaEncodingName+"'"); 
 		}
     }
 }

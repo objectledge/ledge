@@ -574,8 +574,7 @@ public class FileSystem
     public void mkdirs(String path)
         throws IOException, UnsupportedCharactersInFilePathException
     {
-        path = normalizedPath(path);
-        StringTokenizer st = new StringTokenizer(path, "/");
+        StringTokenizer st = new StringTokenizer(normalizedPath(path), "/");
         StringBuilder sb = new StringBuilder();
         String parent = "/";
         while (st.hasMoreTokens())
@@ -1067,8 +1066,7 @@ public class FileSystem
      */
     public static String directoryPath(String path)
     {
-        path = normalizedPath(path);
-        return path.substring(0, path.lastIndexOf('/'));        
+        return path.substring(0, normalizedPath(path).lastIndexOf('/'));        
     }
     
     /**
@@ -1084,13 +1082,13 @@ public class FileSystem
     public static String relativePath(String path, String base)
         throws IllegalArgumentException
     {
-        base = normalizedPath(base);
-        path = normalizedPath(path);
-        if(!path.startsWith(base))
+        String normalizedBase = normalizedPath(base);
+        String normalizedPath = normalizedPath(path);
+        if(!normalizedPath.startsWith(normalizedBase))
         {
             throw new IllegalArgumentException(path+" is not contained in "+base);
         }
-        return path.substring(base.length());
+        return normalizedPath.substring(normalizedBase.length());
     } 
     
     /**

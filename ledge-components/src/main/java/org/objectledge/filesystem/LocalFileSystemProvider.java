@@ -90,15 +90,20 @@ public class LocalFileSystemProvider
     public LocalFileSystemProvider(String name, String root)
     {
         this.name = name;
+        String absRoot = null;
         if(root.startsWith("~"+fs))
         {
-            root = System.getProperty("user.home") + fs + root.substring(2);
+            absRoot = System.getProperty("user.home") + fs + root.substring(2);
         }
-        if(!root.startsWith(fs) && (root.length() <= 1 || root.charAt(1) != ':'))
+        else if(!root.startsWith(fs) && (root.length() <= 1 || root.charAt(1) != ':'))
         {
-            root = System.getProperty("user.dir") + fs + root;
+            absRoot = System.getProperty("user.dir") + fs + root;
         }
-        baseDir = new File(root);
+        else
+        {
+            absRoot = root;
+        }
+        baseDir = new File(absRoot);
         if(!baseDir.exists())
         {
             throw new ComponentInitializationError(root+" does not exist");

@@ -128,8 +128,7 @@ public class ClasspathFileSystemProvider
      */
     public InputStream getInputStream(String path)
     {
-        path = normalizedPath(path);
-		return classLoader.getResourceAsStream(path);
+		return classLoader.getResourceAsStream(normalizedPath(path));
     }
     
     /**
@@ -137,8 +136,7 @@ public class ClasspathFileSystemProvider
      */
     public URL getResource(String path)
     {
-        path = normalizedPath(path);
-        return classLoader.getResource(path);
+        return classLoader.getResource(normalizedPath(path));
     }
  
     ///////////////////////////////////////////////////////////////////////////////////////////////

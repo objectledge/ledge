@@ -123,7 +123,7 @@ public class ProcessExecutor
         String... args)
         throws IOException
     {
-        String cmd = concat(args);
+        String[] augmentedArgs = args;
         File in = null;
         File out = null;
         File err = null;
@@ -134,19 +134,19 @@ public class ProcessExecutor
             {
                 in = File.createTempFile("ledge-in-", ".tmp");
                 write(in, input);
-                args = StringUtils.push(args, "<" + in.getPath());
+                augmentedArgs = StringUtils.push(augmentedArgs, "<" + in.getPath());
                 redirect = true;
             }
             if(captureOutput)
             {
                 out = File.createTempFile("ledge-out-", ".tmp");
-                args = StringUtils.push(args, ">" + out.getPath());
+                augmentedArgs = StringUtils.push(augmentedArgs, ">" + out.getPath());
                 redirect = true;
             }
             if(captureError)
             {
                 err = File.createTempFile("ledge-err-", ".tmp");
-                args = StringUtils.push(args, "2>" + err.getPath());
+                augmentedArgs = StringUtils.push(augmentedArgs, "2>" + err.getPath());
                 redirect = true;
             }
 
@@ -154,12 +154,11 @@ public class ProcessExecutor
             if(redirect)
             {
                 // if the command path contain spaces, these need to be escaped
-                args[0] = args[0].replace(" ", "\\ ");
-                args = StringUtils.push(shellTokens, concat(args));
-                cmd = concat(args);
+                augmentedArgs[0] = augmentedArgs[0].replace(" ", "\\ ");
+                augmentedArgs = StringUtils.push(shellTokens, concat(augmentedArgs));
             }
-            log.debug("executing " + cmd);
-            process = Runtime.getRuntime().exec(args);
+            log.debug("executing " + concat(args));
+            process = Runtime.getRuntime().exec(augmentedArgs);
             process.waitFor();
             return new ExecutionResult(process.exitValue(), read(out), read(err));
         }

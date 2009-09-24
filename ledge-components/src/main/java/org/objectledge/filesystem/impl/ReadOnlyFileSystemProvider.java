@@ -327,14 +327,14 @@ public abstract class ReadOnlyFileSystemProvider
      */
     public boolean isFile(String path)
     {
+        String normalizedPath = FileSystem.normalizedPath(path);
 		if(listing != null)
 		{
-		    path = FileSystem.normalizedPath(path);
-			return listing.contains(path) && !(listing.get(path) instanceof DirectoryItem);
+			return listing.contains(normalizedPath) && !(listing.get(normalizedPath) instanceof DirectoryItem);
 		}
 		else
 		{
-	        return checkItemType(path, false);
+	        return checkItemType(normalizedPath, false);
 		}
     }
 
@@ -343,14 +343,14 @@ public abstract class ReadOnlyFileSystemProvider
      */
     public boolean isDirectory(String path)
     {
+        String normalizedPath = FileSystem.normalizedPath(path);
 		if(listing != null)
 		{
-		    path = FileSystem.normalizedPath(path);
-			return listing.contains(path) && listing.get(path) instanceof DirectoryItem;
+			return listing.contains(normalizedPath) && listing.get(normalizedPath) instanceof DirectoryItem;
 		}
 		else
 		{
-		    return checkItemType(path, true);
+		    return checkItemType(normalizedPath, true);
 		}
     }
 

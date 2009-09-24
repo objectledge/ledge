@@ -56,14 +56,7 @@ public class ScopedParameters implements Parameters
     public ScopedParameters(Parameters parameters, String prefix)
     {
         this.parameters = parameters;
-        if(prefix != null)
-        {
-            this.prefix = prefix;
-        }
-        else
-        {
-            prefix = "";
-        }
+        this.prefix = prefix != null ? prefix : "";
     }
     
     /**

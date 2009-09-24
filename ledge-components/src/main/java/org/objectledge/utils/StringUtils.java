@@ -95,10 +95,15 @@ public class StringUtils
     public static String cookieNameSafeString(String input, char replaceChar)
     {
         // check for unsafe replacement character
+        char safeReplaceChar;
         if (replaceChar == '=' || replaceChar == ',' || replaceChar == ';' || 
             replaceChar == '$' || Character.isWhitespace(replaceChar))
         {
-            replaceChar = '.';
+            safeReplaceChar = '.';
+        }
+        else
+        {
+            safeReplaceChar = replaceChar;
         }
 
         if (input != null)
@@ -112,10 +117,10 @@ public class StringUtils
                 if (Character.isWhitespace(c) || c == '=' || c == ';' || c == ',' || c == '$' 
                     || !(( c >= 'a' && c <= 'z') || ( c >= 'A' && c <= 'Z') || ( c >= '0' && c <= '9')))
                 {
-                    sb.setCharAt(i, replaceChar);
+                    sb.setCharAt(i, safeReplaceChar);
                 }
             }
-            input = sb.toString();
+            return sb.toString();
         }
         return input;
     }
@@ -740,8 +745,8 @@ public class StringUtils
      */
     public static String directoryPath(String path)
     {
-        path = normalizedPath(path);
-        return path.substring(0, path.lastIndexOf('/'));        
+        String normalizedPath = normalizedPath(path);
+        return normalizedPath.substring(0, normalizedPath.lastIndexOf('/'));        
     }
     
     /**
@@ -783,10 +788,11 @@ public class StringUtils
         Iterator<String> keys = t.keySet().iterator();
         int pos, lastpos;
         String k, v;
+        String exp = s;
         while(keys.hasNext())
         {
             k = keys.next();
-            pos = s.indexOf(k);
+            pos = exp.indexOf(k);
             if(pos < 0)
             {
                 continue;
@@ -796,15 +802,15 @@ public class StringUtils
             buff.setLength(0);
             while(pos >= 0)
             {
-                buff.append(s.substring(lastpos, pos));
+                buff.append(exp.substring(lastpos, pos));
                 buff.append(v);
                 lastpos = pos+k.length();
-                pos = s.indexOf(k, lastpos);
+                pos = exp.indexOf(k, lastpos);
             }
-            buff.append(s.substring(lastpos));
-            s = buff.toString();
+            buff.append(exp.substring(lastpos));
+            exp = buff.toString();
         }
-        return s;
+        return exp;
     }
     
     /**
