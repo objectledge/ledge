@@ -29,7 +29,6 @@ package org.objectledge.web.mvc.finders;
 
 import org.jcontainer.dna.Configuration;
 import org.objectledge.LedgeWebTestCase;
-import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
 import org.objectledge.logging.LoggingConfigurator;
@@ -37,8 +36,6 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.views.foo.Bar;
-import org.objectledge.xml.XMLGrammarCache;
-import org.objectledge.xml.XMLValidator;
 
 /**
  * 
@@ -47,9 +44,7 @@ import org.objectledge.xml.XMLValidator;
  */
 public class NameSequenceFactoryTest extends LedgeWebTestCase
 {
-    private FileSystem fs;
-    
-    private ConfigurationFactory configFactory;
+    private FileSystem fs;   
     
     /**
      * Constructor for NameSequenceFactoryTest.
@@ -57,8 +52,6 @@ public class NameSequenceFactoryTest extends LedgeWebTestCase
     public void setUp() throws Exception
     {
         fs = getFileSystem("src/test/resources/view-sequences");
-        XMLValidator validator = new XMLValidator(new XMLGrammarCache());        
-        configFactory = new ConfigurationFactory(fs, validator, ".");
     }
     
     public void testLookups()
