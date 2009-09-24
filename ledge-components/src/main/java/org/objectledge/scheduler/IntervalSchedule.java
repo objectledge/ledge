@@ -89,11 +89,14 @@ public class IntervalSchedule
             switch(matcher.group(2).charAt(0))
             {
             case 'd':
-                interval *= 24;                
+                interval *= 24;
+                // $FALL-THROUGH$
             case 'h':
                 interval *= 60;
+                // $FALL-THROUGH$
             case 'm':                
                 interval *= 60;
+                // $FALL-THROUGH$
             case 's':
                 interval *= 1000;
             }
