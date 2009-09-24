@@ -75,13 +75,6 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
             return infix;
         }
     }
-    
-	/** Internal constant for choosing "views" package name part. */
-	private static final String VIEWS = "views";
-	/** Internal constant for choosing "actions" package name part. */
-	private static final String ACTIONS = "actions";
-	/** Internal constant for choosing "components" package name part. */
-	private static final String COMPONENTS = "components";
 	
 	private MutablePicoContainer container;
 	
@@ -167,10 +160,10 @@ public class MVCFinder implements MVCTemplateFinder, MVCClassFinder
         if(viewName != null && viewName.length() != 0)
         {
             Sequence classSequence = nameSequenceFactory.
-                getClassNameSequence(VIEWS, viewName, true, true);
+                getClassNameSequence(Kind.VIEW.getInfix(), viewName, true, true);
 
             Sequence templateSequence = nameSequenceFactory.
-                getTemplateNameSequence(VIEWS, viewName, true, true);
+                getTemplateNameSequence(Kind.VIEW.getInfix(), viewName, true, true);
 
             while(classSequence.hasNext() && templateSequence.hasNext())
             {
