@@ -1,1 +1,0 @@
-this file allows the product to be reloaded in Zope2
