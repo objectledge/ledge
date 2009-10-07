@@ -59,8 +59,6 @@ public class FormImpl implements Form
     protected String defaultInstanceURI;
     /** Keeps an object representing default Instance. */
     private DefaultInstance defaultInstance;
-    /** WYSIWIG editor name */
-    private String editorName = "kupu";
     
     //private Parameters parameters;
 
@@ -126,7 +124,6 @@ public class FormImpl implements Form
     throws Exception
     {
         InstanceImpl instance = (InstanceImpl)inst;
-        instance.setEditorName(this.getEditorName());
         // 1. Apply new values
         // Apply new values dispatches:
         //  - errorCollector init
@@ -249,14 +246,6 @@ public class FormImpl implements Form
     {
         return htmlService;
     }
-    
-    public String getEditorName() {
-		return editorName;
-	}
-
-	public void setEditorName(String editorName) {
-		this.editorName = editorName;
-	}
 
 /*    public I18nService getI18nService()
     {

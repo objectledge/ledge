@@ -42,11 +42,8 @@ implements FormTool
         templatingContext.put("formtool-link", formLink);
         templatingContext.put("formtoolConst", UIConstants.getInstance());
         // 4. get the skin == template
-        Template template = templating.getTemplate("forms/"+skinName);
-        // 5. get editor name
-        templatingContext.put("editorName", instance.getEditorName());
-        
-        // 6. merge template
+        Template template = templating.getTemplate("forms/"+skinName);       
+        // 5. merge template
         return template.merge(templatingContext);
     }
 

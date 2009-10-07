@@ -48,9 +48,6 @@ public class InstanceImpl extends AbstractInstance
 
     /** This field is <code>true</code> if this instance has all required values. */
     private boolean hasRequired = false;
-    
-    /** WYSIWIG editor name */
-    private String editorName = "kupu";
 
     //------------------------------------------------------------------------
     // Runtime cache
@@ -121,18 +118,6 @@ public class InstanceImpl extends AbstractInstance
     {
         return hasRequired;
     }
-
-     //------------------------------------------------------------------------
-    // methods used internally by form-tool
-    //------------------------------------------------------------------------
-
-    public String getEditorName() {
-		return editorName;
-	}
-
-	public void setEditorName(String editorName) {
-		this.editorName = editorName;
-	}
 
 	//------------------------------------------------------------------------
     // Methods used during Instance processing

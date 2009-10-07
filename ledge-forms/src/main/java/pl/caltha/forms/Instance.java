@@ -34,9 +34,5 @@ public interface Instance
     public String getSchemaURI();
     
     /** Returns DOM4J Document object with this Instance's user inputed data. */
-    public org.dom4j.Document getDocument();
-    
-    /** Return WYSIWIG editor Name */
-    public String getEditorName();
-    
+    public org.dom4j.Document getDocument();  
 }
