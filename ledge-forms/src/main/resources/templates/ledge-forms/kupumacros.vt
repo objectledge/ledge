@@ -7,7 +7,7 @@
   
     
     
-#macro (formtool_htmlarea_kupu $field $loopIndex)
+#macro (formtool_htmlarea_visual $field $loopIndex)
 #set($kupuI18n = $i18n.usePrefix('ledge-forms.kupu'))
 
     

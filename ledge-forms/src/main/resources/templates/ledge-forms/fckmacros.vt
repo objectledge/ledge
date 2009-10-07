@@ -6,7 +6,7 @@
   @param treeDepth  - Depth in the UI tree.
 *#
 #####################  
-#macro (formtool_htmlarea_fckeditor $field $loopIndex)
+#macro (formtool_htmlarea_visual $field $loopIndex)
 ##
 $pageTool.addScriptLink('fckeditor/fckeditor.js')##
 

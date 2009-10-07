@@ -25,18 +25,13 @@
 <pre>$field.getErrorLog($instance)</pre>
 </div>
 #end
-## Choose editor name
-#if($editorName == 'kupu')
 ## Choose a proper control type depending on UserAgent
-  #if($userAgentTool.org == 'microsoft' && $userAgentTool.family == 'ie' && $userAgentTool.majorVersion > 3)
-    #formtool_htmlarea_kupu($field $loopIndex)
-  #elseif($userAgentTool.family == 'gecko')
-    #formtool_htmlarea_kupu($field $loopIndex)
-  #else
-    #formtool_htmlarea_old($field $loopIndex)
-  #end
+#if($userAgentTool.org == 'microsoft' && $userAgentTool.family == 'ie' && $userAgentTool.majorVersion > 3)
+  #formtool_htmlarea_visual($field $loopIndex)
+#elseif($userAgentTool.family == 'gecko')
+  #formtool_htmlarea_visual($field $loopIndex)
 #else
-#formtool_htmlarea_fckeditor($field $loopIndex)
+  #formtool_htmlarea_old($field $loopIndex)
 #end
 #end
 #*
