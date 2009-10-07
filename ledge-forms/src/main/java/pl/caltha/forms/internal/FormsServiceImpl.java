@@ -54,9 +54,6 @@ implements FormsService
      * is a CPU intensive operation.
      */
      private boolean reloadFormDefinitions = false;
-     
-     /** WYSIWIG editor name */
-     private String editorName;
 
     private final HTMLService htmlService;
 
@@ -75,7 +72,6 @@ implements FormsService
         uiSchemaURI   = config.getChild("uri.schema.ui").getValue("classpath:pl/caltha/forms/internal/formtool-ui.xsd");
         //formSchemaURI = config.getChild("uri.schema.form").getValue("pl/caltha/forms/internal/formtool-form.xsd");
         //uiSchemaURI   = config.getChild("uri.schema.ui").getValue("pl/caltha/forms/internal/formtool-ui.xsd");
-        this.editorName = config.getChild("wysiwigEditor").getValue("kupu");
 
         log.info("Preloading schemas for 'formtool' service");
         preloadSchema(formSchemaURI);
@@ -178,7 +174,6 @@ implements FormsService
         org.xml.sax.InputSource is = getInputSource(formDefinitionURI);
         FormBuilder formBuilder = new FormBuilder(FormsService.ACCEPTED_NS_FORM, formSchemaURI);
         FormImpl form =  new FormImpl(this, xmlService, htmlService, formDefinitionURI, formId);
-        form.setEditorName(this.editorName);
         formBuilder.build(form, reader, is, errorHandler);
 
         // Build DefaultInstance
