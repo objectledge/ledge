@@ -136,12 +136,15 @@ public abstract class BaseGenericRowSet<T> extends BaseRowSet<T>
 
         // get a direct child of ancestor which is also an ancestor of descendant
         TableRow<T> childRow = null;
-        while(descendantRow != null && descendantRow != ancestorRow)
+        TableRow<T> row = descendantRow;
+        while(row != null && row != ancestorRow)
         {
-            childRow = descendantRow;
+            // traverse upwards
+            childRow = row;
+            row = rowsByChild.get(row);
         }
 
-        if(rowsByChild.get(descendantRow) == null)
+        if(descendantRow == null)
         {
             throw new IllegalStateException("Ancestor is not a real ancestor of a given row");
         }
