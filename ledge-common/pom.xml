@@ -99,6 +99,7 @@
     <module>../ledge-lgpl</module>
     <module>../ledge-web</module>
     <module>../ledge-forms</module>
+    <module>../ledge-forms-fckeditor</module>
   </modules>
   <repositories>
     <repository>
