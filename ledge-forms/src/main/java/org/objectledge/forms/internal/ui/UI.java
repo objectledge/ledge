@@ -24,14 +24,14 @@ public class UI
     /** Represents UI structure */
     private Node uiTree;
     /** Contains UI nodes with Id's. */
-    private HashMap nodesById = new HashMap();
+    private HashMap<String, List<Node>> nodesById = new HashMap<String, List<Node>>();
     /** Contains UI nodes keyed by their location in UI tree.
      * This is used to name HTML controls and to put incoming values
      * into Instance.
      */
-    private HashMap nodesByUIPath = new HashMap();
+    private HashMap<String, Node> nodesByUIPath = new HashMap<String, Node>();
     /** Contains UI nodes with model references. */
-    private HashMap nodesByBindId = new HashMap();
+    private HashMap<String, List<Node>> nodesByBindId = new HashMap<String, List<Node>>();
     // /** Contains UI's components definitions. */
     // private HashMap componentDefinitions = new HashMap();
 
@@ -58,7 +58,7 @@ public class UI
     throws ConstructionException
     {
         // check if there are already nodes with this id
-        List nodes = (List)(nodesById.get(node.id));
+        List<Node> nodes = nodesById.get(node.id);
         // if not - add node and return
         if(nodes == null)
         {
@@ -67,7 +67,7 @@ public class UI
         }
 
         // if yes - check definitionUiPath
-        Node firstNode = (Node)(nodes.get(0));
+        Node firstNode = nodes.get(0);
 
         if(!firstNode.definitionUiPath.equals(node.definitionUiPath))
         {
@@ -137,22 +137,22 @@ public class UI
     }
 
     /** Returns node(s) with a given ID. */
-    public List getNodesById(String id)
+    public List<Node> getNodesById(String id)
     {
-        return (List)(nodesById.get(id));
+        return nodesById.get(id);
     }
 
     /** Returns node with a given UI path (similar to canonical XPath expression). */
     public Node getNodeByUIPath(String uiPath)
     {
-        return (Node)(nodesByUIPath.get(uiPath));
+        return nodesByUIPath.get(uiPath);
     }
 
     /** Returns node(s) connected to a bind ({@link org.objectledge.forms.internal.model.Bind})
      * expression with a given ID. */
-    public List getNodesByBindId(String bindId)
+    public List<Node> getNodesByBindId(String bindId)
     {
-        return (List)(nodesByBindId.get(bindId));
+        return nodesByBindId.get(bindId);
     }
 
     //--------------------------------
@@ -217,14 +217,14 @@ public class UI
         }
 
         // recurse down to the tree to look for ReferenceNode children
-        List children = null;
+        List<Node> children = null;
         if(node instanceof NodeRepeat)
         {
             children = ((NodeRepeat)node).getChildren(instance);
         }
         else if(node instanceof NodeSwitch)
         {
-            children = new ArrayList(1);
+            children = new ArrayList<Node>(1);
             children.add(((NodeSwitch)node).getCase(instance));
         }
         else
@@ -234,7 +234,7 @@ public class UI
 
         for(int i = 0, s = children.size(); i < s; i++)
         {
-            setValues(instance, parameters, (Node)(children.get(i)));
+            setValues(instance, parameters, children.get(i));
         }
     }
 
@@ -313,7 +313,7 @@ public class UI
         }
 
         // recurse down to the tree to look for ReferenceNode children
-        List children = null;
+        List<Node> children = null;
         if(node instanceof NodeRepeat)
         {
             children = ((NodeRepeat)node).getChildren(inst);
@@ -325,7 +325,7 @@ public class UI
 
         for(int i = 0, s = children.size(); i < s; i++)
         {
-            if(!nodeHasRequired(inst, (Node)(children.get(i))))
+            if(!nodeHasRequired(inst, children.get(i)))
             {
                 // No required value found - no need to check it further
                 return false;

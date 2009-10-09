@@ -18,9 +18,9 @@ public class CollectingErrorHandler extends BaseErrorHandler
     //-----------------------------------------------------------------------
     // Error counters
     /** Collection of errors. */
-    protected ArrayList errors = new ArrayList();
+    protected ArrayList<ErrorInfo> errors = new ArrayList<ErrorInfo>();
     /** Collection of warnings. */
-    protected ArrayList warnings = new ArrayList();
+    protected ArrayList<ErrorInfo> warnings = new ArrayList<ErrorInfo>();
 
     //-----------------------------------------------------------------------
     // BaseErrorHandler methods
@@ -80,7 +80,7 @@ public class CollectingErrorHandler extends BaseErrorHandler
     /** Saves an error or warning information in a list.
      * @return Saved ErrorInfo
      */
-    protected ErrorInfo saveErrorOrWarning( SAXParseException spe, List collection)
+    protected ErrorInfo saveErrorOrWarning( SAXParseException spe, List<ErrorInfo> collection)
     {
         ErrorInfo ei = new ErrorInfo(spe);
         collection.add(ei);
@@ -90,7 +90,7 @@ public class CollectingErrorHandler extends BaseErrorHandler
     /** Returns errors list.
      * @return List of errors.
      */
-    public List getErrors()
+    public List<ErrorInfo> getErrors()
     {
         return errors;
     }
@@ -98,7 +98,7 @@ public class CollectingErrorHandler extends BaseErrorHandler
     /** Returns warnings list.
      * @return List of warnings.
      */
-    public List getWarnings()
+    public List<ErrorInfo> getWarnings()
     {
         return warnings;
     }
@@ -119,10 +119,10 @@ public class CollectingErrorHandler extends BaseErrorHandler
         return dumpErrorsOrWarnings(warnings);
     }
 
-    protected String dumpErrorsOrWarnings(List collection)
+    protected String dumpErrorsOrWarnings(List<ErrorInfo> collection)
     {
         StringBuilder sb = new StringBuilder();
-        for(java.util.Iterator iter = collection.iterator(); iter.hasNext();)
+        for(java.util.Iterator<ErrorInfo> iter = collection.iterator(); iter.hasNext();)
         {
             sb.append(iter.next().toString());
             sb.append('\n');

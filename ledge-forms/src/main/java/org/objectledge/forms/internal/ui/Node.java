@@ -56,11 +56,11 @@ implements Cloneable
         // 2. Clone children collection
         int childrenSize = children.size();
         // 2.1. Create an array
-        next.children = new ArrayList(childrenSize);
+        next.children = new ArrayList<Node>(childrenSize);
         // 2.2. Clone children objects
         for(int i = 0; i < childrenSize; i++)
         {
-            Node child = (Node)(children.get(i));
+            Node child = children.get(i);
             Node cloneChild = (Node)(child.clone());
             next.children.add(i, cloneChild);
         }
@@ -93,7 +93,7 @@ implements Cloneable
     //------------------------------------------------------------------------
     // associations
     /** Node's children. */
-    protected List children = new ArrayList();
+    protected List<Node> children = new ArrayList<Node>();
     /** Node's parent node. */
     protected Node parent;
     /** Node's parent NodeRepeatSubTree node - the root of this node's repeat subtree. */
@@ -128,7 +128,7 @@ implements Cloneable
     /** Getter for List of this Node's children Nodes.
      * @return List of this Node's children Nodes.
      */
-    public List getChildren()
+    public List<Node> getChildren()
     {
         return children;
     }

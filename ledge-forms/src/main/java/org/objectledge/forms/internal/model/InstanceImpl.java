@@ -41,7 +41,7 @@ public class InstanceImpl extends AbstractInstance
     private boolean submitRequested = false;
 
     /** This map contains state values for dynamic UI elements. */
-    private HashMap uiStateMap = new HashMap();
+    private HashMap<Node, HashMap<Object, Object>> uiStateMap = new HashMap<Node, HashMap<Object, Object>>();
 
     /** Error collector used for validation. */
     private DOM4JValidationErrorCollector errorCollector = new DOM4JValidationErrorCollector();
@@ -53,11 +53,11 @@ public class InstanceImpl extends AbstractInstance
     // Runtime cache
     /** This map contains context nodes for UI elements - it decreases
      * number of XPath evaluations. */
-    protected HashMap contextNodeCache = new HashMap();
+    protected HashMap<Object, Object> contextNodeCache = new HashMap<Object, Object>();
 
     /** This map contains results for bind expression evaluation - it decreases
      * number of XPath evaluations. */
-    protected HashMap bindPropertyCache = new HashMap();
+    protected HashMap<Object, Object> bindPropertyCache = new HashMap<Object, Object>();
 
     /** Value cache buffer is used for instance in Select controls. */
     private StringBuilder valueCacheBuffer = new StringBuilder(1024);
@@ -176,10 +176,10 @@ public class InstanceImpl extends AbstractInstance
     /** Sets a UI state value for this instance. */
     public void setStateValue(Node contextNode, Object key, Object value)
     {
-        HashMap stateMap = (HashMap)(uiStateMap.get(contextNode));
+        HashMap<Object, Object> stateMap = uiStateMap.get(contextNode);
         if(stateMap == null)
         {
-            stateMap = new HashMap();
+            stateMap = new HashMap<Object, Object>();
         }
         stateMap.put(key, value);
         uiStateMap.put(contextNode, stateMap);
@@ -188,7 +188,7 @@ public class InstanceImpl extends AbstractInstance
     /** Gets a UI state value for this instance. */
     public Object getStateValue(Node contextNode, Object valueKey)
     {
-        HashMap stateMap = (HashMap)(uiStateMap.get(contextNode));
+        HashMap<Object, Object> stateMap = uiStateMap.get(contextNode);
         if(stateMap != null)
         {
             return stateMap.get(valueKey);
@@ -249,25 +249,26 @@ public class InstanceImpl extends AbstractInstance
         // 1. serialize formId
         out.writeObject(formId);
         // 2. serialize UI state
-        HashMap xPathKeyedUIStateMap = new HashMap();
-        for(Iterator iter = uiStateMap.keySet().iterator(); iter.hasNext();)
+        HashMap<String, HashMap<Object, Object>> xPathKeyedUIStateMap = new HashMap<String, HashMap<Object, Object>>();
+        for(Iterator<Node> iter = uiStateMap.keySet().iterator(); iter.hasNext();)
         {
-            Node contextNode = (Node)(iter.next());
+            Node contextNode = iter.next();
             xPathKeyedUIStateMap.put(contextNode.getUniquePath(), uiStateMap.get(contextNode));
         }
         out.writeObject(xPathKeyedUIStateMap);
     }
 
+    @SuppressWarnings("unchecked")
     private void readObject(java.io.ObjectInputStream in)
     throws IOException, ClassNotFoundException
     {
         // 1. deserialize formId
         this.formId = (String)(in.readObject());
         // 2. deserialize UI state
-        HashMap xPathKeyedUIStateMap = (HashMap)(in.readObject());
-        for(Iterator iter = xPathKeyedUIStateMap.keySet().iterator(); iter.hasNext();)
+        HashMap<String, HashMap<Object, Object>> xPathKeyedUIStateMap = (HashMap<String, HashMap<Object, Object>>)(in.readObject());
+        for(Iterator<String> iter = xPathKeyedUIStateMap.keySet().iterator(); iter.hasNext();)
         {
-            String uniqueXPath = (String)(iter.next());
+            String uniqueXPath = iter.next();
             Node contextNode = instanceDocument.selectSingleNode(uniqueXPath);
             uiStateMap.put(contextNode, xPathKeyedUIStateMap.get(uniqueXPath));
         }

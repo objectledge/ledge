@@ -28,7 +28,7 @@ public class ReferenceMultipleRepeat extends ReferenceMultiple
     //
     protected org.dom4j.Node getParentContextNodeForChild(InstanceImpl instance, Node child)
     {
-        List instChildren = ((NodeRepeat)containerNode).getChildren(instance);
+        List<Node> instChildren = ((NodeRepeat)containerNode).getChildren(instance);
         int repeatIndex = ((NodeRepeat)containerNode).getIndex(instance);
 
         int childIndex = instChildren.indexOf(child);
@@ -39,7 +39,7 @@ public class ReferenceMultipleRepeat extends ReferenceMultiple
         else
         {
             int index = repeatIndex + instChildren.indexOf(child) - 1;
-            return (org.dom4j.Node)(getContextNodes(instance).get(index));
+            return getContextNodes(instance).get(index);
         }
     }
 }

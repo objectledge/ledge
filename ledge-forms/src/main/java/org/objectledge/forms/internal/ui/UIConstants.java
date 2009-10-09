@@ -1,6 +1,7 @@
 package org.objectledge.forms.internal.ui;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -84,9 +85,9 @@ public class UIConstants
     public static final String ITEM = "item";
     public static final String ITEMREF = "itemref";
 
-    static HashMap elementNames = new HashMap();
-    static  HashMap classNames = new HashMap();
-    static HashMap classes = new HashMap();
+    static Map<String, String> elementNames = new HashMap<String, String>();
+    static  Map<String, String> classNames = new HashMap<String, String>();
+    static Map<String, String> classes = new HashMap<String, String>();
     static
     {
         String basePackage = "org.objectledge.forms.internal.ui.";
@@ -144,10 +145,10 @@ public class UIConstants
         classNames.put(ITEMREF,       "NodeControlSelectItemRef");
 
         //-------------------------------------------------------
-        for(java.util.Iterator iter = classNames.keySet().iterator(); iter.hasNext();)
+        for(java.util.Iterator<String> iter = classNames.keySet().iterator(); iter.hasNext();)
         {
-            Object key = iter.next();
-            classes.put(key, basePackage+((String)classNames.get(key)));
+            String key = iter.next();
+            classes.put(key, basePackage+classNames.get(key));
             elementNames.put(key, key);
         }
     }

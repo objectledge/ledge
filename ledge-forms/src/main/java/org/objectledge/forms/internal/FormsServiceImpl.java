@@ -36,10 +36,10 @@ implements FormsService
     private XMLService xmlService;
     
     /** Form definition objects keyed by their Id's. */
-    private HashMap formsById = new HashMap();
+    private HashMap<String, Form> formsById = new HashMap<String, Form>();
 
     /** Form definition objects keyed by their application given names. */
-    private HashMap formsByName = new HashMap();
+    private HashMap<String, Form> formsByName = new HashMap<String, Form>();
 
 
     /** String containing an URI to form definition schema. */
@@ -121,7 +121,7 @@ implements FormsService
         // get form definition from map
         if(formsByName.containsKey(formName))
         {
-            form = (Form)(formsByName.get(formName));
+            form = formsByName.get(formName);
 
             // check for duplicate formName -> form mapping
             String secondFormDefURI =  form.getDefinitionURI();
@@ -385,7 +385,7 @@ implements FormsService
      */
     public class FormData
     {
-        private HashMap instancesById = new HashMap();
+        private HashMap<String, Instance> instancesById = new HashMap<String, Instance>();
 
         /** Puts an instance inside this FormData.
          * @param instance Instance to be stored.
@@ -401,7 +401,7 @@ implements FormsService
          */
         public Instance get(String id)
         {
-            return (Instance)(instancesById.get(id));
+            return instancesById.get(id);
         }
 
         /** Removes an instance from this FormData. */

@@ -7,6 +7,7 @@ import org.objectledge.forms.internal.ui.NodeRepeat;
 import org.objectledge.forms.internal.ui.ReferenceSingle;
 import org.objectledge.forms.internal.ui.UI;
 import org.objectledge.forms.internal.util.Util;
+import org.dom4j.Node;
 import org.xml.sax.Attributes;
 
 
@@ -37,7 +38,7 @@ extends BaseReferenceAction
      * element referenced in <code>at</code> attribute. */
     protected NodeRepeat repeat;
 
-    protected int clipIndex(Number result, List contextNodes)
+    protected int clipIndex(Number result, List<Node> contextNodes)
     {
         // the index is being decreased because in XPath it is 1 based
         int index = result.intValue() - 1;

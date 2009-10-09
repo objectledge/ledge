@@ -43,7 +43,7 @@ public class FormImpl implements Form
     private String definitionURI;
 
     /** Keeps model/bind elements. */
-    private HashMap bindElements = new HashMap();
+    private HashMap<String, Bind> bindElements = new HashMap<String, Bind>();
 
     /** Keeps Form's SubmitInfo. */
     protected SubmitInfo submitInfo;
@@ -222,7 +222,7 @@ public class FormImpl implements Form
     {
         if(bindElements.containsKey(id))
         {
-            return (Bind)(bindElements.get(id));
+            return bindElements.get(id);
         }
         throw new ConstructionException("Cannot find bind element with id='"+id+"'");
     }

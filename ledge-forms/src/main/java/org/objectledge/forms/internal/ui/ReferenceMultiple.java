@@ -33,14 +33,15 @@ public class ReferenceMultiple extends Reference
     //------------------------------------------------------------------------
     // ReferenceMultiple methods
     //
-    public List getContextNodes(InstanceImpl instance)
+    @SuppressWarnings("unchecked")
+    public List<org.dom4j.Node> getContextNodes(InstanceImpl instance)
     {
-        return (List)getContextNodeInternal(instance);
+        return (List<org.dom4j.Node>)getContextNodeInternal(instance);
     }
 
     protected Object evaluateInstanceReference(org.dom4j.Node contextNode)
     {
-        List nodes = instanceReference.getNodes(contextNode);
+        List<org.dom4j.Node> nodes = instanceReference.getNodes(contextNode);
         return nodes;
     }
 }

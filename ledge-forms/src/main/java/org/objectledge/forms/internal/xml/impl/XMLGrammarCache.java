@@ -20,7 +20,7 @@ import com.sun.msv.verifier.regexp.REDocumentDeclaration;
  */
 public class XMLGrammarCache
 {
-    private HashMap grammars = new HashMap();
+    private HashMap<String, Grammar> grammars = new HashMap<String, Grammar>();
     private XMLServiceImpl xmlService;
     private Logger log;
 
@@ -92,7 +92,7 @@ public class XMLGrammarCache
     {
         if(grammars.containsKey(grammarID))
         {
-            return (Grammar)grammars.get(grammarID);
+            return grammars.get(grammarID);
         }
 
         Grammar grammar = null;

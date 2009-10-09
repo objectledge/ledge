@@ -12,6 +12,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 
 
@@ -32,7 +33,7 @@ public class XMLDataReaderImpl
         this.xmlService = xmlService;
         reader = xmlService.getFactory().newSAXParser().getXMLReader();
         entityResolver = xmlService.getEntityResolver();
-        saxPipe = new java.util.ArrayList(3);
+        saxPipe = new java.util.ArrayList<XMLFilter>(3);
     }
 
     private XMLServiceImpl xmlService;
@@ -40,7 +41,7 @@ public class XMLDataReaderImpl
 
     private EntityResolver entityResolver;
     private DTDHandler dtdHandler;
-    private java.util.ArrayList saxPipe;
+    private java.util.ArrayList<XMLFilter> saxPipe;
 
     //------------------------------------------------------------------------
     // XMLDataReader methods
@@ -127,9 +128,9 @@ public class XMLDataReaderImpl
         }
      
         XMLReader lastReader = this.reader;
-        for(java.util.Iterator iter =  saxPipe.iterator(); iter.hasNext();)
+        for(java.util.Iterator<XMLFilter> iter =  saxPipe.iterator(); iter.hasNext();)
         {
-            org.xml.sax.XMLFilter filter = (org.xml.sax.XMLFilter)(iter.next());
+            org.xml.sax.XMLFilter filter = iter.next();
             filter.setParent(lastReader);
             lastReader = filter;
         }

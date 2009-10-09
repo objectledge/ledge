@@ -32,16 +32,16 @@ public class NodeRepeatSubTree extends NodeCaptionReference
     protected Object clone()
     {
         NodeRepeatSubTree next = (NodeRepeatSubTree)(super.clone());
-        next.nodesById = new HashMap();
+        next.nodesById = new HashMap<String, List<Node>>();
         return next;
     }
 
-    private HashMap nodesById = new HashMap();
+    private HashMap<String, List<Node>> nodesById = new HashMap<String, List<Node>>();
 
     /** Returns node(s) with a given ID. */
-    public List getNodesById(String id)
+    public List<Node> getNodesById(String id)
     {
-        return (List)(nodesById.get(id));
+        return nodesById.get(id);
     }
 
     //------------------------------------------------------------------------

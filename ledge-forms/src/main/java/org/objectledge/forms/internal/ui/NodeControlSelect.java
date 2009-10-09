@@ -29,7 +29,7 @@ public class NodeControlSelect extends NodeControl
         key = Util.createAttribute(atts, "key", "empty");
     }
 
-    private HashMap itemsByValue = new HashMap();
+    private HashMap<String, NodeControlSelectItem> itemsByValue = new HashMap<String, NodeControlSelectItem>();
 
     void addItemByValue(NodeControlSelectItem item)
     {
@@ -67,14 +67,14 @@ public class NodeControlSelect extends NodeControl
      * This method is called by select items. */
     boolean getSelected(InstanceImpl instance, NodeControlSelectItem item)
     {
-        Set selectedValues = getSelectedValuesSet(instance);
+        Set<String> selectedValues = getSelectedValuesSet(instance);
         // Return true for selected item/value
         return selectedValues.contains(item.getValue());
     }
 
     public boolean isSelected(InstanceImpl instance, String value)
     {
-        Set selectedValues = getSelectedValuesSet(instance);
+        Set<String> selectedValues = getSelectedValuesSet(instance);
         // Return true for selected item/value
         return selectedValues.contains(value);
     }
@@ -85,15 +85,16 @@ public class NodeControlSelect extends NodeControl
      */
     protected String SELECTED_VALUES = "select.selectedValues";
 
-    private Set getSelectedValuesSet(InstanceImpl instance)
+    @SuppressWarnings("unchecked")
+    private Set<String> getSelectedValuesSet(InstanceImpl instance)
     {
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);
-        Set selectedValues = (Set)(instance.getStateValue(contextNode, SELECTED_VALUES));
+        Set<String> selectedValues = (Set<String>)(instance.getStateValue(contextNode, SELECTED_VALUES));
 
         // 1. build selected values if null
         if(selectedValues == null)
         {
-            selectedValues = new java.util.HashSet();
+            selectedValues = new java.util.HashSet<String>();
             // 1.1. set value from instance
             String value = ref.getValue(contextNode);
             setSelectedValuesValue(selectedValues, value);
@@ -105,7 +106,7 @@ public class NodeControlSelect extends NodeControl
         return selectedValues;
     }
 
-    private void setSelectedValuesValue(Set selectedValues, String value)
+    private void setSelectedValuesValue(Set<String> selectedValues, String value)
     {
         // check for null value and set it
         if(value != null)
@@ -130,7 +131,7 @@ public class NodeControlSelect extends NodeControl
         super.setValue(instance, value);
 
         // 2. Get selected values
-        Set selectedValues = getSelectedValuesSet(instance);
+        Set<String> selectedValues = getSelectedValuesSet(instance);
         // 3. clean old value
         selectedValues.clear();
         // 4. set new value

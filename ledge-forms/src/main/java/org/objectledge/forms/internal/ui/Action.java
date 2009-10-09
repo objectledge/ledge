@@ -43,7 +43,7 @@ public abstract class Action extends Node
     throws ConstructionException
     {
         // find a referenced node
-        List nodes = null;
+        List<Node> nodes = null;
 
         // try to find it in this ui subtree
         NodeRepeatSubTree _repeatSubTree = this.getParentRepeatSubTree();
@@ -77,7 +77,7 @@ public abstract class Action extends Node
         }
         else
         {
-            return (Node)(nodes.get(0));
+            return nodes.get(0);
         }
     }
 }

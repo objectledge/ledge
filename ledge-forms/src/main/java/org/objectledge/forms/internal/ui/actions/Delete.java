@@ -2,6 +2,7 @@ package org.objectledge.forms.internal.ui.actions;
 
 import java.util.List;
 
+import org.dom4j.Node;
 import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.objectledge.forms.internal.ui.ActionEvent;
@@ -32,7 +33,7 @@ public class Delete extends BaseInsertDeleteAction
      */
     public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
     {
-        List contextNodes = ((ReferenceMultipleRepeat)(repeat.getRef())).getContextNodes(instance);
+        List<Node> contextNodes = ((ReferenceMultipleRepeat)(repeat.getRef())).getContextNodes(instance);
         Object result = ((ReferenceSingle)ref).evaluate(instance);
 
         if(result instanceof Number)
@@ -40,7 +41,7 @@ public class Delete extends BaseInsertDeleteAction
             // clip index
             int index = clipIndex((Number)result, contextNodes);
 
-            org.dom4j.Node contextNode = (org.dom4j.Node)(contextNodes.get(index));
+            org.dom4j.Node contextNode = contextNodes.get(index);
             // remove node & set instacne dirty
             contextNode.detach();
             instance.setDirty(true);

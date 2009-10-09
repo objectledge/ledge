@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
  */
 public class Localizer
 {
-    private static HashMap bundles;
+    private static HashMap<String, ResourceBundle> bundles;
     
     public static void init()
     {
@@ -24,7 +24,7 @@ public class Localizer
     {
         if(bundles == null)
         {
-            bundles = new HashMap();
+            bundles = new HashMap<String, ResourceBundle>();
         }
 
         if(bundles.containsKey(baseName))
@@ -51,9 +51,9 @@ public class Localizer
             init();
         }
         
-        for(java.util.Iterator iter = bundles.values().iterator(); iter.hasNext();)
+        for(java.util.Iterator<ResourceBundle> iter = bundles.values().iterator(); iter.hasNext();)
         {
-            ResourceBundle bundle = (ResourceBundle)(iter.next());
+            ResourceBundle bundle = iter.next();
             try
             {
                 String format = bundle.getString(propertyName);

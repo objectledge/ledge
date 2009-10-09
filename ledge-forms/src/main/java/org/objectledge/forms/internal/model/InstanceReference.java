@@ -98,12 +98,14 @@ public class InstanceReference
        return this.xpath.selectSingleNode(context);
     }
 
-    public List getNodes(InstanceImpl instance)
+    @SuppressWarnings("unchecked")
+    public List<org.dom4j.Node> getNodes(InstanceImpl instance)
     {
        return this.xpath.selectNodes(instance.getDocument().getRootElement());
     }
 
-    public List getNodes(Object context)
+    @SuppressWarnings("unchecked")
+    public List<org.dom4j.Node> getNodes(Object context)
     {
        return this.xpath.selectNodes(context);
     }

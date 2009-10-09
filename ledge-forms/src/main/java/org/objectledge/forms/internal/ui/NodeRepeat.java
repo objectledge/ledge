@@ -87,7 +87,7 @@ public class NodeRepeat extends NodeCaptionReference
         // check index for sanity
         int indexVal = index;
 
-        List contextNodes = ((ReferenceMultipleRepeat)ref).getContextNodes(instance);
+        List<org.dom4j.Node> contextNodes = ((ReferenceMultipleRepeat)ref).getContextNodes(instance);
         int ctxNodesNumber = contextNodes.size();
         // number of contextNodes is smaller than repeat size (number)
         // we must start on first child
@@ -106,11 +106,11 @@ public class NodeRepeat extends NodeCaptionReference
         return indexVal;
     }
 
-    public List getChildren(InstanceImpl instance)
+    public List<Node> getChildren(InstanceImpl instance)
     {
-        List contextNodes = ((ReferenceMultipleRepeat)ref).getContextNodes(instance);
+        List<org.dom4j.Node> contextNodes = ((ReferenceMultipleRepeat)ref).getContextNodes(instance);
         int size = Math.min(contextNodes.size(), number);
-        ArrayList instChildren = new ArrayList(size);
+        ArrayList<Node> instChildren = new ArrayList<Node>(size);
         for(int i=0; i<size; i++)
         {
             instChildren.add(i, children.get(i));
@@ -192,11 +192,11 @@ public class NodeRepeat extends NodeCaptionReference
             throw new ConstructionException("Parent context node for repeat with id='"+id+"' is not an element");
         }
 
-        List contextNodes = ((ReferenceMultipleRepeat)ref).getContextNodes(instance);
+        List<org.dom4j.Node> contextNodes = ((ReferenceMultipleRepeat)ref).getContextNodes(instance);
         // WARN: guard from badly designed forms
         if(contextNodes.size() > 0)
         {
-            org.dom4j.Node contextNode = (org.dom4j.Node)(contextNodes.get(0));
+            org.dom4j.Node contextNode = contextNodes.get(0);
             if(contextNode.getParent() != parentContextNode)
             {
                 throw new ConstructionException("Parent context node for repeat with id='"+id+"'"+

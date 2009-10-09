@@ -2,6 +2,7 @@ package org.objectledge.forms.internal.ui.actions;
 
 import java.util.List;
 
+import org.dom4j.Node;
 import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.objectledge.forms.internal.ui.ActionEvent;
@@ -35,11 +36,12 @@ public class Insert extends BaseInsertDeleteAction
     /** This method performs the action, ie. adds a subtree to instance
      * document.
      */
+    @SuppressWarnings("unchecked")
     public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
     {
         // get repeat's context nodes
         org.dom4j.Element parentContextNode = (org.dom4j.Element)(((ReferenceMultipleRepeat)(repeat.getRef())).getParentContextNode(instance));
-        List contextNodes = ((ReferenceMultipleRepeat)(repeat.getRef())).getContextNodes(instance);
+        List<Node> contextNodes = ((ReferenceMultipleRepeat)(repeat.getRef())).getContextNodes(instance);
         // evaluate the index on which an insertion will be performed
         Object at = ((ReferenceSingle)ref).evaluate(instance);
 
@@ -52,18 +54,18 @@ public class Insert extends BaseInsertDeleteAction
 
             // content list for parentContextNode
             // WARN: We only insert Elements
-            List elements = ((org.dom4j.Element)parentContextNode).elements();
+            List<Node> elements = parentContextNode.elements();
 
             // set real index for a not empty node collection
             if(contextNodes.size() > 0)
             {
-                org.dom4j.Node contextNode = (org.dom4j.Node)(contextNodes.get(index));
+                org.dom4j.Node contextNode = contextNodes.get(index);
                 realIndex = elements.indexOf(contextNode);
             }
 
             // perform action
-            List defaultNodes = ((ReferenceMultipleRepeat)(repeat.getRef())).getContextNodes(ui.getForm().getDefaultInstance());
-            org.dom4j.Node insertNode = (org.dom4j.Node)(defaultNodes.get(defaultNodes.size()-1));
+            List<Node> defaultNodes = ((ReferenceMultipleRepeat)(repeat.getRef())).getContextNodes(ui.getForm().getDefaultInstance());
+            org.dom4j.Node insertNode = defaultNodes.get(defaultNodes.size()-1);
             insertNode = (org.dom4j.Node)(insertNode.clone());
             insertNode.detach();
 

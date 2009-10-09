@@ -22,16 +22,16 @@ implements DOM4JContentHandler, ExtendedContentHandler
 {
     //------------------------------------------------------------------------
     // DOM Nodes information
-    private Stack elementStack =  new Stack();
+    private Stack<Element> elementStack =  new Stack<Element>();
     private Node currentNode;
     private org.dom4j.Attribute currentAttribute;
-    private HashMap errorsByNode = new HashMap();
-    private HashMap warningsByNode = new HashMap();
+    private HashMap<Node, Object> errorsByNode = new HashMap<Node, Object>();
+    private HashMap<Node, Object> warningsByNode = new HashMap<Node, Object>();
 
     /** Getter for property errorsByNode.
      * @return Value of property errorsByNode.
      */
-    public HashMap getErrorsByNode()
+    public HashMap<Node, Object> getErrorsByNode()
     {
         return errorsByNode;
     }
@@ -39,7 +39,7 @@ implements DOM4JContentHandler, ExtendedContentHandler
     /** Getter for property warningsByNode.
      * @return Value of property warningsByNode.
      */
-    public HashMap getWarningsByNode()
+    public HashMap<Node, Object> getWarningsByNode()
     {
         return warningsByNode;
     }
@@ -112,7 +112,7 @@ implements DOM4JContentHandler, ExtendedContentHandler
     public void startAttribute(String namespaceURI, String localName, String qName)
     throws SAXException
     {
-        Element element = (Element)(elementStack.peek());
+        Element element = elementStack.peek();
         currentAttribute = element.attribute(qName);
     }
 
@@ -166,7 +166,7 @@ implements DOM4JContentHandler, ExtendedContentHandler
         return saveErrorOrWarning(ei, warningsByNode);
     }
 
-    protected ErrorInfo saveErrorOrWarning(ErrorInfo ei, HashMap map)
+    protected ErrorInfo saveErrorOrWarning(ErrorInfo ei, HashMap<Node, Object> map)
     {
         Node node = null;
         if(currentAttribute != null)
@@ -177,7 +177,7 @@ implements DOM4JContentHandler, ExtendedContentHandler
         else
         {
             //save element - TODO: What about other nodes?
-            node = (Node)(elementStack.peek());
+            node = elementStack.peek();
         }
 
         map.put(node, ei);
@@ -200,12 +200,12 @@ implements DOM4JContentHandler, ExtendedContentHandler
         return dumpErrorsOrWarnings(warningsByNode);
     }
 
-    public String dumpErrorsOrWarnings(Map map)
+    public String dumpErrorsOrWarnings(Map<Node, Object> map)
     {
         StringBuilder sb = new StringBuilder();
-        for(java.util.Iterator iter = map.keySet().iterator(); iter.hasNext();)
+        for(java.util.Iterator<Node> iter = map.keySet().iterator(); iter.hasNext();)
         {
-            Node node = (Node)(iter.next());
+            Node node = iter.next();
             sb.append(node.getUniquePath());
             sb.append(' ');
             sb.append(map.get(node).toString());

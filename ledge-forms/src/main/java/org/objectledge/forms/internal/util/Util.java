@@ -5,7 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.objectledge.forms.ConstructionException;
 import org.xml.sax.Attributes;
@@ -21,17 +22,17 @@ public class Util
     //------------------------------------------------------------------------
     // Utility methods
 
-    public static void insertMultipleIntoHash(Object key, Object value, HashMap hashMap)
+    public static <K, V> void insertMultipleIntoHash(K key, V value, Map<K, List<V>> hashMap)
     {
         if(key == null)
         {
             return;
         }
 
-        ArrayList list = (ArrayList)(hashMap.get(key));
+        List<V> list = hashMap.get(key);
         if(list == null)
         {
-            list = new ArrayList(2);
+            list = new ArrayList<V>(2);
         }
         // we dont have to insert the same object again
         if(!list.contains(value))

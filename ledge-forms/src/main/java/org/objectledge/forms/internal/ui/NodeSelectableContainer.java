@@ -37,13 +37,13 @@ public class NodeSelectableContainer extends NodeCaptionReference
     protected Object clone()
     {
         NodeSelectableContainer next = (NodeSelectableContainer)(super.clone());
-        next.childrenById = new HashMap();
+        next.childrenById = new HashMap<String, NodeSelectable>();
         return next;
     }
 
     //------------------------------------------------------------------------
     // associations
-    public HashMap childrenById = new HashMap();
+    public HashMap<String, NodeSelectable> childrenById = new HashMap<String, NodeSelectable>();
     private String defaultChildId;
 
     //------------------------------------------------------------------------
@@ -78,8 +78,8 @@ public class NodeSelectableContainer extends NodeCaptionReference
             // This should be not empty - schema covers that.
             if(this.childrenById.size() > 0)
             {
-                Collection childrenCol = childrenById.values();
-                defaultChildId = ((Node)(childrenCol.iterator().next())).id;
+                Collection<NodeSelectable> childrenCol = childrenById.values();
+                defaultChildId = childrenCol.iterator().next().id;
             }
         }
     }
@@ -112,6 +112,6 @@ public class NodeSelectableContainer extends NodeCaptionReference
             childId = defaultChildId;
             instance.setStateValue(contextNode, CURRENT_CHILD, childId);
         }
-        return (NodeSelectable)(childrenById.get(childId));
+        return childrenById.get(childId);
     }
 }

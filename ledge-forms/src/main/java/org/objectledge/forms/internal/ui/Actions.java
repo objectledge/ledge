@@ -1,7 +1,7 @@
 package org.objectledge.forms.internal.ui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
@@ -45,7 +45,7 @@ public class Actions extends Node
         Actions next = (Actions)(super.clone());
         // Node.clone() copies the children collection, so we have to copy
         // only the references in actionsByEventType.
-        next.actionsByEventType = new HashMap();
+        next.actionsByEventType = new HashMap<String, List<Action>>();
         for(int i = 0, s = next.children.size(); i < s; i++)
         {
             Action child = (Action)(next.children.get(i));
@@ -57,16 +57,16 @@ public class Actions extends Node
     //------------------------------------------------------------------------
     // associations
     /** Map containing actions gropued by event type. */
-    protected HashMap actionsByEventType = new HashMap();
+    protected HashMap<String, List<Action>> actionsByEventType = new HashMap<String, List<Action>>();
 
     public void execute(UI ui, InstanceImpl instance, ActionEvent event)
     {
-        ArrayList list = (ArrayList)(actionsByEventType.get(event.getType()));
+        List<Action> list = (actionsByEventType.get(event.getType()));
         if(list != null)
         {
             for(int i = 0, s = list.size(); i < s; i++)
             {
-                Action action = (Action)(list.get(i));
+                Action action = (list.get(i));
                 action.execute(ui, instance, event);
             }
         }

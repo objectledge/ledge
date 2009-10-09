@@ -31,7 +31,7 @@ public abstract class AbstractBuilder
     protected String MSG_PREFIX = "";
 
     protected java.lang.StringBuilder buffer;
-    protected Stack context;
+    protected Stack<Object[]> context;
 
     public AbstractBuilder(String acceptedNamespace, String schemaURI)
     {
@@ -39,7 +39,7 @@ public abstract class AbstractBuilder
         this.schemaURI = schemaURI;
 
         buffer = new StringBuilder(111);
-        context = new Stack();
+        context = new Stack<Object[]>();
     }
 
     //------------------------------------------------------------------------
@@ -78,10 +78,10 @@ public abstract class AbstractBuilder
     protected String getPathFromElementStack()
     {
         StringBuilder sb = new StringBuilder(24);
-        for(java.util.Iterator iter = context.iterator(); iter.hasNext();)
+        for(java.util.Iterator<Object[]> iter = context.iterator(); iter.hasNext();)
         {
             // {qName, new org.xml.sax.helpers.AttributesImpl(atts)}
-            Object[] element = (Object[])(iter.next());
+            Object[] element = iter.next();
             String qName = (String)(element[0]);
             sb.append('/');
             sb.append(qName);

@@ -294,11 +294,11 @@ implements Cloneable
         instance.clearContextNode(uiNode.uiPath);
     }
 
-    private void clearContextNodeCache(InstanceImpl instance, java.util.Iterator iter)
+    private void clearContextNodeCache(InstanceImpl instance, java.util.Iterator<Node> iter)
     {
         while(iter.hasNext())
         {
-            clearContextNodeCache(instance, (Node)(iter.next()));
+            clearContextNodeCache(instance, iter.next());
         }
     }
 

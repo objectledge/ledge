@@ -22,13 +22,13 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
     /** Node of a {@link #buildUI}. */
     private Node currentNode;
     /** Stack for Node tree processing. */
-    private Stack nodeStack;
+    private Stack<Node> nodeStack;
 
     public UIBuilder(String acceptedNamespace,
                      String definitionSchemaURI)
     {
         super(acceptedNamespace, definitionSchemaURI);
-        nodeStack = new Stack();
+        nodeStack = new Stack<Node>();
     }
 
     public void startBuild(Object builtObject)
@@ -60,9 +60,9 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
     throws ConstructionException
     {
         node.setParent(ui, parent);
-        for(Iterator iter = node.getChildren().iterator(); iter.hasNext();)
+        for(Iterator<Node> iter = node.getChildren().iterator(); iter.hasNext();)
         {
-            Node child = (Node)(iter.next());
+            Node child = iter.next();
             setParents(ui, node, child);
         }
     }
@@ -70,9 +70,9 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
     private void cloneRepeatSubTrees(UI ui, Node node)
     throws ConstructionException
     {
-        for(Iterator iter = node.getChildren().iterator(); iter.hasNext();)
+        for(Iterator<Node> iter = node.getChildren().iterator(); iter.hasNext();)
         {
-            Node child = (Node)(iter.next());
+            Node child = iter.next();
             cloneRepeatSubTrees(ui, child);
         }
         // on coming back from element - this way sub repeats are copied first
@@ -86,9 +86,9 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
     throws ConstructionException
     {
         node.init(ui);
-        for(Iterator iter = node.getChildren().iterator(); iter.hasNext();)
+        for(Iterator<Node> iter = node.getChildren().iterator(); iter.hasNext();)
         {
-            Node child = (Node)(iter.next());
+            Node child = iter.next();
             initNodes(ui, child);
         }
     }
@@ -111,7 +111,7 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
         }
         catch (ConstructionException e)
         {
-            throw new SAXException("Problem constructing UI element.", (Exception)e);
+            throw new SAXException("Problem constructing UI element.", e);
         }
         // 2. Attach sub node to it's parent node
         try
@@ -138,14 +138,14 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
     throws ConstructionException
     {
         // 1. Get UI element class name
-        String nodeClassName = (String)(UIConstants.classes.get(nodeType));
+        String nodeClassName = UIConstants.classes.get(nodeType);
         if(nodeClassName == null)
         {
             throw new ConstructionException("Cannot find class name for element '"+nodeType+"'");
         }
 
         // 2. Get UI element class
-        java.lang.Class nodeClass;
+        java.lang.Class<?> nodeClass;
         try
         {
             nodeClass = Class.forName(nodeClassName);
@@ -156,7 +156,7 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
         }
 
         // 3. Get a constructor
-        java.lang.reflect.Constructor nodeConstructor;
+        java.lang.reflect.Constructor<?> nodeConstructor;
         try
         {
             nodeConstructor = nodeClass.getDeclaredConstructor(new Class[]{String.class, Attributes.class});
@@ -170,7 +170,7 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
         try
         {
             // WARN: Replacing nodeType with reference to constant string from UIConstants
-            nodeType = (String)(UIConstants.elementNames.get(nodeType));
+            nodeType = UIConstants.elementNames.get(nodeType);
 
             Object node = nodeConstructor.newInstance(new Object[]{nodeType, nodeAtts});
             return (Node)node;
@@ -206,7 +206,7 @@ public class UIBuilder extends org.objectledge.forms.internal.util.AbstractBuild
         // 2. Get back to it's parent
         if(!nodeStack.empty()) // last one is root element so we should not loose it
         {
-            currentNode = (Node)(nodeStack.pop());
+            currentNode = nodeStack.pop();
         }
         //
         super.endElement(namespaceURI, localName, qName);
