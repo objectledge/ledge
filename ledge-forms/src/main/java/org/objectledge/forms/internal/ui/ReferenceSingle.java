@@ -1,6 +1,5 @@
 package org.objectledge.forms.internal.ui;
 
-import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.xml.sax.Attributes;
 
@@ -17,13 +16,11 @@ import org.xml.sax.Attributes;
 public class ReferenceSingle extends Reference
 {
     public ReferenceSingle(Attributes atts, Node containerNode, String instRefName)
-    throws ConstructionException
     {
         super(atts, containerNode, instRefName);
     }
 
     public ReferenceSingle(Attributes atts, Node containerNode)
-    throws ConstructionException
     {
         // ref - InstanceReference
         this(atts, containerNode, "ref");

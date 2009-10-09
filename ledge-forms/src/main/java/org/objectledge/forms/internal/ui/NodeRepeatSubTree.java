@@ -48,7 +48,6 @@ public class NodeRepeatSubTree extends NodeCaptionReference
     // methods used during building
 
     void addNodeById(Node node)
-    throws ConstructionException
     {
         // we do not have to check for ID identity
         // it is already done in UI

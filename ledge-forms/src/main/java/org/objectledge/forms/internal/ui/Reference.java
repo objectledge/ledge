@@ -22,7 +22,6 @@ implements Cloneable
      * assign it to {@link #instanceReference}.
      */
     public Reference(Attributes atts, Node containerNode, String instRefName)
-    throws ConstructionException
     {
         this.containerNode = containerNode;
         this.instRefName = instRefName;

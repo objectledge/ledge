@@ -195,7 +195,6 @@ public abstract class AbstractBuilder
 
     /** Netbeans generated stuff. TODO: Do something with it. */
     protected void dispatch(final boolean fireOnlyIfMixed)
-    throws SAXException
     {
         if (fireOnlyIfMixed && buffer.length() == 0)
         {

@@ -102,7 +102,6 @@ public class Util
     }
     
     public static String createAttribute(Attributes atts, String name, String defVal)
-    throws ConstructionException
     {
         String value = getSAXAttributeVal(atts, name); 
         if(value != null)

@@ -2,7 +2,6 @@ package org.objectledge.forms.internal.ui;
 
 import java.util.List;
 
-import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.xml.sax.Attributes;
 
@@ -18,7 +17,6 @@ import org.xml.sax.Attributes;
 public class ReferenceMultipleRepeat extends ReferenceMultiple
 {
     public ReferenceMultipleRepeat(Attributes atts, NodeRepeat containerNode)
-    throws ConstructionException
     {
         super(atts, containerNode);
     }

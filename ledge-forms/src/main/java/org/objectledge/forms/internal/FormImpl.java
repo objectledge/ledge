@@ -281,7 +281,6 @@ public class FormImpl implements Form
     }
 
     void init(UI ui)
-    throws ConstructionException
     {
         this.ui = ui;
     }

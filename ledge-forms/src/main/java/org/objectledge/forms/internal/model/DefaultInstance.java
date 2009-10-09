@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import org.dom4j.Document;
-import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.FormsException;
 import org.objectledge.forms.internal.FormImpl;
 
@@ -24,7 +23,6 @@ public class DefaultInstance extends InstanceImpl
     private static final long serialVersionUID = 1L;
 
     public DefaultInstance(FormImpl form, String schemaURI, Document instanceDocument)
-    throws ConstructionException
     {
         super(form, schemaURI, instanceDocument);
     }

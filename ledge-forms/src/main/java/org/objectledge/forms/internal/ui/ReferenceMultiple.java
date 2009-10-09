@@ -2,7 +2,6 @@ package org.objectledge.forms.internal.ui;
 
 import java.util.List;
 
-import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.xml.sax.Attributes;
 
@@ -18,13 +17,11 @@ import org.xml.sax.Attributes;
 public class ReferenceMultiple extends Reference
 {
     public ReferenceMultiple(Attributes atts, Node containerNode, String instRefName)
-    throws ConstructionException
     {
         super(atts, containerNode, instRefName);
     }
 
     public ReferenceMultiple(Attributes atts, Node containerNode)
-    throws ConstructionException
     {
         // nodeset - InstanceReference for Grouping controls
         this(atts, containerNode, "nodeset");

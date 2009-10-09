@@ -1,6 +1,5 @@
 package org.objectledge.forms.internal.ui;
 
-import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.xml.sax.Attributes;
 
@@ -14,7 +13,6 @@ import org.xml.sax.Attributes;
 public class ReferenceSingleForm extends ReferenceSingle
 {
     public ReferenceSingleForm(Attributes atts, NodeForm containerNode)
-    throws ConstructionException
     {
         super(atts, containerNode);
     }
