@@ -21,6 +21,11 @@ import org.objectledge.forms.internal.xml.validation.DOM4JValidator;
 public class InstanceImpl extends AbstractInstance
     implements Instance, java.io.Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     //-----------------------------------------------------------------------
     // Parent form definition connection
     /** Reference to contatining Form object. */

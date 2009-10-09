@@ -9,6 +9,11 @@ package org.objectledge.forms.internal.xml.validation;
 public class ValidationException extends java.lang.Exception
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs an instance of <code>XMLValidationException</code> without a message.
      */
     public ValidationException()

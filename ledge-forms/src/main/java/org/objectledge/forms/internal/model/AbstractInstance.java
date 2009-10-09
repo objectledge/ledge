@@ -21,6 +21,10 @@ import org.xml.sax.SAXException;
 public abstract class AbstractInstance
 implements java.io.Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     protected String schemaURI;
     protected Document instanceDocument;
 

@@ -9,6 +9,11 @@ package org.objectledge.forms;
 public class ConstructionException
 extends FormsException
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public ConstructionException()
     {
         super();

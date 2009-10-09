@@ -7,6 +7,11 @@ package org.objectledge.forms.internal.util;
 public class CSSParseException
 extends org.objectledge.forms.ConstructionException
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public CSSParseException()
     {
         super();

@@ -18,6 +18,11 @@ import org.objectledge.forms.internal.FormImpl;
  */
 public class DefaultInstance extends InstanceImpl
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public DefaultInstance(FormImpl form, String schemaURI, Document instanceDocument)
     throws ConstructionException
     {

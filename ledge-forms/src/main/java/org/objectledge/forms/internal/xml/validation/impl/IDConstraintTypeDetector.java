@@ -216,6 +216,10 @@ public class IDConstraintTypeDetector extends IDConstraintChecker {
      * </XMP></PRE>
      */
     public class AmbiguousDocumentException extends SAXException {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
         public AmbiguousDocumentException() {
             super("");
         }
