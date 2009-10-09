@@ -19,7 +19,7 @@ import org.objectledge.forms.internal.xml.validation.DOM4JValidator;
  * @version $Id: InstanceImpl.java,v 1.5 2008-07-24 17:07:12 rafal Exp $
  */
 public class InstanceImpl extends AbstractInstance
-    implements Instance, java.io.Serializable
+    implements Instance
 {
     /**
      * 
