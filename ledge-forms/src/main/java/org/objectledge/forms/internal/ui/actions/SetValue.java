@@ -4,7 +4,6 @@ import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.objectledge.forms.internal.model.InstanceReference;
 import org.objectledge.forms.internal.ui.ActionEvent;
-import org.objectledge.forms.internal.ui.Node;
 import org.objectledge.forms.internal.ui.ReferenceSingle;
 import org.objectledge.forms.internal.ui.TextNode;
 import org.objectledge.forms.internal.ui.UI;
@@ -25,7 +24,7 @@ implements TextNode
     {
         super(type, atts);
         // where to put the value
-        ref = new ReferenceSingle(atts, (Node)this);
+        ref = new ReferenceSingle(atts, this);
         // from where to get it
         String xPath = Util.getSAXAttributeVal(atts, "value");
         if(xPath != null)
