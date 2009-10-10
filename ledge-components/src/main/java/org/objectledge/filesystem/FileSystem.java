@@ -1066,7 +1066,8 @@ public class FileSystem
      */
     public static String directoryPath(String path)
     {
-        return path.substring(0, normalizedPath(path).lastIndexOf('/'));        
+        String normalizedPath = normalizedPath(path);
+        return normalizedPath.substring(0, normalizedPath.lastIndexOf('/'));        
     }
     
     /**
