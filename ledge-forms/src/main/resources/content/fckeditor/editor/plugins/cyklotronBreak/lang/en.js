@@ -1,0 +1,1 @@
+FCKLang.CyklotronPageBreak = 'Break Page' ;
