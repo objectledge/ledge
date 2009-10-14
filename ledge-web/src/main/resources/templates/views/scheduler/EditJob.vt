@@ -1,0 +1,101 @@
+
+<h3>Job scheduler: modify job</h3>
+
+#i18nResult()
+
+#set($format = $date_format.pattern("yyyy-MM-dd HH:mm"))
+
+#macro(yesno $flag)
+#if($flag)
+yes
+#else
+no
+#end
+#end
+
+#macro(checked $flag)
+#if($flag)
+checked
+#end
+#end
+
+<form name="form0" action="$link.action("scheduler.UpdateJob")" method="POST">
+<input type="hidden" name="name" value="$job.name">
+<script language="javascript">
+  function send()
+  {
+     document.form0.submit();
+  }
+</script>
+<table border="0">
+  <tr>
+    <td align="right">Name: </td>
+    <td>$job.name</td>
+  </tr>
+  <tr>
+    <td align="right">Schedule type: </td>
+    <td><input type="text" name="scheduleType" value="$job.schedule.type"></td>
+  </tr>
+  <tr>
+    <td align="right">Schedule config: </td>
+    <td><input type="text" name="scheduleConfig" value="$job.schedule.config"></td>
+  </tr>
+  <tr>
+    <td align="right">Job: </td>
+    <td><input type="text" name="jobClassName" value="$job.jobClassName"></td>
+  </tr>    
+  <tr>
+    <td align="right">Run count: </td>
+    <td>$job.runCount</td>
+  </tr>    
+  <tr>
+    <td align="right">Run count limit: </td>
+    #if($job.runCountLimit == -1)
+    <td><input type="text" name="runCountLimit"></td>
+    #else
+    <td><input type="text" name="runCountLimit" value="$job.runCountLimit"></td>
+    #end
+  </tr>    
+  <tr>
+    <td align="right">Last run: </td>
+    #if($lob.lastRunTime)
+    <td>$format($job.lastRunTime)</td>
+    #else
+    <td>unknown</td>
+    #end
+  </tr>    
+  <tr>
+    <td align="right">Run time limit start: </td>
+    #if($job.timeLimitStart)
+    <td><input type="text" name="runTimeLimitStart" value="$format.format($job.timeLimitStart)"></td>
+    #else
+    <td><input type="text" name="runTimeLimitStart">
+    #end
+  </tr>    
+  <tr>
+    <td align="right">Run time limit end: </td>
+    #if($job.timeLimitEnd)
+    <td><input type="text" name="runTimeLimitEnd" value="$format.format($job.timeLimitEnd)"></td>
+    #else
+    <td><input type="text" name="runTimeLimitEnd">
+    #end
+  </tr>    
+  <tr>
+    <td align="right">Reentrant: </td>
+    <td><input type="checkbox" name="reentrant" value="true" #checked($job.isReentrant())></td>
+  </tr>
+  <tr>
+    <td align="right">Running: </td>
+    <td>#yesno($job.running)</td>
+  </tr>
+  <tr>
+    <td align="right">Enabled: </td>
+    <td><input type="checkbox" name="enabled" value="true" #checked($job.isEnabled())></td>
+  </tr>    
+</table>
+</form>
+<a href="$link.view("scheduler.Jobs")">Back to list</a>
+#if($allowsModifications)
+<a href="javascript:send()">Update job</a>
+<a href="$link.view("scheduler.Jobs").action("scheduler.DeleteJob").set("name",$job.name)">Delete job</a>
+#end
