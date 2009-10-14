@@ -1,0 +1,9 @@
+graph_title Garbage collection time
+graph_order time
+graph_vlabel milliseconds / ${graph_period}
+graph_category garbage collection
+time.label garbage collection
+time.type DERIVE
+time.draw LINE1
+time.min 0
+time.max 10000
