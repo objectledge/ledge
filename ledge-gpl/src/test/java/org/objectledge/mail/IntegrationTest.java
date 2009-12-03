@@ -1,18 +1,23 @@
 package org.objectledge.mail;
 
+import junit.framework.TestCase;
+
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.objectledge.mail.MailmanMailingList;
-import org.objectledge.mail.MailmanMailingListsManager;
 
-public class IntegrationTest
+public class IntegrationTest 
+	extends TestCase
 {
-
     public IntegrationTest()
     {
         super();
     }
 
+    public void testDummy()
+    {
+    	// make maven 1 test plugin happy
+    }
+    
     /**
      * @param args
      */
