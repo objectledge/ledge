@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<container>
-
-  <!-- end of core config -->
-
-  <component class-key="org.objectledge.web.HttpDispatcher"
-             class="org.objectledge.web.dispatcher.StaticHttpDispatcher"/>
-
-</container>

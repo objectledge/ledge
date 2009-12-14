@@ -1,1 +1,0 @@
-DELETE FROM ledge_id_table;

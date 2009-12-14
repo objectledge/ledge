@@ -1,7 +1,0 @@
-<strings>
-<prefix name="foo">
-  <prefix name="bar">
-     <prefix name="foo"><value>bar</value></prefix>
-  </prefix>
-</prefix>
-</strings>

@@ -1,4 +1,0 @@
-#set($strings = $i18n.usePrefix('im.LoggedInUsers'))
-$viewEnclosureTool.override('Page')
-$pageTool.setTitle($strings.title)
-$component.embed('im.LoggedInUsers')

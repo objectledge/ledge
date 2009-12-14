@@ -1,9 +1,0 @@
-graph_title Database access time
-graph_order time
-graph_vlabel milliseconds / ${graph_period}
-graph_category database
-time.label database access
-time.type DERIVE
-time.draw LINE1
-time.min 0
-time.max 10000

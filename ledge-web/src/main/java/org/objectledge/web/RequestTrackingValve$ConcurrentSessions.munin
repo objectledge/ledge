@@ -1,7 +1,0 @@
-graph_title Active sessions
-graph_order count
-graph_vlabel sessions
-graph_category sessions
-count.label active sessions
-count.type GAUGE
-count.draw AREA

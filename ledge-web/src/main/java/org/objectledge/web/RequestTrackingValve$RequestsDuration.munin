@@ -1,7 +1,0 @@
-graph_title Average request duration
-graph_order duration
-graph_vlabel milliseconds
-graph_category requests
-duration.label average request duration
-duration.type GAUGE
-duration.draw LINE1
