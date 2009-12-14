@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>MVC Page model</title>
+  </properties>
+  <body>
+    <section name="MVC Page model">
+      <p>
+      Every web page (be it HTML or WML) rendered by ObjectLedge MVC subsystem consists of following
+      elements:
+      </p>
+      <ul>
+      <li>main Builder selected by <code>view</code> request parameter</li>
+      <li>a number of enclosing Builders which work as a multi-level layout
+      (number of those builders is <code>0</code> up to configured <code>maxEnclosures - 1</code>
+      number)</li>
+      <li>a number of possibly embedded page Components</li>
+      </ul>
+
+      <p>
+      The following illustration shows the page structure. Boxes with a black outline are Builders.
+      Dark grey boxes are components. The white box with black outline is the main Builder selected
+      by the request <code>view</code> parameter.
+      </p>
+
+      <p><img src="../images/mvc-page-model.png" alt="The ObjectLedge MVC page structure" /></p>
+
+      <p>As it is easy to notice on the above illustration, the most important part of the page is
+      the Builder selected by the request parameters. It is also a Builder nested at the lowest
+      level in other builders. This is a result of a way in which Builders are rendered.
+      </p>
+
+      <p>
+      Selected (main) Builder is rendered first. Then the enclosing builder is selected and
+      rendered while inserting the rendering results of the previous one inside. The place at which
+      the enclosed Builder rendering results will appear in enclosing Builder's template is defined
+      by <code>$!embedded_placeholder</code> Velocity reference.
+      </p>
+
+      <p>
+      The page diagram also shows components emebedded in Builder templates. Components are rendered
+      while rendering Builders. They may be nested in any of the builder templates and in component
+      templates as well, thus producing quite complex pages. The following illustration shows the
+      page structure visualised as a tree and shows the sequence in which page elements are
+      rendered (numbers and arrows).
+      </p>
+
+      <p><img src="../images/mvc-page-tree.gif" alt="The ObjectLedge MVC page tree" /></p>
+
+      <p>
+      Builders create a trunk of the tree, while components are it's leaves and possibly branches
+      (for components embedded in components). The tree grows from it's top (the selected Builder)
+      to it's bottom (the outermost Builder, which most of the time will be a packaging for HTML
+      body content).
+      </p>
+    </section>
+  </body>
+</document>
+
