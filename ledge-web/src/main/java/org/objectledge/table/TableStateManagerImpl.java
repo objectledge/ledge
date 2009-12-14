@@ -28,6 +28,7 @@
 
 package org.objectledge.table;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -170,7 +171,8 @@ public class TableStateManagerImpl
      */
     private class TableData
     {
-        private Map<Integer, TableState> map = new HashMap<Integer, TableState>();
+        private Map<Integer, TableState> map = Collections
+            .synchronizedMap(new HashMap<Integer, TableState>());
 
         TableState get(Integer key)
         {
