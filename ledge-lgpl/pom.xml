@@ -25,7 +25,7 @@
       <artifactId>xapool</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.objectledge.ext</groupId>
+      <groupId>net.sf.gnu-hylafax</groupId>
       <artifactId>gnu-hylafax</artifactId>
       <optional>true</optional>
     </dependency>
