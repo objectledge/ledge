@@ -41,10 +41,7 @@ import java.util.Comparator;
 public class ComparableComparator<T extends Comparable<T>>
     implements Comparator<T>
 {  
-    /**
-     * Private ctor to enforce static access.
-     */
-    private ComparableComparator()
+    public ComparableComparator()
     {
         // intentionally left blank
     }
