@@ -6,7 +6,7 @@
   <groupId>org.objectledge</groupId>
   <artifactId>ledge-common</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.4-b1</version>
   <name>ObjectLedge application development toolkit</name>
   <inceptionYear>2003</inceptionYear>
   <description>
@@ -458,23 +458,6 @@
             <configuration>
               <forkMode>never</forkMode>
             </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <!-- apply ledge-maven-plugin to all ledge projects except itself -->
-      <id>with-ledge-maven-plugin</id>
-      <activation>
-        <file>
-          <missing>src/main/java/org/objectledge/maven</missing>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.objectledge</groupId>
-            <artifactId>ledge-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>

@@ -6,7 +6,7 @@
     <groupId>org.objectledge</groupId>
     <artifactId>ledge-common</artifactId>
     <relativePath>../ledge-common/pom.xml</relativePath>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.4-b1</version>
   </parent>
   <artifactId>ledge-components</artifactId>
   <packaging>jar</packaging>
@@ -204,6 +204,10 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.objectledge</groupId>
+        <artifactId>ledge-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
