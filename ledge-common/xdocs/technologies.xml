@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Featured Technologies</title>
+  </properties>
+    
+  <body>
+    <section name="Additional Java APIs">
+      <p>Java Mail API and reference implementation - creation, processing and delivery of e-mail.
+      <a href="http://java.sun.com/products/javamail/">Home</a></p>
+      <p>Java Activation Framework - needed for processing of rich content mail messages.
+      <a href="http://java.sun.com/products/javabeans/glasgow/jaf.html">Home</a></p>
+      <p>Java Transaction API - needed for transaction management.
+      <a href="http://java.sun.com/products/jta/">Home</a></p>
+      <p>Java Connector Architecture - needed for transactional connection pooling.
+      <a href="http://java.sun.com/j2ee/connector/">Home</a></p>
+    </section>
+    <section name="Open Source libraries and toolkits">
+      <p>
+        ObjectLedge is Open Source software, and it is based on numerous Open Source libraries
+        and tools.
+      </p>
+      <subsection name="Container technologies - jcontainer.org">
+        <p>DNA - Provides important component oriented development abstractions: logger and 
+        configuration interfaces. <a href="http://dna.codehaus.org/">Home</a></p>
+        <p>PicoContainer - Construcor dependency injection container. "A tribute to simple yet 
+        controlled power." <a href="http://picocontainer.org/">Home</a></p>
+        <p>NanoContainer - An customizable container with XML composition and component lifecycle 
+        support. <a href="http://picocontainer.org/">Home</a></p>
+      </subsection>
+      <subsection name="Jakarta libraries - jakarta.apache.org">
+        <p>Velocity - Versatile template based text generation library. 
+        <a href="http://jakarta.apache.org/velocity/">Home</a></p>
+        <p>Log4J - End to end logging solution. 
+        <a href="http://logging.apache.org/log4j/docs/">Home</a></p>
+        <p>Commons CLI - Commandline parsing toolkit. 
+        <a href="http://jakarta.apache.org/commons/cli/">Home</a></p>
+        <p>Commons Jelly - Executable XML, used for Maven integration. 
+        <a href="http://jakarta.apache.org/commons/jelly/">Home</a></p>
+        <p>Commons Pool - Simple but powerful object pooling library. 
+        <a href="http://jakarta.apache.org/commons/pool">Home</a></p>
+      </subsection>
+      <subsection name="XML validation - msv.dev.java.net">
+        <p>MSV - Library that covers wide range of XML validation techniques. 
+        <a href="http://msv.dev.java.net/">Home</a></p>
+        <p>isorelax - ISO RELAXNG implementation schema language that is readable and expressive at
+        the same time. <a href="http://msv.dev.java.net/">Home</a></p>
+        <p>xsdlib - W3C schema validation library. <a href="http://msv.dev.java.net/">Home</a></p>
+        <p>relaxngDatatype - Dataype library that can be used for validating a wide range of text 
+        validation techniques. <a href="http://msv.dev.java.net/">Home</a></p>
+      </subsection>
+      <subsection name="Database access">
+        <p>JOTM - Embeddable transaction manager. <a href="http://jotm.objectweb.org/">Home</a></p>
+        <p>XAPool - Transactional database connection pool. 
+        <a href="http://xapool.experlog.com/">Home</a></p>
+        <p>hsqldb - lightning fast ebeddable pure Java database. 
+        <a href="http://hsqldb.sourceforge.net/">Home</a></p>
+      </subsection>
+      <subsection name="Testing">
+        <p>JUnit - Java unit testing solution. <a href="http://www.junit.org/">Home</a></p>
+        <p>JMock - Dynamic mock object generation library that makes TDD a pleasure. 
+        <a href="http://jmock.org/">Home</a></p>
+        <p>DBUnit - Initializing and asserting database contents. 
+        <a href="http://dbunit.sourceforge.net/">Home</a></p>
+        <p>HTTPUnit - Unit testing of servlets without a container. 
+        <a href="http://httpunit.sourceforge.net/">Home</a></p>
+      </subsection>
+    </section>
+    <section name="Tools">
+      <p>We use many excelent Open Source tools for developing ObjectLedge.</p>
+        
+      <table width="100%" border="0" style="color:white;">
+         <tr>
+           <td width="33%" style="vertical-align:bottom; background:white;">
+            <p style="text-align:center;"><img alt="Eclipse logo" style="border:none; margin-bottom:5px;" src="images/EclipseBannerPic.jpg" /><br /><a href="http://www.eclipse.org/">Eclipse</a></p>
+          </td>
+          <td width="33%" style="vertical-align:bottom; background:white;">
+            <p style="text-align:center;">
+              <img alt="Junit logo" style="border:none; margin-bottom:5px;" src="images/frogMov.gif" />
+              <img alt="keep the bar green to keep the code clean..." style="border:none; float:left; margin-right:10px;" src="images/keep.gif" /><br />
+              <a href="http://www.junit.org/">JUnit</a>
+            </p>
+          </td>
+          <td width="33%" style="vertical-align:bottom; background:white;">
+            <p style="text-align:center;"><img alt="Maven logo" style="border:none; margin-bottom:5px;" src="images/maven.jpg" /><br /><a href="http://maven.apache.org/">Maven</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td width="33%" style="vertical-align:bottom; background:white;">
+            <p style="text-align:center;">
+              <img alt="JIRA logo" style="border:none; margin-bottom:5px;" src="images/jira_button_120wx60h.gif" /><br />
+              <a href="http://www.atlassian.com/software/jira/?clicked=Non-Profit">JIRA</a><br/>
+              <a href="http://objectledge.org/jira">view issues</a>
+            </p>
+          </td>
+          <td width="33%" style="vertical-align:bottom; background:white;">
+            <p style="text-align:center;">
+              <img alt="Clover logo" style="border:none; margin-bottom:5px;" src="images/clover_logo.gif" /><br />
+              <a href="http://www.thecortex.net/clover/index.html">Clover</a><br/>
+              <a href="modules/ledge-components/clover/index.html">view a coverage report</a>
+            </p>
+          </td>
+          <td style="vertical-align:bottom; background:white;">
+            <p style="text-align:center;">
+              <img alt="Confluence logo" style="border:none; margin-bottom:5px;" src="images/confluence-logo.gif" /><br />
+              <a href="http://www.atlassian.com/software/confluence/">Confluence</a><br/>
+              <a href="http://objectledge.org/confluence">view documetnation</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </section>
+  </body>
+</document>
+      
