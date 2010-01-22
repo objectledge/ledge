@@ -1,0 +1,6 @@
+bin
+.clover
+target
+velocity.log
+build.properties
+*.log*
