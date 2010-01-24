@@ -419,7 +419,6 @@
               <!-- once maven 2.1 lands, phase should be prepare-package -->
               <phase>test</phase>
               <goals>
-                <goal>version</goal>
                 <goal>listing</goal>
               </goals>
             </execution>
