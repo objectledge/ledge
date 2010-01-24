@@ -91,7 +91,7 @@ public class Versions
                             Attributes jarManifest = null;
                             if(jar.getManifest() != null)
                             {
-                                jar.getManifest().getMainAttributes();
+                                jarManifest = jar.getManifest().getMainAttributes();
                             }
                             if(jarManifest != null
                                 && "Java Runtime Environment".equals(jarManifest
@@ -117,8 +117,8 @@ public class Versions
                                     {
                                         for(Object key : jarManifest.keySet())
                                         {
-                                            properties.put((String)key, (String)jarManifest
-                                                .getValue((String)key));
+                                            properties.put(((Attributes.Name)key).toString(), (String)jarManifest
+                                                .getValue((Attributes.Name)key));
                                         }
                                     }
                                     mavenArtifacts.add(properties);
