@@ -47,7 +47,8 @@ public class ClasspathFileSystemProvider
         }
     }
 
-    private void analyzeClassPath(URL[] urls) throws IOException
+    private void analyzeClassPath(URL[] urls)
+        throws IOException
     {
         for(URL url : urls)
         {
@@ -68,15 +69,21 @@ public class ClasspathFileSystemProvider
             }
         }
     }
-    
+
     private void analyzeJar(URL url)
         throws IOException
     {
+        File jarFile = new File(url.getPath());
+        if(!jarFile.exists())
+        {
+            // omit invalid classpath entries
+            return;
+        }
         JarFile jar = new JarFile(url.getPath());
         Manifest manifest = jar.getManifest();
         if(manifest != null
-            && "Java Runtime Environment".equals(manifest
-                .getMainAttributes().getValue("Implementation-Title")))
+            && "Java Runtime Environment".equals(manifest.getMainAttributes().getValue(
+                "Implementation-Title")))
         {
             // don't analyze JRE jars
             return;
@@ -94,14 +101,16 @@ public class ClasspathFileSystemProvider
                 addFileEntry(entry.getName(), entry.getSize(), entry.getTime());
             }
         }
-        // running surefire tests in a forked JVM (default mode) requires parsing Class-Path manifest attribute of /tmp/surefireBooter<random>.jar
+        // running surefire tests in a forked JVM (default mode) requires parsing Class-Path
+        // manifest attribute of /tmp/surefireBooter<random>.jar
         if(manifest != null && manifest.getMainAttributes().containsKey(Attributes.Name.CLASS_PATH))
         {
-            String classPathAttribute = manifest.getMainAttributes().getValue(Attributes.Name.CLASS_PATH);
+            String classPathAttribute = manifest.getMainAttributes().getValue(
+                Attributes.Name.CLASS_PATH);
             // System.out.println("classpath attribute " + classPathAttribute);
             String classPathElements[] = classPathAttribute.split("\\s+");
             List<URL> classPath = new ArrayList<URL>();
-            for(String classPathElement: classPathElements)
+            for(String classPathElement : classPathElements)
             {
                 if(classPathElement.startsWith("file:"))
                 {
@@ -111,7 +120,7 @@ public class ClasspathFileSystemProvider
             analyzeClassPath(classPath.toArray(new URL[classPath.size()]));
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -120,7 +129,7 @@ public class ClasspathFileSystemProvider
     {
         return classLoader.getResourceAsStream(normalizedPath(path));
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -129,9 +138,9 @@ public class ClasspathFileSystemProvider
     {
         return classLoader.getResource(normalizedPath(path));
     }
- 
+
     //
-    
+
     /**
      * {@inheritDoc}
      */
@@ -139,6 +148,5 @@ public class ClasspathFileSystemProvider
     {
         // strip leading slash
         return FileSystem.normalizedPath(path).substring(1);
-    } 
-
+    }
 }

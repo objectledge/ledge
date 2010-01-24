@@ -27,6 +27,7 @@
 // 
 package org.objectledge.modules.views.system;
 
+import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -87,6 +88,12 @@ public class Versions
                     {
                         if(url.getProtocol().equals("file") && url.getPath().endsWith(".jar"))
                         {
+                            File jarFile = new File(url.getPath());
+                            if(!jarFile.exists())
+                            {
+                                // omit invalid classpath entries
+                                return;
+                            }
                             JarFile jar = new JarFile(url.getPath());
                             Attributes jarManifest = null;
                             if(jar.getManifest() != null)
