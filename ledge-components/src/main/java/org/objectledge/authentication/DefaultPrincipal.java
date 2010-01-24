@@ -1,5 +1,6 @@
 package org.objectledge.authentication;
 
+import java.io.Serializable;
 import java.security.Principal;
 
 /**
@@ -10,8 +11,13 @@ import java.security.Principal;
  * @version $Id: DefaultPrincipal.java,v 1.2 2004-12-23 07:16:34 rafal Exp $
  */
 public class DefaultPrincipal
-    implements Principal
+    implements Principal, Serializable
 {
+    /**
+     * SerialVersionUID as required by Java serialization.
+     */
+    private static final long serialVersionUID = 1L;
+    
     /** The name of the principal */
     private String name;
 

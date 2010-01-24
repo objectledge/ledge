@@ -28,6 +28,7 @@
 
 package org.objectledge.authentication;
 
+import java.io.Serializable;
 import java.security.Principal;
 
 import org.objectledge.context.Context;
@@ -40,8 +41,14 @@ import org.objectledge.context.Context;
  * @version $Id: AuthenticationContext.java,v 1.1 2004-06-29 13:40:13 zwierzem Exp $
  */
 public class AuthenticationContext
+    implements Serializable
 {
-	/**
+    /**
+     * SerialVersionUID as required by Java serialization.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
 	 *  Useful method to retrieve authentication context from context.
 	 *
 	 * @param context the context.
