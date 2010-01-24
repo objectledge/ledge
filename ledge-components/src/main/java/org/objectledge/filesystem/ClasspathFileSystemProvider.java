@@ -1,152 +1,144 @@
-//
-//Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.
-//All rights reserved.
-//
-//Redistribution and use in source and binary forms, with or without modification, 
-//are permitted provided that the following conditions are met:
-//
-//* Redistributions of source code must retain the above copyright notice, 
-//this list of conditions and the following disclaimer.
-//* Redistributions in binary form must reproduce the above copyright notice, 
-//this list of conditions and the following disclaimer in the documentation 
-//and/or other materials provided with the distribution.
-//* Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
-//nor the names of its contributors may be used to endorse or promote products 
-//derived from this software without specific prior written permission.
-//
-//THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-//AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-//WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-//INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
-//BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
-//OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-//WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-//ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
-//POSSIBILITY OF SUCH DAMAGE.
-//
-
 package org.objectledge.filesystem;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
-/**
- * An implementation of the FileSystemProvider that reads resources from the classpath.  
- * 
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: ClasspathFileSystemProvider.java,v 1.12 2008-02-26 22:51:28 rafal Exp $
- */
-public class ClasspathFileSystemProvider 
+public class ClasspathFileSystemProvider
     extends ReadOnlyFileSystemProvider
 {
-    // instance variables /////////////////////////////////////////////////////////////////////////
+    private final ClassLoader classLoader;
 
-	/** the classloader this provider loads data from. */
-	private ClassLoader classLoader;
-	
-    // initialization /////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Creates an new instance of the provider.
-     * 
-     * @param name the name of the provider.
-     * @param classLoader the class loader to load resources from.
-     * @param listings specific location to load listings from.
-     */
-	public ClasspathFileSystemProvider(String name, ClassLoader classLoader,
-        Collection<URL> listings)
-	{
-	    super(name, listings);
-	    this.classLoader = classLoader;
-	}
-	
-    /**
-     * Creates an new instance of the provider.
-     * 
-     * @param name the name of the provider.
-     * @param classLoader the class loader to load resources from.
-     * @param listings specific location to load listings from.
-     */
-	public ClasspathFileSystemProvider(String name, ClassLoader classLoader, URL ... listings )
-	{
-	    this(name, classLoader, Arrays.asList(listings));
-	}
-	
-	/**
-	 * Locates listings on the classpath.
-	 * 
-	 * @param classLoader the class loader.
-	 * @return collection of listings found on the classpath.
-	 */
-	private static Collection<URL> findListings(ClassLoader classLoader)
-    {
-        List<URL> listings = new ArrayList<URL>();
-        for (String location : LISTING_LOCATIONS)
-        {
-            try
-            {
-                Enumeration<URL> locationListings = classLoader.getResources(location.substring(1));
-                while(locationListings.hasMoreElements())
-                {
-                    listings.add(locationListings.nextElement());
-                }
-            }
-            catch(IOException e)
-            {
-                throw new ComponentInitializationError("failed to enumerate resources at location "
-                    + location, e);
-            }
-        }
-        return listings;
-    }
-	
-    /**
-     * Creates an new instance of the provider.
-     * 
-     * @param name the name of the provider.
-     * @param classLoader the class loader to load resources from.
-     */
     public ClasspathFileSystemProvider(String name, ClassLoader classLoader)
     {
-        this(name, classLoader, findListings(classLoader));
+        super(name);
+        this.classLoader = classLoader;
+
+        try
+        {
+            long t = System.currentTimeMillis();
+            ClassLoader cl = getClass().getClassLoader();
+            while(cl != null)
+            {
+                if(cl instanceof URLClassLoader)
+                {
+                    analyzeClassPath(((URLClassLoader)cl).getURLs());
+                }
+                cl = cl.getParent();
+            }
+            t = System.currentTimeMillis() - t;
+            // System.out.println("listing done in " + t + "ms");
+        }
+        catch(IOException e)
+        {
+            throw new ComponentInitializationError("classpath analysis failed", e);
+        }
+    }
+
+    private void analyzeClassPath(URL[] urls) throws IOException
+    {
+        for(URL url : urls)
+        {
+            if(url.getProtocol().equals("file") && url.getPath().endsWith(".jar"))
+            {
+                // System.out.println("analyze jar "+url);
+                analyzeJar(url);
+            }
+            else if(url.getProtocol().equals("file") && url.getPath().endsWith("/"))
+            {
+                // System.out.println("analyze directory "+url);
+                File dir = new File(url.getPath());
+                analyzeDirectory(dir, dir);
+            }
+            else
+            {
+                // System.out.println("not parsing " + url);
+            }
+        }
     }
     
-    // public interface ///////////////////////////////////////////////////////////////////////////
+    private void analyzeJar(URL url)
+        throws IOException
+    {
+        JarFile jar = new JarFile(url.getPath());
+        Manifest manifest = jar.getManifest();
+        if(manifest != null
+            && "Java Runtime Environment".equals(manifest
+                .getMainAttributes().getValue("Implementation-Title")))
+        {
+            // don't analyze JRE jars
+            return;
+        }
+        Enumeration<JarEntry> entries = jar.entries();
+        while(entries.hasMoreElements())
+        {
+            JarEntry entry = entries.nextElement();
+            if(entry.isDirectory())
+            {
+                addDirectoryEntry(entry.getName());
+            }
+            else
+            {
+                addFileEntry(entry.getName(), entry.getSize(), entry.getTime());
+            }
+        }
+        // running surefire tests in a forked JVM (default mode) requires parsing Class-Path manifest attribute of /tmp/surefireBooter<random>.jar
+        if(manifest != null && manifest.getMainAttributes().containsKey(Attributes.Name.CLASS_PATH))
+        {
+            String classPathAttribute = manifest.getMainAttributes().getValue(Attributes.Name.CLASS_PATH);
+            // System.out.println("classpath attribute " + classPathAttribute);
+            String classPathElements[] = classPathAttribute.split("\\s+");
+            List<URL> classPath = new ArrayList<URL>();
+            for(String classPathElement: classPathElements)
+            {
+                if(classPathElement.startsWith("file:"))
+                {
+                    classPath.add(new URL(classPathElement));
+                }
+            }
+            analyzeClassPath(classPath.toArray(new URL[classPath.size()]));
+        }
+    }
     
     /**
      * {@inheritDoc}
      */
+    @Override
     public InputStream getInputStream(String path)
     {
-		return classLoader.getResourceAsStream(normalizedPath(path));
+        return classLoader.getResourceAsStream(normalizedPath(path));
     }
     
     /**
      * {@inheritDoc}
      */
+    @Override
     public URL getResource(String path)
     {
         return classLoader.getResource(normalizedPath(path));
     }
  
-    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //
     
     /**
      * {@inheritDoc}
      */
-    protected String normalizedPath(String path)
+    private String normalizedPath(String path)
     {
         // strip leading slash
         return FileSystem.normalizedPath(path).substring(1);
-    }    
+    } 
+
 }

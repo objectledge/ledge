@@ -31,14 +31,11 @@ package org.objectledge.filesystem;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Set;
 
 import junit.framework.TestCase;
-
-import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
 /**
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
@@ -72,7 +69,7 @@ public class ClasspathFileSystemProviderTest
     {
         super.setUp();
         provider = new ClasspathFileSystemProvider("classpath", ClasspathFileSystemProvider.class
-            .getClassLoader(), new ArrayList<URL>());
+            .getClassLoader());
     }
 
     public void testGetName()
@@ -109,12 +106,12 @@ public class ClasspathFileSystemProviderTest
     
     public void testExistInJar()
     {
-        assertTrue("should exist", provider.exists("java/io/File.class"));
+        assertTrue("should exist", provider.exists("org/objectledge/filesystem/FileSystem.class"));
     }
     
     public void testIsFileInJar()
     {
-        assertTrue("should be a file", provider.isFile("java/io/File.class"));
+        assertTrue("should be a file", provider.isFile("org/objectledge/filesystem/FileSystem.class"));
     }
 
     public void testCanRead()
@@ -132,47 +129,42 @@ public class ClasspathFileSystemProviderTest
         assertFalse("should not be writable", provider.canWrite("org/objectledge/filesystem/"));
     }
 
-    public void testList()
+    public void testListNonExistent()
         throws Exception
     {
-        String location = "jar:file:/some/path/ledge-tutorial-webapp/WEB-INF/lib/dojo-1.1.1.jar!/files.lst";
-        
-        InputStream is = lfs.getInputStream("filesystem/files.lst");
-        Method processListingMethod = 
-            ReadOnlyFileSystemProvider.class.getDeclaredMethod("processListing", 
-                    new Class[] {String.class, InputStream.class});
-        processListingMethod.setAccessible(true);
-        Object[] args = new Object[] {location, is};
-        
-        processListingMethod.invoke(provider, args);
-        
-        String[] dirPaths = new String[] {
-                "/dojo/", 
-                "/dojo/some  double  spaced  path/"};
-        String[] filePaths = new String[] {
-                "/dojo/dojo.css",
-                "/dojo/some  double  spaced  path/dojo.css", 
-                "/dojo/some  double  spaced  path/double  spaced  filename.css"};
-        
-        for(final String dirPath : dirPaths)
+        try
         {
-            assertTrue("The resource should be a directory", provider.isDirectory(dirPath));
-            assertFalse("The resource should NOT be a directory", provider.isFile(dirPath));
-            assertEquals("Modification time should equal -1 for directory", -1,  provider.lastModified(dirPath));
-            assertEquals("Length should equal -1 for directory", -1,  provider.length(dirPath));
+            provider.list("non_existent_directory");
+            fail("should throw the exception");
         }
-        
-        int length = 1842;
-        long lastModified = 1251794098;
-        for(final String filePath : filePaths)
+        catch(IOException e)
         {
-            assertFalse("The resource should NOT be a file", provider.isDirectory(filePath));
-            assertTrue("The resource should be a file", provider.isFile(filePath));
-            assertEquals("The file lenght is incorrect", length++, provider.length(filePath));
-            assertEquals("The file modification date is incorrect", lastModified++, provider.lastModified(filePath));
+            // expected
         }
     }
 
+    public void testListNonDirectory()
+        throws Exception
+    {
+        try
+        {
+            provider.list("org/objectledge/filesystem/FileSystem.class");
+            fail("should throw the exception");
+        }
+        catch(IOException e)
+        {
+            // expected
+        }
+    }
+    
+    public void testList()
+        throws Exception
+    {
+        Set<String> items = provider.list("org/objectledge/filesystem");
+        assertTrue("should contain the file", items.contains("FileSystem.class"));
+    }
+
+    
     public void testCreateNewFile()
         throws Exception
     {

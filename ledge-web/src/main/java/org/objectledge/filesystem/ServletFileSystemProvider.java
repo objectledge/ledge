@@ -28,16 +28,14 @@
 
 package org.objectledge.filesystem;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import org.objectledge.ComponentInitializationError;
 import org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider;
 
 /**
@@ -67,30 +65,40 @@ public class ServletFileSystemProvider
      */
     public ServletFileSystemProvider(String name, ServletContext context)
     {
-        super(name, findListings(context));
+        super(name);
         this.context = context;
+        if(context.getRealPath("/") != null)
+        {
+            File docBase = new File(context.getRealPath("/"));
+            analyzeDirectory(docBase, docBase);
+        }
+        else
+        {
+            // application is running running from an un-exploded war
+            analyzeVirtualPath("/");
+        }
     }
     
-    private static Collection<URL> findListings(ServletContext context)
-    {   
-        List<URL> listings = new ArrayList<URL>();
-        for (String location : LISTING_LOCATIONS)
-        {
-            try
+    private void analyzeVirtualPath(String path)
+    {       
+        addDirectoryEntry(path);
+        Set<String> resourcesPaths = context.getResourcePaths(path);
+        if(resourcesPaths != null)
+        {            
+            for(String resourcePath : resourcesPaths)
             {
-                if(context.getResourceAsStream(location) != null)
+                if(resourcePath.endsWith("/"))
                 {
-                    listings.add(context.getResource(location));
-                    break;
+                    // System.out.println("directory entry " + resourcePath);
+                    analyzeVirtualPath(resourcePath);
+                }
+                else
+                {
+                    // System.out.println("file entry " + resourcePath);
+                    addFileEntry(resourcePath, -1L, -1L);                
                 }
             }
-            catch(MalformedURLException e)
-            {
-                throw new ComponentInitializationError("failed to check for listing at location "
-                    + location, e);
-            }
         }
-        return listings;
     }
     
     // public interface ///////////////////////////////////////////////////////////////////////////
