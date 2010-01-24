@@ -34,11 +34,7 @@
             </overlay>
           </overlays>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.objectledge</groupId>
-        <artifactId>ledge-maven-plugin</artifactId>
-      </plugin>      
+      </plugin>     
     </plugins>
   </build>
 </project>

@@ -79,11 +79,5 @@
         </includes>
       </testResource>
     </testResources>
-    <plugins>
-      <plugin>
-        <groupId>org.objectledge</groupId>
-        <artifactId>ledge-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
   </build>
 </project>

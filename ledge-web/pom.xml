@@ -121,10 +121,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.objectledge</groupId>
-        <artifactId>ledge-maven-plugin</artifactId>
-      </plugin>
     </plugins>
   </build>
 </project>

@@ -91,7 +91,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
   <modules>
-    <module>../ledge-maven-plugin</module>
     <module>../ledge-maven-assemblies</module>
     <module>../ledge-components</module>
     <module>../ledge-container</module>
@@ -408,40 +407,6 @@
             <source>1.6</source>
             <target>1.6</target>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.objectledge</groupId>
-          <artifactId>ledge-maven-plugin</artifactId>
-          <version>${project.version}</version>
-          <executions>
-            <execution>
-              <id>package</id>
-              <!-- once maven 2.1 lands, phase should be prepare-package -->
-              <phase>test</phase>
-              <goals>
-                <goal>listing</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>list-test-resources</id>
-              <!-- listing of test resources -->
-              <phase>process-test-resources</phase>
-              <goals>
-                <goal>listing</goal>
-              </goals>
-              <configuration>
-                <dir>${project.build.testOutputDirectory}</dir>
-              </configuration>
-            </execution>
-            <execution>
-              <id>list-main-resources</id>
-              <!-- listing of main resources for test -->
-              <phase>process-test-resources</phase>
-              <goals>
-                <goal>listing</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
