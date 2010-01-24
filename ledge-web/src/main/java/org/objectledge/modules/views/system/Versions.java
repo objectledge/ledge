@@ -92,7 +92,7 @@ public class Versions
                             if(!jarFile.exists())
                             {
                                 // omit invalid classpath entries
-                                return;
+                                continue jarLoop;
                             }
                             JarFile jar = new JarFile(url.getPath());
                             Attributes jarManifest = null;
