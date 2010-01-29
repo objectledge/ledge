@@ -16,7 +16,9 @@ import org.objectledge.filesystem.RandomAccessFile;
 public abstract class ReadOnlyFileSystemProvider
     implements FileSystemProvider
 {
-    // fields //
+    private static final String FILE_SEPARATOR = System.getProperty("file.separator");
+
+	// fields //
 
     private final String name;
 
@@ -43,7 +45,7 @@ public abstract class ReadOnlyFileSystemProvider
 
     protected void analyzeDirectory(File base, File item)
     {
-        String relativePath = item.getPath().substring(base.getPath().length());
+        String relativePath = item.getPath().substring(base.getPath().length()).replace(FILE_SEPARATOR, "/");
         if(item.isFile())
         {
             addFileEntry(relativePath, item.length(), item.lastModified());
