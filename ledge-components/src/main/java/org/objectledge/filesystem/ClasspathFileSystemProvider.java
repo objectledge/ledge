@@ -3,6 +3,8 @@ package org.objectledge.filesystem;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -41,26 +43,27 @@ public class ClasspathFileSystemProvider
             t = System.currentTimeMillis() - t;
             // System.out.println("listing done in " + t + "ms");
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             throw new ComponentInitializationError("classpath analysis failed", e);
         }
     }
 
     private void analyzeClassPath(URL[] urls)
-        throws IOException
+        throws IOException, URISyntaxException
     {
         for(URL url : urls)
         {
-            if(url.getProtocol().equals("file") && url.getPath().endsWith(".jar"))
+        	URI uri = url.toURI();
+            if(uri.getScheme().equals("file") && uri.getPath().endsWith(".jar"))
             {
                 // System.out.println("analyze jar "+url);
-                analyzeJar(url);
+                analyzeJar(uri);
             }
-            else if(url.getProtocol().equals("file") && url.getPath().endsWith("/"))
+            else if(uri.getScheme().equals("file") && uri.getPath().endsWith("/"))
             {
                 // System.out.println("analyze directory "+url);
-                File dir = new File(url.getPath());
+                File dir = new File(uri.getPath());
                 analyzeDirectory(dir, dir);
             }
             else
@@ -70,16 +73,16 @@ public class ClasspathFileSystemProvider
         }
     }
 
-    private void analyzeJar(URL url)
-        throws IOException
+    private void analyzeJar(URI uri)
+        throws IOException, URISyntaxException
     {
-        File jarFile = new File(url.getPath());
+        File jarFile = new File(uri.getPath());
         if(!jarFile.exists())
         {
             // omit invalid classpath entries
             return;
         }
-        JarFile jar = new JarFile(url.getPath());
+        JarFile jar = new JarFile(uri.getPath());
         Manifest manifest = jar.getManifest();
         if(manifest != null
             && "Java Runtime Environment".equals(manifest.getMainAttributes().getValue(
