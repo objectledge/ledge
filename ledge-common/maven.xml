@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id: maven.xml,v 1.12 2008-06-12 17:03:59 rafal Exp $ -->
+<project xmlns:j="jelly:core"
+         xmlns:util="jelly:util"
+         xmlns:ant="jelly:ant">
+
+  <j:if test="${pom.artifactId != 'ledge-maven-plugin'}">
+    <preGoal name="jar:jar">
+      <attainGoal name="ledge:version-jar"/>
+	  <attainGoal name="ledge:index-jar"/>
+	</preGoal>   
+	
+	<postGoal name="jar:install">
+	  <attainGoal name="ledge:ci-rename"/>
+	</postGoal>      
+	
+	<postGoal name="test:test-resources">
+	  <attainGoal name="ledge:index-jar"/>
+	  <attainGoal name="ledge:index-tests"/>
+	</postGoal>
+	  
+	<preGoal name="war:war">
+      <attainGoal name="ledge:repackage-content"/>
+      <attainGoal name="ledge:version-war"/>
+      <attainGoal name="ledge:version-war-html"/>
+      <attainGoal name="ledge:index-war"/>
+	</preGoal>
+
+	<postGoal name="war:install-snapshot">
+	  <attainGoal name="ledge:ci-rename"/>
+	</postGoal>      
+  </j:if>
+
+  <!-- reports -->
+         
+  <j:if test="${pom.build != null and pom.build.unitTestSourceDirectory != null and !empty(pom.build.unitTestSourceDirectory)}">
+    <util:file var="testDir" name="${pom.build.unitTestSourceDirectory}"/>
+    <j:if test="${testDir.exists()}">
+      <postGoal name="xdoc:register-reports">
+        <attainGoal name="maven-clover-plugin:register"/>
+      </postGoal>
+    </j:if>
+  </j:if>
+   
+</project>         
