@@ -30,6 +30,9 @@
   <prefix name="updated_successfully"><value>Updated successfully</value></prefix>
   <prefix name="deleted_successfully"><value>Deleted successfully</value></prefix>
   <prefix name="created_successfully"><value>Created successfully</value></prefix>
+  <prefix name="enabled_successfully"><value>Enabled successfully</value></prefix>
+  <prefix name="disabled_successfully"><value>Enabled successfully</value></prefix>
+  <prefix name="started_successfully"><value>Started successfully</value></prefix>
   <prefix name="invalid_name"><value>Invalid name</value></prefix>
   <prefix name="schedule_type_empty"><value>Invalid schedule type</value></prefix>
   <prefix name="schedule_config_empty"><value>Empty configuration</value></prefix>

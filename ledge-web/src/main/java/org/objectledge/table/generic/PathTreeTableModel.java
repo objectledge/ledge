@@ -69,6 +69,9 @@ public class PathTreeTableModel<T>
 
     /** Maps objects to sets of children objects. */
     protected Map<T, Set<T>> childrenByObject = new HashMap<T, Set<T>>();
+    
+    /** Used for generating entry ids */
+    private int entryCount = 0;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -77,7 +80,7 @@ public class PathTreeTableModel<T>
      *
      * @param columns the table columns.
      */
-    public PathTreeTableModel(TableColumn<T>[] columns)
+    public PathTreeTableModel(TableColumn<T> ... columns)
     {
         this.columns = columns;
     }
@@ -189,7 +192,7 @@ public class PathTreeTableModel<T>
                 throw new IllegalStateException("cannot bind "+path+
                                                 " because "+parent+" is not bound");
             }
-            String id = Integer.toString(path.hashCode());
+            String id = Integer.toString(++entryCount);
             idByObject.put(object, id);
             objectById.put(id, object);
             childrenByObject.put(object, new HashSet<T>());

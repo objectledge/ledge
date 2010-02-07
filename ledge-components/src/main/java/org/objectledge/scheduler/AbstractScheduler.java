@@ -405,7 +405,7 @@ public abstract class AbstractScheduler
      * 
      * @param job the job.
      */
-    void run(AbstractJobDescriptor job)
+    public void run(AbstractJobDescriptor job)
     {
         synchronized(job)
         {

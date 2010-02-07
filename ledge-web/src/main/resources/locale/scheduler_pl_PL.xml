@@ -30,6 +30,9 @@
   <prefix name="updated_successfully"><value>Zapisano pomy¶lnie</value></prefix>
   <prefix name="deleted_successfully"><value>Skasowano pomy¶lnie</value></prefix>
   <prefix name="created_successfully"><value>Dodano pomy¶lnie</value></prefix>
+  <prefix name="enabled_successfully"><value>W³±czono pomy¶lnie</value></prefix>
+  <prefix name="disabled_successfully"><value>Wy³±czono pomy¶lnie</value></prefix>
+  <prefix name="started_successfully"><value>Uruchomiono pomy¶lnie</value></prefix>
   <prefix name="invalid_name"><value>Nieprawid³owa nazwa</value></prefix>
   <prefix name="schedule_type_empty"><value>Pusty typ</value></prefix>
   <prefix name="schedule_config_empty"><value>Pusta konfiguracja</value></prefix>

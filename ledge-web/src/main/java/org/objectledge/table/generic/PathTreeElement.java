@@ -34,6 +34,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.objectledge.table.TableColumn;
+import org.objectledge.table.TableException;
+
 /**
  * A class that may be used for ad-hoc UI building with {@link PathTreeTableModel}.
  *
@@ -184,5 +187,35 @@ public class PathTreeElement
                 return collator.compare(s1, s2) ;
             }
         };
+    }
+
+    /**
+     * Returns a TableColumn based on a property supporting Comparable interface.
+     * 
+     * @param <T> property type, must implement java.lang.Comparable
+     * @param property name of the property.
+     * @param propertyClass property class.
+     * @return a TableColumn.
+     * @throws TableException when TableColumn constructor terminates abnormally. 
+     */
+    public static <T extends Comparable<T>> TableColumn<PathTreeElement> getTableColumn(
+        String property, Class<T> propertyClass)
+        throws TableException
+    {
+        return new TableColumn<PathTreeElement>(property, getComparator(property, propertyClass));
+    }
+    
+    /**
+     * Return a TableColumn based on a String property with lexical ordering.
+     * 
+     * @param property name of the property.
+     * @param locale java.util.Locale to use for lexical ordering.
+     * @return a TableColumn
+     * @throws TableException when TableColumn constructor terminates abnormally.
+     */
+    public static TableColumn<PathTreeElement> getTableColumn(String property, Locale locale)
+        throws TableException
+    {
+        return new TableColumn<PathTreeElement>(property, getComparator(property, locale));
     }
 }

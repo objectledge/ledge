@@ -98,4 +98,5 @@ checked
 #if($allowsModifications)
 <a href="javascript:send()">Update job</a>
 <a href="$link.view("scheduler.Jobs").action("scheduler.DeleteJob").set("name",$job.name)">Delete job</a>
+<a href="$link.view("scheduler.Jobs").action("scheduler.RunJob").set("name",$job.name)">Run now</a>
 #end
