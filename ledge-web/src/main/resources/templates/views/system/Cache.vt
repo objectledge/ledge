@@ -1,0 +1,31 @@
+<h3>Cache</h3>
+
+<table>
+	<tr>
+		<td>Name</td>
+		<td>Size</td>
+		<td>Requests</td>
+		<td>Hits</td>
+		<td>Misses</td>
+		<td>Hit ratio</td>
+	</tr>
+#foreach($name in $cacheNames)
+#set($info = $cacheInfo.get($name))
+	<tr>
+		<td>$info.name</td>
+		<td>$info.size</td>
+#if($$info.statistics)
+		<td>$info.requests</td>
+		<td>$info.hits</td>
+		<td>$info.misses</td>
+		<td>$info.hitRatio</td>
+#else
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+#end
+	</tr>
+#end
+</table>
+		
