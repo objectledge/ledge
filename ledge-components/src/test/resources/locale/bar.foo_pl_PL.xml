@@ -1,0 +1,6 @@
+<strings>
+<prefix name="bar">
+  <prefix name="foo"><value>bar</value></prefix>
+</prefix>
+<prefix name="foobar"><value>foo&amp;bar</value></prefix>
+</strings>
