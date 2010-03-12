@@ -107,6 +107,13 @@
       <url>http://objectledge.org/nexus/content/groups/m2</url>
     </repository>
   </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>nexus</id>
+      <name>Objectledge Nexus repository (plugins)</name>
+      <url>http://objectledge.org/nexus/content/groups/m2</url>
+    </pluginRepository>
+  </pluginRepositories>  
   <dependencyManagement>
     <dependencies>
       <dependency>
