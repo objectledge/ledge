@@ -80,6 +80,16 @@ public abstract class LedgeTestCase extends MockObjectTestCase
     }
 
     /**
+     * Tear down test fixture
+     */
+    protected void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+        fileSystem = null;
+    }
+
+    /**
      * Returns standard FileSystem rooted at the specified path.
      * 
      * @param root the root directory of the standard file system.

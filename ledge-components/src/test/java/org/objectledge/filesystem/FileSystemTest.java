@@ -103,6 +103,7 @@ public class FileSystemTest extends TestCase
         {
             fs.deleteRecursive("new_directory_2");
         }
+        fs = null;
     }
 
     public void testURL()
