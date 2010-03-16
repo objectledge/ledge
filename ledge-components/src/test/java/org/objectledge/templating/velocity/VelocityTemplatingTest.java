@@ -72,10 +72,7 @@ public class VelocityTemplatingTest extends LedgeTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-		FileSystemProvider lfs = new LocalFileSystemProvider("local", "src/test/resources");
-		FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
-			getClass().getClassLoader());
-		FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
+        FileSystem fs = getFileSystem();
 		try
 		{
             InputSource source = new InputSource(fs.getInputStream(
@@ -96,6 +93,12 @@ public class VelocityTemplatingTest extends LedgeTestCase
 		{
 			throw new RuntimeException(e);
 		}
+    }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        templating = null;
     }
 
     /**

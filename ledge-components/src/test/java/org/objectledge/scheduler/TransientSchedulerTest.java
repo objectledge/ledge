@@ -61,9 +61,8 @@ import org.xml.sax.InputSource;
  */
 public class TransientSchedulerTest extends LedgeTestCase
 {
-    private FileSystem fs = null;
-
     private TransientScheduler scheduler;
+    private ThreadPool threadPool;
 
     /*
      * @see TestCase#setUp()
@@ -71,7 +70,7 @@ public class TransientSchedulerTest extends LedgeTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        fs = FileSystem.getStandardFileSystem("src/test/resources");
+        FileSystem fs = getFileSystem();
         InputSource source = new InputSource(fs.getInputStream(
             "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -81,7 +80,7 @@ public class TransientSchedulerTest extends LedgeTestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(MailSystem.class));
         Configuration config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
         Context context = new Context();
-        ThreadPool threadPool = new ThreadPool(null, context,config, logger);
+        threadPool = new ThreadPool(null, context,config, logger);
         config = getConfig("config/org.objectledge.scheduler.TransientScheduler.xml");
         XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         I18n i18n = new XMLI18n(config, logger, fs, validator);
@@ -93,6 +92,14 @@ public class TransientSchedulerTest extends LedgeTestCase
         scheduler = new TransientScheduler(container, config, 
             logger, threadPool, scheduleFactories);
         scheduler.start();
+    }
+    
+    public void tearDown() throws Exception
+    {
+        super.tearDown();        
+        scheduler = null;
+        threadPool.stop();
+        threadPool = null;
     }
 
     public void testCreateJobDescriptor()
@@ -327,7 +334,7 @@ public class TransientSchedulerTest extends LedgeTestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        return getConfig(fs, name);
+        return getConfig(getFileSystem(), name);
     }
 
 }

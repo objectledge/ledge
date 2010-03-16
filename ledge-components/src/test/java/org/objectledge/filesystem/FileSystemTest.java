@@ -55,12 +55,14 @@ public class FileSystemTest extends TestCase
         throws Exception
     {
         super(arg0);
-        fs = FileSystem.getStandardFileSystem("src/test/resources");
     }
 
     public void setUp()
         throws Exception
     {
+        super.setUp();
+        fs = FileSystem.getStandardFileSystem("src/test/resources");
+        
         fs.createNewFile("file_1");
         fs.mkdirs("directory_1");
         // ensure those are gone even if previous test fails
@@ -85,6 +87,7 @@ public class FileSystemTest extends TestCase
     public void tearDown()
         throws Exception
     {
+        super.tearDown();
         fs.delete("file_1");
         fs.deleteRecursive("directory_1");
         if(fs.exists("new_file_1"))
@@ -108,8 +111,7 @@ public class FileSystemTest extends TestCase
 
     public void testURL()
         throws Exception
-    {
-        
+    {       
         URL url = fs.getResource("/file_1");
         InputStream is = url.openStream();
         is.read();  

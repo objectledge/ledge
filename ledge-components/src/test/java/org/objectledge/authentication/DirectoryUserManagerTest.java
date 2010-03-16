@@ -50,7 +50,6 @@ import org.objectledge.database.IdGenerator;
 import org.objectledge.database.JotmTransaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LedgeDOMConfigurator;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.parameters.DefaultParameters;
@@ -69,8 +68,6 @@ import org.xml.sax.InputSource;
  */
 public class DirectoryUserManagerTest extends LedgeTestCase
 {
-    private FileSystem fs = null;
-
     private ContextFactory contextFactory;
 
     private UserManager userManager;
@@ -78,12 +75,12 @@ public class DirectoryUserManagerTest extends LedgeTestCase
     public void setUp()
         throws Exception
     {
-        fs = FileSystem.getStandardFileSystem("src/test/resources");
-        InputSource source = new InputSource(fs.getInputStream(
+        super.setUp();
+        InputSource source = new InputSource(getFileSystem().getInputStream(
             "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document logConfig = builder.parse(source);
-        LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
+        LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(getFileSystem());
         configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(ContextFactory.class));
         DataSource ds = getDataSource();
@@ -368,12 +365,12 @@ public class DirectoryUserManagerTest extends LedgeTestCase
     private Reader getScript(String path)
         throws IOException
     {
-        return fs.getReader(path, "UTF-8");
+        return getFileSystem().getReader(path, "UTF-8");
     }    
 
     private Configuration getConfig(String name)
         throws Exception
     {
-        return getConfig(fs, name);
+        return getConfig(getFileSystem(), name);
     }
 }

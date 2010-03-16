@@ -69,6 +69,8 @@ public class CachingTest extends LedgeTestCase
     private CacheFactorySPI caching;
 
     private Notification notification;
+    
+    private ThreadPool pool;
 
     public void setUp()
     throws Exception
@@ -77,7 +79,7 @@ public class CachingTest extends LedgeTestCase
         Valve cleanup = null;
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        ThreadPool pool = new ThreadPool(cleanup, context, config, logger);
+        pool = new ThreadPool(cleanup, context, config, logger);
         DataSource dataSource = getDataSource();
         IdGenerator idGenerator = new IdGenerator(dataSource);
         JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger, null);
@@ -93,6 +95,14 @@ public class CachingTest extends LedgeTestCase
         caching = new DefaultCacheFactory(config, logger, pool, notification, persistence, null);
     }
 
+    public void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+        pool.stop();
+        pool = null;
+    }    
+    
     public void testCaching()
     {
         assertNotNull(caching);

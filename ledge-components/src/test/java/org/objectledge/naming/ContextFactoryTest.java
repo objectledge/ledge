@@ -64,8 +64,6 @@ import org.xml.sax.InputSource;
  */
 public class ContextFactoryTest extends LedgeTestCase
 {
-    private FileSystem fs;
-    
     private Logger log;
     
     private ContextFactory contextFactory;
@@ -75,7 +73,7 @@ public class ContextFactoryTest extends LedgeTestCase
     {
         try
         {
-            fs = FileSystem.getStandardFileSystem("src/test/resources");
+            FileSystem fs = getFileSystem();
             InputSource source = new InputSource(fs.getInputStream(
                 "config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -99,7 +97,7 @@ public class ContextFactoryTest extends LedgeTestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        return getConfig(fs, name);
+        return getConfig(getFileSystem(), name);
     }
 
     public void testGetContext()
@@ -205,6 +203,6 @@ public class ContextFactoryTest extends LedgeTestCase
     private Reader getScript(String path)
         throws IOException
     {
-        return fs.getReader(path, "ISO-8859-2");
+        return getFileSystem().getReader(path, "ISO-8859-2");
     }
 }

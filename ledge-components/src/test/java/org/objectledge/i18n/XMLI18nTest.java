@@ -61,12 +61,9 @@ public class XMLI18nTest extends LedgeTestCase
     public void setUp()
     throws Exception
     {
-        FileSystemProvider lfs = new LocalFileSystemProvider("local", "src/test/resources");
-        FileSystemProvider cfs = new ClasspathFileSystemProvider("classpath",
-        										 getClass().getClassLoader());
-        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, cfs }, 4096, 4096);
         try
         {
+            FileSystem fs = getFileSystem();
             InputSource source = new InputSource(
             	fs.getInputStream("config/org.objectledge.logging.LoggingConfigurator.xml"));
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -84,7 +81,12 @@ public class XMLI18nTest extends LedgeTestCase
         {
             throw new RuntimeException(e);
         }
-
+    }
+    
+    public void tearDown() throws Exception
+    {
+        super.tearDown();
+        i18n = null;
     }
 
     public void testInit()

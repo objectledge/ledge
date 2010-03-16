@@ -47,9 +47,6 @@ public class ClasspathFileSystemProviderTest
 {
     protected ClasspathFileSystemProvider provider;
     
-    /**Test resource provider.*/
-    protected FileSystemProvider lfs;
-
     /**
      * Constructor for LocalFileProviderTest.
      * 
@@ -58,7 +55,6 @@ public class ClasspathFileSystemProviderTest
     public ClasspathFileSystemProviderTest(String arg0)
     {
         super(arg0);
-        lfs = new LocalFileSystemProvider("local", "src/test/resources");
     }
 
     /*
@@ -70,6 +66,13 @@ public class ClasspathFileSystemProviderTest
         super.setUp();
         provider = new ClasspathFileSystemProvider("classpath", ClasspathFileSystemProvider.class
             .getClassLoader());
+    }
+    
+    protected void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+        provider = null;
     }
 
     public void testGetName()

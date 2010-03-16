@@ -53,29 +53,35 @@ import org.objectledge.threads.ThreadPool;
  */
 public class MailSystemTest extends LedgeTestCase
 {
-    private FileSystem fs = null;
-
     private MailSystem mailSystem;
+    private ThreadPool threadPool;
 
     public void setUp()
         throws Exception
     {
         super.setUp();
-        fs = getFileSystem();
+        FileSystem fs = getFileSystem();
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(MailSystem.class));
         Configuration config = 
             getConfig("config/org.objectledge.templating.velocity.VelocityTemplating.xml");
         Templating templating = new VelocityTemplating(config, logger, fs);
         Context context = new Context();
         config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
-        ThreadPool threadPool = new ThreadPool(null, context,config, logger);
+        threadPool = new ThreadPool(null, context,config, logger);
         config = getConfig("config/org.objectledge.mail.MailSystem.xml");
         checkSchema(
             "config/org.objectledge.mail.MailSystem.xml","org/objectledge/mail/MailSystem.rng");
         mailSystem = new MailSystem(config, logger, fs, templating, threadPool);
     }
 
-
+    public void tearDown() throws Exception
+    {
+        super.tearDown();
+        mailSystem = null;
+        threadPool.stop();
+        threadPool = null;
+    }
+    
     public void testMailSystem()
     {
         assertNotNull(mailSystem);
@@ -176,7 +182,7 @@ public class MailSystemTest extends LedgeTestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        return getConfig(fs, name);
+        return getConfig(getFileSystem(), name);
     }
 
 }

@@ -58,20 +58,28 @@ public class EventSystemTest extends LedgeTestCase
     
     private Mock mockCacheFactory;
     private CacheFactory cacheFactory;
-    
-    
+
+    private ThreadPool pool;
+        
     public void setUp()
     {
         Context context = new Context();
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         Valve cleanup = null;
-        ThreadPool pool = new ThreadPool(cleanup, context, config, logger);
+        pool = new ThreadPool(cleanup, context, config, logger);
         mockCacheFactory = mock(CacheFactory.class);
         mockCacheFactory.stubs().method("registerForPeriodicExpunge").isVoid();
         cacheFactory = (CacheFactory)mockCacheFactory.proxy();        
         event = new EventWhiteboardFactory(config,logger,pool,cacheFactory);
         whiteboard = event.newInstance();        
+    }
+    
+    public void tearDown()
+        throws Exception
+    {
+        super.tearDown(); 
+        pool.stop();
     }
     
     public void testGetForwarder()

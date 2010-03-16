@@ -1,21 +1,23 @@
 package org.objectledge.statistics;
 
-import junit.framework.TestCase;
-
-import org.objectledge.filesystem.ClasspathFileSystemProvider;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.FileSystemProvider;
+import org.objectledge.test.LedgeTestCase;
 
 public class AbstractMuninGraphTest
-    extends TestCase
+    extends LedgeTestCase
 {
     private Foo foo;
 
     public void setUp()
     {
-        FileSystem fs = new FileSystem(new FileSystemProvider[] { new ClasspathFileSystemProvider(
-            "classpath", getClass().getClassLoader()) }, 4096, 4096);
-        foo = new Foo(fs);
+        foo = new Foo(getFileSystem());
+    }
+    
+    public void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+        foo = null;
     }
 
     public void testGetConfig()

@@ -72,12 +72,10 @@ public class DirectoryParametersTest extends LedgeTestCase
 {
     private ContextFactory contextFactory;
     
-    private FileSystem fs;
-
     public void setUp()
     	throws Exception
 	{
-        fs = FileSystem.getStandardFileSystem("src/test/resources");
+        FileSystem fs = getFileSystem();
         InputSource source = new InputSource(fs.getInputStream(
             "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -212,6 +210,7 @@ public class DirectoryParametersTest extends LedgeTestCase
     private DataSource getDataSource()
         throws Exception
     {
+        FileSystem fs = getFileSystem();
         jdbcDataSource ds = new jdbcDataSource();
         ds.setDatabase("jdbc:hsqldb:.");
         ds.setUser("sa");
@@ -231,7 +230,7 @@ public class DirectoryParametersTest extends LedgeTestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        return getConfig(fs, name);
+        return getConfig(getFileSystem(), name);
     }
 
 }

@@ -72,9 +72,7 @@ import org.xml.sax.InputSource;
  */
 public class DBSchedulerTest extends LedgeTestCase
 {
-    private FileSystem fs = null;
-
-    private DBScheduler scheduler;
+     private DBScheduler scheduler;
 
     /*
      * @see TestCase#setUp()
@@ -82,12 +80,11 @@ public class DBSchedulerTest extends LedgeTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        fs = FileSystem.getStandardFileSystem("src/test/resources");
-        InputSource source = new InputSource(fs.getInputStream(
+        InputSource source = new InputSource(getFileSystem().getInputStream(
             "config/org.objectledge.logging.LoggingConfigurator.xml"));
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document logConfig = builder.parse(source);
-        LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(fs);
+        LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(getFileSystem());
         configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(DBScheduler.class));
         Configuration config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
@@ -219,7 +216,7 @@ public class DBSchedulerTest extends LedgeTestCase
     private Configuration getConfig(String name)
         throws Exception
     {
-        return getConfig(fs, name);
+        return getConfig(getFileSystem(), name);
     }
 
     private DataSource getDataSource() throws Exception
@@ -234,14 +231,14 @@ public class DBSchedulerTest extends LedgeTestCase
         DataSource ds = new HsqldbDataSource(conf);
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, getFileSystem().getReader("sql/database/IdGeneratorTables.sql", "UTF-8"));
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_scheduler"))
         {        
             DatabaseUtils.runScript(ds, 
-                fs.getReader("sql/scheduler/db/DBSchedulerTables.sql", "UTF-8"));
+                getFileSystem().getReader("sql/scheduler/db/DBSchedulerTables.sql", "UTF-8"));
             DatabaseUtils.runScript(ds, 
-                fs.getReader("sql/scheduler/db/DBSchedulerTest.sql", "UTF-8"));
+                getFileSystem().getReader("sql/scheduler/db/DBSchedulerTest.sql", "UTF-8"));
         }
         return ds;
     }

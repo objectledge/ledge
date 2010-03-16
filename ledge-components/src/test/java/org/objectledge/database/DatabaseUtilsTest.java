@@ -35,37 +35,25 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: DatabaseUtilsTest.java,v 1.6 2004-10-25 14:54:54 rafal Exp $
  */
-public class DatabaseUtilsTest extends TestCase
+public class DatabaseUtilsTest extends LedgeTestCase
 {    
-    private FileSystem fs;
-
     private DataSource dataSource;
 
     public void setUp()
         throws Exception
     {
-        fs = FileSystem.getStandardFileSystem(".");
+        super.setUp();
         dataSource = getDataSource();    
-    }
-    
-    /**
-     * Constructor for DatabaseUtilsTest.
-     * @param arg0
-     */
-    public DatabaseUtilsTest(String arg0)
-    {
-        super(arg0);
-    }
+    }    
 
     /*
      * Test for void close(Connection)
@@ -167,7 +155,7 @@ public class DatabaseUtilsTest extends TestCase
     private Reader getScript(String name)
         throws IOException
     {
-        return fs.getReader("sql/database/"+name, "UTF-8");
+        return getFileSystem().getReader("sql/database/"+name, "UTF-8");
     }
     
     private DataSource getDataSource()
