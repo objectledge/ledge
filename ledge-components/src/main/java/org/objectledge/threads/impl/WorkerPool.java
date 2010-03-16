@@ -190,7 +190,7 @@ public class WorkerPool
                         }
                         catch(InterruptedException e)
                         {
-                            continue loop;
+                            break loop;
                         }
                     }
                     task = queue.removeFirst();
