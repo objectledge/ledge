@@ -1,0 +1,511 @@
+<?xml version="1.0"?>
+<!--  
+ Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+--> 
+ 
+<!--
+ | Ledge Maven plugin 
+ |
+ | @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+ | @version $Id$
+ -->
+<project xmlns:j="jelly:core"
+         xmlns:define="jelly:define"
+         xmlns:velocity="jelly:velocity"
+         xmlns:ant="jelly:ant"
+         xmlns:util="jelly:util"
+         xmlns:maven="jelly:maven"
+         xmlns:ledge="ledge">
+
+  <define:taglib uri="ledge">
+    <!--
+     | Create index file used by ReadOnlyFileSystemProvider
+     | 
+     | @param @dir directory to index
+     | @param @index the file to write index to. ${dir}/META-INF/files.lst if not set.
+     -->
+    <define:tag name="indexFiles">
+      <ant:echo>Creating file index...</ant:echo>
+      <j:if test="${dir == null}">
+        <ant:fail>required attribute directory is not set</ant:fail>
+      </j:if>
+      <j:if test="${index == null}">
+        <j:set var="index" value="${dir}/META-INF/files.lst"/>
+      </j:if>
+      <j:new var="indexFile" className="java.io.File">
+        <j:arg type="java.lang.String" value="${index}"/>
+      </j:new>
+      <j:invoke method="mkdirs" on="${indexFile.getParentFile()}"/>
+      <ant:fileScanner var="files">
+        <ant:fileset dir="${dir}" excludes="**/.*"/>
+      </ant:fileScanner>
+      <j:new var="dirFile" className="java.io.File">
+        <j:arg type="java.lang.String" value="${dir}"/>
+      </j:new>
+      <j:set var="skip" value="${dirFile.canonicalPath.length()}"/>
+      <velocity:merge name="${index}"
+                      basedir="${plugin.dir}/plugin-resources/templates"
+                      template="files.lst.vt"
+                      outputEncoding="UTF-8"/>        
+    </define:tag>
+    
+    <define:tag name="versionPage">
+      <ant:echo>Creating version page ${path} using ${template}</ant:echo>
+      <j:new var="date" className="java.util.Date"/>
+      <j:new var="dateFormat" className="java.text.SimpleDateFormat">
+        <j:arg type="java.lang.String" value="yyyy-MM-dd HH:mm"/>
+      </j:new>
+      <j:set var="userName" value="${context.getVariable('maven.username')}"/>
+      <j:set var="buildLabel" value="${context.getVariable('build.label')}"/>
+      <velocity:merge name="${path}"
+                      basedir="${plugin.dir}/plugin-resources/templates"
+                      template="${template}"/>
+    </define:tag>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+    
+    <!--
+     | @param srcDir java.io.File
+     | @param srcMask java.lang.String
+     | @param dstDir java.io.File
+     -->
+    <define:tag name="smartCopy">
+      <j:set var="srcDir" value="${srcDir.canonicalFile}"/>
+      <j:set var="dstDir" value="${dstDir.canonicalFile}"/>
+      <fileScanner var="srcFiles">
+        <fileset dir="${srcDir.path}">
+          <include name="${srcMask}"/>
+        </fileset>
+      </fileScanner>
+      <j:forEach var="srcFile" items="${srcFiles.iterator()}">
+        <j:set var="relPath" value="${srcFile.path.substring(srcDir.path.length())}"/>
+        <util:file var="dstFile" name="${dstDir}/${relPath}"/>
+        <j:choose>
+          <j:when test="${dstFile.exists()}">
+            <util:loadText var="srcContent" file="${srcFile}"/>
+            <util:loadText var="dstContent" file="${dstFile}"/>
+            <j:choose>
+              <j:when test="${!srcContent.equals(dstContent)}">
+                <echo>updating ${dstFile.path} (modified)</echo>
+                <copy file="${srcFile.path}" tofile="${dstFile.path}"/>
+              </j:when>
+              <j:otherwise>
+                <!--
+                <echo>not updating ${dstFile.path} (not modified)</echo>
+                -->
+              </j:otherwise>
+            </j:choose>
+          </j:when>
+          <j:otherwise>
+            <echo>introducing ${dstFile.path} (new file)</echo>
+            <copy file="${srcFile.path}" tofile="${dstFile.path}"/>
+          </j:otherwise>
+        </j:choose>
+      </j:forEach>
+    </define:tag>
+
+    <!--
+     | Invokes JJTree
+     |
+     | @param input the input file
+     | @param outputDir the output directory
+     -->
+    <define:tag name="jjtree">
+      <exec dir="${dir}" executable="java">
+        <arg value="-classpath"/>
+        <arg value="${plugin.getDependencyPath('javacc:javacc')}"/>
+        <arg value="jjtree"/>
+        <arg value="${input}"/>
+      </exec>
+    </define:tag>
+
+    <!--
+     | Invokes JavaCC
+     |
+     | @param input the input file
+     | @param outputDir the output directory
+     -->
+    <define:tag name="javacc">
+      <exec dir="${dir}" executable="java">
+        <arg value="-classpath"/>
+        <arg value="${plugin.getDependencyPath('javacc:javacc')}"/>
+        <arg value="javacc"/>
+        <arg value="${input}"/>
+      </exec>
+    </define:tag>
+    
+  </define:taglib>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+
+  <goal name="ledge:index-jar"
+        description="Generates a jar index in maven.build.dest/META-INF/files.lst">
+    <ledge:indexFiles dir="${maven.build.dest}"/>
+  </goal>
+  
+  <goal name="ledge:index-tests"
+        description="Generates a jar index in maven.test.dest/META-INF/files.lst">
+    <ledge:indexFiles dir="${maven.test.dest}"/>
+  </goal>
+  
+  <goal name="ledge:index-war"
+        description="Generates a war index in maven.war.webapp.dir/WEB-INF/files.lst">
+    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
+    <ledge:indexFiles dir="${webappDir}" index="${webappDir}/WEB-INF/files.lst"/>
+  </goal> 
+  
+  <goal name="ledge:version-jar">
+    <util:file var="versionDir" name="${maven.build.dest}/META-INF/versions/${pom.groupId}"/>
+    <j:invoke method="mkdirs" on="${versionDir}"/>
+    <ledge:versionPage path="${versionDir}/${pom.artifactId}" template="version.vt"/>  
+  </goal>
+  
+  <goal name="ledge:version-war">
+    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
+    <util:file var="versionDir" name="${webappDir}/META-INF/versions/${pom.groupId}"/>
+    <j:invoke method="mkdirs" on="${versionDir}"/>
+    <ledge:versionPage path="${versionDir}/${pom.artifactId}" template="version.vt"/>  
+  </goal>
+  
+  <goal name="ledge:version-war-html" prereqs="war:init">
+    <j:set var="webappDir" value="${pom.getPluginContext('maven-war-plugin').getVariable('maven.war.webapp.dir')}"/>
+    <ledge:versionPage path="${webappDir}/content/version.html" template="version.html.vt"/>
+  </goal>
+  
+  <goal name="ledge:ci-rename">
+    <j:set var="buildLabel" value="${context.getVariable('build.label')}"/>
+    <j:set var="type" value="${context.getVariable('maven.multiproject.type')}"/>
+    <j:if test="${!empty(buildLabel)}">
+       <j:choose>
+         <j:when test="${type.equals('war')}">
+           <j:set var="source" value="${maven.build.dir}/${pom.artifactId}.war"/>
+         </j:when>
+         <j:otherwise>
+           <j:set var="source" value="${maven.build.dir}/${maven.final.name}.${type}"/>
+         </j:otherwise>
+       </j:choose>
+       <j:set var="target" value="${maven.build.dir}/${pom.artifactId}-b${buildLabel}.${type}"/>
+       <ant:move file="${source}" tofile="${target}"/>
+    </j:if>
+  </goal>
+  
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+  
+  <goal name="ledge:javacc">
+    <util:file var="srcDir" name="${pom.build.sourceDirectory}"/>
+    <j:set var="srcDir" value="${srcDir.canonicalFile}"/>
+    <!-- jjtree grammars -->
+    <fileScanner var="srcFiles">
+      <fileset dir="${srcDir.path}">
+        <include name="**/*.jjt"/>
+      </fileset>
+    </fileScanner>
+    <j:forEach var="srcFile" items="${srcFiles.iterator()}">
+      <j:set var="grammarName" value="${srcFile.name.replace('.jjt','')}"/>
+      <util:file var="dstFile" name="${srcFile.parent}/${grammarName}.java"/>
+      <j:set var="propname" value="uptodate-${srcFile.path}"/>
+      <uptodate property="${propname}" 
+      	srcfile="${srcFile.path}" targetfile="${dstFile.path}"/>
+      <j:set var="uptodate" value="${context.getVariable(propname)}"/>
+      <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
+      <j:choose>
+        <j:when test="${empty(uptodate)}">
+          <echo>Generating grammar for ${relPath}</echo>
+          <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
+          <j:set var="dstDir" value="${dstDir.canonicalFile}"/>
+          <j:set var="dummy" value="${dstDir.mkdirs()}"/>
+          <copy todir="${dstDir.path}" overwrite="true">
+            <fileset dir="${srcFile.parentFile.path}">
+			  <include name="*.jjt"/>
+              <include name="*.java"/>
+            </fileset>
+          </copy>
+          <ledge:jjtree input="${grammarName}.jjt" dir="${dstDir.path}"/>
+          <ledge:javacc input="${grammarName}.jj" dir="${dstDir.path}"/>
+          <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+          <touch file="${dstFile.path}"/>
+        </j:when>
+        <j:otherwise>
+          <echo>Grammar for ${relPath} is up-to-date</echo>
+        </j:otherwise>
+      </j:choose>
+    </j:forEach>
+
+    <!-- javacc parsers -->
+    <fileScanner var="srcFiles">
+      <fileset dir="${srcDir.path}">
+        <include name="**/*.jj"/>
+      </fileset>
+    </fileScanner>
+    <j:forEach var="srcFile" items="${srcFiles.iterator()}">
+      <j:set var="grammarName" value="${srcFile.name.replace('.jj','')}"/>
+      <util:file var="dstFile" name="${srcFile.parent}/${grammarName}.java"/>
+      <j:set var="propname" value="uptodate-${srcFile.path}"/>
+      <uptodate property="${propname}" 
+      	srcfile="${srcFile.path}" targetfile="${dstFile.path}"/>
+      <j:set var="uptodate" value="${context.getVariable(propname)}"/>
+      <j:set var="relPath" value="${srcFile.parentFile.path.substring(srcDir.path.length())}"/>
+      <j:choose>
+        <j:when test="${empty(uptodate)}">
+          <echo>Generating parser for ${relPath}</echo>
+          <util:file var="dstDir" name="${maven.build.dir}/javacc/${relPath}"/>
+          <j:set var="dummy" value="${dstDir.mkdirs()}"/>
+          <copy todir="${dstDir.path}" overwrite="true">
+            <fileset dir="${srcFile.parentFile.path}">
+              <include name="*.jj"/>
+              <include name="*.java"/>
+            </fileset>
+          </copy>
+          <ledge:javacc input="${grammarName}.jj" dir="${dstDir.path}"/>
+          <ledge:smartCopy srcDir="${dstDir}" srcMask="*.java" dstDir="${srcFile.parentFile}"/>
+          <touch file="${dstFile.path}"/>
+        </j:when>
+        <j:otherwise>
+          <echo>Parser for ${relPath} is up-to-date</echo>
+        </j:otherwise>
+      </j:choose>
+    </j:forEach>
+  </goal>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+
+  <goal name="ledge:workspace-dependencies">
+    <!-- prepare includes -->
+    <maven:reactor 
+      basedir="${basedir}"
+      includes="${ledge.workspaceDependencies.includes}"
+      postProcessing="true"
+      collectOnly="true"
+      collectionVar="projects"
+      ignoreFailures="false"/>
+    <!-- intialize lists -->
+    <j:new var="depMap" className="java.util.HashMap"/>
+    <j:forEach var="project" items="${projects}">
+      <j:if test="${!depMap.containsKey(project.artifactId)}">
+        <j:new var="depList" className="java.util.ArrayList"/>
+	<j:invoke method="put" on="${depMap}">
+	  <j:arg value="${project.artifactId}"/>
+	  <j:arg value="${depList}"/>
+	</j:invoke>
+      </j:if>
+    </j:forEach>
+    <!-- fill lists -->
+    <j:forEach var="project" items="${projects}">
+      <j:forEach var="dep" items="${project.dependencies}">
+        <j:set var="depList" value="${depMap.get(dep.artifactId)}"/>
+	<j:if test="${depList != null}">
+  	  <j:invoke method="add" on="${depList}">
+	    <j:arg value="${project.artifactId}"/>
+	  </j:invoke>
+	</j:if>
+      </j:forEach>
+      <j:if test="${project.parent != null}">
+        <j:set var="depList" value="${depMap.get(project.parent.artifactId)}"/>
+	<j:choose>
+	  <j:when test="${depList != null}">
+            <j:invoke method="add" on="${depList}">
+              <j:arg value="${project.artifactId}"/>
+            </j:invoke>
+	  </j:when>
+	  <j:otherwise>
+	    <echo>Missing or invalid parent of ${project.artifactId}</echo>
+	  </j:otherwise>
+	</j:choose>
+      </j:if>
+    </j:forEach>    
+    <!-- display lists -->
+    <j:new var="buff" className="java.lang.StringBuffer"/>
+    <j:useList var="projects" items="${depMap.keySet()}"/>
+    <j:invokeStatic className="java.util.Collections" method="sort">
+      <j:arg type="java.util.List" value="${projects}"/>
+    </j:invokeStatic>
+    <j:invokeStatic className="java.lang.System" method="getProperty" var="newLine">
+      <j:arg value="line.separator"/>
+    </j:invokeStatic>
+    <j:forEach var="project" items="${projects}">
+      <j:set var="deps" value="${depMap.get(project)}"/>
+      <j:invoke method="append" on="${buff}">
+        <j:arg value="${project}:"/>
+      </j:invoke>
+      <j:new var="limit" className="java.lang.Integer">
+        <j:arg type="int" value="${size(deps) - 1}"/>
+      </j:new>
+      <j:forEach var="dep" indexVar="count" items="${deps}">
+        <j:invoke method="append" on="${buff}">
+          <j:arg value="${dep}"/>
+        </j:invoke>
+        <j:if test="${count lt limit}">
+          <j:invoke method="append" on="${buff}">
+            <j:arg value=","/>
+          </j:invoke>
+	</j:if>
+      </j:forEach>
+      <j:invoke method="append" on="${buff}">
+        <j:arg value="${newLine}"/>
+      </j:invoke>
+    </j:forEach>
+    <j:set var="output" value="${basedir}/dependencies"/>
+    <echo>Writing dependency information to ${output}</echo>
+    <j:file name="${output}" omitXmlDeclaration="true">${buff.toString()}</j:file>
+  </goal>
+
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+
+  <goal name="ledge:repackage-content">
+    <maven:get var="contentDir" plugin="ledge-maven-plugin" property="ledge.content.dir"/>
+    <maven:get var="contentJars" plugin="ledge-maven-plugin" property="ledge.content.jars"/>
+    <maven:get var="webappDir" plugin="maven-war-plugin" property="maven.war.webapp.dir"/>
+    <delete quiet="true" includeEmptyDirs="true">
+      <fileset dir="${webappDir}/${contentDir}">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+    <unjar dest="${webappDir}">
+      <fileset dir="${webappDir}/WEB-INF/lib" includes="${contentJars}"/>
+      <patternset>
+        <include name="${contentDir}/*"/>
+        <include name="${contentDir}/**/*"/>
+      </patternset>
+    </unjar>
+    <copy todir="${webappDir}">
+      <fileset dir="${maven.war.src}">
+        <include name="${contentDir}/*"/>
+        <include name="${contentDir}/**/*"/>
+      </fileset>
+    </copy>
+  </goal>
+  
+  <!-- ////////////////////////////////////////////////////////////////////////////////////// -->
+  
+  <goal name="ledge:dist-aggregate">
+    <util:loadText var="distAggregationDir" uri="file:///tmp/ledge-maven-plugin.tmp"/>
+    <j:set var="distAggregationDir" value="${distAggregationDir.trim()}"/>
+
+    <j:set var="srcDistTarget" value="${distAggregationDir}/src/${maven.final.name}"/>
+    <copy todir="${srcDistTarget}">
+      <fileset dir="${baseDir}" defaultexcludes="true">
+        <exclude name="bin/**"/>
+        <exclude name="target/**"/>
+      </fileset>
+    </copy>
+
+    <j:set var="binDistTarget" value="${distAggregationDir}/bin/${maven.final.name}"/>
+    <j:set var="artifactType" value="${maven.multiproject.type}"/>
+    <j:set var="installGoal" value="install"/>
+    <j:if test="${artifactType == 'plugin'}">
+      <j:set var="artifactType" value="jar"/>
+      <j:set var="installGoal" value="repository-install"/>
+    </j:if>
+    <j:set var="artifactName" value="${maven.final.name}"/>
+    <j:if test="${artifactType == 'war'}">
+      <j:set var="artifactName" value="${pom.artifactId}"/>
+    </j:if>
+    <attainGoal name="${maven.multiproject.type}:${installGoal}"/>      
+    <copy file="${maven.build.dir}/${artifactName}.${artifactType}" 
+      toFile="${distAggregationDir}/bin/${maven.multiproject.type}s/${maven.final.name}.${artifactType}"/>
+      
+    <j:if test="${pom.build != null and pom.build.sourceDirectory != null and !empty(pom.build.sourceDirectory)}">
+      <util:file var="testDir" name="${pom.build.sourceDirectory}"/>
+      <j:if test="${testDir.exists()}">
+        <mkdir dir="${distAggregationDir}/bin/sources"/>
+        <zip zipfile="${distAggregationDir}/bin/sources/${maven.final.name}-src.zip">
+          <zipfileset dir="${pom.build.sourceDirectory}"/>
+        </zip>
+      </j:if>
+    </j:if>
+    
+  </goal>
+  
+  <goal name="ledge:dist">
+    <maven:get var="distAggregationDir" plugin="maven-dist-plugin" property="maven.dist.assembly.dir"/>
+    <j:file omitXmlDeclaration="true" name="/tmp/ledge-maven-plugin.tmp">${distAggregationDir}</j:file>
+    <delete dir="${distAggregationDir}"/>
+    <maven:reactor
+      basedir="${maven.multiproject.basedir}"
+      includes="${maven.multiproject.includes}"
+      excludes="${maven.multiproject.excludes}"
+      banner="Building distribution of"
+      postProcessing="false"
+      collectOnly="false"
+      ignoreFailures="false"
+      goals="ledge:dist-aggregate"
+    />
+
+    <j:set var="distName" value="${pom.groupId}-all-${pom.currentVersion}"/>
+    <mkdir dir="${maven.dist.dir}"/>
+    <copy file="LICENSE.txt" toDir="${maven.dist.bin.archive.dir}"/>
+    <copy file="README.txt" toDir="${maven.dist.bin.archive.dir}"/>
+    <tar longfile="gnu" tarfile="${maven.dist.dir}/${distName}-bin.tar">
+      <tarfileset dir="${maven.dist.bin.archive.dir}"/>
+    </tar>
+    <bzip2
+      destfile="${maven.dist.dir}/${distName}-bin.tar.bz2"
+      src="${maven.dist.dir}/${distName}-bin.tar"
+    />
+    <delete file="${maven.dist.dir}/${distName}-bin.tar"/>
+    <zip zipfile="${maven.dist.dir}/${distName}-bin.zip">
+      <zipfileset dir="${maven.dist.bin.archive.dir}"/>
+    </zip>
+
+    <copy file="LICENSE.txt" toDir="${maven.dist.src.archive.dir}"/>
+    <copy file="README.txt" toDir="${maven.dist.src.archive.dir}"/>
+    <tar longfile="gnu" tarfile="${maven.dist.dir}/${distName}-src.tar">
+      <tarfileset dir="${maven.dist.src.archive.dir}"/>
+    </tar>
+    <bzip2
+      destfile="${maven.dist.dir}/${distName}-src.tar.bz2"
+      src="${maven.dist.dir}/${distName}-src.tar"
+    />
+    <delete file="${maven.dist.dir}/${distName}-src.tar"/>
+    <zip zipfile="${maven.dist.dir}/${distName}-src.zip">
+      <zipfileset dir="${maven.dist.src.archive.dir}"/>
+    </zip>
+    
+    <attainGoal name="multiproject:site"/>
+    <mkdir dir="${distAggregationDir}/doc"/>
+    <util:file var="testDir" name="${maven.build.dir}/docs"/>
+    <j:if test="${testDir.exists()}">
+      <move file="${maven.build.dir}/docs" toDir="${distAggregationDir}/doc"/>
+    </j:if>
+    <copy file="LICENSE.txt" toDir="${distAggregationDir}/doc"/>
+    <copy file="README.txt" toDir="${distAggregationDir}/doc"/>
+    
+    <tar longfile="gnu" tarfile="${maven.dist.dir}/${distName}-doc.tar">
+      <tarfileset dir="${distAggregationDir}/doc"/>
+    </tar>
+    <bzip2
+      destfile="${maven.dist.dir}/${distName}-doc.tar.bz2"
+      src="${maven.dist.dir}/${distName}-doc.tar"
+    />
+    <delete file="${maven.dist.dir}/${distName}-doc.tar"/>
+    <zip zipfile="${maven.dist.dir}/${distName}-doc.zip">
+      <zipfileset dir="${distAggregationDir}/doc"/>
+    </zip>
+    
+  </goal>
+
+</project>
