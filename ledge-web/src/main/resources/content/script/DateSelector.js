@@ -167,6 +167,34 @@ function dateEnabled(element, saveDisabledString)
     }
 }
 
+function setCurrentTime(base)
+{
+    var element = document.getElementsByName(base+'_enabled').item(1);
+    var form = element.form;
+
+    var yearElem = form.elements[base+'_year'];
+    var monthElem = form.elements[base+'_month'];
+    var dayElem = form.elements[base+'_day'];
+    var hourElem = form.elements[base+'_hour'];
+    var minuteElem = form.elements[base+'_minute'];
+    var dateElem = form.elements[base];
+    
+    var selectedDate = new Date();
+    yearElem.value = selectedDate.getFullYear();
+    monthElem.value = selectedDate.getMonth();
+    dayElem.value = selectedDate.getDate();
+    hourElem.value = selectedDate.getHours();
+    minuteElem.value = selectedDate.getMinutes();
+    
+    dateElem.value = selectedDate.getTime();
+    yearElem.disabled = false;
+    monthElem.disabled = false;
+    dayElem.disabled = false;
+    hourElem.disabled = false;
+    minuteElem.disabled = false;
+    element.checked = true;
+}
+
 /**
 function dateToggleMaxMin(element)
 {
