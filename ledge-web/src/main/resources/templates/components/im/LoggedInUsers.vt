@@ -1,0 +1,93 @@
+#set($strings=$i18n.getPrefix('im.LoggedInUsers'))
+#macro(interval $s)
+	#set($m = $s / 60)
+	#set($s60 = $s - $m * 60)
+	$m:$s60
+#end
+<style type="text/css">
+	div#loggedInUsers img {
+	  border: none;
+	}
+	div#loggedInUsers {
+		font-size: smaller;
+	}
+</style>
+<div id="loggedInUsers">
+#set($requestedLogin = $parametersTool.get('user',''))
+#if($requestedLogin == '')
+$pageTool.addHttpEquivMeta("Refresh", "60;URL=$link.self()")##	
+	<table width="100%">
+		#foreach($user in $users)
+			<tr>
+				<td width="36" align="right">#foreach($contact in $contacts.get($user))
+#if($contact.protocol.schema)##
+<a href="${contact.protocol.schema}:${contact.screenName}"><img src="$contact.statusUrl" title="$contact.screenName"/></a>##
+#else
+<img src="$contact.statusUrl" title="$contact.screenName"/>##
+#end
+#end</td>
+				<td valign="top">
+					#set($l = $login.get($user))
+					<a href="$link.set('user',$l)">$l</a> 
+				</td>
+				<td width="50" valign="top">
+					#interval($idleTime.get($user))
+				</td>
+			</tr>
+		#end
+	</table>
+#else
+<div id="userInfo">
+#foreach($user in $users)
+#if($login.get($user).equals($requestedLogin))
+<div id="login" align="center">$requestedLogin</div>
+#set($pd = $personalData.get($user))
+#set($gn = $pd.get('givenName',''))
+#set($sn = $pd.get('sn',''))
+#if($gn.length() > 0 || $sn.length() > 0)
+<div id="name" align="center">$gn $sn</div>
+#end
+<br/>
+#foreach($contact in $contacts.get($user))
+<div class="contact">
+#if($contact.protocol.infoIconUrl)
+<img border="0" src="$contact.protocol.infoIconUrl"/>
+#end
+$contact.protocol.name $contact.screenName
+#if($requestedLogin.equals($currentUserLogin))
+<a href="$link.action('im.RemoveContact').set('user', $requestedLogin).set('contact',$contact)">$strings.remove</a>
+#end
+</div>
+#end
+</div>
+#end
+#end
+#if($requestedLogin.equals($currentUserLogin))
+<br/>
+<div align="center">
+#if($result)
+$strings.get("result.${result}")
+#end
+<form name="newContact" method="POST" action="$link.action('im.AddContact')">
+<input type="hidden" name="user" value="$requestedLogin"/>
+<table>
+  <tr>
+	<td colspan="2"><input type="text" name="screenName" value="$!screenName"/></td>
+  </tr>
+  <tr>
+	<td>
+<select name="protocol">
+#options($protocolOptions $protocol)
+</select>
+	</td>
+	<td align="right">
+	  <input type="submit" value="$strings.add"/>
+	</td>
+  </tr>
+</table>
+</form>
+</div>
+#end
+<a href="$link.unset('user')">$strings.back</a>	
+#end
+</div>

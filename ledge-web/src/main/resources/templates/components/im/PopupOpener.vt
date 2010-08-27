@@ -1,0 +1,11 @@
+$pageTool.addScriptLink('script/WinPopup.js')
+#set($i18nl = $i18n.usePrefix("im.PopupOpener"))
+<script type="text/javascript">
+  function openUsersPopup()
+  {
+    getWinPopup('imLoggedInUsers').open('${link.view('im.LoggedInUsers')}',200,0.5,'top right');
+  }
+</script>
+<a href="javaScript:openUsersPopup()">
+	$active #if($active == 1)$i18nl.get("active")#else$i18nl.get("active_pl")#end
+</a>
