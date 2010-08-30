@@ -1,291 +1,281 @@
-/*
- * jQuery UI 1.5.2
+/*!
+ * jQuery UI 1.8.4
  *
- * Copyright (c) 2008 Paul Bakaus (ui.jquery.com)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI
  */
-;(function($) {
+(function( $, undefined ) {
 
-$.ui = {
-	plugin: {
-		add: function(module, option, set) {
-			var proto = $.ui[module].prototype;
-			for(var i in set) {
-				proto.plugins[i] = proto.plugins[i] || [];
-				proto.plugins[i].push([option, set[i]]);
-			}
-		},
-		call: function(instance, name, args) {
-			var set = instance.plugins[name];
-			if(!set) { return; }
-			
-			for (var i = 0; i < set.length; i++) {
-				if (instance.options[set[i][0]]) {
-					set[i][1].apply(instance.element, args);
-				}
-			}
-		}	
-	},
-	cssCache: {},
-	css: function(name) {
-		if ($.ui.cssCache[name]) { return $.ui.cssCache[name]; }
-		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
-		
-		//if (!$.browser.safari)
-			//tmp.appendTo('body'); 
-		
-		//Opera and Safari set width and height to 0px instead of auto
-		//Safari returns rgba(0,0,0,0) when bgcolor is not set
-		$.ui.cssCache[name] = !!(
-			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) || 
-			!(/none/).test(tmp.css('backgroundImage')) || !(/transparent|rgba\(0, 0, 0, 0\)/).test(tmp.css('backgroundColor')))
-		);
-		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
-		return $.ui.cssCache[name];
-	},
-	disableSelection: function(el) {
-		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none');
-	},
-	enableSelection: function(el) {
-		$(el).attr('unselectable', 'off').css('MozUserSelect', '');
-	},
-	hasScroll: function(e, a) {
-		var scroll = /top/.test(a||"top") ? 'scrollTop' : 'scrollLeft', has = false;
-		if (e[scroll] > 0) return true; e[scroll] = 1;
-		has = e[scroll] > 0 ? true : false; e[scroll] = 0;
-		return has;
-	}
-};
-
-
-/** jQuery core modifications and additions **/
-
-var _remove = $.fn.remove;
-$.fn.remove = function() {
-	$("*", this).add(this).triggerHandler("remove");
-	return _remove.apply(this, arguments );
-};
-
-// $.widget is a factory to create jQuery plugins
-// taking some boilerplate code out of the plugin code
-// created by Scott González and Jörn Zaefferer
-function getter(namespace, plugin, method) {
-	var methods = $[namespace][plugin].getter || [];
-	methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
-	return ($.inArray(method, methods) != -1);
+// prevent duplicate loading
+// this is only a problem because we proxy existing functions
+// and we don't want to double proxy them
+$.ui = $.ui || {};
+if ( $.ui.version ) {
+	return;
 }
 
-$.widget = function(name, prototype) {
-	var namespace = name.split(".")[0];
-	name = name.split(".")[1];
-	
-	// create plugin method
-	$.fn[name] = function(options) {
-		var isMethodCall = (typeof options == 'string'),
-			args = Array.prototype.slice.call(arguments, 1);
-		
-		if (isMethodCall && getter(namespace, name, options)) {
-			var instance = $.data(this[0], name);
-			return (instance ? instance[options].apply(instance, args)
-				: undefined);
-		}
-		
-		return this.each(function() {
-			var instance = $.data(this, name);
-			if (isMethodCall && instance && $.isFunction(instance[options])) {
-				instance[options].apply(instance, args);
-			} else if (!isMethodCall) {
-				$.data(this, name, new $[namespace][name](this, options));
+//Helper functions and ui object
+$.extend( $.ui, {
+	version: "1.8.4",
+
+	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
+	plugin: {
+		add: function( module, option, set ) {
+			var proto = $.ui[ module ].prototype;
+			for ( var i in set ) {
+				proto.plugins[ i ] = proto.plugins[ i ] || [];
+				proto.plugins[ i ].push( [ option, set[ i ] ] );
 			}
-		});
-	};
-	
-	// create widget constructor
-	$[namespace][name] = function(element, options) {
-		var self = this;
-		
-		this.widgetName = name;
-		this.widgetBaseClass = namespace + '-' + name;
-		
-		this.options = $.extend({}, $.widget.defaults, $[namespace][name].defaults, options);
-		this.element = $(element)
-			.bind('setData.' + name, function(e, key, value) {
-				return self.setData(key, value);
-			})
-			.bind('getData.' + name, function(e, key) {
-				return self.getData(key);
-			})
-			.bind('remove', function() {
-				return self.destroy();
-			});
-		this.init();
-	};
-	
-	// add widget prototype
-	$[namespace][name].prototype = $.extend({}, $.widget.prototype, prototype);
-};
+		},
+		call: function( instance, name, args ) {
+			var set = instance.plugins[ name ];
+			if ( !set || !instance.element[ 0 ].parentNode ) {
+				return;
+			}
 
-$.widget.prototype = {
-	init: function() {},
-	destroy: function() {
-		this.element.removeData(this.widgetName);
-	},
-	
-	getData: function(key) {
-		return this.options[key];
-	},
-	setData: function(key, value) {
-		this.options[key] = value;
-		
-		if (key == 'disabled') {
-			this.element[value ? 'addClass' : 'removeClass'](
-				this.widgetBaseClass + '-disabled');
-		}
-	},
-	
-	enable: function() {
-		this.setData('disabled', false);
-	},
-	disable: function() {
-		this.setData('disabled', true);
-	}
-};
-
-$.widget.defaults = {
-	disabled: false
-};
-
-
-/** Mouse Interaction Plugin **/
-
-$.ui.mouse = {
-	mouseInit: function() {
-		var self = this;
-	
-		this.element.bind('mousedown.'+this.widgetName, function(e) {
-			return self.mouseDown(e);
-		});
-		
-		// Prevent text selection in IE
-		if ($.browser.msie) {
-			this._mouseUnselectable = this.element.attr('unselectable');
-			this.element.attr('unselectable', 'on');
-		}
-		
-		this.started = false;
-	},
-	
-	// TODO: make sure destroying one instance of mouse doesn't mess with
-	// other instances of mouse
-	mouseDestroy: function() {
-		this.element.unbind('.'+this.widgetName);
-		
-		// Restore text selection in IE
-		($.browser.msie
-			&& this.element.attr('unselectable', this._mouseUnselectable));
-	},
-	
-	mouseDown: function(e) {
-		// we may have missed mouseup (out of window)
-		(this._mouseStarted && this.mouseUp(e));
-		
-		this._mouseDownEvent = e;
-		
-		var self = this,
-			btnIsLeft = (e.which == 1),
-			elIsCancel = (typeof this.options.cancel == "string" ? $(e.target).parents().add(e.target).filter(this.options.cancel).length : false);
-		if (!btnIsLeft || elIsCancel || !this.mouseCapture(e)) {
-			return true;
-		}
-		
-		this._mouseDelayMet = !this.options.delay;
-		if (!this._mouseDelayMet) {
-			this._mouseDelayTimer = setTimeout(function() {
-				self._mouseDelayMet = true;
-			}, this.options.delay);
-		}
-		
-		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
-			this._mouseStarted = (this.mouseStart(e) !== false);
-			if (!this._mouseStarted) {
-				e.preventDefault();
-				return true;
+			for ( var i = 0; i < set.length; i++ ) {
+				if ( instance.options[ set[ i ][ 0 ] ] ) {
+					set[ i ][ 1 ].apply( instance.element, args );
+				}
 			}
 		}
-		
-		// these delegates are required to keep context
-		this._mouseMoveDelegate = function(e) {
-			return self.mouseMove(e);
-		};
-		this._mouseUpDelegate = function(e) {
-			return self.mouseUp(e);
-		};
-		$(document)
-			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
-			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
-		
-		return false;
 	},
-	
-	mouseMove: function(e) {
-		// IE mouseup check - mouseup happened when mouse was out of window
-		if ($.browser.msie && !e.button) {
-			return this.mouseUp(e);
-		}
-		
-		if (this._mouseStarted) {
-			this.mouseDrag(e);
+
+	contains: function( a, b ) {
+		return document.compareDocumentPosition ?
+			a.compareDocumentPosition( b ) & 16 :
+			a !== b && a.contains( b );
+	},
+
+	hasScroll: function( el, a ) {
+
+		//If overflow is hidden, the element might have extra content, but the user wants to hide it
+		if ( $( el ).css( "overflow" ) === "hidden") {
 			return false;
 		}
-		
-		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
-			this._mouseStarted =
-				(this.mouseStart(this._mouseDownEvent, e) !== false);
-			(this._mouseStarted ? this.mouseDrag(e) : this.mouseUp(e));
-		}
-		
-		return !this._mouseStarted;
-	},
-	
-	mouseUp: function(e) {
-		$(document)
-			.unbind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
-			.unbind('mouseup.'+this.widgetName, this._mouseUpDelegate);
-		
-		if (this._mouseStarted) {
-			this._mouseStarted = false;
-			this.mouseStop(e);
-		}
-		
-		return false;
-	},
-	
-	mouseDistanceMet: function(e) {
-		return (Math.max(
-				Math.abs(this._mouseDownEvent.pageX - e.pageX),
-				Math.abs(this._mouseDownEvent.pageY - e.pageY)
-			) >= this.options.distance
-		);
-	},
-	
-	mouseDelayMet: function(e) {
-		return this._mouseDelayMet;
-	},
-	
-	// These are placeholder methods, to be overriden by extending plugin
-	mouseStart: function(e) {},
-	mouseDrag: function(e) {},
-	mouseStop: function(e) {},
-	mouseCapture: function(e) { return true; }
-};
 
-$.ui.mouse.defaults = {
-	cancel: null,
-	distance: 1,
-	delay: 0
-};
+		var scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop",
+			has = false;
 
-})(jQuery);
+		if ( el[ scroll ] > 0 ) {
+			return true;
+		}
+
+		// TODO: determine which cases actually cause this to happen
+		// if the element doesn't have the scroll set, see if it's possible to
+		// set the scroll
+		el[ scroll ] = 1;
+		has = ( el[ scroll ] > 0 );
+		el[ scroll ] = 0;
+		return has;
+	},
+
+	isOverAxis: function( x, reference, size ) {
+		//Determines when x coordinate is over "b" element axis
+		return ( x > reference ) && ( x < ( reference + size ) );
+	},
+
+	isOver: function( y, x, top, left, height, width ) {
+		//Determines when x, y coordinates is over "b" element
+		return $.ui.isOverAxis( y, top, height ) && $.ui.isOverAxis( x, left, width );
+	},
+
+	keyCode: {
+		ALT: 18,
+		BACKSPACE: 8,
+		CAPS_LOCK: 20,
+		COMMA: 188,
+		COMMAND: 91,
+		COMMAND_LEFT: 91, // COMMAND
+		COMMAND_RIGHT: 93,
+		CONTROL: 17,
+		DELETE: 46,
+		DOWN: 40,
+		END: 35,
+		ENTER: 13,
+		ESCAPE: 27,
+		HOME: 36,
+		INSERT: 45,
+		LEFT: 37,
+		MENU: 93, // COMMAND_RIGHT
+		NUMPAD_ADD: 107,
+		NUMPAD_DECIMAL: 110,
+		NUMPAD_DIVIDE: 111,
+		NUMPAD_ENTER: 108,
+		NUMPAD_MULTIPLY: 106,
+		NUMPAD_SUBTRACT: 109,
+		PAGE_DOWN: 34,
+		PAGE_UP: 33,
+		PERIOD: 190,
+		RIGHT: 39,
+		SHIFT: 16,
+		SPACE: 32,
+		TAB: 9,
+		UP: 38,
+		WINDOWS: 91 // COMMAND
+	}
+});
+
+//jQuery plugins
+$.fn.extend({
+	_focus: $.fn.focus,
+	focus: function( delay, fn ) {
+		return typeof delay === "number" ?
+			this.each(function() {
+				var elem = this;
+				setTimeout(function() {
+					$( elem ).focus();
+					if ( fn ) {
+						fn.call( elem );
+					}
+				}, delay );
+			}) :
+			this._focus.apply( this, arguments );
+	},
+
+	enableSelection: function() {
+		return this
+			.attr( "unselectable", "off" )
+			.css( "MozUserSelect", "" );
+	},
+
+	disableSelection: function() {
+		return this
+			.attr( "unselectable", "on" )
+			.css( "MozUserSelect", "none" );
+	},
+
+	scrollParent: function() {
+		var scrollParent;
+		if (($.browser.msie && (/(static|relative)/).test(this.css('position'))) || (/absolute/).test(this.css('position'))) {
+			scrollParent = this.parents().filter(function() {
+				return (/(relative|absolute|fixed)/).test($.curCSS(this,'position',1)) && (/(auto|scroll)/).test($.curCSS(this,'overflow',1)+$.curCSS(this,'overflow-y',1)+$.curCSS(this,'overflow-x',1));
+			}).eq(0);
+		} else {
+			scrollParent = this.parents().filter(function() {
+				return (/(auto|scroll)/).test($.curCSS(this,'overflow',1)+$.curCSS(this,'overflow-y',1)+$.curCSS(this,'overflow-x',1));
+			}).eq(0);
+		}
+
+		return (/fixed/).test(this.css('position')) || !scrollParent.length ? $(document) : scrollParent;
+	},
+
+	zIndex: function( zIndex ) {
+		if ( zIndex !== undefined ) {
+			return this.css( "zIndex", zIndex );
+		}
+
+		if ( this.length ) {
+			var elem = $( this[ 0 ] ), position, value;
+			while ( elem.length && elem[ 0 ] !== document ) {
+				// Ignore z-index if position is set to a value where z-index is ignored by the browser
+				// This makes behavior of this function consistent across browsers
+				// WebKit always returns auto if the element is positioned
+				position = elem.css( "position" );
+				if ( position === "absolute" || position === "relative" || position === "fixed" ) {
+					// IE returns 0 when zIndex is not specified
+					// other browsers return a string
+					// we ignore the case of nested elements with an explicit value of 0
+					// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+					value = parseInt( elem.css( "zIndex" ) );
+					if ( !isNaN( value ) && value != 0 ) {
+						return value;
+					}
+				}
+				elem = elem.parent();
+			}
+		}
+
+		return 0;
+	}
+});
+
+$.each( [ "Width", "Height" ], function( i, name ) {
+	var side = name === "Width" ? [ "Left", "Right" ] : [ "Top", "Bottom" ],
+		type = name.toLowerCase(),
+		orig = {
+			innerWidth: $.fn.innerWidth,
+			innerHeight: $.fn.innerHeight,
+			outerWidth: $.fn.outerWidth,
+			outerHeight: $.fn.outerHeight
+		};
+
+	function reduce( elem, size, border, margin ) {
+		$.each( side, function() {
+			size -= parseFloat( $.curCSS( elem, "padding" + this, true) ) || 0;
+			if ( border ) {
+				size -= parseFloat( $.curCSS( elem, "border" + this + "Width", true) ) || 0;
+			}
+			if ( margin ) {
+				size -= parseFloat( $.curCSS( elem, "margin" + this, true) ) || 0;
+			}
+		});
+		return size;
+	}
+
+	$.fn[ "inner" + name ] = function( size ) {
+		if ( size === undefined ) {
+			return orig[ "inner" + name ].call( this );
+		}
+
+		return this.each(function() {
+			$.style( this, type, reduce( this, size ) + "px" );
+		});
+	};
+
+	$.fn[ "outer" + name] = function( size, margin ) {
+		if ( typeof size !== "number" ) {
+			return orig[ "outer" + name ].call( this, size );
+		}
+
+		return this.each(function() {
+			$.style( this, type, reduce( this, size, true, margin ) + "px" );
+		});
+	};
+});
+
+//Additional selectors
+function visible( element ) {
+	return !$( element ).parents().andSelf().filter(function() {
+		return $.curCSS( this, "visibility" ) === "hidden" ||
+			$.expr.filters.hidden( this );
+	}).length;
+}
+
+$.extend( $.expr[ ":" ], {
+	data: function( elem, i, match ) {
+		return !!$.data( elem, match[ 3 ] );
+	},
+
+	focusable: function( element ) {
+		var nodeName = element.nodeName.toLowerCase(),
+			tabIndex = $.attr( element, "tabindex" );
+		if ( "area" === nodeName ) {
+			var map = element.parentNode,
+				mapName = map.name,
+				img;
+			if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
+				return false;
+			}
+			img = $( "img[usemap=#" + mapName + "]" )[0];
+			return !!img && visible( img );
+		}
+		return ( /input|select|textarea|button|object/.test( nodeName )
+			? !element.disabled
+			: "a" == nodeName
+				? element.href || !isNaN( tabIndex )
+				: !isNaN( tabIndex ))
+			// the element and all of its ancestors must be visible
+			&& visible( element );
+	},
+
+	tabbable: function( element ) {
+		var tabIndex = $.attr( element, "tabindex" );
+		return ( isNaN( tabIndex ) || tabIndex >= 0 ) && $( element ).is( ":focusable" );
+	}
+});
+
+})( jQuery );
