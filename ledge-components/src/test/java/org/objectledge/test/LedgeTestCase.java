@@ -28,6 +28,7 @@
 
 package org.objectledge.test;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Properties;
@@ -112,6 +113,10 @@ public abstract class LedgeTestCase extends MockObjectTestCase
      */
     protected Configuration getConfig(FileSystem fs, String name) throws Exception
     {
+        if(!fs.exists(name))
+        {
+            throw new IOException("configuration file " + name + " not found");
+        }
         InputSource source = new InputSource(fs.getInputStream(name));
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         XMLReader reader = parserFactory.newSAXParser().getXMLReader();
