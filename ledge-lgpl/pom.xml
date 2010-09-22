@@ -14,6 +14,11 @@
   <dependencies>
     <dependency>
       <groupId>org.objectledge</groupId>
+      <artifactId>ledge-common</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.objectledge</groupId>
       <artifactId>ledge-components</artifactId>
     </dependency>
     <dependency>
