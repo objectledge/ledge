@@ -13,6 +13,11 @@
   <name>ObjectLedge Components</name>
   <dependencies>
     <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-common</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-api</artifactId>
     </dependency>

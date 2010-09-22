@@ -113,9 +113,15 @@
       <name>Objectledge Nexus repository (plugins)</name>
       <url>http://objectledge.org/nexus/content/groups/m2</url>
     </pluginRepository>
-  </pluginRepositories>  
+  </pluginRepositories>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.objectledge</groupId>
+        <artifactId>ledge-common</artifactId>
+        <type>pom</type>
+        <version>${project.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-components</artifactId>
@@ -423,8 +429,8 @@
         <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
         <version>2.2</version>
-      </plugin>    
-    </plugins>    
+      </plugin>
+    </plugins>
   </build>
   <distributionManagement>
     <repository>
