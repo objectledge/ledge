@@ -60,6 +60,56 @@ public class EmailTool
 
         return jSEncode.toString();
     }
+    
+    /**
+     * Encode the given email address as html/javascript. 
+     * 
+     * @param eMail the address to encode.
+     * @param eMailText the displayed text to encode.
+     * @return encoded representation.
+     */
+    public String encode(String eMail, String eMailText)
+    {
+        StringBuilder jSEncode = new StringBuilder();
+        jSEncode.append("document.write('<a href=\"mailto:").append(eMail).append("\">")
+            .append(eMailText).append("</a>');");
+        String value = jSEncode.toString();
+        
+        jSEncode.setLength(0);
+        jSEncode.append("<script language=\"javascript\">eval(unescape('");
+        for(int i=0; i < value.length(); i++)
+        {
+            jSEncode.append('%').append(bin2Hex(value.charAt(i)));
+        }
+        jSEncode.append("'))</script>");
+
+        return jSEncode.toString();
+    }
+    
+    /**
+     * return javascript code with encoded email address. 
+     * 
+     * @param eMail the address to encode.
+     * @param eMailText the displayed text to encode.
+     * @return encoded representation.
+     */
+    public String encodeToRenderer(String eMail, String eMailText)
+    {
+        StringBuilder jSEncode = new StringBuilder();
+        jSEncode.append("document.write('<a href=\"mailto:").append(eMail).append("\">")
+            .append(eMailText).append("</a>');");
+        String value = jSEncode.toString();
+        jSEncode.setLength(0);
+
+        jSEncode.append("eval(unescape('");
+        for(int i=0; i < value.length(); i++)
+        {
+            jSEncode.append('%').append(bin2Hex(value.charAt(i)));
+        }
+        jSEncode.append("'))");
+
+        return jSEncode.toString();
+    }
 
     /**
      * Provide hexadecimal ordinal of an UTF character. 
