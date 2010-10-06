@@ -652,25 +652,26 @@ public class DBParameters implements Parameters
 			conn = database.getConnection();
 			Iterator<String> iterator = modified.iterator();
 			PreparedStatement deleteStmt = conn.prepareStatement(
-				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = "+id+
-				" AND name = ?");
+				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = ? AND name = ?");
 			PreparedStatement insertStmt = conn.prepareStatement(
 				"INSERT INTO "+DBParametersManager.TABLE_NAME+" (parameters_id, name, value)" +
-				" VALUES ("+id+", ?, ?)");
+				" VALUES (?, ?, ?)");
 			while(iterator.hasNext())
 			{
 				String name = iterator.next();
                 if(!areValuesEqual(name))
                 {
     				String[] values = container.getStrings(name);
-    				deleteStmt.setString(1,name);
+    				deleteStmt.setLong(1, id);
+    				deleteStmt.setString(2, name);
     				deleteStmt.addBatch();
                     doDelete = true;
     				for(int j = 0; j < values.length; j++)
     				{
                         isInsert = true;
-    					insertStmt.setString(1,name);
-    					insertStmt.setString(2,values[j]);
+                        insertStmt.setLong(1, id);
+    					insertStmt.setString(2, name);
+    					insertStmt.setString(3, values[j]);
     					insertStmt.addBatch();
     				}
                 }

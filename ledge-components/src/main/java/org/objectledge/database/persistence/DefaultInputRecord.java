@@ -478,8 +478,10 @@ public class DefaultInputRecord implements InputRecord
     public static PreparedStatement getSelectStatement(long key, Persistent object, Connection conn)
         throws SQLException
     {
-        return conn.prepareStatement("SELECT * FROM " + object.getTable() + " WHERE " +
-            object.getKeyColumns()[0] + " = " + key);
+        PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM " + object.getTable() + " WHERE " +
+            object.getKeyColumns()[0] + " = ?");
+        pstmt.setLong(1, key);
+        return pstmt;
     }
     
     /**
