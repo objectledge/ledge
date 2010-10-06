@@ -38,6 +38,7 @@ User Interface form controls
   <xsd:group name="formControls">
     <xsd:choice>
       <xsd:element ref="formtool:input"/>
+      <xsd:element ref="formtool:hidden"/>
       <xsd:element ref="formtool:textarea"/>
       <!-- htmlarea is a extension for formatted HTML input -->
       <xsd:element ref="formtool:htmlarea"/>
@@ -137,6 +138,18 @@ User Interface form controls
       <xsd:attributeGroup ref="formtool:bindFirstAttributes"/>
       <xsd:attributeGroup ref="formtool:commonUIAttributes"/>
       <xsd:attribute name="maxLength" type="xsd:nonNegativeInteger" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:element name="hidden">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="formtool:caption"/>
+        <xsd:group ref="formtool:optionalUIChildren" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="id" type="xsd:ID" use="optional"/>
+      <xsd:attributeGroup ref="formtool:bindFirstAttributes"/>
+      <xsd:attributeGroup ref="formtool:commonUIAttributes"/>
     </xsd:complexType>
   </xsd:element>
 
