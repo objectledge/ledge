@@ -313,11 +313,12 @@ public class DefaultPersistence implements Persistence
     public boolean exists(String table, String where) throws PersistenceException
     {
         Connection conn = null;
+        Statement statement = null;
+        ResultSet rs = null;
         try
         {
             conn = database.getConnection();
-            Statement statement = conn.createStatement();
-            ResultSet rs;
+            statement = conn.createStatement();
             if (where != null)
             {
                 rs = statement.executeQuery("SELECT DISTINCT 1 FROM " + table + " WHERE " + where);
@@ -334,6 +335,8 @@ public class DefaultPersistence implements Persistence
         }
         finally
         {
+            DatabaseUtils.close(rs);
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
     }
@@ -349,11 +352,12 @@ public class DefaultPersistence implements Persistence
     public int count(String table, String where) throws PersistenceException
     {
         Connection conn = null;
+        Statement statement = null;
+        ResultSet rs = null;
         try
         {
             conn = database.getConnection();
-            Statement statement = conn.createStatement();
-            ResultSet rs;
+            statement = conn.createStatement();
             if (where != null)
             {
                 rs = statement.executeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + where);
@@ -374,6 +378,8 @@ public class DefaultPersistence implements Persistence
         }
         finally
         {
+            DatabaseUtils.close(rs);
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
     }

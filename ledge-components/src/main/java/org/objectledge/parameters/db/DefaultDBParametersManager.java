@@ -55,10 +55,11 @@ public class DefaultDBParametersManager implements DBParametersManager
     	// TODO consider the synchronization.
         long id = -1;
         Connection conn = null;
+        Statement statement = null;
         try
         {
         	conn = database.getConnection();
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             id = database.getNextId(TABLE_NAME);
             statement.execute("INSERT INTO "+TABLE_NAME+" values ("+id+",'','')");
         }
@@ -70,6 +71,7 @@ public class DefaultDBParametersManager implements DBParametersManager
         ///CLOVER:ON
         finally
         {
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
         DBParameters parameters = new DBParameters(null, id, database, logger);
@@ -95,11 +97,13 @@ public class DefaultDBParametersManager implements DBParametersManager
         }
         parameters = new DefaultParameters();
         Connection conn = null;
+        Statement statement = null;
+        ResultSet result = null;
         try
         {
             conn = database.getConnection( );
-            Statement statement = conn.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * from " + TABLE_NAME +
+            statement = conn.createStatement();
+            result = statement.executeQuery("SELECT * from " + TABLE_NAME +
              										  " where parameters_id = " + id);
             boolean exist = false;
             while (result.next())
@@ -127,6 +131,8 @@ public class DefaultDBParametersManager implements DBParametersManager
         ///CLOVER:ON
         finally
         {
+            DatabaseUtils.close(result);
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
     }
@@ -142,10 +148,11 @@ public class DefaultDBParametersManager implements DBParametersManager
     {
         Long key = new Long(id);
         Connection conn = null;
+        Statement statement = null;
         try
         {
         	conn = database.getConnection();
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             statement.execute("DELETE FROM "+TABLE_NAME+" where parameters_id = "+id);
             localCache.remove(key);
         }
@@ -157,6 +164,7 @@ public class DefaultDBParametersManager implements DBParametersManager
         ///CLOVER:ON
         finally
         {
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
     }
@@ -168,11 +176,13 @@ public class DefaultDBParametersManager implements DBParametersManager
         throws DBParametersException
     {
         Connection conn = null;
+        Statement statement = null;
+        ResultSet result = null;
         try
         {
             conn = database.getConnection();
-            Statement statement = conn.createStatement();
-            ResultSet result = statement.executeQuery("SELECT parameters_id, name, value FROM "+
+            statement = conn.createStatement();
+            result = statement.executeQuery("SELECT parameters_id, name, value FROM "+
                 TABLE_NAME+" ORDER BY parameters_id");
             if(result.next())
             {
@@ -203,6 +213,8 @@ public class DefaultDBParametersManager implements DBParametersManager
         }
         finally
         {
+            DatabaseUtils.close(result);
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
     }    
