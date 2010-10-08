@@ -50,12 +50,6 @@ public class IdGenerator
     
     private Connection conn;
 
-    private PreparedStatement fetchStmt;
-    
-    private PreparedStatement insertStmt;
-    
-    private PreparedStatement updateStmt;
-
     /**
      * Creates an IdGenerator component instance.
      * 
@@ -103,13 +97,6 @@ public class IdGenerator
     {
         conn = dataSource.getConnection();
         conn.setAutoCommit(false);
-        fetchStmt = conn.
-            prepareStatement("SELECT next_id FROM ledge_id_table WHERE table_name = ?");
-        insertStmt = conn.
-            prepareStatement("INSERT INTO ledge_id_table(table_name, next_id) VALUES(?, 1)");
-        updateStmt = conn.
-            prepareStatement("UPDATE ledge_id_table SET next_id = next_id + 1 "+
-            "WHERE table_name = ?");
     }
     
     /**
@@ -136,9 +123,6 @@ public class IdGenerator
      */
     public void stop()
     {
-        DatabaseUtils.close(insertStmt);
-        DatabaseUtils.close(fetchStmt);
-        DatabaseUtils.close(updateStmt);
         DatabaseUtils.close(conn);
         conn = null;
     }
@@ -146,24 +130,35 @@ public class IdGenerator
     private long getNextIdInternal(String table)
         throws SQLException
     {
-        fetchStmt.setString(1, table);
-        ResultSet rs = fetchStmt.executeQuery();
-        long id;
-        if(!rs.next())
-        {
-            insertStmt.setString(1, table);
-            insertStmt.execute();
-            id = 0;
-        }
-        else
-        {
-            updateStmt.setString(1, table);
-            updateStmt.execute();
-            id = rs.getLong(1);
-        }
+        PreparedStatement fetchStmt = conn
+            .prepareStatement("SELECT next_id FROM ledge_id_table WHERE table_name = ?");
+        PreparedStatement insertStmt = null;
+        PreparedStatement updateStmt = null;
+        ResultSet rs = null;
         try
         {
+            fetchStmt.setString(1, table);
+            rs = fetchStmt.executeQuery();
+            long id;
+            if(!rs.next())
+            {
+                insertStmt = conn
+                    .prepareStatement("INSERT INTO ledge_id_table(table_name, next_id) VALUES(?, 1)");
+                insertStmt.setString(1, table);
+                insertStmt.execute();
+                id = 0;
+            }
+            else
+            {
+                updateStmt = conn
+                    .prepareStatement("UPDATE ledge_id_table SET next_id = next_id + 1 "
+                        + "WHERE table_name = ?");
+                updateStmt.setString(1, table);
+                updateStmt.execute();
+                id = rs.getLong(1);
+            }
             conn.commit();
+            return id;
         }
         catch(SQLException e)
         {
@@ -179,7 +174,12 @@ public class IdGenerator
                 throw e;
             }
         }
-        DatabaseUtils.close(rs);
-        return id;
+        finally
+        {            
+            DatabaseUtils.close(rs);
+            DatabaseUtils.close(fetchStmt);
+            DatabaseUtils.close(insertStmt);
+            DatabaseUtils.close(updateStmt);
+        }
     }
 }
