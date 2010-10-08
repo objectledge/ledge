@@ -75,11 +75,12 @@ public class DefaultPersistence implements Persistence
     public <V extends Persistent> V load(long id, PersistentFactory<V> factory) throws PersistenceException
     {
         Connection conn = null;
+        PreparedStatement statement = null;
         try
         {
             conn = database.getConnection();
             V obj = factory.newInstance();
-            PreparedStatement statement = DefaultInputRecord.getSelectStatement(id, obj, conn);
+            statement = DefaultInputRecord.getSelectStatement(id, obj, conn);
             ResultSet rs = statement.executeQuery();
             if (!rs.next())
             {
@@ -96,6 +97,7 @@ public class DefaultPersistence implements Persistence
         }
         finally
         {
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
     }
@@ -115,12 +117,14 @@ public class DefaultPersistence implements Persistence
     public <V extends Persistent> List<V> load(String where, PersistentFactory<V> factory) throws PersistenceException
     {
         Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
         try
         {
             conn = database.getConnection();
             V obj = factory.newInstance();
-            PreparedStatement statement = DefaultInputRecord.getSelectStatement(where, obj, conn);
-            ResultSet rs = statement.executeQuery();
+            statement = DefaultInputRecord.getSelectStatement(where, obj, conn);
+            rs = statement.executeQuery();
             InputRecord record = new DefaultInputRecord(rs);
             List<V> list = new ArrayList<V>();
             while (rs.next())
@@ -138,6 +142,8 @@ public class DefaultPersistence implements Persistence
         }
         finally
         {
+            DatabaseUtils.close(rs);
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }
     }
@@ -157,11 +163,11 @@ public class DefaultPersistence implements Persistence
             String[] keys = object.getKeyColumns();
             object.getData(record);
             Connection conn = null;
+            PreparedStatement statement = null;
 
             try
             {
                 conn = database.getConnection();
-                PreparedStatement statement;
                 if (object.getSaved())
                 {
                     statement = record.getUpdateStatement(conn);
@@ -190,6 +196,7 @@ public class DefaultPersistence implements Persistence
             }
             finally
             {
+                DatabaseUtils.close(statement);
                 DatabaseUtils.close(conn);
             }
         }
@@ -212,11 +219,13 @@ public class DefaultPersistence implements Persistence
                 throw new IllegalStateException("no state has been saved yet");
             }
             Connection conn = null;
+            PreparedStatement statement = null;
+            ResultSet rs = null;
             try
             {
                 conn = database.getConnection();
-                PreparedStatement statement = DefaultInputRecord.getSelectStatements(object, conn);
-                ResultSet rs = statement.executeQuery();
+                statement = DefaultInputRecord.getSelectStatements(object, conn);
+                rs = statement.executeQuery();
                 if (!rs.next())
                 {
                     throw new PersistenceException("saved state was lost");
@@ -230,6 +239,8 @@ public class DefaultPersistence implements Persistence
             }
             finally
             {
+                DatabaseUtils.close(rs);
+                DatabaseUtils.close(statement);
                 DatabaseUtils.close(conn);
             }
         }
@@ -246,12 +257,13 @@ public class DefaultPersistence implements Persistence
         synchronized (object)
         {
             Connection conn = null;
+            PreparedStatement statement = null;
             try
             {
                 conn = database.getConnection();
                 OutputRecord record = new DefaultOutputRecord(object);
                 object.getData(record);
-                PreparedStatement statement = record.getDeleteStatement(conn); 
+                statement = record.getDeleteStatement(conn); 
                 statement.execute();
                 if(statement.getUpdateCount() != 1)
                 {
@@ -268,6 +280,7 @@ public class DefaultPersistence implements Persistence
             }
             finally
             {
+                DatabaseUtils.close(statement);
                 DatabaseUtils.close(conn);
             }
         }
@@ -283,11 +296,12 @@ public class DefaultPersistence implements Persistence
     public <V extends Persistent> void delete(String where, PersistentFactory<V> factory) throws PersistenceException
     {
         Connection conn = null;
+        PreparedStatement statement = null;
         try
         {
             conn = database.getConnection();
             Persistent obj = factory.newInstance();
-            PreparedStatement statement = conn.prepareStatement("DELETE FROM " + obj.getTable() + 
+            statement = conn.prepareStatement("DELETE FROM " + obj.getTable() + 
                                                                 " WHERE " + where);
             statement.executeUpdate();
         }
@@ -297,6 +311,7 @@ public class DefaultPersistence implements Persistence
         }
         finally
         {
+            DatabaseUtils.close(statement);
             DatabaseUtils.close(conn);
         }        
     }

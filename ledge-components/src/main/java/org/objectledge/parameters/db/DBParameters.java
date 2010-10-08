@@ -645,15 +645,17 @@ public class DBParameters implements Parameters
 	private void update()
 	{
 		Connection conn = null;
+		PreparedStatement deleteStmt = null;
+		PreparedStatement insertStmt = null;
         boolean isInsert = false;
         boolean doDelete = false;
 		try
 		{
 			conn = database.getConnection();
 			Iterator<String> iterator = modified.iterator();
-			PreparedStatement deleteStmt = conn.prepareStatement(
+            deleteStmt = conn.prepareStatement(
 				"DELETE FROM "+DBParametersManager.TABLE_NAME+" where parameters_id = ? AND name = ?");
-			PreparedStatement insertStmt = conn.prepareStatement(
+            insertStmt = conn.prepareStatement(
 				"INSERT INTO "+DBParametersManager.TABLE_NAME+" (parameters_id, name, value)" +
 				" VALUES (?, ?, ?)");
 			while(iterator.hasNext())
@@ -694,6 +696,8 @@ public class DBParameters implements Parameters
         ///CLOVER:ON
 		finally
 		{
+		    DatabaseUtils.close(insertStmt);
+		    DatabaseUtils.close(deleteStmt);
 			DatabaseUtils.close(conn);
 		}
 	}
