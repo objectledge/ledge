@@ -45,12 +45,13 @@ public abstract class ReadOnlyFileSystemProvider
 
     protected void analyzeDirectory(File base, File item)
     {
-        String relativePath = item.getPath().substring(base.getPath().length()).replace(FILE_SEPARATOR, "/");
+        String relativePath = item.getPath().substring(base.getPath().length()).replace(
+            FILE_SEPARATOR, "/");
         if(item.isFile())
         {
             addFileEntry(relativePath, item.length(), item.lastModified());
         }
-        else
+        else if(item.isDirectory())
         {
             addDirectoryEntry(relativePath);
             for(File child : item.listFiles())
