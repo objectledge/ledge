@@ -17,6 +17,7 @@ no
   <tr>
     <td>Name</td>
     <td>Job</td>
+    <td>Argument</td>
     <td>Schedule type</td>
     <td>Schedule config</td>
     <td>Run count</td>
@@ -28,6 +29,7 @@ no
   <tr>
      <td><a href="$link.view($detailView).set("name",$job.name)">$job.name</a></td>
      <td>$job.jobClassName</td>
+     <td>#if($job.argument) $job.argument #else &nbsp; #end</td>
      <td>$job.schedule.type</td>
      <td>$job.schedule.config</td>
      <td>$job.runCount</td>

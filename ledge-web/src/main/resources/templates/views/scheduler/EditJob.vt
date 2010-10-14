@@ -45,6 +45,10 @@ checked
     <td><input type="text" name="jobClassName" value="$job.jobClassName"></td>
   </tr>    
   <tr>
+    <td align="right">Job argument: </td>
+    <td><input type="text" name="jobArgument" value="$job.argument"></td>
+  </tr>     
+  <tr>
     <td align="right">Run count: </td>
     <td>$job.runCount</td>
   </tr>    
