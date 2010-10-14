@@ -77,6 +77,7 @@ public class CreateJob
 	    String scheduleType = parameters.get("scheduleType","");
         String scheduleConfig = parameters.get("scheduleConfig","");
         String jobClassName = parameters.get("jobClassName","");
+        String jobArgument = parameters.get("jobArgument","");
         if(name.equals(""))
         {
 			templatingContext.put("result", "scheduler.invalid_name");
@@ -133,9 +134,10 @@ public class CreateJob
 		{
             Schedule schedule = scheduler.createSchedule(scheduleType, scheduleConfig);
             AbstractJobDescriptor job = scheduler.createJobDescriptor(name, schedule, jobClassName);
+            job.setArgument(jobArgument);
             job.setRunCountLimit(runCountLimit);
             job.setTimeLimit(runTimeLimitStart, runTimeLimitEnd);
-            job.setReentrant(reentrant);
+            job.setReentrant(reentrant);            
 			if(enabled)
 			{
 				scheduler.enable(job);

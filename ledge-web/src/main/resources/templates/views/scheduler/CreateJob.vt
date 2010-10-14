@@ -27,6 +27,10 @@
     <td><input type="text" name="jobClassName"></td>
   </tr>    
   <tr>
+    <td align="right">Job argument: </td>
+    <td><input type="text" name="jobArgument"></td>
+  </tr>    
+  <tr>
     <td align="right">Run count limit: </td>
     <td><input type="text" name="runCountLimit"></td>
   </tr>    
