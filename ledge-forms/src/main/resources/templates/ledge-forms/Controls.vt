@@ -18,7 +18,7 @@
   @param treeDepth  - Depth in the UI tree.
 *#
 #macro (formtool_hidden $field $loopIndex)
-<input type="hidden" name="$field.name" value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
+<input type="hidden" id="$field.name" name="$field.name" value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
 #end
 #*
   Output - used for displaying values.
