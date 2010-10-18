@@ -27,6 +27,8 @@
 //
 package org.objectledge.filesystem;
 
+import java.io.IOException;
+
 /**
  * Thrown when the underlying filesystem does not support characters occuring in the created
  * file's/directory's name. The message contains the unsupported characters.
@@ -34,7 +36,7 @@ package org.objectledge.filesystem;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: UnsupportedCharactersInFilePathException.java,v 1.2 2004-12-22 08:35:00 rafal Exp $
  */
-public class UnsupportedCharactersInFilePathException extends Exception
+public class UnsupportedCharactersInFilePathException extends IOException
 {
     /**
      * 
