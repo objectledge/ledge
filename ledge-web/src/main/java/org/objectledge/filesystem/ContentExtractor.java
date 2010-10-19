@@ -74,6 +74,7 @@ public class ContentExtractor
             directories.add(dir.getValue());
         }
         this.fileSystem = fileSystem;
+        this.checkUpdated = config.getChild("checkUpdated").getValueAsBoolean(false);
     }
     
     /** The FileSystem. */
@@ -89,13 +90,15 @@ public class ContentExtractor
     /** Name of the provider to write content to. */
     protected String extractContentTo;
     
+    protected boolean checkUpdated;
+    
     private void extractDirectory(String directory)
     {
         String updateMarker = directory+"/.updated"; 
         try
         {
             FileSystemProvider out = fileSystem.getProvider(extractContentTo);
-            if(out.exists(updateMarker))
+            if(checkUpdated && out.exists(updateMarker))
             {
                 return;
             }

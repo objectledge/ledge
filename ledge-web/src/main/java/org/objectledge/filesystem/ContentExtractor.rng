@@ -27,23 +27,34 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <element name="providers">
-    <zeroOrMore>
-      <!-- source FileSystemProvider -->
-      <element name="source">  
-        <text/>
+<element name="config" xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <interleave>
+    <optional>
+      <element name="checkUpdated">
+        <choice>
+          <value type="string">false</value> <!-- default value -->
+          <value type="string">true</value>
+        </choice>
       </element>
-    </zeroOrMore>
-    <!-- target FileSystemProvider -->
-    <element name="target">  
-      <text/>
+    </optional>
+    <element name="providers">
+      <zeroOrMore>
+        <!-- source FileSystemProvider -->
+        <element name="source">
+          <text />
+        </element>
+      </zeroOrMore>
+      <!-- target FileSystemProvider -->
+      <element name="target">
+        <text />
+      </element>
     </element>
-  </element>
-  <!-- name of the directories to be processed -->
-  <oneOrMore>
-    <element name="directory">  
-      <text/>
-    </element>
-  </oneOrMore>
+    <!-- name of the directories to be processed -->
+    <oneOrMore>
+      <element name="directory">
+        <text />
+      </element>
+    </oneOrMore>
+  </interleave>
 </element>
