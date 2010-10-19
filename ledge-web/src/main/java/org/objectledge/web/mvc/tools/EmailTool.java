@@ -60,34 +60,39 @@ public class EmailTool
 
     
     /**
-     * return javascript code with encoded email address.
+     * Return javascript code generating A element with mailto href.
      * 
-     * @param eMail the address to encode.
-     * @param eMailText the displayed text to encode.
-     * @param scriptTag if true result is enclose with <script> tag.
+     * @param eMail the email address for A href.
+     * @param eMailText A tag text.
      * @return encoded representation.
      */
-    public String encodeLink(String eMail, String eMailText, boolean scriptTag)
+    public String encodeLink(String eMail, String eMailText)
     {
-        StringBuilder jSEncode = new StringBuilder();
-        jSEncode.append("document.write('<a href=\"mailto:").append(eMail).append("\">")
+        StringBuilder js = new StringBuilder();
+        js.append("document.write('<a href=\"mailto:").append(eMail).append("\">")
             .append(eMailText).append("</a>');");
-        String value = jSEncode.toString();
-        
-        jSEncode.setLength(0);
-        if(scriptTag)
-        {
-            jSEncode.append("<script language=\"javascript\">eval(unescape('");
-            jSEncode.append(string2hex(value));
-            jSEncode.append("'))</script>");
-        }
-        else
-        {
-            jSEncode.append("eval(unescape('");
-            jSEncode.append(string2hex(value));
-            jSEncode.append("'))");
-        }
-        return jSEncode.toString();
+        StringBuilder jsEncode = new StringBuilder();
+        jsEncode.append("eval(unescape('");
+        jsEncode.append(string2hex(js.toString()));
+        jsEncode.append("'))");
+        return jsEncode.toString();
+    }
+    
+    /**
+     * Return javascript code generating email address.
+     * 
+     * @param eMail the email address.
+     * @return encoded representation.
+     */
+    public String encodeAddress(String eMail)
+    {
+        StringBuilder js = new StringBuilder();
+        js.append("document.write('").append(eMail).append("');");
+        StringBuilder jsEncode = new StringBuilder();
+        jsEncode.append("eval(unescape('");
+        jsEncode.append(string2hex(js.toString()));
+        jsEncode.append("'));");
+        return jsEncode.toString();
     }
 
     /**
@@ -101,7 +106,15 @@ public class EmailTool
         StringBuilder stringEncode = new StringBuilder();
         for(int i = 0; i < value.length(); i++)
         {
-            stringEncode.append('%').append(Integer.toHexString(value.charAt(i)));
+            int ch = value.charAt(i);
+            if(ch > 127)
+            {
+                stringEncode.append("%u").append(String.format("%04x", ch));
+            }
+            else
+            {
+                stringEncode.append('%').append(String.format("%02x", ch));                
+            }
         }
         return stringEncode.toString();
     }
