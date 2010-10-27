@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Overview of web components</title>
+  </properties>
+  <body>
+    <section name="Web components">
+      <subsection name="Web configurator">
+        <p>The simple component providing common configuration for many web components i.e.
+         the default locale, default encoding, mvc path info tokens...
+        </p>
+        <p class="more"><a href="WebConfigurator.html">more</a></p>
+      </subsection>
+      <subsection name="MVC Class Finder">
+        <p> An interface finder for finding MVC model classes.</p>
+        <p class="more"><a href="MVCClassFinder.html">more</a></p>
+      </subsection>
+      <subsection name="MVC Template Finder">
+        <p>An interface finder for finding MVC templates that should be used for
+          rendering specific views or components.
+        </p>
+        <p class="more"><a href="MVCTemplateFinder.html">more</a></p>
+      </subsection>
+      <subsection name="MVC Finder">
+        <p>The default implementation of the finder interfaces.</p>
+        <p class="more"><a href="MVCFinder.html">more</a></p>
+      </subsection>
+      <subsection name="Name sequence factory">
+        <p>The component produces a class or template name sequence for the specified view.</p>
+        <p class="more"><a href="NameSequenceFactory.html">more</a></p>
+      </subsection>
+      <subsection name="PolicySystem">
+        <p>The simple component to checks user permission to execute the action and
+	     access the view.</p>
+        <p class="more"><a href="PolicySystem.html">more</a></p>
+      </subsection>
+    </section>
+  </body>
+</document>
+  

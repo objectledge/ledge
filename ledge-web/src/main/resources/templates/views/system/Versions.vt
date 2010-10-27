@@ -1,0 +1,88 @@
+$pageTool.appendTitleSuffix('Package versions')
+<h3>Maven2 artifacts</h3>
+<table width="100%">
+<tr>
+	<th>group</th>
+	<th>artifact</th>
+	<th>version</th>
+	<th>build&nbsp;id</th>
+	<th>build&nbsp;date</th>
+	<th>built&nbsp;by</th>
+</tr>
+#foreach($artifact in $mavenArtifacts)
+<tr>
+	<td>$artifact.get('groupId')</td>
+	<td>$artifact.get('artifactId')</td>
+	<td>$artifact.get('version')</td>
+	<td>$!artifact.get('Build-Id')</td>
+	<td nowrap="true">$!artifact.get('Build-Date')</td>
+	<td>$!artifact.get('Built-By')</td>
+</tr>
+#end
+</table>
+<br/>
+
+#set($javaSpec = "Java Platform API Specification")
+#macro(unquote $text)
+#if(!$text)
+	
+#elseif($text.startsWith('"') && $text.endsWith('"') && $text.length() > 2)
+#set($limit = $text.length() - 1)
+$text.substring(1, $limit)
+#else
+$text
+#end
+#end
+
+<h3>Java Extensions</h3>
+<table width="100%">
+<tr>
+  <th>package</th>
+  <th>specification title</th>
+  <th>specification version</th>
+  <th>specification vendor</th>
+  <th>implementation title</th>
+  <th>implementation version</th>
+  <th>implementation vendor</th>
+</tr>
+#foreach($package in $packages)
+#if(!$package.specificationTitle.equals($javaSpec))
+<tr>
+<td>$package.name</td>
+<td>#unquote($package.specificationTitle)</td>
+<td>#unquote($package.specificationVersion)</td>
+<td>#unquote($package.specificationVendor)</td>
+<td>#unquote($package.implementationTitle)</td>
+<td>#unquote($package.implementationVersion)</td>
+<td>#unquote($package.implementationVendor)</td>
+</tr>
+#end
+#end
+</table>
+<br/>
+
+<h3>Java Platform</h3>
+<table width="100%">
+<tr>
+  <th>package</th>
+  <th>specification title</th>
+  <th>specification version</th>
+  <th>specification vendor</th>
+  <th>implementation title</th>
+  <th>implementation version</th>
+  <th>implementation vendor</th>
+</tr>
+#foreach($package in $packages)
+#if($package.specificationTitle.equals($javaSpec))
+<tr>
+<td>$package.name</td>
+<td>#unquote($package.specificationTitle)</td>
+<td>#unquote($package.specificationVersion)</td>
+<td>#unquote($package.specificationVendor)</td>
+<td>#unquote($package.implementationTitle)</td>
+<td>#unquote($package.implementationVersion)</td>
+<td>#unquote($package.implementationVendor)</td>
+</tr>
+#end
+#end
+</table>
