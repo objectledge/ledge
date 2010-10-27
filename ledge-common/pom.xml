@@ -89,6 +89,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
   </properties>
   <modules>
     <module>../ledge-maven-assemblies</module>
@@ -421,6 +422,32 @@
             <source>1.6</source>
             <target>1.6</target>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.1</version>
+          <configuration>
+            <archive>
+              <manifestEntries>
+                <Build-Date>${maven.build.timestamp}</Build-Date>
+                <Build-Id>${buildId}</Build-Id>
+              </manifestEntries>
+            </archive>
+          </configuration>         
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2-beta-5</version>
+          <configuration>
+            <archive>
+              <manifestEntries>
+                <Build-Date>${maven.build.timestamp}</Build-Date>
+                <Build-Id>${buildId}</Build-Id>
+              </manifestEntries>
+            </archive>
+          </configuration>         
         </plugin>
       </plugins>
     </pluginManagement>
