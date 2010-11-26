@@ -283,9 +283,13 @@ public class StringTool
      */
     public static <E> E getRandomElement(List<E> list)
     {
-         Random generator = new Random(System.currentTimeMillis());
-         int i = generator.nextInt(list.size());
-         return list.get(i);
+        if(list != null && list.size() > 0)
+        {
+            Random generator = new Random(System.currentTimeMillis());
+            int i = generator.nextInt(list.size());
+            return list.get(i);
+        }
+        return null;
     }
     
 
