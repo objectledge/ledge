@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.objectledge.utils.StringUtils;
 
@@ -273,8 +274,22 @@ public class StringTool
         Collections.sort(result, collator);
         return result;
     }
-
+    
     /**
+     * Returns a random element from given list.
+     * 
+     * @param input a list of elements. 
+     * @return random element.
+     */
+    public static <E> E getRandomElement(List<E> list)
+    {
+         Random generator = new Random(System.currentTimeMillis());
+         int i = generator.nextInt(list.size());
+         return list.get(i);
+    }
+    
+
+    /*
      * Formats time interval as a human readable string, only English is supported.
      * 
      * @param interval the interval in seconds.
