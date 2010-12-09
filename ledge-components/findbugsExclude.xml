@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<FindBugsFilter>
+  <Match class="org.objectledge.filesystem.impl.ReadOnlyFileSystemProvider">
+    <Method name="processListing" params="java.lang.String,java.io.File" returns="void"/>
+    <BugCode name="DE"/>
+  </Match>
+</FindBugsFilter>
