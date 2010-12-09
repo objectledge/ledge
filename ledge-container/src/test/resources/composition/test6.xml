@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<container>
+  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
+             class="org.objectledge.pico.LedgeStringToObjectConverter"/>
+
+  <component class="org.objectledge.pico.xml.Test6a"/>
+  
+  <component key="b1" class="org.objectledge.pico.xml.Test6b">
+    <parameter class="java.lang.String" value="s"/>
+  </component>
+  <component class-key="org.objectledge.pico.xml.ITest6b" class="org.objectledge.pico.xml.Test6b">
+    <parameter class="int" value="1"/>
+  </component>
+
+  <component class="org.objectledge.pico.xml.Test6c">
+    <parameter/>
+    <parameter key="b1"/>
+    <parameter class-key="org.objectledge.pico.xml.ITest6b"/>
+  </component>  
+</container>
