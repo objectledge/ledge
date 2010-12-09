@@ -244,7 +244,7 @@ public class PageTool
      */
     public void addStyleLink(String href, int priority)
     {
-        addStyleLink(new ContentLink(href), priority, null, null);
+        addStyleLink(new ContentLink(href), priority, null, null, null);
     }
     
     /**
@@ -255,7 +255,7 @@ public class PageTool
      */
     public void addStyleLink(String href, int priority, String media)
     {
-        addStyleLink(new ContentLink(href), priority, media, null);
+        addStyleLink(new ContentLink(href), priority, media, null, null);
     }
     
     /**
@@ -263,24 +263,40 @@ public class PageTool
      * @param href a link to the style
      * @param priority priority of a style link
      * @param media media of a style link
-     * @param rel ...
+     * @param rel rel attribute for the link
      */
     public void addStyleLink(String href, int priority, String media, String rel)
     {
-        addStyleLink(new ContentLink(href), priority, media, rel);
+        addStyleLink(new ContentLink(href), priority, media, rel, null);
+    }
+
+    /**
+     * Adds a style link with a given priority.
+     * @param href a link to the style
+     * @param priority priority of a style link
+     * @param media media of a style link
+     * @param rel rel attribute for the link
+     * @param type type attribute for the link
+     */
+    public void addStyleLink(String href, int priority, String media, String rel, String type)
+    {
+        addStyleLink(new ContentLink(href), priority, media, rel, type);
     }
     
     /** 
      * Adds a style link with a given priority.
      * @param resLink a content resource link to be added
      * @param priority priority of a style link
+     * @param media media attribute for the link
+     * @param rel rel attribute for the link
+     * @param type type attribute for the link
      */
-    protected void addStyleLink(ContentLink resLink, int priority, String media, String rel)
+    protected void addStyleLink(ContentLink resLink, int priority, String media, String rel, String type)
     {
         if(!styleLinksSet.contains(resLink))
         {
             styleLinksSet.add(resLink);
-            styleLinks.add(new StyleLink(resLink, priority, media, rel));
+            styleLinks.add(new StyleLink(resLink, priority, media, rel, type));
         }
     }
 
@@ -315,13 +331,15 @@ public class PageTool
         private int priority;
         private String media;
         private String rel;
+        private String type;
 
-        StyleLink(ContentLink resLink, int priority, String media, String rel)
+        StyleLink(ContentLink resLink, int priority, String media, String rel, String type)
         {
             this.resLink = resLink;
             this.priority = priority;
             this.media = media;
             this.rel = rel;
+            this.type = type;
         }
 
         /** Getter for <code>href</code> attribute value.
@@ -352,6 +370,15 @@ public class PageTool
                 return "stylesheet";
             }
             return rel;
+        }
+        
+        public String getType()
+        {
+            if(type == null || type.length() == 0)
+            {
+                return "text/css";
+            }
+            return type;
         }
     }
 
