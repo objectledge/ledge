@@ -1,0 +1,4 @@
+*.log
+target
+build.properties
+.clover
