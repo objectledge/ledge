@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+
+  $Id: package.html,v 1.1 2005-07-07 08:25:24 zwierzem Exp $
+
+ Copyright (c) 2003-2005, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+       this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+       this list of conditions and the following disclaimer in the documentation  
+       and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+       nor the names of its contributors may be used to endorse or promote products  
+       derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+ 
+-->
+</head>
+<body>
+
+The MVC web application model implemented in ObjectLedge.
+	
+<h3>Model-View-Controller</h3>
+<p>
+The <a href="http://java.sun.com/blueprints/guidelines/designing_enterprise_applications_2e/web-tier/web-tier5.html">Model-View-Controller</a>
+is an application building pattern which makes it easier for developers to separate
+application concerns - namely: presentation and businness logic. This separation is good for
+understanding and maintaining the code. MVC is already a quite old and mature concept, comes
+from Smalltalk developers and is extensively used in client GUI Java APIs like Swing and SWT.
+The web application frameworks have adapted this pattern and implemented it in many different
+ways providing different levels of flexibility.
+</p>
+
+<p>
+The main idea of web application frameworks which support MVC pattern is to move away
+all the logic contained in presentation layer - most often some kind of templates,
+ObjectLedge uses own MVC implementation and
+<a href="http://jakarta.apache.org/velocity/index.html">Velocity templating language</a>
+- to avoid problems when changing the way data is presented or
+changing the way business logic works.
+</p>
+
+<p>
+ObjectLedge MVC implementation is based on ideas from Jakarta Turbine project. It uses
+a number of dedicated {@link org.objectledge.pipeline.Valve} components inserted into a
+pipeline embedded in
+{@link org.objectledge.web.LedgeServlet}.
+Together with the pipeline and selector components, valves create a <b>Controller</b>
+part of a MVC framework. The most important valves are:
+</p>
+<ul>
+<li>{@link org.objectledge.web.mvc.actions.ActionExecutorValve}</li>
+<li>{@link org.objectledge.web.mvc.builders.BuilderExecutorValve}</li>
+</ul>
+
+<p>
+The <code>ActionExecutorValve</code> executes actions. Actions are components which when
+executed are expected to make changes in <b>Model</b> part of MVC architecture. For example an
+update of address data in the phone book database is an action.
+</p>
+
+<p>
+The <code>BuilderExecutorValve</code> executes builders, a <b>View</b> part of MVC architecture.
+Views are not expected to make changes in the Model. The role of a View is
+to present data and UI controls to the application user. For example a list of
+address entries in an address database together with buttons which allow editing entries
+and viewing their details constitute a view. The view itself does not change database contents
+but exposes GUI for executing such actions.
+The other example is a view with a form for address entry editing.
+This form may be connected with entry update action as mentioned above.
+</p>
+
+<p>
+The ObjectLedge MVC framework is created upon following concepts:
+</p>
+
+<ul>
+<li>View</li>
+</ul>
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>
