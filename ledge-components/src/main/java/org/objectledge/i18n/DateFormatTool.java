@@ -29,6 +29,7 @@
 package org.objectledge.i18n;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -234,8 +235,28 @@ public class DateFormatTool
     {
         return Arrays.asList(TimeZone.getAvailableIDs());
     }
+    
+    /**
+     * Parse a date from string according to the active format.
+     * <p>
+     * This is useful for embedding date constants in templates: <code>#set($date = $format_date.pattern('yyyy-MM-dd').parse('2010-06-28'))</code>
+     * </p>
+     * 
+     * @param stringDate a date in string form. String must conform to the active pattern. 
+     * @return Date object or null if the string is malformed.
+     */
+    public Date parse(String stringDate)
+    {
+        try
+        {
+            return format.parse(stringDate);
+        }
+        catch(ParseException e)
+        {
+            return null;
+        }
+    }
 
-	
     // implementation ------------------------------------------------------------------------------
 
     /**
