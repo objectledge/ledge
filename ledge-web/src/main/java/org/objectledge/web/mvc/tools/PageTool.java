@@ -193,11 +193,22 @@ public class PageTool
 
 		/**
 		 * Constructs a content resource link. 
+		 * 
 		 * @param href relative URI of a linked content resource 
 		 */
         public ContentLink(String href)
         {
-            this.href = href;
+            this.href = linkTool.content(href).toString();
+        }
+        
+        /**
+         * Constructs a content resource link.
+         * 
+         * @param link link tool instance.
+         */
+        public ContentLink(LinkTool link)
+        {
+            this.href = link.toString();
         }
 
 		/**
@@ -221,7 +232,7 @@ public class PageTool
 		 */
         public String toString()
         {
-            return linkTool.content(href).toString();
+            return href;
         }
     }
 
@@ -281,6 +292,48 @@ public class PageTool
     public void addStyleLink(String href, int priority, String media, String rel, String type)
     {
         addStyleLink(new ContentLink(href), priority, media, rel, type);
+    }
+    
+    /**
+     * Adds a style link with a default priority equal to <code>0</code>.
+     * @param link a link to the style
+     */
+    public void addStyleLink(LinkTool link)
+    {
+        addStyleLink(link, 0);
+    }
+
+    /**
+     * Adds a style link with a given priority.
+     * @param link a link to the style
+     * @param priority priority of a style link
+     */
+    public void addStyleLink(LinkTool link, int priority)
+    {
+        addStyleLink(new ContentLink(link), priority, null, null, null);
+    }
+    
+    /**
+     * Adds a style link with a given priority.
+     * @param link a link to the style
+     * @param priority priority of a style link
+     * @param media media of a style link
+     */
+    public void addStyleLink(LinkTool link, int priority, String media)
+    {
+        addStyleLink(new ContentLink(link), priority, media, null, null);
+    }
+    
+    /**
+     * Adds a style link with a given priority.
+     * @param link a link to the style
+     * @param priority priority of a style link
+     * @param media media of a style link
+     * @param rel ...
+     */
+    public void addStyleLink(LinkTool link, int priority, String media, String rel)
+    {
+        addStyleLink(new ContentLink(link), priority, media, rel, null);
     }
     
     /** 
@@ -405,6 +458,25 @@ public class PageTool
         this.addAutoLoadScriptLink(new ContentLink(src), charset);
     }
 
+    /** 
+     * Adds an autoload script link, with no charset attribute defined.
+     * @param link a link to the script source
+     */
+    public void addAutoLoadScriptLink(LinkTool link)
+    {
+        this.addAutoLoadScriptLink(link, null);
+    }
+
+    /**
+     * Adds an autoload script link, with charset attribute defined.
+     * @param link a link to the script source
+     * @param charset charset of a linked source file
+     */
+    public void addAutoLoadScriptLink(LinkTool link, String charset)
+    {
+        this.addAutoLoadScriptLink(new ContentLink(link), charset);
+    }    
+    
     /**
      * Adds an autoload script link with a given type and charset attribute defined.
      * @param srcLink a link to the script source
@@ -438,6 +510,25 @@ public class PageTool
         this.addScriptLink(new ContentLink(src), charset);
     }
 
+    /** 
+     * Adds a script link, with no charset attribute defined.
+     * @param link a link to the script source
+     */
+    public void addScriptLink(LinkTool link)
+    {
+        this.addScriptLink(link, null);
+    }
+
+    /**
+     * Adds a script link, with charset attribute defined.
+     * @param link a link to the script source
+     * @param charset charset of a linked source file
+     */
+    public void addScriptLink(LinkTool link, String charset)
+    {
+        this.addScriptLink(new ContentLink(link), charset);
+    }    
+    
     /** 
      * Checks if any scripts have been added. This is useful for including template code
      * for scripts configuration.
