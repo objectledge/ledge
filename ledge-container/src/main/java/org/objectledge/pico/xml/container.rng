@@ -30,7 +30,8 @@
 
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" 
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
-  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  ns="http://objectledge.org/container/1.0">
 
   <start>
     <ref name="container"/>
@@ -86,6 +87,7 @@
       <zeroOrMore>
         <choice>
           <ref name="parameter"/>
+          <ref name="sequence"/>
           <ref name="component"/>
         </choice>
       </zeroOrMore>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<container>
+<container xmlns="http://objectledge.org/container/1.0">
   <component class="org.objectledge.context.Context"/>
   <alias key="a1" class-ref="org.objectledge.context.Context"/>
   <component key="factory" class="org.objectledge.pico.xml.AlternateComponentAdapterFactory"/>
