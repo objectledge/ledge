@@ -103,7 +103,7 @@ public class Worker
     {
         try
         {
-            NDC.push("W "+task.getName());
+            NDC.push("W");
             log.info("starting "+name);
             loop: while(!shutdown)
             {
@@ -135,6 +135,7 @@ public class Worker
                 thread.setName(task.getName());
                 try
                 {
+                    NDC.push("W "+task.getName());
                     log.debug(name+" starting "+task.getName());
                     task.process(context);
                     log.debug(name+" finished "+task.getName());
@@ -153,6 +154,10 @@ public class Worker
                 catch(Throwable e)
                 {
                     log.error(name+": uncaught exception in "+task.getName(), e);
+                }
+                finally
+                {
+                    NDC.pop();
                 }
 
                 if(cleanup != null)
