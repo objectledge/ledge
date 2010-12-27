@@ -28,6 +28,7 @@
 package org.objectledge.threads.impl;
 
 import org.apache.commons.pool.ObjectPool;
+import org.apache.log4j.NDC;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
@@ -100,17 +101,65 @@ public class Worker
      */
     public void run()
     {
-        log.info("starting "+name);
-
-        loop: while(!shutdown)
+        try
         {
-            synchronized(this)
+            NDC.push("W "+task.getName());
+            log.info("starting "+name);
+            loop: while(!shutdown)
             {
-                if(task == null)
+                synchronized(this)
+                {
+                    if(task == null)
+                    {
+                        try
+                        {
+                            this.wait();
+                        }
+                        ///CLOVER:OFF
+                        catch(VirtualMachineError e)
+                        {
+                            throw e;
+                        }
+                        catch(ThreadDeath e)
+                        {
+                            throw e;
+                        }
+                        ///CLOVER:ON
+                        catch(InterruptedException e)
+                        {
+                            break loop;
+                        }
+                    }
+                }
+                
+                thread.setName(task.getName());
+                try
+                {
+                    log.debug(name+" starting "+task.getName());
+                    task.process(context);
+                    log.debug(name+" finished "+task.getName());
+                }
+                ///CLOVER:OFF
+                catch(VirtualMachineError e)
+                {
+                    throw e;
+                }
+                ///CLOVER:ON
+                catch(ThreadDeath e)
+                {
+                    log.warn(name+" was forcibly stopped while running "+task.getName());
+                    throw e;
+                }
+                catch(Throwable e)
+                {
+                    log.error(name+": uncaught exception in "+task.getName(), e);
+                }
+
+                if(cleanup != null)
                 {
                     try
                     {
-                        this.wait();
+                        cleanup.process(context);
                     }
                     ///CLOVER:OFF
                     catch(VirtualMachineError e)
@@ -122,79 +171,39 @@ public class Worker
                         throw e;
                     }
                     ///CLOVER:ON
-                    catch(InterruptedException e)
+                    catch(Throwable e)
                     {
-                        break loop;
+                        log.error(name+": uncaught exception in cleanup after " + task.getName(), e);
+                    }
+                    finally
+                    {
+                        context.clearAttributes();
                     }
                 }
-            }
-            
-            thread.setName(task.getName());
-            try
-            {
-                log.debug(name+" starting "+task.getName());
-                task.process(context);
-                log.debug(name+" done "+task.getName());
-            }
-            ///CLOVER:OFF
-            catch(VirtualMachineError e)
-            {
-                throw e;
-            }
-            ///CLOVER:ON
-            catch(ThreadDeath e)
-            {
-                log.warn(name+" was forcibly stopped while running "+task.getName());
-                throw e;
-            }
-            catch(Throwable e)
-            {
-                log.error(name+": uncaught exception in "+task.getName(), e);
-            }
-            
-            if(cleanup != null)
-            {
-                try
+                
+                thread.setName(name);
+                task = null;
+                if(pool != null)
                 {
-                    cleanup.process(context);
-                }
-                ///CLOVER:OFF
-                catch(VirtualMachineError e)
-                {
-                    throw e;
-                }
-                catch(ThreadDeath e)
-                {
-                    throw e;
-                }
-                ///CLOVER:ON
-                catch(Throwable e)
-                {
-                    log.error(name+": uncaught exception in cleanup", e);
-                }
-                finally
-                {
-                    context.clearAttributes();
+                    try
+                    {
+                        pool.returnObject(this);
+                    }
+                    ///CLOVER:OFF
+                    catch(Exception e)
+                    {
+                        log.error("failed to return worker to the pool", e);
+                    }
+                    ///CLOVER:ON
                 }
             }
-            
-            thread.setName(name);
-            task = null;
-            if(pool != null)
-            {
-                try
-                {
-                    pool.returnObject(this);
-                }
-                ///CLOVER:OFF
-                catch(Exception e)
-                {
-                    log.error("failed to return worker to the pool", e);
-                }
-                ///CLOVER:ON
-            }
+
         }
-        log.info("finished "+name);
+        finally
+        {
+            log.info("finished "+name);
+            NDC.pop();
+        }
     }
     
     /**

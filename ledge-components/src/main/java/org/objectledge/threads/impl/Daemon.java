@@ -27,6 +27,7 @@
 // 
 package org.objectledge.threads.impl;
 
+import org.apache.log4j.NDC;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
@@ -84,73 +85,73 @@ public class Daemon
      */    
     public void run()
     {
-        log.info("starting "+task.getName());
         try
         {
-            running = true;
-            task.process(context);
-        }
-        ///CLOVER:OFF
-        catch(VirtualMachineError e)
-        {
-            throw e;
-        }
-        ///CLOVER:ON
-        catch(ThreadDeath e)
-        {
-            if(!shutdown)
-            {
-                log.warn(task.getName()+" was forcibly stopped", e);
-            }
-            else
-            {
-                log.info("finished "+task.getName());
-            }
-            throw e;
-        }
-        catch(Throwable e)
-        {
-            log.error("unhandled exception in "+task.getName(), e);
-        }
-        finally
-        {
-            running = false;
-        }
-        
-        if(shutdown)
-        {
-            log.info("finished "+task.getName());
-        }
-        else
-        {
-            log.error(task.getName()+" has quit");
-        }
-        
-        // cleanup
-        if(cleanup != null)
-        {
+            NDC.push("D " + task.getName());
             try
             {
-                cleanup.process(context);
+                running = true;
+                log.info("starting "+task.getName());
+                task.process(context);
+                if(shutdown)
+                {
+                    log.info("finished "+task.getName());
+                }
+                else
+                {
+                    log.error(task.getName()+" has quit unexpectedly");
+                }
             }
             ///CLOVER:OFF
             catch(VirtualMachineError e)
             {
                 throw e;
             }
+            ///CLOVER:ON
             catch(ThreadDeath e)
             {
+                log.warn(task.getName()+" was forcibly stopped", e);
                 throw e;
             }
-            ///CLOVER:ON
             catch(Throwable e)
             {
-                log.error("error in cleanup after "+task.getName(), e);
+                log.error("unhandled exception in "+task.getName(), e);
             }
             finally
             {
-                context.clearAttributes();
-            }            
+                running = false;
+            }        
+            
+            // cleanup
+            if(cleanup != null)
+            {
+                try
+                {
+                    cleanup.process(context);
+                }
+                ///CLOVER:OFF
+                catch(VirtualMachineError e)
+                {
+                    throw e;
+                }
+                catch(ThreadDeath e)
+                {
+                    throw e;
+                }
+                ///CLOVER:ON
+                catch(Throwable e)
+                {
+                    log.error("uncaught exception in cleanup after "+task.getName(), e);
+                }
+                finally
+                {
+                    context.clearAttributes();
+                }
+            }
+        }
+        finally
+        {
+            NDC.pop();            
         }
     }
 
