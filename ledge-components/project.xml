@@ -78,6 +78,12 @@
       <url>http://objectledge.org/modules/ledge-maven-plugin</url>
     </dependency>
     <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-javacc-plugin</artifactId>
+      <version>1.2</version>
+      <type>plugin</type>
+    </dependency>
+    <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
       <version>1.1</version>

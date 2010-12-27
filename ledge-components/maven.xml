@@ -33,7 +33,7 @@
          xmlns:ant="jelly:ant">
          
   <preGoal name="java:compile">
-    <attainGoal name="ledge:javacc"/>
+    <attainGoal name="javacc"/>
   </preGoal>
   
   <preGoal name="jar:jar">
