@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://objectledge.org/i18n/1.0" xmlns:i18n="http://objectledge.org/i18n/1.0">
+  <xs:element name="strings">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="i18n:item"/>
+        <xs:element ref="i18n:prefix"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item">
+    <xs:complexType mixed="true">
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="prefix">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="i18n:value"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="i18n:prefix"/>
+          <xs:element ref="i18n:item"/>
+        </xs:choice>
+      </xs:choice>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="value" type="xs:string"/>
+</xs:schema>
