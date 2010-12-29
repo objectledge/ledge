@@ -88,7 +88,7 @@
 		<p>Here's an example of namespace compositioning:
           Consider a file in the localization data directory named:
           <source>foo.bar_pl_PL.xml</source> containing the following XML markup:
-<source><![CDATA[<strings>
+<source><![CDATA[<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="foo2">
     <value>first_value</value>
     <prefix name="bar2">
