@@ -19,15 +19,17 @@
   <define name="prefix">
     <element name="prefix">
       <attribute name="name" />
-      <choice>
-        <ref name="value" />
-        <oneOrMore>
+      <interleave>
+        <optional>
+          <ref name="value" />
+        </optional>
+        <zeroOrMore>
           <choice>
             <ref name="prefix" />
             <ref name="item" />
           </choice>
-        </oneOrMore>
-      </choice>
+        </zeroOrMore>
+      </interleave>
     </element>
   </define>
   <define name="value">

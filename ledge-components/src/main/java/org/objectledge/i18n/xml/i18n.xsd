@@ -15,9 +15,9 @@
   </xs:element>
   <xs:element name="prefix">
     <xs:complexType>
-      <xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="i18n:value"/>
-        <xs:choice maxOccurs="unbounded">
+        <xs:choice>
           <xs:element ref="i18n:prefix"/>
           <xs:element ref="i18n:item"/>
         </xs:choice>
