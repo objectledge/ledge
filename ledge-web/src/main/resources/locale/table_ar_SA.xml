@@ -27,7 +27,7 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
   --> 
- <strings>
+ <strings xmlns="http://objectledge.org/i18n/1.0">
  <prefix name="empty">
   <value>لا توجد مفردات/مواد </value> 
   </prefix>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="date.optional.undefined"><value>niezdefiniowana</value></prefix>
   <prefix name="tidy.log.title"><value>Informacja o błędach w HTML</value></prefix>
   <prefix name="kupu">
