@@ -27,7 +27,7 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://objectledge.org/i18n/1.0">
   <start>
     <element name="strings">
       <ref name="scope"/>
