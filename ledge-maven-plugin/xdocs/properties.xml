@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+  <properties>
+    <title>Ledge Maven plugin Properties</title>
+  </properties>
+  <body>
+    <section name="Ledge Maven plugin Settings">
+      <p>
+        <table>
+          <tr>
+            <th>Property</th>
+            <th>Optional?</th>
+            <th>Description</th>
+          </tr>
+        </table>
+      </p>
+    </section>
+  </body>
+</document>
