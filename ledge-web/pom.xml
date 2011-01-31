@@ -36,6 +36,10 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>net.tanesha.recaptcha4j</groupId>
+      <artifactId>recaptcha4j</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-components</artifactId>
       <type>test-jar</type>
