@@ -1,5 +1,6 @@
 package org.objectledge.web.captcha;
 
+import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.tools.ContextToolFactory;
 
@@ -15,13 +16,17 @@ public class CaptchaToolFactory
 
     private final CaptchaService captchaService;
 
+    private final Context context;
+
     /**
      * Creates a new instance of CaptchaToolFactory.
      * 
+     * @param context thread execution context.
      * @param captchaService CaptchaService implementation.
      */
-    public CaptchaToolFactory(CaptchaService captchaService)
+    public CaptchaToolFactory(Context context, CaptchaService captchaService)
     {
+        this.context = context;
         this.captchaService = captchaService;
     }
 
@@ -41,7 +46,7 @@ public class CaptchaToolFactory
     public Object getTool()
         throws ProcessingException
     {
-        return new CaptchaTool(captchaService);
+        return new CaptchaTool(context, captchaService);
     }
 
     /**

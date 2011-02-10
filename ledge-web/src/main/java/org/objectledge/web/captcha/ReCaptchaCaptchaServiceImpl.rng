@@ -3,31 +3,36 @@
   <start>
     <element name="config">
       <element name="publicKey">
-        <text/>
+        <text />
       </element>
       <element name="privateKey">
-        <text/>
+        <text />
       </element>
       <optional>
         <element name="recaptchaServer">
-          <text/>
+          <text />
         </element>
       </optional>
       <optional>
         <element name="includeNoscript">
-          <text/>
+          <text />
         </element>
       </optional>
       <optional>
-        <element name="defaultTheme">
-          <text/>
-        </element>
-      </optional>    
-      <optional>
         <element name="errorMessage">
-          <text/>
+          <text />
         </element>
-      </optional>    
+      </optional>
+      <optional>
+        <element name="options">
+          <zeroOrMore>
+            <element name="option">
+              <attribute name="name" />
+              <text />
+            </element>
+          </zeroOrMore>
+        </element>
+      </optional>
     </element>
   </start>
 </grammar>

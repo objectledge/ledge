@@ -1,5 +1,6 @@
 package org.objectledge.web.captcha;
 
+import java.util.Locale;
 import java.util.Map;
 
 import org.objectledge.parameters.RequestParameters;
@@ -13,19 +14,12 @@ import org.objectledge.web.HttpContext;
 public interface CaptchaService
 {
     /**
-     * Create CAPTCHA widget with default options
-     * 
-     * @return HTML markup of CAPTCHA widget.
-     */
-    public String createCaptchaWidget();
-
-    /**
      * Create CAPTCHA widget with specified options.
      * 
      * @param options implementation specific options.
      * @return HTML markup of CAPTCHA widget.
      */
-    public String createCaptchaWidget(Map<String, String> properties);
+    public String createCaptchaWidget(Locale locale, Map<String, String> properties);
 
     /**
      * Verify CAPTCHA solved by the user.
