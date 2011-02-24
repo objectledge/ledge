@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class DefaultDBParametersManager implements DBParametersManager
     {
         this.logger = logger;
         this.database = database;
-        localCache = new HashMap<Long, Parameters>();
+        localCache = Collections.synchronizedMap(new HashMap<Long, Parameters>());
     }
     
     /**
