@@ -1,0 +1,61 @@
+$pageTool.appendTitleSuffix('Logging system : Logger properties')##
+#macro(level_selector $levels)
+<select name="level">
+#foreach($level in $levels)
+<option value="$level"#if($level.equals($logger.effectiveLevel.toString())) selected="selected"#end>$level</option>
+#end
+</select>
+#end
+<style type="text/css">
+div.frame {
+  border: solid 1px gray;
+}
+div.panel {
+  padding: 5px;
+}
+</style>
+<div class="panel frame">
+<h3>Properties</h3>
+<form name="form1" method="post" action="$link.view('logging.Loggers').action('logging.UpdateLogger')">
+<input type="hidden" name="id" value="$parametersTool.get('id')"/>
+name: $logger.name <br/> 
+<br/>
+level: #level_selector(['OFF', 'FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'ALL'])
+<br/>
+additive: <input name="additivity" value="true" type="checkbox"#if($logger.additivity) checked="true"#end/> <br/>
+<input type="submit" value="Update"/>
+</form>
+</div>
+<br/> 
+<div class="panel frame">
+<h3>Appenders</h3>
+<div class="panel">
+#if($appenders.empty)
+<em>none</em>
+#else
+#foreach($appender in $appenders)
+$appender.name ($appender.class.name) <a href="$link.action('logging.DeleteAppender').set('id',$parametersTool.get('id')).set('appender', $appender.name)">delete</a><br/>
+#end
+#end
+</div>
+<h3>Inherited appenders</h3>
+<div class="panel">
+#if($inheritedAppenders.empty)
+<em>none</em>
+#else
+#foreach($appender in $inheritedAppenders)
+$appender.name ($appender.class.name) <br/>
+#end
+#end	
+</div>
+<a href="$link.view('logging.CreateAppender').set('id', $logger.name)">Add appender</a>
+</div>
+<br/>
+<div class="panel frame">
+<h3>Test</h3>
+<form name="form2" method="POST" action="$link.action('logging.TestLogger')">
+<input type="hidden" name="id" value="$parametersTool.get('id')"/>
+#level_selector(['FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG']) <input type="text" name="message"/> <input type="submit" value="Go"/>
+</form>
+</div>
+<a href="$link.view('logging.Loggers')">back</a>
