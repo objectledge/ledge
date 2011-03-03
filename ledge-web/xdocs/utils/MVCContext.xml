@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>MVC Context</title>
+  </properties>
+
+  <body>
+    <section name="MVCContext">
+      <subsection name="Description">
+        <p>
+        The MVCContext is a simple container to keep all needed parameters in one easly accessed place
+        througout the whole mvc pipeline processing.
+       </p>
+      </subsection>
+      
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>MVCContext <a href="../apidocs/org/objectledge/web/mvc/MVCContext.html">JavaDoc</a></li>
+            <li>MVCContext <a href="../xref/org/objectledge/web/mvc/MVCContext.html">XRef</a></li>
+            <li>MVCContext <a href="http://objectledge.org/fisheye/browse/ledge/ledge-web/src/main/java/org/objectledge/web/mvc/MVCContext.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">none</td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+    </section>
+  </body>
+</document>
