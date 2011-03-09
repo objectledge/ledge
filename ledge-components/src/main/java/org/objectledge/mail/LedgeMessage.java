@@ -161,7 +161,19 @@ public class LedgeMessage
         template = templating.
         	getTemplate("/messages/"+templateName+"_"+locale.toString()+"_"+media);
         this.media = media;
-    }    
+    } 
+    
+    /**
+     * Use template for generating message body.
+     * 
+     * @param template the template to use.
+     * @param media the media type.
+     */    
+    public void setTemplate(Template template, String media)
+    {
+        this.template = template;
+        this.media = media;
+    }
 
     /**
      * Return the template context that will be used for rendering the message
