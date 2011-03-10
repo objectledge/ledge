@@ -263,9 +263,10 @@ public class LedgeMessage
         String content = null;
         String contentType = null;
         
+        TemplatingContext templatingContext = getContext();
         if (template != null)
         {
-            content = template.merge(getContext());
+            content = template.merge(templatingContext);
         }
         else 
         {
@@ -280,6 +281,10 @@ public class LedgeMessage
         {
             contentType = "text/"+media.toLowerCase();
         }
+        if(templatingContext.containsKey("contentType"))
+        {
+            contentType = (String)templatingContext.get("contentType");
+        }
         String charset = MimeUtility.mimeCharset(encoding);
         if(charset != null && !charset.equals(""))
         {
@@ -291,7 +296,7 @@ public class LedgeMessage
             String subject = getMessage().getSubject();
             if(subject == null || subject.equals(""))
             {
-                subject = (String)getContext().get("subject");
+                subject = (String)templatingContext.get("subject");
                 if(subject != null)
                 {
                     try
