@@ -5,6 +5,7 @@
     <artifactId>ledge-common</artifactId>
     <groupId>org.objectledge</groupId>
     <version>1.0.9-SNAPSHOT</version>
+    <relativePath>../ledge-common/pom.xml</relativePath>
   </parent>
   <groupId>org.objectledge</groupId>
   <artifactId>ledge-forms-fckeditor</artifactId>

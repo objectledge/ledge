@@ -4,6 +4,7 @@
     <artifactId>ledge-common</artifactId>
     <groupId>org.objectledge</groupId>
     <version>1.0.9-SNAPSHOT</version>
+    <relativePath>../ledge-common/pom.xml</relativePath>    
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.objectledge</groupId>
