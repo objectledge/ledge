@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<tests>
+
+  <!-- test harness -->
+
+  <test result="true">
+    <rule>
+      <true/>
+    </rule>
+  </test>
+
+  <test result="false">
+    <rule>
+      <false/>
+    </rule>
+  </test>
+
+  <test result="exception">
+    <rule>
+      <equal>
+        <variable name="undefined"/>
+        <true/>
+      </equal>
+    </rule>
+  </test>
+
+  <!-- // expressions /////////////////////////////////////////////////////////////////////// -->
+
+  <test result="true">
+    <rule>
+      <or>
+        <true/>
+        <true/>
+      </or>
+    </rule>
+  </test>
+  
+  <test result="true">
+    <rule>
+      <and>
+        <true/>
+        <true/>
+      </and>
+    </rule>
+  </test>
+  
+  <test result="false">
+    <rule>
+      <not>
+        <true/>
+      </not>
+    </rule>
+  </test>
+  
+  <test result="false">
+    <rule>
+      <and>
+        <or>
+          <true/>
+          <false/>
+        </or>
+        <not>
+          <true/>
+        </not>
+      </and>
+    </rule>
+  </test>
+  
+  <!-- // conditions //////////////////////////////////////////////////////////////////////// -->
+  
+  <test result="true">
+    <rule>
+      <defined>
+        <variable name="string"/>
+      </defined>
+    </rule>
+  </test>
+  
+  <!-- TODO caveat -->
+  <!--
+  <test result="false">
+    <rule>
+      <defined>
+        <variable name="undefined"/>
+      </defined>
+    </rule>
+  </test>
+  -->
+  
+  <test result="true">
+    <rule>
+      <instanceof>
+        <variable name="string"/>
+        <class name="java.lang.String"/>
+      </instanceof>
+    </rule>
+  </test>
+
+  <test result="false">
+    <rule>
+      <instanceof>
+        <variable name="string"/>
+        <class name="java.lang.Integer"/>
+      </instanceof>
+    </rule>
+  </test>
+  
+  <test result="true">
+    <rule>
+      <equal>
+        <variable name="string"/>
+        <string value="string"/>
+      </equal>
+    </rule>
+  </test>
+
+  <test result="false">
+    <rule>
+      <equal>
+        <variable name="string"/>
+        <string value="string2"/>
+      </equal>
+    </rule>
+  </test>
+
+  <test result="true">
+    <rule>
+      <equal>
+        <variable name="string"/>
+        <variable name="string2"/>
+      </equal>
+    </rule>
+  </test>
+  
+  <test result="true">
+    <rule>
+      <same>
+        <variable name="string"/>
+        <variable name="string"/>
+      </same>
+    </rule>
+  </test>
+
+  <!-- strings are interned, so this fails -->
+  <!--
+  <test result="false">
+    <rule>
+      <same>
+        <variable name="string"/>
+        <variable name="string2"/>
+      </same>
+    </rule>
+  </test>
+  -->
+  
+  <test result="true">
+    <rule>
+      <greater>
+        <int value="2"/>
+        <variable name="one"/>
+      </greater>
+    </rule>
+  </test>
+
+  <test result="false">
+    <rule>
+      <lesser>
+        <int value="2"/>
+        <variable name="one"/>
+      </lesser>
+    </rule>
+  </test>
+
+  <test result="true">
+    <rule>
+      <greater-or-equal>
+        <int value="1"/>
+        <variable name="one"/>
+      </greater-or-equal>
+    </rule>
+  </test>
+
+  <test result="true">
+    <rule>
+      <lesser-or-equal>
+        <int value="1"/>
+        <variable name="one"/>
+      </lesser-or-equal>
+    </rule>
+  </test>
+  
+  <test result="true">
+    <rule>
+      <matches>
+        <string value="str.*"/>
+        <variable name="string"/>
+      </matches>
+    </rule>
+  </test>
+  
+  <!-- // literals ////////////////////////////////////////////////////////////////////////// -->
+  
+  <test result="false">
+    <rule>
+      <equal>
+        <true/>
+        <false/>
+      </equal>
+    </rule>
+  </test>
+  
+  <test result="false">
+    <rule>
+      <equal>
+        <int value="7"/>
+        <long value="7"/>
+      </equal> 
+    </rule>
+  </test>
+  
+  <test result="false">
+    <rule>
+      <same>
+        <variable name="string"/>
+        <null/>
+      </same>
+    </rule>
+  </test>
+  
+  <test result="true">
+    <rule>
+      <lesser>
+        <decimal value="0.5"/>
+        <decimal value="0.7"/>
+      </lesser>
+    </rule>
+  </test>
+  
+  <!-- // semantic errors /////////////////////////////////////////////////////////////////// -->
+  
+  <test result="exception">
+    <rule>
+      <matches>
+        <string value="[1-9]*"/>
+        <variable name="one"/>
+      </matches>
+    </rule>
+  </test>
+
+  <test result="exception">
+    <rule>
+      <equal>
+        <null/>
+        <variable name="one"/>
+      </equal>
+    </rule>
+  </test>
+  
+</tests>
