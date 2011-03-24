@@ -65,9 +65,6 @@ public class SoftMapImpl<K, V>
     /** Nubmer of items to protect. (0 to disable) */
     private int protect = PROTECT_DEFAULT;
 
-    /** Current number of dangling links. */
-    private int dangling;
-
     /** The protected items. */
     private Object[] ring;
 
@@ -152,7 +149,7 @@ public class SoftMapImpl<K, V>
             while(i.hasNext())
             {
                 Entry ref = i.next();
-                if(ref.isValid() && ref.getValue() == null)
+                if((!ref.isEnqueued()) && ref.getValue() == null)
                 {
                     return true;
                 }
@@ -163,7 +160,7 @@ public class SoftMapImpl<K, V>
             while(i.hasNext())
             {
                 Entry ref = i.next();
-                if(ref.isValid() && value.equals(ref.getValue()))
+                if((!ref.isEnqueued()) && value.equals(ref.getValue()))
                 {
                     return true;
                 }
@@ -215,17 +212,8 @@ public class SoftMapImpl<K, V>
     public V get(Object key)
     {
         cleanup();
-        Entry ref = delegate.get(key);
-        if(ref==null || ref.isEnqueued())
-        {
-            return null;
-        }
-        else
-        {
-            V obj = ref.get();
-            protectValue(obj);
-            return obj;
-        }
+        Entry entry = delegate.get(key);
+        return entry != null ? entry.get() : null;
     }
 
     /**
@@ -418,21 +406,12 @@ public class SoftMapImpl<K, V>
      */
     public void cleanup()
     {
-        int size = delegate.size();
-        if(size > 0 && dangling > size / 2)
+        Entry ref;
+        while((ref = (Entry)queue.poll()) != null)
         {
-            while(true)
-            {
-                Entry ref = (Entry)queue.poll();
-                if(ref == null)
-                {
-                    return;
-                }
-                delegate.remove(ref.getKey());
-                dangling--;
-            }
+            delegate.remove(ref.getKey());
         }
-    }   
+    }
     
     // inner classes /////////////////////////////////////////////////////////
 
@@ -449,12 +428,6 @@ public class SoftMapImpl<K, V>
         {
             super(value, queue);
             this.key = key;
-        }
-
-        public boolean enqueue()
-        {
-            dangling++;
-            return super.enqueue();
         }
 
         public V get()
@@ -502,11 +475,6 @@ public class SoftMapImpl<K, V>
         public int hashCode()
         {
             return super.hashCode();
-        }
-        
-        boolean isValid()
-        {
-            return !isEnqueued();
         }
     }
 
