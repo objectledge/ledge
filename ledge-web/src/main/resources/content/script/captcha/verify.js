@@ -17,5 +17,8 @@ function captchaCallback(data, form, msg)
     form.submit();
   }else{
     alert(msg);
+    if(Recaptcha){
+     Recaptcha.reload();
+    }
   }
 }

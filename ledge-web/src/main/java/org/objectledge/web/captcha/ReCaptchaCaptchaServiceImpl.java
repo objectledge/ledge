@@ -2,6 +2,7 @@ package org.objectledge.web.captcha;
 
 import java.net.URLEncoder;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,6 +25,8 @@ public class ReCaptchaCaptchaServiceImpl
     private static final String PARAMETER_CHALLENGE = "recaptcha_challenge_field";
 
     private static final String PARAMETER_RESPONSE = "recaptcha_response_field";
+    
+    private static final String CAPTCHA_CACHE = "captcha_cache";
 
     private static final String I18n_PREFIX = "captcha";
     
@@ -40,6 +43,10 @@ public class ReCaptchaCaptchaServiceImpl
     private final boolean includeNoscript;
     
     private final String publicKey;
+    
+    private final long cacheTimeLimit;
+    
+    private final long cacheHitLimit;
 
     private final I18n i18n;
 
@@ -65,6 +72,8 @@ public class ReCaptchaCaptchaServiceImpl
         {
             defaultOptions.put(option.getAttribute("name"), option.getValue().trim());
         }
+        cacheTimeLimit = config.getChild("cacheValidity").getChild("timeLimit").getValueAsLong(60000);
+        cacheHitLimit = config.getChild("cacheValidity").getChild("hitLimit").getValueAsLong(2);
     }
 
     @Override
@@ -92,6 +101,7 @@ public class ReCaptchaCaptchaServiceImpl
     public boolean checkCaptcha(String remoteAddr, String challenge, String response)
     {
         ReCaptchaResponse result = reCaptcha.checkAnswer(remoteAddr, challenge, response);
+       
         if(!result.isValid() && result.getErrorMessage().equals("incorrect-captcha-sol"))
         {
             log.error("recaptcha verification failed: " + result.getErrorMessage());
@@ -105,7 +115,47 @@ public class ReCaptchaCaptchaServiceImpl
         String remoteAddr = httpContext.getRequest().getRemoteAddr();
         String challenge = parameters.get(PARAMETER_CHALLENGE, "");
         String response = parameters.get(PARAMETER_RESPONSE, "");
-        return checkCaptcha(remoteAddr, challenge, response);
+        
+        Map<CaptchaCacheKey, CaptchaCacheValue> captchaCacheMap = (HashMap<CaptchaCacheKey, CaptchaCacheValue>)httpContext
+            .getSessionAttribute(CAPTCHA_CACHE);
+
+        CaptchaCacheKey captchaCacheKey = new CaptchaCacheKey(remoteAddr, challenge, response);
+        CaptchaCacheValue captchaCacheValue = null;
+
+        if(captchaCacheMap != null)
+        {
+            if(captchaCacheMap.containsKey(captchaCacheKey))
+            {
+                captchaCacheValue = captchaCacheMap.get(captchaCacheKey);
+                long cacheValidityEnd = (new Date()).getTime() + this.cacheTimeLimit;
+                if(captchaCacheValue.getTimestamp() > cacheValidityEnd
+                    && captchaCacheValue.getCounter() > this.cacheHitLimit)
+                {
+                    captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge,
+                        response));
+                    captchaCacheMap.put(captchaCacheKey, captchaCacheValue);
+                    httpContext.setSessionAttribute(CAPTCHA_CACHE, captchaCacheMap);
+                }
+            }
+            else
+            {
+                captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge,
+                    response));
+                captchaCacheMap.put(captchaCacheKey, captchaCacheValue);
+                httpContext.setSessionAttribute(CAPTCHA_CACHE, captchaCacheMap);
+            }
+        }
+        else
+        {
+
+            captchaCacheMap = new HashMap<CaptchaCacheKey, CaptchaCacheValue>();
+            captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge, response));
+
+            captchaCacheMap.put(captchaCacheKey, captchaCacheValue);
+            httpContext.setSessionAttribute(CAPTCHA_CACHE, captchaCacheMap);
+        }
+
+        return captchaCacheValue.getValue();
     }
     
     /**
