@@ -56,6 +56,8 @@
         <directory>src/main/resources</directory>
         <excludes>
           <exclude>content/**</exclude>
+          <exclude>locale/**</exclude>
+          <exclude>templates/**</exclude>
         </excludes>
       </resource>
     </resources>

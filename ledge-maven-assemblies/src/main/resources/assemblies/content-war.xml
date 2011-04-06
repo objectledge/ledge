@@ -12,5 +12,13 @@
       <directory>src/main/resources/content</directory>
       <outputDirectory>/content</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>src/main/resources/templates</directory>
+      <outputDirectory>/templates</outputDirectory>
+    </fileSet>    
+    <fileSet>
+      <directory>src/main/resources/locale</directory>
+      <outputDirectory>/locale</outputDirectory>
+    </fileSet>    
   </fileSets>
 </assembly>
