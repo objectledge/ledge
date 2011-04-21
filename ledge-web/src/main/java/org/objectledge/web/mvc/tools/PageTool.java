@@ -707,6 +707,16 @@ public class PageTool
     }
     
     /**
+     * Sets the content type header of the current response.
+     * 
+     * @param contentType content type header.
+     */
+    public void setContentType(String contentType)
+    {
+        httpContext.setContentType(contentType);
+    }
+    
+    /**
      * Returns the character encoding of the current reponse, useful for generation of HTML
      * content headers and XML declaration.
      * 
