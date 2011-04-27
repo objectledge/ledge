@@ -12,7 +12,13 @@
 #foreach($name in $cacheNames)
 #set($info = $cacheInfo.get($name))
 	<tr>
-		<td>$info.name</td>
+		<td>
+		#if($info.composite)
+			<a href="$link.view('system.CompositeCache').set('cache',$info.name)">$info.name</a>
+		#else
+			$info.name
+		#end	
+		</td>
 		<td>$info.size</td>
 #if($$info.statistics)
 		<td>$info.requests</td>

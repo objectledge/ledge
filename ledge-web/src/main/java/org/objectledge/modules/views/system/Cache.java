@@ -100,6 +100,8 @@ public class Cache
         private final int misses;
 
         private final String hitRatio;
+        
+        private boolean composite;
 
         public Info(String name, Map<?, ?> map)
         {
@@ -130,6 +132,7 @@ public class Cache
                 misses = 0;
                 hitRatio = "";
             }
+            composite = CompositeCache.isCompositeCache(map);
         }
 
         /**
@@ -200,6 +203,16 @@ public class Cache
         public boolean isStatistics()
         {
             return statistics;
+        }
+        
+        /**
+         * Returns true if cache is composite.
+         * 
+         * @return
+         */
+        public boolean isComposite()
+        {
+            return composite;
         }
     }
 }
