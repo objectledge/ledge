@@ -8,7 +8,7 @@
     <groupId>org.objectledge</groupId>
     <artifactId>ledge-common</artifactId>
     <relativePath>../ledge-common/pom.xml</relativePath>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.0.10-SNAPSHOT</version>
   </parent>
   <name>ObjectLedge Maven2 plugin</name>
   <dependencies>
