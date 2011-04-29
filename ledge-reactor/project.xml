@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: project.xml,v 1.15 2006-11-19 22:27:48 rafal Exp $ -->
+
+<project>
+  <pomVersion>3</pomVersion>
+  <extend>../ledge-common/project.xml</extend>
+  <!-- project info -->
+
+  <groupId>objectledge</groupId>
+  <id>ledge-reactor</id>
+  <currentVersion>${versions.ledge}</currentVersion>
+  <name>ObjectLedge</name>
+  <shortDescription>Object Ledge - documentation package.</shortDescription>
+  <description>Object Ledge is a platform for building applications in Java 2 Standard and Enterprise Edition environments. ObjectLedge follows component / container and Inversion Of Control design paradigms implemented with the excelent
+  PicoContainer (http://picocontainer.org) package. ObjectLedge provides a number of components - basic building blocks of the applications, a few extensions to the Pico framework, customized containers for easy deployment of applications in command line, daemon, and J2EE servlet environments.
+  </description>
+  <reports>
+    <report>maven-license-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-faq-plugin</report>
+    <report>maven-multiproject-plugin</report>
+    <report>maven-dashboard-plugin</report>
+    <report>maven-multichanges-plugin</report>
+    <!-- <report>maven-jira-plugin</report> -->
+
+  </reports>
+  <dependencies>
+    <dependency>
+      <type>plugin</type>
+      <groupId>findbugs</groupId>
+      <artifactId>maven-findbugs-plugin</artifactId>
+      <version>1.3</version>
+    </dependency>
+  </dependencies>
+  <versions>
+    <version>
+      <id>0.3</id>
+      <name>0.3</name>
+      <tag>RELEASE-0_3</tag>
+    </version>
+  </versions>
+</project>
