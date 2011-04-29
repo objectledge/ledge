@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>I18n</title>
+  </properties>
+
+  <body>
+    <section name="I18n">
+      <subsection name="Description">
+        <p>I18n components provide the access to the locale sensitive <code>String</code> resources.</p>
+      </subsection>
+    
+      <subsection name="Browse">
+	    <p>
+	      <ul>
+	        <li>I18n <a href="../apidocs/org/objectledge/i18n/I18n.html">JavaDoc</a></li>
+	        <li>I18n <a href="../xref/org/objectledge/i18n/I18n.html">XRef</a></li>
+	        <li>I18n <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/i18n/I18n.java">CVS log</a></li>
+	      </ul>
+	    </p>
+      </subsection>
+
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+				not applicable
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+      
+      <subsection name="Implementations">
+        <ul>
+          <li>
+            <p>An implementation of the <code>I18n</code> interface, that loads
+            the localized strings from a set of XML files.</p>
+            <p class="more"><a href="i18n/XMLI18n.html">more</a></p>
+          </li>
+        </ul>
+      </subsection>
+    </section>
+  </body>
+</document>  
+  

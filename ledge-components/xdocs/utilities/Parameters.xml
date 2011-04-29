@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Parameters</title>
+  </properties>
+
+  <body>
+    <section name="Parameters">
+      <subsection name="Description">
+        <p>Parameter set is an abstraction very often encountered in application development. Here
+        is an attempt to define it's characteristics:</p>
+        <p>
+          <ol>
+            <li>A set is composed of named parameters.</li>
+            <li>A subset of parameters that share a common name prefix can be viewed as a nested
+              parameter set.</li>
+            <li>Parameter values are primarily represented as strings
+              <ol>
+                <li>Parameter values may be retrieved as instances of several Java primitive types, or
+                  arrays thereof. At least following types need to be supported:
+                  <ul>
+                    <li>String</li>
+                    <li>boolean</li>
+                    <li>int</li>
+                    <li>long</li>
+                    <li>float</li>
+                  </ul>
+                </li>
+                <li>A NumberFormatException will be thrown by the numeric value retrieval methods if the 
+                  value is not a correct number representation.</li>
+              </ol>
+            </li>
+            <li>Parameter may have more than one value.
+              <ol>
+                <li>Multiple values of a paremeter are ',' separated.</li>
+                <li>',' characters inside parameter values must be '\' escaped.</li>
+                <li>The values of the parameter are returned in the same order that they are 
+                  defined.</li>
+                <li>Different methods are used to retrieve a single value and all values of the 
+                  parameter. If one value is expected, but multiple are available, an unchecked 
+                  exception will be thrown.</li>
+              </ol>
+            </li>
+            <li>A default value may be provided upon retrieval of the parameter value. If the set
+              does not contain a value of the parameter the provided default will be returned.</li>
+            <li>If no default value is provided and the set does not contain parameter value, an 
+              unchecked exception will be thrown.</li>
+            <li>The parameter set must be serializable as a human readable/editable string, 
+              and deserializable from that representation.
+              <ol>
+                <li>A parameter is represented as &lt;name&gt; '=' &lt;values&gt; pairs.</li>
+                <li>Parameters withing a set are newline separater. Thus newline characters in
+                parameter values need to be '\' escaped.</li>
+                <li>Any characters outside the 7 bit US-ASCII range must be escaped using Java
+                Unicode sequences when generating the string representation. Both escape
+                sequences and Unicode characters must be accepted when parsing.</li>
+              </ol>
+            </li>
+          </ol>
+        </p>
+      </subsection>
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>Parameters <a href="../apidocs/org/objectledge/parameters/Parameters.html">JavaDoc</a></li>
+            <li>Parameters <a href="../xref/org/objectledge/parameters/Parameters.html">XRef</a></li>
+            <li>Parameters <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/parameters/Parameters.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+      <subsection name="Implementations">
+        <p>
+          <ul>
+            <li>
+              <p>DefaultParamteres is a transient, memory based implementation of <code>Parameters</code>
+              interface.</p>
+              <p class="more"><a href="parameters/DefaultParameters.html">more</a></p>
+            </li>
+            <li>
+              <p>DBParamteres is a persistent, database based implementation of <code>Parameters</code>
+              interface.</p>
+              <p class="more"><a href="parameters/DBParameters.html">more</a></p>
+            </li>
+          </ul>
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>
