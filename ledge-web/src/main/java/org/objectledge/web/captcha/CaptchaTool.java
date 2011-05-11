@@ -1,11 +1,13 @@
 package org.objectledge.web.captcha;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
 
 /**
  * Context tool for including CAPTCHA widget in a form,
@@ -13,7 +15,7 @@ import org.objectledge.i18n.I18nContext;
  * @author rafal
  */
 public class CaptchaTool
-{
+{    
     private final CaptchaService captchaService;
     
     private final Context context;
@@ -52,7 +54,6 @@ public class CaptchaTool
         return captchaService.createCaptchaWidget(locale, options);        
     }
     
-
     /**
      * Create CAPTCHA widget with specified locale and options.
      * 
@@ -62,5 +63,18 @@ public class CaptchaTool
     public String createCaptchaWidget(Locale locale, Map<String, String> options)
     {
         return captchaService.createCaptchaWidget(locale, options);
+    }
+    
+    /**
+     * Verify if CAPTCHA required by the principal.
+     * 
+     * @param parameters component or application configuration.
+     *        principal subject's principal.
+     * @return true if CAPTCHA required otherwise false.
+     */
+    public boolean isCaptchaRequired(Parameters config, Principal principal)
+    throws Exception
+    {
+        return captchaService.isCaptchaRequired(config, principal);
     }
 }

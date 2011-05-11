@@ -1,6 +1,7 @@
 package org.objectledge.web.captcha;
 
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -12,7 +13,9 @@ import java.util.Properties;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
 import org.objectledge.i18n.I18n;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.web.HttpContext;
 
@@ -21,7 +24,7 @@ import net.tanesha.recaptcha.ReCaptchaResponse;
 
 public class ReCaptchaCaptchaServiceImpl
     implements CaptchaService
-{
+{        
     private static final String PARAMETER_CHALLENGE = "recaptcha_challenge_field";
 
     private static final String PARAMETER_RESPONSE = "recaptcha_response_field";
@@ -49,8 +52,10 @@ public class ReCaptchaCaptchaServiceImpl
     private final long cacheHitLimit;
 
     private final I18n i18n;
+    
+    private final UserManager userManager;
 
-    public ReCaptchaCaptchaServiceImpl(I18n i18n, Configuration config, Logger log)
+    public ReCaptchaCaptchaServiceImpl(I18n i18n, Configuration config, Logger log, UserManager userManager)
         throws ConfigurationException
     {
         this.i18n = i18n;
@@ -74,6 +79,7 @@ public class ReCaptchaCaptchaServiceImpl
         }
         cacheTimeLimit = config.getChild("cacheValidity").getChild("timeLimit").getValueAsLong(60000);
         cacheHitLimit = config.getChild("cacheValidity").getChild("hitLimit").getValueAsLong(2);
+        this.userManager = userManager;
     }
 
     @Override
@@ -156,6 +162,34 @@ public class ReCaptchaCaptchaServiceImpl
         }
 
         return captchaCacheValue.getValue();
+    }
+    
+    /**
+     * Verify if CAPTCHA required by the principal.
+     * 
+     * @param parameters component or application configuration.
+     *        principal subject's principal.
+     * @return true if CAPTCHA required otherwise false.
+     */
+    public boolean isCaptchaRequired(Parameters config, Principal principal)
+    throws Exception
+    {
+        if(config != null)
+        {
+            String captcha_verification = config.get("captcha_verification", CAPTCHA_DISABLED);
+            Principal anonymous = userManager.getAnonymousAccount();
+
+            if(CAPTCHA_FOR_EVERYONE.equals(captcha_verification))
+            {
+                return true;
+            }
+            else if(CAPTCHA_FOR_ANONYMOUS.equals(captcha_verification)
+                && anonymous.equals(principal))
+            {
+                return true;
+            }
+        }
+        return false; 
     }
     
     /**

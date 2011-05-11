@@ -1,6 +1,6 @@
-function initCaptchaVerify(fieldName,url)
+function initCaptchaVerify(fieldName,url, form, msg)
 {
-  $("#"+ fieldName).click(function(){ captchaVerify(url); } );
+  $("#"+ fieldName).click(function(){ captchaVerify(url, form, msg); } );
 }
 
 function captchaVerify(url, form, msg)

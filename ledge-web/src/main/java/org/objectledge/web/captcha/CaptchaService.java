@@ -1,8 +1,10 @@
 package org.objectledge.web.captcha;
 
+import java.security.Principal;
 import java.util.Locale;
 import java.util.Map;
 
+import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.web.HttpContext;
 
@@ -12,7 +14,13 @@ import org.objectledge.web.HttpContext;
  * @author rafal 
  */
 public interface CaptchaService
-{
+{    
+    public static final String CAPTCHA_FOR_EVERYONE = "all";
+    
+    public static final String CAPTCHA_FOR_ANONYMOUS = "anonymous";
+    
+    public static final String CAPTCHA_DISABLED = "";
+    
     /**
      * Create CAPTCHA widget with specified options.
      * 
@@ -39,4 +47,13 @@ public interface CaptchaService
      * @return
      */
     public boolean checkCaptcha(HttpContext httpContext, RequestParameters parameters);
+    
+    /**
+     * Verify if CAPTCHA required by the principal.
+     * 
+     * @param parameters component or application configuration.
+     *        principal subject's principal.
+     * @return true if CAPTCHA required otherwise false.
+     */
+    public boolean isCaptchaRequired(Parameters config, Principal principal) throws Exception;
 }
