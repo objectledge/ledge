@@ -187,7 +187,34 @@ public class LedgeServlet extends HttpServlet
         container.killContainer();
         super.destroy();
     }
-    
+
+    /**
+     * Initializes FileSystem using local, servlet and classpath providers.
+     * <p>
+     * The FileSystem will be composed of LocalFilesystemProvider, ServletFileSystemProvicer and
+     * ClasspathFileSystemProvider instances with this specific order. This means that if a file
+     * with the same virtual pathname is found in the local file system, it will overshadow a file
+     * with the same pathname in web application archive, which in turn will overshadow a file with
+     * the same pathname on the classpath.
+     * </p>
+     * <p>
+     * Root directory of the local filesystem is determined using web application initialization
+     * parameters that are defined either in web application descriptor (web.xml) or application
+     * server's specific application deployment descriptors. The following parameters are checked:
+     * <ul>
+     * <li>servlet parameter named "root"</li>
+     * <li>context parameter named "<em>servlet name</em>.root"</li>
+     * <li>context parameter named "root"</li>
+     * <li>context parameter named "javax.servlet.context.tempdir"</li>
+     * <li>System property "java.io.tmpdir"</li>
+     * </ul>
+     * </p>
+     * 
+     * @param servletConfig a ServletConfig object for determinig servlet name and parmameter
+     *        access.
+     * @param classLoader a ClassLoader for the classpath provider.
+     * @return
+     */
     public static FileSystem fileSystem(ServletConfig servletConfig, ClassLoader classLoader)
     {
         ServletContext context = servletConfig.getServletContext();
