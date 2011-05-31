@@ -146,28 +146,10 @@ public class LedgeServlet extends HttpServlet
         BasicConfigurator.configure();
         Logger log = Logger.getLogger(LedgeServlet.class);
 
+        FileSystem fs = fileSystem(servletConfig, getClass().getClassLoader());
+        
         ServletContext context = servletConfig.getServletContext();
-        String ctxRootParam = servletConfig.getServletName()+".root";
         String ctxConfigParam = servletConfig.getServletName()+".config";
-
-        String root = servletConfig.getInitParameter("root");
-        if(root == null)
-        {
-            root = context.getInitParameter(ctxRootParam);
-        }
-        if(root == null)
-        {
-            File tempDir = (File)context.getAttribute("javax.servlet.context.tempdir");
-            if(tempDir == null)
-            {
-                root = System.getProperty("java.io.tmpdir");
-            }
-            else
-            {
-                root = tempDir.getAbsolutePath(); 
-            }
-        }
-
         String config = servletConfig.getInitParameter("config");
         if(config == null)
         {
@@ -177,14 +159,9 @@ public class LedgeServlet extends HttpServlet
         {
             config = "/config";
         }
-
-        log.info("starting up: root="+root+" config="+config);
-
-        LocalFileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        ServletFileSystemProvider sfs = new ServletFileSystemProvider("servlet", context);
-        ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
-            getClass().getClassLoader());
-        FileSystem fs = new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4194304);
+        String root = ((LocalFileSystemProvider)fs.getProvider("local")).getBasePath();
+        
+        log.info("starting up "+servletConfig.getServletName()+" servlet: root="+root+" config="+config);
         try
         {
             container = new LedgeContainer(fs, config, getClass().getClassLoader());    
@@ -209,5 +186,37 @@ public class LedgeServlet extends HttpServlet
     {
         container.killContainer();
         super.destroy();
+    }
+    
+    public static FileSystem fileSystem(ServletConfig servletConfig, ClassLoader classLoader)
+    {
+        ServletContext context = servletConfig.getServletContext();
+        String root = servletConfig.getInitParameter("root");
+        if(root == null)
+        {
+            root = context.getInitParameter(servletConfig.getServletName()+".root");
+        }
+        if(root == null)
+        {
+            root = context.getInitParameter("root");
+        }
+        if(root == null)
+        {
+            File tempDir = (File)context.getAttribute("javax.servlet.context.tempdir");
+            if(tempDir == null)
+            {
+                root = System.getProperty("java.io.tmpdir");
+            }
+            else
+            {
+                root = tempDir.getAbsolutePath(); 
+            }
+        }        
+
+        LocalFileSystemProvider lfs = new LocalFileSystemProvider("local", root);
+        ServletFileSystemProvider sfs = new ServletFileSystemProvider("servlet", context);
+        ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
+            classLoader);
+        return new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4194304);
     }
 }
