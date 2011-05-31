@@ -132,7 +132,6 @@ $.Autocompleter = function(input, options) {
 			
 			// matches also semicolon
 			case options.multiple && $.trim(options.multipleSeparator) == "," && KEY.COMMA:
-			case KEY.TAB:
 			case KEY.RETURN:
 				if( selectCurrent() ) {
 					// stop default to prevent a form submit, Opera needs special handling
@@ -142,6 +141,7 @@ $.Autocompleter = function(input, options) {
 				}
 				break;
 				
+			case KEY.TAB:	
 			case KEY.ESC:
 				select.hide();
 				break;
@@ -397,6 +397,7 @@ $.Autocompleter.defaults = {
 	cacheLength: 10,
 	max: 100,
 	mustMatch: false,
+	allowHide: false,
 	extraParams: {},
 	selectFirst: true,
 	formatItem: function(row) { return row[0]; },
@@ -672,7 +673,11 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			moveSelect(1);
 		},
 		prev: function() {
-			moveSelect(-1);
+			if(options.allowHide && active == 0){
+				this.hide();
+			}else{
+				moveSelect(-1);
+			}
 		},
 		pageUp: function() {
 			if (active != 0 && active - 8 < 0) {
