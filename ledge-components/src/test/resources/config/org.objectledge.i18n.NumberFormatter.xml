@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Copyright (c) 2005, Warsaw University of Technology. 
+ All rights reserved.
+--> 
+
+<config>
+  <locale name="pl_PL" defaultPattern="full">
+    <pattern name="money" value="###,###,###,###,###,###,##0.00"/>
+    <pattern name="precision2" value="0.00"/>
+    <pattern name="precision1" value="0.0"/>
+    <pattern name="full" value="0.0000000000000000000000000000000"/>
+  </locale>
+  <locale name="en_US" defaultPattern="full">
+    <pattern name="money" value="###,###,###,##0.00"/>
+    <pattern name="precision2" value="0.00"/>
+    <pattern name="precision1" value="0.0"/>
+    <pattern name="full" value="0.0000000000000000"/>
+  </locale>
+</config>
