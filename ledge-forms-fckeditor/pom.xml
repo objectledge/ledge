@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>ledge-common</artifactId>
+    <groupId>org.objectledge</groupId>
+    <version>1.0.10</version>
+    <relativePath>../ledge-common/pom.xml</relativePath>
+  </parent>
+  <groupId>org.objectledge</groupId>
+  <artifactId>ledge-forms-fckeditor</artifactId>
+  <packaging>war</packaging>
+  <name>Visual HTMLArea plugin for ledge-forms using FCKEditor</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-common</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>net.fckeditor</groupId>
+      <artifactId>fckeditor</artifactId>
+      <version>2.6.3</version>
+      <type>war</type>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1-beta-1</version>
+        <configuration>
+          <overlays>
+            <overlay>
+              <groupId>net.fckeditor</groupId>
+              <artifactId>fckeditor</artifactId>
+              <includes>
+                <include>fckeditor/**</include>
+              </includes>
+              <targetPath>content</targetPath>
+            </overlay>
+          </overlays>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
