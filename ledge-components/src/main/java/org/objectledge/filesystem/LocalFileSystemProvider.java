@@ -82,6 +82,13 @@ public class LocalFileSystemProvider
 	// initialization ///////////////////////////////////////////////////////
     
     /**
+     * No-arg constructor for mocking.
+     */
+    protected LocalFileSystemProvider()
+    {        
+    }
+    
+    /**
      * Crates a new instance of the provider.
      * 
      * @param name the name of the provider.
