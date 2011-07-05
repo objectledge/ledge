@@ -52,30 +52,12 @@
           <include>**/*.properties</include>
         </includes>
       </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>content/**</exclude>
-          <exclude>locale/**</exclude>
-          <exclude>templates/**</exclude>
-        </excludes>
-      </resource>
     </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
-          <webResources>
-            <resource>
-              <directory>src/main/resources</directory>
-              <includes>
-                <include>content/**</include>
-                <include>locale/**</include>
-                <include>templates/**</include>
-              </includes>
-            </resource>
-          </webResources>
           <attachClasses>true</attachClasses>
           <classesClassifier /> <!-- due to limitation of maven-war-plugin classifier=classes anyway -->
           <packagingExcludes>WEB-INF/lib/*.jar,WEB-INF/classes/**</packagingExcludes>
