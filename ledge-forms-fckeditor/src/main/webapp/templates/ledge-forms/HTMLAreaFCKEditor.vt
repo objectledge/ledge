@@ -8,7 +8,7 @@
 #####################  
 #macro (formtool_htmlarea_visual $field $loopIndex)
 ##
-$pageTool.addScriptLink('fckeditor/fckeditor.js')##
+$pageTool.addScriptLink('ckeditor/ckeditor.js')##
 
 
 
@@ -27,7 +27,7 @@ $!htmlValue
 #set($jslink = $link.sessionless())##
 <script type="text/javascript">
 <!--
-var sBasePath = '$jslink.content('fckeditor/')';
+var sBasePath = '$jslink.content('ckeditor/')';
 var oFCKeditor = new FCKeditor( '$field.name' ) ;
 oFCKeditor.BasePath	= sBasePath ;
 oFCKeditor.Height = '400' ;
