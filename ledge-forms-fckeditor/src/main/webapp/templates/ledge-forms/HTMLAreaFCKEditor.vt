@@ -28,10 +28,8 @@ $!htmlValue
 <script type="text/javascript">
 <!--
 var sBasePath = '$jslink.content('ckeditor/')';
-var oFCKeditor = new FCKeditor( '$field.name' ) ;
-oFCKeditor.BasePath	= sBasePath ;
-oFCKeditor.Height = '400' ;
-oFCKeditor.ReplaceTextarea() ;
+var oFCKeditor = CKEDITOR.replace('$field.name');
+oFCKeditor.BasePath	= sBasePath;
 //-->
 </script>
 
