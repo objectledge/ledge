@@ -67,22 +67,14 @@ public class ServletFileSystemProvider
     {
         super(name);
         this.context = context;
-        if(context.getRealPath("/") != null)
-        {
-            File docBase = new File(context.getRealPath("/"));
-            analyzeDirectory(docBase, docBase);
-        }
-        else
-        {
-            // application is running running from an un-exploded war
-            analyzeVirtualPath("/");
-        }
+        analyzeVirtualPath("/");
     }
     
     private void analyzeVirtualPath(String path)
     {       
         addDirectoryEntry(path);
-        Set<String> resourcesPaths = context.getResourcePaths(path);
+        @SuppressWarnings("unchecked")
+		Set<String> resourcesPaths = context.getResourcePaths(path);
         if(resourcesPaths != null)
         {            
             for(String resourcePath : resourcesPaths)
