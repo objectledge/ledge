@@ -63,7 +63,7 @@ public class LocalSingleSignOnService
 
     private static final int DEFAULT_TICKET_VALIDITY_TIME = 60;
 
-    private final Logger logger;
+    private final Logger log;
 
     private final List<Realm> realms;
 
@@ -79,10 +79,10 @@ public class LocalSingleSignOnService
     private final Map<PrincipalRealm, LogInStatus> userStatus = Collections
         .synchronizedMap(new HashMap<PrincipalRealm, LogInStatus>());
 
-    public LocalSingleSignOnService(ThreadPool threadPool, Configuration config, Logger logger)
+    public LocalSingleSignOnService(ThreadPool threadPool, Configuration config, Logger log)
         throws ConfigurationException
     {
-        this.logger = logger;
+        this.log = log;
         Configuration[] realmConfigs = config.getChild("realms").getChildren("realm");
         List<Realm> realms = new ArrayList<Realm>();
         Set<String> domains = new HashSet<String>();
@@ -171,13 +171,13 @@ public class LocalSingleSignOnService
         if(realm != null)
         {
             Ticket ticket = generateTicket(principal, realm, client);
-            logger.debug("ACCEPTED " + client + ", " + principal.getName() + " generated ticket "
+            log.debug("ACCEPTED " + client + ", " + principal.getName() + " generated ticket "
                 + ticket);
             return ticket.getId();
         }
         else
         {
-            logger.warn("DECLINED " + client + ", " + principal.getName() + " " + domain
+            log.warn("DECLINED " + client + ", " + principal.getName() + " " + domain
                 + " is not a realm master");
             return null;
         }
@@ -192,24 +192,24 @@ public class LocalSingleSignOnService
             {
                 if(ticket.getRealm().containsDomain(domain))
                 {
-                    logger.debug("ACCEPTED ticket " + ticket.toString());
+                    log.debug("ACCEPTED ticket " + ticket.toString());
                     return ticket.getPrincipal();
                 }
                 else
                 {
-                    logger.warn("DECLINED ticket " + ticket.toString() + " provided from domain "
+                    log.warn("DECLINED ticket " + ticket.toString() + " provided from domain "
                         + domain + " outside of realm ");
                 }
             }
             else
             {
-                logger.warn("DECLINED ticket " + ticket.toString() + " provided by client "
+                log.warn("DECLINED ticket " + ticket.toString() + " provided by client "
                     + client);
             }
         }
         else
         {
-            logger.warn("DECLINED ticket " + ticketId + " - expired on invalid");
+            log.warn("DECLINED ticket " + ticketId + " - expired on invalid");
         }
         return null;
     }
@@ -222,6 +222,7 @@ public class LocalSingleSignOnService
         {
             for(Realm realm : domainRealms)
             {
+                log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
                 userStatus.put(new PrincipalRealm(principal, realm),
                     LogInStatus.LOGGED_IN);
             }
@@ -237,6 +238,7 @@ public class LocalSingleSignOnService
         {
             for(Realm realm : domainRealms)
             {
+                log.debug("LOGGED OUT user " + principal.getName() + " from realm " + realm.getName());
                 userStatus.put(new PrincipalRealm(principal, realm),
                     LogInStatus.LOGGED_OUT);
             }
@@ -248,8 +250,9 @@ public class LocalSingleSignOnService
             while(i.hasNext())
             {
                 Ticket ticket = i.next();
-                if(ticket.getPrincipal().equals(principal))
+                if(ticket.getPrincipal().equals(principal))                
                 {
+                    log.debug("INVALIDATED ticket " + ticket.toString() + " because of user logout");
                     i.remove();
                 }
             }
@@ -449,7 +452,7 @@ public class LocalSingleSignOnService
                     Ticket ticket = i.next();
                     if(ticket.getAge() > ticketValidityTime)
                     {
-                        logger.debug("EXPIRED ticket " + ticket.toString());
+                        log.debug("EXPIRED ticket " + ticket.toString());
                         i.remove();
                     }
                 }
