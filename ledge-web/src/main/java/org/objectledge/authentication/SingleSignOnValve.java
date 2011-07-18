@@ -73,8 +73,8 @@ public class SingleSignOnValve
                             context
                                 .setAttribute(AuthenticationContext.class, authenticationContext);
 
-                            httpContext.getRequest().getSession()
-                                .setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                            httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                            singleSignOnService.logIn(principal, domain);
 
                             // delete ticket cookie
                             Cookie newCookie = new Cookie(SingleSignOnService.SSO_TICKET_COOKIE, "");
