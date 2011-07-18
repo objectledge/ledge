@@ -29,15 +29,17 @@
 package org.objectledge.authentication;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Principal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -45,10 +47,13 @@ import org.apache.commons.codec.binary.Base64;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
-
-import com.sun.mail.util.ASCIIUtility;
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.threads.Task;
+import org.objectledge.threads.ThreadPool;
 
 public class LocalSingleSignOnService
+    implements SingleSignOnService
 {
     private static final String DEFAULT_RANDOM_ALGORITHM = "NativePRNG";
 
@@ -56,42 +61,70 @@ public class LocalSingleSignOnService
 
     private static final int DEFAULT_BYTES_PER_TICKET = 16;
 
+    private static final int DEFAULT_TICKET_VALIDITY_TIME = 60;
+
     private final Logger logger;
 
     private final List<Realm> realms;
 
+    private final Map<String, Ticket> tickets = Collections
+        .synchronizedMap(new HashMap<String, Ticket>());
+
     private final Random random;
 
     private int bytesPerTicket;
-    
-    private final Base64 base64;
-    
-    public LocalSingleSignOnService(Configuration config, Logger logger)
+
+    private int ticketValidityTime;
+
+    private final Map<PrincipalRealm, LogInStatus> userStatus = Collections
+        .synchronizedMap(new HashMap<PrincipalRealm, LogInStatus>());
+
+    public LocalSingleSignOnService(ThreadPool threadPool, Configuration config, Logger logger)
         throws ConfigurationException
     {
         this.logger = logger;
         Configuration[] realmConfigs = config.getChild("realms").getChildren("realm");
         List<Realm> realms = new ArrayList<Realm>();
-        Set<String> sites = new HashSet<String>();
+        Set<String> domains = new HashSet<String>();
         Realm globalRealm = null;
         realmLoop: for(Configuration realmConfig : realmConfigs)
         {
             String realmName = realmConfig.getAttribute("name");
+            if(realmName.length() == 0)
+            {
+                throw new ConfigurationException("realm name empty", realmConfig.getPath(),
+                    realmConfig.getLocation());
+            }
+            for(Realm prevRealm : realms)
+            {
+                if(prevRealm.getName().equals(realmName))
+                {
+                    throw new ConfigurationException("realm name not unique",
+                        realmConfig.getPath(), realmConfig.getLocation());
+                }
+            }
             String realmMaster = realmConfig.getAttribute("master");
-            Configuration[] siteConfigs = realmConfig.getChildren();
-            if(siteConfigs.length == 1 && siteConfigs[0].getName().equals("allSites"))
+            Configuration[] domainConfigs = realmConfig.getChildren();
+            if(domainConfigs.length == 1 && domainConfigs[0].getName().equals("allDomains"))
             {
                 globalRealm = new Realm(realmName, realmMaster, null);
                 break realmLoop;
             }
             else
             {
-                sites.clear();
-                for(Configuration siteConfig : siteConfigs)
+                domains.clear();
+                for(Configuration domainConfig : domainConfigs)
                 {
-                    sites.add(siteConfig.getValue());
+                    String domain = domainConfig.getValue();
+                    if(domain.equals(realmMaster))
+                    {
+                        throw new ConfigurationException(
+                            "realm may not contain it's own master as subordinate",
+                            domainConfig.getPath(), domainConfig.getLocation());
+                    }
+                    domains.add(domain);
                 }
-                realms.add(new Realm(realmName, realmMaster, sites));
+                realms.add(new Realm(realmName, realmMaster, domains));
             }
         }
         if(globalRealm != null)
@@ -122,16 +155,129 @@ public class LocalSingleSignOnService
             throw new ConfigurationException("invalid algorithm", algorithmConfig.getPath(),
                 algorithmConfig.getLocation());
         }
-        this.bytesPerTicket = config.getChild("random", true).getChild("bytesPerTicket", true)
+        this.bytesPerTicket = config.getChild("tickets", true).getChild("size", true)
             .getValueAsInteger(DEFAULT_BYTES_PER_TICKET);
-        this.base64 = new Base64();
+        this.ticketValidityTime = config.getChild("tickets", true).getChild("validityTime", true)
+            .getValueAsInteger(DEFAULT_TICKET_VALIDITY_TIME);
+
+        threadPool.runDaemon(new TicketExpiryTask());
     }
-    
-    private Ticket generateTicket(Principal principal)
+
+    // ..........................................................................................
+
+    public String generateTicket(Principal principal, String domain, String client)
+    {
+        Realm realm = findRealmByMaster(domain);
+        if(realm != null)
+        {
+            Ticket ticket = generateTicket(principal, realm, client);
+            logger.debug("ACCEPTED " + client + ", " + principal.getName() + " generated ticket "
+                + ticket);
+            return ticket.getId();
+        }
+        else
+        {
+            logger.warn("DECLINED " + client + ", " + principal.getName() + " " + domain
+                + " is not a realm master");
+            return null;
+        }
+    }
+
+    public Principal validateTicket(String ticketId, String domain, String client)
+    {
+        Ticket ticket = tickets.remove(ticketId);
+        if(ticket != null)
+        {
+            if(ticket.getClient().equals(client))
+            {
+                if(ticket.getRealm().containsDomain(domain))
+                {
+                    logger.debug("ACCEPTED ticket " + ticket.toString());
+                    return ticket.getPrincipal();
+                }
+                else
+                {
+                    logger.warn("DECLINED ticket " + ticket.toString() + " provided from domain "
+                        + domain + " outside of realm ");
+                }
+            }
+            else
+            {
+                logger.warn("DECLINED ticket " + ticket.toString() + " provided by client "
+                    + client);
+            }
+        }
+        else
+        {
+            logger.warn("DECLINED ticket " + ticketId + " - expired on invalid");
+        }
+        return null;
+    }
+
+    @Override
+    public void logIn(Principal principal, String domain)
+    {
+        List<Realm> domainRealms = findRealmsByMember(domain);
+        synchronized(userStatus)
+        {
+            for(Realm realm : domainRealms)
+            {
+                userStatus.put(new PrincipalRealm(principal, realm),
+                    LogInStatus.LOGGED_IN);
+            }
+        }
+    }
+
+    @Override
+    public void logOut(Principal principal, String domain)
+    {
+        // mark user as logged out
+        List<Realm> domainRealms = findRealmsByMember(domain);
+        synchronized(userStatus)
+        {
+            for(Realm realm : domainRealms)
+            {
+                userStatus.put(new PrincipalRealm(principal, realm),
+                    LogInStatus.LOGGED_OUT);
+            }
+        }
+        // invalidate outstanding tickets
+        synchronized(tickets)
+        {
+            Iterator<Ticket> i = tickets.values().iterator();
+            while(i.hasNext())
+            {
+                Ticket ticket = i.next();
+                if(ticket.getPrincipal().equals(principal))
+                {
+                    i.remove();
+                }
+            }
+        }
+    }
+
+    @Override
+    public LogInStatus checkStatus(Principal principal, String domain)
+    {
+        List<Realm> domainRealms = findRealmsByMember(domain);
+        if(domainRealms.size() > 0)
+        {
+            LogInStatus status = userStatus.get(new PrincipalRealm(principal, domainRealms.get(0)));
+            if(status != null)
+            {
+                return status;
+            }
+        }
+        return LogInStatus.UNKNOWN;
+    }
+
+    // ..........................................................................................
+
+    private Ticket generateTicket(Principal principal, Realm realm, String client)
     {
         byte idBytes[] = new byte[bytesPerTicket];
         random.nextBytes(idBytes);
-        byte encodedId[] = base64.encodeBase64(idBytes, false);
+        byte encodedId[] = Base64.encodeBase64(idBytes, false);
         String id;
         try
         {
@@ -141,19 +287,51 @@ public class LocalSingleSignOnService
         {
             throw new Error("ISO-8859-1 encoding not supported");
         }
-        return new Ticket(principal, id);
+        Ticket ticket = new Ticket(principal, realm, client, id);
+        tickets.put(id, ticket);
+        return ticket;
     }
+
+    private Realm findRealmByMaster(String domain)
+    {
+        for(Realm realm : realms)
+        {
+            if(realm.getMaster().equals(domain))
+            {
+                return realm;
+            }
+        }
+        return null;
+    }
+
+    private List<Realm> findRealmsByMember(String domain)
+    {
+        List<Realm> realms = new ArrayList<Realm>(1);
+        for(Realm realm : realms)
+        {
+            if(realm.containsDomain(domain))
+            {
+                realms.add(realm);
+            }
+        }
+        return realms;
+    }
+
+    // ..........................................................................................
 
     private static class Realm
     {
         private final String name;
 
-        private final Set<String> sites;
+        private final String master;
 
-        public Realm(String name, String master, Set<String> sites)
+        private final Set<String> domains;
+
+        public Realm(String name, String master, Set<String> domains)
         {
             this.name = name;
-            this.sites = sites;
+            this.master = master;
+            this.domains = domains;
         }
 
         public String getName()
@@ -161,9 +339,22 @@ public class LocalSingleSignOnService
             return name;
         }
 
-        public boolean containsSite(String site)
+        public String getMaster()
         {
-            return sites.contains(site);
+            return master;
+        }
+
+        public boolean containsDomain(String domain)
+        {
+            if(domains == null)
+            {
+                // global realm contains any domain except the master                
+                return !master.equals(domain);
+            }
+            else
+            {
+                return domains.contains(domain);
+            }
         }
     }
 
@@ -171,13 +362,19 @@ public class LocalSingleSignOnService
     {
         private final Principal principal;
 
+        private final Realm realm;
+
+        private final String client;
+
         private final String id;
 
         private final long timestamp;
 
-        public Ticket(Principal principal, String id)
+        public Ticket(Principal principal, Realm realm, String client, String id)
         {
             this.principal = principal;
+            this.realm = realm;
+            this.client = client;
             this.id = id;
             this.timestamp = System.currentTimeMillis();
         }
@@ -185,6 +382,16 @@ public class LocalSingleSignOnService
         public Principal getPrincipal()
         {
             return principal;
+        }
+
+        public Realm getRealm()
+        {
+            return realm;
+        }
+
+        public String getClient()
+        {
+            return client;
         }
 
         public String getId()
@@ -195,6 +402,94 @@ public class LocalSingleSignOnService
         public long getAge()
         {
             return (System.currentTimeMillis() - timestamp) / 1000;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return id.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if(obj == null || !(obj instanceof Ticket))
+            {
+                return false;
+            }
+            return id.equals(((Ticket)obj).id);
+        }
+
+        @Override
+        public String toString()
+        {
+            return id + " for realm " + realm.getName() + ", client" + client + ", "
+                + principal.getName();
+        }
+    }
+
+    private class TicketExpiryTask
+        extends Task
+    {
+        @Override
+        public String getName()
+        {
+            return "SSO Ticket expiry";
+        }
+
+        @Override
+        public void process(Context context)
+            throws ProcessingException
+        {
+            synchronized(tickets)
+            {
+                Iterator<Ticket> i = tickets.values().iterator();
+                while(i.hasNext())
+                {
+                    Ticket ticket = i.next();
+                    if(ticket.getAge() > ticketValidityTime)
+                    {
+                        logger.debug("EXPIRED ticket " + ticket.toString());
+                        i.remove();
+                    }
+                }
+            }
+        }
+    }
+
+    private static class PrincipalRealm
+    {
+        private final Principal principal;
+
+        private final Realm realm;
+
+        public PrincipalRealm(Principal principal, Realm realm)
+        {
+            this.principal = principal;
+            this.realm = realm;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return principal.hashCode() ^ realm.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if(obj == null || !(obj instanceof PrincipalRealm))
+            {
+                return false;
+            }
+            PrincipalRealm other = (PrincipalRealm)obj;
+            return principal.equals(other.principal) && realm.equals(other.realm);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "user " + principal.getName() + " in realm " + realm.getName();            		
         }
     }
 }

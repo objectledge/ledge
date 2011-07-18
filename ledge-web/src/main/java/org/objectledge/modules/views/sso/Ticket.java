@@ -1,5 +1,8 @@
 package org.objectledge.modules.views.sso;
 
+import java.security.Principal;
+
+import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.context.Context;
@@ -33,6 +36,15 @@ import org.objectledge.web.mvc.builders.EnclosingView;
  * master of the realm. In other circumstances an attacker could authenticated with any server in
  * the SSO domain after hijacking an authenticated session to one of them.
  * </p>
+ * <p>
+ * The view uses content type {@code application/json} and returns JSON encoded object with single
+ * field named {@code ticket}. The returned value is either ticket identifier, or {@code "NONE"} in
+ * case of any errors.
+ * </p>
+ * <p>
+ * As a security precaution, no errors are reported to client side. You need to enable logging on
+ * server side to see the reasons of failed requests.
+ * </p>
  * 
  * @author rkrzewski <rafal.krzewski@objectledge.org>
  */
@@ -41,10 +53,13 @@ public class Ticket
 {
     private final SingleSignOnService singleSignOnService;
 
-    public Ticket(Context context, SingleSignOnService singleSignOnService)
+    private final Logger log;
+
+    public Ticket(Context context, SingleSignOnService singleSignOnService, Logger log)
     {
         super(context);
         this.singleSignOnService = singleSignOnService;
+        this.log = log;
     }
 
     @Override
@@ -52,18 +67,34 @@ public class Ticket
         throws BuildException, ProcessingException
     {
         HttpContext httpContext = context.getAttribute(HttpContext.class);
-        httpContext.setContentType("text/plain");
+        String client = httpContext.getRequest().getRemoteAddr();
+        String domain = httpContext.getRequest().getServerName();
+        httpContext.setContentType("application/json");
         AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
-        if(authContext.isUserAuthenticated() && httpContext.getRequest().isSecure())
+        String ticket = "NONE";
+        if(authContext.isUserAuthenticated())
         {
-            String domain = httpContext.getRequest().getServerName();
-            String ticket = singleSignOnService.logIn(authContext.getUserPrincipal(), domain);
-            return SingleSignOnService.SSO_TICKET_COOKIE + "=" + ticket;
+            Principal principal = authContext.getUserPrincipal();
+            if(httpContext.getRequest().isSecure())
+            {
+                ticket = singleSignOnService.generateTicket(principal, domain, client);
+            }
+            else
+            {
+                log.warn("DECLINED " + client + ", " + principal.getName()
+                    + " not using secure channel");
+            }
         }
         else
         {
-            return SingleSignOnService.SSO_TICKET_COOKIE + "=NONE";
+            log.warn("DECLINED " + client + " session not authenticated");
         }
+        return formatReply(ticket);
+    }
+
+    private String formatReply(String ticket)
+    {
+        return "{ ticket : \"" + ticket != null ? ticket : "NONE" + "\" }";
     }
 
     @Override

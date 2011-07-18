@@ -32,6 +32,7 @@
     <element name="config">
       <interleave>
         <optional>
+          <!-- provider and implementation of SecureRandom to use -->
           <element name="random">
             <interleave>
               <optional>
@@ -44,9 +45,22 @@
                   <text />
                 </element>
               </optional>
+            </interleave>
+          </element>
+        </optional>
+        <optional>
+          <element name="tickets">
+            <interleave>
               <optional>
-                <element name="bytesPerTicket">
-                  <text />
+                <!-- random bytes per ticket -->
+                <element name="size">
+                  <text/>
+                </element>
+              </optional>
+              <optional>
+                <!-- ticket validity time in seconds -->
+                <element name="validityTime">
+                  <text/>
                 </element>
               </optional>
             </interleave>
@@ -62,11 +76,11 @@
                 <text />
               </attribute>
               <choice>
-                <element name="allSites">
+                <element name="allDomains">
                   <empty />
                 </element>
                 <oneOrMore>
-                  <element name="site">
+                  <element name="domain">
                     <text />
                   </element>
                 </oneOrMore>

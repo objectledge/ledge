@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import javax.servlet.http.Cookie;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
@@ -17,6 +18,10 @@ import org.objectledge.web.WebConstants;
  * valid for the domain from where the ticket has originated, the user will be authenticated.
  * </p>
  * <p>
+ * The valve will automatically log out the currently logged in user if the most recent login/logout
+ * action in any domain belonging to the same SSO realm performed by this user was a logout.
+ * </p>
+ * <p>
  * This valve is expected to run AFTER {@link AuthenticationValve}.
  * </p>
  * 
@@ -25,52 +30,92 @@ import org.objectledge.web.WebConstants;
 public class SingleSignOnValve
     implements Valve
 {
-    private SingleSignOnService singleSignOnService;
+    private final SingleSignOnService singleSignOnService;
 
-    public SingleSignOnValve(SingleSignOnService singleSignOnService)
+    private final UserManager userManager;
+
+    private final Logger log;
+
+    public SingleSignOnValve(SingleSignOnService singleSignOnService, UserManager userManager,
+        Logger log)
     {
         this.singleSignOnService = singleSignOnService;
+        this.userManager = userManager;
+        this.log = log;
     }
 
     @Override
     public void process(Context context)
         throws ProcessingException
     {
-        AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
-        if(!authContext.isUserAuthenticated())
+        try
         {
+            AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
             HttpContext httpContext = context.getAttribute(HttpContext.class);
-            Cookie[] cookies = httpContext.getRequest().getCookies();
-            for(Cookie cookie : cookies)
+            if(!authContext.isUserAuthenticated())
             {
-                if(cookie.getName().equals(SingleSignOnService.SSO_TICKET_COOKIE))
+                Cookie[] cookies = httpContext.getRequest().getCookies();
+                for(Cookie cookie : cookies)
                 {
-                    String ticket = cookie.getValue();
-                    String domain = httpContext.getRequest().getServerName();
-                    // check if the authentication cookie is valid
-                    Principal principal = singleSignOnService.logIn(ticket, domain);
-                    if(principal != null)
+                    if(cookie.getName().equals(SingleSignOnService.SSO_TICKET_COOKIE))
                     {
-                        AuthenticationContext authenticationContext = new AuthenticationContext();
-                        authenticationContext.setUserPrincipal(principal, true);
-                        context.setAttribute(AuthenticationContext.class, authenticationContext);
+                        log.info("STARTING SSO login attempt");
+                        String ticket = cookie.getValue();
+                        String domain = httpContext.getRequest().getServerName();
+                        String client = httpContext.getRequest().getRemoteAddr();
+                        // check if the authentication cookie is valid
+                        Principal principal = singleSignOnService.validateTicket(ticket, domain,
+                            client);
+                        if(principal != null)
+                        {
+                            AuthenticationContext authenticationContext = new AuthenticationContext();
+                            authenticationContext.setUserPrincipal(principal, true);
+                            context
+                                .setAttribute(AuthenticationContext.class, authenticationContext);
 
-                        httpContext.getRequest().getSession()
-                            .setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                            httpContext.getRequest().getSession()
+                                .setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
 
-                        // delete ticket cookie
-                        Cookie newCookie = new Cookie(SingleSignOnService.SSO_TICKET_COOKIE, "");
-                        newCookie.setMaxAge(0);
-                        httpContext.getResponse().addCookie(newCookie);
+                            // delete ticket cookie
+                            Cookie newCookie = new Cookie(SingleSignOnService.SSO_TICKET_COOKIE, "");
+                            newCookie.setMaxAge(0);
+                            httpContext.getResponse().addCookie(newCookie);
 
-                        // let JS side know user is authenticated
-                        newCookie = new Cookie(SingleSignOnService.SSO_AUTH_COOKIE, "true");
-                        newCookie.setMaxAge(-1);
-                        httpContext.getResponse().addCookie(newCookie);
+                            // let JS side know user is authenticated
+                            newCookie = new Cookie(SingleSignOnService.SSO_AUTH_COOKIE, "true");
+                            newCookie.setMaxAge(-1);
+                            httpContext.getResponse().addCookie(newCookie);
+                            log.info("LOGGED IN user " + principal.getName() + " to " + domain);
+                        }
+                        else
+                        {
+                            log.info("DECLINED SSO login attempt");
+                        }
+                        break;
                     }
-                    break;
                 }
             }
+            else
+            {
+                // check if the user has not logged out through other domain in the same realm
+                Principal principal = authContext.getUserPrincipal();
+                String domain = httpContext.getRequest().getServerName();
+                SingleSignOnService.LogInStatus status = singleSignOnService.checkStatus(principal,
+                    domain);
+                if(status == SingleSignOnService.LogInStatus.LOGGED_OUT)
+                {
+                    httpContext.clearSessionAttributes();
+                    Principal anonymous = userManager.getAnonymousAccount();
+                    AuthenticationContext authenticationContext = AuthenticationContext
+                        .getAuthenticationContext(context);
+                    authenticationContext.setUserPrincipal(anonymous, false);
+                    log.info("LOGGED OUT user " + principal.getName() + " from " + domain);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException(e);
         }
     }
 }
