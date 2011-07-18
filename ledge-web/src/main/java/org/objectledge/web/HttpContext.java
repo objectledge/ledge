@@ -34,9 +34,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.objectledge.context.Context;
 
@@ -278,6 +281,27 @@ public class HttpContext
     public void removeSessionAttribute(String key)
     {
         request.getSession().setAttribute(key, null);
+    }
+    
+    /**
+     * Removes all session attributes.
+     */
+    public void clearSessionAttributes()
+    {
+        HttpSession session = request.getSession();
+        @SuppressWarnings("unchecked")
+        Enumeration<String> attrNames = session.getAttributeNames();
+        ArrayList<String> temp = new ArrayList<String>();
+        while (attrNames.hasMoreElements())
+        {
+            String name = attrNames.nextElement();
+            temp.add(name);
+        }
+        for (int i = 0; i < temp.size(); i++)
+        {
+            String name = temp.get(i);
+            session.removeAttribute(name);
+        }
     }
 
     /**

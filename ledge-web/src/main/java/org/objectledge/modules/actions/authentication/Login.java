@@ -100,7 +100,7 @@ public class Login
             principal = userManager.getUserByLogin(login);
             if (userManager.checkUserPassword(principal, password))
             {
-                clearSession(httpContext.getRequest().getSession());
+                httpContext.clearSessionAttributes();
             }
             else
             {

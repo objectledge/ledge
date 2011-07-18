@@ -69,7 +69,7 @@ public class Logout
         try
         {
             HttpContext httpContext = HttpContext.getHttpContext(context);
-            clearSession(httpContext.getRequest().getSession());
+            httpContext.clearSessionAttributes();
             Principal anonymous = userManager.getAnonymousAccount();
             AuthenticationContext authenticationContext = 
                 AuthenticationContext.getAuthenticationContext(context);

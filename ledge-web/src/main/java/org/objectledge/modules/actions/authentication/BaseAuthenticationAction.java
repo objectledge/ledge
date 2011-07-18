@@ -27,11 +27,6 @@
 // 
 package org.objectledge.modules.actions.authentication;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpSession;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.pipeline.Valve;
@@ -67,28 +62,5 @@ public abstract class BaseAuthenticationAction
     {
         this.logger = logger;
         this.userManager = userManager;
-    }
-
-    /**
-     * Clear session to prevent the scenario that
-     * one user uses the session of another.
-     * 
-     * @param session the http session.
-     */
-    @SuppressWarnings("unchecked")
-    protected void clearSession(HttpSession session)
-    {
-        Enumeration<String> attrNames = session.getAttributeNames();
-        ArrayList<String> temp = new ArrayList<String>();
-        while (attrNames.hasMoreElements())
-        {
-            String name = attrNames.nextElement();
-            temp.add(name);
-        }
-        for (int i = 0; i < temp.size(); i++)
-        {
-            String name = temp.get(i);
-            session.removeAttribute(name);
-        }
     }
 }

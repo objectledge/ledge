@@ -93,9 +93,8 @@ public class Impersonate
         {
             if(principal != null)
             {
-                clearSession(httpContext.getRequest().getSession());
-            	httpContext.getRequest().getSession().
-                    setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                httpContext.clearSessionAttributes();
+            	httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
             	AuthenticationContext authenticationContext = 
             	    AuthenticationContext.getAuthenticationContext(context);
                 boolean authenticated = !principal.equals(userManager.getAnonymousAccount());
