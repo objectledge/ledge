@@ -28,6 +28,7 @@
 package org.objectledge.modules.actions.authentication;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.pipeline.Valve;
 
@@ -47,19 +48,25 @@ public abstract class BaseAuthenticationAction
     public static final String PASSWORD_PARAM = "password";
 
     /** the logger. */
-    protected Logger logger;
+    protected final Logger logger;
 
     /** the authentication component. */
-    protected UserManager userManager;
+    protected final UserManager userManager;
+
+    /** the SSO service */
+    protected final SingleSignOnService singleSignOnService;
 
     /**
      * Action constructor.
      * 
-     * @param logger the logger.
      * @param userManager the user manager.
+     * @param singleSignOnService the SSO service
+     * @param logger the logger.
      */
-    public BaseAuthenticationAction(Logger logger, UserManager userManager)
+    public BaseAuthenticationAction(UserManager userManager,
+        SingleSignOnService singleSignOnService, Logger logger)
     {
+        this.singleSignOnService = singleSignOnService;
         this.logger = logger;
         this.userManager = userManager;
     }

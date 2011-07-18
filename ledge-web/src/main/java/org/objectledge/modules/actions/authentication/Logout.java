@@ -32,6 +32,7 @@ import java.security.Principal;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
@@ -42,9 +43,9 @@ import org.objectledge.web.HttpContext;
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- * @version $Id: Logout.java,v 1.2 2004-12-22 08:58:30 rafal Exp $ 
+ * @version $Id: Logout.java,v 1.2 2004-12-22 08:58:30 rafal Exp $
  */
-public class Logout 
+public class Logout
     extends BaseAuthenticationAction
 {
     /**
@@ -52,32 +53,39 @@ public class Logout
      * 
      * @param logger the logger.
      * @param userManager the user manager.
+     * @param singleSignOnService the SSO service.
      */
-    public Logout(Logger logger, UserManager userManager)
+    public Logout(Logger logger, UserManager userManager, SingleSignOnService singleSignOnService)
     {
-        super(logger, userManager);
+        super(userManager, singleSignOnService, logger);
     }
 
     /**
      * Runns the valve.
-     *   
+     * 
      * @param context the context.
      * @throws ProcessingException if action processing fails.
      */
-    public void process(Context context) throws ProcessingException
+    public void process(Context context)
+        throws ProcessingException
     {
         try
         {
             HttpContext httpContext = HttpContext.getHttpContext(context);
             httpContext.clearSessionAttributes();
             Principal anonymous = userManager.getAnonymousAccount();
-            AuthenticationContext authenticationContext = 
-                AuthenticationContext.getAuthenticationContext(context);
+            AuthenticationContext authenticationContext = AuthenticationContext
+                .getAuthenticationContext(context);
+            if(authenticationContext.isUserAuthenticated())
+            {
+                Principal principal = authenticationContext.getUserPrincipal();
+                singleSignOnService.logOut(principal, httpContext.getRequest().getServerName());
+            }
             authenticationContext.setUserPrincipal(anonymous, false);
         }
         catch(AuthenticationException e)
         {
-            throw new ProcessingException("user manager exception ",e);
+            throw new ProcessingException("user manager exception ", e);
         }
     }
 }

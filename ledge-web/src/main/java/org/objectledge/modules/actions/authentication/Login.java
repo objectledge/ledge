@@ -32,6 +32,7 @@ import java.security.Principal;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
@@ -43,33 +44,33 @@ import org.objectledge.web.mvc.security.LoginRequiredException;
 
 /**
  * Login action.
- *
  * 
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: Login.java,v 1.2 2004-12-22 08:58:30 rafal Exp $
  */
-public class Login 
+public class Login
     extends BaseAuthenticationAction
 {
     /**
      * Action constructor.
      * 
-     * @param logger the logger.
      * @param userManager the user manager.
+     * @param singleSignOnService the SSO service.
+     * @param logger the logger.
      */
-    public Login(Logger logger, UserManager userManager)
+    public Login(UserManager userManager, SingleSignOnService singleSignOnService, Logger logger)
     {
-        super(logger, userManager);
+        super(userManager, singleSignOnService, logger);
     }
 
     /**
      * Runns the valve.
-     *   
+     * 
      * @param context the context.
      * @throws ProcessingException if action processing fails.
      */
-    public void process(Context context) 
+    public void process(Context context)
         throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
@@ -78,7 +79,7 @@ public class Login
         String login = parameters.get(LOGIN_PARAM, null);
         String password = parameters.get(PASSWORD_PARAM, null);
         parameters.remove(LOGIN_PARAM);
-        parameters.remove(PASSWORD_PARAM);        
+        parameters.remove(PASSWORD_PARAM);
 
         Principal anonymous = null;
         try
@@ -89,16 +90,16 @@ public class Login
         {
             throw new ProcessingException("UserManager exception", e);
         }
-        if (login == null || password == null)
+        if(login == null || password == null)
         {
-            throw new ProcessingException("Required parameters (" + LOGIN_PARAM +
-                                                   ", " + PASSWORD_PARAM + ") not found");
+            throw new ProcessingException("Required parameters (" + LOGIN_PARAM + ", "
+                + PASSWORD_PARAM + ") not found");
         }
         Principal principal = null;
         try
         {
             principal = userManager.getUserByLogin(login);
-            if (userManager.checkUserPassword(principal, password))
+            if(userManager.checkUserPassword(principal, password))
             {
                 httpContext.clearSessionAttributes();
             }
@@ -108,13 +109,15 @@ public class Login
                 principal = null;
             }
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             logger.debug("unknown username " + login);
             principal = null;
         }
+        AuthenticationContext authenticationContext = AuthenticationContext
+            .getAuthenticationContext(context);
         boolean authenticated;
-        if (principal == null)
+        if(principal == null)
         {
             principal = anonymous;
             authenticated = false;
@@ -122,15 +125,19 @@ public class Login
         else
         {
             authenticated = true;
-        	httpContext.getRequest().getSession().
-                setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+            String domain = httpContext.getRequest().getServerName();
+            if(authenticationContext.isUserAuthenticated())
+            {
+                Principal previousPrincipal = authenticationContext.getUserPrincipal();
+                singleSignOnService.logOut(previousPrincipal, domain);
+            }
+            httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+            singleSignOnService.logIn(principal, domain);            
         }
 
-        AuthenticationContext authenticationContext = 
-            AuthenticationContext.getAuthenticationContext(context);
         authenticationContext.setUserPrincipal(principal, authenticated);
 
-        if (!authenticated)
+        if(!authenticated)
         {
             throw new LoginRequiredException("Login failed");
         }

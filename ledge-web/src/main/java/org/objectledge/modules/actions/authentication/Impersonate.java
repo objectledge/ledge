@@ -32,6 +32,7 @@ import java.security.Principal;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
@@ -42,40 +43,41 @@ import org.objectledge.web.WebConstants;
 
 /**
  * Login action.
- *
  * 
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a> 
+ * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: Impersonate.java,v 1.1 2006-02-09 13:32:40 pablo Exp $
  */
-public class Impersonate 
+public class Impersonate
     extends BaseAuthenticationAction
-{  
+{
     /**
      * Action constructor.
      * 
-     * @param logger the logger.
      * @param userManager the user manager.
+     * @param singleSignOnService the SSO service.
+     * @param logger the logger.
      */
-    public Impersonate(Logger logger, UserManager userManager)
+    public Impersonate(UserManager userManager, Logger logger,
+        SingleSignOnService singleSignOnService)
     {
-        super(logger, userManager);
+        super(userManager, singleSignOnService, logger);
     }
 
     /**
      * Runns the valve.
-     *   
+     * 
      * @param context the context.
      * @throws ProcessingException if action processing fails.
      */
-    public void process(Context context) 
+    public void process(Context context)
         throws ProcessingException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);
 
         String login = parameters.get("dn", null);
-        if (login == null)
+        if(login == null)
         {
             throw new ProcessingException("Required parameter (dn) not found");
         }
@@ -84,7 +86,7 @@ public class Impersonate
         {
             principal = userManager.getUserByLogin(login);
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             logger.debug("unknown username " + login);
             principal = null;
@@ -94,11 +96,20 @@ public class Impersonate
             if(principal != null)
             {
                 httpContext.clearSessionAttributes();
-            	httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
-            	AuthenticationContext authenticationContext = 
-            	    AuthenticationContext.getAuthenticationContext(context);
+                String domain = httpContext.getRequest().getServerName();
+                httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                AuthenticationContext authenticationContext = AuthenticationContext
+                    .getAuthenticationContext(context);
+                if(authenticationContext.isUserAuthenticated()) 
+                {
+                    singleSignOnService.logOut(authenticationContext.getUserPrincipal(), domain);
+                }
                 boolean authenticated = !principal.equals(userManager.getAnonymousAccount());
-            	authenticationContext.setUserPrincipal(principal, authenticated);
+                authenticationContext.setUserPrincipal(principal, authenticated);
+                if(authenticated)
+                {
+                    singleSignOnService.logIn(principal, domain);
+                }
             }
         }
         catch(AuthenticationException e)
@@ -106,7 +117,7 @@ public class Impersonate
             throw new ProcessingException("failed to impersonate", e);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -132,8 +143,8 @@ public class Impersonate
         throws Exception
     {
         Principal root = userManager.getSuperuserAccount();
-        AuthenticationContext authenticationContext = 
-            AuthenticationContext.getAuthenticationContext(context);
+        AuthenticationContext authenticationContext = AuthenticationContext
+            .getAuthenticationContext(context);
         if(root == null)
         {
             return false;
