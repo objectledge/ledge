@@ -18,6 +18,10 @@ public interface SingleSignOnService
     
     LogInStatus checkStatus(Principal principal, String domain);
     
+    boolean ssoAvailable(String domain);
+    
+    String ssoBaseUrl(String domain);
+    
     public enum LogInStatus
     {
         LOGGED_IN,

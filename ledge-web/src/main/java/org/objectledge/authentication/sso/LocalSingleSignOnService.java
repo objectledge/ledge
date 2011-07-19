@@ -289,6 +289,26 @@ public class LocalSingleSignOnService
         }
         return LogInStatus.UNKNOWN;
     }
+    
+    @Override
+    public boolean ssoAvailable(String domain)
+    {
+        return findRealmsByMember(domain).size() > 0;
+    }
+    
+    @Override
+    public String ssoBaseUrl(String domain)
+    {
+        List<Realm> realms = findRealmsByMember(domain);
+        if(realms.size() > 0)
+        {
+            return realms.get(0).getBaseUrl();
+        }
+        else
+        {
+            return null;            
+        }
+    }
 
     // ..........................................................................................
 

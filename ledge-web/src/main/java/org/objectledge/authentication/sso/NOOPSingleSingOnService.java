@@ -34,4 +34,16 @@ public class NOOPSingleSingOnService
     {
         return LogInStatus.UNKNOWN;
     }
+    
+    @Override
+    public boolean ssoAvailable(String domain)
+    {
+        return false;
+    }
+    
+    @Override
+    public String ssoBaseUrl(String domain)
+    {
+        return null;
+    }
 }
