@@ -57,7 +57,6 @@ public class Login
 
         if(!httpContext.getRequest().isSecure())
         {
-
             Principal principal = null;
             try
             {
@@ -68,7 +67,15 @@ public class Login
                     status = "invalid_credentials";
                 }
                 ticket = singleSignOnService.generateTicket(principal, domain, client);
-                if(ticket == null)
+                if(ticket != null)
+                {
+                    log.debug("ACCEPTED " + client + " login ");
+                    // we don't call SingleSingOnService.logIn() here, since the login has been performed
+                    // to the realm master which does not belong the realm. Login will be recored when
+                    // the one time ticket will be validated by SingleSingOnValve in the actual domain
+                    // the user is trying to access.
+                }
+                else
                 {
                     // domain is not a realm master
                     status = "invalid_request";
