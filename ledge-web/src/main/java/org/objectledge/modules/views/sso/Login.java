@@ -4,9 +4,9 @@ import java.security.Principal;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
-import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.UserUnknownException;
+import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;

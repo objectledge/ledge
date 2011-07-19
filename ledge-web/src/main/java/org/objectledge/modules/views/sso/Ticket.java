@@ -4,7 +4,7 @@ import java.security.Principal;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
-import org.objectledge.authentication.SingleSignOnService;
+import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
@@ -18,7 +18,7 @@ import org.objectledge.web.mvc.builders.EnclosingView;
  * <p>
  * This view is expected to be accessed from JavaScript embedded in a page loaded from different
  * domain. The returned string needs to be stored in HTTP cookie that will be picked up and
- * validated on a subsequent request by {@link org.objectledge.authentication.SingleSignOnValve}.
+ * validated on a subsequent request by {@link org.objectledge.authentication.sso.SingleSignOnValve}.
  * </p>
  * <p>
  * In order for the ticket to be granted, user needs to authenticate using Login action first.

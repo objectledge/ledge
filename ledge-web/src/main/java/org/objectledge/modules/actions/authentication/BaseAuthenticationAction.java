@@ -28,8 +28,8 @@
 package org.objectledge.modules.actions.authentication;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.pipeline.Valve;
 
 /**
