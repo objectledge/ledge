@@ -27,22 +27,33 @@
  POSSIBILITY OF SUCH DAMAGE. 
 -->
 
-<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:a="http://objectledge.org/annotation/1.0">
+  <define name="hostName">
+    <data type="string">
+      <a:documentation>DNS compatible host name</a:documentation>
+      <param name="pattern">([A-Za-z0-9\-]+\.)+[A-Za-z]{2,}</param>
+    </data>
+  </define>
   <start>
     <element name="config">
       <interleave>
         <optional>
-          <!-- provider and implementation of SecureRandom to use -->
           <element name="random">
+            <a:documentation>provider and implementation of SecureRandom to use</a:documentation>
             <interleave>
               <optional>
                 <element name="provider">
-                  <text />
+                  <data type="string">
+                    <a:defaultValue>SUN</a:defaultValue>
+                  </data>
                 </element>
               </optional>
               <optional>
                 <element name="algorithm">
-                  <text />
+                  <data type="string">
+                    <a:defaultValue>NativePRNG</a:defaultValue>
+                  </data>
                 </element>
               </optional>
             </interleave>
@@ -52,15 +63,18 @@
           <element name="tickets">
             <interleave>
               <optional>
-                <!-- random bytes per ticket -->
                 <element name="size">
-                  <text/>
+                  <a:documentation>random bytes per ticket</a:documentation>
+                  <a:defaultValue>16</a:defaultValue>
+                  <data type="integer" />
                 </element>
               </optional>
               <optional>
-                <!-- ticket validity time in seconds -->
                 <element name="validityTime">
-                  <text/>
+                  <a:documentation>ticket validity time in seconds</a:documentation>
+                  <data type="integer">
+                    <a:defaultValue>60</a:defaultValue>
+                  </data>
                 </element>
               </optional>
             </interleave>
@@ -70,21 +84,63 @@
           <zeroOrMore>
             <element name="realm">
               <attribute name="name">
-                <text />
+                <data type="string" />
               </attribute>
-              <attribute name="master">
-                <text />
-              </attribute>
-              <choice>
-                <element name="allDomains">
-                  <empty />
+              <interleave>
+                <element name="master">
+                  <a:documentation>single point of access to sso.Ticket and sso.Login views
+                  </a:documentation>
+                  <ref name="hostName" />
                 </element>
-                <oneOrMore>
-                  <element name="domain">
-                    <text />
+                <optional>
+                  <element name="includeMaster">
+                    <a:documentation>should domain master be considered a member of the realm. NOT
+                      RECOMMENDED, unless the master host is accessed exclusively through HTTPS
+                    </a:documentation>
+                    <data type="boolean">
+                      <a:defaultValue>false</a:defaultValue>
+                    </data>
                   </element>
-                </oneOrMore>
-              </choice>
+                </optional>
+                <optional>
+                  <element name="baseUrlFormat">
+                    <a:documentation>String.format() pattern for building base URL for accessing sso
+                      views. It's expected to contain single parameter reference for hostname.
+                      Typical values:
+
+                      https://%s
+                      https://%s:8443/cyklotron/ledge
+
+                      View parameters of the
+                      following form will be appended to the result of
+                      expansion of this pattern:
+
+                      /view/sso.Ticket
+                      /view/soo.Login?login=%s&amp;password=%s
+                    </a:documentation>
+                    <data type="string">
+                      <a:defaultValue>https://%s</a:defaultValue>
+                    </data>
+                  </element>
+                </optional>
+                <choice>
+                  <element name="allDomains">
+                    <a:documentation>Indication that this realm contains all domains, with possible
+                      exception on the realm master. If a realm contains this indication it must be
+                      the only realm defined in the configuration.
+                    </a:documentation>
+                    <empty />
+                  </element>
+                  <element name="domains">
+                    <a:documentation>Enumeration of hosts contained in this realm.</a:documentation>
+                    <oneOrMore>
+                      <element name="domain">
+                        <ref name="hostName" />
+                      </element>
+                    </oneOrMore>
+                  </element>
+                </choice>
+              </interleave>
             </element>
           </zeroOrMore>
         </element>

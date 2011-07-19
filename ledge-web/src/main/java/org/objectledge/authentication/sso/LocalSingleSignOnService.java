@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jcontainer.dna.Configuration;
@@ -55,6 +56,10 @@ import org.objectledge.threads.ThreadPool;
 public class LocalSingleSignOnService
     implements SingleSignOnService
 {
+    private static final String DEFAULT_BASE_URL_FORMAT = "https://%s";
+
+    private static final Pattern REQUIRED_BASE_URL_FORMAT_PATTERN = Pattern.compile(".*%s.*");
+
     private static final String DEFAULT_RANDOM_ALGORITHM = "NativePRNG";
 
     private static final String DEFAULT_RANDOM_PROVIDER = "SUN";
@@ -90,6 +95,14 @@ public class LocalSingleSignOnService
         realmLoop: for(Configuration realmConfig : realmConfigs)
         {
             String realmName = realmConfig.getAttribute("name");
+            boolean includeMaster = realmConfig.getChild("includeMaster").getValueAsBoolean(false);
+            Configuration baseUrlFormatConfig = realmConfig.getChild("baseUrlFormat");
+            String baseUrlFormat = baseUrlFormatConfig.getValue(DEFAULT_BASE_URL_FORMAT);
+            if(!REQUIRED_BASE_URL_FORMAT_PATTERN.matcher(baseUrlFormat).matches())
+            {
+                throw new ConfigurationException("baseUrlFormat does have required form",
+                    baseUrlFormatConfig.getPath(), baseUrlFormatConfig.getLocation());
+            }
             if(realmName.length() == 0)
             {
                 throw new ConfigurationException("realm name empty", realmConfig.getPath(),
@@ -103,20 +116,23 @@ public class LocalSingleSignOnService
                         realmConfig.getPath(), realmConfig.getLocation());
                 }
             }
-            String realmMaster = realmConfig.getAttribute("master");
-            Configuration[] domainConfigs = realmConfig.getChildren();
-            if(domainConfigs.length == 1 && domainConfigs[0].getName().equals("allDomains"))
+            String realmMaster = realmConfig.getChild("master").getValue();
+            if(realmConfig.getChild("allDomains", false) != null)
             {
-                globalRealm = new Realm(realmName, realmMaster, null);
-                break realmLoop;
+                globalRealm = new Realm(realmName, realmMaster, null, includeMaster, baseUrlFormat);
+                if(realmConfigs.length > 1)
+                {
+                    throw new ConfigurationException("a global realm cannot have secondary realms",
+                        realmConfig.getPath(), realmConfig.getLocation());
+                }
             }
             else
             {
                 domains.clear();
-                for(Configuration domainConfig : domainConfigs)
+                for(Configuration domainConfig : realmConfig.getChild("domains").getChildren())
                 {
                     String domain = domainConfig.getValue();
-                    if(domain.equals(realmMaster))
+                    if(domain.equals(realmMaster) && !includeMaster)
                     {
                         throw new ConfigurationException(
                             "realm may not contain it's own master as subordinate",
@@ -124,7 +140,8 @@ public class LocalSingleSignOnService
                     }
                     domains.add(domain);
                 }
-                realms.add(new Realm(realmName, realmMaster, domains));
+                realms
+                    .add(new Realm(realmName, realmMaster, domains, includeMaster, baseUrlFormat));
             }
         }
         if(globalRealm != null)
@@ -155,6 +172,7 @@ public class LocalSingleSignOnService
             throw new ConfigurationException("invalid algorithm", algorithmConfig.getPath(),
                 algorithmConfig.getLocation());
         }
+
         this.bytesPerTicket = config.getChild("tickets", true).getChild("size", true)
             .getValueAsInteger(DEFAULT_BYTES_PER_TICKET);
         this.ticketValidityTime = config.getChild("tickets", true).getChild("validityTime", true)
@@ -203,8 +221,7 @@ public class LocalSingleSignOnService
             }
             else
             {
-                log.warn("DECLINED ticket " + ticket.toString() + " provided by client "
-                    + client);
+                log.warn("DECLINED ticket " + ticket.toString() + " provided by client " + client);
             }
         }
         else
@@ -223,8 +240,7 @@ public class LocalSingleSignOnService
             for(Realm realm : domainRealms)
             {
                 log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
-                userStatus.put(new PrincipalRealm(principal, realm),
-                    LogInStatus.LOGGED_IN);
+                userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_IN);
             }
         }
     }
@@ -238,9 +254,9 @@ public class LocalSingleSignOnService
         {
             for(Realm realm : domainRealms)
             {
-                log.debug("LOGGED OUT user " + principal.getName() + " from realm " + realm.getName());
-                userStatus.put(new PrincipalRealm(principal, realm),
-                    LogInStatus.LOGGED_OUT);
+                log.debug("LOGGED OUT user " + principal.getName() + " from realm "
+                    + realm.getName());
+                userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_OUT);
             }
         }
         // invalidate outstanding tickets
@@ -250,7 +266,7 @@ public class LocalSingleSignOnService
             while(i.hasNext())
             {
                 Ticket ticket = i.next();
-                if(ticket.getPrincipal().equals(principal))                
+                if(ticket.getPrincipal().equals(principal))
                 {
                     log.debug("INVALIDATED ticket " + ticket.toString() + " because of user logout");
                     i.remove();
@@ -330,11 +346,18 @@ public class LocalSingleSignOnService
 
         private final Set<String> domains;
 
-        public Realm(String name, String master, Set<String> domains)
+        private final boolean includeMaster;
+
+        private final String baseUrl;
+
+        public Realm(String name, String master, Set<String> domains, boolean includeMaster,
+            String baseUrlFormat)
         {
             this.name = name;
             this.master = master;
             this.domains = domains;
+            this.includeMaster = includeMaster;
+            this.baseUrl = String.format(baseUrlFormat, master);
         }
 
         public String getName()
@@ -351,13 +374,17 @@ public class LocalSingleSignOnService
         {
             if(domains == null)
             {
-                // global realm contains any domain except the master                
-                return !master.equals(domain);
+                return includeMaster || !master.equals(domain);
             }
             else
             {
                 return domains.contains(domain);
             }
+        }
+
+        public String getBaseUrl()
+        {
+            return baseUrl;
         }
     }
 
@@ -492,7 +519,7 @@ public class LocalSingleSignOnService
         @Override
         public String toString()
         {
-            return "user " + principal.getName() + " in realm " + realm.getName();            		
+            return "user " + principal.getName() + " in realm " + realm.getName();
         }
     }
 }
