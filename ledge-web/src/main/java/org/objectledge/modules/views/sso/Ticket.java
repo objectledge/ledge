@@ -94,7 +94,7 @@ public class Ticket
 
     private String formatReply(String ticket)
     {
-        return "{ ticket : \"" + ticket != null ? ticket : "NONE" + "\" }";
+        return "{ ticket : \"" + (ticket != null ? ticket : "NONE") + "\" }";
     }
 
     @Override
