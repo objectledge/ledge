@@ -6,6 +6,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.web.HttpContext;
@@ -67,9 +69,18 @@ public class Ticket
         throws BuildException, ProcessingException
     {
         HttpContext httpContext = context.getAttribute(HttpContext.class);
+        Parameters parameters = context.getAttribute(RequestParameters.class);
+        String callback = parameters.get("callback", null);
         String client = httpContext.getRequest().getRemoteAddr();
         String domain = httpContext.getRequest().getServerName();
-        httpContext.setContentType("application/json");
+        if(callback != null)
+        {
+            httpContext.setContentType("text/javascript");
+        }
+        else
+        {
+            httpContext.setContentType("application/json");
+        }
         AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
         String ticket = "NONE";
         if(authContext.isUserAuthenticated())
@@ -89,12 +100,13 @@ public class Ticket
         {
             log.warn("DECLINED " + client + " session not authenticated");
         }
-        return formatReply(ticket);
+        return formatReply(callback, ticket);
     }
 
-    private String formatReply(String ticket)
+    private String formatReply(String callback, String ticket)
     {
-        return "{ ticket : \"" + (ticket != null ? ticket : "NONE") + "\" }";
+        String jsonObject = "{ ticket : \"" + (ticket != null ? ticket : "NONE") + "\" }";
+        return callback != null ? (callback + "(" + jsonObject + ");") : jsonObject;
     }
 
     @Override
