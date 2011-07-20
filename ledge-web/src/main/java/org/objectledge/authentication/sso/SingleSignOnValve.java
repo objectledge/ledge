@@ -58,43 +58,46 @@ public class SingleSignOnValve
             if(!authContext.isUserAuthenticated())
             {
                 Cookie[] cookies = httpContext.getRequest().getCookies();
-                for(Cookie cookie : cookies)
-                {
-                    if(cookie.getName().equals(SingleSignOnService.SSO_TICKET_COOKIE))
+                if(cookies != null)
+                {                    
+                    for(Cookie cookie : cookies)
                     {
-                        log.info("STARTING SSO login attempt");
-                        String ticket = cookie.getValue();
-                        String domain = httpContext.getRequest().getServerName();
-                        String client = httpContext.getRequest().getRemoteAddr();
-                        // check if the authentication cookie is valid
-                        Principal principal = singleSignOnService.validateTicket(ticket, domain,
-                            client);
-                        if(principal != null)
+                        if(cookie.getName().equals(SingleSignOnService.SSO_TICKET_COOKIE))
                         {
-                            AuthenticationContext authenticationContext = new AuthenticationContext();
-                            authenticationContext.setUserPrincipal(principal, true);
-                            context
+                            log.info("STARTING SSO login attempt");
+                            String ticket = cookie.getValue();
+                            String domain = httpContext.getRequest().getServerName();
+                            String client = httpContext.getRequest().getRemoteAddr();
+                            // check if the authentication cookie is valid
+                            Principal principal = singleSignOnService.validateTicket(ticket, domain,
+                                client);
+                            if(principal != null)
+                            {
+                                AuthenticationContext authenticationContext = new AuthenticationContext();
+                                authenticationContext.setUserPrincipal(principal, true);
+                                context
                                 .setAttribute(AuthenticationContext.class, authenticationContext);
-
-                            httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
-                            singleSignOnService.logIn(principal, domain);
-
-                            // delete ticket cookie
-                            Cookie newCookie = new Cookie(SingleSignOnService.SSO_TICKET_COOKIE, "");
-                            newCookie.setMaxAge(0);
-                            httpContext.getResponse().addCookie(newCookie);
-
-                            // let JS side know user is authenticated
-                            newCookie = new Cookie(SingleSignOnService.SSO_AUTH_COOKIE, "true");
-                            newCookie.setMaxAge(-1);
-                            httpContext.getResponse().addCookie(newCookie);
-                            log.info("LOGGED IN user " + principal.getName() + " to " + domain);
+                                
+                                httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                                singleSignOnService.logIn(principal, domain);
+                                
+                                // delete ticket cookie
+                                Cookie newCookie = new Cookie(SingleSignOnService.SSO_TICKET_COOKIE, "");
+                                newCookie.setMaxAge(0);
+                                httpContext.getResponse().addCookie(newCookie);
+                                
+                                // let JS side know user is authenticated
+                                newCookie = new Cookie(SingleSignOnService.SSO_AUTH_COOKIE, "true");
+                                newCookie.setMaxAge(-1);
+                                httpContext.getResponse().addCookie(newCookie);
+                                log.info("LOGGED IN user " + principal.getName() + " to " + domain);
+                            }
+                            else
+                            {
+                                log.info("DECLINED SSO login attempt");
+                            }
+                            break;
                         }
-                        else
-                        {
-                            log.info("DECLINED SSO login attempt");
-                        }
-                        break;
                     }
                 }
             }
