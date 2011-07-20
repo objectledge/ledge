@@ -45,6 +45,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
@@ -316,16 +317,8 @@ public class LocalSingleSignOnService
     {
         byte idBytes[] = new byte[bytesPerTicket];
         random.nextBytes(idBytes);
-        byte encodedId[] = Base64.encodeBase64(idBytes, false);
-        String id;
-        try
-        {
-            id = new String(encodedId, "ISO-8859-1");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            throw new Error("ISO-8859-1 encoding not supported");
-        }
+        String id = new String(Hex.encodeHex(idBytes));
+       
         Ticket ticket = new Ticket(principal, realm, client, id);
         tickets.put(id, ticket);
         return ticket;
@@ -346,7 +339,7 @@ public class LocalSingleSignOnService
     private List<Realm> findRealmsByMember(String domain)
     {
         List<Realm> realms = new ArrayList<Realm>(1);
-        for(Realm realm : realms)
+        for(Realm realm : this.realms)
         {
             if(realm.containsDomain(domain))
             {
