@@ -28,7 +28,7 @@
 -->
 
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
-  xmlns:a="http://objectledge.org/annotation/1.0">
+  xmlns:a="http://objectledge.org/annotation/1.0" ns="http://objectledge.org/sso/local/1.0">
   <define name="hostName">
     <data type="string">
       <a:documentation>DNS compatible host name</a:documentation>
