@@ -55,7 +55,7 @@ public class Login
         String status = "success";
         String ticket = null;
 
-        if(!httpContext.getRequest().isSecure())
+        if(httpContext.getRequest().isSecure())
         {
             Principal principal = null;
             try
