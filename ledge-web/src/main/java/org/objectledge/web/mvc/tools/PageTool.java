@@ -198,7 +198,14 @@ public class PageTool
 		 */
         public ContentLink(String href)
         {
-            this.href = linkTool.content(href).toString();
+            if(href.contains("://"))
+            {
+                this.href = href;
+            } 
+            else
+            {
+                this.href = linkTool.content(href).toString();
+            }
         }
         
         /**
