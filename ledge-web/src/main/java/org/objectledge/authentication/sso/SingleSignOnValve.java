@@ -86,10 +86,6 @@ public class SingleSignOnValve
                                 newCookie.setMaxAge(0);
                                 httpContext.getResponse().addCookie(newCookie);
                                 
-                                // let JS side know user is authenticated
-                                newCookie = new Cookie(SingleSignOnService.SSO_AUTH_COOKIE, "true");
-                                newCookie.setMaxAge(-1);
-                                httpContext.getResponse().addCookie(newCookie);
                                 log.info("LOGGED IN user " + principal.getName() + " to " + domain);
                             }
                             else

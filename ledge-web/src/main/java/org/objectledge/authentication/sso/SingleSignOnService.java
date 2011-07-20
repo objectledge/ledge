@@ -6,8 +6,6 @@ public interface SingleSignOnService
 {
     public static final String SSO_TICKET_COOKIE = "org.objectledge.web.sso.ticket";
     
-    public static final String SSO_AUTH_COOKIE = "org.objectledge.web.sso.auth";
-    
     String generateTicket(Principal principal, String domain, String client);
     
     Principal validateTicket(String ticket, String domain, String client);

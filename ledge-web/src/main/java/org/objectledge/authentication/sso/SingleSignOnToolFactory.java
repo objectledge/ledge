@@ -1,5 +1,6 @@
 package org.objectledge.authentication.sso;
 
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.tools.ContextToolFactory;
@@ -24,8 +25,7 @@ public class SingleSignOnToolFactory
     public Object getTool()
         throws ProcessingException
     {
-        HttpContext httpContext = context.getAttribute(HttpContext.class);        
-        return new SingleSignOnTool(httpContext, singleSignOnService);
+        return new SingleSignOnTool(context, singleSignOnService);
     }
 
     @Override
