@@ -19,9 +19,11 @@ sso = {
 					document.cookie = "org.objectledge.web.sso.ticket="
 							+ data.ticket;
 					callback(data.status);
+					return;
 				} else {
 					if(data && data.status) {
-						callback(data.status);	
+						callback(data.status);
+						return;
 					}
 				}
 				callback("internal_error");
@@ -55,9 +57,11 @@ sso = {
 					document.cookie = "org.objectledge.web.sso.ticket="
 							+ data.ticket;
 					callback(data.status);
+					return;
 				} else {
 					if(data && data.status) {
-						callback(data.status);	
+						callback(data.status);
+						return;
 					}					
 				}
 				callback("internal_error");
