@@ -71,8 +71,6 @@ public class Ticket
         HttpContext httpContext = context.getAttribute(HttpContext.class);
         Parameters parameters = context.getAttribute(RequestParameters.class);
         String callback = parameters.get("callback", null);
-        String client = httpContext.getRequest().getRemoteAddr();
-        String domain = httpContext.getRequest().getServerName();
         if(callback != null)
         {
             httpContext.setContentType("text/javascript");
@@ -81,31 +79,46 @@ public class Ticket
         {
             httpContext.setContentType("application/json");
         }
+        String client = httpContext.getRequest().getRemoteAddr();
+        String domain = httpContext.getRequest().getServerName();
         AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
-        String ticket = "NONE";
+        
+        String ticket = null;
+        String status = "success";
+        
         if(authContext.isUserAuthenticated())
         {
             Principal principal = authContext.getUserPrincipal();
             if(httpContext.getRequest().isSecure())
             {
                 ticket = singleSignOnService.generateTicket(principal, domain, client);
+                
+                ticket = singleSignOnService.generateTicket(principal, domain, client);
+                if(ticket == null)
+                {
+                    // domain is not a realm master, warning was logged by SingleSignOnService
+                    status = "invalid_request";
+                }
             }
             else
             {
+                status = "invalid_request";
                 log.warn("DECLINED " + client + ", " + principal.getName()
                     + " not using secure channel");
             }
         }
         else
         {
+            status = "not_logged_on";
             log.warn("DECLINED " + client + " session not authenticated");
         }
-        return formatReply(callback, ticket);
+        return formatReply(callback, status, ticket);
     }
 
-    private String formatReply(String callback, String ticket)
+    private String formatReply(String callback, String status, String ticket)
     {
-        String jsonObject = "{ ticket : \"" + (ticket != null ? ticket : "NONE") + "\" }";
+        String jsonObject = "{ status : \"" + status + "\",\n ticket : \""
+            + (ticket != null ? ticket : "NONE") + "\" }";
         return callback != null ? (callback + "(" + jsonObject + ");") : jsonObject;
     }
 
