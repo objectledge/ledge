@@ -47,6 +47,15 @@ public class Login
     {
         Parameters parameters = context.getAttribute(RequestParameters.class);
         HttpContext httpContext = context.getAttribute(HttpContext.class);
+        String callback = parameters.get("callback", null);
+        if(callback != null)
+        {
+            httpContext.setContentType("text/javascript");
+        }
+        else
+        {
+            httpContext.setContentType("application/json");
+        }
         String client = httpContext.getRequest().getRemoteAddr();
         String domain = httpContext.getRequest().getServerName();
         String login = parameters.get(LOGIN_PARAM, null);
@@ -61,24 +70,27 @@ public class Login
             try
             {
                 principal = userManager.getUserByLogin(login);
-                if(!userManager.checkUserPassword(principal, password))
+                if(userManager.checkUserPassword(principal, password))
                 {
-                    log.warn("DECLINED " + client + " login " + login + " invalid password");
-                    status = "invalid_credentials";
-                }
-                ticket = singleSignOnService.generateTicket(principal, domain, client);
-                if(ticket != null)
-                {
-                    log.debug("ACCEPTED " + client + " login ");
-                    // we don't call SingleSingOnService.logIn() here, since the login has been performed
-                    // to the realm master which does not belong the realm. Login will be recored when
-                    // the one time ticket will be validated by SingleSingOnValve in the actual domain
-                    // the user is trying to access.
+                    ticket = singleSignOnService.generateTicket(principal, domain, client);
+                    if(ticket != null)
+                    {
+                        log.debug("ACCEPTED " + client + " login ");
+                        // we don't call SingleSingOnService.logIn() here, since the login has been
+                        // performed to the realm master which does not belong the realm. Login will
+                        // be recored when the one time ticket will be validated by
+                        // SingleSingOnValve in the actual domain the user is trying to access.
+                    }
+                    else
+                    {
+                        // domain is not a realm master, warning was logged by SingleSignOnService
+                        status = "invalid_request";
+                    }
                 }
                 else
                 {
-                    // domain is not a realm master
-                    status = "invalid_request";
+                    log.warn("DECLINED " + client + " login " + login + " invalid password");
+                    status = "invalid_credentials";
                 }
             }
             catch(UserUnknownException e)
@@ -97,15 +109,14 @@ public class Login
             log.warn("DECLINED " + client + " login " + login + " not using secure channel");
             status = "invalid_request";
         }
-
-        httpContext.setContentType("application/json");
-        return formatReply(status, ticket);
+        return formatReply(callback, status, ticket);
     }
 
-    private String formatReply(String status, String ticket)
+    private String formatReply(String callback, String status, String ticket)
     {
-        return "{ status : \"" + status + "\",\n ticket : \"" + ticket != null ? ticket : "NONE"
-            + "\" }";
+        String jsonObject = "{ status : \"" + status + "\",\n ticket : \""
+            + (ticket != null ? ticket : "NONE") + "\" }";
+        return callback != null ? (callback + "(" + jsonObject + ");") : jsonObject;
     }
 
     @Override
