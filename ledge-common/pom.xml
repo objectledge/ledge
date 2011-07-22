@@ -104,7 +104,14 @@
     <repository>
       <id>nexus</id>
       <name>Objectledge Nexus repository</name>
-      <url>http://objectledge.org/nexus/content/groups/m2</url>
+      <url>http://objectledge.org/nexus/content/groups/m2</url>      
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -112,6 +119,13 @@
       <id>nexus</id>
       <name>Objectledge Nexus repository (plugins)</name>
       <url>http://objectledge.org/nexus/content/groups/m2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
     </pluginRepository>
   </pluginRepositories>
   <dependencyManagement>
