@@ -142,6 +142,7 @@
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-web</artifactId>
+        <classifier>classes</classifier>
         <version>${project.version}</version>
       </dependency>
       <dependency>
