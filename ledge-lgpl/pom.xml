@@ -30,11 +30,6 @@
       <artifactId>xapool</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.sf.gnu-hylafax</groupId>
-      <artifactId>gnu-hylafax</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>howl</groupId>
       <artifactId>howl-logger</artifactId>
       <version>0.1.11</version>

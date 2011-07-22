@@ -355,11 +355,6 @@
         <version>1.6-beta</version>
       </dependency>
       <dependency>
-        <groupId>net.sf.gnu-hylafax</groupId>
-        <artifactId>gnu-hylafax</artifactId>
-        <version>0.0.7</version>
-      </dependency>
-      <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
         <version>2.4</version>
