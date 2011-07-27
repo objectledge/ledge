@@ -86,25 +86,32 @@ public class Ticket
         String ticket = null;
         String status = "success";
         
+        log.debug("request from " + client + " sessionId " + httpContext.getRequest().getSession().getId());
         if(authContext.isUserAuthenticated())
         {
             Principal principal = authContext.getUserPrincipal();
-            if(httpContext.getRequest().isSecure())
+            if(singleSignOnService.checkStatus(principal, domain) != SingleSignOnService.LogInStatus.LOGGED_OUT)
             {
-                ticket = singleSignOnService.generateTicket(principal, domain, client);
-                
-                ticket = singleSignOnService.generateTicket(principal, domain, client);
-                if(ticket == null)
+                if(httpContext.getRequest().isSecure())
                 {
-                    // domain is not a realm master, warning was logged by SingleSignOnService
+                    ticket = singleSignOnService.generateTicket(principal, domain, client);
+                    if(ticket == null)
+                    {
+                        // domain is not a realm master, warning was logged by SingleSignOnService
+                        status = "invalid_request";
+                    }
+                }
+                else
+                {
                     status = "invalid_request";
+                    log.warn("DECLINED " + client + ", " + principal.getName()
+                        + " not using secure channel");
                 }
             }
             else
             {
-                status = "invalid_request";
-                log.warn("DECLINED " + client + ", " + principal.getName()
-                    + " not using secure channel");
+                status = "not_logged_on";
+                log.warn("DECLINED " + client + " principal recenly logged out");
             }
         }
         else
