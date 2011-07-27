@@ -13,6 +13,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.WebConstants;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.EnclosingView;
@@ -64,6 +65,7 @@ public class Login
         String status = "success";
         String ticket = null;
 
+        log.debug("request from " + client + " sessionId " + httpContext.getRequest().getSession().getId());
         if(httpContext.getRequest().isSecure())
         {
             Principal principal = null;
@@ -80,6 +82,10 @@ public class Login
                         // performed to the realm master which does not belong the realm. Login will
                         // be recored when the one time ticket will be validated by
                         // SingleSingOnValve in the actual domain the user is trying to access.
+
+                        // make the session between client and realm master an authenticated one,
+                        // so that subsequent ticket requests from the same clients can succeed
+                        httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
                     }
                     else
                     {
