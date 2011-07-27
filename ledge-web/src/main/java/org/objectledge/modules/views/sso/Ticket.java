@@ -1,6 +1,10 @@
 package org.objectledge.modules.views.sso;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
@@ -11,9 +15,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.EnclosingView;
 
 /**
  * Retrieve one-time authentication ticket from SingleSignOn service.
@@ -51,7 +53,7 @@ import org.objectledge.web.mvc.builders.EnclosingView;
  * @author rkrzewski <rafal.krzewski@objectledge.org>
  */
 public class Ticket
-    extends AbstractBuilder
+    extends AbstractSsoView
 {
     private final SingleSignOnService singleSignOnService;
 
@@ -59,7 +61,7 @@ public class Ticket
 
     public Ticket(Context context, SingleSignOnService singleSignOnService, Logger log)
     {
-        super(context);
+        super(context, log);
         this.singleSignOnService = singleSignOnService;
         this.log = log;
     }
@@ -81,6 +83,7 @@ public class Ticket
         }
         String client = httpContext.getRequest().getRemoteAddr();
         String domain = httpContext.getRequest().getServerName();
+        String targetDomain = refererDomain(httpContext.getRequest());
         AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
         
         String ticket = null;
@@ -89,29 +92,37 @@ public class Ticket
         log.debug("request from " + client + " sessionId " + httpContext.getRequest().getSession().getId());
         if(authContext.isUserAuthenticated())
         {
-            Principal principal = authContext.getUserPrincipal();
-            if(singleSignOnService.checkStatus(principal, domain) != SingleSignOnService.LogInStatus.LOGGED_OUT)
+            if(targetDomain != null)
             {
-                if(httpContext.getRequest().isSecure())
+                Principal principal = authContext.getUserPrincipal();
+                if(singleSignOnService.checkStatus(principal, targetDomain) != SingleSignOnService.LogInStatus.LOGGED_OUT)
                 {
-                    ticket = singleSignOnService.generateTicket(principal, domain, client);
-                    if(ticket == null)
+                    if(httpContext.getRequest().isSecure())
                     {
-                        // domain is not a realm master, warning was logged by SingleSignOnService
+                        ticket = singleSignOnService.generateTicket(principal, domain, client);
+                        if(ticket == null)
+                        {
+                            // domain is not a realm master, warning was logged by SingleSignOnService
+                            status = "invalid_request";
+                        }
+                    }
+                    else
+                    {
                         status = "invalid_request";
+                        log.warn("DECLINED " + client + ", " + principal.getName()
+                            + " not using secure channel");
                     }
                 }
                 else
                 {
-                    status = "invalid_request";
-                    log.warn("DECLINED " + client + ", " + principal.getName()
-                        + " not using secure channel");
+                    status = "not_logged_on";
+                    log.warn("DECLINED " + client + " principal recenly logged out");
                 }
             }
             else
             {
-                status = "not_logged_on";
-                log.warn("DECLINED " + client + " principal recenly logged out");
+                status = "invalid_request";
+                log.warn("DECLINED " + client + " missing or malformed Referer header");
             }
         }
         else
@@ -122,16 +133,21 @@ public class Ticket
         return formatReply(callback, status, ticket);
     }
 
-    private String formatReply(String callback, String status, String ticket)
+    private String refererDomain(HttpServletRequest request)
     {
-        String jsonObject = "{ status : \"" + status + "\",\n ticket : \""
-            + (ticket != null ? ticket : "NONE") + "\" }";
-        return callback != null ? (callback + "(" + jsonObject + ");") : jsonObject;
-    }
-
-    @Override
-    public EnclosingView getEnclosingView(String thisViewName)
-    {
-        return EnclosingView.TOP;
+        String referer = request.getHeader("Referer");
+        if(referer == null)
+        {
+            return request.getServerName();
+        }
+        try
+        {
+            URL refererUrl = new URL(referer);
+            return refererUrl.getHost();
+        }
+        catch(MalformedURLException e)
+        {
+            return null;
+        }
     }
 }

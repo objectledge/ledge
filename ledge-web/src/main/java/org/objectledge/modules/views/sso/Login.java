@@ -1,6 +1,10 @@
 package org.objectledge.modules.views.sso;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
@@ -14,12 +18,10 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
-import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.EnclosingView;
 
 public class Login
-    extends AbstractBuilder
+    extends AbstractSsoView
 {
     /** login parameter name. */
     public static final String LOGIN_PARAM = "login";
@@ -36,7 +38,7 @@ public class Login
     public Login(UserManager userManager, SingleSignOnService singleSignOnService, Context context,
         Logger log)
     {
-        super(context);
+        super(context, log);
         this.userManager = userManager;
         this.singleSignOnService = singleSignOnService;
         this.log = log;
@@ -118,16 +120,24 @@ public class Login
         return formatReply(callback, status, ticket);
     }
 
-    private String formatReply(String callback, String status, String ticket)
+    protected String refererDomain(HttpServletRequest request)
     {
-        String jsonObject = "{ status : \"" + status + "\",\n ticket : \""
-            + (ticket != null ? ticket : "NONE") + "\" }";
-        return callback != null ? (callback + "(" + jsonObject + ");") : jsonObject;
-    }
-
-    @Override
-    public EnclosingView getEnclosingView(String thisViewName)
-    {
-        return EnclosingView.TOP;
+        String referer = request.getHeader("Referer");
+        if(referer == null)
+        {
+            String serverName = request.getServerName();
+            log.warn("No Referer header received from " + request.getRemoteAddr() + " assuming " + serverName);
+            return serverName;
+        }
+        try
+        {
+            URL refererUrl = new URL(referer);
+            return refererUrl.getHost();
+        }
+        catch(MalformedURLException e)
+        {
+            log.error("Malformed Referer header received from " + request);
+            return null;
+        }
     }
 }
