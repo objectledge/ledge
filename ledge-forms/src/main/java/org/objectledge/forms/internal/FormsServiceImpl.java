@@ -258,7 +258,7 @@ implements FormsService
      *      for a given Form definition.
      * @return found or newly created Instance object
      */
-    public Instance getInstance(String formName, HttpContext httpContext)
+    public Instance getInstance(String formName, String instanceName, HttpContext httpContext)
     throws FormsException
     {
         // guard from null formNames
@@ -272,12 +272,12 @@ implements FormsService
         FormImpl form = (FormImpl)(formsByName.get(formName));
 
         FormData formData = getFormData(httpContext);
-        InstanceImpl instance = (InstanceImpl)(formData.get(formName));
+        InstanceImpl instance = (InstanceImpl)(formData.get(formName+"#"+instanceName));
 
         if(instance == null)
         {
             // create new Instance
-            instance = form.createInstance(formName);
+            instance = form.createInstance(formName+"#"+instanceName);
             // store it in FormData
             formData.put(instance);
         }
@@ -301,7 +301,8 @@ implements FormsService
      * @throws Exception thrown on problems with deserialization.
      * @return Deserialized Instance object.
      */
-    public Instance getInstance(String formName, HttpContext httpContext, byte[] savedState)
+    public Instance getInstance(String formName, String instanceName, HttpContext httpContext,
+        byte[] savedState)
         throws Exception
     {
         if(!formsByName.containsKey(formName))
@@ -313,7 +314,7 @@ implements FormsService
         FormData formData = getFormData(httpContext);
 
         // create new Instance
-        InstanceImpl instance = form.createInstance(formName, savedState);
+        InstanceImpl instance = form.createInstance(formName+"#"+instanceName, savedState);
         // store it in FormData
         formData.put(instance);
 
@@ -330,10 +331,10 @@ implements FormsService
      * @throws FormsException
      * @throws Exception thrown on problems with serialization.
      */
-    public byte[] serializeInstance(String formName, HttpContext httpContext)
+    public byte[] serializeInstance(String formName, String instanceName, HttpContext httpContext)
         throws Exception
     {
-        InstanceImpl instance = (InstanceImpl)getInstance(formName, httpContext);
+        InstanceImpl instance = (InstanceImpl)getInstance(formName, instanceName, httpContext);
         FormImpl form = (FormImpl)(formsByName.get(formName)); // non null on account previous call
                                                                // succeeding
         return form.serializeInstance(instance);

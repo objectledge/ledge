@@ -60,12 +60,13 @@ public interface FormsService
      * @param formName            Form's system wide identifier, this one is
      *      used to allow same form definitions to be used in different site
      *      contexts.
+     * @param instanceName instance identifier, local to user's session and prarticular form definition.
      * @param httpContext HttpConext for current request.
      * @return                    found or newly created Instance object.
      * @throws FormsException  thrown when a found Instance is not an
      *      instance for a given Form definition.
      */
-    public Instance getInstance( String formName,HttpContext httpContext )
+    public Instance getInstance( String formName, String instanceName, HttpContext httpContext )
         throws FormsException;
 
     /**
@@ -73,12 +74,13 @@ public interface FormsService
      * 
      * @param formName Form's system wide identifier, this one is used to allow same form
      *        definitions to be used in different site contexts.
+     * @param instanceName instance identifier, local to user's session and prarticular form definition.
      * @param httpContext HttpConext for current request.
      * @param savedState Serialized Instance data.
      * @return Deserialized Instance object.
      * @throws Exception thrown on problems with deserialization.
      */
-  public Instance getInstance( String formName, HttpContext httpContext, byte[] savedState )
+  public Instance getInstance( String formName, String instanceName, HttpContext httpContext, byte[] savedState )
         throws Exception;
 
     /**
@@ -86,11 +88,12 @@ public interface FormsService
      * 
      * @param formName Form's system wide identifier, this one is used to allow same form
      *        definitions to be used in different site contexts.
+     * @param instanceName instance identifier, local to user's session and prarticular form definition.
      * @param httpContext HttpConext for current request.
      * @return Serialized Instance data.
      * @throws Exception thrown on problems with serialization.
      */
-    public byte[] serializeInstance(String formName, HttpContext httpContext)
+    public byte[] serializeInstance(String formName, String instanceName, HttpContext httpContext)
         throws Exception;
 
     /**
