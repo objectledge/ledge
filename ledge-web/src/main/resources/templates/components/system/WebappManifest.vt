@@ -1,0 +1,19 @@
+#if($manifest)
+#set($attr = $manifest.mainAttributes)
+#set($title = $attr.getValue('Implementation-Title'))
+#set($version = $attr.getValue('Implementation-Version'))
+#set($builtBy = $attr.getValue('Built-By'))
+#set($buildDate = $attr.getValue('Build-Date'))
+#set($buildId = $attr.getValue('Build-Id'))
+#if($buildId && $buildId != '')
+#set($description = "$title $version build $buildId, built by $builtBy on $buildDate")
+#set($version = "$version b$buildId")
+#else
+#set($description = "$title $version built by $builtBy on $buildDate")
+#end
+#else
+#set($version = 'Unknown version')
+#set($description = 'Version information not available')
+#end
+
+<span title="$description">$version</span>
