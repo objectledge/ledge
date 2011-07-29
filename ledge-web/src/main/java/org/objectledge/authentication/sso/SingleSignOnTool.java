@@ -29,19 +29,10 @@ public class SingleSignOnTool
         return authContext.isUserAuthenticated();
     }
     
-    public String loginUrl()
+    public String getBaseUrl()
     {
         HttpContext httpContext = context.getAttribute(HttpContext.class); 
         String domain = httpContext.getRequest().getServerName();
-        String baseUrl = singleSignOnService.ssoBaseUrl(domain);
-        return baseUrl != null ? baseUrl + "/view/sso.Login" : null;
-    }
-
-    public String ticketUrl()
-    {
-        HttpContext httpContext = context.getAttribute(HttpContext.class);
-        String domain = httpContext.getRequest().getServerName();
-        String baseUrl = singleSignOnService.ssoBaseUrl(domain);
-        return baseUrl != null ? baseUrl + "/view/sso.Ticket" : null;
+        return singleSignOnService.ssoBaseUrl(domain);        
     }
 }
