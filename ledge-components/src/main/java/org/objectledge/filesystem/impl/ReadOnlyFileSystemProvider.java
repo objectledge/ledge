@@ -3,6 +3,7 @@ package org.objectledge.filesystem.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -179,7 +180,12 @@ public abstract class ReadOnlyFileSystemProvider
         {
             if(entry.isDirectory())
             {
-                return listings.get(normalizedPath);
+                Set<String> listing = listings.get(normalizedPath);
+                if(listing == null)
+                {
+                    listing = Collections.emptySet();
+                }
+                return listing;
             }
             throw new IOException(path + " is not a directory");
         }
