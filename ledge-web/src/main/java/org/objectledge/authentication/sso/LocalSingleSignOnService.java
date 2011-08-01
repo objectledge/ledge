@@ -319,6 +319,13 @@ public class LocalSingleSignOnService
         Realm realm = findRealmByMember(domain);
         return realm != null ? realm.getBaseUrl() : null;
     }
+    
+    @Override
+    public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
+    {
+        // TODO implement
+        return true;
+    }    
 
     // ..........................................................................................
 

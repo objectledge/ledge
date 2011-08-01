@@ -40,4 +40,10 @@ public class NOOPSingleSingOnService
     {
         return null;
     }
+
+    @Override
+    public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
+    {
+        return false;
+    }
 }

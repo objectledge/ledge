@@ -18,6 +18,8 @@ public interface SingleSignOnService
     
     String ssoBaseUrl(String domain);
     
+    boolean validateApiRequest(String secret, String remoteAddr, boolean secure);
+    
     public enum LoginStatus
     {
         LOGGED_IN,

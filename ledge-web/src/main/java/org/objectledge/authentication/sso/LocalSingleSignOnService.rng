@@ -153,6 +153,46 @@
             </element>
           </zeroOrMore>
         </element>
+        <element name="serverApi">
+          <attribute name="enabled">
+            <a:documentation>Should server API be activated. When false, all requests are declined.
+            </a:documentation>
+            <data type="boolean">
+              <a:defaultValue>false</a:defaultValue>
+            </data>
+          </attribute>
+          <attribute name="requireSsl">
+            <a:documentation>Are client required to use SSL?</a:documentation>
+            <data type="boolean">
+              <a:defaultValue>true</a:defaultValue>
+            </data>
+          </attribute>
+          <interleave>
+            <element name="secret">
+              <a:documentation>HTTP basic authentication password required from clients.</a:documentation>
+              <data type="string" />
+            </element>
+            <element name="authorizedClients">
+              <oneOrMore>
+                <choice>
+                  <element name="host">
+                    <ref name="hostName"/>
+                  </element>
+                  <element name="address">
+                    <data type="string">
+                      <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}</param>
+                    </data>
+                  </element>
+                  <element name="addressRange">
+                    <data type="string">
+                      <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}</param>
+                    </data>
+                  </element>
+                </choice>
+              </oneOrMore>
+            </element>
+          </interleave>
+        </element>
       </interleave>
     </element>
   </start>
