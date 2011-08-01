@@ -301,12 +301,6 @@ public class LocalSingleSignOnService
     }
 
     @Override
-    public boolean ssoAvailable(String domain)
-    {
-        return findRealmByMember(domain) != null;
-    }
-
-    @Override
     public String ssoBaseUrl(String domain)
     {
         Realm realm = findRealmByMember(domain);

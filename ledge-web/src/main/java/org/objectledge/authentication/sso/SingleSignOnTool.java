@@ -20,7 +20,7 @@ public class SingleSignOnTool
     {
         HttpContext httpContext = context.getAttribute(HttpContext.class); 
         String domain = httpContext.getRequest().getServerName();
-        return singleSignOnService.ssoAvailable(domain);
+        return singleSignOnService.ssoBaseUrl(domain) != null;
     }
 
     public boolean isLoggedIn()
