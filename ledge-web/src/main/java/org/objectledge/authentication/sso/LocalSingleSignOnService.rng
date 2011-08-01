@@ -104,8 +104,6 @@
                   <ref name="hostName" />
                 </element>
                 <optional>
-                </optional>
-                <optional>
                   <element name="baseUrlFormat">
                     <a:documentation>String.format() pattern for building base URL for accessing sso
                       views. It's expected to contain single parameter reference for hostname.
