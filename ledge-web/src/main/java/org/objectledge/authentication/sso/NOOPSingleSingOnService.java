@@ -30,9 +30,9 @@ public class NOOPSingleSingOnService
     }
 
     @Override
-    public LogInStatus checkStatus(Principal principal, String domain)
+    public LoginStatus checkStatus(Principal principal, String domain)
     {
-        return LogInStatus.UNKNOWN;
+        return LoginStatus.UNKNOWN;
     }
     
     @Override

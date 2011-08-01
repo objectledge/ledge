@@ -102,9 +102,9 @@ public class SingleSignOnValve
                 // check if the user has not logged out through other domain in the same realm
                 Principal principal = authContext.getUserPrincipal();
                 String domain = httpContext.getRequest().getServerName();
-                SingleSignOnService.LogInStatus status = singleSignOnService.checkStatus(principal,
+                SingleSignOnService.LoginStatus status = singleSignOnService.checkStatus(principal,
                     domain);
-                if(status == SingleSignOnService.LogInStatus.LOGGED_OUT)
+                if(status == SingleSignOnService.LoginStatus.LOGGED_OUT)
                 {
                     httpContext.clearSessionAttributes();
                     Principal anonymous = userManager.getAnonymousAccount();

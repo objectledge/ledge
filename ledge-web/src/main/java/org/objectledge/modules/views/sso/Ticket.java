@@ -95,7 +95,7 @@ public class Ticket
             if(targetDomain != null)
             {
                 Principal principal = authContext.getUserPrincipal();
-                if(singleSignOnService.checkStatus(principal, targetDomain) != SingleSignOnService.LogInStatus.LOGGED_OUT)
+                if(singleSignOnService.checkStatus(principal, targetDomain) != SingleSignOnService.LoginStatus.LOGGED_OUT)
                 {
                     if(httpContext.getRequest().isSecure())
                     {

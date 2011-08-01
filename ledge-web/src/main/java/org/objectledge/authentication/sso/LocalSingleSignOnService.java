@@ -82,8 +82,8 @@ public class LocalSingleSignOnService
 
     private int ticketValidityTime;
 
-    private final Map<PrincipalRealm, LogInStatus> userStatus = Collections
-        .synchronizedMap(new HashMap<PrincipalRealm, LogInStatus>());
+    private final Map<PrincipalRealm, LoginStatus> userStatus = Collections
+        .synchronizedMap(new HashMap<PrincipalRealm, LoginStatus>());
 
     public LocalSingleSignOnService(ThreadPool threadPool, Configuration config, Logger log)
         throws ConfigurationException
@@ -262,7 +262,7 @@ public class LocalSingleSignOnService
         synchronized(userStatus)
         {
             log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
-            userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_IN);
+            userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_IN);
         }
     }
 
@@ -274,7 +274,7 @@ public class LocalSingleSignOnService
         synchronized(userStatus)
         {
             log.debug("LOGGED OUT user " + principal.getName() + " from realm " + realm.getName());
-            userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_OUT);
+            userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_OUT);
         }
         // invalidate outstanding tickets
         synchronized(tickets)
@@ -293,11 +293,11 @@ public class LocalSingleSignOnService
     }
 
     @Override
-    public LogInStatus checkStatus(Principal principal, String domain)
+    public LoginStatus checkStatus(Principal principal, String domain)
     {
         Realm realm = findRealmByMember(domain);
-        LogInStatus status = userStatus.get(new PrincipalRealm(principal, realm));
-        return status != null ? status : LogInStatus.UNKNOWN;
+        LoginStatus status = userStatus.get(new PrincipalRealm(principal, realm));
+        return status != null ? status : LoginStatus.UNKNOWN;
     }
 
     @Override

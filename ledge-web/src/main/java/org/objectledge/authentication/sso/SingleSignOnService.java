@@ -14,11 +14,11 @@ public interface SingleSignOnService
     
     void logOut(Principal principal, String domain);
     
-    LogInStatus checkStatus(Principal principal, String domain);
+    LoginStatus checkStatus(Principal principal, String domain);
     
     String ssoBaseUrl(String domain);
     
-    public enum LogInStatus
+    public enum LoginStatus
     {
         LOGGED_IN,
         LOGGED_OUT,
