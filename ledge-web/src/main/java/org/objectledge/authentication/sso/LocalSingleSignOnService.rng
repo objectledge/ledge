@@ -35,6 +35,17 @@
       <param name="pattern">([A-Za-z0-9\-]+\.)+[A-Za-z]{2,}</param>
     </data>
   </define>
+  <define name="includeMaster">
+    <attribute name="includeMaster">
+      <a:documentation>should domain master be considered a member of the realm. NOT
+        RECOMMENDED,
+        unless the master host is accessed exclusively through HTTPS
+      </a:documentation>
+      <data type="boolean">
+        <a:defaultValue>false</a:defaultValue>
+      </data>
+    </attribute>
+  </define>
   <start>
     <element name="config">
       <interleave>
@@ -93,14 +104,6 @@
                   <ref name="hostName" />
                 </element>
                 <optional>
-                  <element name="includeMaster">
-                    <a:documentation>should domain master be considered a member of the realm. NOT
-                      RECOMMENDED, unless the master host is accessed exclusively through HTTPS
-                    </a:documentation>
-                    <data type="boolean">
-                      <a:defaultValue>false</a:defaultValue>
-                    </data>
-                  </element>
                 </optional>
                 <optional>
                   <element name="baseUrlFormat">
@@ -129,10 +132,18 @@
                       exception on the realm master. If a realm contains this indication it must be
                       the only realm defined in the configuration.
                     </a:documentation>
+                    <optional>
+                      <ref name="includeMaster" />
+                    </optional>
                     <empty />
                   </element>
                   <element name="domains">
-                    <a:documentation>Enumeration of hosts contained in this realm.</a:documentation>
+                    <a:documentation>Enumeration of hosts contained in this realm. Each host name
+                      may appear only once in all realms definitions.
+                    </a:documentation>
+                    <optional>
+                      <ref name="includeMaster" />
+                    </optional>
                     <oneOrMore>
                       <element name="domain">
                         <ref name="hostName" />

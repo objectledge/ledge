@@ -96,7 +96,6 @@ public class LocalSingleSignOnService
         realmLoop: for(Configuration realmConfig : realmConfigs)
         {
             String realmName = realmConfig.getAttribute("name");
-            boolean includeMaster = realmConfig.getChild("includeMaster").getValueAsBoolean(false);
             Configuration baseUrlFormatConfig = realmConfig.getChild("baseUrlFormat");
             String baseUrlFormat = baseUrlFormatConfig.getValue(DEFAULT_BASE_URL_FORMAT);
             if(!REQUIRED_BASE_URL_FORMAT_PATTERN.matcher(baseUrlFormat).matches())
@@ -118,8 +117,10 @@ public class LocalSingleSignOnService
                 }
             }
             String realmMaster = realmConfig.getChild("master").getValue();
-            if(realmConfig.getChild("allDomains", false) != null)
+            Configuration allDomainsConfig = realmConfig.getChild("allDomains", false);
+            if(allDomainsConfig != null)
             {
+                boolean includeMaster = allDomainsConfig.getAttributeAsBoolean("includeMaster", false);
                 globalRealm = new Realm(realmName, realmMaster, null, includeMaster, baseUrlFormat);
                 if(realmConfigs.length > 1)
                 {
@@ -129,8 +130,10 @@ public class LocalSingleSignOnService
             }
             else
             {
+                Configuration domainsConfig = realmConfig.getChild("domains");
+                boolean includeMaster = domainsConfig.getAttributeAsBoolean("includeMaster", false);
                 domains.clear();
-                for(Configuration domainConfig : realmConfig.getChild("domains").getChildren())
+                for(Configuration domainConfig : domainsConfig.getChildren())
                 {
                     String domain = domainConfig.getValue();
                     if(domain.equals(realmMaster) && !includeMaster)
