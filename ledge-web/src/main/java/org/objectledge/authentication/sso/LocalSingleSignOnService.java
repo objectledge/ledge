@@ -28,7 +28,6 @@
 
 package org.objectledge.authentication.sso;
 
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Principal;
@@ -44,7 +43,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -73,6 +71,8 @@ public class LocalSingleSignOnService
 
     private final List<Realm> realms;
 
+    private final Map<String, Realm> domainRealm;
+
     private final Map<String, Ticket> tickets = Collections
         .synchronizedMap(new HashMap<String, Ticket>());
 
@@ -92,8 +92,10 @@ public class LocalSingleSignOnService
         Configuration[] realmConfigs = config.getChild("realms").getChildren("realm");
         List<Realm> realms = new ArrayList<Realm>();
         Set<String> domains = new HashSet<String>();
+        Set<String> allDomains = new HashSet<String>();
         Realm globalRealm = null;
-        realmLoop: for(Configuration realmConfig : realmConfigs)
+        Map<String, Realm> domainRealm = new HashMap<String, Realm>();
+        for(Configuration realmConfig : realmConfigs)
         {
             String realmName = realmConfig.getAttribute("name");
             Configuration baseUrlFormatConfig = realmConfig.getChild("baseUrlFormat");
@@ -120,7 +122,8 @@ public class LocalSingleSignOnService
             Configuration allDomainsConfig = realmConfig.getChild("allDomains", false);
             if(allDomainsConfig != null)
             {
-                boolean includeMaster = allDomainsConfig.getAttributeAsBoolean("includeMaster", false);
+                boolean includeMaster = allDomainsConfig.getAttributeAsBoolean("includeMaster",
+                    false);
                 globalRealm = new Realm(realmName, realmMaster, null, includeMaster, baseUrlFormat);
                 if(realmConfigs.length > 1)
                 {
@@ -142,20 +145,37 @@ public class LocalSingleSignOnService
                             "realm may not contain it's own master as subordinate",
                             domainConfig.getPath(), domainConfig.getLocation());
                     }
+                    if(allDomains.contains(domain))
+                    {
+                        throw new ConfigurationException(
+                            "domain may not belong to more than one realm", domainConfig.getPath(),
+                            domainConfig.getLocation());
+                    }
                     domains.add(domain);
+                    allDomains.add(domain);
                 }
-                realms
-                    .add(new Realm(realmName, realmMaster, domains, includeMaster, baseUrlFormat));
+                Realm realm = new Realm(realmName, realmMaster, domains, includeMaster,
+                    baseUrlFormat);
+                realms.add(realm);
+                for(Configuration domainConfig : domainsConfig.getChildren())
+                {
+                    domainRealm.put(domainConfig.getValue(), realm);
+                }
             }
         }
         if(globalRealm != null)
         {
             this.realms = Collections.singletonList(globalRealm);
+            for(String domain : allDomains)
+            {
+                domainRealm.put(domain, globalRealm);
+            }
         }
         else
         {
             this.realms = Collections.unmodifiableList(realms);
         }
+        this.domainRealm = Collections.unmodifiableMap(domainRealm);
 
         Configuration providerConfig = config.getChild("random", true).getChild("provider", true);
         String randomProvider = providerConfig.getValue(DEFAULT_RANDOM_PROVIDER);
@@ -238,14 +258,11 @@ public class LocalSingleSignOnService
     @Override
     public void logIn(Principal principal, String domain)
     {
-        List<Realm> domainRealms = findRealmsByMember(domain);
+        Realm realm = findRealmByMember(domain);
         synchronized(userStatus)
         {
-            for(Realm realm : domainRealms)
-            {
-                log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
-                userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_IN);
-            }
+            log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
+            userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_IN);
         }
     }
 
@@ -253,15 +270,11 @@ public class LocalSingleSignOnService
     public void logOut(Principal principal, String domain)
     {
         // mark user as logged out
-        List<Realm> domainRealms = findRealmsByMember(domain);
+        Realm realm = findRealmByMember(domain);
         synchronized(userStatus)
         {
-            for(Realm realm : domainRealms)
-            {
-                log.debug("LOGGED OUT user " + principal.getName() + " from realm "
-                    + realm.getName());
-                userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_OUT);
-            }
+            log.debug("LOGGED OUT user " + principal.getName() + " from realm " + realm.getName());
+            userStatus.put(new PrincipalRealm(principal, realm), LogInStatus.LOGGED_OUT);
         }
         // invalidate outstanding tickets
         synchronized(tickets)
@@ -270,7 +283,7 @@ public class LocalSingleSignOnService
             while(i.hasNext())
             {
                 Ticket ticket = i.next();
-                if(ticket.getPrincipal().equals(principal))
+                if(ticket.getPrincipal().equals(principal) && ticket.getRealm().equals(realm))
                 {
                     log.debug("INVALIDATED ticket " + ticket.toString() + " because of user logout");
                     i.remove();
@@ -282,36 +295,22 @@ public class LocalSingleSignOnService
     @Override
     public LogInStatus checkStatus(Principal principal, String domain)
     {
-        List<Realm> domainRealms = findRealmsByMember(domain);
-        if(domainRealms.size() > 0)
-        {
-            LogInStatus status = userStatus.get(new PrincipalRealm(principal, domainRealms.get(0)));
-            if(status != null)
-            {
-                return status;
-            }
-        }
-        return LogInStatus.UNKNOWN;
+        Realm realm = findRealmByMember(domain);
+        LogInStatus status = userStatus.get(new PrincipalRealm(principal, realm));
+        return status != null ? status : LogInStatus.UNKNOWN;
     }
-    
+
     @Override
     public boolean ssoAvailable(String domain)
     {
-        return findRealmsByMember(domain).size() > 0;
+        return findRealmByMember(domain) != null;
     }
-    
+
     @Override
     public String ssoBaseUrl(String domain)
     {
-        List<Realm> realms = findRealmsByMember(domain);
-        if(realms.size() > 0)
-        {
-            return realms.get(0).getBaseUrl();
-        }
-        else
-        {
-            return null;            
-        }
+        Realm realm = findRealmByMember(domain);
+        return realms != null ? realm.getBaseUrl() : null;
     }
 
     // ..........................................................................................
@@ -321,7 +320,7 @@ public class LocalSingleSignOnService
         byte idBytes[] = new byte[bytesPerTicket];
         random.nextBytes(idBytes);
         String id = new String(Hex.encodeHex(idBytes));
-       
+
         Ticket ticket = new Ticket(principal, realm, client, id);
         tickets.put(id, ticket);
         return ticket;
@@ -339,17 +338,9 @@ public class LocalSingleSignOnService
         return null;
     }
 
-    private List<Realm> findRealmsByMember(String domain)
+    private Realm findRealmByMember(String domain)
     {
-        List<Realm> realms = new ArrayList<Realm>(1);
-        for(Realm realm : this.realms)
-        {
-            if(realm.containsDomain(domain))
-            {
-                realms.add(realm);
-            }
-        }
-        return realms;
+        return domainRealm.get(domain);
     }
 
     // ..........................................................................................
