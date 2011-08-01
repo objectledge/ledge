@@ -36,12 +36,6 @@ public class NOOPSingleSingOnService
     }
     
     @Override
-    public boolean ssoAvailable(String domain)
-    {
-        return false;
-    }
-    
-    @Override
     public String ssoBaseUrl(String domain)
     {
         return null;
