@@ -247,36 +247,52 @@ public class LocalSingleSignOnService
     public void logIn(Principal principal, String domain)
     {
         Realm realm = findRealmByMember(domain);
-        synchronized(userStatus)
+        if(realm != null)
         {
-            log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
-            userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_IN);
+            synchronized(userStatus)
+            {
+                log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
+                userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_IN);
+            }
+        }
+        else
+        {
+            log.warn("FAILED login tracking request for user " + principal.getName() + " domain "
+                + domain + " does not belong to any realm");
         }
     }
 
     @Override
     public void logOut(Principal principal, String domain)
     {
-        // mark user as logged out
         Realm realm = findRealmByMember(domain);
-        synchronized(userStatus)
+        if(realm != null)
         {
-            log.debug("LOGGED OUT user " + principal.getName() + " from realm " + realm.getName());
-            userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_OUT);
-        }
-        // invalidate outstanding tickets
-        synchronized(tickets)
-        {
-            Iterator<Ticket> i = tickets.values().iterator();
-            while(i.hasNext())
+            // mark user as logged out
+            synchronized(userStatus)
             {
-                Ticket ticket = i.next();
-                if(ticket.getPrincipal().equals(principal) && ticket.getRealm().equals(realm))
-                {
-                    log.debug("INVALIDATED ticket " + ticket.toString() + " because of user logout");
-                    i.remove();
-                }
+                log.debug("LOGGED OUT user " + principal.getName() + " from realm " + realm.getName());
+                userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_OUT);
             }
+            // invalidate outstanding tickets
+            synchronized(tickets)
+            {
+                Iterator<Ticket> i = tickets.values().iterator();
+                while(i.hasNext())
+                {
+                    Ticket ticket = i.next();
+                    if(ticket.getPrincipal().equals(principal) && ticket.getRealm().equals(realm))
+                    {
+                        log.debug("INVALIDATED ticket " + ticket.toString() + " because of user logout");
+                        i.remove();
+                    }
+                }
+            }            
+        }
+        else
+        {
+            log.warn("FAILED logout tracking request for user " + principal.getName() + " domain "
+                + domain + " does not belong to any realm");
         }
     }
 
@@ -284,8 +300,17 @@ public class LocalSingleSignOnService
     public LoginStatus checkStatus(Principal principal, String domain)
     {
         Realm realm = findRealmByMember(domain);
-        LoginStatus status = userStatus.get(new PrincipalRealm(principal, realm));
-        return status != null ? status : LoginStatus.UNKNOWN;
+        if(realm != null)
+        {
+            LoginStatus status = userStatus.get(new PrincipalRealm(principal, realm));
+            return status != null ? status : LoginStatus.UNKNOWN;
+        }
+        else
+        {
+            log.warn("FAILED login status check for user " + principal.getName() + " domain "
+                            + domain + " does not belong to any realm");            
+            return LoginStatus.UNKNOWN;
+        }
     }
 
     @Override
