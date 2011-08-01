@@ -71,8 +71,6 @@ public class LocalSingleSignOnService
 
     private final List<Realm> realms;
 
-    private final Map<String, Realm> domainRealm;
-
     private final Map<String, Ticket> tickets = Collections
         .synchronizedMap(new HashMap<String, Ticket>());
 
@@ -94,7 +92,6 @@ public class LocalSingleSignOnService
         Set<String> domains = new HashSet<String>();
         Set<String> allDomains = new HashSet<String>();
         Realm globalRealm = null;
-        Map<String, Realm> domainRealm = new HashMap<String, Realm>();
         for(Configuration realmConfig : realmConfigs)
         {
             String realmName = realmConfig.getAttribute("name");
@@ -157,25 +154,16 @@ public class LocalSingleSignOnService
                 Realm realm = new Realm(realmName, realmMaster, domains, includeMaster,
                     baseUrlFormat);
                 realms.add(realm);
-                for(Configuration domainConfig : domainsConfig.getChildren())
-                {
-                    domainRealm.put(domainConfig.getValue(), realm);
-                }
             }
         }
         if(globalRealm != null)
         {
             this.realms = Collections.singletonList(globalRealm);
-            for(String domain : allDomains)
-            {
-                domainRealm.put(domain, globalRealm);
-            }
         }
         else
         {
             this.realms = Collections.unmodifiableList(realms);
         }
-        this.domainRealm = Collections.unmodifiableMap(domainRealm);
 
         Configuration providerConfig = config.getChild("random", true).getChild("provider", true);
         String randomProvider = providerConfig.getValue(DEFAULT_RANDOM_PROVIDER);
@@ -304,7 +292,7 @@ public class LocalSingleSignOnService
     public String ssoBaseUrl(String domain)
     {
         Realm realm = findRealmByMember(domain);
-        return realms != null ? realm.getBaseUrl() : null;
+        return realm != null ? realm.getBaseUrl() : null;
     }
 
     // ..........................................................................................
@@ -334,7 +322,14 @@ public class LocalSingleSignOnService
 
     private Realm findRealmByMember(String domain)
     {
-        return domainRealm.get(domain);
+        for(Realm realm : realms)
+        {
+            if(realm.containsDomain(domain))
+            {
+                return realm;
+            }
+        }
+        return null;
     }
 
     // ..........................................................................................
