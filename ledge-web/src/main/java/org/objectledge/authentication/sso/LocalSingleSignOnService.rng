@@ -153,46 +153,67 @@
             </element>
           </zeroOrMore>
         </element>
-        <element name="serverApi">
-          <attribute name="enabled">
-            <a:documentation>Should server API be activated. When false, all requests are declined.
-            </a:documentation>
-            <data type="boolean">
-              <a:defaultValue>false</a:defaultValue>
-            </data>
-          </attribute>
-          <attribute name="requireSsl">
-            <a:documentation>Are client required to use SSL?</a:documentation>
-            <data type="boolean">
-              <a:defaultValue>true</a:defaultValue>
-            </data>
-          </attribute>
-          <interleave>
-            <element name="secret">
-              <a:documentation>HTTP basic authentication password required from clients.</a:documentation>
-              <data type="string" />
-            </element>
-            <element name="authorizedClients">
-              <oneOrMore>
-                <choice>
-                  <element name="host">
-                    <ref name="hostName"/>
-                  </element>
-                  <element name="address">
-                    <data type="string">
-                      <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}</param>
-                    </data>
-                  </element>
-                  <element name="addressRange">
-                    <data type="string">
-                      <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}</param>
-                    </data>
-                  </element>
-                </choice>
-              </oneOrMore>
-            </element>
-          </interleave>
-        </element>
+        <optional>
+          <element name="serverApi">
+            <attribute name="enabled">
+              <a:documentation>Should server API be activated. When false, all requests are
+                declined.
+              </a:documentation>
+              <data type="boolean">
+                <a:defaultValue>false</a:defaultValue>
+              </data>
+            </attribute>
+            <optional>
+              <attribute name="requireSsl">
+                <a:documentation>Are client required to use SSL?</a:documentation>
+                <data type="boolean">
+                  <a:defaultValue>true</a:defaultValue>
+                </data>
+              </attribute>
+            </optional>
+            <interleave>
+              <optional>
+                <element name="secret">
+                  <a:documentation>HTTP basic authentication password required from clients. It is
+                    recommended to use secret, or authorizedClients restrictions, or both.
+                  </a:documentation>
+                  <data type="string" />
+                </element>
+              </optional>
+              <optional>
+                <element name="authorizedClients">
+                  <a:documentation>Clients authorized to use the server API. When not present, no
+                    restrictions on client host.</a:documentation>
+                  <oneOrMore>
+                    <choice>
+                      <element name="ip4">
+                        <data type="string">
+                          <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}</param>
+                        </data>
+                      </element>
+                      <element name="ip6">
+                        <data type="string">
+                          <param name="pattern">([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}</param>
+                        </data>
+                      </element>
+                      <element name="ip4range">
+                        <data type="string">
+                          <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}</param>
+                        </data>
+                      </element>
+                      <element name="ip6range">
+                        <data type="string">
+                          <param name="pattern">([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}/[0-9]{1,3}
+                          </param>
+                        </data>
+                      </element>
+                    </choice>
+                  </oneOrMore>
+                </element>
+              </optional>
+            </interleave>
+          </element>
+        </optional>
       </interleave>
     </element>
   </start>
