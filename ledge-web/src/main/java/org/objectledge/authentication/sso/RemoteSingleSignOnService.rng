@@ -35,9 +35,23 @@
         <element name="remoteUrl">
           <data type="anyURI" />
         </element>
-        <element name="secret">
-          <data type="string" />
-        </element>
+        <optional>
+          <element name="secret">
+            <data type="string" />
+          </element>
+        </optional>
+        <optional>
+          <element name="sslKeyStore">
+            <interleave>
+              <element name="url">
+                <data type="anyURI" />
+              </element>
+              <element name="password">
+                <data type="string" />
+              </element>
+            </interleave>
+          </element>
+        </optional>
       </element>
     </interleave>
   </start>

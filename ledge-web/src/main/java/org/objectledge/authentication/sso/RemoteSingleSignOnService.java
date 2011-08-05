@@ -1,9 +1,15 @@
 package org.objectledge.authentication.sso;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.security.Principal;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.contrib.ssl.AuthSSLProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -32,14 +38,16 @@ public class RemoteSingleSignOnService
 
         XmlRpcClientConfigImpl xmlRpcConfig = new XmlRpcClientConfigImpl();
         Configuration remoteUrlConfig = config.getChild("remoteUrl");
+        URL remoteUrl;
         try
         {
-            xmlRpcConfig.setServerURL(new URL(remoteUrlConfig.getValue()));
+            remoteUrl = new URL(remoteUrlConfig.getValue());
+            xmlRpcConfig.setServerURL(remoteUrl);
         }
         catch(MalformedURLException e)
         {
-            throw new ConfigurationException("invalid url", remoteUrlConfig.getPath(),
-                remoteUrlConfig.getLocation(), e);
+            throw new ConfigurationException("invalid url " + remoteUrlConfig.getValue(),
+                remoteUrlConfig.getPath(), remoteUrlConfig.getLocation(), e);
         }
         xmlRpcConfig.setEnabledForExtensions(true);
         xmlRpcConfig.setContentLengthOptional(true);
@@ -47,7 +55,40 @@ public class RemoteSingleSignOnService
         xmlRpcConfig.setBasicPassword(secret);
         XmlRpcClient xmlRpcClient = new XmlRpcClient();
         xmlRpcClient.setConfig(xmlRpcConfig);
-        xmlRpcClient.setTransportFactory(new XmlRpcCommonsTransportFactory(xmlRpcClient));
+        XmlRpcCommonsTransportFactory transportFactory = new XmlRpcCommonsTransportFactory(
+            xmlRpcClient);
+        Configuration sslConfig = config.getChild("sslKeyStore", false);
+        if(remoteUrl.getProtocol().equals("https") && sslConfig != null)
+        {
+            Configuration urlConfig = sslConfig.getChild("url");
+            String pass = sslConfig.getChild("password").getValue();
+            try
+            {
+                URL url = new URL(urlConfig.getValue());
+                HttpClient httpClient = new HttpClient();
+                ProtocolSocketFactory sslSocketFactory = new AuthSSLProtocolSocketFactory(null,
+                    null, url, pass);
+                Protocol protocol = new Protocol("https", sslSocketFactory, remoteUrl.getPort());
+                httpClient.getHostConfiguration().setHost(remoteUrl.getHost(), remoteUrl.getPort(),
+                    protocol);
+            }
+            catch(MalformedURLException e)
+            {
+                throw new ConfigurationException("invalid url " + urlConfig.getValue(),
+                    urlConfig.getPath(), urlConfig.getLocation(), e);
+            }
+            catch(IOException e)
+            {
+                throw new ConfigurationException("keystore access failed", sslConfig.getPath(),
+                    sslConfig.getLocation(), e);
+            }
+            catch(GeneralSecurityException e)
+            {
+                throw new ConfigurationException("SSL setup failed", sslConfig.getPath(),
+                    sslConfig.getLocation(), e);
+            }
+        }
+        xmlRpcClient.setTransportFactory(transportFactory);
         ClientFactory clientFactory = new ClientFactory(xmlRpcClient);
         remote = (XmlRpcSingleSignOnService)clientFactory
             .newInstance(XmlRpcSingleSignOnService.class);
