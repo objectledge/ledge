@@ -7,19 +7,19 @@ import java.security.GeneralSecurityException;
 import java.security.Principal;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.contrib.ssl.AuthSSLProtocolSocketFactory;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
-import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
 import org.apache.xmlrpc.client.util.ClientFactory;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.xmlrpc.XmlRpcCommonsTransportFactory;
+import org.objectledge.xmlrpc.ssl.AuthSSLProtocolSocketFactory;
 
 public class RemoteSingleSignOnService
     implements SingleSignOnService
@@ -56,17 +56,15 @@ public class RemoteSingleSignOnService
         xmlRpcConfig.setBasicPassword(secret);
         XmlRpcClient xmlRpcClient = new XmlRpcClient();
         xmlRpcClient.setConfig(xmlRpcConfig);
-        XmlRpcCommonsTransportFactory transportFactory = new XmlRpcCommonsTransportFactory(
-            xmlRpcClient);
         Configuration sslConfig = config.getChild("sslKeyStore", false);
         if(remoteUrl.getProtocol().equals("https") && sslConfig != null)
         {
-            Configuration urlConfig = sslConfig.getChild("url");
+            HttpClient httpClient = new HttpClient();
+            Configuration keystoreUrlConfig = sslConfig.getChild("url");
             String pass = sslConfig.getChild("password").getValue();
             try
             {
-                URL url = new URL(urlConfig.getValue());
-                HttpClient httpClient = new HttpClient();
+                URL url = new URL(keystoreUrlConfig.getValue());
                 ProtocolSocketFactory sslSocketFactory = new AuthSSLProtocolSocketFactory(null,
                     null, url, pass);
                 Protocol protocol = new Protocol("https", sslSocketFactory, remoteUrl.getPort());
@@ -75,21 +73,14 @@ public class RemoteSingleSignOnService
             }
             catch(MalformedURLException e)
             {
-                throw new ConfigurationException("invalid url " + urlConfig.getValue(),
-                    urlConfig.getPath(), urlConfig.getLocation(), e);
+                throw new ConfigurationException("invalid url " + keystoreUrlConfig.getValue(),
+                    keystoreUrlConfig.getPath(), keystoreUrlConfig.getLocation(), e);
             }
-            catch(IOException e)
-            {
-                throw new ConfigurationException("keystore access failed", sslConfig.getPath(),
-                    sslConfig.getLocation(), e);
-            }
-            catch(GeneralSecurityException e)
-            {
-                throw new ConfigurationException("SSL setup failed", sslConfig.getPath(),
-                    sslConfig.getLocation(), e);
-            }
+            XmlRpcCommonsTransportFactory transportFactory = new XmlRpcCommonsTransportFactory(
+                xmlRpcClient);
+            transportFactory.setHttpClient(httpClient);
+            xmlRpcClient.setTransportFactory(transportFactory);
         }
-        xmlRpcClient.setTransportFactory(transportFactory);
         ClientFactory clientFactory = new ClientFactory(xmlRpcClient);
         remote = (XmlRpcSingleSignOnService)clientFactory
             .newInstance(XmlRpcSingleSignOnService.class);
