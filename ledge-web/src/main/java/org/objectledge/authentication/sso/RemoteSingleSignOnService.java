@@ -52,6 +52,7 @@ public class RemoteSingleSignOnService
         xmlRpcConfig.setEnabledForExtensions(true);
         xmlRpcConfig.setContentLengthOptional(true);
         String secret = config.getChild("secret").getValue();
+        xmlRpcConfig.setBasicUserName("sso");
         xmlRpcConfig.setBasicPassword(secret);
         XmlRpcClient xmlRpcClient = new XmlRpcClient();
         xmlRpcClient.setConfig(xmlRpcConfig);
