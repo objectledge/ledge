@@ -82,6 +82,8 @@ public class LocalSingleSignOnService
 
     private final Map<PrincipalRealm, LoginStatus> userStatus = Collections
         .synchronizedMap(new HashMap<PrincipalRealm, LoginStatus>());
+    
+    private final ServerApiRestrictions serverApiRestrictions;
 
     public LocalSingleSignOnService(ThreadPool threadPool, Configuration config, Logger log)
         throws ConfigurationException
@@ -189,6 +191,8 @@ public class LocalSingleSignOnService
             .getValueAsInteger(DEFAULT_BYTES_PER_TICKET);
         this.ticketValidityTime = config.getChild("tickets", true).getChild("validityTime", true)
             .getValueAsInteger(DEFAULT_TICKET_VALIDITY_TIME);
+        
+        serverApiRestrictions = new ServerApiRestrictions(config.getChild("serverApi"), log);
 
         threadPool.runDaemon(new TicketExpiryTask());
     }
@@ -323,8 +327,7 @@ public class LocalSingleSignOnService
     @Override
     public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
     {
-        // TODO implement
-        return true;
+       return serverApiRestrictions.validateApiRequest(secret, remoteAddr, secure);
     }    
 
     // ..........................................................................................
