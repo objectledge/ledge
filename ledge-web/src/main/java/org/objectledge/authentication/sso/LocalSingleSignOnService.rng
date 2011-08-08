@@ -165,7 +165,7 @@
             </attribute>
             <optional>
               <attribute name="requireSsl">
-                <a:documentation>Are client required to use SSL?</a:documentation>
+                <a:documentation>Are clients required to use SSL?</a:documentation>
                 <data type="boolean">
                   <a:defaultValue>true</a:defaultValue>
                 </data>
