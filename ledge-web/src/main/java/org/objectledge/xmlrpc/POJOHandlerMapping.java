@@ -36,7 +36,7 @@ public class POJOHandlerMapping
         this.handler = handler;
         for(Class<? > publicInterface : publicInterfaces)
         {
-            if(!handler.getClass().isAssignableFrom(publicInterface))
+            if(!publicInterface.isAssignableFrom(handler.getClass()))
             {
                 throw new IllegalArgumentException(handler.getClass().getName()
                     + " does not implement " + publicInterface.getName());
