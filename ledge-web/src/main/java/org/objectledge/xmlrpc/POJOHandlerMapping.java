@@ -20,9 +20,6 @@ import org.apache.xmlrpc.server.RequestProcessorFactoryFactory;
 public class POJOHandlerMapping
     extends AbstractReflectiveHandlerMapping
 {
-    /** Handler object */
-    private final Object handler;
-
     /**
      * Creates a new POJOHandlerMapping.
      * 
@@ -32,8 +29,8 @@ public class POJOHandlerMapping
      */
     public POJOHandlerMapping(Object handler, Class<? >... publicInterfaces)
         throws XmlRpcException
-    {
-        this.handler = handler;
+    {        
+        setRequestProcessorFactoryFactory(new POJORequestProcessorFactoryFactory(handler));
         for(Class<? > publicInterface : publicInterfaces)
         {
             if(!publicInterface.isAssignableFrom(handler.getClass()))
@@ -45,21 +42,23 @@ public class POJOHandlerMapping
         }
     }
 
-    @Override
-    public RequestProcessorFactoryFactory getRequestProcessorFactoryFactory()
-    {
-        return new POJORequestProcessorFactoryFactory();
-    }
-
-    private class POJORequestProcessorFactoryFactory
+    private static class POJORequestProcessorFactoryFactory
         extends RequestProcessorFactoryFactory.StatelessProcessorFactoryFactory
     {
+        /** Handler object */
+        private final Object handler;
+
+        POJORequestProcessorFactoryFactory(Object handler)
+        {
+            this.handler = handler;
+        }
+
         @SuppressWarnings("rawtypes")
         @Override
         protected Object getRequestProcessor(Class pClass)
             throws XmlRpcException
         {
-            return POJOHandlerMapping.this.handler;
+            return handler;
         }
     }
 }
