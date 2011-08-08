@@ -1,5 +1,6 @@
 package org.objectledge.xmlrpc;
 
+import java.util.Collections;
 import java.util.Enumeration;
 
 import javax.servlet.ServletConfig;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.XmlRpcHandlerMapping;
-import org.apache.xmlrpc.server.XmlRpcHttpServerConfig;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.XmlRpcServlet;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
@@ -177,7 +177,7 @@ public abstract class XmlRpcView
         @Override
         public Enumeration<String> getInitParameterNames()
         {
-            return null;
+            return Collections.enumeration(Collections.<String>emptyList());
         }
     }
 }
