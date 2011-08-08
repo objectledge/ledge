@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -48,8 +49,9 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.utils.StringUtils;
@@ -105,7 +107,10 @@ public class MailmanMailingListsManager implements MailingListsManager
         monitoringAddress = config.getChild("monitoring_address").getValue("");
         monitoringSessionName = config.getChild("monitoring_session").getValue("");
         lastIdMap = new HashMap<String, Integer>();
-        client = new XmlRpcClient(address);
+        XmlRpcClientConfigImpl clientConfig = new XmlRpcClientConfigImpl();
+        clientConfig.setServerURL(new URL(address));
+        client = new XmlRpcClient();
+        client.setConfig(clientConfig);
     }
     
     /**
@@ -123,7 +128,10 @@ public class MailmanMailingListsManager implements MailingListsManager
         this.address = address;
         this.adminPassword = password;
         lastIdMap = new HashMap<String, Integer>();
-        client = new XmlRpcClient(address);
+        XmlRpcClientConfigImpl clientConfig = new XmlRpcClientConfigImpl();
+        clientConfig.setServerURL(new URL(address));
+        client = new XmlRpcClient();
+        client.setConfig(clientConfig);
     }
     
     public MailingListsManager.Status getStatus()
