@@ -16,14 +16,12 @@ public class IPAddressUtil
 {
     /**
      * Creates an InetAddress based on textual representation of IP address.
-     * 
      * <p>
      * Both IPv4 and IPv6 are supported.
      * </p>
      * 
      * @param text textual representation of IP address.
      * @return an InetAddress instance.
-     * 
      * @throws UnknownHostException if InetAddress.byAddress(byte[]) call fails.
      * @throws IllegalArgumentException if address format is invalid.
      */
@@ -46,6 +44,12 @@ public class IPAddressUtil
         return InetAddress.getByAddress(bytes);
     }
 
+    /**
+     * Converts text representation of IPv4 address into bytes.
+     * 
+     * @param text text representation of IPv4 address.
+     * @return byte representation, or {@code null} if text representation format is not valid.
+     */
     public static byte[] textToNumericFormatV4(String text)
     {
         if(text.length() == 0)
@@ -116,6 +120,12 @@ public class IPAddressUtil
         return bytes;
     }
 
+    /**
+     * Converts text representation of IPv6 address into bytes.
+     * 
+     * @param text text representation of IPv6 address.
+     * @return byte representation, or {@code null} if text representation format is not valid.
+     */
     public static byte[] textToNumericFormatV6(String text)
     {
         byte[] bytes = new byte[16];
@@ -223,16 +233,35 @@ public class IPAddressUtil
         return bytes;
     }
 
+    /**
+     * Checks if text representation of IPv4 address is valid.
+     * 
+     * @param text text representation of IPv4 address.
+     * @return {@code true} if address format is valid.
+     */
     public static boolean isIPv4LiteralAddress(String text)
     {
         return (textToNumericFormatV4(text) != null);
     }
 
+    /**
+     * Checks if text representation of IPv6 address is valid.
+     * 
+     * @param text text representation of IPv6 address.
+     * @return {@code true} if address format is valid.
+     */
     public static boolean isIPv6LiteralAddress(String text)
     {
         return (textToNumericFormatV6(text) != null);
     }
 
+    /**
+     * Converts IPv4 mapped IPv6 address into IPv4 address.
+     * 
+     * @param ip6bytes byte representation of IPv6 address.
+     * @return byte representation of IPv4 address or {@code null} if the IPv6 address is not an
+     *         IPv4 mapped address.
+     */
     public static byte[] convertFromIPv4MappedAddress(byte[] ip6bytes)
     {
         if(isIPv4MappedAddress(ip6bytes))
@@ -244,7 +273,13 @@ public class IPAddressUtil
         return null;
     }
 
-    private static boolean isIPv4MappedAddress(byte[] ip6bytes)
+    /**
+     * Checks if an IPv6 address is an IPv4 mapped IPv6 address.
+     * 
+     * @param ip6bytes byte representation of IPv6 address.
+     * @return {@code true} if the IPv6 address is an IPv4 mapped address.
+     */
+    public static boolean isIPv4MappedAddress(byte[] ip6bytes)
     {
         if(ip6bytes.length < 16)
         {
