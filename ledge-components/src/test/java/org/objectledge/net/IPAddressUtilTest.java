@@ -133,7 +133,6 @@ public class IPAddressUtilTest
         String text = "1080:0:0:0:8:800:200C:417A";
         byte[] raw = IPAddressUtil.textToNumericFormatV6(text);
         InetAddress addr = InetAddress.getByAddress(raw);
-        System.out.println(addr.getHostAddress());
         byte[] expected = new byte[] { 
                         (byte)0x10, (byte)0x80, (byte)0x00, (byte)0x00, 
                         (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, 
@@ -143,6 +142,54 @@ public class IPAddressUtilTest
         assertEquals(text, addr.getHostAddress().toUpperCase());
     }
 
+
+    public void testByAddressIp4() throws UnknownHostException, IllegalArgumentException
+    {
+        InetAddress addr = IPAddressUtil.byAddress("192.168.1.1");
+        byte[] expected = new byte[] {
+          (byte)192, (byte)168, (byte)1, (byte)1              
+        };
+        assertEquals(expected, addr.getAddress());
+    }
+    
+    public void testByAddressIp4Invalid() throws UnknownHostException, IllegalArgumentException
+    {
+        try
+        {
+            IPAddressUtil.byAddress("192.168.1.333");
+            fail("should throw exception");
+        }
+        catch(Exception e)
+        {
+            // OK
+        }
+    }
+    
+    public void testByAddressIp6() throws UnknownHostException, IllegalArgumentException
+    {
+        String text = "1080:0:0:0:8:800:200C:417A";
+        InetAddress addr = IPAddressUtil.byAddress(text);
+        byte[] expected = new byte[] { 
+                        (byte)0x10, (byte)0x80, (byte)0x00, (byte)0x00, 
+                        (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, 
+                        (byte)0x00, (byte)0x08, (byte)0x08, (byte)0x00, 
+                        (byte)0x20, (byte)0x0C, (byte)0x41, (byte)0x7A };
+        assertEquals(expected, addr.getAddress());
+    }
+    
+    public void testByAddressIp6Invalid() throws UnknownHostException, IllegalArgumentException
+    {
+        try
+        {
+            IPAddressUtil.byAddress(":::");
+            fail("should throw exception");
+        }
+        catch(Exception e)
+        {
+            // OK
+        }
+    }
+    
     private static void assertEquals(byte[] expected, byte[] actual)
     {
         assertEquals("length", expected.length, actual.length);

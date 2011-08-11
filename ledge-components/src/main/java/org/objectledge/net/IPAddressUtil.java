@@ -1,5 +1,8 @@
 package org.objectledge.net;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * An utility class for IP address manipulation.
  * <p>
@@ -11,6 +14,38 @@ package org.objectledge.net;
  */
 public class IPAddressUtil
 {
+    /**
+     * Creates an InetAddress based on textual representation of IP address.
+     * 
+     * <p>
+     * Both IPv4 and IPv6 are supported.
+     * </p>
+     * 
+     * @param text textual representation of IP address.
+     * @return an InetAddress instance.
+     * 
+     * @throws UnknownHostException if InetAddress.byAddress(byte[]) call fails.
+     * @throws IllegalArgumentException if address format is invalid.
+     */
+    public static InetAddress byAddress(String text)
+        throws UnknownHostException, IllegalArgumentException
+    {
+        byte[] bytes;
+        if(text.contains(":"))
+        {
+            bytes = textToNumericFormatV6(text);
+        }
+        else
+        {
+            bytes = textToNumericFormatV4(text);
+        }
+        if(bytes == null)
+        {
+            throw new IllegalArgumentException("invalid address " + text);
+        }
+        return InetAddress.getByAddress(bytes);
+    }
+
     public static byte[] textToNumericFormatV4(String text)
     {
         if(text.length() == 0)
