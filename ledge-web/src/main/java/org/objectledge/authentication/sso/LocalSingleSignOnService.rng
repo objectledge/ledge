@@ -185,29 +185,11 @@
                   <a:documentation>Clients authorized to use the server API. When not present, no
                     restrictions on client host.</a:documentation>
                   <oneOrMore>
-                    <choice>
-                      <element name="ip4">
+                      <element name="addressRange">
                         <data type="string">
-                          <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}</param>
+                          <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}|([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}/[0-9]{1,3}</param>
                         </data>
                       </element>
-                      <element name="ip6">
-                        <data type="string">
-                          <param name="pattern">([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}</param>
-                        </data>
-                      </element>
-                      <element name="ip4range">
-                        <data type="string">
-                          <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}</param>
-                        </data>
-                      </element>
-                      <element name="ip6range">
-                        <data type="string">
-                          <param name="pattern">([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}/[0-9]{1,3}
-                          </param>
-                        </data>
-                      </element>
-                    </choice>
                   </oneOrMore>
                 </element>
               </optional>
