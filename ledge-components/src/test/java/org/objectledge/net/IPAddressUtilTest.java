@@ -1,5 +1,8 @@
 package org.objectledge.net;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import junit.framework.TestCase;
 
 public class IPAddressUtilTest
@@ -123,6 +126,21 @@ public class IPAddressUtilTest
         assertNull(IPAddressUtil.textToNumericFormatV6("::1.2.3.4.5"));
         assertNull(IPAddressUtil.textToNumericFormatV6("::1.2.3.x"));
         assertNull(IPAddressUtil.textToNumericFormatV6("::1.2.3.555"));
+    }
+    
+    public void testInetAddress() throws UnknownHostException
+    {
+        String text = "1080:0:0:0:8:800:200C:417A";
+        byte[] raw = IPAddressUtil.textToNumericFormatV6(text);
+        InetAddress addr = InetAddress.getByAddress(raw);
+        System.out.println(addr.getHostAddress());
+        byte[] expected = new byte[] { 
+                        (byte)0x10, (byte)0x80, (byte)0x00, (byte)0x00, 
+                        (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, 
+                        (byte)0x00, (byte)0x08, (byte)0x08, (byte)0x00, 
+                        (byte)0x20, (byte)0x0C, (byte)0x41, (byte)0x7A };
+        assertEquals(expected, addr.getAddress());
+        assertEquals(text, addr.getHostAddress().toUpperCase());
     }
 
     private static void assertEquals(byte[] expected, byte[] actual)
