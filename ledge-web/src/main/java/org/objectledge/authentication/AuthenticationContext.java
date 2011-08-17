@@ -64,14 +64,18 @@ public class AuthenticationContext
 
     /** is the user authenticated */
 	private boolean authenticated;
+	
+	/** has authentication context of the session changed during this request? */
+	private boolean changed;
 
 	/**
 	 * Construct new authentication context.
      */
-	public AuthenticationContext()
+	public AuthenticationContext(Principal user, boolean authenticated)
 	{
-        this.user = null;
-        this.authenticated = false;
+        this.user = user;
+        this.authenticated = authenticated;
+        this.changed = false;
 	}
 	
     /**
@@ -104,5 +108,23 @@ public class AuthenticationContext
     {
         this.user = user;
         this.authenticated = authenticated;
+        this.changed = true;
+    }
+    
+    /**
+     * Returns {@code true} if the authentication context of the session has changed during
+     * processing of the current request.
+     * <p>
+     * Authentication context can be changed by the authentication.Login, authentication.Logout,
+     * authentication.Impersonate actions and the SingleSingOnValve. When the context changes,
+     * PostAuthenticationValve will execute it's nested valves.
+     * </p>
+     * 
+     * @return {@code true} if the authentication context of the session has changed during
+     * processing of the current request.
+     */
+    public boolean isChanged()
+    {
+        return changed;
     }
 }

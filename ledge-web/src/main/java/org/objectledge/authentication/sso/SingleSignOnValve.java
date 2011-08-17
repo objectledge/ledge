@@ -73,10 +73,9 @@ public class SingleSignOnValve
                                 client);
                             if(principal != null)
                             {
-                                AuthenticationContext authenticationContext = new AuthenticationContext();
+                                AuthenticationContext authenticationContext = context
+                                    .getAttribute(AuthenticationContext.class);
                                 authenticationContext.setUserPrincipal(principal, true);
-                                context
-                                .setAttribute(AuthenticationContext.class, authenticationContext);
                                 
                                 httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
                                 singleSignOnService.logIn(principal, domain);

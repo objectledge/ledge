@@ -34,9 +34,9 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.ProcessingStage;
 
 /**
- * A valve that executes it's nested valve (possibly a pipeline) only if an authentication.* action 
- * was called in this request. 
- *
+ * A valve that executes it's nested valve (possibly a pipeline) only if an
+ * {@link AuthenticationContext#isChanged()} returns true.
+ * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: PostAuthenticationValve.java,v 1.1 2005-05-06 09:36:29 rafal Exp $
  */
@@ -54,7 +54,7 @@ public class PostAuthenticationValve
     {
         this.nested = nestedArg;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -62,7 +62,8 @@ public class PostAuthenticationValve
         throws ProcessingException
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
-        if(mvcContext.getAction() != null && mvcContext.getAction().startsWith("authentication."))
+        AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
+        if(authContext.isChanged())
         {
             ProcessingStage current = mvcContext.getStage();
             mvcContext.setStage(ProcessingStage.POST_AUTHENTICATION);

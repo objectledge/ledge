@@ -54,7 +54,7 @@ public class SecurityHelperTest extends LedgeTestCase
         requestMock.stubs().method("getContentType").will(returnValue("text/plain"));
         Context context = new Context();
         context.clearAttributes();
-        AuthenticationContext authenticationContext = new AuthenticationContext();
+        AuthenticationContext authenticationContext = new AuthenticationContext(null, false);
         HttpContext httpContext = new HttpContext(request, response);
         Object obj = new SecureObject(true, true, true);
         SecurityHelper securityHelper = new SecurityHelper();

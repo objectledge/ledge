@@ -88,8 +88,8 @@ public class AuthenticationValve
 		{
 			authenticated = !principal.equals(anonymous);
 		}
-        AuthenticationContext authenticationContext = new AuthenticationContext();
-        authenticationContext.setUserPrincipal(principal, authenticated);
+        AuthenticationContext authenticationContext = new AuthenticationContext(principal,
+            authenticated);
         context.setAttribute(AuthenticationContext.class, authenticationContext);
         
     	httpContext.getRequest().getSession().setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, 

@@ -118,7 +118,7 @@ public class WebI18nTest extends LedgeTestCase
         MVCInitializerValve mvcInitializer = new MVCInitializerValve(webConfigurator);
         mvcInitializer.process(context);
         localeLoaderValve = new LocaleLoaderValve(logger, i18n);
-        AuthenticationContext authenticationContext = new AuthenticationContext();
+        AuthenticationContext authenticationContext = new AuthenticationContext(null, false);
         context.setAttribute(AuthenticationContext.class, authenticationContext);
     }
 
