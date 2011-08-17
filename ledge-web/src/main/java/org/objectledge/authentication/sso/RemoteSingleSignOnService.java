@@ -1,9 +1,7 @@
 package org.objectledge.authentication.sso;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.security.Principal;
 
 import org.apache.commons.httpclient.HttpClient;
