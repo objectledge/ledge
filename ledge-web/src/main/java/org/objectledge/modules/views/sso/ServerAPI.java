@@ -69,33 +69,35 @@ public class ServerAPI
     }
 
     @Override
-    public void logIn(String principalName, String domain)
+    public String logIn(String principalName, String domain)
         throws XmlRpcException
     {
         try
         {
             Principal principal = userManager.getUserByName(principalName);
-            singleSignOnService.logIn(principal, domain);
+            singleSignOnService.logIn(principal, domain);           
         }
         catch(AuthenticationException e)
         {
             log.warn("unknown user " + principalName);
         }
+        return ""; 
     }
 
     @Override
-    public void logOut(String principalName, String domain)
+    public String logOut(String principalName, String domain)
         throws XmlRpcException
     {
         try
         {
             Principal principal = userManager.getUserByName(principalName);
-            singleSignOnService.logOut(principal, domain);
+            singleSignOnService.logOut(principal, domain);            
         }
         catch(AuthenticationException e)
         {
-            log.warn("unknown user " + principalName);
+            log.warn("unknown user " + principalName);           
         }
+        return "";
     }
 
     @Override
