@@ -27,22 +27,14 @@
 // 
 package org.objectledge.modules.views.captcha;
 
-import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableStateManager;
-import org.objectledge.templating.Template;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.captcha.CaptchaService;
-import org.objectledge.web.mvc.builders.AbstractBuilder;
-import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.EnclosingView;
-import org.objectledge.web.mvc.security.SecurityChecking;
+import java.io.IOException;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import org.codehaus.jackson.JsonGenerationException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.captcha.CaptchaService;
+import org.objectledge.web.json.AbstractJsonView;
 
 /**
  * A view that verify captch'a code.
@@ -51,69 +43,24 @@ import net.sf.json.JSONObject;
  * @version $Id: Loggers.java,v 1.2 2005-07-26 12:13:30 rafal Exp $
  */
 public class Verify
-    extends AbstractBuilder
-    implements SecurityChecking
+    extends AbstractJsonView
 {
-
-    /** The Location service. */
+    /** captcha service. */
     private CaptchaService captchaService;
 
-    public Verify(Context context, CaptchaService captchaService)
+    public Verify(CaptchaService captchaService, Context context, Logger logger)
     {
-        super(context);
+        super(context, logger);
         this.captchaService = captchaService;
     }
 
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    @Override
+    protected void buildJsonStream()
+        throws ProcessingException, JsonGenerationException, IOException
     {
-        Parameters parameters = RequestParameters.getRequestParameters(context);
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        try
-        {
-            JSONObject result = new JSONObject();
-            Boolean verify = captchaService.checkCaptcha(httpContext, (RequestParameters)parameters);
-            result.put("result", verify);
-            return result.toString();
-        }
-        catch(Exception e)
-        {
-            return new StackTrace(e).toString();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean requiresAuthenticatedUser(Context context)
-        throws Exception
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean requiresSecureChannel(Context context)
-        throws Exception
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean checkAccessRights(Context context)
-        throws ProcessingException
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public EnclosingView getEnclosingView(String thisViewName)
-    {
-        return EnclosingView.TOP;
+        boolean result = captchaService.checkCaptcha(getHttpContext(), getRequestParameters());
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeBooleanField("result", result);
+        jsonGenerator.writeEndObject();
     }
 }

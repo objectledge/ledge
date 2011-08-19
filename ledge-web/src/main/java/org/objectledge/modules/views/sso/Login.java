@@ -1,11 +1,13 @@
 package org.objectledge.modules.views.sso;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
@@ -13,15 +15,12 @@ import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
-import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.json.AbstractJsonView;
 
 public class Login
-    extends AbstractSsoView
+    extends AbstractJsonView
 {
     /** login parameter name. */
     public static final String LOGIN_PARAM = "login";
@@ -45,30 +44,23 @@ public class Login
     }
 
     @Override
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    public void buildJsonStream()
+        throws JsonGenerationException, IOException
     {
-        Parameters parameters = context.getAttribute(RequestParameters.class);
-        HttpContext httpContext = context.getAttribute(HttpContext.class);
-        String callback = parameters.get("callback", null);
-        if(callback != null)
-        {
-            httpContext.setContentType("text/javascript");
-        }
-        else
-        {
-            httpContext.setContentType("application/json");
-        }
-        String client = httpContext.getRequest().getRemoteAddr();
-        String domain = httpContext.getRequest().getServerName();
+        Parameters parameters = getRequestParameters();
+        HttpContext httpContext = getHttpContext();
+        HttpServletRequest httpRequest = httpContext.getRequest();
+
+        String client = httpRequest.getRemoteAddr();
+        String domain = httpRequest.getServerName();
         String login = parameters.get(LOGIN_PARAM, null);
         String password = parameters.get(PASSWORD_PARAM, null);
 
         String status = "success";
         String ticket = null;
 
-        log.debug("request from " + client + " sessionId " + httpContext.getRequest().getSession().getId());
-        if(httpContext.getRequest().isSecure())
+        log.debug("request from " + client + " sessionId " + httpRequest.getSession().getId());
+        if(httpRequest.isSecure())
         {
             Principal principal = null;
             try
@@ -87,7 +79,8 @@ public class Login
 
                         // make the session between client and realm master an authenticated one,
                         // so that subsequent ticket requests from the same clients can succeed
-                        httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                        httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY,
+                            principal);
                     }
                     else
                     {
@@ -117,7 +110,17 @@ public class Login
             log.warn("DECLINED " + client + " login " + login + " not using secure channel");
             status = "invalid_request";
         }
-        return formatReply(callback, status, ticket);
+        
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("status", status);
+        jsonGenerator.writeStringField("ticket", ticket);
+        jsonGenerator.writeEndObject();
+    }
+    
+    @Override
+    protected String getCallbackParameterName()
+    {        
+        return "callback";
     }
 
     protected String refererDomain(HttpServletRequest request)
@@ -126,7 +129,8 @@ public class Login
         if(referer == null)
         {
             String serverName = request.getServerName();
-            log.warn("No Referer header received from " + request.getRemoteAddr() + " assuming " + serverName);
+            log.warn("No Referer header received from " + request.getRemoteAddr() + " assuming "
+                + serverName);
             return serverName;
         }
         try

@@ -1,28 +1,27 @@
 package org.objectledge.modules.views.sso;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.builders.BuildException;
+import org.objectledge.web.json.AbstractJsonView;
 
 /**
  * Retrieve one-time authentication ticket from SingleSignOn service.
  * <p>
  * This view is expected to be accessed from JavaScript embedded in a page loaded from different
  * domain. The returned string needs to be stored in HTTP cookie that will be picked up and
- * validated on a subsequent request by {@link org.objectledge.authentication.sso.SingleSignOnValve}.
+ * validated on a subsequent request by {@link org.objectledge.authentication.sso.SingleSignOnValve}
+ * .
  * </p>
  * <p>
  * In order for the ticket to be granted, user needs to authenticate using Login action first.
@@ -53,7 +52,7 @@ import org.objectledge.web.mvc.builders.BuildException;
  * @author rkrzewski <rafal.krzewski@objectledge.org>
  */
 public class Ticket
-    extends AbstractSsoView
+    extends AbstractJsonView
 {
     private final SingleSignOnService singleSignOnService;
 
@@ -67,29 +66,21 @@ public class Ticket
     }
 
     @Override
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    public void buildJsonStream()
+        throws JsonGenerationException, IOException
     {
-        HttpContext httpContext = context.getAttribute(HttpContext.class);
-        Parameters parameters = context.getAttribute(RequestParameters.class);
-        String callback = parameters.get("callback", null);
-        if(callback != null)
-        {
-            httpContext.setContentType("text/javascript");
-        }
-        else
-        {
-            httpContext.setContentType("application/json");
-        }
-        String client = httpContext.getRequest().getRemoteAddr();
-        String domain = httpContext.getRequest().getServerName();
-        String targetDomain = refererDomain(httpContext.getRequest());
+        HttpContext httpContext = getHttpContext();
+
+        HttpServletRequest httpRequest = httpContext.getRequest();
+        String client = httpRequest.getRemoteAddr();
+        String domain = httpRequest.getServerName();
+        String targetDomain = refererDomain(httpRequest);
         AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
-        
+
         String ticket = null;
         String status = "success";
-        
-        log.debug("request from " + client + " sessionId " + httpContext.getRequest().getSession().getId());
+
+        log.debug("request from " + client + " sessionId " + httpRequest.getSession().getId());
         if(authContext.isUserAuthenticated())
         {
             if(targetDomain != null)
@@ -97,12 +88,13 @@ public class Ticket
                 Principal principal = authContext.getUserPrincipal();
                 if(singleSignOnService.checkStatus(principal, targetDomain) != SingleSignOnService.LoginStatus.LOGGED_OUT)
                 {
-                    if(httpContext.getRequest().isSecure())
+                    if(httpRequest.isSecure())
                     {
                         ticket = singleSignOnService.generateTicket(principal, domain, client);
                         if(ticket == null)
                         {
-                            // domain is not a realm master, warning was logged by SingleSignOnService
+                            // domain is not a realm master, warning was logged by
+                            // SingleSignOnService
                             status = "invalid_request";
                         }
                     }
@@ -130,7 +122,17 @@ public class Ticket
             status = "not_logged_on";
             log.warn("DECLINED " + client + " session not authenticated");
         }
-        return formatReply(callback, status, ticket);
+
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("status", status);
+        jsonGenerator.writeStringField("ticket", ticket);
+        jsonGenerator.writeEndObject();
+    }
+    
+    @Override
+    protected String getCallbackParameterName()
+    {        
+        return "callback";
     }
 
     private String refererDomain(HttpServletRequest request)
