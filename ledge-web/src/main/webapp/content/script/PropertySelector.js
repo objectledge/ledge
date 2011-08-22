@@ -1,6 +1,6 @@
 /**
  * This script was created by:
- * @author <a href="rkrzewsk@caltha.pl">Rafa³ Krzewski</a>
+ * @author <a href="rkrzewsk@caltha.pl">Rafaï¿½ Krzewski</a>
  * @author <a href="dgajda@caltha.pl">Damian Gajda</a>
  * Copyright 2002-2003 Caltha
  *
@@ -30,11 +30,11 @@ function PropertySelector(attributeNames, form, elementNames, callBackObject)
             var attributeName = this.attributes[i];
             var value = values[attributeName];
 
-            setValue(this.form, elementName, value);
+            Forms.setValue(this.form, elementName, value);
         }
    		if(callBackObject)
    		{
 	        callBackObject.afterValuesSet(this);
 	    }
-   }
-}
+   };
+};
