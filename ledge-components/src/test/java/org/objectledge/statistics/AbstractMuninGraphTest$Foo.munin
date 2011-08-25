@@ -1,0 +1,7 @@
+graph_title Foo
+graph_order foo bar baz
+foo.label Foo
+bar.label Bar
+baz.label Baz
+
+ 

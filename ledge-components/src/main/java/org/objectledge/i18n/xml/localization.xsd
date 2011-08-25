@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+  All rights reserved. 
+  
+  Redistribution and use in source and binary forms, with or without modification,  
+  are permitted provided that the following conditions are met: 
+  
+  * Redistributions of source code must retain the above copyright notice,  
+    this list of conditions and the following disclaimer. 
+  * Redistributions in binary form must reproduce the above copyright notice,  
+    this list of conditions and the following disclaimer in the documentation  
+    and/or other materials provided with the distribution. 
+  * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+    nor the names of its contributors may be used to endorse or promote products  
+    derived from this software without specific prior written permission. 
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+  POSSIBILITY OF SUCH DAMAGE. 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://objectledge.org/i18n/1.0" xmlns:i18n="http://objectledge.org/i18n/1.0">
+  <xs:element name="strings" type="i18n:scope"/>
+  <xs:complexType name="scope">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="i18n:value"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="i18n:item"/>
+        <xs:element ref="i18n:prefix"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="value" type="xs:string"/>
+  <xs:element name="item">
+    <xs:complexType mixed="true">
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="prefix">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="i18n:scope">
+          <xs:attribute name="name" use="required"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
