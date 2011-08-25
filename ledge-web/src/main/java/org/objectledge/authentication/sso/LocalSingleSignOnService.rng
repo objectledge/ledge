@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!--  
+ Copyright (c) 2003-2011, Caltha - Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+-->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:a="http://objectledge.org/annotation/1.0" ns="http://objectledge.org/sso/local/1.0">
+  <define name="hostName">
+    <data type="string">
+      <a:documentation>DNS compatible host name</a:documentation>
+      <param name="pattern">([A-Za-z0-9\-]+\.)+[A-Za-z]{2,}</param>
+    </data>
+  </define>
+  <define name="includeMaster">
+    <attribute name="includeMaster">
+      <a:documentation>should domain master be considered a member of the realm. NOT
+        RECOMMENDED,
+        unless the master host is accessed exclusively through HTTPS
+      </a:documentation>
+      <data type="boolean">
+        <a:defaultValue>false</a:defaultValue>
+      </data>
+    </attribute>
+  </define>
+  <start>
+    <element name="config">
+      <interleave>
+        <optional>
+          <element name="random">
+            <a:documentation>provider and implementation of SecureRandom to use</a:documentation>
+            <interleave>
+              <optional>
+                <element name="provider">
+                  <data type="string">
+                    <a:defaultValue>SUN</a:defaultValue>
+                  </data>
+                </element>
+              </optional>
+              <optional>
+                <element name="algorithm">
+                  <data type="string">
+                    <a:defaultValue>NativePRNG</a:defaultValue>
+                  </data>
+                </element>
+              </optional>
+            </interleave>
+          </element>
+        </optional>
+        <optional>
+          <element name="tickets">
+            <interleave>
+              <optional>
+                <element name="size">
+                  <a:documentation>random bytes per ticket</a:documentation>
+                  <a:defaultValue>16</a:defaultValue>
+                  <data type="integer" />
+                </element>
+              </optional>
+              <optional>
+                <element name="validityTime">
+                  <a:documentation>ticket validity time in seconds</a:documentation>
+                  <data type="integer">
+                    <a:defaultValue>60</a:defaultValue>
+                  </data>
+                </element>
+              </optional>
+            </interleave>
+          </element>
+        </optional>
+        <element name="realms">
+          <zeroOrMore>
+            <element name="realm">
+              <attribute name="name">
+                <data type="string" />
+              </attribute>
+              <interleave>
+                <element name="master">
+                  <a:documentation>single point of access to sso.Ticket and sso.Login views
+                  </a:documentation>
+                  <ref name="hostName" />
+                </element>
+                <optional>
+                  <element name="baseUrlFormat">
+                    <a:documentation>String.format() pattern for building base URL for accessing sso
+                      views. It's expected to contain single parameter reference for hostname.
+                      Typical values:
+
+                      https://%s
+                      https://%s:8443/cyklotron/ledge
+
+                      View parameters of the
+                      following form will be appended to the result of
+                      expansion of this pattern:
+
+                      /view/sso.Ticket
+                      /view/soo.Login?login=%s&amp;password=%s
+                    </a:documentation>
+                    <data type="string">
+                      <a:defaultValue>https://%s</a:defaultValue>
+                    </data>
+                  </element>
+                </optional>
+                <choice>
+                  <element name="allDomains">
+                    <a:documentation>Indication that this realm contains all domains, with possible
+                      exception on the realm master. If a realm contains this indication it must be
+                      the only realm defined in the configuration.
+                    </a:documentation>
+                    <optional>
+                      <ref name="includeMaster" />
+                    </optional>
+                    <empty />
+                  </element>
+                  <element name="domains">
+                    <a:documentation>Enumeration of hosts contained in this realm. Each host name
+                      may appear only once in all realms definitions.
+                    </a:documentation>
+                    <optional>
+                      <ref name="includeMaster" />
+                    </optional>
+                    <oneOrMore>
+                      <element name="domain">
+                        <ref name="hostName" />
+                      </element>
+                    </oneOrMore>
+                  </element>
+                </choice>
+              </interleave>
+            </element>
+          </zeroOrMore>
+        </element>
+        <optional>
+          <element name="serverApi">
+            <attribute name="enabled">
+              <a:documentation>Should server API be activated. When false, all requests are
+                declined.
+              </a:documentation>
+              <data type="boolean">
+                <a:defaultValue>false</a:defaultValue>
+              </data>
+            </attribute>
+            <optional>
+              <attribute name="requireSsl">
+                <a:documentation>Are clients required to use SSL?</a:documentation>
+                <data type="boolean">
+                  <a:defaultValue>true</a:defaultValue>
+                </data>
+              </attribute>
+            </optional>
+            <interleave>
+              <optional>
+                <element name="secret">
+                  <a:documentation>HTTP basic authentication password required from clients. It is
+                    recommended to use secret, or authorizedClients restrictions, or both.
+                  </a:documentation>
+                  <data type="string" />
+                </element>
+              </optional>
+              <optional>
+                <element name="authorizedClients">
+                  <a:documentation>Clients authorized to use the server API. When not present, no
+                    restrictions on client host.</a:documentation>
+                  <oneOrMore>
+                      <element name="addressRange">
+                        <data type="string">
+                          <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}|([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}/[0-9]{1,3}</param>
+                        </data>
+                      </element>
+                  </oneOrMore>
+                </element>
+              </optional>
+            </interleave>
+          </element>
+        </optional>
+      </interleave>
+    </element>
+  </start>
+</grammar>
