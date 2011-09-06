@@ -117,6 +117,16 @@ public class FileTableModel implements ExtendedTableModel<FileObject>
         }
         return columns;
     }
+    
+    /** 
+     * {@inheritDoc}
+     */
+    public TableColumn<FileObject> getColumn(String name)
+        throws TableException
+    {
+        Comparator<FileObject> comparator = comparatorByColumnName.get(name);
+        return new TableColumn<FileObject>(name, comparator);
+    }
 
     /**
      * Gets all children of the parent, may return empty array.

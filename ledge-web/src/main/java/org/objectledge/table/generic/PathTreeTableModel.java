@@ -51,7 +51,7 @@ import org.objectledge.table.TableState;
  * @version $Id: PathTreeTableModel.java,v 1.8 2009-01-09 16:16:38 rafal Exp $
  */
 public class PathTreeTableModel<T>
-    implements ExtendedTableModel<T>
+    extends AbstractTableModel<T>
 {
     // instance variables ////////////////////////////////////////////////////
 
@@ -83,34 +83,6 @@ public class PathTreeTableModel<T>
     public PathTreeTableModel(TableColumn<T> ... columns)
     {
         this.columns = columns;
-    }
-
-    // TableModel interface //////////////////////////////////////////////////
-
-    /**
-     * {@inheritDoc}
-     */
-    public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters)
-    {
-        if(state.getTreeView())
-        {
-			return new GenericTreeRowSet<T>(state, filters, this);
-        }
-        else
-        {
-			return new GenericListRowSet<T>(state, filters, this);
-        }
-    }
-
-    /**
-     * Returns array of column definitions. They are created on every call,
-     * because they can get modified durig it's lifecycle.
-     *
-     * @return array of <code>TableColumn</code> objects
-     */
-    public TableColumn<T>[] getColumns()
-    {
-        return columns;
     }
 
     // ExtendedTableModel interface //////////////////////////////////////////

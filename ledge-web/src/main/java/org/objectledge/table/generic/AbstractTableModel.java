@@ -89,4 +89,22 @@ public abstract class AbstractTableModel<T>
     {
         return columns;
     }
+    
+    /**
+     * Returns a column with the given name.
+     * 
+     * @param name name of the column.
+     * @return a TableColumn, or {@code null} when no such column is present in the model.
+     */
+    public TableColumn<T> getColumn(String name)
+    {
+        for(TableColumn<T> column : columns)
+        {
+            if(column.getName().equals(name))
+            {
+                return column;
+            }
+        }
+        return null;
+    }
 }

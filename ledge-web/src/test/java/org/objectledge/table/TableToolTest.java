@@ -438,8 +438,8 @@ public class TableToolTest extends TestCase
 		public MockTableModel() throws TableException
 		{
 			columns = new TableColumn[] {
-				new TableColumn("column1", new MockComparator()),
-				new TableColumn("column2", null)
+				new TableColumn<Object>("column1", new MockComparator()),
+				new TableColumn<Object>("column2", null)
 			};
 		}
 
@@ -449,6 +449,18 @@ public class TableToolTest extends TestCase
 		public TableColumn<Object>[] getColumns()
 		{
 			return columns;
+		}
+		
+		public TableColumn<Object> getColumn(String name)
+		{
+		    for(TableColumn<Object> column : columns)
+	        {
+	            if(column.getName().equals(name))
+	            {
+	                return column;
+	            }
+	        }
+	        return null;
 		}
 		
 		/**

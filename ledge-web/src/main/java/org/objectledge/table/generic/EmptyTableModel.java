@@ -61,6 +61,14 @@ public class EmptyTableModel<T> implements TableModel<T>
     {
         return new TableColumn[0];
     }
+    
+    /** 
+     * {@inheritDoc}
+     */
+    public TableColumn<T> getColumn(String name)
+    {
+        return null;
+    }
 
     // row set implementation
 

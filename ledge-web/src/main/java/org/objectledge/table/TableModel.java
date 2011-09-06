@@ -60,4 +60,13 @@ public interface TableModel<T>
      * @return array of <code>TableColumn</code> objects
      */
     public TableColumn<T>[] getColumns();
+    
+    /**
+     * Returns a column with the given name.
+     * 
+     * @param name name of the column.
+     * @return a TableColumn, or {@code null} when no such column is present in the model.
+     * @throws TableException when there is a problem accessing or creating the requested column.
+     */
+    public TableColumn<T> getColumn(String name) throws TableException;
 }
