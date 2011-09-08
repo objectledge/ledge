@@ -12,5 +12,6 @@ $embeddedPlaceholder
 <li><a href="$link.view('system.Cache')">Cache system statistics</a></li>
 <li><a href="$link.view('scheduler.Jobs')">Job scheduling administration</a></li>
 <li><a href="$link.action('templating.Restart')">Flush template cache</a></li>
+<li><a href="$link.action('i18n.Reload')">Reload i18n files</a></li>
 </ul>
 </div>
