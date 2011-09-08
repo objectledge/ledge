@@ -76,10 +76,10 @@ public class Impersonate
         HttpContext httpContext = HttpContext.getHttpContext(context);
         Parameters parameters = RequestParameters.getRequestParameters(context);
 
-        String login = parameters.get("dn", null);
+        String login = parameters.get("uid", null);
         if(login == null)
         {
-            throw new ProcessingException("Required parameter (dn) not found");
+            throw new ProcessingException("parameter uid not defined");
         }
         Principal principal = null;
         try
