@@ -28,8 +28,10 @@
 
 package org.objectledge.i18n;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -193,7 +195,18 @@ public class I18nTool
      */
     public Collection<String> getKeys()
     {
-        return i18n.getKeys(locale);
+        List<String> keys = new ArrayList<String>();
+        Collection<String> allKeys = i18n.getKeys(locale);
+        String prefix = prefixBuf.toString();
+        for(String key : allKeys)
+        {
+            if(key.startsWith(prefix))
+            {
+                keys.add(key);
+            }
+        }
+        Collections.sort(keys);
+        return keys;
     }
     
     // implementation ------------------------------------------------------------------------------
