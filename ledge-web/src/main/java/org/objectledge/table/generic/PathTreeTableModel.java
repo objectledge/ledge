@@ -55,9 +55,6 @@ public class PathTreeTableModel<T>
 {
     // instance variables ////////////////////////////////////////////////////
 
-    /** The columns of the list. */
-    protected TableColumn<T>[] columns;
-
     /** Maps names to objects. */
     protected Map<String, T> objectByPath = new HashMap<String, T>();
 
@@ -82,7 +79,7 @@ public class PathTreeTableModel<T>
      */
     public PathTreeTableModel(TableColumn<T> ... columns)
     {
-        this.columns = columns;
+        super(columns);
     }
 
     // ExtendedTableModel interface //////////////////////////////////////////
