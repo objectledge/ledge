@@ -7,7 +7,6 @@
     <version>1.0.12-SNAPSHOT</version>
     <relativePath>../ledge-common/pom.xml</relativePath>
   </parent>
-  <groupId>org.objectledge</groupId>
   <artifactId>ledge-forms-fckeditor</artifactId>
   <packaging>war</packaging>
   <name>Visual HTMLArea plugin for ledge-forms using FCKEditor</name>
