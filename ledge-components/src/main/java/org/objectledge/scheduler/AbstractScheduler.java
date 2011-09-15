@@ -351,7 +351,7 @@ public abstract class AbstractScheduler
                     int countLimit = job.getRunCountLimit();
                     if(countLimit < 0 || job.getRunCount() < countLimit)
                     {
-                        Long target = new Long(nextRun.getTime());
+                        Long target = Long.valueOf(nextRun.getTime());
                         Set<AbstractJobDescriptor> set = queue.get(target);
                         if(set == null)
                         {

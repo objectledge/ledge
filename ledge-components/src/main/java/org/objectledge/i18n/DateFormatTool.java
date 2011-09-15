@@ -205,13 +205,13 @@ public class DateFormatTool
         }
         Calendar cal = Calendar.getInstance(zone);
         cal.setTime(date);
-        list.add(new Integer(cal.get(Calendar.YEAR)));
-        list.add(new Integer(cal.get(Calendar.MONTH)));
-        list.add(new Integer(cal.get(Calendar.DAY_OF_MONTH)));
-        list.add(new Integer(cal.get(Calendar.HOUR_OF_DAY)));
-        list.add(new Integer(cal.get(Calendar.MINUTE)));
-        list.add(new Integer(cal.get(Calendar.SECOND)));
-        list.add(new Integer(cal.get(Calendar.MILLISECOND)));
+        list.add(cal.get(Calendar.YEAR));
+        list.add(cal.get(Calendar.MONTH));
+        list.add(cal.get(Calendar.DAY_OF_MONTH));
+        list.add(cal.get(Calendar.HOUR_OF_DAY));
+        list.add(cal.get(Calendar.MINUTE));
+        list.add(cal.get(Calendar.SECOND));
+        list.add(cal.get(Calendar.MILLISECOND));
         return list;
     }
 

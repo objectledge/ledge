@@ -400,7 +400,7 @@ class Rule
     {
         try
         {
-            return new Integer(Integer.parseInt(evaluateLiteralValue(node)));      
+            return Integer.valueOf(Integer.parseInt(evaluateLiteralValue(node)));      
         }
         catch(NumberFormatException e)
         {
@@ -413,7 +413,7 @@ class Rule
     {
         try
         {
-            return new Long(Long.parseLong(evaluateLiteralValue(node)));      
+            return Long.valueOf(Long.parseLong(evaluateLiteralValue(node)));      
         }
         catch(NumberFormatException e)
         {

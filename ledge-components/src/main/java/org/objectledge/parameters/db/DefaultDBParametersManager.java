@@ -76,8 +76,7 @@ public class DefaultDBParametersManager implements DBParametersManager
             DatabaseUtils.close(conn);
         }
         DBParameters parameters = new DBParameters(null, id, database, logger);
-		Long key = new Long(id);
-		localCache.put(key, parameters);
+		localCache.put(Long.valueOf(id), parameters);
 		return parameters;
     }
 
@@ -91,7 +90,7 @@ public class DefaultDBParametersManager implements DBParametersManager
     public Parameters getParameters(long id) throws DBParametersException
     {
         Parameters parameters;
-        Long key = new Long(id);
+        Long key = Long.valueOf(id);
         if (localCache.containsKey(key))
         {
             return localCache.get(key);
@@ -203,7 +202,7 @@ public class DefaultDBParametersManager implements DBParametersManager
                     while(result.next() && result.getLong(1) == lastId);
                     Parameters pc = new DBParameters(temp, lastId, database, logger);
                     temp.remove();
-                    localCache.put(new Long(lastId), pc);
+                    localCache.put(Long.valueOf(lastId), pc);
                 }
                 while(!result.isAfterLast());
             }

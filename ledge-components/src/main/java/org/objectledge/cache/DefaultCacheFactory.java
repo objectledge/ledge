@@ -542,7 +542,7 @@ public class DefaultCacheFactory
                     queue.remove(target);
                 }
             }
-            target = new Long(System.currentTimeMillis()+object.getUpdateLatency());
+            target = Long.valueOf(System.currentTimeMillis()+object.getUpdateLatency());
             set = queue.get(target);
             if(set == null)
             {

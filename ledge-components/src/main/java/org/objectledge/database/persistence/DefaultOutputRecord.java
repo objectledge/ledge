@@ -97,7 +97,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setByte(String field, byte value)
         throws PersistenceException
     {
-        fields.put(field, new Byte(value));
+        fields.put(field, Byte.valueOf(value));
     }
 
     /**
@@ -111,7 +111,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setShort(String field, short value)
         throws PersistenceException
     {
-        fields.put(field, new Short(value));
+        fields.put(field, Short.valueOf(value));
     }
 
     /**
@@ -125,7 +125,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setInteger(String field, int value)
         throws PersistenceException
     {
-        fields.put(field, new Integer(value));
+        fields.put(field, Integer.valueOf(value));
     }
 
     /**
@@ -139,7 +139,7 @@ public class DefaultOutputRecord implements OutputRecord
     public void setLong(String field, long value)
         throws PersistenceException
     {
-        fields.put(field, new Long(value));
+        fields.put(field, Long.valueOf(value));
     }        
 
     /**

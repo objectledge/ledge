@@ -80,7 +80,7 @@ public class EncoderGenerator
         for(int i = 0; i < inputTable.length; i++)
         {
             short prefixValue = (short)(inputTable[i].getUnicodeCode() & (short)(prefixMask));
-            Short prefix = new Short(prefixValue);
+            Short prefix = Short.valueOf(prefixValue);
             // get or create group array
             Map<Short,MappingEntry> group = groups.get(prefix);
             if(group == null)
@@ -90,7 +90,7 @@ public class EncoderGenerator
             groups.put(prefix, group);
 
             // fill group map
-            Short suffix = new Short((short)(inputTable[i].getUnicodeCode() & (short)suffixMask));
+            Short suffix = Short.valueOf((short)(inputTable[i].getUnicodeCode() & (short)suffixMask));
             group.put(suffix, inputTable[i]);
         }
 
@@ -103,7 +103,7 @@ public class EncoderGenerator
 
         for(int i = 0; i < 256; i++)
         {
-            Short prefix = new Short((short)((i << 8) & prefixMask));
+            Short prefix = Short.valueOf((short)((i << 8) & prefixMask));
 
             if(groups.containsKey(prefix))
             {
@@ -113,7 +113,7 @@ public class EncoderGenerator
 
                 for(int j = 0; j < 256; j++)
                 {
-                    Short suffix = new Short((short)j);
+                    Short suffix = Short.valueOf((short)j);
                     if(group.containsKey(suffix))
                     {
                         MappingEntry entry = group.get(suffix);

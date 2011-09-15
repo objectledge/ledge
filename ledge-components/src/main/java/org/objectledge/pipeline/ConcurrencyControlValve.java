@@ -155,7 +155,7 @@ public class ConcurrencyControlValve
         {
             if(semaphore != null)
             {
-                return new Integer(limit - semaphore.availablePermits());
+                return Integer.valueOf(limit - semaphore.availablePermits());
             }
             else
             {
@@ -172,7 +172,7 @@ public class ConcurrencyControlValve
         {
             if(semaphore != null)
             {
-                return new Integer(semaphore.getQueueLength());
+                return Integer.valueOf(semaphore.getQueueLength());
             }
             else
             {

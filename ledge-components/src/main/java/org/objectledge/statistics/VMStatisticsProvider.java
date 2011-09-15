@@ -90,7 +90,7 @@ public class VMStatisticsProvider
         public Number getUsed()
         {
             MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
-            return new Long(memory.getHeapMemoryUsage().getUsed());
+            return Long.valueOf(memory.getHeapMemoryUsage().getUsed());
         }
         
         /**
@@ -101,7 +101,7 @@ public class VMStatisticsProvider
         public Number getFree()
         {
             MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
-            return new Long(memory.getHeapMemoryUsage().getMax()
+            return Long.valueOf(memory.getHeapMemoryUsage().getMax()
                 - memory.getHeapMemoryUsage().getUsed());
         }
     }
@@ -127,7 +127,7 @@ public class VMStatisticsProvider
         public Number getUsed()
         {
             MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
-            return new Long(memory.getNonHeapMemoryUsage().getUsed());
+            return Long.valueOf(memory.getNonHeapMemoryUsage().getUsed());
         }
         
         /**
@@ -138,7 +138,7 @@ public class VMStatisticsProvider
         public Number getFree()
         {
             MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
-            return new Long(memory.getNonHeapMemoryUsage().getMax() - memory.getNonHeapMemoryUsage().getUsed());
+            return Long.valueOf(memory.getNonHeapMemoryUsage().getMax() - memory.getNonHeapMemoryUsage().getUsed());
         }
     }
 
@@ -169,7 +169,7 @@ public class VMStatisticsProvider
             {
                 sum += garbageCollector.getCollectionCount();
             }
-            return new Long(sum);
+            return Long.valueOf(sum);
         }
     }
 
@@ -200,7 +200,7 @@ public class VMStatisticsProvider
             {
                 sum += garbageCollector.getCollectionTime();
             }
-            return new Long(sum);
+            return Long.valueOf(sum);
         }
     }
 }
