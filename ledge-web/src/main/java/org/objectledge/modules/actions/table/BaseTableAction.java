@@ -82,6 +82,6 @@ public abstract class BaseTableAction
             throw new ProcessingException("'"+TableConstants.TABLE_ID_PARAM_KEY+
             	"' parameter, not found");
         }
-        return tableStateManager.getState(context, new Integer(id));
+        return tableStateManager.getState(context, Integer.valueOf(id));
     }
 }

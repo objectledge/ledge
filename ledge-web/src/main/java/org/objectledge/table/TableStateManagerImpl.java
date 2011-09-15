@@ -116,8 +116,7 @@ public class TableStateManagerImpl
         if(id == null)
         {
             //create id
-            id = new Integer(nextId);
-            nextId++;
+            id = Integer.valueOf(nextId++);
             //create mappings
             byNameMapping.put(name, id);
             byIdMapping.put(id, name);

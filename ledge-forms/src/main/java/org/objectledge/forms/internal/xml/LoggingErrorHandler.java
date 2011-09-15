@@ -58,8 +58,8 @@ public class LoggingErrorHandler extends BaseErrorHandler
     {
         return Localizer.localize( prop, new Object[]
                                     {
-                                        new Integer(spe.getLineNumber()),
-                                        new Integer(spe.getColumnNumber()),
+                                        Integer.valueOf(spe.getLineNumber()),
+                                        Integer.valueOf(spe.getColumnNumber()),
                                         spe.getSystemId(),
                                         spe.getLocalizedMessage()
                                     } );

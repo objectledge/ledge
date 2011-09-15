@@ -52,7 +52,7 @@ public class LedgeStringToObjectConverter extends StringToObjectConverter
             {
                 public Object convert(String in)
                 {
-                    return in == null ? new Integer(0) : Integer.valueOf(in);
+                    return in == null ? Integer.valueOf(0) : Integer.valueOf(in);
                 }    
             }
         );
@@ -61,7 +61,7 @@ public class LedgeStringToObjectConverter extends StringToObjectConverter
             {
                 public Object convert(String in)
                 {
-                    return in == null ? new Long(0) : Long.valueOf(in);
+                    return in == null ? Long.valueOf(0) : Long.valueOf(in);
                 }    
             }
         );

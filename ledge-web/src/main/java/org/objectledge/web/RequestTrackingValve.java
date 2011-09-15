@@ -428,7 +428,7 @@ public class RequestTrackingValve
          */
         public Number getCount()
         {
-            return new Integer(totalRequests);
+            return Integer.valueOf(totalRequests);
         }
     }
    
@@ -483,7 +483,7 @@ public class RequestTrackingValve
          */
         public Number getCount()
         {
-            return new Integer(totalSessions);
+            return Integer.valueOf(totalSessions);
         }
     }
     
@@ -507,7 +507,7 @@ public class RequestTrackingValve
          */
         public Number getCount()
         {
-            return new Integer(concurrentSessions);
+            return Integer.valueOf(concurrentSessions);
         }
     }
 }

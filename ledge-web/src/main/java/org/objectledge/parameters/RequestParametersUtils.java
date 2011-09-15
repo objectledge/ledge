@@ -184,19 +184,19 @@ public class RequestParametersUtils
         }
         else if (propclass == Long.class || propclass == Long.TYPE)
         {
-            args[0] = new Long(params.getLong(prop.getName()));
+            args[0] = Long.valueOf(params.getLong(prop.getName()));
         }
         else if (propclass == Short.class || propclass == Short.TYPE)
         {
-            args[0] = new Short((short)params.getLong(prop.getName()));
+            args[0] = Short.valueOf((short)params.getLong(prop.getName()));
         }
         else if (propclass == Byte.class || propclass == Byte.TYPE)
         {
-            args[0] = new Byte((byte)params.getLong(prop.getName()));
+            args[0] = Byte.valueOf((byte)params.getLong(prop.getName()));
         }           
         else if (propclass == Character.class || propclass == Character.TYPE)
         {
-            args[0] = new Character(params.get(prop.getName()).charAt(0));
+            args[0] = Character.valueOf(params.get(prop.getName()).charAt(0));
         }           
         else if (propclass == Boolean.class || propclass == Boolean.TYPE)
         {
@@ -206,7 +206,7 @@ public class RequestParametersUtils
         {
             //FIXME
 //            args[0] = new Double(getDouble(prop.getName()));
-            args[0] = new Double(params.getFloat(prop.getName()));
+            args[0] = Double.valueOf(params.getFloat(prop.getName()));
         }
         else if (propclass == BigDecimal.class)
         {

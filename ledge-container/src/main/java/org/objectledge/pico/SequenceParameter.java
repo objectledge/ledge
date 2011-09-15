@@ -186,7 +186,7 @@ public class SequenceParameter implements Parameter
             try
             {
                 Constructor<C> ctor = targetType.getConstructor(new Class[] { Integer.TYPE });
-                target = ctor.newInstance(new Object[] { new Integer(source.size()) });
+                target = ctor.newInstance(new Object[] { Integer.valueOf(source.size()) });
             }
             catch(NoSuchMethodException e)
             {

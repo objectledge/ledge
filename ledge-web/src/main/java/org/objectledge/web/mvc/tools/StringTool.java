@@ -126,7 +126,7 @@ public class StringTool
      */
     public Long getLongValue(int value)
     {
-    	return new Long(value);
+    	return Long.valueOf((long)value);
     }
 
     /**

@@ -154,7 +154,7 @@ public class XMLGrammarCache
         }
 
         long parsingTime = System.currentTimeMillis();
-        log.info(Localizer.localize(MSG_PARSING_TIME, new Long(parsingTime-stime))+" '"+grammarID+"'");
+        log.info(Localizer.localize(MSG_PARSING_TIME, Long.valueOf(parsingTime-stime))+" '"+grammarID+"'");
 
         return grammar;
     }
