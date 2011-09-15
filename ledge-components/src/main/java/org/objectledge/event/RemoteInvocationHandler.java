@@ -80,9 +80,9 @@ public class RemoteInvocationHandler implements InvocationHandler
                 Method remoteMethod = remoteClass.
                     getMethod(methods[i].getName(), methods[i].getParameterTypes());
 
-                if(!methods[i].getReturnType().equals(remoteMethod.getParameterTypes()))
+                if(!methods[i].getReturnType().equals(remoteMethod.getReturnType()))
                 {
-                    throw new NoSuchMethodException("");
+                    throw new NoSuchMethodException("return type mismatch");
                 }
 
                 Class<?>[] remoteMethodExceptions = remoteMethod.getExceptionTypes();
@@ -98,7 +98,7 @@ public class RemoteInvocationHandler implements InvocationHandler
                                 continue loop;
                             }
                         }
-                        throw new NoSuchMethodException("");
+                        throw new NoSuchMethodException("thrown exceptions mismatch");
                     }
                 }           
             }
@@ -106,7 +106,7 @@ public class RemoteInvocationHandler implements InvocationHandler
             {
                 throw new IllegalArgumentException(remoteClass.getName()+
                                                    " does not have method matching "+
-                                                   methods[i].toString());
+                                                   methods[i].toString(), e);
             }
         }
     }
