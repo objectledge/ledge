@@ -113,7 +113,7 @@ public abstract class Transaction
     public void setTransactionTimeout(int seconds)
         throws SQLException
     {
-        timeout.equals(seconds);
+        timeout.set(seconds);
     }
     
     /**
