@@ -49,7 +49,7 @@ import com.sun.msv.grammar.Grammar;
 public class XMLGrammarCache
 {
 	private SAXParserFactory parserFactory;
-	private Map<URL,Grammar> grammars = new HashMap<URL,Grammar>();
+	private Map<String,Grammar> grammars = new HashMap<String,Grammar>();
 
 	/**
 	 * Creates a XML grammar cache.
@@ -77,16 +77,17 @@ public class XMLGrammarCache
     public synchronized Grammar getGrammar(URL grammarURI)
     	throws SAXException, ParserConfigurationException, IOException
     {
-        if(grammars.containsKey(grammarURI))
+        String key = grammarURI.toExternalForm();
+        if(grammars.containsKey(key))
         {
-            return grammars.get(grammarURI);
+            return grammars.get(key);
         }
 
         Grammar grammar = null;
         if(grammarURI != null)
         {
             grammar = loadGrammar(grammarURI);
-            grammars.put(grammarURI, grammar);
+            grammars.put(key, grammar);
         }
         return grammar;
     }
