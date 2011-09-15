@@ -456,25 +456,32 @@ public class SoftMapImpl<K, V>
                 "setting values through entry set is not supported"); 
         }
         
-        /**
-         * {@inheritDoc}
-         */
         public boolean equals(Object o)
         {
-            Entry e1 = this;
-            Entry e2 = (Entry)o;
-            return (e1.getKey()==null ? e2.getKey()==null :
-                    e1.getKey().equals(e2.getKey())) && 
-                (e1.getValue()==null ? e2.getValue()==null :
-                 e1.getValue().equals(e2.getValue()));
+            if(!(o instanceof Map.Entry))
+            {                
+                return false;
+            }
+            @SuppressWarnings("rawtypes")
+            Map.Entry e = (Map.Entry)o;
+            Object k1 = getKey();
+            Object k2 = e.getKey();
+            if(k1 == k2 || (k1 != null && k1.equals(k2)))
+            {
+                Object v1 = getValue();
+                Object v2 = e.getValue();
+                if(v1 == v2 || (v1 != null && v1.equals(v2)))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
-        
-        /**
-         * {@inheritDoc}
-         */
+
         public int hashCode()
         {
-            return super.hashCode();
+            V value = getValue();
+            return (key == null ? 0 : key.hashCode()) ^ (value == null ? 0 : value.hashCode());
         }
     }
 
