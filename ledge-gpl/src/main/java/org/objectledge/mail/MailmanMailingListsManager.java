@@ -594,11 +594,11 @@ public class MailmanMailingListsManager implements MailingListsManager
         Boolean result;
         if(comment != null)
         {
-            result = executeMethod("Mailman.handleModeratorRequest", listName, adminPassword, Integer.parseInt(id), command);
+            result = executeMethod("Mailman.handleModeratorRequest", listName, adminPassword, Integer.parseInt(id), command, comment);
         }
         else
         {
-            result = executeMethod(listName, adminPassword, Integer.parseInt(id), command, comment);
+            result = executeMethod("Mailman.handleModeratorRequest", listName, adminPassword, Integer.parseInt(id), command);
         }
         if(!result)
         {
