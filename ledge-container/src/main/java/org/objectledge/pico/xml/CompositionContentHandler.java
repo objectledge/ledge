@@ -179,11 +179,11 @@ class CompositionContentHandler extends DefaultHandler
         Object factory = containerStack.getLast().getComponentInstance(key);
         if(factory == null)
         {
-            new SAXParseException("component "+key+" not found", locator);
+            throw new SAXParseException("component "+key+" not found", locator);
         }
         else if(ComponentAdapterFactory.class.isAssignableFrom(factory.getClass()))
         {
-            new SAXParseException(factory.getClass() + " does not implement " + 
+            throw new SAXParseException(factory.getClass() + " does not implement " + 
                 ComponentAdapterFactory.class, locator);
         }
         factoryStack.add((ComponentAdapterFactory)factory);
