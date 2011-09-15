@@ -49,15 +49,15 @@ public class CaptchaCacheKey
 
     public boolean equals(Object object)
     {
-        if(object == null)
-        {
-            return false;
-        }
-        else
+        if(object != null && object instanceof CaptchaCacheKey)
         {
             CaptchaCacheKey other = (CaptchaCacheKey)object;
             return this.challenge.equals(other.challenge) && this.response.equals(other.response)
                 && this.remoteAddr.equals(other.remoteAddr);
+        }
+        else
+        {
+            return false;
         }
     }
     
