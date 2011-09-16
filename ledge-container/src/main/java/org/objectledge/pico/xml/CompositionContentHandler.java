@@ -181,7 +181,7 @@ class CompositionContentHandler extends DefaultHandler
         {
             throw new SAXParseException("component "+key+" not found", locator);
         }
-        else if(ComponentAdapterFactory.class.isAssignableFrom(factory.getClass()))
+        else if(!ComponentAdapterFactory.class.isAssignableFrom(factory.getClass()))
         {
             throw new SAXParseException(factory.getClass() + " does not implement " + 
                 ComponentAdapterFactory.class, locator);
