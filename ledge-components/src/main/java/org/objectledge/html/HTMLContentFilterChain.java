@@ -1,6 +1,7 @@
 package org.objectledge.html;
 
 import org.dom4j.Document;
+import org.objectledge.pipeline.ProcessingException;
 
 public class HTMLContentFilterChain
     implements HTMLContentFilter
@@ -14,6 +15,7 @@ public class HTMLContentFilterChain
 
     @Override
     public Document filter(Document dom)
+        throws ProcessingException
     {
         for(HTMLContentFilter contentFilter : contentFilters)
         {

@@ -4,6 +4,7 @@
 package org.objectledge.html;
 
 import org.dom4j.Document;
+import org.objectledge.pipeline.ProcessingException;
 
 /**
  * An interfeace defining HTML DOM filters. 
@@ -13,5 +14,5 @@ import org.dom4j.Document;
  */
 public interface HTMLContentFilter
 {
-	public Document filter(Document dom);
+	public Document filter(Document dom) throws ProcessingException;
 }
