@@ -30,6 +30,7 @@ package org.objectledge.container;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -98,7 +99,31 @@ public class LedgeContainer
      * 
      * @param fs the FileSystem
      * @param configBase configuration directory.
-     * @param classLoader the classload to load classes with.
+     * @param classLoader the class loader to load classes with.
+     * @param componentInstanaces additional component instances to be available in the boot
+     *        container. Boot container is populated before composition file is parsed.
+     * @throws IOException if the composition file could not be read.
+     * @throws ClassNotFoundException if the container builder class could not be instantiated.
+     * @throws PicoCompositionException if the composition file is invalid, or could not be verified
+     *         due to system failure.
+     */ 
+    public LedgeContainer(FileSystem fs, String configBase, ClassLoader classLoader,
+        Map<Object, Object> componentInstanaces)
+        throws IOException, ClassNotFoundException, PicoCompositionException
+    {
+        containerBuilder = new LedgeContainerBuilder(getCompositionFile(fs, configBase), 
+            classLoader);
+        ObjectReference parentRef = new SimpleReference();
+        parentRef.set(getBootContainer(fs, configBase, classLoader, componentInstanaces));
+        containerBuilder.buildContainer(containerRef, parentRef, null, true);
+    }
+    
+    /**
+     * Creates an instance of the LedgeContainer.
+     * 
+     * @param fs the FileSystem
+     * @param configBase configuration directory.
+     * @param classLoader the class loader to load classes with.
      * @throws IOException if the composition file could not be read.
      * @throws ClassNotFoundException if the container builder class could not be instantiated.
      * @throws PicoCompositionException if the composition file is invalid, or could not be 
@@ -107,11 +132,7 @@ public class LedgeContainer
     public LedgeContainer(FileSystem fs, String configBase, ClassLoader classLoader)
         throws IOException, ClassNotFoundException, PicoCompositionException
     {
-        containerBuilder = new LedgeContainerBuilder(getCompositionFile(fs, configBase), 
-            classLoader);
-        ObjectReference parentRef = new SimpleReference();
-        parentRef.set(getBootContainer(fs, configBase, classLoader));
-        containerBuilder.buildContainer(containerRef, parentRef, null, true);
+        this(fs, configBase, classLoader, null);
     }
 
     /**
@@ -154,10 +175,11 @@ public class LedgeContainer
      * @param fs the FileSystem
      * @param configBase configuration directory.
      * @param classLoader the classload to load classes with.
+     * @param componentInstanaces TODO
      * @return the boot component container.
      */    
     protected static PicoContainer getBootContainer(FileSystem fs, String configBase, 
-        ClassLoader classLoader)
+        ClassLoader classLoader, Map<Object, Object> componentInstanaces)
     {
         MutablePicoContainer bootContainer = new DefaultPicoContainer();
         bootContainer.registerComponentInstance(FileSystem.class, fs);
@@ -189,6 +211,13 @@ public class LedgeContainer
         bootContainer.registerComponentImplementation(ComponentAdapterFactory.class,
             CachingComponentAdapterFactory.class, 
             params(component(CustomizingConstructorComponentAdapterFactory.class)));
+        if(componentInstanaces != null)
+        {
+            for(Map.Entry<Object, Object> componentInstance : componentInstanaces.entrySet())
+            {
+                bootContainer.registerComponentInstance(componentInstance.getKey(), componentInstance.getValue());
+            }
+        }
         return bootContainer;
     }
 
