@@ -910,10 +910,10 @@ public class DBParametersTest extends TestCase
         if(!DatabaseUtils.hasTable(ds, "ledge_parameters"))
         {        
             DatabaseUtils.runScript(ds, 
-                fs.getReader("sql/parameters/db/DBParametersTables.sql", "UTF-8"));
+                fs.getReader("sql/parameters/DBParametersTables.sql", "UTF-8"));
         }
         DatabaseUtils.runScript(ds, 
-            fs.getReader("sql/parameters/db/DBParametersTest.sql", "UTF-8"));
+            fs.getReader("sql/parameters/DBParametersTest.sql", "UTF-8"));
         return ds;
     }
 }

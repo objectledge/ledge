@@ -194,9 +194,9 @@ public class ContextFactoryTest extends LedgeTestCase
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
         {
-            DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNamingTables.sql"));
+            DatabaseUtils.runScript(ds, getScript("sql/naming/DBNamingTables.sql"));
         }
-        DatabaseUtils.runScript(ds, getScript("sql/naming/db/DBNamingTest.sql"));
+        DatabaseUtils.runScript(ds, getScript("sql/naming/DBNamingTest.sql"));
         return ds;
     }
     

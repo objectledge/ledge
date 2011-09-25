@@ -236,9 +236,9 @@ public class DBSchedulerTest extends LedgeTestCase
         if(!DatabaseUtils.hasTable(ds, "ledge_scheduler"))
         {        
             DatabaseUtils.runScript(ds, 
-                getFileSystem().getReader("sql/scheduler/db/DBSchedulerTables.sql", "UTF-8"));
+                getFileSystem().getReader("sql/scheduler/DBSchedulerTables.sql", "UTF-8"));
             DatabaseUtils.runScript(ds, 
-                getFileSystem().getReader("sql/scheduler/db/DBSchedulerTest.sql", "UTF-8"));
+                getFileSystem().getReader("sql/scheduler/DBSchedulerTest.sql", "UTF-8"));
         }
         return ds;
     }

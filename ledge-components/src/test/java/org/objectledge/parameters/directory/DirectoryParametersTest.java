@@ -221,9 +221,9 @@ public class DirectoryParametersTest extends LedgeTestCase
         }
         if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
         {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/naming/db/DBNamingTables.sql", "UTF-8"));
+            DatabaseUtils.runScript(ds, fs.getReader("sql/naming/DBNamingTables.sql", "UTF-8"));
         }
-        DatabaseUtils.runScript(ds, fs.getReader("sql/naming/db/DBNamingTest.sql", "UTF-8"));
+        DatabaseUtils.runScript(ds, fs.getReader("sql/naming/DBNamingTest.sql", "UTF-8"));
         return ds;
     }        
 

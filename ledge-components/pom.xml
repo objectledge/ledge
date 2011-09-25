@@ -159,7 +159,6 @@
         <directory>src/main/java</directory>
         <includes>
           <include>**/*.rng</include>
-          <include>**/*.sql</include>
           <include>**/*.munin</include>
         </includes>
       </resource>
@@ -169,10 +168,23 @@
         <directory>src/test/java</directory>
         <includes>
           <include>**/*.rng</include>
-          <include>**/*.sql</include>
           <include>**/*.munin</include>
           <include>**/*.lst</include>
           <include>log4j.properties</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/main/sql</directory>
+        <targetPath>sql</targetPath>
+        <includes>
+          <include>**/*.sql</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/test/sql</directory>
+        <targetPath>sql</targetPath>
+        <includes>
+          <include>**/*.sql</include>
         </includes>
       </testResource>
     </testResources>
@@ -204,6 +216,24 @@
               <includes>
               <include>org/objectledge/test/*</include>
               </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/install.xml</descriptor>
+              </descriptors>
             </configuration>
           </execution>
         </executions>
