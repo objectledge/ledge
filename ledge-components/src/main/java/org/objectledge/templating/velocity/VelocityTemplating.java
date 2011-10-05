@@ -86,8 +86,7 @@ public class VelocityTemplating implements Templating
     private Map<String, Boolean> templateExistsCache = new HashMap<String, Boolean>();
     
     /** Caching flag. */
-    protected boolean cache = false;
-
+    private boolean cache = false;
     
     /**
      * Creates a new instance of the templating system.
@@ -113,7 +112,7 @@ public class VelocityTemplating implements Templating
         throws ComponentInitializationError
     {        
         // create and initialize a new engine
-        VelocityEngine engine = new VelocityEngine();
+        VelocityEngine newEngine = new VelocityEngine();
         
         extension = config.getChild("extension").getValue(".vt");
         encoding = config.getChild("encoding").getValue("ISO-8859-1");
@@ -138,7 +137,7 @@ public class VelocityTemplating implements Templating
 					{
 						value = properties[i].getValue();
 					}
-					engine.addProperty(name, value);
+                    newEngine.addProperty(name, value);
 				}
             }
         }
@@ -146,19 +145,20 @@ public class VelocityTemplating implements Templating
         {
             throw new ComponentInitializationError("failed to initialze Velocity", e);
         }
-        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, logger);
-        engine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
-        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "objectledge");
-        engine.setProperty("objectledge.resource.loader.class",
+        newEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, logger);
+        newEngine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
+        newEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "objectledge");
+        newEngine.setProperty("objectledge.resource.loader.class",
 			"org.objectledge.templating.velocity.LedgeResourceLoader");
-        engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LEDGE_FILE_SYSTEM,
+        newEngine.setProperty("objectledge.resource.loader."
+            + LedgeResourceLoader.LEDGE_FILE_SYSTEM,
         	 fileSystem);
-        engine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
+        newEngine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
              logger);
-        engine.setProperty(RuntimeConstants.INPUT_ENCODING, encoding);
+        newEngine.setProperty(RuntimeConstants.INPUT_ENCODING, encoding);
         try
         {
-            engine.init();
+            newEngine.init();
         }
 		///CLOVER:OFF
         catch (VirtualMachineError e)
@@ -178,7 +178,7 @@ public class VelocityTemplating implements Templating
         templateExistsCache = new HashMap<String, Boolean>();
 
         // replace old engine with new one
-        this.engine = engine;
+        this.engine = newEngine;
     }
 
     /**
@@ -409,7 +409,6 @@ public class VelocityTemplating implements Templating
         
         @Override
         public void init(RuntimeServices rs)
-        throws Exception
         {
         }
         
@@ -438,9 +437,6 @@ public class VelocityTemplating implements Templating
         {
             switch (level)
             {
-                case LogChute.DEBUG_ID :
-                    logger.debug(message);
-                    break;
                 case LogChute.ERROR_ID :
                     logger.error(message);
                     break;
@@ -461,9 +457,6 @@ public class VelocityTemplating implements Templating
         {
             switch (level)
             {
-                case LogChute.DEBUG_ID :
-                    logger.debug(message, e);
-                    break;
                 case LogChute.ERROR_ID :
                     logger.error(message, e);
                     break;
