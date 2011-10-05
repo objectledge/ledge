@@ -28,47 +28,27 @@
 
 package org.objectledge.encodings;
 
-import org.objectledge.ComponentInitializationError;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectledge.encodings.encoders.CharEncoder;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.defaults.ConstructorInjectionComponentAdapterFactory;
-import org.picocontainer.defaults.DefaultPicoContainer;
 
 /**
  * Base encoder using CharacterEncoders.
- *
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: AbstractEncoder.java,v 1.2 2004-12-22 08:35:13 rafal Exp $
  */
 public abstract class AbstractEncoder
 {
-	private static final String ENCODER_CLASS_PREFIX = 
-        "org.objectledge.encodings.encoders.CharEncoder";
-	private MutablePicoContainer container;
+    private static final String ENCODER_CLASS_PREFIX = "org.objectledge.encodings.encoders.CharEncoder";
 
-	/**
-	 * Constructs the base encoder component.
-	 */
-	public AbstractEncoder()
-	{
-        // non caching container
-        this.container =
-            new DefaultPicoContainer(new ConstructorInjectionComponentAdapterFactory());
-		CharEncoder ref1 = getCharsetEncoder("UTF-16");
-		CharEncoder ref2 = getCharsetEncoder("UTF-16");
-		if(ref1 == null || ref2 == null)
-		{
-			throw new ComponentInitializationError("cannot get basic UTF-16 encoder");
-		}
-		if(ref1 == ref2)
-		{
-			throw new ComponentInitializationError(
-				"container configured for component instance caching");
-		}
-	}
+    private Map<String, CharEncoder> encoders = Collections
+        .synchronizedMap(new HashMap<String, CharEncoder>());
 
-	// implementation ----------------------------------------------------------------------------
-	
+    // implementation ----------------------------------------------------------------------------
+
     /**
      * Returns an encoder instance for the specific encoding.
      * 
@@ -77,27 +57,37 @@ public abstract class AbstractEncoder
      */
     protected CharEncoder getCharsetEncoder(String encodingName)
     {
-    	if(encodingName == null)
-    	{
-    		return null;    		
-    	}
-    	
-    	String javaEncodingName = EncodingMap.getIANA2JavaMapping(encodingName);
-		try
-		{
-			Object encoderInstance = container.getComponentInstance(javaEncodingName); 
-			if(encoderInstance == null)
-			{
-				Class<?> clazz = Class.forName(ENCODER_CLASS_PREFIX + javaEncodingName);
-				container.registerComponentImplementation(javaEncodingName, clazz);
-				encoderInstance = container.getComponentInstance(javaEncodingName);
-			}
-			return (CharEncoder) encoderInstance;
-		}
-		catch (ClassNotFoundException e)
-		{
-			throw new IllegalArgumentException(
-				"unknown or unsupported encoding '"+javaEncodingName+"'"); 
-		}
+        if(encodingName == null)
+        {
+            return null;
+        }
+
+        String javaEncodingName = EncodingMap.getIANA2JavaMapping(encodingName);
+        try
+        {
+            CharEncoder encoderInstance = encoders.get(javaEncodingName);
+            if(encoderInstance == null)
+            {
+                @SuppressWarnings("unchecked")
+                Class<? extends CharEncoder> clazz = (Class<? extends CharEncoder>)Class
+                    .forName(ENCODER_CLASS_PREFIX + javaEncodingName);
+                encoderInstance = clazz.newInstance();
+                encoders.put(javaEncodingName, encoderInstance);
+            }
+            return encoderInstance;
+        }
+        catch(ClassNotFoundException e)
+        {
+            throw new IllegalArgumentException("unknown or unsupported encoding '"
+                + javaEncodingName + "'", e);
+        }
+        catch(InstantiationException e)
+        {
+            throw new IllegalArgumentException("instantiation failed", e);
+        }
+        catch(IllegalAccessException e)
+        {
+            throw new IllegalArgumentException("intstantiation failed", e);
+        }
     }
 }
