@@ -28,9 +28,9 @@
 
 package org.objectledge.pico.customization;
 
+import org.objectledge.pico.ConstructorInjectionComponentAdapter;
 import org.picocontainer.Parameter;
 import org.picocontainer.defaults.AssignabilityRegistrationException;
-import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 import org.picocontainer.defaults.NotConcreteRegistrationException;
 
 /**
@@ -40,7 +40,8 @@ import org.picocontainer.defaults.NotConcreteRegistrationException;
  * @version $Id: CustomizingConstructorComponentAdapter.java,v 1.9 2005-02-04 02:28:15 rafal Exp $
  */
 @SuppressWarnings("unchecked")
-public class CustomizingConstructorComponentAdapter extends ConstructorInjectionComponentAdapter
+public class CustomizingConstructorComponentAdapter
+    extends ConstructorInjectionComponentAdapter
 {
     /**
      * 

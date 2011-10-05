@@ -42,6 +42,8 @@ import org.objectledge.configuration.CustomizedConfigurationProvider;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggerFactory;
 import org.objectledge.logging.LoggingConfigurator;
+import org.objectledge.pico.ConstructorInjectionComponentAdapter;
+import org.objectledge.pico.DefaultComponentAdapterFactory;
 import org.objectledge.pico.LedgeStringToObjectConverter;
 import org.objectledge.pico.customization.CustomizedComponentAdapter;
 import org.objectledge.pico.customization.CustomizingConstructorComponentAdapterFactory;
@@ -56,7 +58,6 @@ import org.picocontainer.defaults.CachingComponentAdapterFactory;
 import org.picocontainer.defaults.ComponentAdapterFactory;
 import org.picocontainer.defaults.ComponentParameter;
 import org.picocontainer.defaults.ConstantParameter;
-import org.picocontainer.defaults.ConstructorInjectionComponentAdapter;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.picocontainer.defaults.ObjectReference;
 import org.picocontainer.defaults.SimpleReference;
@@ -181,7 +182,8 @@ public class LedgeContainer
     protected static PicoContainer getBootContainer(FileSystem fs, String configBase, 
         ClassLoader classLoader, Map<Object, Object> componentInstanaces)
     {
-        MutablePicoContainer bootContainer = new DefaultPicoContainer();
+        MutablePicoContainer bootContainer = new DefaultPicoContainer(
+            new DefaultComponentAdapterFactory());
         bootContainer.registerComponentInstance(FileSystem.class, fs);
         bootContainer.registerComponentInstance(ClassLoader.class, classLoader);
         bootContainer.registerComponentImplementation(XMLGrammarCache.class);

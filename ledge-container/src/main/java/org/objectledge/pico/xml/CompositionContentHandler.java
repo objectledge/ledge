@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.objectledge.pico.AliasComponentAdapter;
+import org.objectledge.pico.DefaultComponentAdapterFactory;
 import org.objectledge.pico.SequenceParameter;
 import org.objectledge.pico.StringParameter;
 import org.objectledge.pico.customization.CustomizingComponentParameter;
@@ -19,7 +20,6 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.PicoContainer;
 import org.picocontainer.defaults.ComponentAdapterFactory;
-import org.picocontainer.defaults.DefaultComponentAdapterFactory;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
