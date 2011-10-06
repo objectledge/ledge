@@ -42,6 +42,7 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.cache.CacheFactory;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.Template;
@@ -51,13 +52,15 @@ import org.objectledge.templating.TemplatingContext;
 
 /**
  * Simple templating implementation based on velocity engine.
- *
- *
+ * 
  * @author <a href="mailto:pablo@caltha.com">Pawel Potempski</a>
  * @version $Id: VelocityTemplating.java,v 1.30 2008-08-28 15:52:47 rafal Exp $
  */
-public class VelocityTemplating implements Templating
+public class VelocityTemplating
+    implements Templating
 {
+    private static final String CACHE_NAME = "velocityTemplates";
+
     /** logger */
     private DNALogChute logger;
 
@@ -75,19 +78,19 @@ public class VelocityTemplating implements Templating
 
     /** config */
     private Configuration config;
-    
+
     /** file system */
     private FileSystem fileSystem;
-    
+
     /** template objects/nulls keyed by name strings. */
-    private Map<String, Template> templateCache = new HashMap<String, Template>();
-    
+    private final Map<String, Template> templateCache;
+
     /** boolean objects/nulls keyed by name strings. */
-    private Map<String, Boolean> templateExistsCache = new HashMap<String, Boolean>();
-    
+    private final Map<String, Boolean> templateExistsCache = new HashMap<String, Boolean>();
+
     /** Caching flag. */
     private boolean cache = false;
-    
+
     /**
      * Creates a new instance of the templating system.
      * 
@@ -100,6 +103,32 @@ public class VelocityTemplating implements Templating
         this.config = config;
         this.logger = new DNALogChute(logger);
         this.fileSystem = fileSystem;
+        this.templateCache = new HashMap<String, Template>();
+        restart();
+    }
+
+    /**
+     * Creates a new instance of the templating system.
+     * 
+     * @param config the configuration.
+     * @param logger the logger.
+     * @param fileSystem the filesystem to read files from.
+     */
+    public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem,
+        CacheFactory cacheFactory)
+    {
+        this.config = config;
+        this.logger = new DNALogChute(logger);
+        this.fileSystem = fileSystem;
+        if(cacheFactory.getInstanceNames().contains(CACHE_NAME))
+        {
+            this.templateCache = cacheFactory.getInstance(CACHE_NAME);
+        }
+        else
+        {
+            // fall back to simple, permanent cache
+            this.templateCache = new HashMap<String, Template>();
+        }
         restart();
     }
 
@@ -108,12 +137,12 @@ public class VelocityTemplating implements Templating
      * 
      * @throws ComponentInitializationError if the restart fails for some reason.
      */
-    public void restart() 
+    public void restart()
         throws ComponentInitializationError
-    {        
+    {
         // create and initialize a new engine
         VelocityEngine newEngine = new VelocityEngine();
-        
+
         extension = config.getChild("extension").getValue(".vt");
         encoding = config.getChild("encoding").getValue("ISO-8859-1");
         cache = config.getChild("cache").getValueAsBoolean(false);
@@ -121,27 +150,27 @@ public class VelocityTemplating implements Templating
         {
             Configuration[] path = config.getChild("paths").getChildren("path");
             paths = new String[path.length];
-            for (int i = 0; i < path.length; i++)
+            for(int i = 0; i < path.length; i++)
             {
                 paths[i] = path[i].getValue();
             }
             Configuration node = config.getChild("properties");
             if(node != null)
-	        {
-	        	Configuration[] properties = node.getChildren("property");
-				for (int i = 0; i < properties.length; i++)
-				{
-					String name = properties[i].getAttribute("name");
-					String value = properties[i].getAttribute("value", null);
-					if(value == null)
-					{
-						value = properties[i].getValue();
-					}
+            {
+                Configuration[] properties = node.getChildren("property");
+                for(int i = 0; i < properties.length; i++)
+                {
+                    String name = properties[i].getAttribute("name");
+                    String value = properties[i].getAttribute("value", null);
+                    if(value == null)
+                    {
+                        value = properties[i].getValue();
+                    }
                     newEngine.addProperty(name, value);
-				}
+                }
             }
         }
-        catch (ConfigurationException e)
+        catch(ConfigurationException e)
         {
             throw new ComponentInitializationError("failed to initialze Velocity", e);
         }
@@ -149,33 +178,32 @@ public class VelocityTemplating implements Templating
         newEngine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
         newEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "objectledge");
         newEngine.setProperty("objectledge.resource.loader.class",
-			"org.objectledge.templating.velocity.LedgeResourceLoader");
+            "org.objectledge.templating.velocity.LedgeResourceLoader");
         newEngine.setProperty("objectledge.resource.loader."
-            + LedgeResourceLoader.LEDGE_FILE_SYSTEM,
-        	 fileSystem);
+            + LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
         newEngine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
-             logger);
+            logger);
         newEngine.setProperty(RuntimeConstants.INPUT_ENCODING, encoding);
         try
         {
             newEngine.init();
         }
-		///CLOVER:OFF
-        catch (VirtualMachineError e)
+        // /CLOVER:OFF
+        catch(VirtualMachineError e)
         {
             throw e;
         }
-        catch (ThreadDeath e)
+        catch(ThreadDeath e)
         {
             throw e;
         }
-        catch (Throwable t)
+        catch(Throwable t)
         {
             throw new ComponentInitializationError("failed to initialze Velocity", t);
         }
-		///CLOVER:ON
-        templateCache = new HashMap<String, Template>();
-        templateExistsCache = new HashMap<String, Boolean>();
+        // /CLOVER:ON
+        templateExistsCache.clear();
+        templateCache.clear();
 
         // replace old engine with new one
         this.engine = newEngine;
@@ -209,22 +237,22 @@ public class VelocityTemplating implements Templating
         boolean exists = false;
         try
         {
-            for (int i = 0; i < paths.length; i++)
+            for(int i = 0; i < paths.length; i++)
             {
                 String path = paths[i] + name + extension;
-                if (engine.resourceExists(path))
+                if(engine.resourceExists(path))
                 {
                     exists = true;
                     break;
                 }
             }
         }
-        ///CLOVER OFF
-        catch (Exception e)
+        // /CLOVER OFF
+        catch(Exception e)
         {
             throw new RuntimeException("Velocity internal error", e);
         }
-		///CLOVER ON
+        // /CLOVER ON
         if(cache)
         {
             synchronized(templateCache)
@@ -238,7 +266,8 @@ public class VelocityTemplating implements Templating
     /**
      * {@inheritDoc}
      */
-    public Template getTemplate(String name) throws TemplateNotFoundException
+    public Template getTemplate(String name)
+        throws TemplateNotFoundException
     {
         if(cache)
         {
@@ -257,7 +286,8 @@ public class VelocityTemplating implements Templating
                     }
                     else
                     {
-                        throw new TemplateNotFoundException("template "+name+extension+" not found");
+                        throw new TemplateNotFoundException("template " + name + extension
+                            + " not found");
                     }
                 }
             }
@@ -267,22 +297,22 @@ public class VelocityTemplating implements Templating
         String path = null;
         try
         {
-            for (int i = 0; i < paths.length; i++)
+            for(int i = 0; i < paths.length; i++)
             {
                 path = paths[i] + name + extension;
-                if (engine.resourceExists(path))
+                if(engine.resourceExists(path))
                 {
                     template = new VelocityTemplate(this, name, engine.getTemplate(path));
                 }
             }
         }
-		///CLOVER:OFF
-        catch (Exception e)
+        // /CLOVER:OFF
+        catch(Exception e)
         {
-            throw new RuntimeException("Velocity internal error, template path: '"+path+"'", e);
+            throw new RuntimeException("Velocity internal error, template path: '" + path + "'", e);
         }
-		///CLOVER:ON
-        if (template != null)
+        // /CLOVER:ON
+        if(template != null)
         {
             if(cache)
             {
@@ -301,25 +331,24 @@ public class VelocityTemplating implements Templating
      * {@inheritDoc}
      */
     public void merge(TemplatingContext context, Reader source, Writer target, String logTag)
-    	throws MergingException
+        throws MergingException
     {
         boolean success = false;
         try
         {
-            success = engine.evaluate(((VelocityContext)context).getContext(),
-            							target, logTag, source);
+            success = engine.evaluate(((VelocityContext)context).getContext(), target, logTag,
+                source);
         }
         catch(MethodInvocationException e)
         {
-            throw new MergingException("failed to render template - " +
-                                        " exception during method invocation", 
-                                        e.getWrappedThrowable());
-        }        
-        catch (Exception e)
+            throw new MergingException("failed to render template - "
+                + " exception during method invocation", e.getWrappedThrowable());
+        }
+        catch(Exception e)
         {
             throw new MergingException("failed to render template", e);
         }
-        if (!success)
+        if(!success)
         {
             throw new MergingException("failed to render template, cause in the log");
         }
@@ -329,21 +358,23 @@ public class VelocityTemplating implements Templating
      * {@inheritDoc}
      */
     public void merge(TemplatingContext context, Template template, Writer target)
-    	throws MergingException
+        throws MergingException
     {
         try
         {
-            ((VelocityTemplate)template).getTemplate().
-            	merge(((VelocityContext)context).getContext(), target);
-            // re-enable rendering if #stop directive was encountered in the nested template in Velocity 1.5+
-            ((org.apache.velocity.VelocityContext)((VelocityContext)context).getContext()).setAllowRendering(true);
+            ((VelocityTemplate)template).getTemplate().merge(
+                ((VelocityContext)context).getContext(), target);
+            // re-enable rendering if #stop directive was encountered in the nested template in
+            // Velocity 1.5+
+            ((org.apache.velocity.VelocityContext)((VelocityContext)context).getContext())
+                .setAllowRendering(true);
         }
         catch(MethodInvocationException e)
         {
-            throw new MergingException("failed to render template - " +                                        " exception during method invocation", 
-                                        e.getWrappedThrowable());
+            throw new MergingException("failed to render template - "
+                + " exception during method invocation", e.getWrappedThrowable());
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             throw new MergingException("failed to render template", e);
         }
@@ -361,7 +392,7 @@ public class VelocityTemplating implements Templating
     {
         return extension;
     }
-    
+
     // Velocity logging interface implementation
 
     /**
@@ -371,7 +402,7 @@ public class VelocityTemplating implements Templating
     {
         // does nothing
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -392,7 +423,8 @@ public class VelocityTemplating implements Templating
      * 
      * @author rafal
      */
-    private static class DNALogChute implements LogChute 
+    private static class DNALogChute
+        implements LogChute
     {
         /** The delegate DNA logger. */
         private Logger logger;
@@ -404,30 +436,30 @@ public class VelocityTemplating implements Templating
          */
         public DNALogChute(Logger logger)
         {
-            this.logger = logger;            
-        }      
-        
+            this.logger = logger;
+        }
+
         @Override
         public void init(RuntimeServices rs)
         {
         }
-        
+
         @Override
         public boolean isLevelEnabled(int level)
         {
-            switch (level)
+            switch(level)
             {
-            case LogChute.DEBUG_ID :
+            case LogChute.DEBUG_ID:
                 return logger.isDebugEnabled();
-            case LogChute.ERROR_ID :
+            case LogChute.ERROR_ID:
                 return logger.isErrorEnabled();
-            case LogChute.WARN_ID :
+            case LogChute.WARN_ID:
                 return logger.isWarnEnabled();
-            case LogChute.INFO_ID :
+            case LogChute.INFO_ID:
                 return logger.isInfoEnabled();
-            default :
+            default:
                 return logger.isDebugEnabled();
-            }    
+            }
         }
 
         /**
@@ -435,40 +467,40 @@ public class VelocityTemplating implements Templating
          */
         public void log(int level, String message)
         {
-            switch (level)
+            switch(level)
             {
-                case LogChute.ERROR_ID :
-                    logger.error(message);
-                    break;
-                case LogChute.WARN_ID :
-                    logger.warn(message);
-                    break;
-                case LogChute.INFO_ID :
-                    logger.info(message);
-                    break;
-                default :
-                    logger.debug(message);
-                    break;
+            case LogChute.ERROR_ID:
+                logger.error(message);
+                break;
+            case LogChute.WARN_ID:
+                logger.warn(message);
+                break;
+            case LogChute.INFO_ID:
+                logger.info(message);
+                break;
+            default:
+                logger.debug(message);
+                break;
             }
         }
 
         @Override
         public void log(int level, String message, Throwable e)
         {
-            switch (level)
+            switch(level)
             {
-                case LogChute.ERROR_ID :
-                    logger.error(message, e);
-                    break;
-                case LogChute.WARN_ID :
-                    logger.warn(message, e);
-                    break;
-                case LogChute.INFO_ID :
-                    logger.info(message, e);
-                    break;
-                default :
-                    logger.debug(message, e);
-                    break;
+            case LogChute.ERROR_ID:
+                logger.error(message, e);
+                break;
+            case LogChute.WARN_ID:
+                logger.warn(message, e);
+                break;
+            case LogChute.INFO_ID:
+                logger.info(message, e);
+                break;
+            default:
+                logger.debug(message, e);
+                break;
             }
         }
     }
