@@ -144,6 +144,12 @@
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-components</artifactId>
+        <version>${project.version}</version>
+        <classifier>install</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.objectledge</groupId>
+        <artifactId>ledge-components</artifactId>
         <type>test-jar</type>
         <version>${project.version}</version>
       </dependency>
