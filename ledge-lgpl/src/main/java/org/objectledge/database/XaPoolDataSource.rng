@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!--  
+ Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+--> 
+
+<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
+  <interleave>
+    <!-- connection properties -->
+    <element name="connection">
+      <interleave>
+        <!-- required properties -->
+        <element name="driver">
+          <text/>
+        </element>
+        <element name="url">
+          <text/>
+        </element>
+    
+        <!-- credentials -->
+        <optional>
+          <element name="user">  
+            <text/>
+          </element>
+        </optional>
+        <optional>    
+          <element name="password">  
+            <text/>
+          </element>
+        </optional> 
+        <optional>
+          <element name="login-timeout">
+           <text/>
+          </element>
+        </optional>
+
+        <!-- other properties -->
+        <optional>
+          <element name="transaction-isolation">
+            <text/>
+          </element>
+        </optional>
+    
+        <optional>
+          <element name="prepared-statement-cache-size">
+            <text/>
+          </element>
+        </optional>
+    
+      </interleave>
+    </element>
+
+    <!-- deadlock timeouts -->    
+    <optional>
+      <element name="deadlock">  
+        <interleave>
+          <optional>
+            <element name="max-wait">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="retry-wait">
+              <text/>
+            </element>
+          </optional>
+        </interleave>
+      </element>
+    </optional>
+
+    <!-- pool properties -->
+    <optional>
+      <element name="pool">      
+        <interleave>
+          <!-- pool capacity -->
+          <optional>
+            <element name="capacity">
+              <interleave>
+                <optional>
+                  <element name="min">
+                    <text/>
+                  </element>
+                </optional>
+                <element name="max">
+                  <text/>
+                </element>
+              </interleave>
+            </element>
+          </optional>
+          <!-- pool cleanup -->
+          <optional>
+            <element name="cleanup">
+              <interleave>
+                <!-- force GC during cleanup -->
+                <optional>
+                  <element name="gc">
+                    <text/>
+                  </element>
+                </optional>
+                <!-- cleanup thread wakeup interval -->
+                <optional>
+                  <element name="interval">
+                    <text/>
+                  </element>
+                </optional>
+                <!-- lifetime of unused connections -->
+                <optional>
+                  <element name="unused-life-time">
+                    <text/>
+                  </element>
+                </optional>
+              </interleave>
+            </element>
+          </optional>
+          <!-- connection checking -->
+          <optional>
+            <element name="checking">
+              <interleave>
+                <!-- connection checking level
+                 |     0 - no checking
+                 |     1 - check connection object
+                 |     2 - run validation query on connection
+                 |     3 - check all connection objects in the pool
+                 |     4 - run validation query on all connections in the pool
+                 -->
+                <optional>
+                  <element name="level">
+                    <text/>
+                  </element>
+                </optional>
+                <!-- connection validation statement -->
+                <optional>
+                  <element name="statement">
+                    <text/>
+                  </element>
+                </optional>
+              </interleave>
+            </element>
+          </optional>
+        </interleave>
+      </element>
+    </optional>
+    
+  </interleave>   
+</element>
