@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--  
+ Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+--> 
+<config>
+  <protocol>
+    <id>gg</id>
+    <name>GaduGadu</name>
+    <schema>gg</schema>
+    <iconUrl></iconUrl>
+    <infoUrl>http://gadugadu.pl/</infoUrl>
+    <statusUrlFormat>http://www.gadu-gadu.pl/users/status.asp?id=%s&amp;styl=1</statusUrlFormat>
+    <screenNamePattern>\d+</screenNamePattern>
+  </protocol>
+  
+  <protocol>
+    <id>tlen</id>
+    <name>Tlen</name>
+    <schema>tlen</schema>
+    <iconUrl></iconUrl>
+    <infoUrl>http://tlen.pl/</infoUrl>
+    <statusUrlFormat>http://status.tlen.pl/?u=%s&amp;t=1</statusUrlFormat>
+    <screenNamePattern>.*</screenNamePattern>
+  </protocol>
+  
+  <protocol>
+    <id>icq</id>
+    <name>ICQ</name>
+    <schema>icq</schema>
+    <iconUrl></iconUrl>
+    <infoUrl>http://icq.com/</infoUrl>
+    <statusUrlFormat>http://status.icq.com/online.gif?icq=%s&amp;img=5</statusUrlFormat>
+    <screenNamePattern>\d+</screenNamePattern>
+  </protocol>
+  
+  <protocol>
+    <id>yahoo</id>
+    <name>Yahoo!</name>
+    <schema>yahoo</schema>
+    <iconUrl></iconUrl>
+    <infoUrl>http://messenger.yahoo.com/</infoUrl>
+    <statusUrlFormat>http://opi.yahoo.com/online?u=%s&amp;m=g&amp;t=2</statusUrlFormat>
+    <screenNamePattern>.*</screenNamePattern>
+  </protocol>  
+</config>
