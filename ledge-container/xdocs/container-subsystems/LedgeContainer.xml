@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Ledge container</title>
+  </properties>
+
+  <body>
+    <section name="Ledge container">
+      <subsection name="Description">
+        <p>LedgeContainer is a NanoContainer flawor, that uses the
+        <a href="../../ledge-components/components/FileSystem.html">FileSystem</a> component for 
+        loading the composition file, and parses it using 
+        <a href="../pico-extensions/XMLFrontEnd.html">Ledge XmlFrontEnd</a>. It also pre-feeds
+        the internal PicoContainer with objects required by various container subsystems, including
+        a <code>FileSystem</code>, <code>ClassLoader</code> and confiuration directory path.</p>
+      </subsection>
+    
+      <subsection name="Browse">
+        <p>
+          <ul>
+            <li>LedgeContainer <a href="../apidocs/org/objectledge/container/LedgeContainer.html">JavaDoc</a></li>
+            <li>LedgeContainer <a href="../apidocs/org/objectledge/container/LedgeContainer.html">XRef</a></li>
+            <li>LedgeContainer <a href="http://objectledge.org/fisheye/browse/ledge/ledge-container/src/main/java/org/objectledge/container/LedgeContainer.java">CVS log</a></li>
+          </ul>
+        </p>
+      </subsection>
+    
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                not applicable
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>PicoContainer (picocontainer), NanoContanier (picocontainer:nanocontainer),
+                PicoExtras Script (picocontainer:picoextras-script)</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>  
