@@ -192,10 +192,8 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.6</version>
         <executions>
           <execution>
-            <id>javacc</id>
             <goals>
               <goal>javacc</goal>
             </goals>
@@ -205,7 +203,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.1</version>
         <executions>
           <execution>
             <id>test-jar</id>
@@ -223,7 +220,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2.1</version>
         <executions>
           <execution>
             <phase>package</phase>
