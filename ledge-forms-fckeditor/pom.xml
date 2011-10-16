@@ -12,11 +12,6 @@
   <name>Visual HTMLArea plugin for ledge-forms using FCKEditor</name>
   <dependencies>
     <dependency>
-      <groupId>org.objectledge</groupId>
-      <artifactId>ledge-common</artifactId>
-      <type>pom</type>
-    </dependency>
-    <dependency>
       <groupId>com.ckeditor</groupId>
       <artifactId>ckeditor</artifactId>
       <version>3.6.1</version>
