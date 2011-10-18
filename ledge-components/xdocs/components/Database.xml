@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Database</title>
+  </properties>
+
+  <body>
+    <section name="Database">
+      <subsection name="Description">
+        <p>A convenience wrapper around database related components.</p>
+		<p>Use this component to reduce the number of required constructor parameters
+		   in your database dependant components, and make sure that they'll access 
+		   the right data source, if you are using the ThreadDataSource decorator.</p>
+      </subsection>
+    
+      <subsection name="Browse">
+	    <p>
+	      <ul>
+	        <li>Database <a href="../apidocs/org/objectledge/database/Database.html">JavaDoc</a></li>
+	        <li>Database <a href="../xref/org/objectledge/database/Database.html">XRef</a></li>
+	        <li>Database <a href="http://objectledge.org/fisheye/browse/ledge/ledge-components/src/main/java/org/objectledge/database/Database.java">CVS log</a></li>
+	      </ul>
+	    </p>
+      </subsection>
+
+      <subsection name="Dependencies">
+        <p>
+          <table>
+            <tr>
+              <th>required components</th>
+              <td width="100%">
+                <a href="DataSource.html">DataSource</a>, 
+                <a href="DataSource.html">IdGenerator</a>, 
+                <a href="Transaction.html">Transaction</a>
+              </td>
+            </tr>
+            <tr>
+              <th>required libraries</th>
+              <td>none</td>
+            </tr>
+          </table>
+        </p>
+      </subsection>
+
+      <subsection name="Constructor parameters">		
+  	    <p>
+	      <table>
+	        <tr>
+              <th>position</th>
+	          <th>type</th>
+	          <th widht="100%">description</th>
+            </tr>
+            <tr>
+	          <td>1</td>
+	          <td><code>org.objectledge.database.DataSource</code></td>
+	          <td>the data source</td>
+	        </tr>
+		    <tr>
+		      <td>2</td>
+		      <td><code>org.objectledge.database.IdGenerator</code></td>
+		      <td>the id generator</td>
+		    </tr>
+		    <tr>
+		      <td>3</td>
+		      <td><code>org.objectledge.database.Transaction</code></td>
+		      <td>the transaction</td>
+		    </tr>		    
+		  </table>
+	    </p>
+	  </subsection>
+    </section>
+  </body>
+</document>  
+  
