@@ -33,7 +33,10 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.Text;
+import org.dom4j.VisitorSupport;
 import org.dom4j.io.OutputFormat;
+import org.dom4j.tree.DefaultElement;
+import org.dom4j.tree.DefaultText;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 
@@ -465,6 +468,130 @@ public class HTMLServiceImpl
     {
         // U+00AO = &nbsp;
         return text.replace('\u00A0', ' ').trim().length() == 0;
+    }
+
+    public void mergeAdjecentTextNodes(Document doc)
+    {
+        doc.accept(new VisitorSupport()
+            {
+                @Override
+                public void visit(Element element)
+                {
+                    Node cur = null;
+                    StringBuilder buff = new StringBuilder();
+                    List<Node> newContent = new ArrayList<Node>(element.content().size());
+                    for(Node node : (List<Node>)element.content())
+                    {
+                        if(node instanceof Text)
+                        {
+                            if(cur == null)
+                            {
+                                cur = node;
+                                buff.setLength(0);
+                                buff.append(node.getText());
+                            }
+                            else
+                            {
+                                buff.append(node.getText());
+                            }
+                        }
+                        else
+                        {
+                            if(cur != null)
+                            {
+                                newContent.add(new DefaultText(buff.toString()));
+                                cur = null;
+                            }
+                            newContent.add((Node)node.clone());
+                        }
+                    }
+                    if(cur != null)
+                    {
+                        newContent.add(new DefaultText(buff.toString()));
+                    }
+                    element.setContent(newContent);
+                }
+            });
+    }
+
+    public void bulletsToLists(Document doc)
+    {
+        doc.accept(new VisitorSupport()
+            {
+                @Override
+                public void visit(Element element)
+                {
+                    Element ul = null;
+                    List<Node> newContent = new ArrayList<Node>(element.content().size());
+                    for(Node node : (List<Node>)element.content())
+                    {
+                        if(isBullet(node))
+                        {
+                            if(ul == null)
+                            {
+                                ul = new DefaultElement("UL");
+                                newContent.add(ul);
+                            }
+                            ul.add(toListItem(node));
+                        }
+                        else if(ul != null && node instanceof Text)
+                        {
+                            ul.add((Text)(node.clone()));
+                        }
+                        else
+                        {
+                            ul = null;
+                            newContent.add((Node)node.clone());
+                        }
+                    }
+                    element.setContent(newContent);
+                }
+
+                /**
+                 * Check if the node is a P element, having Text node as a first child, with content
+                 * beginning with U+002D (hyphen-minus) or U+00B7 (middot) character.
+                 * 
+                 * @param node node to be checked.
+                 * @return if node is a paragraph beginning with a bullet.
+                 */
+                private boolean isBullet(Node node)
+                {
+                    return node instanceof Element
+                        && node.getName().equals("P")
+                        && node.selectObject("child::node()[1]") instanceof Text
+                        && ((String)node.selectObject("string(child::text()[1])"))
+                            .matches("^[\\r\\n\\s\u00A0]*[-\u00B7].*");
+                }
+
+                /**
+                 * Converts bulleted paragraph into list item. Bullet and following whitespace is
+                 * stripped from the first Text child node.
+                 * 
+                 * @param node node to be converted.
+                 * @return LI element.
+                 */
+                private Node toListItem(Node node)
+                {
+                    Node firstText = (Node)node.selectSingleNode("child::text()[1]");
+                    String text = firstText.getText();
+                    text = text.replaceAll("^[\\r\\n\\s\u00A0]*[-\u00B7][\\s\u00A0]*", "");
+                    Element listItem = (Element)(node.clone());
+                    listItem.setName("LI");
+                    listItem.content().set(0, new DefaultText(text));
+                    return listItem;
+                }
+            });
+    }
+
+    public void collapseWhitespace(Document html)
+    {
+        List<Node> textNodes = (List<Node>)html.selectNodes("//text()");
+        for(Node textNode : textNodes)
+        {
+            String text = textNode.getText();
+            text = text.replaceAll("[ \u00A0\t]+", " ");
+            textNode.setText(text);
+        }
     }
 
     // helper classes
