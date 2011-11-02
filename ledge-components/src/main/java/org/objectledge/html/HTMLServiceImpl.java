@@ -502,7 +502,7 @@ public class HTMLServiceImpl
                                 newContent.add(new DefaultText(buff.toString()));
                                 cur = null;
                             }
-                            newContent.add(node);
+                            newContent.add((Node)node.clone());
                         }
                     }
                     if(cur != null)
@@ -541,7 +541,7 @@ public class HTMLServiceImpl
                         else
                         {
                             ul = null;
-                            newContent.add(node);
+                            newContent.add((Node)node.clone());
                         }
                     }
                     element.setContent(newContent);
@@ -560,7 +560,7 @@ public class HTMLServiceImpl
                         && node.getName().equals("P")
                         && node.selectObject("child::node()[1]") instanceof Text
                         && ((String)node.selectObject("string(child::text()[1])"))
-                            .matches("^[-\u00B7].*");
+                            .matches("^[\\r\\n\\s\u00A0]*[-\u00B7].*");
                 }
 
                 /**
@@ -574,7 +574,7 @@ public class HTMLServiceImpl
                 {
                     Node firstText = (Node)node.selectSingleNode("child::text()[1]");
                     String text = firstText.getText();
-                    text = text.replaceAll("^[-\u00B7][\\s\u00A0]*", "");
+                    text = text.replaceAll("^[\\r\\n\\s\u00A0]*[-\u00B7][\\s\u00A0]*", "");
                     Element listItem = (Element)(node.clone());
                     listItem.setName("LI");
                     listItem.content().set(0, new DefaultText(text));
