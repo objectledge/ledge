@@ -96,4 +96,20 @@ public interface HTMLService
      * @param html a HTML document that will be altered.
      */
     public void collapseSubsequentBreaksInParas(Document html);
+
+    /**
+     * Documents that contains XML entities might have the text chopped into multiple adjacent text
+     * nodes, this method fixes this by merging text nodes together.
+     * 
+     * @param html a HTML document that will be altered.
+     */
+    public void mergeAdjecentTextNodes(Document html);
+
+    /**
+     * Collapse whitespace sequences (ordinary spaces, non-breakable spaces and tabs) into single
+     * spaces.
+     * 
+     * @param html a HTML document that will be altered.
+     */
+    public void collapseWhitespace(Document html);
 }
