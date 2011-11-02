@@ -121,4 +121,18 @@ public class HTMLServiceImplTest
         assertTrue(((String)doc.selectObject("string(//P[@id='tabs'])")).contains("x y"));
         assertTrue(((String)doc.selectObject("string(//P[@id='nbsps'])")).contains("x y"));
     }
+
+    public void testBulletLists()
+        throws HTMLException, IOException
+    {
+        String html = getFileSystem().read("html/bullets.html", "UTF-8");
+        Document doc = htmlService.textToDom4j(html);
+        htmlService.mergeAdjecentTextNodes(doc); // merge &nbsp; nodes with adjacent text
+        htmlService.bulletsToLists(doc);
+        List<Element> divs = (List<Element>)doc.selectNodes("//DIV");
+        for(Element div : divs)
+        {
+            assertEquals(3, ((Double)div.selectObject("count(./UL/LI)")).intValue());
+        }
+    }
 }

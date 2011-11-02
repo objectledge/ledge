@@ -112,4 +112,12 @@ public interface HTMLService
      * @param html a HTML document that will be altered.
      */
     public void collapseWhitespace(Document html);
+
+    /**
+     * Converts sequences of paragraphs starting with - (minus-hyphen, U+002D) or · (middle dot,
+     * U+00B7) characters into UL / LI sturctures.
+     * 
+     * @param doc html a HTML document that will be altered.
+     */
+    public void bulletsToLists(Document html);
 }
