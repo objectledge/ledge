@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.util.Util;
 import org.xml.sax.Attributes;
 
@@ -22,7 +22,7 @@ public class Actions extends Node
         super(type, atts);
     }
 
-    private void addToActionsByEventType(Action child)
+    public void addAction(Action child)
     {
         String event = child.getEventType();
         // TODO: do we have a default event
@@ -49,7 +49,7 @@ public class Actions extends Node
         for(int i = 0, s = next.children.size(); i < s; i++)
         {
             Action child = (Action)(next.children.get(i));
-            next.addToActionsByEventType(child);
+            next.addAction(child);
         }
         return next;
     }
@@ -59,7 +59,7 @@ public class Actions extends Node
     /** Map containing actions gropued by event type. */
     protected HashMap<String, List<Action>> actionsByEventType = new HashMap<String, List<Action>>();
 
-    public void execute(UI ui, InstanceImpl instance, ActionEvent event)
+    public void execute(UI ui, Instance instance, ActionEvent event)
     {
         List<Action> list = (actionsByEventType.get(event.getType()));
         if(list != null)
@@ -84,7 +84,7 @@ public class Actions extends Node
             super.addChild(child);
 
             // group actions by their event type
-            addToActionsByEventType((Action)child);
+            addAction((Action)child);
         }
         else
         {

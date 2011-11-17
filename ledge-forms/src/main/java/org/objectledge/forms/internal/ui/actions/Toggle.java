@@ -1,6 +1,7 @@
 package org.objectledge.forms.internal.ui.actions;
 
 import org.objectledge.forms.ConstructionException;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.objectledge.forms.internal.ui.ActionEvent;
 import org.objectledge.forms.internal.ui.NodeSelectable;
@@ -40,10 +41,11 @@ public class Toggle extends org.objectledge.forms.internal.ui.Action
      *      with {@link #childNodeId} in subtree</li>
      * </ol>
      */
-    public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void execute(UI ui, Instance instance, ActionEvent evt)
     {
         org.dom4j.Node contextNode = ((ReferenceSingle)(containerNode.getRef())).getContextNode(instance);
-        instance.setStateValue(contextNode, containerNode.getCurrentChildKey(), childNodeId);
+        ((InstanceImpl)instance).setStateValue(contextNode, containerNode.getCurrentChildKey(),
+            childNodeId);
     }
 
     //------------------------------------------------------------------------

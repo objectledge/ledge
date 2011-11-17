@@ -1,7 +1,7 @@
 package org.objectledge.forms.internal.ui.actions;
 
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.ui.ActionEvent;
 import org.objectledge.forms.internal.ui.ActionNode;
 import org.objectledge.forms.internal.ui.Node;
@@ -37,7 +37,7 @@ public class Dispatch extends org.objectledge.forms.internal.ui.Action
     /** This method performs the action, ie. dispatches an event
      * to a given target.
      */
-    public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void execute(UI ui, Instance instance, ActionEvent evt)
     {
         targetNode.dispatchEvent(ui, instance, new ActionEvent(eventName, (Node)(targetNode)));
     }

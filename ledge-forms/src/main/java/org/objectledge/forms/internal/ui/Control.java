@@ -1,6 +1,6 @@
 package org.objectledge.forms.internal.ui;
 
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 
 /** Represents common properties of form-tool controls.
  * <ul>
@@ -15,10 +15,10 @@ import org.objectledge.forms.internal.model.InstanceImpl;
 public interface Control extends ActionNode
 {
     /** Returns value associated with this Control. */
-    public Object getValue(InstanceImpl instance);
+    public Object getValue(Instance instance);
     /** Returns <code>true</code> if this control has a value. */
-    public boolean hasValue(InstanceImpl instance);
+    public boolean hasValue(Instance instance);
     /** Returns true if value associated with this Control is invalid. */
-    public boolean hasError(InstanceImpl instance);
+    public boolean hasError(Instance instance);
 }
 

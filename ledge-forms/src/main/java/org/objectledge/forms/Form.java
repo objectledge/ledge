@@ -1,5 +1,6 @@
 package org.objectledge.forms;
 
+import org.objectledge.forms.internal.ui.UI;
 import org.objectledge.parameters.Parameters;
 
 
@@ -87,4 +88,7 @@ public interface Form
     public String getInstanceSchemaURI();
     /** Returns URI for this form's Default Instance document. */
     public String getDefaultInstanceURI();
+
+    /** Returns UI of the form. */
+    public UI getUI();
 }

@@ -1,6 +1,7 @@
 package org.objectledge.forms.internal.ui;
 
 import org.objectledge.forms.ConstructionException;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.model.Bind;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.objectledge.forms.internal.model.InstanceReference;
@@ -274,12 +275,12 @@ implements Cloneable
     /** Removes contexNode(s) cached for this ReferenceNode from Instance.
      * @param instance InstanceImpl in which and for which context nodes are cached.
      */
-    public void clearContextNodeCache(InstanceImpl instance)
+    public void clearContextNodeCache(Instance instance)
     {
         clearContextNodeCache(instance, containerNode);
     }
 
-    private void clearContextNodeCache(InstanceImpl instance, Node uiNode)
+    private void clearContextNodeCache(Instance instance, Node uiNode)
     {
         clearContextNodeCache(instance, uiNode.children.iterator());
 
@@ -290,10 +291,10 @@ implements Cloneable
             clearContextNodeCache(instance, ((NodeCaption)uiNode).actions.children.iterator());
         }
 
-        instance.clearContextNode(uiNode.uiPath);
+        ((InstanceImpl)instance).clearContextNode(uiNode.uiPath);
     }
 
-    private void clearContextNodeCache(InstanceImpl instance, java.util.Iterator<Node> iter)
+    private void clearContextNodeCache(Instance instance, java.util.Iterator<Node> iter)
     {
         while(iter.hasNext())
         {
@@ -311,10 +312,10 @@ implements Cloneable
      * and from which context node(s) will be retrieved.
      * @return Context node or a list of context nodes.
      */
-    protected Object getContextNodeInternal(InstanceImpl instance)
+    protected Object getContextNodeInternal(Instance instance)
     {
         // 1. Check for context node in context node cache.
-        Object localContextNode = instance.getContextNode(containerNode.uiPath);
+        Object localContextNode = ((InstanceImpl)instance).getContextNode(containerNode.uiPath);
         if(localContextNode != null)
         {
             return localContextNode;
@@ -339,7 +340,7 @@ implements Cloneable
         }
 
         // 5. Store context node in UI context node cache.
-        instance.setContextNode(containerNode.getName(), localContextNode);
+        ((InstanceImpl)instance).setContextNode(containerNode.getName(), localContextNode);
 
         return localContextNode;
     }
@@ -350,7 +351,7 @@ implements Cloneable
      * and from which context node(s) will be retrieved.
      * @return Context node for XPath expression.
      */
-    public org.dom4j.Node getParentContextNode(InstanceImpl instance)
+    public org.dom4j.Node getParentContextNode(Instance instance)
     {
         // 1. get context node for this InstanceReference from parent
         org.dom4j.Node contextNode = null;
@@ -386,7 +387,7 @@ implements Cloneable
      * @param child Child UI Node which called this method.
      * @return Parent context node for a calling child.
      */
-    protected org.dom4j.Node getParentContextNodeForChild(InstanceImpl instance, Node child)
+    protected org.dom4j.Node getParentContextNodeForChild(Instance instance, Node child)
     {
         return (org.dom4j.Node)getContextNodeInternal(instance);
     }
@@ -405,7 +406,7 @@ implements Cloneable
 
     /** This method is for raw acces to Reference's evaluation result.
      */
-    public Object evaluate(InstanceImpl instance)
+    public Object evaluate(Instance instance)
     {
         return instanceReference.getValue(getParentContextNode(instance));
     }

@@ -1,7 +1,7 @@
 package org.objectledge.forms.internal.ui.actions;
 
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.ui.ActionEvent;
 import org.objectledge.forms.internal.ui.UI;
 import org.xml.sax.Attributes;
@@ -21,7 +21,7 @@ public class NoOp extends org.objectledge.forms.internal.ui.Action
 
     /** This method performs the action, ie. does nothing.
      */
-    public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void execute(UI ui, Instance instance, ActionEvent evt)
     {
         // do nothing very thoroughly
     }
