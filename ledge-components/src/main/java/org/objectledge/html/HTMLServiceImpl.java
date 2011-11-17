@@ -549,7 +549,7 @@ public class HTMLServiceImpl
 
                 /**
                  * Check if the node is a P element, having Text node as a first child, with content
-                 * beginning with U+002D (hyphen-minus) or U+00B7 (middot) character.
+                 * beginning with U+00B7 (middot) character.
                  * 
                  * @param node node to be checked.
                  * @return if node is a paragraph beginning with a bullet.
@@ -560,7 +560,7 @@ public class HTMLServiceImpl
                         && node.getName().equals("P")
                         && node.selectObject("child::node()[1]") instanceof Text
                         && ((String)node.selectObject("string(child::text()[1])"))
-                            .matches("^[\\r\\n\\s\u00A0]*[-\u00B7].*");
+                            .matches("^[\\r\\n\\s\u00A0]*[\u00B7].*");
                 }
 
                 /**
@@ -574,7 +574,7 @@ public class HTMLServiceImpl
                 {
                     Node firstText = (Node)node.selectSingleNode("child::text()[1]");
                     String text = firstText.getText();
-                    text = text.replaceAll("^[\\r\\n\\s\u00A0]*[-\u00B7][\\s\u00A0]*", "");
+                    text = text.replaceAll("^[\\r\\n\\s\u00A0]*[\u00B7][\\s\u00A0]*", "");
                     Element listItem = (Element)(node.clone());
                     listItem.setName("LI");
                     listItem.content().set(0, new DefaultText(text));
