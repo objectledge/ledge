@@ -125,7 +125,7 @@ public class HTMLServiceImplTest
     {
         String html = getFileSystem().read("html/bullets.html", "UTF-8");
         Document doc = htmlService.textToDom4j(html);
-        htmlService.bulletsToLists(doc);
+        htmlService.bulletParasToLists(doc);
         List<Element> divs = (List<Element>)doc.selectNodes("//DIV");
         for(Element div : divs)
         {

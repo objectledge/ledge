@@ -1,6 +1,7 @@
 package org.objectledge.html;
 
 import java.io.Writer;
+import java.util.Set;
 
 import org.dom4j.Document;
 
@@ -77,6 +78,14 @@ public interface HTMLService
     public String collectText(Document dom4jDoc);
 
     /**
+     * Documents that contains XML entities might have the text chopped into multiple adjacent text
+     * nodes, this method fixes this by merging text nodes together.
+     * 
+     * @param html a HTML document that will be altered.
+     */
+    public void mergeAdjecentTextNodes(Document html);
+
+    /**
      * Removes from the documents all P tags that contain only whitespace.
      * 
      * @param html a HTML document that will be altered.
@@ -98,14 +107,6 @@ public interface HTMLService
     public void collapseSubsequentBreaksInParas(Document html);
 
     /**
-     * Documents that contains XML entities might have the text chopped into multiple adjacent text
-     * nodes, this method fixes this by merging text nodes together.
-     * 
-     * @param html a HTML document that will be altered.
-     */
-    public void mergeAdjecentTextNodes(Document html);
-
-    /**
      * Collapse whitespace sequences (ordinary spaces, non-breakable spaces and tabs) into single
      * spaces.
      * 
@@ -119,5 +120,34 @@ public interface HTMLService
      * 
      * @param doc html a HTML document that will be altered.
      */
-    public void bulletsToLists(Document html);
+    public void bulletParasToLists(Document html);
+
+    /**
+     * Identifiers of document cleanup methods, used as apart of cleanup profile.
+     */
+    public enum Cleanup
+    {
+        /** {@link HTMLService#removeEmptyParas(Document)} */
+        REMOVE_EMPTY_PARAS,
+
+        /** {@link HTMLService#trimBreaksFromParas(Document)} */
+        TRIM_BREAKS_FROM_PARAS,
+
+        /** {@link HTMLService#collapseSubsequentBreaksInParas(Document)} */
+        COLLAPSE_SUBSEQUENT_BREAKS_IN_PARAS,
+
+        /** {@link HTMLService#collapseWhitespace(Document)} */
+        COLLAPSE_WHITESPACE,
+
+        /** {@link HTMLService#bulletsToLists(Document) } */
+        BULLET_PARAS_TO_LISTS
+    }
+
+    /**
+     * Apply selected cleanup methods to the document.
+     * 
+     * @param doc a HTML document that will be altered.
+     * @param cleanups selected cleanup methods.
+     */
+    public void applyCleanups(Document doc, Set<Cleanup> cleanups);
 }

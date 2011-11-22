@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -174,6 +175,28 @@ public class HTMLServiceImpl
         }
     }
 
+    private Set<Cleanup> getCleanups(String profileName)
+    {
+        Set<Cleanup> cleanups = EnumSet.noneOf(Cleanup.class);
+        if(cleanupProfiles.get(profileName).getChild("additionalCleanups", false) != null)
+        {
+            try
+            {
+                Configuration[] cleanupElements = cleanupProfiles.get(profileName)
+                    .getChild("additionalCleanups").getChildren("cleanup");
+                for(Configuration cleanupElement : cleanupElements)
+                {
+                    cleanups.add(Cleanup.valueOf(cleanupElement.getValue()));
+                }
+            }
+            catch(ConfigurationException e)
+            {
+                throw new IllegalArgumentException("Invalid configuration", e);
+            }
+        }
+        return cleanups;
+    }
+
     /**
      * Return the configured profile names.
      * 
@@ -269,6 +292,10 @@ public class HTMLServiceImpl
                     doc = emptyDom4j();
                 }
                 mergeAdjecentTextNodes(doc);
+                if(cleanupProfile != null)
+                {
+                    applyCleanups(doc, getCleanups(cleanupProfile));
+                }
                 return doc;
             }
             else
@@ -523,7 +550,7 @@ public class HTMLServiceImpl
             });
     }
 
-    public void bulletsToLists(Document doc)
+    public void bulletParasToLists(Document doc)
     {
         doc.accept(new VisitorSupport()
             {
@@ -600,6 +627,32 @@ public class HTMLServiceImpl
             String text = textNode.getText();
             text = text.replaceAll("[ \u00A0\t]+", " ");
             textNode.setText(text);
+        }
+    }
+
+    @Override
+    public void applyCleanups(Document doc, Set<Cleanup> cleanupMethods)
+    {
+        for(Cleanup cleanup : cleanupMethods)
+        {
+            switch(cleanup)
+            {
+            case REMOVE_EMPTY_PARAS:
+                removeEmptyParas(doc);
+                break;
+            case TRIM_BREAKS_FROM_PARAS:
+                trimBreaksFromParas(doc);
+                break;
+            case COLLAPSE_SUBSEQUENT_BREAKS_IN_PARAS:
+                collapseSubsequentBreaksInParas(doc);
+                break;
+            case COLLAPSE_WHITESPACE:
+                collapseWhitespace(doc);
+                break;
+            case BULLET_PARAS_TO_LISTS:
+                bulletParasToLists(doc);
+                break;
+            }
         }
     }
 
