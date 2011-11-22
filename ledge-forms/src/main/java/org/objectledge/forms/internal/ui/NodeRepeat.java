@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.objectledge.forms.ConstructionException;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.objectledge.forms.internal.util.Util;
 import org.xml.sax.Attributes;
@@ -64,25 +65,25 @@ public class NodeRepeat extends NodeCaptionReference
 
     private String INDEX;
 
-    public int getIndex(InstanceImpl instance)
+    public int getIndex(Instance instance)
     {
         // get parent contextNode - repeat cannot us contextNode because it
         // does not have one
         org.dom4j.Node contextNode = ref.getParentContextNode(instance);
         // get value from state
-        Integer index = (Integer)(instance.getStateValue(contextNode, INDEX));
+        Integer index = (Integer)(((InstanceImpl)instance).getStateValue(contextNode, INDEX));
         // no state value - get one from default
         if(index == null)
         {
             index = new Integer( calcIndex(instance, startIndex) );
             // store index val in state
-            instance.setStateValue(contextNode, INDEX, index);
+            ((InstanceImpl)instance).setStateValue(contextNode, INDEX, index);
         }
 
         return index.intValue();
     }
 
-    private int calcIndex(InstanceImpl instance, int index)
+    private int calcIndex(Instance instance, int index)
     {
         // check index for sanity
         int indexVal = index;
@@ -106,7 +107,7 @@ public class NodeRepeat extends NodeCaptionReference
         return indexVal;
     }
 
-    public List<Node> getChildren(InstanceImpl instance)
+    public List<Node> getChildren(Instance instance)
     {
         List<org.dom4j.Node> contextNodes = ((ReferenceMultipleRepeat)ref).getContextNodes(instance);
         int size = Math.min(contextNodes.size(), number);
@@ -118,7 +119,7 @@ public class NodeRepeat extends NodeCaptionReference
         return instChildren;
     }
 
-    public void flushChildrenState(InstanceImpl instance)
+    public void flushChildrenState(Instance instance)
     {
         ref.clearContextNodeCache(instance);
     }

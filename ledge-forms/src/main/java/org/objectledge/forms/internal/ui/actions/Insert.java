@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.dom4j.Node;
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.ui.ActionEvent;
 import org.objectledge.forms.internal.ui.ReferenceMultipleRepeat;
 import org.objectledge.forms.internal.ui.ReferenceSingle;
@@ -37,7 +37,7 @@ public class Insert extends BaseInsertDeleteAction
      * document.
      */
     @SuppressWarnings("unchecked")
-    public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void execute(UI ui, Instance instance, ActionEvent evt)
     {
         // get repeat's context nodes
         org.dom4j.Element parentContextNode = (org.dom4j.Element)(((ReferenceMultipleRepeat)(repeat.getRef())).getParentContextNode(instance));

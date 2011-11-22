@@ -3,7 +3,7 @@ package org.objectledge.forms.internal.ui;
 import java.util.List;
 
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.util.Util;
 import org.xml.sax.Attributes;
 
@@ -33,7 +33,7 @@ public abstract class Action extends Node
         return eventType;
     }
 
-    public abstract void execute(UI ui, InstanceImpl instance, ActionEvent evt);
+    public abstract void execute(UI ui, Instance instance, ActionEvent evt);
 
     /** This method is used in action which reference nodes by their XML ID.
      * It is used to find the referenced node in a closest RepeatSubTree in which

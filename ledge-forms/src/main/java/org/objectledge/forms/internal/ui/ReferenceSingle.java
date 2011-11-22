@@ -1,6 +1,6 @@
 package org.objectledge.forms.internal.ui;
 
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.xml.sax.Attributes;
 
 
@@ -29,7 +29,7 @@ public class ReferenceSingle extends Reference
     //------------------------------------------------------------------------
     // ReferenceSingle methods
     //
-    public org.dom4j.Node getContextNode(InstanceImpl instance)
+    public org.dom4j.Node getContextNode(Instance instance)
     {
         return (org.dom4j.Node)getContextNodeInternal(instance);
     }

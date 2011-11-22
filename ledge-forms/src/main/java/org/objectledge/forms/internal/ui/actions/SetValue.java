@@ -1,7 +1,7 @@
 package org.objectledge.forms.internal.ui.actions;
 
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.model.InstanceReference;
 import org.objectledge.forms.internal.ui.ActionEvent;
 import org.objectledge.forms.internal.ui.ReferenceSingle;
@@ -43,7 +43,7 @@ implements TextNode
 
     /** This method performs the action, ie. sets a value in Instance.
      */
-    public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void execute(UI ui, Instance instance, ActionEvent evt)
     {
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);
 

@@ -125,7 +125,7 @@ public class NodeControlSelect extends NodeControl
     //------------------------------------------------------------------------
     // Control methods
     //
-    void setValue(InstanceImpl instance, String value)
+    public void setValue(InstanceImpl instance, String value)
     {
         // 1. Set value in instance
         super.setValue(instance, value);

@@ -1,6 +1,7 @@
 package org.objectledge.forms.internal.ui;
 
 import org.objectledge.forms.ConstructionException;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.model.InstanceImpl;
 import org.xml.sax.Attributes;
 
@@ -29,7 +30,7 @@ implements Control
      * Grabs context node and returns value, stores cached
      * value and context node in NodeState.
      */
-    public Object getValue(InstanceImpl instance)
+    public Object getValue(Instance instance)
     {
         // 1. Get contextNode.
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);
@@ -38,7 +39,7 @@ implements Control
         return ref.getValue(contextNode);
     }
 
-    public boolean hasValue(InstanceImpl instance)
+    public boolean hasValue(Instance instance)
     {
         Object value = getValue(instance);
         boolean hasValue = (value != null);
@@ -49,13 +50,13 @@ implements Control
         return hasValue;
     }
 
-    public boolean hasError(InstanceImpl instance)
+    public boolean hasError(Instance instance)
     {
         //FIXME: Add Bind.required checking (??)
-        return instance.hasError(((ReferenceSingle)ref).getContextNode(instance));
+        return ((InstanceImpl)instance).hasError(((ReferenceSingle)ref).getContextNode(instance));
     }
 
-    void setValue(InstanceImpl instance, String value)
+    public void setValue(Instance instance, String value)
     {
         // 1. Get contextNode.
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);
@@ -68,7 +69,7 @@ implements Control
     // ActionNode methods
 
     /** Passes an event to this UI node (control). */
-    public void dispatchEvent(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void dispatchEvent(UI ui, Instance instance, ActionEvent evt)
     {
         actions.execute(ui, instance, evt);
     }
@@ -77,5 +78,10 @@ implements Control
     public boolean hasAction()
     {
         return (actions.getChildren().size() > 0);
+    }
+
+    public void addAction(Action action)
+    {
+        actions.addAction(action);
     }
 }

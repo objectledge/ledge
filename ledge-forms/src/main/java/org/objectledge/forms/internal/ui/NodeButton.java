@@ -1,7 +1,7 @@
 package org.objectledge.forms.internal.ui;
 
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.xml.sax.Attributes;
 
 
@@ -30,7 +30,7 @@ implements ActionNode
     // ActionNode methods
 
     /** Passes an event to this UI node (control). */
-    public void dispatchEvent(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void dispatchEvent(UI ui, Instance instance, ActionEvent evt)
     {
         actions.execute(ui, instance, evt);
     }
@@ -39,6 +39,11 @@ implements ActionNode
     public boolean hasAction()
     {
         return (actions.getChildren().size() > 0);
+    }
+
+    public void addAction(Action action)
+    {
+        actions.addAction(action);
     }
 }
 

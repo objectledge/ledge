@@ -2,7 +2,7 @@ package org.objectledge.forms.internal.ui;
 
 import java.util.List;
 
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.xml.sax.Attributes;
 
 
@@ -24,7 +24,7 @@ public class ReferenceMultipleRepeat extends ReferenceMultiple
     //------------------------------------------------------------------------
     // ReferenceMultiple methods
     //
-    protected org.dom4j.Node getParentContextNodeForChild(InstanceImpl instance, Node child)
+    protected org.dom4j.Node getParentContextNodeForChild(Instance instance, Node child)
     {
         List<Node> instChildren = ((NodeRepeat)containerNode).getChildren(instance);
         int repeatIndex = ((NodeRepeat)containerNode).getIndex(instance);

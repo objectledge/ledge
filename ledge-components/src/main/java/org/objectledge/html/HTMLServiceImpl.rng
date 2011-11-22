@@ -72,6 +72,21 @@
           </oneOrMore>
         </element>
       </optional>
+      <optional>
+        <element name="additionalCleanups">
+          <oneOrMore>
+            <element name="cleanup">
+               <choice>
+                 <value>REMOVE_EMPTY_PARAS</value>
+                 <value>TRIM_BREAKS_FROM_PARAS</value>
+                 <value>COLLAPSE_SUBSEQUENT_BREAKS_IN_PARAS</value>
+                 <value>COLLAPSE_WHITESPACE</value>
+                 <value>BULLET_PARAS_TO_LISTS</value>
+               </choice>
+            </element>
+          </oneOrMore>
+        </element>
+      </optional>
     </element>
   </define>
 

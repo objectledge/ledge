@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.dom4j.Node;
 import org.objectledge.forms.ConstructionException;
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.objectledge.forms.internal.ui.ActionEvent;
 import org.objectledge.forms.internal.ui.ReferenceMultipleRepeat;
 import org.objectledge.forms.internal.ui.ReferenceSingle;
@@ -31,7 +31,7 @@ public class Delete extends BaseInsertDeleteAction
     /** This method performs the action, ie. removes a subtree from instance
      * document.
      */
-    public void execute(UI ui, InstanceImpl instance, ActionEvent evt)
+    public void execute(UI ui, Instance instance, ActionEvent evt)
     {
         List<Node> contextNodes = ((ReferenceMultipleRepeat)(repeat.getRef())).getContextNodes(instance);
         Object result = ((ReferenceSingle)ref).evaluate(instance);

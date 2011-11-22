@@ -2,7 +2,7 @@ package org.objectledge.forms.internal.ui;
 
 import java.util.List;
 
-import org.objectledge.forms.internal.model.InstanceImpl;
+import org.objectledge.forms.Instance;
 import org.xml.sax.Attributes;
 
 
@@ -31,7 +31,7 @@ public class ReferenceMultiple extends Reference
     // ReferenceMultiple methods
     //
     @SuppressWarnings("unchecked")
-    public List<org.dom4j.Node> getContextNodes(InstanceImpl instance)
+    public List<org.dom4j.Node> getContextNodes(Instance instance)
     {
         return (List<org.dom4j.Node>)getContextNodeInternal(instance);
     }

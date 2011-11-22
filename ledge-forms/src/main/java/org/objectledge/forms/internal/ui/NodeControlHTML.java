@@ -41,7 +41,7 @@ public class NodeControlHTML extends NodeControl
     /** Key for Tidy error log state value. */
     private String ERROR_LOG = "htmlarea.tidyErrorLog";
 
-    void setValue(InstanceImpl instance, String value)
+    public void setValue(InstanceImpl instance, String value)
     {
         // clean last error log
         org.dom4j.Node contextNode = ((ReferenceSingle)ref).getContextNode(instance);

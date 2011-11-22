@@ -105,7 +105,6 @@ public class HTMLServiceImplTest
     {
         String html = getFileSystem().read("html/subsequentTextNodes.html", "UTF-8");
         Document doc = htmlService.textToDom4j(html);
-        htmlService.mergeAdjecentTextNodes(doc);
         assertEquals(3, ((Branch)doc.selectSingleNode("//P")).nodeCount());
         assertEquals(1, ((Branch)doc.selectSingleNode("//EM")).nodeCount());
     }
@@ -115,7 +114,6 @@ public class HTMLServiceImplTest
     {
         String html = getFileSystem().read("html/whitespace.html", "UTF-8");
         Document doc = htmlService.textToDom4j(html);
-        htmlService.mergeAdjecentTextNodes(doc); // merge &nbsp; nodes with adjacent text
         htmlService.collapseWhitespace(doc);
         assertTrue(((String)doc.selectObject("string(//P[@id='spaces'])")).contains("x y"));
         assertTrue(((String)doc.selectObject("string(//P[@id='tabs'])")).contains("x y"));
@@ -127,8 +125,7 @@ public class HTMLServiceImplTest
     {
         String html = getFileSystem().read("html/bullets.html", "UTF-8");
         Document doc = htmlService.textToDom4j(html);
-        htmlService.mergeAdjecentTextNodes(doc); // merge &nbsp; nodes with adjacent text
-        htmlService.bulletsToLists(doc);
+        htmlService.bulletParasToLists(doc);
         List<Element> divs = (List<Element>)doc.selectNodes("//DIV");
         for(Element div : divs)
         {
