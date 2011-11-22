@@ -220,6 +220,7 @@ public class HTMLServiceImpl
             {
                 doc = emptyDom4j();
             }
+            mergeAdjecentTextNodes(doc);
             return doc;
         }
         catch(Exception e)
@@ -260,12 +261,20 @@ public class HTMLServiceImpl
             XMLInputSource source = new XMLInputSource("", "", "", new StringReader(html), "UTF-8");
             parser.parse(source);
 
-            Document doc = dom4jBuilder.getDocument();
-            if(doc.getRootElement().content().isEmpty())
+            if(!errorCollector.errorDetected())
             {
-                doc = emptyDom4j();
+                Document doc = dom4jBuilder.getDocument();
+                if(doc.getRootElement().content().isEmpty())
+                {
+                    doc = emptyDom4j();
+                }
+                mergeAdjecentTextNodes(doc);
+                return doc;
             }
-            return !errorCollector.errorDetected() ? doc : null;
+            else
+            {
+                return null;
+            }
         }
         catch(Exception e)
         {
