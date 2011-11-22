@@ -1,6 +1,7 @@
 package org.objectledge.html;
 
 import java.io.Writer;
+import java.util.List;
 import java.util.Set;
 
 import org.dom4j.Document;
@@ -150,4 +151,11 @@ public interface HTMLService
      * @param cleanups selected cleanup methods.
      */
     public void applyCleanups(Document doc, Set<Cleanup> cleanups);
+
+    /**
+     * Returns the names of available cleanup profiles.
+     * 
+     * @return the names of available cleanup profiles.
+     */
+    public List<String> availableCleanupProfiles();
 }

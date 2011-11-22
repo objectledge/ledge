@@ -656,6 +656,12 @@ public class HTMLServiceImpl
         }
     }
 
+    @Override
+    public List<String> availableCleanupProfiles()
+    {
+        return new ArrayList<String>(cleanupProfiles.keySet());
+    }
+
     // helper classes
 
     private static final class ValidationErrorCollector
