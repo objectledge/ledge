@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <element name="config">
+      <element name="publicKey">
+        <text />
+      </element>
+      <element name="privateKey">
+        <text />
+      </element> 
+      <optional>
+        <element name="cacheValidity">
+          <optional>
+            <element name="timeLimit">
+              <text />
+            </element>
+          </optional>
+          <optional>
+            <element name="hitLimit">
+              <text />
+            </element>
+          </optional>
+        </element>
+      </optional>     
+      <optional>
+        <element name="recaptchaServer">
+          <text />
+        </element>
+      </optional>
+      <optional>
+        <element name="includeNoscript">
+          <text />
+        </element>
+      </optional>
+      <optional>
+        <element name="errorMessage">
+          <text />
+        </element>
+      </optional>
+      <optional>
+        <element name="options">
+          <zeroOrMore>
+            <element name="option">
+              <attribute name="name" />
+              <text />
+            </element>
+          </zeroOrMore>
+        </element>
+      </optional>
+    </element>
+  </start>
+</grammar>
