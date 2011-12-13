@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<container xmlns="http://objectledge.org/container/1.0">
+  <component class-key="org.nanocontainer.reflection.StringToObjectConverter"
+             class="org.objectledge.pico.LedgeStringToObjectConverter"/>
+
+  <component key="t71" class="org.objectledge.pico.xml.Test7">
+    <sequence>
+      <parameter value="a"/>
+      <parameter value="b"/>
+    </sequence>
+  </component>
+    
+  <component key="t72" class="org.objectledge.pico.xml.Test7">
+    <sequence>
+      <sequence>
+        <parameter value="a"/>
+        <parameter value="b"/>
+      </sequence>
+      <sequence>
+        <parameter value="a"/>
+        <parameter value="b"/>
+        <parameter value="c"/>
+      </sequence>
+    </sequence>
+  </component>
+
+</container>
