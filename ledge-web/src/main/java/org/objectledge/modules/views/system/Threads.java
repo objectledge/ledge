@@ -28,16 +28,18 @@
 
 package org.objectledge.modules.views.system;
 
+import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
 
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.builders.PolicyProtectedBuilder;
 import org.objectledge.web.mvc.security.PolicySystem;
 
 /**
- *
- *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id$
  */
@@ -47,7 +49,7 @@ public class Threads
 
     /**
      * Creates a new Threads instance.
-     *
+     * 
      * @param context
      * @param policySystemArg
      */
@@ -63,5 +65,58 @@ public class Threads
     public void process(TemplatingContext templatingContext)
     {
         templatingContext.put("thread", ManagementFactory.getThreadMXBean());
+        Parameters parameters = context.getAttribute(RequestParameters.class);
+        if(parameters.isDefined("runnable"))
+        {
+            templatingContext.put("threadFilter", RunnableThreadFilter.INSTANCE);
+        }
+        else
+        {
+            templatingContext.put("threadFilter", ThreadFilter.INSTANCE);
+        }
+    }
+
+    public static class ThreadFilter
+    {
+        public static final ThreadFilter INSTANCE = new ThreadFilter();
+
+        private ThreadFilter()
+        {
+
+        }
+
+        public boolean accept(ThreadInfo threadInfo)
+        {
+            return true;
+        }
+    }
+
+    public static class RunnableThreadFilter
+        extends ThreadFilter
+    {
+        public static final ThreadFilter INSTANCE = new RunnableThreadFilter();
+
+        private RunnableThreadFilter()
+        {
+
+        }
+
+        @Override
+        public boolean accept(ThreadInfo threadInfo)
+        {
+            if(!threadInfo.getThreadState().equals(State.RUNNABLE)
+                || threadInfo.getThreadId() == Thread.currentThread().getId())
+            {
+                return false;
+            }
+            final String threadName = threadInfo.getThreadName().toLowerCase();
+            if(threadName.contains("accept") || threadName.contains("listen")
+                || threadName.contains("poll") || threadName.contains("dispatch")
+                || threadName.equals("main"))
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
