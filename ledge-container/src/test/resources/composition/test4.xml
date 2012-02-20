@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<container xmlns="http://objectledge.org/container/1.0">
+  <component class="org.objectledge.pico.xml.AlternateComponentAdapterFactory"/>
+  
+  <factory class-key="org.objectledge.pico.xml.AlternateComponentAdapterFactory"/>
+  
+  <component class="org.objectledge.pico.xml.AlternateNestingComponentAdapterFactory">
+    <parameter class-key="org.objectledge.pico.xml.AlternateComponentAdapterFactory"/>
+  </component>
+
+  <factory class-key="org.objectledge.pico.xml.AlternateNestingComponentAdapterFactory">
+    <component key="f1" class="org.objectledge.pico.xml.FooComponent">
+      <parameter value="f1"/>
+    </component>
+  </factory>
+
+  <factory class-key="org.objectledge.pico.xml.AlternateNestingComponentAdapterFactory">
+    <container>
+      <component key="f2" class="org.objectledge.pico.xml.FooComponent">
+        <parameter value="f2"/>
+      </component>
+    </container>
+  </factory>
+  <factory class-key="org.objectledge.pico.xml.AlternateNestingComponentAdapterFactory">
+    <component key="f3" class="org.objectledge.pico.xml.FooComponent">
+      <parameter value="f3"/>
+    </component>
+    <factory class-key="org.objectledge.pico.xml.AlternateComponentAdapterFactory">
+      <component key="f4" class="org.objectledge.pico.xml.FooComponent">
+        <parameter value="f4"/>
+      </component>
+    </factory>
+  </factory>
+</container>
