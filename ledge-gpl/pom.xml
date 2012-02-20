@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.objectledge</groupId>
+    <artifactId>ledge-common</artifactId>
+    <relativePath>../ledge-common/pom.xml</relativePath>
+    <version>1.0.12.1</version>
+  </parent>
+  <artifactId>ledge-gpl</artifactId>
+  <packaging>jar</packaging>
+  <name>ObjectLedge Components - GPL licensed</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-common</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-components</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlrpc</groupId>
+      <artifactId>xmlrpc-client</artifactId>
+      <version>3.1.3</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.rng</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+</project>
