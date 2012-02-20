@@ -1,0 +1,8 @@
+graph_title Cache ${name} size
+graph_order size
+graph_vlabel elements
+graph_category cache
+size.label cache size
+size.type GAUGE
+size.draw AREA
+size.min 0
