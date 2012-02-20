@@ -1,0 +1,22 @@
+<h3>Composite Cache</h3>
+	
+#if($nestedCaches)
+<form name="form1" method="GET" action="$link">
+<input type="hidden" name="cache" value="$cache"/>
+Top <input type="text" name="limit" value="$limit" size="3"/> <input type="submit" value="change" />  items in composite cache $cache.
+</form>
+<table>
+	<tr>
+		<td>Key</td>
+		<td>Elements</td>
+	</tr>
+#foreach($nestedCache in $nestedCaches)
+	<tr>
+		<td>$nestedCache.key</td>
+		<td>$nestedCache.elementCount</td>
+	</tr>
+#end
+</table>
+#else
+<p>$cache is not a composite cache</p>
+#end
