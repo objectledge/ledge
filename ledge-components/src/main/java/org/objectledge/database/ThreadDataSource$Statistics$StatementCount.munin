@@ -6,9 +6,7 @@ reads.label reads
 reads.type DERIVE
 reads.draw LINE1
 reads.min 0
-reads.max 10000
 writes.label writes
 writes.type DERIVE
 writes.draw LINE1
-reads.min 0
-reads.max 10000
+writes.min 0

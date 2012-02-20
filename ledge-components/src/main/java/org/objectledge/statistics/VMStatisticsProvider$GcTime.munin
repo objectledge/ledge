@@ -6,4 +6,3 @@ time.label garbage collection
 time.type DERIVE
 time.draw LINE1
 time.min 0
-time.max 10000
