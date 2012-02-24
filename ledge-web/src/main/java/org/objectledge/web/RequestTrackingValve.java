@@ -57,6 +57,7 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.statistics.AbstractMuninGraph;
 import org.objectledge.statistics.MuninGraph;
 import org.objectledge.statistics.ReflectiveStatisticsProvider;
+import org.objectledge.statistics.RoundRobinAverage;
 import org.objectledge.utils.StringUtils;
 
 /**
@@ -69,6 +70,10 @@ public class RequestTrackingValve
     extends ReflectiveStatisticsProvider
     implements Valve
 {
+    private static final int AVG_DURATION_WINDOW = 2500;
+    
+    private static final int AVG_DURATION_WARMUP = 100;
+
     private final Valve nested;
     
     private final Logger log;
@@ -99,7 +104,7 @@ public class RequestTrackingValve
     
     private int concurrentRequests = 0;
     
-    private long totalDuration = 0;
+    private RoundRobinAverage averageDuration = new RoundRobinAverage(AVG_DURATION_WINDOW);
     
     private String currentTime;
     
@@ -230,7 +235,9 @@ public class RequestTrackingValve
         finally
         {
             long duration = System.currentTimeMillis() - startTime;
-            totalDuration += duration;
+            if(totalRequests > AVG_DURATION_WARMUP) {
+                averageDuration.addSample(duration);
+            }
             if(log.isInfoEnabled())
             {
                 log.info("done in "
@@ -452,14 +459,7 @@ public class RequestTrackingValve
          */
         public Number getDuration()
         {
-            if(totalRequests > 0)
-            {
-                return new Double((double)totalDuration / totalRequests);
-            }
-            else
-            {
-                return 0f;
-            }
+            return averageDuration.getAverage();
         }
     }    
     
