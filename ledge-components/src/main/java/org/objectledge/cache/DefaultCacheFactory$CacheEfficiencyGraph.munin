@@ -1,0 +1,12 @@
+graph_title Cache ${name} efficiency
+graph_order hit miss
+graph_vlabel % requests
+graph_category cache
+hit.label hit
+hit.type GAUGE
+hit.draw AREA
+hit.min 0
+miss.label miss
+miss.type GAUGE
+miss.draw STACK
+miss.min 0

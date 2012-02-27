@@ -1,0 +1,10 @@
+graph_title Execution concurrency
+graph_order running waiting
+graph_vlabel threads
+graph_category threads
+running.label running
+running.type GAUGE
+running.draw AREA
+waiting.label waiting
+waiting.type GAUGE
+waiting.draw STACK
