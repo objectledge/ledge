@@ -4,7 +4,7 @@
   <parent>
     <artifactId>ledge-common</artifactId>
     <groupId>org.objectledge</groupId>
-    <version>1.0.12.1</version>
+    <version>1.0.12.2</version>
     <relativePath>../ledge-common/pom.xml</relativePath>
   </parent>
   <artifactId>ledge-forms-fckeditor</artifactId>
