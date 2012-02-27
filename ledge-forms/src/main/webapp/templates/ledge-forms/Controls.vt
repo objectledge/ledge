@@ -1,0 +1,181 @@
+#*
+  This set of macros displays formtool controls as XHTML 1.0 controls.
+
+  'uiPath' is being used instead of 'id' for HTML control's 'id',
+  because it is unique in case of use of 'repeat' control.
+
+  @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
+  @version $Id: Controls.vt,v 1.4 2008-08-28 15:52:17 rafal Exp $
+*#
+#*
+ TODO: Implement a hidden control:
+   - add it to schema
+   - add it to UIContants (NodeControl)
+  Hidden - will be used for calculations etc..
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_hidden $field $loopIndex)
+<input type="hidden" id="$field.name" name="$field.name" value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
+#end
+#*
+  Output - used for displaying values.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_output $field $loopIndex)
+<span##
+ #if($field.vis.CSSClass) class="$field.vis.CSSClass"#end##
+ #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end>$!field.getValue($instance)</span>
+#end
+#*
+  Textarea - multiline text input.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_textarea $field $loopIndex)
+<textarea##
+ name="$field.name" id="$field.name"##
+ #if($field.hasAction()) onchange="formtool_dispatch_event('$formtool_form_id', '$field.name');"#end##
+ #if(!$field.ref.bind.getRelevant($instance, $field)) disabled="disabled"#end##
+ #if($field.ref.bind.getReadOnly($instance, $field)) readonly="readonly"#end##
+ #if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end##
+ class="#if($field.ref.bind.getRequired($instance, $field)) #if($field.hasValue($instance)) formtool-required-value#else formtool-required#end #end$!field.vis.CSSClass"##
+ #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end##
+ cols="$!field.cols" rows="$!field.rows">$!field.getValue($instance)</textarea>
+#end
+#*
+  Input - one line text input.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_input $field $loopIndex)
+<input type="text"##
+ name="$field.name" id="$field.name"##
+ #if($field.hasAction()) onchange="formtool_dispatch_event('$formtool_form_id', '$field.name');"#end##
+ #if(!$field.ref.bind.getRelevant($instance, $field)) disabled="disabled"#end##
+ #if($field.ref.bind.getReadOnly($instance, $field)) readonly="readonly"#end##
+ #if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end##
+ class="#if($field.ref.bind.getRequired($instance, $field)) #if($field.hasValue($instance)) formtool-required-value#else formtool-required#end #end$!field.vis.CSSClass"##
+ #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end##
+ size="$!field.cols" #if($field.maxLength > 0)maxlength="$field.maxLength"#end##
+ value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
+#end
+#*
+  Secret - one line text input for passwords - doesn't show the contents.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_secret $field $loopIndex)
+<input type="password"##
+ name="$field.name" id="$field.name"##
+ #if($field.hasAction()) onchange="formtool_dispatch_event('$formtool_form_id', '$field.name');"#end##
+ #if(!$field.ref.bind.getRelevant($instance, $field)) disabled="disabled"#end##
+ #if($field.ref.bind.getReadOnly($instance, $field)) readonly="readonly"#end##
+ #if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end##
+ class="#if($field.ref.bind.getRequired($instance, $field)) #if($field.hasValue($instance)) formtool-required-value#else formtool-required#end #end$!field.vis.CSSClass"##
+ #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end##
+ size="$!field.cols" maxlength="$!field.length"##
+ value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
+#end
+#*
+  Date - used for displaying date selectors.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_date $field $loopIndex)
+<span class="#if($field.ref.bind.getRequired($instance, $field)) #if($field.hasValue($instance)) formtool-required-value#else formtool-required#end #end$!field.vis.CSSClass"##
+  #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end>
+#if($field.ref.bind.getRelevant($instance, $field))
+#set($dateValue = $field.getValue($instance))
+#if($field.ref.bind.getReadOnly($instance, $field))
+ $format_date.format($dateValue.value)
+#else
+ #if($field.optionalSelection)
+  #dateSelectorOptionalMain($field.name $dateValue.value true [2000..2020] [0..23] [0..59] $dateValue.enabled true $i18n.get('ledge-forms.date.optional.undefined'))
+  ## TODO: $showTimeControls $years
+ #else
+  #dateSelectorMain($field.name $dateValue.value true [2000..2020] [0..23] [0..59] $dateValue.enabled true)
+ #end
+#end
+#end
+</span>
+#end
+#*
+  File upload selection field.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_upload $field $loopIndex)
+<input type="file"##
+ name="$field.name" id="$field.name"##
+ #if($field.hasAction()) onchange="formtool_dispatch_event('$formtool_form_id', '$field.name');"#end##
+ #if(!$field.ref.bind.getRelevant($instance, $field)) disabled="disabled"#end##
+ #if($field.ref.bind.getReadOnly($instance, $field)) readonly="readonly"#end##
+ #if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end##
+ class="#if($field.ref.bind.getRequired($instance, $field)) #if($field.hasValue($instance)) formtool-required-value#else formtool-required#end #end$!field.vis.CSSClass"##
+ #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end##
+ size="$!field.cols" maxlength="$!field.length"##
+ value="$!htmlEncoder.encodeAttribute($field.getValue($instance))" />
+#end
+#*
+  Range selection - not implemented.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_range $field $loopIndex)
+<span class="formtool-error">Control type UNSUPPORTED !!!</span>
+#end
+#*
+  Button.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_button $field $loopIndex)
+<button type="button"##
+ name="$field.name" id="$field.name"##
+ #if($field.ref.bind.getReadOnly($instance, $field)) readonly="readonly"#end##
+ #if(!$field.ref.bind.getRelevant($instance, $field)) disabled="disabled"#end##
+ #if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end##
+ #if($field.vis.CSSClass) class="$field.vis.CSSClass"#end##
+ #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end##
+## #if($field.hasAction()) onchange="formtool_dispatch_event('$formtool_form_id', '$field.name');"#end##
+ onclick="formtool_dispatch_event('$formtool_form_id', '$field.name');"##
+>$formtool_form_i18n.get($field.desc.caption.text)</button>
+#end
+#*
+  Submit button.
+  @param instance    - current form instance.
+  @param field       - current UI node.
+  @param loopIndex  - Control's index in an outside loop.
+  @param treeDepth  - Depth in the UI tree.
+*#
+#macro (formtool_submit $field $loopIndex)
+<button type="submit"##
+ name="$field.name" id="$field.name"##
+ #if($field.ref.bind.getReadOnly($instance, $field)) readonly="readonly"#end##
+ #if(!$field.ref.bind.getRelevant($instance, $field)) disabled="disabled"#end##
+ #if($field.vis.navIndex) tabindex="$field.vis.navIndex"#end##
+ #if($field.vis.CSSClass) class="$field.vis.CSSClass"#end##
+ #if($field.vis.CSSStyle) style="$field.vis.CSSStyle"#end##
+ ##onclick="formtool_dispatch_event('$formtool_form_id', '$field.name');"##
+>$formtool_form_i18n.get($field.desc.caption.text)</button>
+#end
