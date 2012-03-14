@@ -159,14 +159,14 @@ public class DatabaseUtils
     }
     
     /**
-     * Escape the \ and ' in string that goes to statement.
+     * Escape ' characters in string that goes to statement.
      * 
      * @param input the input string.
      * @return the result string.
      */
     public static String escapeSqlString(String input)
     {
-        return StringUtils.backslashEscape(input, "'\\");
+        return input.replaceAll("'", "''");
     }
     
     /**

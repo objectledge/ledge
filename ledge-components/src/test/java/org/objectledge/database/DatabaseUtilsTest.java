@@ -120,8 +120,8 @@ public class DatabaseUtilsTest extends LedgeTestCase
     public void testEscapeSqlString()
         throws Exception
     {
-        assertEquals("\u05E2\u05D6\u05E8\u05D0\\'s home directory is "+
-            "c:\\\\users\\\\\u05E2\u05D6\u05E8\u05D0",
+        assertEquals("\u05E2\u05D6\u05E8\u05D0''s home directory is "+
+            "c:\\users\\\u05E2\u05D6\u05E8\u05D0",
             DatabaseUtils.escapeSqlString("\u05E2\u05D6\u05E8\u05D0's home directory is "+
                 "c:\\users\\\u05E2\u05D6\u05E8\u05D0"));
     }
