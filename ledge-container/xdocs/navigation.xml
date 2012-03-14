@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ObjectLedge container">
+
+  <title>ObjectLedge container</title>
+  <body>
+    <links>
+      <item name="home" href="../../index.html"/>
+      <item name="wiki" href="http://objectledge.org/confluence/display/LEDGE"/>
+      <item name="issues" href="http://objectledge.org/jira/secure/BrowseProject.jspa?id=10000"/>
+      <item name="fisheye" href="http://objectledge.org/fisheye/browse/ledge/ledge-container"/>
+    </links>
+    <menu name="Refernce">
+      <item name="Container subsystems"   href="/container-subsystems/index.html" collapse="true">
+        <item name="Logging configurator"   href="/container-subsystems/LoggingConfigurator.html"/>
+        <item name="Logger factory"         href="/container-subsystems/LoggerFactory.html"/>
+        <item name="Configuration factory"  href="/container-subsystems/ConfigurationFactory.html"/>
+        <item name="Ledge container"        href="/container-subsystems/LedgeContainer.html"/>
+        <item name="Command line interface" href="/container-subsystems/Main.html"/>
+      </item>
+      <item name="Pico extenstions"        href="/pico-extensions/index.html" collapse="true">
+        <item name="SequenceParameter"       href="/pico-extensions/SequenceParameter.html"/>
+        <item name="Component customization" href="/pico-extensions/ComponentCustomization.html"/>
+        <item name="Enhanced XMLFrontEnd"    href="/pico-extensions/XMLFrontEnd.html"/>
+      </item>
+    </menu>
+  </body>
+</project>
+  
