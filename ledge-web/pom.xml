@@ -6,7 +6,7 @@
     <groupId>org.objectledge</groupId>
     <artifactId>ledge-common</artifactId>
     <relativePath>../ledge-common/pom.xml</relativePath>
-    <version>1.0.12.2</version>
+    <version>1.0.12.3</version>
   </parent>
   <artifactId>ledge-web</artifactId>
   <packaging>war</packaging>
