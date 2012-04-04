@@ -1,0 +1,97 @@
+#macro(interval $ms)
+$stringTool.millisecondsInterval($ms)
+#end
+
+#macro(nanoInterval $ns)
+$stringTool.nanosecondsInterval($ns)
+#end
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+
+<h3>Threads summary</h3>
+<div class="d1">
+daemon thread count = $thread.daemonThreadCount <br/>
+peak thread count = $thread.peakThreadCount <br/>
+thread count = $thread.threadCount <br/>
+total started thred count = $thread.totalStartedThreadCount <br/>
+#if($thread.threadCpuTimeSupported)
+thread cpu time enabled = $thread.threadCpuTimeEnabled <br/>
+#end
+#if($thread.threadContentionMonitoringSupported)
+thread contention monitoring enabled = $thread.threadContentionMonitoringEnabled <br/>
+#end
+
+<h3>Thread filtering</h3>
+#if($parameters.isDefined('runnable'))
+<a href="$link">all threads</a>
+#else
+<a href="$link.set('runnable', 'true')">runnable threads</a>	
+#end
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+#if($stringTool.getArraySize($thread.findMonitorDeadlockedThreads()) > 0)
+<h3>Deadlock</h3>
+#foreach($threadInfo in $thread.getThereadInfo($thread.findMonitorDeadlockedThreads(), 65535))
+<h4>$threadInfo.threadName</h4>
+#if($threadInfo.lockName)
+lock name = $threadInfo.lockName <br/>
+#end
+#if($threadInfo.lockOwnerId != -1)
+lock owner = $!thread.getThreadInfo($threadInfo.lockOwnerId).threadName <br/>
+#end
+<div class="d1">
+#foreach($frame in $threadInfo.stackTrace)
+$frame <br/>
+#end
+</div>
+#end
+#end
+
+<h3>Thread listing</h3>
+<ul>
+#foreach($threadInfo in $thread.getThreadInfo($thread.allThreadIds, 65535))
+#if($threadFilter.accept($threadInfo))
+	<li><a href="#${threadInfo.threadId}"> $threadInfo.threadName</a> $threadInfo.threadState</li>
+#end	
+#end
+</ul>
+
+<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
+<h3>Thread call stacks</h3>
+#foreach($threadInfo in $thread.getThreadInfo($thread.allThreadIds, 65535))
+#if($threadFilter.accept($threadInfo))	
+<a name="$threadInfo.threadId" />
+<h4>$threadInfo.threadName</h4>
+<div class="d1">
+suspended = $threadInfo.suspended <br/>
+state = $threadInfo.threadState <br/>
+#if($threadInfo.lockName)
+lock name = $threadInfo.lockName <br/>
+#end
+#if($threadInfo.lockOwnerId != -1)
+lock owner = $!thread.getThreadInfo($threadInfo.lockOwnerId).threadName <br/>
+#end
+blocked count = $threadInfo.blockedCount <br/>
+#if($thread.threadContentionMonitoringSupported && $thread.threadContentionMonitoringEnabled)
+blocked time = #interval($threadInfo.blockedTime) <br/>
+#end
+waited count = $threadInfo.waitedCount <br/>
+#if($thread.threadContentionMonitoringSupported && $thread.threadContentionMonitoringEnabled)
+waited time = #interval($threadInfo.waitedTime) <br/>
+#end
+#if($thread.threadCpuTimeSupported && $thread.threadCpuTimeEnabled)
+cpu time = #nanoInterval($thread.getThreadCpuTime($threadInfo.threadId)) <br/>
+cpu user time = #nanoInterval($thread.getThreadUserTime($threadInfo.threadId)) <br/>
+#end
+native = $threadInfo.inNative <br/>
+<div class="d1">
+#foreach($frame in $threadInfo.stackTrace)
+$frame <br/>
+#end
+</div>
+</div>
+#end
+#end
+</div>
+
+	
