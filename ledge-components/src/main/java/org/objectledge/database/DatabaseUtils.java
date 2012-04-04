@@ -166,7 +166,7 @@ public class DatabaseUtils
      */
     public static String escapeSqlString(String input)
     {
-        return input.replaceAll("'", "''");
+        return input == null ? null : input.replaceAll("'", "''");
     }
     
     /**
