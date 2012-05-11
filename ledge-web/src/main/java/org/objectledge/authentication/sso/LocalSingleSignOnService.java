@@ -484,7 +484,7 @@ public class LocalSingleSignOnService
         @Override
         public String toString()
         {
-            return id + " for realm " + realm.getName() + ", client" + client + ", "
+            return id + " for realm " + realm.getName() + ", client " + client + ", "
                 + principal.getName();
         }
     }
