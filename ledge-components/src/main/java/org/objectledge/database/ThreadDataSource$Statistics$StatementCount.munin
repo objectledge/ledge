@@ -1,0 +1,12 @@
+graph_title Database statement rate
+graph_order reads writes
+graph_vlabel statements / ${graph_period}
+graph_category database
+reads.label reads
+reads.type DERIVE
+reads.draw LINE1
+reads.min 0
+writes.label writes
+writes.type DERIVE
+writes.draw LINE1
+writes.min 0

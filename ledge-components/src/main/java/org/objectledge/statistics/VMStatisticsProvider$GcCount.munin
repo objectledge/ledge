@@ -1,0 +1,8 @@
+graph_title Garbage collections
+graph_order count
+graph_vlabel collections / ${graph_period}
+graph_category garbage collection
+count.label garbage collections
+count.type DERIVE
+count.draw LINE1
+count.min 0

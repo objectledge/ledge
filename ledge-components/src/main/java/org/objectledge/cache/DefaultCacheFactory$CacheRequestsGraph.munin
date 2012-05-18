@@ -1,0 +1,8 @@
+graph_title Cache ${name} request rate
+graph_order count
+graph_vlabel requests / ${graph_period}
+graph_category cache
+count.label requests
+count.type DERIVE
+count.draw LINE1
+count.min 0
