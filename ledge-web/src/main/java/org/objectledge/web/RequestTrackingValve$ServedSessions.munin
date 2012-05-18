@@ -1,0 +1,8 @@
+graph_title Session creation rate
+graph_order count
+graph_vlabel sessions / ${graph_period}
+graph_category sessions
+count.label session creation rate
+count.type DERIVE
+count.draw LINE1
+count.min 0

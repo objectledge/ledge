@@ -1,0 +1,8 @@
+graph_title Request rate
+graph_order count
+graph_vlabel requests / ${graph_period}
+count.label request rate
+graph_category requests
+count.type DERIVE
+count.draw LINE1
+count.min 0
