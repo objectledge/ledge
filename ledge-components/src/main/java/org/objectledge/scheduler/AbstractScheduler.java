@@ -352,15 +352,15 @@ public abstract class AbstractScheduler
                     if(countLimit < 0 || job.getRunCount() < countLimit)
                     {
                         Long target = Long.valueOf(nextRun.getTime());
-                        Set<AbstractJobDescriptor> set = queue.get(target);
-                        if(set == null)
-                        {
-                            set = new HashSet<AbstractJobDescriptor>();
-                            queue.put(target, set);
-                        }
-                        set.add(job);
                         synchronized(queue)
                         {
+                            Set<AbstractJobDescriptor> set = queue.get(target);
+                            if(set == null)
+                            {
+                                set = new HashSet<AbstractJobDescriptor>();
+                                queue.put(target, set);
+                            }
+                            set.add(job);
                             queue.notify();
                         }
                         return;
@@ -581,7 +581,7 @@ public abstract class AbstractScheduler
                 long now;
                 loop: while(!Thread.interrupted())
                 {
-                    // queue is empty - wait indefinetely
+                    // queue is empty - wait indefinitely
                     if(queue.size() == 0)
                     {
                         try
@@ -598,7 +598,7 @@ public abstract class AbstractScheduler
                     Long first = queue.firstKey();
                     while(!queue.isEmpty() && first.longValue() <= now)
                     {
-                        // the first element of the que has reached or passed
+                        // the first element of the queue has reached or passed
                         // it's target time
                         Set<AbstractJobDescriptor> set = queue.remove(first);
                         Iterator<AbstractJobDescriptor> i = set.iterator();
