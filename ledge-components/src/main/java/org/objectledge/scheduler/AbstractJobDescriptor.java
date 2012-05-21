@@ -120,7 +120,7 @@ public abstract class AbstractJobDescriptor
      * @param schedule the new schedule.
      * @throws JobModificationException if the job state could not be saved.
      */
-    public synchronized void setSchedule(Schedule schedule)
+    public void setSchedule(Schedule schedule)
         throws JobModificationException
     {
         this.schedule = schedule;
@@ -144,7 +144,7 @@ public abstract class AbstractJobDescriptor
      * @param jobClassName the job class name.
      * @throws JobModificationException if the job state could not be saved. 
      */
-    public synchronized void setJobClassName(String jobClassName)
+    public void setJobClassName(String jobClassName)
         throws JobModificationException
     {
         this.jobClassName = jobClassName;
@@ -213,7 +213,7 @@ public abstract class AbstractJobDescriptor
      * @param limit the maximum number of job executions, or -1 if disabled.
      * @throws JobModificationException if the job state could not be saved. 
      */
-    public synchronized void setRunCountLimit(int limit)
+    public void setRunCountLimit(int limit)
         throws JobModificationException
     {
         this.runCountLimit = limit;
@@ -338,7 +338,7 @@ public abstract class AbstractJobDescriptor
      * @param reentrant the job's reentrantess flag state.
      * @throws JobModificationException if the job state could not be saved.
      */
-    public synchronized void setReentrant(boolean reentrant)
+    public void setReentrant(boolean reentrant)
         throws JobModificationException
     {
         this.reentrant = reentrant;
@@ -387,7 +387,7 @@ public abstract class AbstractJobDescriptor
      *
      * @param lastRunTime the job's last execution time.
      */
-    synchronized void setLastRunTime(Date lastRunTime)
+    void setLastRunTime(Date lastRunTime)
         throws JobModificationException
     {
         this.lastRunTime = lastRunTime;
@@ -399,7 +399,7 @@ public abstract class AbstractJobDescriptor
      *
      * @param runCount the count of job executions to date.
      */
-    synchronized void setRunCount(int runCount)
+    void setRunCount(int runCount)
         throws JobModificationException
     {
         this.runCount = runCount;
@@ -411,7 +411,7 @@ public abstract class AbstractJobDescriptor
      *
      * @param enabled <code>true</code> if the job is to be enabled.
      */
-    synchronized void setEnabled(boolean enabled)
+    void setEnabled(boolean enabled)
         throws JobModificationException
     {
         this.enabled = enabled;

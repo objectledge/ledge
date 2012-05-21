@@ -132,24 +132,27 @@ public class UpdateJob
 		AbstractJobDescriptor job = scheduler.getJobDescriptor(name);
 		try
 		{
-			scheduler.disable(job);
-			Schedule schedule = scheduler.createSchedule(scheduleType, scheduleConfig);
-            job.setSchedule(schedule);
-            job.setJobClassName(jobClassName);
-            job.setRunCountLimit(runCountLimit);
-            job.setTimeLimit(runTimeLimitStart, runTimeLimitEnd);
-            job.setReentrant(reentrant);
-			if(enabled)
-			{
-				scheduler.enable(job);
-			}
+		    synchronized(job) 
+		    {
+		        scheduler.disable(job);
+		        Schedule schedule = scheduler.createSchedule(scheduleType, scheduleConfig);
+		        job.setSchedule(schedule);
+		        job.setJobClassName(jobClassName);
+		        job.setRunCountLimit(runCountLimit);
+		        job.setTimeLimit(runTimeLimitStart, runTimeLimitEnd);
+		        job.setReentrant(reentrant);
+		        if(enabled)
+		        {
+		            scheduler.enable(job);
+		        }
+		    }
 			templatingContext.put("result", "scheduler.updated_successfully");
 			MVCContext mvcContext = MVCContext.getMVCContext(context);
 			mvcContext.setView("scheduler.Jobs");
 		}
 		catch(Exception e)
 		{
-			throw new ProcessingException("failed to delete job");
+			throw new ProcessingException("job update failed", e);
 		}
     }
 }
