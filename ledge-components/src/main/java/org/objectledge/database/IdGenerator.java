@@ -98,7 +98,7 @@ public class IdGenerator
      * 
      * @throws SQLException if the connection could not be opened, or prepared statemets created.
      */
-    public void init()
+    private void init()
         throws SQLException
     {
         conn = dataSource.getConnection();
@@ -115,7 +115,7 @@ public class IdGenerator
     /**
      * {@inheritDoc}
      */
-    public void start()
+    public synchronized void start()
     {
         try
         {
@@ -134,7 +134,7 @@ public class IdGenerator
     /**
      * {@inheritDoc}
      */
-    public void stop()
+    public synchronized void stop()
     {
         DatabaseUtils.close(insertStmt);
         DatabaseUtils.close(fetchStmt);
