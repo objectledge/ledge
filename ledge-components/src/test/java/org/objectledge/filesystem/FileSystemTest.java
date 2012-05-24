@@ -261,7 +261,7 @@ public class FileSystemTest extends TestCase
     public void testList()
         throws Exception
     {
-        assertEquals(fs.list("directory").length,5);
+        assertEquals(fs.list("directory").length,4);
         try
         {
             fs.list("nonexistent_directory");
