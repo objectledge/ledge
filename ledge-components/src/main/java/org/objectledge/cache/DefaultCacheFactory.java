@@ -52,6 +52,7 @@ import org.objectledge.cache.spi.ConfigurableMap;
 import org.objectledge.cache.spi.ConfigurableValueFactory;
 import org.objectledge.cache.spi.DistributedMap;
 import org.objectledge.cache.spi.FactoryMap;
+import org.objectledge.cache.spi.GuavaCache;
 import org.objectledge.cache.spi.LRUMap;
 import org.objectledge.cache.spi.LayeredMap;
 import org.objectledge.cache.spi.SoftMap;
@@ -120,6 +121,9 @@ public class DefaultCacheFactory
     /** Type constant for ForgetFullMap. */
     public static final String FORGETFULL_MAP_TYPE = "ForgetfullMap";
     
+    /** Type contstant for GuavaCache. */
+    public static final String GUAVA_CACHE_TYPE = "GuavaCache";
+    
     /** The default implementation HashMap implementation. */
     public static final String HASH_MAP_CLASS_DEFALUT =
         "java.util.HashMap";
@@ -159,6 +163,11 @@ public class DefaultCacheFactory
     /** The default implementation StatisticsMap implementation. */
     public static final String FORGETFULL_MAP_CLASS_DEFALUT =
         "org.objectledge.cache.impl.ForgetfullMapImpl";
+    
+    /** The implementation of GuavaCache */
+    public static final String GUAVA_CACHE_CLASS_DEFAULT = 
+         "org.objectledge.cache.impl.GuavaCacheImpl";
+    
     // member objects ////////////////////////////////////////////////////////
     
     /** The registered StatisticsMaps */
@@ -231,6 +240,7 @@ public class DefaultCacheFactory
         classMap.put(FACTORY_MAP_TYPE, FACTORY_MAP_CLASS_DEFALUT);
         classMap.put(STATISTICS_MAP_TYPE, STATISTICS_MAP_CLASS_DEFALUT);
         classMap.put(FORGETFULL_MAP_TYPE, FORGETFULL_MAP_CLASS_DEFALUT);
+        classMap.put(GUAVA_CACHE_TYPE, GUAVA_CACHE_CLASS_DEFAULT);
         
         Map<String, Class<?>> ifaceMap = new HashMap<String, Class<?>>();
         ifaceMap.put(TIMEOUT_MAP_TYPE, TimeoutMap.class);
@@ -239,6 +249,7 @@ public class DefaultCacheFactory
         ifaceMap.put(DISTRIBUTED_MAP_TYPE, DistributedMap.class);
         ifaceMap.put(FACTORY_MAP_TYPE, FactoryMap.class);
         ifaceMap.put(STATISTICS_MAP_TYPE, StatisticsMap.class);
+        ifaceMap.put(GUAVA_CACHE_TYPE, GuavaCache.class);
         
         Configuration[] custom = config.getChildren("implementation");
         for(int i=0; i<custom.length; i++)
