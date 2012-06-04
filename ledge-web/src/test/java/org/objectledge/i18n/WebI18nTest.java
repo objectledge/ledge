@@ -129,6 +129,7 @@ public class WebI18nTest extends LedgeTestCase
             AuthenticationContext.getAuthenticationContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         List<Cookie> cookieList = new ArrayList<Cookie>();
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
         
         mockHttpServletRequest.stubs().method("getCookies").
             will(new ReturnListValuesAsArray<Cookie>(cookieList));
@@ -140,13 +141,13 @@ public class WebI18nTest extends LedgeTestCase
         localeLoaderValve.process(context);
         Cookie[] cookies = httpContext.getRequest().getCookies();
         assertNotNull(cookies);
-        assertEquals(cookies.length, 1);
+        assertEquals(cookies.length, 0);
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
-        assertEquals(cookies.length, 1);
+        assertEquals(cookies.length, 0);
         authenticationContext.setUserPrincipal(new DefaultPrincipal("foo"), true);
         localeLoaderValve.process(context);
         cookies = httpContext.getRequest().getCookies();
-        assertEquals(cookies.length, 2);
+        assertEquals(cookies.length, 0);     
     }
 }
