@@ -34,6 +34,7 @@ import javax.servlet.http.Cookie;
 
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
+import org.objectledge.i18n.I18n;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.i18n.I18nWebConstants;
 import org.objectledge.parameters.Parameters;
@@ -42,6 +43,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.WebConfigurator;
 
 /**
  * Set encoding action.
@@ -53,6 +55,22 @@ import org.objectledge.web.HttpContext;
 public class SetLocale 
     implements Valve
 {
+
+    private I18n i18n;
+	private WebConfigurator webConfigurator;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param webConfigurator the web configurator component.
+	 */
+	public SetLocale(WebConfigurator webConfigurator, I18n i18n) {
+
+		this.webConfigurator = webConfigurator;
+		this.i18n = i18n;
+	}
+
+	
     /**
      * Run the valve.
      * 
@@ -73,43 +91,51 @@ public class SetLocale
             throw new ProcessingException(e);
         }
 
-        String cookieKey = "";
-        AuthenticationContext authenticationContext =
-            AuthenticationContext.getAuthenticationContext(context);
-        Principal principal = (authenticationContext != null) ?
-                authenticationContext.getUserPrincipal() : null;
-        if (principal != null && principal.getName() != null)
-        {
-            cookieKey = cookieKey + "." + StringUtils.cookieNameSafeString(principal.getName());
-        }
-        else
-        {
-            cookieKey = cookieKey + ".anonymous";
-        }
-        String localeCookieKey = "locale" + cookieKey;
-        String encodingCookieKey = "encoding" + cookieKey + "." + locale.toString();
-        Cookie cookie = new Cookie(localeCookieKey, localeString);
-        cookie.setMaxAge(3600 * 24 * 365);
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        cookie.setPath(httpContext.getRequest().getContextPath() + 
-                       httpContext.getRequest().getServletPath());
-        httpContext.getResponse().addCookie(cookie);
-        httpContext.setSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY, locale);
+		String cookieKey = "";
+		AuthenticationContext authenticationContext = AuthenticationContext
+				.getAuthenticationContext(context);
+		Principal principal = (authenticationContext != null) ? authenticationContext
+				.getUserPrincipal() : null;
+		if (principal != null && principal.getName() != null) {
+			cookieKey = cookieKey + "."
+					+ StringUtils.cookieNameSafeString(principal.getName());
+		} else {
+			cookieKey = cookieKey + ".anonymous";
+		}
+        
+		HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
-        i18nContext.setLocale(locale);
+		if (locale != null && !i18n.getPreferedLocale().equals(locale)) {
+
+			String localeCookieKey = "locale" + cookieKey;
+
+			Cookie cookie = new Cookie(localeCookieKey, localeString);
+			cookie.setMaxAge(3600 * 24 * 365);
+			cookie.setPath(httpContext.getRequest().getContextPath()
+					+ httpContext.getRequest().getServletPath());
+			httpContext.getResponse().addCookie(cookie);
+			httpContext.setSessionAttribute(
+					I18nWebConstants.LOCALE_SESSION_KEY, locale);
+		}
+		i18nContext.setLocale(locale);
+		
+        String encoding = webConfigurator.getDefaultEncoding();
         Cookie[] cookies = httpContext.getRequest().getCookies();
-        if (cookies != null)
-        {
-            for (int i = 0; i < cookies.length; i++)
-            {
-                if (cookies[i].getName().equals(encodingCookieKey))
-                {
-                    httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, 
+		if (cookies != null) {
+			String encodingCookieKey = "encoding" + cookieKey + "."
+					+ locale.toString();
+			for (int i = 0; i < cookies.length; i++) {
+				if (cookies[i].getName().equals(encodingCookieKey)
+						&& !webConfigurator.getDefaultEncoding().equals(
+								cookies[i].getValue())) {
+					httpContext.setSessionAttribute(
+							I18nWebConstants.ENCODING_SESSION_KEY, 
                         cookies[i].getValue());
-                    httpContext.setEncoding(cookies[i].getValue());
+                    encoding = cookies[i].getValue();
+                    break;
                 }
             }
         }
+        httpContext.setEncoding(encoding);
     }
 }
-
