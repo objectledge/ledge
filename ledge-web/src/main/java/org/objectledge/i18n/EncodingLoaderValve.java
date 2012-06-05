@@ -28,9 +28,7 @@
 
 package org.objectledge.i18n;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.servlet.http.Cookie;
 
@@ -89,27 +87,27 @@ public class EncodingLoaderValve
         if (encoding == null)
         {
             Cookie encodingCookie = getCookie(httpContext, encodingCookieKey);
-            if (encodingCookie != null) {
- 
-            	if(encodingCookie.getMaxAge() <= 60 * 24 * 3600) // less then 60 days left
+            if(encodingCookie != null)
+            {
+                if(encodingCookie.getMaxAge() <= 60 * 24 * 3600) // less then 60 days left
                 {
                     setInCookie = true;
                 }
-                
-                String encodingString = encodingCookie.getValue();
-                if(encodingString != null)
+
+                String requestedEncoding = encodingCookie.getValue();
+                if(requestedEncoding != null)
                 {
-                	try
+                    try
                     {
-                        new OutputStreamWriter(new ByteArrayOutputStream(), encodingString);
-                        encoding = encodingString;
+                        Charset.forName(requestedEncoding);
+                        encoding = requestedEncoding;
                         setInSession = true;
                     }
-                    catch (UnsupportedEncodingException e)
+                    catch(Exception e)
                     {
-                        logger.error("malformed " + encodingCookieKey + " cookie '" + 
-                                     encodingString + "' received from client " +
-                                     httpContext.getRequest().getRemoteAddr());
+                        logger.error("malformed " + encodingCookieKey + " cookie '"
+                            + requestedEncoding + "' received from client "
+                            + httpContext.getRequest().getRemoteAddr());
                     }
                 }
             }

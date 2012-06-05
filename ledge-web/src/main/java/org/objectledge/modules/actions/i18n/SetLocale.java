@@ -27,11 +27,13 @@
 // 
 package org.objectledge.modules.actions.i18n;
 
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.Locale;
 
 import javax.servlet.http.Cookie;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
 import org.objectledge.i18n.I18n;
@@ -55,21 +57,23 @@ import org.objectledge.web.WebConfigurator;
 public class SetLocale 
     implements Valve
 {
-
     private I18n i18n;
-	private WebConfigurator webConfigurator;
+
+    private WebConfigurator webConfigurator;
+
+    private final Logger log;
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param webConfigurator the web configurator component.
 	 */
-	public SetLocale(WebConfigurator webConfigurator, I18n i18n) {
-
+    public SetLocale(WebConfigurator webConfigurator, I18n i18n, Logger log)
+    {
 		this.webConfigurator = webConfigurator;
 		this.i18n = i18n;
+        this.log = log;
 	}
-
 	
     /**
      * Run the valve.
@@ -77,7 +81,8 @@ public class SetLocale
      * @param context the context.
      * @throws ProcessingException if action processing fails.
      */
-    public void process(Context context) throws ProcessingException
+    public void process(Context context)
+        throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
         String localeString = parameters.get("locale", null);
@@ -91,48 +96,63 @@ public class SetLocale
             throw new ProcessingException(e);
         }
 
-		String cookieKey = "";
-		AuthenticationContext authenticationContext = AuthenticationContext
-				.getAuthenticationContext(context);
-		Principal principal = (authenticationContext != null) ? authenticationContext
-				.getUserPrincipal() : null;
-		if (principal != null && principal.getName() != null) {
-			cookieKey = cookieKey + "."
-					+ StringUtils.cookieNameSafeString(principal.getName());
-		} else {
-			cookieKey = cookieKey + ".anonymous";
-		}
-        
-		HttpContext httpContext = HttpContext.getHttpContext(context);
+        String cookieKey = "";
+        AuthenticationContext authenticationContext = AuthenticationContext
+            .getAuthenticationContext(context);
+        Principal principal = (authenticationContext != null) ? authenticationContext
+            .getUserPrincipal() : null;
+        if(principal != null && principal.getName() != null)
+        {
+            cookieKey = cookieKey + "." + StringUtils.cookieNameSafeString(principal.getName());
+        }
+        else
+        {
+            cookieKey = cookieKey + ".anonymous";
+        }
+
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
-		if (locale != null && !i18n.getPreferedLocale().equals(locale)) {
+        if(locale != null && !i18n.getPreferedLocale().equals(locale))
+        {
+            String localeCookieKey = "locale" + cookieKey;
 
-			String localeCookieKey = "locale" + cookieKey;
+            Cookie cookie = new Cookie(localeCookieKey, localeString);
+            cookie.setMaxAge(3600 * 24 * 365);
+            cookie.setPath(httpContext.getRequest().getContextPath()
+                + httpContext.getRequest().getServletPath());
 
-			Cookie cookie = new Cookie(localeCookieKey, localeString);
-			cookie.setMaxAge(3600 * 24 * 365);
-			cookie.setPath(httpContext.getRequest().getContextPath()
-					+ httpContext.getRequest().getServletPath());
-			httpContext.getResponse().addCookie(cookie);
-			httpContext.setSessionAttribute(
-					I18nWebConstants.LOCALE_SESSION_KEY, locale);
-		}
-		i18nContext.setLocale(locale);
-		
+            httpContext.getResponse().addCookie(cookie);
+            httpContext.setSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY, locale);
+        }
+        i18nContext.setLocale(locale);
+
         String encoding = webConfigurator.getDefaultEncoding();
         Cookie[] cookies = httpContext.getRequest().getCookies();
-		if (cookies != null) {
-			String encodingCookieKey = "encoding" + cookieKey + "."
-					+ locale.toString();
-			for (int i = 0; i < cookies.length; i++) {
-				if (cookies[i].getName().equals(encodingCookieKey)
-						&& !webConfigurator.getDefaultEncoding().equals(
-								cookies[i].getValue())) {
-					httpContext.setSessionAttribute(
-							I18nWebConstants.ENCODING_SESSION_KEY, 
-                        cookies[i].getValue());
-                    encoding = cookies[i].getValue();
-                    break;
+        if(locale != null && cookies != null)
+        {
+            String encodingCookieKey = "encoding" + cookieKey + "." + locale.toString();
+            for(int i = 0; i < cookies.length; i++)
+            {
+                if(cookies[i].getName().equals(encodingCookieKey))
+                {
+                    String requestedEncoding = cookies[i].getValue();
+                    if(!webConfigurator.getDefaultEncoding().equals(requestedEncoding))
+                    {
+                        try
+                        {
+                            Charset.forName(requestedEncoding);
+                            httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY,
+                                requestedEncoding);
+                            encoding = requestedEncoding;
+                        }
+                        catch(Exception e)
+                        {
+                            log.error("malformed " + encodingCookieKey + " cookie '"
+                                + requestedEncoding + "' received from client "
+                                + httpContext.getRequest().getRemoteAddr());
+                        }
+                        break;
+                    }
                 }
             }
         }

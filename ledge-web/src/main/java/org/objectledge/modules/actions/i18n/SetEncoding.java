@@ -27,7 +27,7 @@
 // 
 package org.objectledge.modules.actions.i18n;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.security.Principal;
 
 import javax.servlet.http.Cookie;
@@ -82,9 +82,9 @@ public class SetEncoding
         }
         try
         {
-            "".getBytes(encoding);
+            Charset.forName(encoding);
         }
-        catch(UnsupportedEncodingException e)
+        catch(Exception e)
         {
             throw new ProcessingException("Unsupported encoding "+encoding);
         }
