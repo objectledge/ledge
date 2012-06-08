@@ -244,7 +244,7 @@ public class HttpContext
      */    
     public void setSessionAttribute(String key, Object value)
     {
-        request.getSession(true).setAttribute(key, value);
+        request.getSession().setAttribute(key, value);
     }
     
     /**
@@ -255,8 +255,7 @@ public class HttpContext
      */
     public Object getSessionAttribute(String key)
     {
-        HttpSession session = request.getSession(false);
-        return session != null ? session.getAttribute(key) : null;
+        return request.getSession().getAttribute(key);
     }
 
     /**
@@ -267,18 +266,11 @@ public class HttpContext
      * @param defaultValue the value to return if not defined.
      * @return session attribute value of defaultValue if session attribute is not defined.
      */
+    @SuppressWarnings("unchecked")
     public <T> T getSessionAttribute(String key, T defaultValue)
     {
-        HttpSession session = request.getSession(false);
-        if(session != null)
-        {
-            T sessionValue = (T)session.getAttribute(key);
-            return sessionValue != null ? sessionValue : defaultValue;
-        }
-        else
-        {
-            return defaultValue;
-        }
+        T sessionValue = (T)request.getSession().getAttribute(key); 
+        return sessionValue == null ? defaultValue : sessionValue;
     }
     
     /**
@@ -288,11 +280,7 @@ public class HttpContext
      */
     public void removeSessionAttribute(String key)
     {
-        HttpSession session = request.getSession(false);
-        if(session != null)
-        {
-            session.setAttribute(key, null);
-        }
+        request.getSession().setAttribute(key, null);
     }
     
     /**
@@ -300,21 +288,19 @@ public class HttpContext
      */
     public void clearSessionAttributes()
     {
-        HttpSession session = request.getSession(false);
-        if(session != null)
+        HttpSession session = request.getSession();
+        @SuppressWarnings("unchecked")
+        Enumeration<String> attrNames = session.getAttributeNames();
+        ArrayList<String> temp = new ArrayList<String>();
+        while (attrNames.hasMoreElements())
         {
-            Enumeration<String> attrNames = session.getAttributeNames();
-            ArrayList<String> temp = new ArrayList<String>();
-            while(attrNames.hasMoreElements())
-            {
-                String name = attrNames.nextElement();
-                temp.add(name);
-            }
-            for(int i = 0; i < temp.size(); i++)
-            {
-                String name = temp.get(i);
-                session.removeAttribute(name);
-            }
+            String name = attrNames.nextElement();
+            temp.add(name);
+        }
+        for (int i = 0; i < temp.size(); i++)
+        {
+            String name = temp.get(i);
+            session.removeAttribute(name);
         }
     }
 

@@ -209,24 +209,15 @@ public class RequestTrackingValve
     {
         long startTime = 0;
         int r = 0;
-        int s = -1;
+        int s = 0;
         String requestUrl = null;
         try
         {
             HttpContext httpContext = HttpContext.getHttpContext(context);
             r = totalRequests++;
             concurrentRequests++;
-            String requestMarker;
-            SessionMarker sm = trackSession(httpContext);
-            if(sm != null)
-            {
-                s = sm.getId();
-                requestMarker = "R" + r + " S" + s;
-            }
-            else
-            {
-                requestMarker = "R" + r + " NS";
-            }
+            s = trackSession(httpContext).getId();
+            String requestMarker = "R"+r+" S"+s;
             context.setAttribute(REQUEST_MARKER_KEY, requestMarker);
             NDC.push(requestMarker);
             requestUrl = getRequestUrl(httpContext);
@@ -267,22 +258,15 @@ public class RequestTrackingValve
     
     private SessionMarker trackSession(HttpContext httpContext)
     {
-        HttpSession session = httpContext.getRequest().getSession(false);
-        if(session != null)
+        HttpSession session = httpContext.getRequest().getSession();
+        SessionMarker marker = (SessionMarker)session.getAttribute(SessionMarker.KEY);
+        if(marker == null)
         {
-            SessionMarker marker = (SessionMarker)session.getAttribute(SessionMarker.KEY);
-            if(marker == null)
-            {
-                concurrentSessions++;
-                marker = new SessionMarker(this, totalSessions++);
-                session.setAttribute(SessionMarker.KEY, marker);
-            }
-            return marker;
+            concurrentSessions++;
+            marker = new SessionMarker(this, totalSessions++);
+            session.setAttribute(SessionMarker.KEY, marker);
         }
-        else
-        {
-            return null;
-        }
+        return marker;
     }
     
     private void updateCurrentTime(long time)
@@ -417,14 +401,7 @@ public class RequestTrackingValve
     
     private void slowRequestLog(int r, int s, long duration, String url)
     {
-        if(s >= 0)
-        {
-            slowRequestLog.format("%s R%d S%d %dms %s\n", currentTime, r, s, duration, url);
-        }
-        else
-        {
-            slowRequestLog.format("%s R%d NS %dms %s\n", currentTime, r, s, duration, url);
-        }
+        slowRequestLog.format("%s R%d S%d %dms %s\n", currentTime, r, s, duration, url);
         slowRequestLog.flush();
     }
     

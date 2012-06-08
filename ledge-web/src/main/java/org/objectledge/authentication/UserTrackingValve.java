@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
@@ -71,7 +72,8 @@ public class UserTrackingValve
                     card =  new PunchCard(principal);
                     cardRack.put(principal, card);
                     HttpContext httpContext = HttpContext.getHttpContext(context);
-                    httpContext.setSessionAttribute(PunchCard.class.getName(), card);
+                    HttpSession session = httpContext.getRequest().getSession();
+                    session.setAttribute(PunchCard.class.getName(), card);
                 }
                 else
                 {

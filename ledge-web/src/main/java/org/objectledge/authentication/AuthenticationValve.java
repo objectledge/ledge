@@ -68,8 +68,8 @@ public class AuthenticationValve
         throws ProcessingException
     {
     	HttpContext httpContext = HttpContext.getHttpContext(context);
-        Principal principal = (Principal)httpContext
-            .getSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY);
+    	Principal principal = (Principal)httpContext.getRequest().
+			getSession().getAttribute(WebConstants.PRINCIPAL_SESSION_KEY);
 		Principal anonymous = null;
         try
         {
@@ -92,9 +92,7 @@ public class AuthenticationValve
             authenticated);
         context.setAttribute(AuthenticationContext.class, authenticationContext);
         
-        if(authenticated)
-        {
-            httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
-        }
+    	httpContext.getRequest().getSession().setAttribute(WebConstants.PRINCIPAL_SESSION_KEY, 
+            principal);
     }
 }

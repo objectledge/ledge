@@ -70,9 +70,9 @@ public class SessionDurationValve
         HttpContext httpContext = HttpContext.getHttpContext(context);
         AuthenticationContext authenticationContext = AuthenticationContext
             .getAuthenticationContext(context);
-        HttpSession session = httpContext.getRequest().getSession(false);
-        if(session != null
-            && (mvcContext.getStage() == ProcessingStage.POST_AUTHENTICATION || session.isNew()))
+        HttpSession session = httpContext.getRequest().getSession();
+        if(mvcContext.getStage() == ProcessingStage.POST_AUTHENTICATION
+            || session.isNew())
         {
             if(authenticationContext.isUserAuthenticated())
             {

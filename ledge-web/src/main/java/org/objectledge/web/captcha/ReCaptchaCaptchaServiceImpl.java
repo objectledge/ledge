@@ -2,12 +2,13 @@ package org.objectledge.web.captcha;
 
 import java.net.URLEncoder;
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -20,9 +21,6 @@ import org.objectledge.web.HttpContext;
 
 import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 public class ReCaptchaCaptchaServiceImpl
     implements CaptchaService
@@ -57,8 +55,6 @@ public class ReCaptchaCaptchaServiceImpl
     
     private final UserManager userManager;
 
-    private final Map<CaptchaCacheKey, CaptchaCacheValue> captchaCache;
-
     public ReCaptchaCaptchaServiceImpl(I18n i18n, Configuration config, Logger log, UserManager userManager)
         throws ConfigurationException
     {
@@ -84,9 +80,6 @@ public class ReCaptchaCaptchaServiceImpl
         cacheTimeLimit = config.getChild("cacheValidity").getChild("timeLimit").getValueAsLong(60000);
         cacheHitLimit = config.getChild("cacheValidity").getChild("hitLimit").getValueAsLong(2);
         this.userManager = userManager;
-        Cache<CaptchaCacheKey, CaptchaCacheValue> cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(cacheTimeLimit, TimeUnit.MILLISECONDS).build();
-        captchaCache = cache.asMap();
     }
 
     @Override
@@ -129,21 +122,43 @@ public class ReCaptchaCaptchaServiceImpl
         String challenge = parameters.get(PARAMETER_CHALLENGE, "");
         String response = parameters.get(PARAMETER_RESPONSE, "");
         
-        CaptchaCacheKey captchaCacheKey = new CaptchaCacheKey(remoteAddr, challenge, response);
-        CaptchaCacheValue captchaCacheValue = captchaCache.get(captchaCacheKey);
+        Map<CaptchaCacheKey, CaptchaCacheValue> captchaCacheMap = (HashMap<CaptchaCacheKey, CaptchaCacheValue>)httpContext
+            .getSessionAttribute(CAPTCHA_CACHE);
 
-        if(captchaCacheValue != null)
+        CaptchaCacheKey captchaCacheKey = new CaptchaCacheKey(remoteAddr, challenge, response);
+        CaptchaCacheValue captchaCacheValue = null;
+
+        if(captchaCacheMap != null)
         {
-            if(System.currentTimeMillis() > captchaCacheValue.getTimestamp() + this.cacheTimeLimit
-                || captchaCacheValue.getCounter() > this.cacheHitLimit)
+            if(captchaCacheMap.containsKey(captchaCacheKey))
             {
-                return false;
+                captchaCacheValue = captchaCacheMap.get(captchaCacheKey);
+                long cacheValidityEnd = (new Date()).getTime() + this.cacheTimeLimit;
+                if(captchaCacheValue.getTimestamp() > cacheValidityEnd
+                    && captchaCacheValue.getCounter() > this.cacheHitLimit)
+                {
+                    captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge,
+                        response));
+                    captchaCacheMap.put(captchaCacheKey, captchaCacheValue);
+                    httpContext.setSessionAttribute(CAPTCHA_CACHE, captchaCacheMap);
+                }
+            }
+            else
+            {
+                captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge,
+                    response));
+                captchaCacheMap.put(captchaCacheKey, captchaCacheValue);
+                httpContext.setSessionAttribute(CAPTCHA_CACHE, captchaCacheMap);
             }
         }
         else
         {
+
+            captchaCacheMap = new HashMap<CaptchaCacheKey, CaptchaCacheValue>();
             captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge, response));
-            captchaCache.put(captchaCacheKey, captchaCacheValue);
+
+            captchaCacheMap.put(captchaCacheKey, captchaCacheValue);
+            httpContext.setSessionAttribute(CAPTCHA_CACHE, captchaCacheMap);
         }
 
         return captchaCacheValue.getValue();
@@ -157,7 +172,7 @@ public class ReCaptchaCaptchaServiceImpl
      * @return true if CAPTCHA required otherwise false.
      */
     public boolean isCaptchaRequired(Parameters config, Principal principal)
-        throws Exception
+    throws Exception
     {
         if(config != null)
         {

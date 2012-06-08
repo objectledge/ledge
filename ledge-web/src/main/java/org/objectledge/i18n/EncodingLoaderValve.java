@@ -28,7 +28,9 @@
 
 package org.objectledge.i18n;
 
-import java.nio.charset.Charset;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.Cookie;
 
@@ -86,28 +88,37 @@ public class EncodingLoaderValve
         // get encoding from cookie
         if (encoding == null)
         {
+            setInSession = true;
             Cookie encodingCookie = getCookie(httpContext, encodingCookieKey);
-            if(encodingCookie != null)
+            if (encodingCookie == null)
+            {
+                setInCookie = true;
+            }
+            else
             {
                 if(encodingCookie.getMaxAge() <= 60 * 24 * 3600) // less then 60 days left
                 {
                     setInCookie = true;
                 }
-
-                String requestedEncoding = encodingCookie.getValue();
-                if(requestedEncoding != null)
+                
+                String encodingString = encodingCookie.getValue();
+                if(encodingString == null)
+                {
+                    setInCookie = true;
+                }
+                else
                 {
                     try
                     {
-                        Charset.forName(requestedEncoding);
-                        encoding = requestedEncoding;
-                        setInSession = true;
+                        new OutputStreamWriter(new ByteArrayOutputStream(), encodingString);
+                        encoding = encodingString;
                     }
-                    catch(Exception e)
+                    catch (UnsupportedEncodingException e)
                     {
-                        logger.error("malformed " + encodingCookieKey + " cookie '"
-                            + requestedEncoding + "' received from client "
-                            + httpContext.getRequest().getRemoteAddr());
+                        setInCookie = true;
+                        logger.error("malformed " + encodingCookieKey + " cookie '" + 
+                                     encodingString + "' received from client " +
+                                     httpContext.getRequest().getRemoteAddr());
                     }
                 }
             }
@@ -116,6 +127,8 @@ public class EncodingLoaderValve
         // get default encoding
         if (encoding == null)
         {
+            setInSession = true;
+            setInCookie = true;
             encoding = webConfigurator.getDefaultEncoding();
         }
         
