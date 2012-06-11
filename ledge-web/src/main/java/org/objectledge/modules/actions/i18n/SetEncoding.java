@@ -90,31 +90,32 @@ public class SetEncoding
         }
         
 		HttpContext httpContext = HttpContext.getHttpContext(context);
-		if (!webConfigurator.getDefaultEncoding().equals(encoding))
-		{        
-	        String cookieKey = "encoding";
-	        AuthenticationContext authenticationContext =
-	                AuthenticationContext.getAuthenticationContext(context);
-	        Principal principal = (authenticationContext != null) ?
-	                authenticationContext.getUserPrincipal() : null;
-	        if(principal != null && principal.getName() != null)
-	        {
-	            cookieKey = cookieKey + "." + StringUtils.
-                    cookieNameSafeString(principal.getName());
-	        }
-	        else
-	        {
-	            cookieKey = cookieKey + ".anonymous";
-	        }
-	        I18nContext i18nContext = I18nContext.getI18nContext(context);
-	        cookieKey = cookieKey + "." + i18nContext.getLocale().toString();
-	        Cookie cookie = new Cookie(cookieKey, encoding);
-	        cookie.setMaxAge(3600*24*365);
-	        cookie.setPath(httpContext.getRequest().getContextPath()+
-                       httpContext.getRequest().getServletPath());
-	        httpContext.getResponse().addCookie(cookie);
-	        httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, encoding);
+		String cookieKey = "encoding";
+		AuthenticationContext authenticationContext = AuthenticationContext
+				.getAuthenticationContext(context);
+		Principal principal = (authenticationContext != null) ? authenticationContext
+				.getUserPrincipal() : null;
+		if (principal != null && principal.getName() != null) {
+			cookieKey = cookieKey + "."
+					+ StringUtils.cookieNameSafeString(principal.getName());
+		} else {
+			cookieKey = cookieKey + ".anonymous";
 		}
+		I18nContext i18nContext = I18nContext.getI18nContext(context);
+		cookieKey = cookieKey + "." + i18nContext.getLocale().toString();
+		Cookie cookie = new Cookie(cookieKey, encoding);
+		int maxAge = webConfigurator.getDefaultEncoding().equals(encoding) ? 0 : 3600 * 24 * 365;
+		cookie.setMaxAge(maxAge);
+		cookie.setPath(httpContext.getRequest().getContextPath()
+				+ httpContext.getRequest().getServletPath());
+		httpContext.getResponse().addCookie(cookie);
+		if (!webConfigurator.getDefaultEncoding().equals(encoding)) {
+			httpContext.setSessionAttribute(
+					I18nWebConstants.ENCODING_SESSION_KEY, encoding);
+		} else {
+			httpContext
+					.removeSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY);
+		}		
         httpContext.setEncoding(encoding);
     }
 }

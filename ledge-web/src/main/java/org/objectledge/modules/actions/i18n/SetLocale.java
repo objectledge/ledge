@@ -112,18 +112,19 @@ public class SetLocale
 
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
-        if(locale != null && !i18n.getPreferedLocale().equals(locale))
-        {
-            String localeCookieKey = "locale" + cookieKey;
-
-            Cookie cookie = new Cookie(localeCookieKey, localeString);
-            cookie.setMaxAge(3600 * 24 * 365);
-            cookie.setPath(httpContext.getRequest().getContextPath()
-                + httpContext.getRequest().getServletPath());
-
-            httpContext.getResponse().addCookie(cookie);
-            httpContext.setSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY, locale);
-        }
+		String localeCookieKey = "locale" + cookieKey;
+		Cookie cookie = new Cookie(localeCookieKey, localeString);
+		int maxAge = i18n.getPreferedLocale().equals(locale) ? 0 : 3600 * 24 * 365;
+		cookie.setMaxAge(maxAge);
+		cookie.setPath(httpContext.getRequest().getContextPath()
+				+ httpContext.getRequest().getServletPath());
+		httpContext.getResponse().addCookie(cookie);
+		if (!i18n.getPreferedLocale().equals(locale)) {
+			httpContext.setSessionAttribute(
+					I18nWebConstants.LOCALE_SESSION_KEY, locale);
+		} else {
+			httpContext.removeSessionAttribute(I18nWebConstants.LOCALE_SESSION_KEY);
+		}
         i18nContext.setLocale(locale);
 
         String encoding = webConfigurator.getDefaultEncoding();
@@ -151,8 +152,12 @@ public class SetLocale
                                 + requestedEncoding + "' received from client "
                                 + httpContext.getRequest().getRemoteAddr());
                         }
-                        break;
+                    } else {
+                        cookies[i].setMaxAge(0);
+                        httpContext.getResponse().addCookie(cookies[i]);
+                    	httpContext.removeSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY);
                     }
+                    break;
                 }
             }
         }
