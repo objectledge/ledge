@@ -779,7 +779,7 @@ public class PageTool
     {
         if(cacheInterval == null)
         {            
-            cacheInterval = config.default_cache_interval;
+            cacheInterval = config.defaultCacheInterval;
         }
         return (long)cacheInterval;
     }
@@ -834,7 +834,7 @@ public class PageTool
         private SimpleDateFormat httpExpiresTimeFormatter = new SimpleDateFormat(HTTP_EXPIRES_TIME_FORMAT);
         
         /** cache interval in secunds */
-        private long default_cache_interval;
+        private long defaultCacheInterval;
 
         /**
          * Initializes the configuraiton object.
@@ -860,7 +860,7 @@ public class PageTool
         public void configure(org.jcontainer.dna.Configuration config)
             throws ConfigurationException
         {
-            default_cache_interval = config.getChild("default_cache_interval").getValueAsLong();
+            defaultCacheInterval = config.getChild("default_cache_interval").getValueAsLong();
         }
         
         
