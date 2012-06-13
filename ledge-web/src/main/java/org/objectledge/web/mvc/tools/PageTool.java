@@ -105,6 +105,10 @@ public class PageTool
 
     /** configuration. */
     protected PageTool.Configuration config;
+    
+    /** cache interval. */
+    protected Long cacheInterval;
+
 
 	/** 
 	 * Component constructor.
@@ -753,53 +757,66 @@ public class PageTool
         httpContext.getResponse().setStatus(status);
     }
     
+    
     /**
-     * Gets default caching in the browser.
+     * Set cache interval time.
+     * 
+     * @param value the interval time in seconds.
      */
-    public String getDefaultCacheExpires()
+    public void setCacheInterval(long value)
     {
-        Date cacheExpiresTime = new Date(System.currentTimeMillis() + config.defaultCacheExpires);
-        return config.cacheTimeFormatter.format(cacheExpiresTime);
+        if(value < 0)
+        {
+            value = 0L;
+        }
+        cacheInterval = value;
     }
     
     /**
-     * Sets default caching in the browser.
+     * Get cache interval time in seconds.
      */
-    public void setDefaultCacheExpires()
+    public long getCacheInterval()
     {
-        Date cacheExpiresTime = new Date(System.currentTimeMillis() + config.defaultCacheExpires);
-        addHttpEquivMeta("Expires", config.cacheTimeFormatter.format(cacheExpiresTime));
+        if(cacheInterval == null)
+        {            
+            cacheInterval = config.default_cache_interval;
+        }
+        return (long)cacheInterval;
     }
     
     /**
-     * Disable caching in the browser.
+     * Gets HTTP expires time.
+     */
+    public String getHttpExpires()
+    {
+        if(getCacheInterval() == 0)
+        {
+            return "0";
+        }
+        else
+        {
+            Date httpExpiresTime = new Date();
+            httpExpiresTime.setTime(System.currentTimeMillis() + getCacheInterval() * 1000);
+            return config.httpExpiresTimeFormatter.format(httpExpiresTime);
+        }
+    }
+    
+    /**
+     * Gets max age time.
+     */
+    public long getMaxAge()
+    {
+        return getCacheInterval();
+    }
+    
+    /**
+     *  Check if cache is disabled.
      */    
-    public void disableCache()
+    public boolean isCacheDisable()
     {
-        addHttpEquivMeta("Expires", "0");
+        return (getCacheInterval() == 0); 
     }
     
-    /**
-     * Gets caching time in the browser.
-     * 
-     * @param cacheExpires the expires time in millis. 
-     */
-    public String getCacheExpires(long cacheExpires)
-    {
-        Date cacheExpiresTime = new Date(System.currentTimeMillis() + cacheExpires);
-        return config.cacheTimeFormatter.format(cacheExpiresTime);
-    }
-    
-    /**
-     * Sets caching in the browser.
-     * 
-     * @param cacheExpires the expires time in millis. 
-     */
-    public void setCacheExpires(long cacheExpires)
-    {
-        Date cacheExpiresTime = new Date(System.currentTimeMillis() + cacheExpires);
-        addHttpEquivMeta("Expires", config.cacheTimeFormatter.format(cacheExpiresTime));
-    }
     
     /**
      * Represents the shared configuration of the PageTools.
@@ -811,13 +828,13 @@ public class PageTool
     {        
         
         /** Cache date time format pattern used for parsing date + time. */
-        public static final String CACHE_TIME_FORMAT = "EEE, dd-MMM-yyyy HH:mm:ss zzz";
+        public static final String HTTP_EXPIRES_TIME_FORMAT = "EEE, dd-MMM-yyyy HH:mm:ss zzz";
         
         /** SimpleDateFormat pattern used for parsing date + time. */
-        private SimpleDateFormat cacheTimeFormatter = new SimpleDateFormat(CACHE_TIME_FORMAT);
+        private SimpleDateFormat httpExpiresTimeFormatter = new SimpleDateFormat(HTTP_EXPIRES_TIME_FORMAT);
         
-        /** currently used action parameter name */
-        private long defaultCacheExpires;
+        /** cache interval in secunds */
+        private long default_cache_interval;
 
         /**
          * Initializes the configuraiton object.
@@ -828,7 +845,7 @@ public class PageTool
         public Configuration(org.jcontainer.dna.Configuration config)
             throws ConfigurationException
         {
-            cacheTimeFormatter.setTimeZone(TimeZone.getDefault());
+            httpExpiresTimeFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
             configure(config);
         }
         
@@ -842,8 +859,10 @@ public class PageTool
          */
         public void configure(org.jcontainer.dna.Configuration config)
             throws ConfigurationException
-        {            
-            defaultCacheExpires = config.getChild("default_cache_expires").getValueAsLong();
+        {
+            default_cache_interval = config.getChild("default_cache_interval").getValueAsLong();
         }
+        
+        
     }
 }

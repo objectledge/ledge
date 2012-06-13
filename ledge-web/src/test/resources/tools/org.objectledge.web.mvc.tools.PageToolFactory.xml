@@ -28,5 +28,5 @@
 --> 
 
 <config>
-  <default_cache_expires>60000</default_cache_expires>
+  <default_cache_interval>60</default_cache_interval>
 </config>
