@@ -28,13 +28,18 @@
 
 package org.objectledge.web.mvc.tools;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
+import org.jcontainer.dna.Configurable;
+import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.web.HttpContext;
 
 /**
@@ -98,16 +103,20 @@ public class PageTool
     /** The http context. */
     protected HttpContext httpContext;
 
+    /** configuration. */
+    protected PageTool.Configuration config;
+
 	/** 
 	 * Component constructor.
 	 * @param parentLinkTool the link tool used to generate links to page content resources.
 	 * @param httpContext the http context
 	 */
-	public PageTool(LinkTool parentLinkTool, HttpContext httpContext)
+	public PageTool(LinkTool parentLinkTool, HttpContext httpContext, PageTool.Configuration config)
 	{
 		this.parentLinkTool = parentLinkTool;
         this.linkTool = parentLinkTool.sessionless();
         this.httpContext = httpContext;
+        this.config = config;
     }
 
 	/** 
@@ -742,5 +751,99 @@ public class PageTool
     public void setStatus(int status)
     {
         httpContext.getResponse().setStatus(status);
+    }
+    
+    /**
+     * Gets default caching in the browser.
+     */
+    public String getDefaultCacheExpires()
+    {
+        Date cacheExpiresTime = new Date(System.currentTimeMillis() + config.defaultCacheExpires);
+        return config.cacheTimeFormatter.format(cacheExpiresTime);
+    }
+    
+    /**
+     * Sets default caching in the browser.
+     */
+    public void setDefaultCacheExpires()
+    {
+        Date cacheExpiresTime = new Date(System.currentTimeMillis() + config.defaultCacheExpires);
+        addHttpEquivMeta("Expires", config.cacheTimeFormatter.format(cacheExpiresTime));
+    }
+    
+    /**
+     * Disable caching in the browser.
+     */    
+    public void disableCache()
+    {
+        addHttpEquivMeta("Expires", "0");
+    }
+    
+    /**
+     * Gets caching time in the browser.
+     * 
+     * @param cacheExpires the expires time in millis. 
+     */
+    public String getCacheExpires(long cacheExpires)
+    {
+        Date cacheExpiresTime = new Date(System.currentTimeMillis() + cacheExpires);
+        return config.cacheTimeFormatter.format(cacheExpiresTime);
+    }
+    
+    /**
+     * Sets caching in the browser.
+     * 
+     * @param cacheExpires the expires time in millis. 
+     */
+    public void setCacheExpires(long cacheExpires)
+    {
+        Date cacheExpiresTime = new Date(System.currentTimeMillis() + cacheExpires);
+        addHttpEquivMeta("Expires", config.cacheTimeFormatter.format(cacheExpiresTime));
+    }
+    
+    /**
+     * Represents the shared configuration of the PageTools.
+     *
+     * <p>Created on Jan 14, 2004</p>
+     */
+    public static class Configuration
+        implements Configurable
+    {        
+        
+        /** Cache date time format pattern used for parsing date + time. */
+        public static final String CACHE_TIME_FORMAT = "EEE, dd-MMM-yyyy HH:mm:ss zzz";
+        
+        /** SimpleDateFormat pattern used for parsing date + time. */
+        private SimpleDateFormat cacheTimeFormatter = new SimpleDateFormat(CACHE_TIME_FORMAT);
+        
+        /** currently used action parameter name */
+        private long defaultCacheExpires;
+
+        /**
+         * Initializes the configuraiton object.
+         * 
+         * @param config DNA configuration
+         * @throws ConfigurationException if the configuration is invalid.
+         */
+        public Configuration(org.jcontainer.dna.Configuration config)
+            throws ConfigurationException
+        {
+            cacheTimeFormatter.setTimeZone(TimeZone.getDefault());
+            configure(config);
+        }
+        
+        /**
+         * Initializes the internal state from DNA configuration object.
+         * 
+         * <p>This method may be used to reconfigure page tool at runtime.</p>
+         * 
+         * @param config DNA configuration
+         * @throws ConfigurationException if the configuration is invalid.
+         */
+        public void configure(org.jcontainer.dna.Configuration config)
+            throws ConfigurationException
+        {            
+            defaultCacheExpires = config.getChild("default_cache_expires").getValueAsLong();
+        }
     }
 }
