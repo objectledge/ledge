@@ -197,8 +197,8 @@ public class DirectoryUserManager extends UserManager
             }
             attrs.put(oc);
             attrs.put(new BasicAttribute(loginAttribute, login));
-            attrs.put(new BasicAttribute(passwordAttribute, 
-                                         passwordDigester.digestPassword(password)));
+            attrs.put(new BasicAttribute(passwordAttribute, passwordDigester
+                .generateDigest(password)));
             ctx.createSubcontext(directory.getRelativeName(dn), attrs);
             nameByLogin.put(login, dn);
             loginByName.put(dn, login);
@@ -342,8 +342,8 @@ public class DirectoryUserManager extends UserManager
                 throw new UserUnknownException("user "+account.getName()+" does not exist");
             }
             Attributes attrs = new BasicAttributes(true);
-            attrs.put(new BasicAttribute(passwordAttribute,
-                                         passwordDigester.digestPassword(password)));
+            attrs.put(new BasicAttribute(passwordAttribute, passwordDigester
+                .generateDigest(password)));
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attrs);
             logger.info("User " + account.getName() + "'s password changed");
         }
@@ -392,7 +392,14 @@ public class DirectoryUserManager extends UserManager
         {
             closeContext(ctx);
         }
-        return storedPassword.equals(passwordDigester.digestPassword(password));
+        try
+        {
+            return passwordDigester.validateDigest(password, storedPassword);
+        }
+        catch(Exception e)
+        {
+            throw new AuthenticationException("password validation failed", e);
+        }
     }
 
     /**

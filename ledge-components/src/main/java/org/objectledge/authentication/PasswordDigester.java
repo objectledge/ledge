@@ -28,12 +28,26 @@
 
 package org.objectledge.authentication;
 
+import static java.lang.System.arraycopy;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSet;
+
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.pool.BasePoolableObjectFactory;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.commons.pool.BaseKeyedPoolableObjectFactory;
+import org.apache.commons.pool.KeyedObjectPool;
+import org.apache.commons.pool.impl.StackKeyedObjectPool;
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.ComponentInitializationError;
 
 /**
  * Default implementation of password digester.
@@ -42,77 +56,281 @@ import org.apache.commons.pool.impl.GenericObjectPool;
  */
 public class PasswordDigester
 {
-    /** the digest algorithm - null for plaintext */
-    private String algorithm;
+    /**
+     * Password schemes supported with JDK 1.6.
+     */
+    public static final Set<String> SUPPORTED_SCHEMES = unmodifiableSet(new HashSet<String>(asList(
+        "SHA", "SSHA", "SHA1", "SSHA1", "MD5", "SMD5", "SHA256", "SSHA256", "SHA384", "SSHA384",
+        "SHA512", "SSHA512")));
+
+    /** Password scheme */
+    private final String defaultScheme;
 
     /** the local message digest pool */
-    private ObjectPool messageDigestPool = new GenericObjectPool(new MessageDigestFactory());
-    
+    private final KeyedObjectPool digestPool = new StackKeyedObjectPool(new PasswordDigestFactory());
+
+    /** random generator for salt. */
+    private final Random random;
+
+    private static final Pattern ENCODED_PASSORD_PATTERN = Pattern
+        .compile("\\{([A-Za-z0-9]+)\\}([A-Za-z0-9+/\\-_=]+)");
+
     /**
-     * component constructor.
+     * Create PasswordDigester instance.
      * 
-     * @param algorithm the algorithm.
+     * @param scheme default password encryption scheme.
      */
-    public PasswordDigester(String algorithm)
+    public PasswordDigester(String scheme)
     {
-        this.algorithm = algorithm;
+        this.defaultScheme = scheme;
+        random = new SecureRandom();
+        random.setSeed(System.nanoTime());
+        try
+        {
+            PasswordDigest digest = (PasswordDigest)digestPool.borrowObject(scheme);
+            digestPool.returnObject(scheme, digest);
+        }
+        catch(Exception e)
+        {
+            throw new ComponentInitializationError("Unable to initialize password digester", e);
+        }
+    }
+
+    public PasswordDigester(Configuration configuration)
+        throws ConfigurationException
+    {
+        this(configuration.getChild("scheme").getValue());
     }
 
     /**
-     * Digests a given password using a chosen algorithm.
+     * Generate password digest using default scheme.
      * 
-     * @param password the password to be digested, <code>null</code> value is allowed
+     * @param password password to process.
+     * @return digested and encoded password.
      */
-    public String digestPassword(String password)
+    public String generateDigest(String password)
     {
-        if (algorithm != null)
+        try
         {
-            if (password == null)
-            {
-                // return unmatchable password for non-login accounts
-                return "-";
-            }
-            MessageDigest digest = null;
+            PasswordDigest digest = (PasswordDigest)digestPool.borrowObject(defaultScheme);
             try
             {
-                digest = (MessageDigest)messageDigestPool.borrowObject();
-                byte[] hash = digest.digest(password.getBytes());
-                messageDigestPool.returnObject(digest);
-                StringBuilder encoded = new StringBuilder();
-                encoded.append('{');
-                encoded.append(algorithm.toLowerCase());
-                encoded.append('}');
-                Base64 encoder = new Base64();
-                encoded.append(new String(encoder.encode(hash), "US-ASCII"));
-                return encoded.toString();
+                StringBuilder buff = new StringBuilder();
+                buff.append("{").append(defaultScheme).append("}");
+                buff.append(digest.generate(password));
+                return buff.toString();
             }
-            catch (Exception e)
+            finally
             {
-                RuntimeException ee = new IllegalArgumentException("Digest password exception: "+
-                                                                    e.getMessage());
-                ee.initCause(e);
-                throw ee;
+                digestPool.returnObject(defaultScheme, digest);
+            }
+        }
+        catch(Exception e)
+        {
+            // algorithm was verified in component constructor, so we don't expecte exceptions at
+            // this point.
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Generate password digest using custom scheme.
+     * 
+     * @param password the password.
+     * @param scheme password scheme to use.
+     * @return digested and encoded password.
+     * @throws NoSuchAlgorithmException if the specified password scheme is not supported
+     */
+    public String generateDigest(String password, String scheme)
+        throws NoSuchAlgorithmException
+    {
+        try
+        {
+            PasswordDigest digest = (PasswordDigest)digestPool.borrowObject(scheme);
+            try
+            {
+                StringBuilder buff = new StringBuilder();
+                buff.append("{").append(scheme).append("}");
+                buff.append(digest.generate(password));
+                return buff.toString();
+            }
+            finally
+            {
+                digestPool.returnObject(scheme, digest);
+            }
+        }
+        catch(Exception e)
+        {
+            if(e instanceof NoSuchAlgorithmException)
+            {
+                throw (NoSuchAlgorithmException)e;
+            }
+            else
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Validate password against password digest.
+     * 
+     * @param password the password.
+     * @param encoded digested and encoded password.
+     * @return true if the password matches
+     * @throws NoSuchAlgorithmException if the specified password scheme is not supported
+     */
+    public boolean validateDigest(String password, String encoded)
+        throws NoSuchAlgorithmException
+    {
+        Matcher matcher = ENCODED_PASSORD_PATTERN.matcher(encoded);
+        if(matcher.matches())
+        {
+            String scheme = matcher.group(1);
+            String hash = matcher.group(2);
+            try
+            {
+                PasswordDigest digest = (PasswordDigest)digestPool.borrowObject(scheme);
+                try
+                {
+                    return digest.validate(password, hash);
+                }
+                finally
+                {
+                    digestPool.returnObject(scheme, digest);
+                }
+            }
+            catch(RuntimeException e)
+            {
+                throw e;
+            }
+            catch(Exception e)
+            {
+                if(e instanceof NoSuchAlgorithmException)
+                {
+                    throw (NoSuchAlgorithmException)e;
+                }
+                else
+                {
+                    throw new RuntimeException(e);
+                }
             }
         }
         else
         {
-            return password;
+            throw new IllegalArgumentException("invalid hashed password format " + encoded
+                + " {SCHEME}BASE64 expected");
         }
     }
-    
-    /**
-     * A factory of MessageDigest objects.
-     */
-    private class MessageDigestFactory
-        extends BasePoolableObjectFactory
+
+    private class PasswordDigest
     {
-        /**
-         * {@inheritDoc}
-         */
-        public synchronized Object makeObject() throws Exception
+        private final Pattern SHA2_PATTERN = Pattern.compile("SHA(\\d+)");
+
+        public static final int SALT_BITS = 64;
+
+        private final MessageDigest messageDigest;
+
+        private final int digestLength;
+
+        private final boolean useSalt;
+
+        private final Base64 base64 = new Base64();
+
+        public PasswordDigest(String scheme)
+            throws NoSuchAlgorithmException
         {
-            return MessageDigest.getInstance(algorithm);
+            String algorithm = scheme.toUpperCase();
+            if(algorithm.matches("^S[^H].*"))
+            {
+                algorithm = algorithm.substring(1);
+                useSalt = true;
+            }
+            else
+            {
+                useSalt = false;
+            }
+            if(algorithm.equals("SHA1"))
+            {
+                algorithm = "SHA";
+            }
+            Matcher m = SHA2_PATTERN.matcher(algorithm);
+            if(m.matches())
+            {
+                algorithm = "SHA-" + m.group(1);
+            }
+            this.messageDigest = MessageDigest.getInstance(algorithm);
+            this.digestLength = messageDigest.getDigestLength();
+        }
+
+        public String generate(String password)
+        {
+            messageDigest.reset();
+            messageDigest.update(password.getBytes());
+            byte[] digest;
+            if(useSalt)
+            {
+                byte[] salt = new byte[SALT_BITS / 8];
+                random.nextBytes(salt);
+                messageDigest.update(salt);
+                digest = messageDigest.digest();
+                byte[] temp = new byte[digest.length + salt.length];
+                System.arraycopy(digest, 0, temp, 0, digest.length);
+                System.arraycopy(salt, 0, temp, digest.length, salt.length);
+                digest = temp;
+            }
+            else
+            {
+                digest = messageDigest.digest();
+            }
+            return base64.encodeAsString(digest);
+        }
+
+        public boolean validate(String password, String hash)
+        {
+            messageDigest.reset();
+            messageDigest.update(password.getBytes());
+            byte[] digest = base64.decode(hash);
+            if(useSalt)
+            {
+                int saltBytes = digest.length - digestLength;
+                if(saltBytes < 1)
+                {
+                    throw new IllegalArgumentException(
+                        "not enough salt bytes - wrong password scheme used or truncated data: expected "
+                            + (useSalt ? "at least " : "") + (digestLength + 1) + " bytes, got "
+                            + digest.length);
+                }
+                byte[] salt = new byte[saltBytes];
+                arraycopy(digest, digestLength, salt, 0, saltBytes);
+                messageDigest.update(salt);
+                byte[] temp = new byte[digestLength];
+                arraycopy(digest, 0, temp, 0, digestLength);
+                digest = temp;
+            }
+            if(digest.length < digestLength)
+            {
+                throw new IllegalArgumentException(
+                    "wrong password scheme used or truncated data: expected "
+                        + (useSalt ? ("at least " + (digestLength + 1)) : digestLength)
+                        + " bytes, got " + digest.length);
+            }
+            return MessageDigest.isEqual(digest, messageDigest.digest());
         }
     }
-    
+
+    /**
+     * A factory of PasswordDigest objects.
+     */
+    private class PasswordDigestFactory
+        extends BaseKeyedPoolableObjectFactory
+    {
+
+        @Override
+        public Object makeObject(Object key)
+            throws Exception
+        {
+            return new PasswordDigest((String)key);
+        }
+    }
 }
