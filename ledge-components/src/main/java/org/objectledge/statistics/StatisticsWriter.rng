@@ -37,6 +37,11 @@
         <element name="interval">
           <text/>
         </element>
+        <optional>
+           <element name="keep">
+             <empty/>
+           </element>
+        </optional>
       </interleave>
     </element>
   </start>

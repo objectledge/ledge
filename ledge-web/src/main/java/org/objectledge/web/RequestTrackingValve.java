@@ -117,21 +117,23 @@ public class RequestTrackingValve
     
     /**
      * Creates new RequestTrackingValve instance.
-     *
+     * 
      * @param nested the nested valve.
      * @param log the logger to use.
      * @param fileSystem the FileSystem component.
      * @param performanceLogPath the FileSystem path of performance log file.
+     * @param keepPerformanceLog should performace log be appended to after restart
      * @param slowRequestLogPath the FileSystem path of slow request log file.
      * @param slowRequestThreshold minimum processing duration in milliseconds for requests that
-     * should be logged in slow request log.  
+     *        should be logged in slow request log.
+     * @param keepSlowRequestLog should slow request log be appended to after restart
      * @param timeFormatPattern the SimpleDateFormat pattern to use for date formatting.
      * @param timeResolution the resolution of time measurement in the custom logs.
      */
-    public RequestTrackingValve(final Valve nested, final Logger log, 
-        final FileSystem fileSystem, final String performanceLogPath,
+    public RequestTrackingValve(final Valve nested, final Logger log, final FileSystem fileSystem,
+        final String performanceLogPath, boolean keepPerformanceLog,
         final String slowRequestLogPath, final long slowRequestThreshold,
-        final String timeFormatPattern, final long timeResolution)
+        boolean keepSlowRequestLog, final String timeFormatPattern, final long timeResolution)
     {
         this.nested = nested;
         this.log = log;
@@ -139,8 +141,8 @@ public class RequestTrackingValve
         {
             if(performanceLogPath != null)
             {
-                this.performanceLog = new PrintWriter(new OutputStreamWriter(fileSystem
-                    .getOutputStream(performanceLogPath), "UTF-8"));
+                this.performanceLog = new PrintWriter(new OutputStreamWriter(
+                    fileSystem.getOutputStream(performanceLogPath, keepPerformanceLog), "UTF-8"));
             }
             else
             {
@@ -148,8 +150,8 @@ public class RequestTrackingValve
             }
             if(slowRequestLogPath != null)
             {
-                this.slowRequestLog = new PrintWriter(new OutputStreamWriter(fileSystem
-                    .getOutputStream(slowRequestLogPath), "UTF-8"));
+                this.slowRequestLog = new PrintWriter(new OutputStreamWriter(
+                    fileSystem.getOutputStream(slowRequestLogPath, keepSlowRequestLog), "UTF-8"));
             }
             else
             {
@@ -179,8 +181,8 @@ public class RequestTrackingValve
      */
     public RequestTrackingValve(final Valve nested, final Logger log, final FileSystem fileSystem)
     {
-        this(nested, log, fileSystem, null, null, Long.MAX_VALUE, DEFAULT_TIME_FORMAT_PATTERN,
-            DEFAULT_TIME_RESOLUTION);
+        this(nested, log, fileSystem, null, false, null, Long.MAX_VALUE,
+            false, DEFAULT_TIME_FORMAT_PATTERN, DEFAULT_TIME_RESOLUTION);
     }
 
     /**
@@ -194,11 +196,15 @@ public class RequestTrackingValve
     public RequestTrackingValve(final Valve nested, final Logger log, final FileSystem fileSystem,
         final Configuration config)
     {
-        this(nested, log, fileSystem, config.getChild("performanceLog").getChild("path").getValue(
-            null), config.getChild("slowRequestLog").getChild("path").getValue(null), config
-            .getChild("slowRequestLog").getChild("threshold").getValueAsLong(Long.MAX_VALUE),
-            config.getChild("time").getChild("format").getValue(DEFAULT_TIME_FORMAT_PATTERN),
-            config.getChild("time").getChild("resolution").getValueAsLong(DEFAULT_TIME_RESOLUTION));
+        this(nested, log, fileSystem, config.getChild("performanceLog").getChild("path")
+            .getValue(null), config.getChild("performanceLog").getChild("keep", false) != null,
+                        config.getChild("slowRequestLog").getChild("path").getValue(null), config
+                            .getChild("slowRequestLog").getChild("threshold")
+                            .getValueAsLong(Long.MAX_VALUE), config.getChild("slowRequestLog")
+                            .getChild("keep", false) != null, config.getChild("time")
+                            .getChild("format").getValue(DEFAULT_TIME_FORMAT_PATTERN), config
+                            .getChild("time").getChild("resolution")
+                            .getValueAsLong(DEFAULT_TIME_RESOLUTION));
     }
 
     /**
