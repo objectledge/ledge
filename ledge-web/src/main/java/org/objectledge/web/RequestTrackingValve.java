@@ -213,7 +213,7 @@ public class RequestTrackingValve
     public void process(Context context)
         throws ProcessingException
     {
-        long startTime = 0;
+        long startTime = System.currentTimeMillis();
         int r = 0;
         int s = 0;
         String requestUrl = null;
