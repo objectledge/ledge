@@ -31,11 +31,13 @@ import java.util.concurrent.Semaphore;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.statistics.AbstractMuninGraph;
 import org.objectledge.statistics.MuninGraph;
 import org.objectledge.statistics.ReflectiveStatisticsProvider;
+import org.objectledge.utils.StringUtils;
 
 /**
  * A valve that provides control over the number of threads executing another valve.
@@ -57,16 +59,21 @@ public class ConcurrencyControlValve
     
     private final MuninGraph[] graphs;
 
+    private final Logger log;
+
     /**
      * Creates new ConcurrencyControlValve instance.
      * 
      * @param nestedValve the valve to control.
      * @param limit the maximum number of threads allowed to execute, or 0 for unlimited.
+     * @param log logger
      */
-    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs, final int limit)
+    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs, final int limit,
+        final Logger log)
     {
         this.nestedValve = nestedValve;
         this.limit = limit;
+        this.log = log;
         if(limit > 0)
         {
             semaphore = new Semaphore(limit, true);
@@ -80,15 +87,17 @@ public class ConcurrencyControlValve
 
     /**
      * Creates a new ConcurrencyControlValve instance.
-     *
+     * 
      * @param nestedValve the valve to control.
      * @param config the confguration object.
+     * @param log logger
      * @throws ConfigurationException if the configuration is incorrect.
      */
-    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs, final Configuration config)
+    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs,
+        final Configuration config, final Logger log)
         throws ConfigurationException
     {
-        this(nestedValve, fs, config.getChild("limit").getValueAsInteger());
+        this(nestedValve, fs, config.getChild("limit").getValueAsInteger(), log);
     }
     
     /**
@@ -101,7 +110,20 @@ public class ConcurrencyControlValve
         {
             try
             {
+                long time = 0;
+                if(log.isInfoEnabled())
+                {
+                    time = System.currentTimeMillis();
+                }
                 semaphore.acquireUninterruptibly();
+                if(log.isInfoEnabled())
+                {
+                    time = System.currentTimeMillis() - time;
+                    if(time > 0)
+                    {
+                        log.info("queued for " + StringUtils.formatMilliIntervalAsSeconds(time));
+                    }
+                }
                 nestedValve.process(context);
             }
             finally
