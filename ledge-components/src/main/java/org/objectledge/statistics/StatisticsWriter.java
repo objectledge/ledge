@@ -56,22 +56,23 @@ public class StatisticsWriter
     
     /**
      * Creates new StatisticsWriter instance.
-     *
+     * 
      * @param statistics the Statistics component.
      * @param fileSystem the FileSystem component.
      * @param threadPool the ThreadPool component.
      * @param path the path of the statistics log file, FileSystem relative.
      * @param interval interval between statistics dumps in seconds.
+     * @param keep should the log file be appended to after restart.
      */
     public StatisticsWriter(Statistics statistics, FileSystem fileSystem, ThreadPool threadPool,
-        String path, int interval)
+        String path, int interval, boolean keep)
     {
         this.statistics = statistics;
         PrintWriter pw;
         try
         {
             fileSystem.mkdirs(FileSystem.directoryPath(path));
-            OutputStream os = fileSystem.getOutputStream(path, true);
+            OutputStream os = fileSystem.getOutputStream(path, keep);
             if(os == null)
             {
                 throw new IOException("can't write to "+path);
@@ -99,7 +100,7 @@ public class StatisticsWriter
         Configuration config) throws ConfigurationException
     {
         this(statistics, fileSystem, threadPool, config.getChild("path").getValue(),
-            config.getChild("interval").getValueAsInteger());
+            config.getChild("interval").getValueAsInteger(), false);
     }
     
     private void printHeader(PrintWriter pw)
