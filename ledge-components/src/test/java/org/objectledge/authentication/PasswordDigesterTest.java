@@ -82,4 +82,15 @@ public class PasswordDigesterTest
             assertTrue(e instanceof IllegalArgumentException);
         }
     }
+
+    public void testApacheDS()
+        throws NoSuchAlgorithmException
+    {
+        PasswordDigester pd = new PasswordDigester("SHA");
+        // passwords encoded by Apache Directory Studio
+        assertTrue(pd.validateDigest("PASSWORD", "{SSHA}TdkTjM05gC1aLmZjxl1UIrv4i4YI/jR4PjHxPA=="));
+        assertTrue(pd.validateDigest("PASSWORD", "{SHA}ESu3kTBHkd3PaS4p/VzxSbNf6jc="));
+        assertTrue(pd.validateDigest("PASSWORD", "{MD5}MZ9NJuPFNrXdhxuyxS4xeA=="));
+        assertTrue(pd.validateDigest("PASSWORD", "{SMD5}ezcC096b6hWF0QxiUHVxI7NRqBZvZuMx"));
+    }
 }
