@@ -108,26 +108,34 @@ public class ConcurrencyControlValve
     {
         if(semaphore != null)
         {
+            long startTime = 0;
+            if(log.isInfoEnabled())
+            {
+                startTime = System.currentTimeMillis();
+            }
             try
             {
-                long time = 0;
-                if(log.isInfoEnabled())
-                {
-                    time = System.currentTimeMillis();
-                }
                 semaphore.acquireUninterruptibly();
                 if(log.isInfoEnabled())
                 {
-                    time = System.currentTimeMillis() - time;
-                    if(time > 0)
+                    long endTime = System.currentTimeMillis();
+                    if(endTime > startTime)
                     {
-                        log.info("queued for " + StringUtils.formatMilliIntervalAsSeconds(time));
+                        log.info("queued for "
+                            + StringUtils.formatMilliIntervalAsSeconds(endTime - startTime));
                     }
+                    startTime = endTime;
                 }
                 nestedValve.process(context);
             }
             finally
             {
+                if(log.isInfoEnabled())
+                {
+                    long endTime = System.currentTimeMillis();
+                    log.info("processed in "
+                        + StringUtils.formatMilliIntervalAsSeconds(endTime - startTime));
+                }
                 semaphore.release();
             }
         }
