@@ -36,6 +36,7 @@ import java.nio.CharBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -333,9 +334,10 @@ public class MuninNode
             {
                 if(graph.getId().equals(item))
                 {
+                    Map<String, Number> values = graph.getValues();
                     for (String variable : graph.getVariables())
                     {
-                        buff.append(variable).append(".value ").append(graph.getValue(variable))
+                        buff.append(variable).append(".value ").append(values.get(variable))
                             .append("\n");
                     }
                     break;

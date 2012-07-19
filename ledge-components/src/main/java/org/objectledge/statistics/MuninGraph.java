@@ -1,5 +1,7 @@
 package org.objectledge.statistics;
 
+import java.util.Map;
+
 public interface MuninGraph
 {
     public String getId();
@@ -11,6 +13,6 @@ public interface MuninGraph
     public String[] getVariables();
     
     public String getLabel(String variable);
-    
-    public Number getValue(String variable);
+
+    public Map<String, Number> getValues();
 }

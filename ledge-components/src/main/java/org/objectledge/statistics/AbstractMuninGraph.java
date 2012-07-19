@@ -5,6 +5,8 @@ import static java.util.regex.Pattern.MULTILINE;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +42,7 @@ public abstract class AbstractMuninGraph
         return config;
     }
 
-    public Number getValue(String variable)
+    protected Number getValue(String variable)
     {
         String accessorName = getAccessorName(variable);
         Method m;
@@ -94,6 +96,17 @@ public abstract class AbstractMuninGraph
                 variable+".label entry is missing from configuration file " + getConfigPath());
         }
         return m.group(1);
+    }
+
+    @Override
+    public Map<String, Number> getValues()
+    {
+        Map<String, Number> values = new HashMap<String, Number>();
+        for(String variable : getVariables())
+        {
+            values.put(variable, getValue(variable));
+        }
+        return values;
     }
 
     protected String getConfigPath()

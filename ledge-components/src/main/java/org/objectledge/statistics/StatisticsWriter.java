@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -139,10 +140,11 @@ public class StatisticsWriter
         }
         for(int i = 0; i < graphs.length; i++)
         {
+            Map<String, Number> values = graphs[i].getValues();
             String[] variables = graphs[i].getVariables(); 
             for(int j = 0; j < variables.length; j++)
             {
-                Number value = graphs[i].getValue(variables[j]);
+                Number value = values.get(variables[j]);
                 if(value == null)
                 {
                     pw.print("U");
