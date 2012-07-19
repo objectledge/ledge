@@ -1,5 +1,7 @@
 package org.objectledge.statistics;
 
+import java.util.Map;
+
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.LedgeTestCase;
 
@@ -46,6 +48,15 @@ public class AbstractMuninGraphTest
         assertEquals(v, 1.0d);
     }
     
+    public void testGetValues()
+    {
+        Map<String, Number> values = foo.getValues();
+        assertEquals(foo.getVariables().length, values.size());
+        for(String variable : foo.getVariables())
+        {
+            assertEquals(foo.getValue(variable), values.get(variable));
+        }
+    }
     
     public void testBadVariable()
     {
