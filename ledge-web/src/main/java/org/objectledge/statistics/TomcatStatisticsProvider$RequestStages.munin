@@ -1,0 +1,29 @@
+graph_title Request stages
+graph_order new parse prepare service endInput endOutput keepAlive ended
+graph_vlabel request count
+graph_category Tomcat
+graph_args --base 1000
+new.label 
+new.type GAUGE
+new.draw AREA
+parse.label parse
+parse.type GAUGE
+parse.draw AREA
+prepare.label prepare
+prepare.type GAUGE
+prepare.draw AREA
+service.label service
+service.type GAUGE
+service.draw AREA
+endInput.label end input
+endInput.type GAUGE
+endInput.draw AREA
+endOutput.label end output
+endOutput.type GAUGE
+endOutput.draw AREA
+keepAlive.label keep alive
+keepAlive.type GAUGE
+keepAlive.draw AREA
+ended.label ended
+ended.type GAUGE
+ended.draw AREA
