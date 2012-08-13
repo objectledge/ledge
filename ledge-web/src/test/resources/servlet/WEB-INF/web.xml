@@ -7,9 +7,21 @@
       <param-name>root</param-name>
       <param-value>src/test/resources/servlet</param-value>
     </init-param>
+  </servlet>  
+  <servlet>
+    <servlet-name>rest</servlet-name>
+    <servlet-class>org.objectledge.web.rest.RestServlet</servlet-class>
+    <init-param>
+      <param-name>root</param-name>
+      <param-value>src/test/resources/servlet</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>ledge</servlet-name>
     <url-pattern>/ledge/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>rest</servlet-name>
+    <url-pattern>/f/*</url-pattern>
   </servlet-mapping>
 </web-app>

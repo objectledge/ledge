@@ -30,6 +30,8 @@ package org.objectledge.web.dispatcher;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,7 +56,7 @@ public class PipelineHttpDispatcher
 	/** the pipeline */
     private Valve pipeline;
     
-    /** thead context. */
+    /** thread context. */
     private Context context;
     
     /**
@@ -69,7 +71,7 @@ public class PipelineHttpDispatcher
     {
         this.pipeline = pipeline;
         this.context = context;
-    }
+    }    
     
     /**
      * {@inheritDoc}
@@ -77,20 +79,31 @@ public class PipelineHttpDispatcher
     public boolean dispatch(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        HttpContext httpContext = new HttpContext(request,response);
-        context.setAttribute(HttpContext.class, httpContext);
-        try
-        {
-            pipeline.process(context);
-        }
-        catch(ProcessingException e)
-        {
-            throw new ServletException("processing failed", e);
-        }
-        finally
-        {
-            context.clearAttributes();
-        }
-        return httpContext.getDirectResponse();
+        return this.dispatch(request, response, null);
     }
+    
+    public boolean dispatch(HttpServletRequest request, HttpServletResponse response, ServletConfig svconfig)
+            throws ServletException, IOException
+        {
+            HttpContext httpContext = new HttpContext(request,response);
+            context.setAttribute(HttpContext.class, httpContext);
+            if(svconfig != null) {
+                context.setAttribute(ServletConfig.class, svconfig);
+            }
+            
+            try
+            {
+                pipeline.process(context);
+            }
+            catch(ProcessingException e)
+            {
+                throw new ServletException("processing failed", e);
+            }
+            finally
+            {
+                context.clearAttributes();
+            }
+            return httpContext.getDirectResponse();
+        }
+    
 }

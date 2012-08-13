@@ -124,7 +124,9 @@ public class LedgeServlet extends HttpServlet
     protected HttpDispatcher dispatcher;
     
     /** The container. */
-    protected LedgeContainer container;
+    protected static LedgeContainer container;
+    
+    protected ServletConfig servletConfig;
     
     /**
      * {@inheritDoc}
@@ -132,7 +134,7 @@ public class LedgeServlet extends HttpServlet
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        if(!dispatcher.dispatch(request, response))
+        if(!dispatcher.dispatch(request, response, this.servletConfig))
         {
             super.service(request, response);
         }
@@ -144,7 +146,9 @@ public class LedgeServlet extends HttpServlet
     public void init(ServletConfig servletConfig) throws ServletException
     {
         BasicConfigurator.configure();
-        Logger log = Logger.getLogger(LedgeServlet.class);
+        this.servletConfig = servletConfig;        
+        
+        Logger log = Logger.getLogger(LedgeServlet.class);                
 
         FileSystem fs = fileSystem(servletConfig, getClass().getClassLoader());
         
@@ -162,22 +166,34 @@ public class LedgeServlet extends HttpServlet
         String root = ((LocalFileSystemProvider)fs.getProvider("local")).getBasePath();
         
         log.info("starting up "+servletConfig.getServletName()+" servlet: root="+root+" config="+config);
-        try
-        {
-            container = new LedgeContainer(fs, config, getClass().getClassLoader());    
-        }
-        catch(Exception e)
-        {
-            log.error("failed to initialize container", e);
-            throw new ServletException("failed to initialize container", e);
-        }
-
-        dispatcher = (HttpDispatcher)container.getContainer().
-            getComponentInstance(HttpDispatcher.class);
-        if(dispatcher == null)
+       if(container == null) {
+            try
+            {
+                container = new LedgeContainer(fs, config, getClass().getClassLoader());    
+            }
+            catch(Exception e)
+            {
+                log.error("failed to initialize container", e);
+                throw new ServletException("failed to initialize container", e);
+            }
+       }
+    }
+    
+     /**
+     * {@inheritDoc}
+     */
+    public void init(ServletConfig servletConfig) throws ServletException
+    {
+        Logger log = Logger.getLogger(LedgeServlet.class);
+    	configure(servletConfig); //throws ServletException
+    	
+       dispatcher = (HttpDispatcher)container.getContainer().
+           getComponentInstance("cmsDispatcher");
+        
+       if(dispatcher == null)
         {
             log.error("dispatcher component is missing");
-            throw new ServletException("dispatcher component is missing");
+            throw new ServletException("cmsDispatcher dispatcher component is missing");
         }
     }
 
