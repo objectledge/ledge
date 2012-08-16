@@ -54,13 +54,22 @@ public class HsqldbDataSource extends DelegatingDataSource
         super(getDataSource(config));
     }
 
-    private static DataSource getDataSource(Configuration config)
-        throws ConfigurationException
+    /**
+     * Constructs a DataSource instance.
+     * 
+     * @param url a JDBC url
+     * @param user user name
+     * @param password password
+     * @throws ConfigurationException if the configuration is invalid.
+     */
+    public HsqldbDataSource(String url, String user, String password)
+    {
+        super(getDataSource(url, user, password));
+    }
+
+    public static DataSource getDataSource(String url, String user, String password)
     {
         jdbcDataSource dataSource;
-        String url = config.getChild("url").getValue();
-        String user = config.getChild("user").getValue(null);
-        String password = config.getChild("password").getValue(null);
         dataSource = new jdbcDataSource();
         dataSource.setDatabase(url);
         dataSource.setUser(user);
@@ -69,5 +78,14 @@ public class HsqldbDataSource extends DelegatingDataSource
             dataSource.setPassword(password);
         }
         return dataSource;
+    }
+
+    private static DataSource getDataSource(Configuration config)
+        throws ConfigurationException
+    {
+        String url = config.getChild("url").getValue();
+        String user = config.getChild("user").getValue(null);
+        String password = config.getChild("password").getValue(null);
+        return getDataSource(url, user, password);
     }
 }
