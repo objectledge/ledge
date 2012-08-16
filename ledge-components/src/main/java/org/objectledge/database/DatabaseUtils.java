@@ -32,15 +32,18 @@ import java.io.LineNumberReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
-import org.objectledge.utils.StringUtils;
 
 /**
  * A set of utility functions for working with JDBC databases.
@@ -303,4 +306,215 @@ public class DatabaseUtils
             close(conn);
         }
     }    
+
+    /**
+     * Transfer data from one database to another.
+     * <p>
+     * inputQuery and outputStatement must agree in number and sequence of columns.
+     * </p>
+     * <p>
+     * outputStatement may be an {@code insert} or {@code update} statement.
+     * </p>
+     * <p>
+     * Note that moving data between tables in a single database can be done much faster with plain
+     * {@code insert ... select ...} SQL statement without the roundtrip to JVM and back.
+     * </p>
+     * 
+     * @param inputConn input connection.
+     * @param outputConn output connection.
+     * @param inputQuery input query.
+     * @param outputStatement output statement.
+     * @param batchSize batch size, if positive, negative to disable batching.
+     * @param batchCommits should a commit be issued after each batch.
+     * @return number of copied rows.
+     * @throws SQLException
+     */
+    public static int transfer(final Connection inputConn, final Connection outputConn,
+        final String inputQuery, final String outputStatement, final int batchSize,
+        boolean batchCommits)
+        throws SQLException
+    {
+        int rowCount = 0;
+        final Statement inStmt = inputConn.createStatement();
+        try
+        {
+            final ResultSet in = inStmt.executeQuery(inputQuery);
+            try
+            {
+                outputConn.setAutoCommit(false);
+                final PreparedStatement outStmt = outputConn.prepareStatement(outputStatement);
+                try
+                {
+                    final ResultSetMetaData rsMetaData = in.getMetaData();
+                    if(batchSize > 0)
+                    {
+                        int batchCount = 0;
+                        while(!in.isAfterLast())
+                        {
+                            while(in.next())
+                            {
+                                for(int i = 1; i <= rsMetaData.getColumnCount(); i++)
+                                {
+                                    Object val = in.getObject(i);
+                                    outStmt.setObject(i, val, rsMetaData.getColumnType(i));
+                                }
+                                outStmt.addBatch();
+                                rowCount++;
+                                batchCount++;
+                                if(batchCount == batchSize)
+                                {
+                                    break;
+                                }
+                            }
+                            if(batchCount > 0)
+                            {
+                                outStmt.executeBatch();
+                                if(batchCommits)
+                                {
+                                    outputConn.commit();
+                                }
+                                batchCount = 0;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        while(in.next())
+                        {
+                            for(int i = 1; i <= rsMetaData.getColumnCount(); i++)
+                            {
+                                Object val = in.getObject(i);
+                                outStmt.setObject(i, val, rsMetaData.getColumnType(i));
+                            }
+                            outStmt.execute();
+                        }
+                    }
+                }
+                finally
+                {
+                    if(batchSize < 0 || !batchCommits)
+                    {
+                        outputConn.commit();
+                    }
+                    outStmt.close();
+                    outputConn.setAutoCommit(true);
+                }
+            }
+            finally
+            {
+                in.close();
+            }
+        }
+        finally
+        {
+            inStmt.close();
+        }
+        return rowCount;
+    }
+
+    /**
+     * Transfer a table from one database to another.
+     * <p>
+     * Target table must exist and must agree in number and type of columns with the source table.
+     * </p>
+     * <p>
+     * {@code null} may be used as wildcard for catalog and schema names.
+     * </p>
+     * 
+     * @param inputConn input connection.
+     * @param outputConn output connection.
+     * @param catalog input database catalog.
+     * @param schema input database schema.
+     * @param tableName table to be moved.
+     * @param sourceWhereClause optional {@code WHERE} clause, may be {@code null}.
+     * @param truncate should the output table be truncated.
+     * @param batchSize batch size to use, negative to disable batching.
+     * @param batchCommit should a {@code COMMIT} be issued after transferring each batch.
+     * @return
+     * @throws SQLException
+     */
+    public static int transferTable(Connection inputConn, Connection outputConn, String catalog,
+        String schema, String tableName, String sourceWhereClause, boolean truncate, int batchSize,
+        boolean batchCommit)
+        throws SQLException
+    {
+        // discover columns
+        List<String> columns = new ArrayList<String>();
+        ResultSet colRs = inputConn.getMetaData().getColumns(catalog, schema, tableName, "%");
+        try
+        {
+            while(colRs.next())
+            {
+                columns.add(colRs.getString("COLUMN_NAME"));
+            }
+        }
+        finally
+        {
+            colRs.close();
+        }
+    
+        // build input query
+        StringBuilder buff = new StringBuilder();
+        buff.append("SELECT ");
+        for(int i = 0; i < columns.size(); i++)
+        {
+            buff.append(columns.get(i));
+            if(i < columns.size() - 1)
+            {
+                buff.append(", ");
+            }
+        }
+        buff.append(" FROM ").append(tableName);
+        if(sourceWhereClause != null)
+        {
+            buff.append(" WHERE ").append(sourceWhereClause);
+        }
+        final String inputQuery = buff.toString();
+    
+        // build output statement
+        buff.setLength(0);
+        buff.append("INSERT INTO ");
+        buff.append(tableName).append(" (");
+        for(int i = 0; i < columns.size(); i++)
+        {
+            buff.append(columns.get(i));
+            if(i < columns.size() - 1)
+            {
+                buff.append(", ");
+            }
+        }
+        buff.append(") VALUES (");
+        for(int i = 0; i < columns.size(); i++)
+        {
+            buff.append("?");
+            if(i < columns.size() - 1)
+            {
+                buff.append(", ");
+            }
+        }
+        buff.append(")");
+        final String outputStatement = buff.toString();
+    
+        // truncate output table
+        if(truncate)
+        {
+            Statement truncStmt = outputConn.createStatement();
+            try
+            {
+                truncStmt.execute("TRUNCATE TABLE " + tableName);
+            }
+            finally
+            {
+                truncStmt.close();
+            }
+        }
+    
+        // transfer data
+        return transfer(inputConn, outputConn, inputQuery, outputStatement,
+            batchSize, batchCommit);
+    }
 }
