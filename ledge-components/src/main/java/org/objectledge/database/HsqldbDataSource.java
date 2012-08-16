@@ -29,7 +29,7 @@ package org.objectledge.database;
 
 import javax.sql.DataSource;
 
-import org.hsqldb.jdbc.jdbcDataSource;
+import org.hsqldb.jdbc.JDBCDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.database.impl.DelegatingDataSource;
@@ -69,8 +69,8 @@ public class HsqldbDataSource extends DelegatingDataSource
 
     public static DataSource getDataSource(String url, String user, String password)
     {
-        jdbcDataSource dataSource;
-        dataSource = new jdbcDataSource();
+        JDBCDataSource dataSource;
+        dataSource = new JDBCDataSource();
         dataSource.setDatabase(url);
         dataSource.setUser(user);
         if(password != null)

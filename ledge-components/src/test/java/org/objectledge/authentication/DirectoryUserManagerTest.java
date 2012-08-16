@@ -38,7 +38,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.LogManager;
-import org.hsqldb.jdbc.jdbcDataSource;
+import org.hsqldb.jdbc.JDBCDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
@@ -346,7 +346,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
     private DataSource getDataSource()
         throws Exception
     {
-        jdbcDataSource ds = new jdbcDataSource();
+        JDBCDataSource ds = new JDBCDataSource();
         ds.setDatabase("jdbc:hsqldb:.");
         ds.setUser("sa");
         ds.setPassword("");
