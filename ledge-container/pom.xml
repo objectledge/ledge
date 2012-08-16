@@ -40,6 +40,8 @@
         <directory>src/test/java</directory>
         <includes>
           <include>**/*.rng</include>
+          <include>**/*.sql</include>
+          <include>**/*.bin</include>          
         </includes>
       </testResource>
     </testResources>
