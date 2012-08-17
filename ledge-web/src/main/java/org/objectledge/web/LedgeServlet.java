@@ -124,7 +124,7 @@ public class LedgeServlet extends HttpServlet
     protected HttpDispatcher dispatcher;
     
     /** The container. */
-    protected static LedgeContainer container;
+    protected LedgeContainer container;
     
     protected ServletConfig servletConfig;
     
@@ -146,38 +146,18 @@ public class LedgeServlet extends HttpServlet
     public void init(ServletConfig servletConfig) throws ServletException
     {
         BasicConfigurator.configure();
-        this.servletConfig = servletConfig;        
-        
         Logger log = Logger.getLogger(LedgeServlet.class);                
+        this.servletConfig = servletConfig;        
+        this.container = (LedgeContainer)servletConfig.getServletContext().getAttribute("container");
 
-        FileSystem fs = fileSystem(servletConfig, getClass().getClassLoader());
-        
-        ServletContext context = servletConfig.getServletContext();
-        String ctxConfigParam = servletConfig.getServletName()+".config";
-        String config = servletConfig.getInitParameter("config");
-        if(config == null)
-        {
-            config = context.getInitParameter(ctxConfigParam);
+        if(container == null) {
+            log.error("Failed to configure servlet. Container is null.");
+            throw new ServletException("I won't to start a LedgeServlet without a LedgeContainer, no!");
         }
-        if(config == null)
-        {
-            config = "/config";
-        }
-        String root = ((LocalFileSystemProvider)fs.getProvider("local")).getBasePath();
         
-        log.info("starting up "+servletConfig.getServletName()+" servlet: root="+root+" config="+config);
-       if(container == null) {
-            try
-            {
-                container = new LedgeContainer(fs, config, getClass().getClassLoader());    
-            }
-            catch(Exception e)
-            {
-                log.error("failed to initialize container", e);
-                throw new ServletException("failed to initialize container", e);
-            }
-       }
-    }
+       log.info("Servlet name="+servletConfig.getServletName() + " started.");
+
+   }
     
      /**
      * {@inheritDoc}
@@ -195,71 +175,5 @@ public class LedgeServlet extends HttpServlet
             log.error("dispatcher component is missing");
             throw new ServletException("cmsDispatcher dispatcher component is missing");
         }
-    }
-
-    @Override
-    public void destroy()
-    {
-        container.killContainer();
-        super.destroy();
-    }
-
-    /**
-     * Initializes FileSystem using local, servlet and classpath providers.
-     * <p>
-     * The FileSystem will be composed of LocalFilesystemProvider, ServletFileSystemProvicer and
-     * ClasspathFileSystemProvider instances with this specific order. This means that if a file
-     * with the same virtual pathname is found in the local file system, it will overshadow a file
-     * with the same pathname in web application archive, which in turn will overshadow a file with
-     * the same pathname on the classpath.
-     * </p>
-     * <p>
-     * Root directory of the local filesystem is determined using web application initialization
-     * parameters that are defined either in web application descriptor (web.xml) or application
-     * server's specific application deployment descriptors. The following parameters are checked:
-     * <ul>
-     * <li>servlet parameter named "root"</li>
-     * <li>context parameter named "<em>servlet name</em>.root"</li>
-     * <li>context parameter named "root"</li>
-     * <li>context parameter named "javax.servlet.context.tempdir"</li>
-     * <li>System property "java.io.tmpdir"</li>
-     * </ul>
-     * </p>
-     * 
-     * @param servletConfig a ServletConfig object for determinig servlet name and parmameter
-     *        access.
-     * @param classLoader a ClassLoader for the classpath provider.
-     * @return
-     */
-    public static FileSystem fileSystem(ServletConfig servletConfig, ClassLoader classLoader)
-    {
-        ServletContext context = servletConfig.getServletContext();
-        String root = servletConfig.getInitParameter("root");
-        if(root == null)
-        {
-            root = context.getInitParameter(servletConfig.getServletName()+".root");
-        }
-        if(root == null)
-        {
-            root = context.getInitParameter("root");
-        }
-        if(root == null)
-        {
-            File tempDir = (File)context.getAttribute("javax.servlet.context.tempdir");
-            if(tempDir == null)
-            {
-                root = System.getProperty("java.io.tmpdir");
-            }
-            else
-            {
-                root = tempDir.getAbsolutePath(); 
-            }
-        }        
-
-        LocalFileSystemProvider lfs = new LocalFileSystemProvider("local", root);
-        ServletFileSystemProvider sfs = new ServletFileSystemProvider("servlet", context);
-        ClasspathFileSystemProvider cfs = new ClasspathFileSystemProvider("classpath", 
-            classLoader);
-        return new FileSystem(new FileSystemProvider[] { lfs, sfs, cfs }, 4096, 4194304);
     }
 }

@@ -1,5 +1,19 @@
 <?xml version="1.0"?>
 <web-app>
+  <listener>
+	<listener-class>org.objectledge.web.LedgeServletManager</listener-class>
+  </listener>
+  <context-param> 
+    <description>Filesystem Root</description> 
+    <param-name>root</param-name> 
+    <param-value>src/test/resources/servlet</param-value> 
+  </context-param> 
+  <context-param> 
+	<description>LedgeContainer config path</description> 
+	<param-name>configPath</param-name> 
+	<param-value>/config</param-value> 
+  </context-param> 
+  
   <servlet>
     <servlet-name>ledge</servlet-name>
     <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>

@@ -1,7 +1,9 @@
 package org.objectledge.web;
 
+import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,16 +33,22 @@ import org.objectledge.filesystem.FileSystem;
 public class ContentServlet
     extends HttpServlet
 {
-    private FileSystem fileSystem;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private FileSystem fileSystem;
 
     private ServletContext servletContext;
 
     @Override
     public void init()
     {
-        fileSystem = LedgeServlet.fileSystem(getServletConfig(), getClass().getClassLoader());
-        servletContext = getServletConfig().getServletContext();
-    }
+    	ServletConfig servletConfig = getServletConfig();
+        servletContext = servletConfig.getServletContext();
+        fileSystem = LedgeServletManager.createServletSpecyficSystem(servletConfig, getClass().getClassLoader());
+    }    
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

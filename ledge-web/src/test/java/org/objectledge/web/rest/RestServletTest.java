@@ -61,7 +61,7 @@ public class RestServletTest extends LedgeWebTestCase
     	
     	String root = "src/test/resources/servlet/config/";
         FileSystem fs = FileSystem.getStandardFileSystem(root);
-    	Configuration config = getConfig(fs, JerseyRestValve.class, JerseyRestValve.class);
+    	//Configuration config = getConfig(fs, JerseyRestValve.class, JerseyRestValve.class);
         ServletRunner runner = getRunner("servlet");
         ServletUnitClient client = runner.newClient();
         WebRequest request = new GetMethodWebRequest("http://localhost/f/hello");
