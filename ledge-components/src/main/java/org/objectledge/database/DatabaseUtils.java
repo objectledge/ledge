@@ -444,7 +444,9 @@ public class DatabaseUtils
     {
         // discover columns
         List<String> columns = new ArrayList<String>();
-        ResultSet colRs = inputConn.getMetaData().getColumns(catalog, schema, tableName, "%");
+        ResultSet colRs = inputConn.getMetaData().getColumns(
+            adjustIdentifierCase(catalog, inputConn), adjustIdentifierCase(schema, inputConn),
+            adjustIdentifierCase(tableName, inputConn), "%");
         try
         {
             while(colRs.next())
@@ -548,5 +550,31 @@ public class DatabaseUtils
                 conn.close();
             }
         }
+    }
+
+    /**
+     * Adjusts an SQL identifier to correct case according to the database convention.
+     * 
+     * @param identifier a SQL identifier.
+     * @param conn a JDBC connection
+     * @return case-adjusted identifier
+     * @throws SQLException
+     */
+    public static String adjustIdentifierCase(String identifier, Connection conn)
+        throws SQLException
+    {
+        DatabaseMetaData md = conn.getMetaData();
+        if(!md.storesMixedCaseIdentifiers() && identifier != null)
+        {
+            if(md.storesUpperCaseIdentifiers())
+            {
+                return identifier.toUpperCase();
+            }
+            if(md.storesLowerCaseIdentifiers())
+            {
+                return identifier.toLowerCase();
+            }
+        }
+        return identifier;
     }
 }
