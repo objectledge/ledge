@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.EnumSet;
 import java.util.regex.Pattern;
 
+import javax.sql.DataSource;
+
 /**
  * Represents relational database type.
  * 
@@ -63,5 +65,26 @@ public enum DatabaseType
             }
         }
         return UNKNOWN;
+    }
+
+    /**
+     * Attempt to detect connected database type.
+     * 
+     * @param dataSource a SQL {@code javax.sql.DataSource}
+     * @return database type, possibly {@link DatabaseType#UNKNOWN}
+     * @throws SQLException when database metadata cannot be retrieved from the data source.
+     */
+    public static DatabaseType detect(DataSource dataSource)
+        throws SQLException
+    {
+        Connection conn = dataSource.getConnection();
+        try
+        {
+            return detect(conn);
+        }
+        finally
+        {
+            conn.close();
+        }
     }
 }
