@@ -517,4 +517,36 @@ public class DatabaseUtils
         return transfer(inputConn, outputConn, inputQuery, outputStatement,
             batchSize, batchCommit);
     }
+
+    /**
+     * Attempt to shut down an Java in-process database.
+     * 
+     * @param dataSource an SQL {@link javax.sql.DataSource}
+     * @throws SQLException
+     */
+    public static void shutdown(DataSource dataSource)
+        throws SQLException
+    {
+        DatabaseType dbType = DatabaseType.detect(dataSource);
+        if(dbType == DatabaseType.HSQL || dbType == DatabaseType.H2)
+        {
+            Connection conn = dataSource.getConnection();
+            try
+            {
+                Statement stmt = conn.createStatement();
+                try
+                {
+                    stmt.execute("SHUTDOWN");
+                }
+                finally
+                {
+                    stmt.close();
+                }
+            }
+            finally
+            {
+                conn.close();
+            }
+        }
+    }
 }
