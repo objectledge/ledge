@@ -3,6 +3,7 @@ package org.objectledge.web.rest;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,7 @@ import com.sun.jersey.api.core.PackagesResourceConfig;
 
 public class JerseyRestValve implements RestProcessor, Valve {	
     
-    private LedgeServletContainer jerseyContainer;	
+    private volatile LedgeServletContainer jerseyContainer;	
     
     Logger logger;
 
@@ -46,12 +47,16 @@ public class JerseyRestValve implements RestProcessor, Valve {
 	    HttpServletRequest request = httpContext.getRequest();
  	    HttpServletResponse response = httpContext.getResponse(); 	    
  	    ServletConfig svconfig = (ServletConfig)context.getAttribute(ServletConfig.class);
- 	    
+// 	    ServletContext svcontext = svconfig.getServletContext();
+// 	    svcontext.setAttribute("ledgeContext", context); //for Jersey rest resources to access data sources
+// 	    
         try {
-            PackagesResourceConfig app = new PackagesResourceConfig(restPackageNames);
-            jerseyContainer = new LedgeServletContainer(app);
-            jerseyContainer.setServletConfig(svconfig);
-            jerseyContainer.init();               	
+            if(jerseyContainer == null) {
+                PackagesResourceConfig app = new PackagesResourceConfig(restPackageNames);
+                jerseyContainer = new LedgeServletContainer(app);
+                jerseyContainer.setServletConfig(svconfig);
+                jerseyContainer.init();                 
+            }
         	jerseyContainer.service(request, response);
         	httpContext.setDirectResponse(true);
         	

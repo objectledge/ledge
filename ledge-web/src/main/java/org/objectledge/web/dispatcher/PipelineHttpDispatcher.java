@@ -87,6 +87,7 @@ public class PipelineHttpDispatcher
         {
             HttpContext httpContext = new HttpContext(request,response);
             context.setAttribute(HttpContext.class, httpContext);
+            svconfig.getServletContext().setAttribute("ledgeContext", context); // cerated for Jersey rest resources to access data sources            
             if(svconfig != null) {
                 context.setAttribute(ServletConfig.class, svconfig);
             }
