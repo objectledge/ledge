@@ -44,6 +44,7 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 /**
  * A delegation pattern wrapper for java.sql.Connection.
@@ -546,5 +547,40 @@ public class DelegatingConnection
         {
             return delegate.unwrap(iface);
         }        
+    }
+
+    @Override
+    public void setSchema(String schema)
+        throws SQLException
+    {
+        delegate.setSchema(schema);
+    }
+
+    @Override
+    public String getSchema()
+        throws SQLException
+    {
+        return delegate.getSchema();
+    }
+
+    @Override
+    public void abort(Executor executor)
+        throws SQLException
+    {
+        delegate.abort(executor);
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds)
+        throws SQLException
+    {
+        delegate.setNetworkTimeout(executor, milliseconds);
+    }
+
+    @Override
+    public int getNetworkTimeout()
+        throws SQLException
+    {
+        return delegate.getNetworkTimeout();
     }
 }
