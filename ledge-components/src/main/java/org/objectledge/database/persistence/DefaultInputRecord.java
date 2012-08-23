@@ -80,7 +80,7 @@ public class DefaultInputRecord implements InputRecord
     {
         try
         {
-            return rs.getBoolean(field);
+            return rs.getBoolean(field) || rs.getString(field).equals("1");
         }
         catch(SQLException e)
         {
