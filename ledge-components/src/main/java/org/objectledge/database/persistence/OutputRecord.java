@@ -29,12 +29,8 @@ package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Ref;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -167,42 +163,6 @@ public interface OutputRecord
      *         specified value. 
      */
     public abstract void setTimestamp(String field, Date value) throws PersistenceException;
-    /**
-     * Sets a <code>Array</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public abstract void setArray(String field, Array value) throws PersistenceException;
-    /**
-     * Sets a <code>Blob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public abstract void setBlob(String field, Blob value) throws PersistenceException;
-    /**
-     * Sets a <code>Clob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public abstract void setClob(String field, Clob value) throws PersistenceException;
-    /**
-     * Sets a <code>Ref</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public abstract void setRef(String field, Ref value) throws PersistenceException;
     /**
      * Sets a <code>URL</code> field value.
      * 

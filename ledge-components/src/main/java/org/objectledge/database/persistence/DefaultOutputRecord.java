@@ -30,13 +30,9 @@ package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
-import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -55,7 +51,6 @@ import org.objectledge.database.DatabaseUtils;
 /**
  * An implementation of {@link DefaultOutputRecord}.
  *
- * TODO get rid of sun.misc.Base64Encoder
  */
 public class DefaultOutputRecord
     implements OutputRecord
@@ -347,62 +342,6 @@ public class DefaultOutputRecord
     }
 
     /**
-     * Sets a <code>Array</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public void setArray(String field, Array value)
-        throws PersistenceException
-    {
-        fields.put(field, value);
-    }
-
-    /**
-     * Sets a <code>Blob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public void setBlob(String field, Blob value)
-        throws PersistenceException
-    {
-        fields.put(field, value);
-    }
-
-    /**
-     * Sets a <code>Clob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public void setClob(String field, Clob value)
-        throws PersistenceException
-    {
-        fields.put(field, value);
-    }
-
-    /**
-     * Sets a <code>Ref</code> field value.
-     * 
-     * @param field the name of the field.
-     * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
-     */
-    public void setRef(String field, Ref value)
-        throws PersistenceException
-    {
-        fields.put(field, value);
-    }
-
-    /**
      * Sets a <code>URL</code> field value.
      * 
      * @param field the name of the field.
@@ -613,22 +552,6 @@ public class DefaultOutputRecord
             stmt.setNull(pos, getSQLType(table, column, stmt.getConnection()));
             return;
         }
-        if(value instanceof Array)
-        {
-            stmt.setArray(pos, (Array)value);
-        }
-        else if(value instanceof Blob)
-        {
-            stmt.setBlob(pos, (Blob)value);
-        }
-        else if(value instanceof Clob)
-        {
-            stmt.setClob(pos, (Clob)value);
-        }
-        else if(value instanceof java.sql.Date)
-        {
-            stmt.setDate(pos, (java.sql.Date)value);
-        }
         else if(value instanceof Time)
         {
             stmt.setTime(pos, (Time)value);        
@@ -637,10 +560,10 @@ public class DefaultOutputRecord
         {
             stmt.setTimestamp(pos, (Timestamp)value);        
         }
-        else if(value instanceof Ref)
+        else if(value instanceof java.sql.Date)
         {
-            stmt.setRef(pos, (Ref)value);
-        }
+            stmt.setDate(pos, (java.sql.Date)value);
+        }        
         else if(value instanceof URL)
         {
             stmt.setURL(pos, (URL)value);
