@@ -29,8 +29,6 @@ package org.objectledge.web.dispatcher;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,12 +91,5 @@ public class SelectorHttpDispatcher
             throw new ServletException("dispatcher selection failed", e);
         }
     }
-
-	@Override
-	public boolean dispatch(HttpServletRequest request,
-			HttpServletResponse response, ServletConfig servletConfig)
-			throws ServletException, IOException {
-		return this.dispatch(request, response);
-	}  
 }
     

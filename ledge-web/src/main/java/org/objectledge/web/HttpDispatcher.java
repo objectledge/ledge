@@ -30,8 +30,6 @@ package org.objectledge.web;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,23 +62,4 @@ public interface HttpDispatcher
      */
     public boolean dispatch(HttpServletRequest request, HttpServletResponse response)   
         throws ServletException, IOException;
-    
-    /**
-     * Dispatches a HTTP request.
-     * 
-     * <p>It the mehtod return false, {@link LedgeServlet} will handle the request
-     * with superclass service() method.</p>
-     * 
-     * <p>If servletcontext is null should call dispatch(request, response)</p>
-     * 
-     * @param request the request.
-     * @param response the response.
-     * @param servletConfig - servlet context of calling servlet.
-     * @return <code>true</code> if the dispatcher was able to dispatch the request.
-     * @throws ServletException if the reqest processing fails.
-     * @throws IOException if the communication with the client fails.
-     */    
-    public boolean dispatch(HttpServletRequest request, HttpServletResponse response, ServletConfig svconfig)   
-            throws ServletException, IOException;
-    
 }

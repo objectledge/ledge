@@ -30,8 +30,6 @@ package org.objectledge.web.dispatcher;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,20 +43,22 @@ import org.objectledge.web.HttpDispatcher;
 
 /**
  * A dispatcher that process the request using pipeline.
- *
- * <p>Created on Dec 23, 2003</p>
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> 
+ * <p>
+ * Created on Dec 23, 2003
+ * </p>
+ * 
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: PipelineHttpDispatcher.java,v 1.13 2005-07-07 08:29:25 zwierzem Exp $
  */
-public class PipelineHttpDispatcher 
+public class PipelineHttpDispatcher
     implements HttpDispatcher
 {
-	/** the pipeline */
+    /** the pipeline */
     private Valve pipeline;
-    
+
     /** thread context. */
     private Context context;
-    
+
     /**
      * Creates a new pipeline dipspatcher.
      * 
@@ -71,40 +71,28 @@ public class PipelineHttpDispatcher
     {
         this.pipeline = pipeline;
         this.context = context;
-    }    
-    
+    }
+
     /**
      * {@inheritDoc}
      */
     public boolean dispatch(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        return this.dispatch(request, response, null);
-    }
-    
-    public boolean dispatch(HttpServletRequest request, HttpServletResponse response, ServletConfig svconfig)
-            throws ServletException, IOException
+        HttpContext httpContext = new HttpContext(request, response);
+        context.setAttribute(HttpContext.class, httpContext);
+        try
         {
-            HttpContext httpContext = new HttpContext(request,response);
-            context.setAttribute(HttpContext.class, httpContext);
-            svconfig.getServletContext().setAttribute("ledgeContext", context); // cerated for Jersey rest resources to access data sources            
-            if(svconfig != null) {
-                context.setAttribute(ServletConfig.class, svconfig);
-            }
-            
-            try
-            {
-                pipeline.process(context);
-            }
-            catch(ProcessingException e)
-            {
-                throw new ServletException("processing failed", e);
-            }
-            finally
-            {
-                context.clearAttributes();
-            }
-            return httpContext.getDirectResponse();
+            pipeline.process(context);
         }
-    
+        catch(ProcessingException e)
+        {
+            throw new ServletException("processing failed", e);
+        }
+        finally
+        {
+            context.clearAttributes();
+        }
+        return httpContext.getDirectResponse();
+    }
 }

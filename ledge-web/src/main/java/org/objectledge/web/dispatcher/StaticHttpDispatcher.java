@@ -33,8 +33,6 @@ import java.io.PrintWriter;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -116,10 +114,4 @@ public class StaticHttpDispatcher
         }
         return false;
     }
-	@Override
-	public boolean dispatch(HttpServletRequest request,
-			HttpServletResponse response, ServletConfig svconfig)
-			throws ServletException, IOException {
-		return this.dispatch(request, response);
-	}    
 }
