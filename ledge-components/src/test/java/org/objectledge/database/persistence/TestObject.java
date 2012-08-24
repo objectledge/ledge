@@ -32,36 +32,36 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a> To change the template for this
+ *         generated type comment go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
+ *         Comments
  */
-public class TestObject implements Persistent
+public class TestObject
+    implements Persistent
 {
     private long id;
-    
+
     private String value;
-    
+
     private Date date;
 
     private boolean valueBoolean;
-    
+
     private float valueFloat;
-    
+
     private BigDecimal valueDecimal;
-    
+
     private Date valueTime;
-    
+
     private Date valueTimestamp;
-    
+
     private short valueShort;
-    
+
     private byte valueByte;
-    
+
     public TestObject()
     {
-        this("",null);
+        this("", null);
     }
 
     public TestObject(String value, Date date)
@@ -70,7 +70,6 @@ public class TestObject implements Persistent
         this.date = date;
         this.value = value;
     }
-    
 
     /**
      * {@inheritDoc}
@@ -85,41 +84,45 @@ public class TestObject implements Persistent
      */
     public String[] getKeyColumns()
     {
-        return new String[]{"id"};
+        return new String[] { "id" };
     }
 
     /**
      * {@inheritDoc}
      */
-    public void getData(OutputRecord record) throws PersistenceException
+    public void getData(OutputRecord record)
+        throws PersistenceException
     {
         record.setLong("id", id);
         record.setString("value", value);
-        record.setDate("date",date);
-        record.setBoolean("value_boolean",valueBoolean);
-        record.setFloat("value_float",valueFloat);
-        record.setBigDecimal("value_decimal",valueDecimal);
-        record.setTime("value_time",valueTime);
-        record.setTimestamp("value_timestamp",valueTimestamp);
-        record.setShort("value_short",valueShort);
-        record.setByte("value_byte",valueByte);
+        record.setDate("date", date);
+        record.setBoolean("value_boolean", valueBoolean);
+        record.setFloat("value_float", valueFloat);
+        record.setBigDecimal("value_decimal", valueDecimal);
+        record.setTime("value_time", valueTime);
+        record.setTimestamp("value_timestamp", valueTimestamp);
+        record.setShort("value_short", valueShort);
+        record.setByte("value_byte", valueByte);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setData(InputRecord record) throws PersistenceException
+    public void setData(InputRecord record)
+        throws PersistenceException
     {
         id = record.getLong("id");
         value = record.getString("value");
         date = record.getDate("date");
-        valueBoolean = record.getBoolean("value_boolean");
-        valueFloat = record.getFloat("value_float");
-        valueDecimal = record.getBigDecimal("value_decimal");
-        valueTime = record.getDate("value_time");
-        valueTimestamp = record.getDate("value_timestamp");
-        valueShort = record.getShort("value_short");
-        valueByte = record.getByte("value_byte");
+        valueBoolean = record.isNull("value_boolean") ? false : record.getBoolean("value_boolean");
+        valueFloat = record.isNull("value_float") ? 0f : record.getFloat("value_float");
+        valueDecimal = record.isNull("value_decimal") ? BigDecimal.valueOf(0) : record
+            .getBigDecimal("value_decimal");
+        valueTime = record.isNull("value_time") ? null : record.getDate("value_time");
+        valueTimestamp = record.isNull("value_timestamp") ? null : record
+            .getDate("value_timestamp");
+        valueShort = record.isNull("value_short") ? null : record.getShort("value_short");
+        valueByte = record.isNull("value_byte") ? null : record.getByte("value_byte");
     }
 
     /**
@@ -142,22 +145,22 @@ public class TestObject implements Persistent
     {
         return id;
     }
-    
+
     public String getValue()
     {
         return value;
     }
-    
+
     public Date getDate()
     {
         return date;
     }
-    
+
     public void setDate(Date date)
     {
         this.date = date;
     }
-    
+
     public void setValue(String value)
     {
         this.value = value;

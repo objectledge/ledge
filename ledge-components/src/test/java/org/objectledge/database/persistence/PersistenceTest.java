@@ -191,7 +191,7 @@ public class PersistenceTest extends TestCase
     {
         DefaultConfiguration conf = new DefaultConfiguration("config", "", "/");
         DefaultConfiguration url = new DefaultConfiguration("url", "", "/config");
-        url.setValue("jdbc:hsqldb:.");
+        url.setValue("jdbc:hsqldb:target/testdb");
         conf.addChild(url);
         DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
         user.setValue("sa");
@@ -207,6 +207,11 @@ public class PersistenceTest extends TestCase
         if(!DatabaseUtils.hasTable(ds, "test_object"))
         {
             reader = fs.getReader("sql/database/persistence/TestObject.sql", "UTF-8");
+            DatabaseUtils.runScript(ds, reader);
+        }
+        else
+        {
+            reader = fs.getReader("sql/database/persistence/TruncateTestObject.sql", "UTF-8");
             DatabaseUtils.runScript(ds, reader);
         }
         return ds;

@@ -125,10 +125,10 @@ public class DefaultPersistence implements Persistence
             V obj = factory.newInstance();
             statement = DefaultInputRecord.getSelectStatement(where, obj, conn);
             rs = statement.executeQuery();
-            InputRecord record = new DefaultInputRecord(rs);
             List<V> list = new ArrayList<V>();
             while (rs.next())
             {
+                InputRecord record = new DefaultInputRecord(rs);
                 obj.setData(record);
                 obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
                 list.add(obj);

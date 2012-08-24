@@ -29,10 +29,6 @@ package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Ref;
 import java.util.Date;
 
 /**
@@ -136,42 +132,6 @@ public interface InputRecord
      *         unaccessible. 
      */
     public abstract Date getDate(String field) throws PersistenceException;
-    /**
-     * gets a <code>Array</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Array getArray(String field) throws PersistenceException;
-    /**
-     * Returns a <code>Blob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Blob getBlob(String field) throws PersistenceException;
-    /**
-     * Returns a <code>Clob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Clob getClob(String field) throws PersistenceException;
-    /**
-     * Returns a <code>Ref</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Ref getRef(String field) throws PersistenceException;
     /**
      * Returns a <code>URL</code> field value.
      * 
