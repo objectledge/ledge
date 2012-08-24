@@ -414,7 +414,7 @@ public class DefaultInputRecord
         object.getData(out);
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + object.getTable()
             + " WHERE " + out.getWhereClause());
-        out.setValues(stmt, true, false);
+        out.setValues(stmt, true, false, 1);
         return stmt;
     }
 

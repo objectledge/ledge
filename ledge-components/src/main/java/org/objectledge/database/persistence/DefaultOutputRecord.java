@@ -34,8 +34,10 @@ import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -44,23 +46,28 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
+import org.objectledge.database.DatabaseUtils;
 
 /**
  * An implementation of {@link DefaultOutputRecord}.
  *
  * TODO get rid of sun.misc.Base64Encoder
  */
-public class DefaultOutputRecord implements OutputRecord
+public class DefaultOutputRecord
+    implements OutputRecord
 {
     /** The persistent object. */
-    private Persistent object;
-    
+    private final Persistent object;
+
     /** The fields. */
-    private HashMap<String,Object> fields;
-        
+    private final HashMap<String, Object> fields = new HashMap<String, Object>();
+
+    private Map<String, Integer> typeMap = null;
+
     /**
      * Constructs an <code>OutputRecordImpl</code>.
      * 
@@ -68,10 +75,58 @@ public class DefaultOutputRecord implements OutputRecord
      */
     public DefaultOutputRecord(Persistent object)
     {
-        fields = new HashMap<String,Object>();
+        this(object, null);
+    }
+
+    /**
+     * Constructs an <code>OutputRecordImpl</code>.
+     * 
+     * @param object a Persistent object.
+     * @param typeMap mapping of column names to SQLTypes. Type map is using for setting SQL NULL
+     *        values PreparedStatement parameters. When not provided, types will be retrieved from
+     *        database on demand. Caller should strive to provide the mapping though for performance
+     *        reasons.
+     */
+    public DefaultOutputRecord(Persistent object, Map<String, Integer> typeMap)
+    {
         this.object = object;
     }
-        
+
+    /**
+     * Returns SQL type of the specified column. This method initializes {@link #typeMap} on demand,
+     * when missing.
+     * 
+     * @param table table name.
+     * @param column column name.
+     * @param conn database connection.
+     * @return SQL type of the column.
+     * @throws SQLException
+     */
+    private int getSQLType(String table, String column, Connection conn)
+        throws SQLException
+    {
+        if(typeMap == null)
+        {
+            typeMap = new HashMap<String, Integer>();
+
+            DatabaseMetaData md = conn.getMetaData();
+            ResultSet rs = md.getColumns(null, null,
+                DatabaseUtils.adjustIdentifierCase(table, conn), "%");
+            try
+            {
+                while(rs.next())
+                {
+                    typeMap.put(rs.getString("COLUMN_NAME"), rs.getInt("DATA_TYPE"));
+                }
+            }
+            finally
+            {
+                DatabaseUtils.close(rs);
+            }
+        }
+        return typeMap.get(DatabaseUtils.adjustIdentifierCase(column, conn));
+    }
+
     /**
      * Sets a <code>boolean</code> field value.
      *
@@ -396,25 +451,19 @@ public class DefaultOutputRecord implements OutputRecord
      * @return the where clause.
      * @throws PersistenceException if the clause could not be built.
      */
-    public String getWhereClause()
+    String getWhereClause()
         throws PersistenceException
     {
-        Set<String> keyFields = getKeyFields();
         StringBuilder buff = new StringBuilder();
-        for(Iterator<String> i = fields.keySet().iterator(); i.hasNext();)
+        Iterator<String> i = getKeyFields().iterator();
+        while(i.hasNext())
         {
-            String field = i.next();
-            if(keyFields.contains(field))
+            buff.append(i.next()).append(" = ?");
+            if(i.hasNext())
             {
-                buff.append(field);
-                Object value = fields.get(field);
-                buff.append(value == null ? " IS " : " = ");
-                appendValueString(buff, value);
                 buff.append(" AND ");
             }
         }
-        // remove trailing " AND "
-        buff.setLength(buff.length() - 5);
         return buff.toString();
     }
 
@@ -438,8 +487,7 @@ public class DefaultOutputRecord implements OutputRecord
         {
             String field = i.next();
             buff.append(field);
-            Object value = fields.get(field);
-            appendValueString(buff2, value);
+            buff2.append("?");
             if(i.hasNext())
             {
                 buff.append(", ");
@@ -450,7 +498,7 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(buff2.toString());
         buff.append(")");
         PreparedStatement stmt = conn.prepareStatement(buff.toString());
-        setValues(stmt, true, true);
+        setValues(stmt, true, true, 1);
         return stmt;
     }
     
@@ -477,9 +525,7 @@ public class DefaultOutputRecord implements OutputRecord
             if(!keyFields.contains(field))
             {
                 buff.append(field);
-                buff.append(" = ");
-                Object value = fields.get(field);
-                appendValueString(buff, value);
+                buff.append(" = ? ");
                 buff.append(", ");
             }
         }
@@ -489,9 +535,9 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(getWhereClause());
         PreparedStatement stmt = conn.prepareStatement(buff.toString());
         // set non-key values first
-        setValues(stmt, false, true);
+        int wherePos = setValues(stmt, false, true, 1);
         // set key values
-        setValues(stmt, true, false);
+        setValues(stmt, true, false, wherePos);
         return stmt;
     }
 
@@ -501,31 +547,6 @@ public class DefaultOutputRecord implements OutputRecord
     private Set<String> getKeyFields()
     {
         return new HashSet<String>(Arrays.asList(object.getKeyColumns()));
-    }
-    
-    /**
-     * Appends string token apropriate for the value in the statement body to a given buffer.
-     *
-     * @param buff the buffer to append to.
-     * @param object the object.
-     */
-    private void appendValueString(StringBuilder buff, Object object)
-    {
-        if(object == null)
-        {
-            buff.append("NULL");
-        }
-        else
-        {
-            if(object instanceof Number)
-            {
-                buff.append(object.toString());
-            }
-            else
-            {
-                buff.append('?');
-            }
-        }        
     }
 
     /**
@@ -546,26 +567,10 @@ public class DefaultOutputRecord implements OutputRecord
         buff.append(" WHERE ");
         buff.append(getWhereClause());
         PreparedStatement stmt = conn.prepareStatement(buff.toString());
-        setValues(stmt, true, false);
+        setValues(stmt, true, false, 1);
         return stmt;
     }
 
-    /**
-     * Returns a value of a field.
-     *
-     * <p>Note! String and Date values will be returned enclosed in single
-     * quotes, byte array values will be returned BASE64 encoded and enclosed
-     * in single quotes.</p>
-     *
-     * @param name the name of the field
-     * @return stringied and possibly quoted value of the field, or
-     *         <code>null</code> if unset.
-     */
-    public String getField(String name)
-    {
-        return (String)fields.get(name);
-    }
-    
     /**
      * Sets prepared statement's positional parameters to non-string field values.
      * 
@@ -573,28 +578,24 @@ public class DefaultOutputRecord implements OutputRecord
      * @param includeKeys <code>true</code> to set key values.
      * @param includeNonKeys <code>true</code> to set non-key values.
      * @throws SQLException if a value couldn't be set.
+     * @return next available parameter position
      */
-    public void setValues(PreparedStatement stmt, boolean includeKeys, boolean includeNonKeys)
+    int setValues(PreparedStatement stmt, boolean includeKeys, boolean includeNonKeys, int startPos)
         throws SQLException
     {
         Set<String> keyFields = getKeyFields();
-        int pos = 1;
+        int pos = startPos;
         for(Iterator<String> i = fields.keySet().iterator(); i.hasNext();)
         {
-            Object field = i.next();
+            String field = i.next();
             boolean isKey = keyFields.contains(field);
             if((isKey && includeKeys) || (!isKey && includeNonKeys))
             {
                 Object value = fields.get(field);
-                if(value != null)
-                {
-                    if(!(value instanceof Number))
-                    {
-                        setValue(pos++, value, stmt);
-                    }
-                }
+                setValue(pos++, object.getTable(), field, value, stmt);
             }
         }
+        return pos;
     }
     
     /**
@@ -604,9 +605,14 @@ public class DefaultOutputRecord implements OutputRecord
      * @param value parameter value.
      * @param stmt the statement.
      */
-    private void setValue(int pos, Object value, PreparedStatement stmt)
+    private void setValue(int pos, String table, String column, Object value, PreparedStatement stmt)
         throws SQLException
     {
+        if(value == null)
+        {
+            stmt.setNull(pos, getSQLType(table, column, stmt.getConnection()));
+            return;
+        }
         if(value instanceof Array)
         {
             stmt.setArray(pos, (Array)value);
@@ -646,6 +652,34 @@ public class DefaultOutputRecord implements OutputRecord
         else if(value instanceof String)
         {
             stmt.setString(pos, (String)value);
+        }
+        else if(value instanceof Long)
+        {
+            stmt.setLong(pos, ((Long)value).longValue());
+        }
+        else if(value instanceof Integer)
+        {
+            stmt.setInt(pos, ((Integer)value).intValue());
+        }
+        else if(value instanceof Short)
+        {
+            stmt.setShort(pos, ((Short)value).shortValue());
+        }
+        else if(value instanceof Byte)
+        {
+            stmt.setByte(pos, ((Byte)value).byteValue());
+        }
+        else if(value instanceof Double)
+        {
+            stmt.setDouble(pos, ((Double)value).doubleValue());
+        }
+        else if(value instanceof Float)
+        {
+            stmt.setFloat(pos, ((Float)value).byteValue());
+        }
+        else if(value instanceof BigDecimal)
+        {
+            stmt.setBigDecimal(pos, (BigDecimal)value);
         }
         else
         {

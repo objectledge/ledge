@@ -233,14 +233,6 @@ public interface OutputRecord
     // Implementation specific ///////////////////////////////////////////
     
     /**
-     * Get the where clasuse.
-     * 
-     * @return the clause.
-     * @throws PersistenceException if occured.
-     */
-    public abstract String getWhereClause() throws PersistenceException;
-    
-    /**
      * Builds an insert statement with contained data.
      *
      * @param conn database connection.
@@ -271,16 +263,4 @@ public interface OutputRecord
      */
     public abstract PreparedStatement getDeleteStatement(Connection conn)
         throws PersistenceException, SQLException;
-    /**
-     * Returns a value of a field.
-     *
-     * <p>Note! String and Date values will be returned enclosed in single
-     * quotes, byte array values will be returned BASE64 encoded and enclosed
-     * in single quotes.</p>
-     *
-     * @param name the name of the field
-     * @return stringied and possibly quoted value of the field, or
-     *         <code>null</code> if unset.
-     */
-    public abstract String getField(String name);
 }
