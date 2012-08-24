@@ -28,11 +28,9 @@
 
 package org.objectledge.web;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -40,21 +38,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.objectledge.container.LedgeContainer;
-import org.objectledge.filesystem.ClasspathFileSystemProvider;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.FileSystemProvider;
-import org.objectledge.filesystem.LocalFileSystemProvider;
-import org.objectledge.filesystem.ServletFileSystemProvider;
+import org.picocontainer.PicoContainer;
 
 /**
  * LedgeServlet is the entry point of a Ledge application in the servlet environment.
- * 
  * <p>
  * It performs startup and shutdown of the system and forwards HTTP requests to designated
  * components through {@link org.objectledge.web.HttpDispatcher} interface.
  * </p>
- * 
  * <h3>Configuration parameters</h3>
  * <table>
  * <tr>
@@ -64,8 +55,8 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  * </tr>
  * <tr>
  * <td>root</td>
- * <td><code>javax.servlet.context.tempdir</code> context attribute, or <code>user.dir</code>
- * system property if the former is not available.</td>
+ * <td><code>javax.servlet.context.tempdir</code> context attribute, or <code>user.dir</code> system
+ * property if the former is not available.</td>
  * <td>The root directory of the local file system td use.</td>
  * </tr>
  * <tr>
@@ -74,13 +65,13 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  * <td>The base path of system configuration, within Ledge FileSystem.</td>
  * </tr>
  * </table>
- * 
  * <p>
  * The configuration parameters may be given as servlet initailizaion parameters in the
  * <code>web.xml</code> file, or as servlet context attributes. In the latter case the actual name
  * of the attribute is composed of the servlet-name under which LedgeServlet is registered, a dot
  * and the actual parameter name. Consider the following <code>web.xml</code> file:
  * </p>
+ * 
  * <pre>
  * &lt;?xml version="1.0"?&gt;
  * &lt;web-app&gt;
@@ -94,11 +85,11 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  *   &lt;/servlet-mapping&gt;
  * &lt;/web-app&gt;
  * </pre>
- * 
  * <p>
  * The root directory can be used at deployment time with the following Tomcat application
  * definition file:
  * </p>
+ * 
  * <pre>
  * &lt;?xml version="1.0"?&gt;
  * &lt;Context path="/app"
@@ -113,67 +104,57 @@ import org.objectledge.filesystem.ServletFileSystemProvider;
  * @author <a href="Rafal.Krzewski">rafal@caltha.pl</a>
  * @version $Id: LedgeServlet.java,v 1.20 2008-10-28 16:09:06 rafal Exp $
  */
-public class LedgeServlet extends HttpServlet
+public class LedgeServlet
+    extends HttpServlet
 {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
+    private static final String DISPATCHER_KEY = "dispatcher";
+
     /** The request dispatcher. */
-    protected HttpDispatcher dispatcher;
-    
-    /** The container. */
-    protected LedgeContainer container;
-    
-    protected ServletConfig servletConfig;
-    
+    private HttpDispatcher dispatcher;
+
     /**
      * {@inheritDoc}
      */
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException
     {
-        if(!dispatcher.dispatch(request, response, this.servletConfig))
+        if(!dispatcher.dispatch(request, response))
         {
             super.service(request, response);
         }
     }
-    
-     /**
-     * {@inheritDoc}
+    /**
+    * {@inheritDoc}
      */
-    public void init(ServletConfig servletConfig) throws ServletException
+    public void init(ServletConfig servletConfig)
+        throws ServletException
     {
         BasicConfigurator.configure();
-        Logger log = Logger.getLogger(LedgeServlet.class);                
-        this.servletConfig = servletConfig;        
-        this.container = (LedgeContainer)servletConfig.getServletContext().getAttribute("container");
-
-        if(container == null) {
-            log.error("Failed to configure servlet. Container is null.");
-            throw new ServletException("I won't to start a LedgeServlet without a LedgeContainer, no!");
-        }
-        
-       log.info("Servlet name="+servletConfig.getServletName() + " started.");
-
-   }
-    
-     /**
-     * {@inheritDoc}
-     */
-    public void init(ServletConfig servletConfig) throws ServletException
-    {
         Logger log = Logger.getLogger(LedgeServlet.class);
-    	configure(servletConfig); //throws ServletException
-    	
-       dispatcher = (HttpDispatcher)container.getContainer().
-           getComponentInstance("cmsDispatcher");
-        
-       if(dispatcher == null)
+        PicoContainer container = (PicoContainer)servletConfig.getServletContext().getAttribute(
+            LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
+
+        if(container == null)
         {
-            log.error("dispatcher component is missing");
-            throw new ServletException("cmsDispatcher dispatcher component is missing");
+            throw new ServletException(LedgeServletContextListener.CONTAINER_CONTEXT_KEY
+                + " is missing from SerlvetContext");
         }
+
+        final String dispatcherName = servletConfig.getInitParameter(DISPATCHER_KEY);
+        dispatcher = (HttpDispatcher)container
+            .getComponentInstance(dispatcherName != null ? dispatcherName : HttpDispatcher.class);
+
+        if(dispatcher == null)
+       {
+            throw new ServletException("HttpDispatcher component "
+                + (dispatcherName != null ? dispatcherName + " " : " ") + "is missing");
+        }
+
+        log.info("Servlet " + servletConfig.getServletName() + " initialized.");
     }
 }
