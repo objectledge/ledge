@@ -109,7 +109,7 @@ public class LedgeContainer
      *         due to system failure.
      */ 
     public LedgeContainer(FileSystem fs, String configBase, ClassLoader classLoader,
-        Map<Object, Object> componentInstanaces)
+        Map<?, ?> componentInstanaces)
         throws IOException, ClassNotFoundException, PicoCompositionException
     {
         containerBuilder = new LedgeContainerBuilder(getCompositionFile(fs, configBase), 
@@ -180,7 +180,7 @@ public class LedgeContainer
      * @return the boot component container.
      */    
     protected static PicoContainer getBootContainer(FileSystem fs, String configBase, 
-        ClassLoader classLoader, Map<Object, Object> componentInstanaces)
+        ClassLoader classLoader, Map<?, ?> componentInstanaces)
     {
         MutablePicoContainer bootContainer = new DefaultPicoContainer(
             new DefaultComponentAdapterFactory());
@@ -215,7 +215,7 @@ public class LedgeContainer
             params(component(CustomizingConstructorComponentAdapterFactory.class)));
         if(componentInstanaces != null)
         {
-            for(Map.Entry<Object, Object> componentInstance : componentInstanaces.entrySet())
+            for(Map.Entry<?, ?> componentInstance : componentInstanaces.entrySet())
             {
                 bootContainer.registerComponentInstance(componentInstance.getKey(), componentInstance.getValue());
             }
