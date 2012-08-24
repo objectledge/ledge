@@ -27,4 +27,22 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0"><element name="restPackageNames"><text/></element></element>
+<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
+  <element name="restPackageNames">
+    <text />
+  </element>
+  <optional>
+    <element name="init-parmaeters">
+      <zeroOrMore>
+        <element name="init-paramter">
+           <element name="param-name">
+             <text/>
+           </element>
+           <element name="param-value">
+             <text/>
+           </element>
+        </element>
+      </zeroOrMore>      
+    </element>
+  </optional>
+</element>
