@@ -407,7 +407,7 @@ public class DefaultInputRecord
      * @throws PersistenceException if there is a problem retrieving key values from the object.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatements(Persistent object, Connection conn)
+    public static PreparedStatement getSelectStatement(Persistent object, Connection conn)
         throws PersistenceException, SQLException
     {
         DefaultOutputRecord out = new DefaultOutputRecord(object);
@@ -421,13 +421,13 @@ public class DefaultInputRecord
     /**
      * Creates a select statement for fetching an object from the database.
      * 
-     * @param key the key value.
      * @param object Persistent object.
      * @param conn the connection to use.
+     * @param key the key value.
      * @return a prepared statement.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatement(long key, Persistent object, Connection conn)
+    public static PreparedStatement getSelectStatement(Persistent object, Connection conn, long key)
         throws SQLException
     {
         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM " + object.getTable()
@@ -439,19 +439,51 @@ public class DefaultInputRecord
     /**
      * Creates a select statement for fetching an object from the database.
      * 
-     * @param where where clause, or <code>null</code> to fetch all objects.
      * @param object Persistent object.
      * @param conn the connection to use.
+     * @param where WHERE clause, or <code>null</code> to fetch all objects.
+     * @param parameters optional values for parameter placeholders in the where clause. Null values
+     *        are not supported, because {@link PreparedStatement#setNull(int, int)} requires SQL
+     *        Type specifier, and SQL NULL values don't play nice with equality operator commonly
+     *        found in simple WHERE clauses.
      * @return a prepared statement.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatement(String where, Persistent object,
-        Connection conn)
+    public static PreparedStatement getSelectStatement(Persistent object, Connection conn,
+        String where, Object... parameters)
         throws SQLException
     {
         if(where != null)
         {
-            return conn.prepareStatement("SELECT * FROM " + object.getTable() + " WHERE " + where);
+            final PreparedStatement stmt = conn.prepareStatement("SELECT * FROM "
+                + object.getTable() + " WHERE " + where);
+            if(parameters != null)
+            {
+                int placeholderCount = 0;
+                for(int i = 0; i < where.length(); i++)
+                {
+                    if(where.charAt(i) == '?')
+                    {
+                        placeholderCount++;
+                    }
+                }
+                if(placeholderCount != parameters.length)
+                {
+                    throw new IllegalArgumentException("where clause specifies " + placeholderCount
+                        + " parameter placeholders but " + parameters.length
+                        + " values were provideded");
+                }
+                for(int i = 0; i < parameters.length; i++)
+                {
+                    if(parameters[i] == null)
+                    {
+                        throw new IllegalArgumentException(
+                            "null parameter values are not supported");
+                    }
+                    DefaultOutputRecord.setValue(i + 1, parameters[i], java.sql.Types.OTHER, stmt);
+                }
+            }
+            return stmt;
         }
         else
         {

@@ -98,7 +98,7 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
     {
         try
         {
-            return persistence.load(key.longValue(), factory);
+            return persistence.load(factory, key.longValue());
         }
         catch(PersistenceException e)
         {

@@ -66,13 +66,13 @@ public class DefaultPersistence implements Persistence
 
     /**
      * Loads an object from the database.
-     *
-     * @param id the identifier of the object.
      * @param factory the object instance factory.
+     * @param id the identifier of the object.
+     *
      * @return the presistent object.
      * @throws PersistenceException if any exception occured.
      */
-    public <V extends Persistent> V load(long id, PersistentFactory<V> factory) throws PersistenceException
+    public <V extends Persistent> V load(PersistentFactory<V> factory, long id) throws PersistenceException
     {
         Connection conn = null;
         PreparedStatement statement = null;
@@ -80,7 +80,7 @@ public class DefaultPersistence implements Persistence
         {
             conn = database.getConnection();
             V obj = factory.newInstance();
-            statement = DefaultInputRecord.getSelectStatement(id, obj, conn);
+            statement = DefaultInputRecord.getSelectStatement(obj, conn, id);
             ResultSet rs = statement.executeQuery();
             if (!rs.next())
             {
@@ -108,13 +108,34 @@ public class DefaultPersistence implements Persistence
      * <p>Note that joins are not supported. This package provides a means of
      * converting objects to rows in a table and vice versa. If you want more,
      * you need some different tool.</p>
-     *
-     * @param where the where clause to be used in the query
      * @param factory the object instance factory.
-     * @return the list of presistent objects.
+     * @param where the where clause to be used in the query
+     *
+     * @return the list of peristent objects.
      * @throws PersistenceException if any exception occured.
      */
-    public <V extends Persistent> List<V> load(String where, PersistentFactory<V> factory) throws PersistenceException
+    public <V extends Persistent> List<V> load(PersistentFactory<V> factory)
+        throws PersistenceException
+    {
+        return load(factory, null, (Object[])null);
+    }
+
+    /**
+     * Loads objects from the database.
+     * <p>
+     * Note that joins are not supported. This package provides a means of converting objects to
+     * rows in a table and vice versa. If you want more, you need some different tool.
+     * </p>
+     * 
+     * @param factory the object instance factory.
+     * @param where the where clause to be used in the query
+     * @param parameters positional parameters used in where clause.
+     * @return the list of persistent objects.
+     * @throws PersistenceException if any exception occured.
+     */
+    public <V extends Persistent> List<V> load(PersistentFactory<V> factory, String where,
+        Object... parameters)
+        throws PersistenceException
     {
         Connection conn = null;
         PreparedStatement statement = null;
@@ -123,10 +144,10 @@ public class DefaultPersistence implements Persistence
         {
             conn = database.getConnection();
             V obj = factory.newInstance();
-            statement = DefaultInputRecord.getSelectStatement(where, obj, conn);
+            statement = DefaultInputRecord.getSelectStatement(obj, conn, where, parameters);
             rs = statement.executeQuery();
             List<V> list = new ArrayList<V>();
-            while (rs.next())
+            while(rs.next())
             {
                 InputRecord record = new DefaultInputRecord(rs);
                 obj.setData(record);
@@ -136,7 +157,7 @@ public class DefaultPersistence implements Persistence
             }
             return list;
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             throw new PersistenceException("Failed to retrieve object", e);
         }
@@ -224,7 +245,7 @@ public class DefaultPersistence implements Persistence
             try
             {
                 conn = database.getConnection();
-                statement = DefaultInputRecord.getSelectStatements(object, conn);
+                statement = DefaultInputRecord.getSelectStatement(object, conn);
                 rs = statement.executeQuery();
                 if (!rs.next())
                 {

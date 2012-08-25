@@ -531,7 +531,8 @@ public class DefaultOutputRecord
             if((isKey && includeKeys) || (!isKey && includeNonKeys))
             {
                 Object value = fields.get(field);
-                setValue(pos++, object.getTable(), field, value, stmt);
+                setValue(pos++, value, getSQLType(object.getTable(), field, stmt.getConnection()),
+                    stmt);
             }
         }
         return pos;
@@ -544,12 +545,12 @@ public class DefaultOutputRecord
      * @param value parameter value.
      * @param stmt the statement.
      */
-    private void setValue(int pos, String table, String column, Object value, PreparedStatement stmt)
+    static void setValue(int pos, Object value, int sqlType, PreparedStatement stmt)
         throws SQLException
     {
         if(value == null)
         {
-            stmt.setNull(pos, getSQLType(table, column, stmt.getConnection()));
+            stmt.setNull(pos, sqlType);
             return;
         }
         else if(value instanceof Time)
@@ -606,7 +607,7 @@ public class DefaultOutputRecord
         }
         else
         {
-            stmt.setObject(pos, object);
+            throw new IllegalArgumentException("unsupported type " + value.getClass());
         }
     }
 }

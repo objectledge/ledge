@@ -85,7 +85,7 @@ public class DatabaseContext implements Context
         List<PersistentContext> list = null;
         try
         {
-            list = persistence.load("dn = '"+dn+"'", PersistentContext.FACTORY);
+            list = persistence.load(PersistentContext.FACTORY, "dn = ?", dn);
         }
         catch(PersistenceException e)
         {
@@ -250,7 +250,8 @@ public class DatabaseContext implements Context
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List<PersistentContext> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<PersistentContext> list = persistence.load(PersistentContext.FACTORY,
+                "parent = ?", parentId);
             List<NameClassPair> target = new ArrayList<NameClassPair>();
             for(int i = 0; i < list.size(); i++)
             {
@@ -302,7 +303,8 @@ public class DatabaseContext implements Context
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List<PersistentContext> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<PersistentContext> list = persistence.load(PersistentContext.FACTORY,
+                "parent = ?", parentId);
             if(list.size()>0)
             {
                 throw new NamingException("failed to destroy not empty subcontext");
@@ -468,7 +470,7 @@ public class DatabaseContext implements Context
     {
         try
         {
-            return persistence.load("dn = '"+dn+"'", PersistentContext.FACTORY);
+            return persistence.load(PersistentContext.FACTORY, "dn = ?", dn);
         }
         catch(PersistenceException e)
         {

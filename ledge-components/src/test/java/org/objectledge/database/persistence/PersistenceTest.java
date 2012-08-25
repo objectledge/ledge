@@ -84,32 +84,32 @@ public class PersistenceTest extends TestCase
      */
     public void testLoadlongPersistentFactory() throws Exception
     {
-        TestObject object = persistence.load(1, testFactory);
+        TestObject object = persistence.load(testFactory, 1);
         assertNull(object);
-        object = persistence.load(0, testFactory);
+        object = persistence.load(testFactory, 0);
         assertNull(object);
         List<TestObject> list;
-        list = persistence.load(null, testFactory);
+        list = persistence.load(testFactory);
         assertEquals(list.size(), 0);
         object = new TestObject("foo", new Date());
         persistence.save(object);
-        object = persistence.load(object.getId(), testFactory);
+        object = persistence.load(testFactory, object.getId());
         assertNotNull(object);
-        list = persistence.load(null, testFactory);
+        list = persistence.load(testFactory);
         assertEquals(list.size(), 1);
-        list = persistence.load("id = " + object.getId(), testFactory);
+        list = persistence.load(testFactory, "id = ?", object.getId());
         assertEquals(list.size(), 1);
-        list = persistence.load("id = -1", testFactory);
+        list = persistence.load(testFactory, "id = ?", -1);
         assertEquals(list.size(), 0);
-        list = persistence.load("value = 'bar'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "bar");
         assertEquals(list.size(), 0);
-        list = persistence.load("value = 'foo'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "foo");
         assertEquals(list.size(), 1);
         object.setValue("bar");
         persistence.save(object);
-        list = persistence.load("value = 'foo'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "foo");
         assertEquals(list.size(), 0);
-        list = persistence.load("value = 'bar'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "bar");
         assertEquals(list.size(), 1);
         object.setValue("foo");
         assertEquals(object.getValue(), "foo");
@@ -144,7 +144,7 @@ public class PersistenceTest extends TestCase
         
         assertEquals(list.size(),1);
         persistence.delete(object);
-        list = persistence.load(null, testFactory);
+        list = persistence.load(testFactory);
         assertEquals(list.size(),0);
         
         assertEquals(persistence.exists("test_object",null),false);

@@ -163,7 +163,7 @@ public class DBScheduler extends AbstractScheduler
     {
         try
         {
-            List<DBJobDescriptor> jobList = persistence.load(null, this);
+            List<DBJobDescriptor> jobList = persistence.load(this);
             Iterator<DBJobDescriptor> i = jobList.iterator();
             while (i.hasNext())
             {

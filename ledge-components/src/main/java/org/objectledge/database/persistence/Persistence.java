@@ -44,28 +44,46 @@ public interface Persistence
 
     /**
      * Loads an object from the database.
-     *
-     * @param id the identifier of the object.
      * @param factory the object instance factory.
+     * @param id the identifier of the object.
+     *
      * @return the presistent object.
      * @throws PersistenceException if any exception occured.
      */
-    public <V extends Persistent> V load(long id, PersistentFactory<V> factory)
+    public <V extends Persistent> V load(PersistentFactory<V> factory, long id)
+        throws PersistenceException;
+
+    /**
+     * Loads all objects from the database.
+     * <p>
+     * Note that joins are not supported. This package provides a means of converting objects to
+     * rows in a table and vice versa. If you want more, you need some different tool.
+     * </p>
+     * 
+     * @param factory the object instance factory.
+     * @return the list of persistent objects.
+     * @throws PersistenceException if any exception occured.
+     */
+    public <V extends Persistent> List<V> load(PersistentFactory<V> factory)
         throws PersistenceException;
 
     /**
      * Loads objects from the database.
-     *
-     * <p>Note that joins are not supported. This package provides a means of
-     * converting objects to rows in a table and vice versa. If you want more,
-     * you need some different tool.</p>
-     *
-     * @param where the where clause to be used in the query
+     * <p>
+     * Note that joins are not supported. This package provides a means of converting objects to
+     * rows in a table and vice versa. If you want more, you need some different tool.
+     * </p>
+     * 
      * @param factory the object instance factory.
-     * @return the list of presistent objects.
+     * @param where the where clause to be used in the query
+     * @param parameters positional parameters used in where clause.
+     * @return the list of persistent objects.
      * @throws PersistenceException if any exception occured.
      */
-    public <V extends Persistent> List<V> load(String where, PersistentFactory<V> factory) throws PersistenceException;
+    public <V extends Persistent> List<V> load(PersistentFactory<V> factory,
+        String where,
+        Object... parameters)
+        throws PersistenceException;
 
     /**
      * Saves an object in the database.
