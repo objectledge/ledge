@@ -407,7 +407,7 @@ public class DefaultInputRecord
      * @throws PersistenceException if there is a problem retrieving key values from the object.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatement(Persistent object, Connection conn)
+    static PreparedStatement getSelectStatement(Persistent object, Connection conn)
         throws PersistenceException, SQLException
     {
         DefaultOutputRecord out = new DefaultOutputRecord(object);
@@ -427,7 +427,7 @@ public class DefaultInputRecord
      * @return a prepared statement.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatement(Persistent object, Connection conn, long key)
+    static PreparedStatement getSelectStatement(Persistent object, Connection conn, long key)
         throws SQLException
     {
         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM " + object.getTable()
@@ -449,7 +449,7 @@ public class DefaultInputRecord
      * @return a prepared statement.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatement(Persistent object, Connection conn,
+    static PreparedStatement getSelectStatement(Persistent object, Connection conn,
         String where, Object... parameters)
         throws SQLException
     {

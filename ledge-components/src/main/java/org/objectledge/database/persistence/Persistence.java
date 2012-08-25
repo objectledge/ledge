@@ -86,8 +86,22 @@ public interface Persistence
         throws PersistenceException;
 
     /**
+     * Loads data from the database.
+     * 
+     * @param template a Persistent object that the select statement table and columns are derived
+     *        from.
+     * @param where where clause to be used in the query.
+     * @param parameters positional parameters used in where clasue.
+     * @return a list of {@link InputRecord} objects, possibly empty.
+     * @throws PersistenceException
+     */
+    public List<InputRecord> loadInputRecords(Persistent template, String where,
+        Object... parameters)
+        throws PersistenceException;
+
+    /**
      * Saves an object in the database.
-     *
+     * 
      * @param object the object to be saved.
      * @throws PersistenceException if any exception occured.
      */

@@ -170,6 +170,48 @@ public class DefaultPersistence implements Persistence
     }
 
     /**
+     * Loads data from the database.
+     * 
+     * @param template a Persistent object that the select statement table and columns are derived
+     *        from.
+     * @param where where clause to be used in the query.
+     * @param parameters positional parameters used in where clasue.
+     * @return a list of {@link InputRecord} objects, possibly empty.
+     * @throws PersistenceException
+     */
+    public List<InputRecord> loadInputRecords(Persistent template, String where,
+        Object... parameters)
+        throws PersistenceException
+    {
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try
+        {
+            conn = database.getConnection();
+            statement = DefaultInputRecord.getSelectStatement(template, conn, where, parameters);
+            rs = statement.executeQuery();
+            List<InputRecord> list = new ArrayList<InputRecord>();
+            while(rs.next())
+            {
+                list.add(new DefaultInputRecord(rs));
+            }
+            return list;
+        }
+        catch(Exception e)
+        {
+            throw new PersistenceException("Failed to retrieve objects", e);
+        }
+        finally
+        {
+            DatabaseUtils.close(rs);
+            DatabaseUtils.close(statement);
+            DatabaseUtils.close(conn);
+        }
+
+    }
+
+    /**
      * Saves an object in the database.
      *
      * @param object the object to be saved.
@@ -179,7 +221,7 @@ public class DefaultPersistence implements Persistence
     {
         synchronized (object)
         {
-            OutputRecord record = new DefaultOutputRecord(object);
+            DefaultOutputRecord record = new DefaultOutputRecord(object);
             String table = object.getTable();
             String[] keys = object.getKeyColumns();
             object.getData(record);
@@ -282,7 +324,7 @@ public class DefaultPersistence implements Persistence
             try
             {
                 conn = database.getConnection();
-                OutputRecord record = new DefaultOutputRecord(object);
+                DefaultOutputRecord record = new DefaultOutputRecord(object);
                 object.getData(record);
                 statement = record.getDeleteStatement(conn); 
                 statement.execute();

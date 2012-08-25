@@ -29,9 +29,6 @@ package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -189,38 +186,4 @@ public interface OutputRecord
      *         specified value. 
      */
     public abstract void setNull(String field) throws PersistenceException;
-    
-    // Implementation specific ///////////////////////////////////////////
-    
-    /**
-     * Builds an insert statement with contained data.
-     *
-     * @param conn database connection.
-     * @return the statement.
-     * @throws PersistenceException if the statement could not be built.
-     * @throws SQLException if the statement could not be created.
-     */
-    public abstract PreparedStatement getInsertStatement(Connection conn)
-        throws PersistenceException, SQLException;
-    /**
-     * Builds an update statement with contained data.
-     *
-     * @param conn database connection.
-     * @return the statement.
-     * @throws PersistenceException if the statement could not be built.
-     * @throws SQLException if the statement could not be created.
-     */
-    public abstract PreparedStatement getUpdateStatement(Connection conn)
-        throws PersistenceException, SQLException;
-    /**
-     * Builds a <code>DELETE</code> statement with contained data.
-     *
-     *
-     * @param conn database connection.
-     * @return the statement.
-     * @throws PersistenceException if the statement could not be built.
-     * @throws SQLException if the statement could not be created.
-     */
-    public abstract PreparedStatement getDeleteStatement(Connection conn)
-        throws PersistenceException, SQLException;
 }

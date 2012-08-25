@@ -414,7 +414,7 @@ public class DefaultOutputRecord
      * @throws PersistenceException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
-    public PreparedStatement getInsertStatement(Connection conn)
+    PreparedStatement getInsertStatement(Connection conn)
         throws PersistenceException, SQLException
     {
         StringBuilder buff = new StringBuilder();
@@ -449,7 +449,7 @@ public class DefaultOutputRecord
      * @throws PersistenceException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
-    public PreparedStatement getUpdateStatement(Connection conn)
+    PreparedStatement getUpdateStatement(Connection conn)
         throws PersistenceException, SQLException
     {
         Set<String> keyFields = getKeyFields();
@@ -497,7 +497,7 @@ public class DefaultOutputRecord
      * @throws PersistenceException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
-    public PreparedStatement getDeleteStatement(Connection conn)
+    PreparedStatement getDeleteStatement(Connection conn)
         throws PersistenceException, SQLException
     {
         StringBuilder buff = new StringBuilder();
