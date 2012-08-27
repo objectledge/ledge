@@ -611,6 +611,17 @@ public class DefaultOutputRecord
         }
     }
 
+    boolean containsValue(String field)
+    {
+        return fields.containsKey(field);
+    }
+
+    <T> T getValue(String field, Class<T> clazz)
+    {
+        T value = (T)fields.get(field);
+        return value;
+    }
+
     @Override
     public String toString()
     {
