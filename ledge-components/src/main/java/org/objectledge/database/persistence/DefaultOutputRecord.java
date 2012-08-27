@@ -610,4 +610,10 @@ public class DefaultOutputRecord
             throw new IllegalArgumentException("unsupported type " + value.getClass());
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return fields.toString();
+    }
 }

@@ -490,4 +490,10 @@ public class DefaultInputRecord
             return conn.prepareStatement("SELECT * FROM " + object.getTable());
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return data.toString();
+    }
 }
