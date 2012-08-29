@@ -238,21 +238,17 @@ public class DefaultPersistence implements Persistence
                 }
                 else
                 {
-                    long id;
-                    if(record.containsValue(keys[0]))
+                    long id = -1l;
+                    if(keys.length == 1)
                     {
-                        id = record.getValue(keys[0], Long.class);
-                    }
-                    else
-                    {
-                        if(keys.length == 1)
+                        if(record.containsValue(keys[0]))
+                        {
+                            id = record.getValue(keys[0], Long.class);
+                        }
+                        if(id == -1l)
                         {
                             id = database.getNextId(table);
                             record.setLong(keys[0], id);
-                        }
-                        else
-                        {
-                            id = -1;
                         }
                     }
                     statement = record.getInsertStatement(conn);
