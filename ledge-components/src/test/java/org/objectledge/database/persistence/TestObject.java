@@ -29,6 +29,7 @@
 package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -91,7 +92,7 @@ public class TestObject
      * {@inheritDoc}
      */
     public void getData(OutputRecord record)
-        throws PersistenceException
+        throws SQLException
     {
         record.setLong("id", id);
         record.setString("value", value);
@@ -109,7 +110,7 @@ public class TestObject
      * {@inheritDoc}
      */
     public void setData(InputRecord record)
-        throws PersistenceException
+        throws SQLException
     {
         id = record.getLong("id");
         value = record.getString("value");

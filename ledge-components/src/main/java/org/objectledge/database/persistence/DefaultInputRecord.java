@@ -101,19 +101,19 @@ public class DefaultInputRecord
     /**
      * @param field
      * @return
-     * @throws PersistenceException
+     * @throws SQLException
      */
     private Object getNotNull(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = data.get(field.toUpperCase());
         if(value == null)
         {
-            throw new PersistenceException(field + " not found");
+            throw new SQLException(field + " not found");
         }
         if(value == NULL)
         {
-            throw new PersistenceException(field + " is NULL");
+            throw new SQLException(field + " is NULL");
         }
         return value;
     }
@@ -125,10 +125,10 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as boolean.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public boolean getBoolean(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Boolean)
@@ -143,7 +143,7 @@ public class DefaultInputRecord
         {
             return BOOLEAN_TRUE_LITERALS.contains(((String)value).toLowerCase());
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -151,17 +151,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as byte.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public byte getByte(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Number)
         {
             return ((Number)value).byteValue();
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -169,17 +169,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as short.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public short getShort(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Number)
         {
             return ((Number)value).shortValue();
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -187,17 +187,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as integer.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public int getInteger(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Number)
         {
             return ((Number)value).intValue();
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -205,17 +205,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as long.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public long getLong(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Number)
         {
             return ((Number)value).longValue();
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -223,10 +223,10 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as big decimal.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public BigDecimal getBigDecimal(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof BigDecimal)
@@ -241,7 +241,7 @@ public class DefaultInputRecord
         {
             return BigDecimal.valueOf(((Number)value).doubleValue());
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -249,17 +249,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as float.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public float getFloat(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Number)
         {
             return ((Number)value).floatValue();
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -267,17 +267,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as double.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public double getDouble(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Number)
         {
             return ((Number)value).doubleValue();
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -285,17 +285,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as string.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public String getString(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof String)
         {
             return DatabaseUtils.unescapeSqlString((String)value);
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -306,10 +306,10 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as array of byte.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public byte[] getBytes(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value.getClass().isArray() && value.getClass().getComponentType().equals(Byte.TYPE))
@@ -320,7 +320,7 @@ public class DefaultInputRecord
         {
             Base64.decodeBase64((String)value);
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -328,17 +328,17 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return the field value as date.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public Date getDate(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof Date)
         {
             return new Date(((Date)value).getTime());
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -346,10 +346,10 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the specified value.
+     * @throws SQLException if the field could not be get to the specified value.
      */
     public URL getURL(String field)
-        throws PersistenceException
+        throws SQLException
     {
         Object value = getNotNull(field);
         if(value instanceof URL)
@@ -364,10 +364,10 @@ public class DefaultInputRecord
             }
             catch(MalformedURLException e)
             {
-                throw new PersistenceException("invalid URL value " + value + " for " + field, e);
+                throw new SQLException("invalid URL value " + value + " for " + field, e);
             }
         }
-        throw new PersistenceException(field + " has unsupported type " + value.getClass());
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -375,10 +375,10 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the specified value.
+     * @throws SQLException if the field could not be get to the specified value.
      */
     public Object getObject(String field)
-        throws PersistenceException
+        throws SQLException
     {
         return getNotNull(field);
     }
@@ -388,10 +388,10 @@ public class DefaultInputRecord
      * 
      * @param field the name of the field.
      * @return <code>true</code> if null.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public boolean isNull(String field)
-        throws PersistenceException
+        throws SQLException
     {
         return data.get(field.toUpperCase()) == NULL;
     }
@@ -404,11 +404,11 @@ public class DefaultInputRecord
      * @param object Persistent object.
      * @param conn the connection to use.
      * @return a prepared statement.
-     * @throws PersistenceException if there is a problem retrieving key values from the object.
+     * @throws SQLException if there is a problem retrieving key values from the object.
      * @throws SQLException if there is a problem creating the statement.
      */
     static PreparedStatement getSelectStatement(Persistent object, Connection conn)
-        throws PersistenceException, SQLException
+        throws SQLException
     {
         DefaultOutputRecord out = new DefaultOutputRecord(object);
         object.getData(out);

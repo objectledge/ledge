@@ -124,84 +124,78 @@ public class DefaultOutputRecord
 
     /**
      * Sets a <code>boolean</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     *         specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setBoolean(String field, boolean value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
      * Sets a <code>byte</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     * specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setByte(String field, byte value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, Byte.valueOf(value));
     }
 
     /**
      * Sets a <code>short</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     *         specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setShort(String field, short value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, Short.valueOf(value));
     }
 
     /**
      * Sets an <code>int</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     *         specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setInteger(String field, int value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, Integer.valueOf(value));
     }
 
     /**
      * Sets a <code>long</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     *         specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setLong(String field, long value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, Long.valueOf(value));
     }        
 
     /**
      * Sets a <code>BigDecimal</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     *         specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setBigDecimal(String field, BigDecimal value)
-        throws PersistenceException
+        throws SQLException
     {
         if(value == null)
         {
@@ -213,42 +207,39 @@ public class DefaultOutputRecord
 
     /**
      * Sets a <code>float</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     *         specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setFloat(String field, float value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, new Float(value));
     }
 
     /**
      * Sets a <code>double</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the 
-     *         specified value.
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setDouble(String field, double value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, new Double(value));
     }
 
     /**
      * Sets a <code>String</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setString(String field, String value)
-        throws PersistenceException
+        throws SQLException
     {
         if(value == null)
         {
@@ -260,17 +251,16 @@ public class DefaultOutputRecord
 
     /**
      * Sets a <code>byte</code> array field value.
-     *
-     * <p>String value read from the database will be BASE64 decoded to obtain
-     * byte array.</p>
-     *
+     * <p>
+     * String value read from the database will be BASE64 decoded to obtain byte array.
+     * </p>
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setBytes(String field, byte[] value)
-        throws PersistenceException
+        throws SQLException
     {
         try
         {
@@ -280,20 +270,19 @@ public class DefaultOutputRecord
         }
         catch(Exception e)
         {
-            throw new PersistenceException("Failed to encode field "+field, e);
+            throw new SQLException("Failed to encode field " + field, e);
         }
     }
 
     /**
      * Sets a <code>Date</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @param value the value of the field.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setDate(String field, Date value)
-        throws PersistenceException
+        throws SQLException
     {
         if(value == null)
         {
@@ -308,11 +297,10 @@ public class DefaultOutputRecord
      * 
      * @param field the name of the field.
      * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setTime(String field, Date value)
-        throws PersistenceException
+        throws SQLException
     {
         if(value == null)
         {
@@ -327,11 +315,10 @@ public class DefaultOutputRecord
      * 
      * @param field the name of the field.
      * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setTimestamp(String field, Date value)
-        throws PersistenceException
+        throws SQLException
     {
         if(value == null)
         {
@@ -346,11 +333,10 @@ public class DefaultOutputRecord
      * 
      * @param field the name of the field.
      * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setURL(String field, URL value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, value);
     }
@@ -360,24 +346,22 @@ public class DefaultOutputRecord
      * 
      * @param field the name of the field.
      * @param value the value of the filed.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setObject(String field, Object value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, value);
     }
 
     /**
      * Sets a field to <code>SQL NULL</code> value.
-     *
+     * 
      * @param field the name of the field.
-     * @throws PersistenceException if the field could not be set to the
-     *         specified value. 
+     * @throws SQLException if the field could not be set to the specified value.
      */
     public void setNull(String field)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, null);
     }
@@ -387,19 +371,19 @@ public class DefaultOutputRecord
 
     @Override
     public <T> void set(String field, T value)
-        throws PersistenceException
+        throws SQLException
     {
         fields.put(field, value);
     }
 
     /**
      * Builds <code>WHERE</code> clause with contained data.
-     *
+     * 
      * @return the where clause.
-     * @throws PersistenceException if the clause could not be built.
+     * @throws SQLException if the clause could not be built.
      */
     String getWhereClause()
-        throws PersistenceException
+        throws SQLException
     {
         StringBuilder buff = new StringBuilder();
         Iterator<String> i = getKeyFields().iterator();
@@ -416,14 +400,14 @@ public class DefaultOutputRecord
 
     /**
      * Builds an insert statement with contained data.
-     *
+     * 
      * @param conn database connection.
      * @return the statement.
-     * @throws PersistenceException if the statement could not be built.
+     * @throws SQLException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
     PreparedStatement getInsertStatement(Connection conn)
-        throws PersistenceException, SQLException
+        throws SQLException, SQLException
     {
         StringBuilder buff = new StringBuilder();
         StringBuilder buff2 = new StringBuilder();
@@ -451,14 +435,14 @@ public class DefaultOutputRecord
     
     /**
      * Builds an update statement with contained data.
-     *
+     * 
      * @param conn database connection.
      * @return the statement.
-     * @throws PersistenceException if the statement could not be built.
+     * @throws SQLException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
     PreparedStatement getUpdateStatement(Connection conn)
-        throws PersistenceException, SQLException
+        throws SQLException, SQLException
     {
         Set<String> keyFields = getKeyFields();
         StringBuilder buff = new StringBuilder();
@@ -498,15 +482,14 @@ public class DefaultOutputRecord
 
     /**
      * Builds a <code>DELETE</code> statement with contained data.
-     *
-     *
+     * 
      * @param conn database connection.
      * @return the statement.
-     * @throws PersistenceException if the statement could not be built.
+     * @throws SQLException if the statement could not be built.
      * @throws SQLException if the statement could not be created.
      */
     PreparedStatement getDeleteStatement(Connection conn)
-        throws PersistenceException, SQLException
+        throws SQLException
     {
         StringBuilder buff = new StringBuilder();
         buff.append("DELETE FROM ");

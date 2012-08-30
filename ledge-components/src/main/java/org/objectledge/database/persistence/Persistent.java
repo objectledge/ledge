@@ -27,6 +27,8 @@
 // 
 package org.objectledge.database.persistence;
 
+import java.sql.SQLException;
+
 /**
  * Implemented by objects that are made persistent using a relational
  * database.
@@ -52,27 +54,29 @@ public interface Persistent
 
     /**
      * Stores the fields of the object into the specified record.
-     *
-     * <p>You need to call <code>getData</code> of your superclasses if they
-     * are <code>Persistent</code>.</p>
-     *
+     * <p>
+     * You need to call <code>getData</code> of your superclasses if they are
+     * <code>Persistent</code>.
+     * </p>
+     * 
      * @param record the record to store state into.
-     * @throws PersistenceException if something goes wrong.
+     * @throws SQLException if something goes wrong.
      */
     public void getData(OutputRecord record)
-        throws PersistenceException;
+        throws SQLException;
     
     /**
      * Loads the fields of the object from the specified record.
-     *
-     * <p>You need to call <code>setData</code> of your superclasses if they
-     * are <code>Persistent</code>.</p>
+     * <p>
+     * You need to call <code>setData</code> of your superclasses if they are
+     * <code>Persistent</code>.
+     * </p>
      * 
      * @param record the record to read state from.
-     * @throws PersistenceException if something goes wrong.
+     * @throws SQLException if something goes wrong.
      */
     public void setData(InputRecord record)
-        throws PersistenceException;
+        throws SQLException;
     
     /**
      * Returns the 'saved' flag for the object.

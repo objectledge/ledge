@@ -29,6 +29,7 @@
 package org.objectledge.database.persistence;
 
 import java.io.Reader;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class PersistenceTest extends TestCase
             persistence.revert(object2);
             fail("should throw the exception");
         }
-        catch (PersistenceException e)
+        catch(SQLException e)
         {
             //ok!            
         }

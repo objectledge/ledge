@@ -28,11 +28,12 @@
 
 package org.objectledge.cache;
 
+import java.sql.SQLException;
+
 import org.jcontainer.dna.Configuration;
 import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.ConfigurableValueFactory;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.database.persistence.PersistenceException;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
 
@@ -71,16 +72,9 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
         factory = new PersistentFactory<V>()
             {
                 public V newInstance()
-                    throws PersistenceException
+                    throws InstantiationException, IllegalAccessException
                 {
-                    try
-                    {
-                        return cl.newInstance();
-                    }
-                    catch(Exception e)
-                    {
-                        throw new PersistenceException("failed to instantiate "+cl.getName());
-                    }
+                    return cl.newInstance();
                 }
             };
     }
@@ -100,7 +94,7 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
         {
             return persistence.load(factory, key.longValue());
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new RuntimeException("failed to produce value", e);
         }
@@ -109,7 +103,6 @@ public class PersistenceValueFactory<K extends Number, V extends Persistent>
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     public void configure(CacheFactorySPI caching, String name, Configuration config)
     {
         Configuration[] parameters = config.getChildren("parameter");

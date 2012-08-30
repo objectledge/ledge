@@ -27,6 +27,7 @@
 // 
 package org.objectledge.database.persistence;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.objectledge.database.Database;
@@ -44,14 +45,14 @@ public interface Persistence
 
     /**
      * Loads an object from the database.
+     * 
      * @param factory the object instance factory.
      * @param id the identifier of the object.
-     *
      * @return the presistent object.
-     * @throws PersistenceException if any exception occured.
+     * @throws SQLException if any exception occured.
      */
     public <V extends Persistent> V load(PersistentFactory<V> factory, long id)
-        throws PersistenceException;
+        throws SQLException;
 
     /**
      * Loads all objects from the database.
@@ -62,10 +63,10 @@ public interface Persistence
      * 
      * @param factory the object instance factory.
      * @return the list of persistent objects.
-     * @throws PersistenceException if any exception occured.
+     * @throws SQLException if any exception occured.
      */
     public <V extends Persistent> List<V> load(PersistentFactory<V> factory)
-        throws PersistenceException;
+        throws SQLException;
 
     /**
      * Loads objects from the database.
@@ -78,12 +79,12 @@ public interface Persistence
      * @param where the where clause to be used in the query
      * @param parameters positional parameters used in where clause.
      * @return the list of persistent objects.
-     * @throws PersistenceException if any exception occured.
+     * @throws SQLException if any exception occured.
      */
     public <V extends Persistent> List<V> load(PersistentFactory<V> factory,
         String where,
         Object... parameters)
-        throws PersistenceException;
+        throws SQLException;
 
     /**
      * Loads data from the database.
@@ -93,68 +94,72 @@ public interface Persistence
      * @param where where clause to be used in the query.
      * @param parameters positional parameters used in where clasue.
      * @return a list of {@link InputRecord} objects, possibly empty.
-     * @throws PersistenceException
+     * @throws SQLException
      */
     public List<InputRecord> loadInputRecords(Persistent template, String where,
         Object... parameters)
-        throws PersistenceException;
+        throws SQLException;
 
     /**
      * Saves an object in the database.
      * 
      * @param object the object to be saved.
-     * @throws PersistenceException if any exception occured.
+     * @throws SQLException if any exception occured.
      */
-    public void save(Persistent object) throws PersistenceException;
+    public void save(Persistent object)
+        throws SQLException;
 
     /**
      * Reverts the object to the saved state.
-     *
+     * 
      * @param object the object to have it's state restored.
-     * @throws PersistenceException if any exception occured.
-     * @throws IllegalStateException if no state has been saved yet for the
-     *         object in question.
+     * @throws SQLException if any exception occured.
+     * @throws IllegalStateException if no state has been saved yet for the object in question.
      */
     public void revert(Persistent object)
-        throws PersistenceException, IllegalStateException;
+        throws SQLException, IllegalStateException;
 
     /**
      * Removes an object from the database.
-     *
+     * 
      * @param object the object to be removed.
-     * @throws PersistenceException if any exception occured.
+     * @throws SQLException if any exception occured.
      */
-    public void delete(Persistent object) throws PersistenceException;
+    public void delete(Persistent object)
+        throws SQLException;
 
     /**
      * Removes the objects from the database.
-     *
+     * 
      * @param where the where clause to be used in the query
      * @param factory the object instance factory.
-     * @throws PersistenceException if any exception occured.
+     * @throws SQLException if any exception occured.
      */
-    public <V extends Persistent> void delete(String where, PersistentFactory<V> factory) throws PersistenceException;
+    public <V extends Persistent> void delete(String where, PersistentFactory<V> factory)
+        throws SQLException;
 
     /**
      * An utility method for checking for existence of rows.
-     *
+     * 
      * @param table the table to be checked.
      * @param where the condition.
-     * @return <code>true</code> if the <code>condition</code> is true for one
-     *         or more rows in the <code>table</code>.
-     * @throws PersistenceException if any exception occured.
+     * @return <code>true</code> if the <code>condition</code> is true for one or more rows in the
+     *         <code>table</code>.
+     * @throws SQLException if any exception occured.
      */
-    public boolean exists(String table, String where) throws PersistenceException;
+    public boolean exists(String table, String where)
+        throws SQLException;
     
     /**
      * An utility method for checking the number of matching rows.
-     *
+     * 
      * @param table the table to be chcked.
      * @param where the condition.
      * @return the number of <code>table</code> matching the condition.
-     * @throws PersistenceException if any exception occured.
+     * @throws SQLException if any exception occured.
      */
-    public int count(String table, String where) throws PersistenceException;
+    public int count(String table, String where)
+        throws SQLException;
     
     /**
      * Get the database component used by persistence.

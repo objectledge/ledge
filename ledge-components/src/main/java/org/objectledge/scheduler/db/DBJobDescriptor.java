@@ -28,10 +28,11 @@
 
 package org.objectledge.scheduler.db;
 
+import java.sql.SQLException;
+
 import org.objectledge.database.persistence.InputRecord;
 import org.objectledge.database.persistence.OutputRecord;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.database.persistence.PersistenceException;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.scheduler.AbstractJobDescriptor;
 import org.objectledge.scheduler.AbstractScheduler;
@@ -103,7 +104,8 @@ public class DBJobDescriptor extends AbstractJobDescriptor
     /**
      * {@inheritDoc}
      */
-    public void getData(OutputRecord record) throws PersistenceException
+    public void getData(OutputRecord record)
+        throws SQLException
     {
         record.setLong("job_id", jobId);
         record.setString("job_name", getName());
@@ -151,7 +153,8 @@ public class DBJobDescriptor extends AbstractJobDescriptor
     /**
      * {@inheritDoc}
      */
-    public void setData(InputRecord record) throws PersistenceException
+    public void setData(InputRecord record)
+        throws SQLException
     {
         jobId = record.getLong("job_id");
         String name = record.getString("job_name");
@@ -165,7 +168,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
         }
         catch (InvalidScheduleException e)
         {
-            throw new PersistenceException("failed to create schedule", e);
+            throw new SQLException("failed to create schedule", e);
         }
         try
         {
@@ -209,7 +212,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
         }
         catch (Exception e)
         {
-            throw new PersistenceException("Failed to initialize scheduled job", e);
+            throw new SQLException("Failed to initialize scheduled job", e);
         }
     }
 
@@ -240,7 +243,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
         {
             persistence.save(this);
         }
-        catch (PersistenceException e)
+        catch(SQLException e)
         {
             throw new JobModificationException("failed to save job state", e);
         }
