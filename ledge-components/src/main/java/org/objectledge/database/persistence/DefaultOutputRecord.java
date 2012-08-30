@@ -382,7 +382,15 @@ public class DefaultOutputRecord
         fields.put(field, null);
     }
 
+
     // Implementation specific ///////////////////////////////////////////
+
+    @Override
+    public <T> void set(String field, T value)
+        throws PersistenceException
+    {
+        fields.put(field, value);
+    }
 
     /**
      * Builds <code>WHERE</code> clause with contained data.

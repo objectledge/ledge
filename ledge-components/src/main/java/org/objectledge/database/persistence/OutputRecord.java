@@ -186,4 +186,16 @@ public interface OutputRecord
      *         specified value. 
      */
     public abstract void setNull(String field) throws PersistenceException;
+
+    /**
+     * Sets a field to the specified value.
+     * 
+     * @param field name of he field.
+     * @param value value of the field
+     * @param type type of the field.
+     * @throws PersistenceException f the field could not be set to the specified value.
+     * @throws IllegalArugmentException if type is not supported.
+     */
+    public abstract <T> void set(String field, T value)
+        throws PersistenceException;
 }
