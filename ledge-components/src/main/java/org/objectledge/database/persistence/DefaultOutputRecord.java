@@ -50,7 +50,6 @@ import org.objectledge.database.DatabaseUtils;
 
 /**
  * An implementation of {@link DefaultOutputRecord}.
- *
  */
 public class DefaultOutputRecord
     implements OutputRecord
@@ -185,7 +184,7 @@ public class DefaultOutputRecord
         throws SQLException
     {
         fields.put(field, Long.valueOf(value));
-    }        
+    }
 
     /**
      * Sets a <code>BigDecimal</code> field value.
@@ -245,7 +244,7 @@ public class DefaultOutputRecord
         {
             setNull(field);
             return;
-        }        
+        }
         fields.put(field, value);
     }
 
@@ -288,10 +287,10 @@ public class DefaultOutputRecord
         {
             setNull(field);
             return;
-        }        
+        }
         fields.put(field, new java.sql.Date(value.getTime()));
     }
-    
+
     /**
      * Sets a <code>Time</code> field value.
      * 
@@ -306,7 +305,7 @@ public class DefaultOutputRecord
         {
             setNull(field);
             return;
-        }        
+        }
         fields.put(field, new Time(value.getTime()));
     }
 
@@ -324,7 +323,7 @@ public class DefaultOutputRecord
         {
             setNull(field);
             return;
-        }        
+        }
         fields.put(field, new Timestamp(value.getTime()));
     }
 
@@ -366,7 +365,6 @@ public class DefaultOutputRecord
         fields.put(field, null);
     }
 
-
     // Implementation specific ///////////////////////////////////////////
 
     @Override
@@ -407,7 +405,7 @@ public class DefaultOutputRecord
      * @throws SQLException if the statement could not be created.
      */
     PreparedStatement getInsertStatement(Connection conn)
-        throws SQLException, SQLException
+        throws SQLException
     {
         StringBuilder buff = new StringBuilder();
         StringBuilder buff2 = new StringBuilder();
@@ -432,7 +430,7 @@ public class DefaultOutputRecord
         setValues(stmt, true, true, 1);
         return stmt;
     }
-    
+
     /**
      * Builds an update statement with contained data.
      * 
@@ -442,7 +440,7 @@ public class DefaultOutputRecord
      * @throws SQLException if the statement could not be created.
      */
     PreparedStatement getUpdateStatement(Connection conn)
-        throws SQLException, SQLException
+        throws SQLException
     {
         Set<String> keyFields = getKeyFields();
         StringBuilder buff = new StringBuilder();
@@ -528,7 +526,7 @@ public class DefaultOutputRecord
         }
         return pos;
     }
-    
+
     /**
      * Sets prepared statement's positional parameters to non-string field values.
      * 
@@ -546,16 +544,16 @@ public class DefaultOutputRecord
         }
         else if(value instanceof Time)
         {
-            stmt.setTime(pos, (Time)value);        
+            stmt.setTime(pos, (Time)value);
         }
         else if(value instanceof Timestamp)
         {
-            stmt.setTimestamp(pos, (Timestamp)value);        
+            stmt.setTimestamp(pos, (Timestamp)value);
         }
         else if(value instanceof java.sql.Date)
         {
             stmt.setDate(pos, (java.sql.Date)value);
-        }        
+        }
         else if(value instanceof URL)
         {
             stmt.setURL(pos, (URL)value);
@@ -617,5 +615,29 @@ public class DefaultOutputRecord
     public String toString()
     {
         return fields.toString();
+    }
+
+    public static PreparedStatement getInsertStatement(Persistent object, Connection conn)
+        throws SQLException
+    {
+        DefaultOutputRecord record = new DefaultOutputRecord(object);
+        object.getData(record);
+        return record.getInsertStatement(conn);
+    }
+
+    public static PreparedStatement getUpdateStatement(Persistent object, Connection conn)
+        throws SQLException
+    {
+        DefaultOutputRecord record = new DefaultOutputRecord(object);
+        object.getData(record);
+        return record.getUpdateStatement(conn);
+    }
+
+    public static PreparedStatement getDeleteStatement(Persistent object, Connection conn)
+        throws SQLException
+    {
+        DefaultOutputRecord record = new DefaultOutputRecord(object);
+        object.getData(record);
+        return record.getDeleteStatement(conn);
     }
 }
