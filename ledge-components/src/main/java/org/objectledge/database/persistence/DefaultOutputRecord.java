@@ -534,7 +534,7 @@ public class DefaultOutputRecord
      * @param value parameter value.
      * @param stmt the statement.
      */
-    static void setValue(int pos, Object value, int sqlType, PreparedStatement stmt)
+    public static void setValue(int pos, Object value, int sqlType, PreparedStatement stmt)
         throws SQLException
     {
         if(value == null)
