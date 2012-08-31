@@ -224,10 +224,13 @@ public class DefaultPersistence implements Persistence
             try
             {
                 conn = database.getConnection();
-                if (object.getSaved())
+                if(object.getSaved())
                 {
-                    statement = record.getUpdateStatement(conn);
-                    statement.execute();
+                    if(record.hasNonKeyValues())
+                    {
+                        statement = record.getUpdateStatement(conn);
+                        statement.execute();
+                    }
                 }
                 else
                 {

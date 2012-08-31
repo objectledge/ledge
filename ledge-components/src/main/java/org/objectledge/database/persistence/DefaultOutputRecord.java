@@ -611,6 +611,20 @@ public class DefaultOutputRecord
         return value;
     }
 
+    boolean hasNonKeyValues()
+    {
+        boolean hasNonKeyValues = false;
+        Set<String> keyFields = getKeyFields();
+        for(String field : fields.keySet())
+        {
+            if(!keyFields.contains(field))
+            {
+                hasNonKeyValues = true;
+            }
+        }
+        return hasNonKeyValues;
+    }
+
     @Override
     public String toString()
     {
