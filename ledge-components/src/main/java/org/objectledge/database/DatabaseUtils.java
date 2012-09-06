@@ -27,9 +27,13 @@
 // 
 package org.objectledge.database;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -38,7 +42,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
@@ -53,10 +62,16 @@ import org.jcontainer.dna.impl.Log4JLogger;
  */
 public class DatabaseUtils
 {
+    private static final String SQL_KEYWORDS_RESOURCE = "SQL2003.txt";
+
+    private static final String SQL_2003_KEYWORDS = loadSql2003Keywords();
+
     /** A logger. Bypasses LogFactory. */
     private static Logger log = 
         new Log4JLogger(org.apache.log4j.Logger.getLogger(DatabaseUtils.class));
     
+    private static final Map<String, Set<String>> reservedWords = new ConcurrentHashMap<String, Set<String>>();
+
     ///CLOVER:OFF
     /**
      * Private constructor to prevent subclassing and enforce static access.
@@ -576,5 +591,76 @@ public class DatabaseUtils
             }
         }
         return identifier;
+    }
+
+    public static Set<String> reservedWords(Connection conn)
+        throws SQLException
+    {
+        DatabaseMetaData md = conn.getMetaData();
+        String id = getDatabaseId(md);
+        Set<String> words = reservedWords.get(id);
+        if(words == null)
+        {
+            words = new HashSet<String>();
+            words.addAll(Arrays.asList(SQL_2003_KEYWORDS.toUpperCase().split("\n")));
+            words.addAll(Arrays.asList(md.getSQLKeywords().toUpperCase().split(",")));
+            words.remove("");
+            reservedWords.put(id, words);
+        }
+        return words;
+    }
+
+    public static String quotedIdentifier(String id, Connection conn)
+        throws SQLException
+    {
+        Set<String> reserved = reservedWords(conn);
+        if(reserved.contains(id.toUpperCase()))
+        {
+            DatabaseMetaData md = conn.getMetaData();
+            String q = md.getIdentifierQuoteString();
+            return q + id + q;
+        }
+        else
+        {
+            return id;
+        }
+    }
+
+    private static String getDatabaseId(DatabaseMetaData md)
+        throws SQLException
+    {
+        return md.getDatabaseProductName() + " " + md.getDatabaseProductVersion();
+    }
+
+    private static String loadSql2003Keywords()
+    {
+        InputStream is = DatabaseUtils.class.getResourceAsStream(SQL_KEYWORDS_RESOURCE);
+        StringWriter w = new StringWriter();
+        Reader r = new InputStreamReader(new BufferedInputStream(is));
+        try
+        {
+            int i;
+            while((i = r.read()) > 0)
+            {
+                w.write(i);
+            }
+            return w.toString();
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("Can't load " + SQL_KEYWORDS_RESOURCE + " from classpath", e);
+        }
+        finally
+        {
+            try
+            {
+                r.close();
+                w.close();
+            }
+            catch(IOException e)
+            {
+                // ignore
+            }
+        }
     }
 }
