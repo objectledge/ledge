@@ -655,4 +655,12 @@ public class DefaultOutputRecord
         object.getData(record);
         return record.getDeleteStatement(conn);
     }
+
+    public static void refeshInsertStatement(Persistent object, PreparedStatement statement)
+        throws SQLException
+    {
+        DefaultOutputRecord record = new DefaultOutputRecord(object);
+        object.getData(record);
+        record.setValues(statement, false, true, record.getKeyFields().size() + 1);
+    }
 }
