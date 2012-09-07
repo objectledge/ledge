@@ -40,8 +40,9 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,7 +59,7 @@ public class DefaultOutputRecord
     private final Persistent object;
 
     /** The fields. */
-    private final HashMap<String, Object> fields = new HashMap<String, Object>();
+    private final Map<String, Object> fields = new LinkedHashMap<String, Object>();
 
     private Map<String, Integer> typeMap = null;
 
@@ -475,7 +476,7 @@ public class DefaultOutputRecord
      */
     private Set<String> getKeyFields()
     {
-        return new HashSet<String>(Arrays.asList(object.getKeyColumns()));
+        return new LinkedHashSet<String>(Arrays.asList(object.getKeyColumns()));
     }
 
     /**
