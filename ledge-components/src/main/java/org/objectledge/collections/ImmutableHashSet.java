@@ -162,4 +162,10 @@ public class ImmutableHashSet<E>
     {
         return delegate.hashCode();
     }
+
+    @Override
+    public String toString()
+    {
+        return delegate.toString();
+    }
 }
