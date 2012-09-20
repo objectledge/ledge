@@ -31,8 +31,10 @@ package org.objectledge.messaging;
 import java.util.HashMap;
 
 import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.XAConnection;
+import javax.jms.XAConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
@@ -72,11 +74,11 @@ public class MessagingFactoryImpl
             {
                 String name = xaconnectionDef.getAttribute("name");
                 String url = xaconnectionDef.getChild("url").getValue(
-                    ActiveMQXAConnectionFactory.DEFAULT_BROKER_URL);
+                    ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
                 String user = xaconnectionDef.getChild("user").getValue(
-                    ActiveMQXAConnectionFactory.DEFAULT_USER);
+                    ActiveMQConnectionFactory.DEFAULT_USER);
                 String password = xaconnectionDef.getChild("password").getValue(
-                    ActiveMQXAConnectionFactory.DEFAULT_PASSWORD);
+                    ActiveMQConnectionFactory.DEFAULT_PASSWORD);
 
                 connectionFactoryPool.put(name, (Object)new ActiveMQXAConnectionFactory(user,
                     password, url));
@@ -94,17 +96,14 @@ public class MessagingFactoryImpl
         Object connectionFactory = connectionFactoryPool.get(name);
         C connection = null;
         if(XAConnection.class.isAssignableFrom(connectionClass)
-            && (connectionFactory instanceof ActiveMQXAConnectionFactory))
+            && (connectionFactory instanceof XAConnectionFactory))
         {
-            connection = (C)((ActiveMQXAConnectionFactory)connectionFactory).createConnection();
+            connection = (C)((XAConnectionFactory)connectionFactory).createXAConnection();
         }
-        else if(Connection.class.isAssignableFrom(connectionClass)
-            && (connectionFactory instanceof ActiveMQConnectionFactory))
+        else if(Connection.class.isAssignableFrom(connectionClass))
         {
-            connection = (C)((ActiveMQConnectionFactory)connectionFactory).createConnection();
+            connection = (C)((ConnectionFactory)connectionFactory).createConnection();
         }
-
         return connection;
     }
-
 }
