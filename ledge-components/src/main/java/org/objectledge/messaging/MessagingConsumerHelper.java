@@ -44,7 +44,7 @@ import org.objectledge.pipeline.ProcessingException;
  * 
  * @author lukasz
  */
-public class MessagingConsumerHelper
+public class MessagingConsumerHelper<S extends Session, C extends Connection>
 {
 
     private Integer ackMode;
@@ -59,17 +59,17 @@ public class MessagingConsumerHelper
 
     private Destination destination;
 
-    private Session jmsSession;
+    private S jmsSession;
 
     private MessageConsumer messageConsumer;
 
-    private final Connection connection;
+    private final C connection;
 
     private final MessageListener messageListener;
 
     private final ExceptionListener exceptionListener;
 
-    public MessagingConsumerHelper(Connection connection, MessageListener messageListener,
+    public MessagingConsumerHelper(C connection, MessageListener messageListener,
         ExceptionListener exceptionListener)
         throws Exception
     {
@@ -78,7 +78,7 @@ public class MessagingConsumerHelper
         this.exceptionListener = exceptionListener;
     }
 
-    public MessagingConsumerHelper(Connection connection, MessageListener messageListener,
+    public MessagingConsumerHelper(C connection, MessageListener messageListener,
         ExceptionListener exceptionListener, Configuration configuration)
         throws Exception
     {
@@ -104,7 +104,7 @@ public class MessagingConsumerHelper
 
             connection.setExceptionListener(exceptionListener);
             connection.start();
-            jmsSession = connection.createSession(transacted, ackMode);
+            jmsSession = (S)connection.createSession(transacted, ackMode);
 
             if(topic)
             {
@@ -215,7 +215,7 @@ public class MessagingConsumerHelper
         this.destination = destination;
     }
 
-    public Session getJmsSession()
+    public S getJmsSession()
     {
         return jmsSession;
     }
