@@ -71,6 +71,6 @@ public class DummyMessageListener
     @Override
     public void onException(JMSException e)
     {
-        logger.error("NgoMessageListener Exception: ", e);
+        logger.error("JMS Exception: ", e);
     }
 }
