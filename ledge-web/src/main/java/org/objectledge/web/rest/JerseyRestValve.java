@@ -24,6 +24,8 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 public class JerseyRestValve
     implements Valve
 {
+    private static final String REST_PACKAGE_NAMES_KEY = "restPackageNames";
+
     private final ServletContainer jerseyContainer;
 
     private final Logger logger;
@@ -41,7 +43,7 @@ public class JerseyRestValve
         throws ConfigurationException, ServletException
     {
         this.logger = logger;
-        String restPackageNames = config.getChild("restPackageNames").getValue();
+        String restPackageNames = config.getChild(REST_PACKAGE_NAMES_KEY).getValue();
 
         Configuration initParams = config.getChild("init-parmameters", true);
 
