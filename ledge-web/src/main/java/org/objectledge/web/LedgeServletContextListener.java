@@ -7,6 +7,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.container.LedgeContainer;
@@ -41,6 +42,7 @@ public class LedgeServletContextListener
     public LedgeServletContextListener()
         throws ConfigurationException
     {
+        BasicConfigurator.configure();
         log = Logger.getLogger(LedgeServletContextListener.class);
     }
 
