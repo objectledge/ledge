@@ -4,7 +4,7 @@ import org.apache.xmlrpc.XmlRpcException;
 
 public interface XmlRpcSingleSignOnService
 {
-    String validateTicket(String ticket, String domain, String client)
+    String[] validateTicket(String ticket, String domain, String client)
         throws XmlRpcException;
 
     String logIn(String principal, String domain)

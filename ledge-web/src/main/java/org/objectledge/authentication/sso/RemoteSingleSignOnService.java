@@ -103,16 +103,16 @@ public class RemoteSingleSignOnService
     {
         try
         {
-            String principal = remote.validateTicket(ticket, domain, client);
-            if(principal != null)
+            String[] response = remote.validateTicket(ticket, domain, client);
+            if(response != null && response.length == 2 && response[0].equals("VALID"))
             {
                 try
                 {
-                    return userManager.getUserByName(principal);
+                    return userManager.getUserByName(response[1]);
                 }
                 catch(AuthenticationException e)
                 {
-                    log.error("DECLINED sso ticket - uknown user " + principal);
+                    log.error("DECLINED sso ticket - uknown user " + response[1]);
                     return null;
                 }
             }
