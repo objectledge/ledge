@@ -12,10 +12,11 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.sso.SingleSignOnService;
+import org.objectledge.authentication.sso.SingleSignOnService.LoginStatus;
 import org.objectledge.authentication.sso.XmlRpcSingleSignOnService;
 import org.objectledge.context.Context;
-import org.objectledge.xmlrpc.XmlRpcHttpRequestConfig;
 import org.objectledge.xmlrpc.POJOHandlerMapping;
+import org.objectledge.xmlrpc.XmlRpcHttpRequestConfig;
 import org.objectledge.xmlrpc.XmlRpcView;
 
 public class ServerAPI
@@ -62,10 +63,18 @@ public class ServerAPI
     }
 
     @Override
-    public String validateTicket(String ticket, String domain, String client)
+    public String[] validateTicket(String ticket, String domain, String client)
         throws XmlRpcException
     {
-        return singleSignOnService.validateTicket(ticket, domain, client).getName();
+        final Principal principal = singleSignOnService.validateTicket(ticket, domain, client);
+        if(principal != null)
+        {
+            return new String[] { "VALID", principal.getName() };
+        }
+        else
+        {
+            return new String[] { "INVALID", "" };
+        }
     }
 
     @Override
@@ -75,13 +84,14 @@ public class ServerAPI
         try
         {
             Principal principal = userManager.getUserByName(principalName);
-            singleSignOnService.logIn(principal, domain);           
+            singleSignOnService.logIn(principal, domain);
+            return LoginStatus.LOGGED_IN.name();
         }
         catch(AuthenticationException e)
         {
             log.warn("unknown user " + principalName);
+            return LoginStatus.ERROR.name();
         }
-        return ""; 
     }
 
     @Override
@@ -91,13 +101,14 @@ public class ServerAPI
         try
         {
             Principal principal = userManager.getUserByName(principalName);
-            singleSignOnService.logOut(principal, domain);            
+            singleSignOnService.logOut(principal, domain);
+            return LoginStatus.LOGGED_OUT.name();
         }
         catch(AuthenticationException e)
         {
-            log.warn("unknown user " + principalName);           
+            log.warn("unknown user " + principalName);
+            return LoginStatus.ERROR.name();
         }
-        return "";
     }
 
     @Override
@@ -112,7 +123,7 @@ public class ServerAPI
         catch(AuthenticationException e)
         {
             log.warn("unknown user " + principalName);
-            return null;
+            return LoginStatus.ERROR.name();
         }
     }
 
