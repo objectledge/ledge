@@ -29,10 +29,7 @@ package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Ref;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -46,158 +43,144 @@ public interface InputRecord
 {
     /**
      * Returns a <code>boolean</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as boolean.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract boolean getBoolean(String field) throws PersistenceException;
+    public abstract boolean getBoolean(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>byte</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as byte.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract byte getByte(String field) throws PersistenceException;
+    public abstract byte getByte(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>short</code> field value.
-     *
+     * 
      * @param field the name of the field.
-     * @return the field value as short.     
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @return the field value as short.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract short getShort(String field) throws PersistenceException;
+    public abstract short getShort(String field)
+        throws SQLException;
+    
     /**
      * Returns an <code>int</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as integer.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract int getInteger(String field) throws PersistenceException;
+    public abstract int getInteger(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>long</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as long.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract long getLong(String field) throws PersistenceException;
+    public abstract long getLong(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>BigDecimal</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as big decimal.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract BigDecimal getBigDecimal(String field) throws PersistenceException;
+    public abstract BigDecimal getBigDecimal(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>float</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as float.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract float getFloat(String field) throws PersistenceException;
+    public abstract float getFloat(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>double</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as double.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract double getDouble(String field) throws PersistenceException;
+    public abstract double getDouble(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>String</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as string.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract String getString(String field) throws PersistenceException;
+    public abstract String getString(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>byte</code> array field value.
-     *
-     * <p>String value read from the database will be BASE64 decoded to obtain
-     * byte array.</p>
-     *
+     * <p>
+     * String value read from the database will be BASE64 decoded to obtain byte array.
+     * </p>
+     * 
      * @param field the name of the field.
      * @return the field value as array of byte.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract byte[] getBytes(String field) throws PersistenceException;
+    public abstract byte[] getBytes(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>Date</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as date.
-     * @throws PersistenceException if the field is missing or otherwise
-     *         unaccessible. 
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract Date getDate(String field) throws PersistenceException;
-    /**
-     * gets a <code>Array</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Array getArray(String field) throws PersistenceException;
-    /**
-     * Returns a <code>Blob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Blob getBlob(String field) throws PersistenceException;
-    /**
-     * Returns a <code>Clob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Clob getClob(String field) throws PersistenceException;
-    /**
-     * Returns a <code>Ref</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public abstract Ref getRef(String field) throws PersistenceException;
+    public abstract Date getDate(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>URL</code> field value.
      * 
      * @param field the name of the field.
      * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
+     * @throws SQLException if the field could not be get to the specified value.
      */
-    public abstract URL getURL(String field) throws PersistenceException;
+    public abstract URL getURL(String field)
+        throws SQLException;
+    
     /**
      * Returns a <code>Object</code> field value.
      * 
      * @param field the name of the field.
      * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
+     * @throws SQLException if the field could not be get to the specified value.
      */
-    public abstract Object getObject(String field) throws PersistenceException;
+    public abstract Object getObject(String field)
+        throws SQLException;
+    
     /**
-     * Returns <code>true</code> if the field has <code>SQL NULL</code>
-     * value. 
-     *
+     * Returns <code>true</code> if the field has <code>SQL NULL</code> value.
+     * 
      * @param field the name of the field.
      * @return <code>true</code> if null.
-     * @throws PersistenceException if the field is missing or otherwise
-     *         unaccessible. 
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
-    public abstract boolean isNull(String field) throws PersistenceException;
+    public abstract boolean isNull(String field)
+        throws SQLException;
 }

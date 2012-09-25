@@ -6,17 +6,12 @@
     <groupId>org.objectledge</groupId>
     <artifactId>ledge-common</artifactId>
     <relativePath>../ledge-common/pom.xml</relativePath>
-    <version>1.0.13.1</version>
+    <version>1.0.14</version>
   </parent>
   <artifactId>ledge-components</artifactId>
   <packaging>jar</packaging>
   <name>ObjectLedge Components</name>
   <dependencies>
-    <dependency>
-      <groupId>org.objectledge</groupId>
-      <artifactId>ledge-common</artifactId>
-      <type>pom</type>
-    </dependency>
     <dependency>
       <groupId>dna</groupId>
       <artifactId>dna-api</artifactId>
@@ -67,7 +62,7 @@
       <artifactId>commons-codec</artifactId>
     </dependency>
     <dependency>
-      <groupId>hsqldb</groupId>
+      <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
       <optional>true</optional>
     </dependency>
@@ -152,6 +147,16 @@
       <artifactId>connector-api</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+    	<groupId>org.apache.activemq</groupId>
+    	<artifactId>activemq-all</artifactId>
+    	<version>5.6.0</version>
+    </dependency>
   </dependencies>
   <build>
     <resources>
@@ -160,6 +165,7 @@
         <includes>
           <include>**/*.rng</include>
           <include>**/*.munin</include>
+          <include>**/*.txt</include>
         </includes>
       </resource>
     </resources>
@@ -192,10 +198,8 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.6</version>
         <executions>
           <execution>
-            <id>javacc</id>
             <goals>
               <goal>javacc</goal>
             </goals>
@@ -205,7 +209,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.1</version>
         <executions>
           <execution>
             <id>test-jar</id>
@@ -223,7 +226,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2.1</version>
         <executions>
           <execution>
             <phase>package</phase>

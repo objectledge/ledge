@@ -36,3 +36,5 @@ CREATE TABLE ledge_parameters (
    name VARCHAR(255) NOT NULL,
    value VARCHAR(255) NOT NULL
 );
+
+CREATE INDEX ledge_parameters_id_idx ON ledge_parameters(parameters_id);

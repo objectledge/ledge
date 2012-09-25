@@ -1201,4 +1201,24 @@ public class DelegatingCallableStatement
             return callableStatement.unwrap(iface);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> T getObject(int parameterIndex, Class<T> type)
+        throws SQLException
+    {
+        return callableStatement.getObject(parameterIndex, type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> T getObject(String parameterName, Class<T> type)
+        throws SQLException
+    {
+        return callableStatement.getObject(parameterName, type);
+    }
 }

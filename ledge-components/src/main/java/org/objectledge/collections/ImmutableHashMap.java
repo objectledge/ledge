@@ -138,4 +138,10 @@ public class ImmutableHashMap<K, V>
     {
         return delegate.hashCode();
     }
+
+    @Override
+    public String toString()
+    {
+        return delegate.toString();
+    }
 }

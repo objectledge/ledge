@@ -36,7 +36,6 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 
 import org.jcontainer.dna.impl.DefaultConfiguration;
-import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.LedgeTestCase;
 
 /**
@@ -92,7 +91,7 @@ public class DatabaseUtilsTest extends LedgeTestCase
         Statement stmt = conn.createStatement();
         ResultSet rs = null;
         DatabaseUtils.close(rs);
-        rs = stmt.executeQuery("CHECKPOINT");
+        stmt.execute("CHECKPOINT");
         DatabaseUtils.close(rs);
         DatabaseUtils.close(rs);
     }
@@ -105,7 +104,7 @@ public class DatabaseUtilsTest extends LedgeTestCase
     {
         Connection conn = dataSource.getConnection();
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("CHECKPOINT");
+        ResultSet rs = stmt.executeQuery("VALUES (NOW)");
         DatabaseUtils.close(conn, stmt, rs);
     }
 

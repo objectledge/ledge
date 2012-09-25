@@ -27,7 +27,7 @@
 // 
 package org.objectledge.modules.actions.i18n;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.security.Principal;
 
 import javax.servlet.http.Cookie;
@@ -42,6 +42,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.WebConfigurator;
 
 /**
  * Set encoding action.
@@ -53,6 +54,18 @@ import org.objectledge.web.HttpContext;
 public class SetEncoding 
     implements Valve
 {
+
+	private WebConfigurator webConfigurator;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param webConfigurator the web configurator component.
+	 */
+	public SetEncoding(WebConfigurator webConfigurator) {
+		this.webConfigurator = webConfigurator;
+	}
+	
     /**
      * Run the valve.
      * 
@@ -69,22 +82,22 @@ public class SetEncoding
         }
         try
         {
-            "".getBytes(encoding);
+            Charset.forName(encoding);
         }
-        catch(UnsupportedEncodingException e)
+        catch(Exception e)
         {
             throw new ProcessingException("Unsupported encoding "+encoding);
         }
-            
+        
+        HttpContext httpContext = HttpContext.getHttpContext(context);
         String cookieKey = "encoding";
-        AuthenticationContext authenticationContext =
-            AuthenticationContext.getAuthenticationContext(context);
-        Principal principal = (authenticationContext != null) ?
-                authenticationContext.getUserPrincipal() : null;
+        AuthenticationContext authenticationContext = AuthenticationContext
+            .getAuthenticationContext(context);
+        Principal principal = (authenticationContext != null) ? authenticationContext
+            .getUserPrincipal() : null;
         if(principal != null && principal.getName() != null)
         {
-            cookieKey = cookieKey + "." + StringUtils.
-                    cookieNameSafeString(principal.getName());
+            cookieKey = cookieKey + "." + StringUtils.cookieNameSafeString(principal.getName());
         }
         else
         {
@@ -93,12 +106,19 @@ public class SetEncoding
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         cookieKey = cookieKey + "." + i18nContext.getLocale().toString();
         Cookie cookie = new Cookie(cookieKey, encoding);
-        cookie.setMaxAge(3600*24*365);
-        HttpContext httpContext = HttpContext.getHttpContext(context);
-        cookie.setPath(httpContext.getRequest().getContextPath()+
-                       httpContext.getRequest().getServletPath());
+        int maxAge = webConfigurator.getDefaultEncoding().equals(encoding) ? 0 : 3600 * 24 * 365;
+        cookie.setMaxAge(maxAge);
+        cookie.setPath(httpContext.getRequest().getContextPath()
+            + httpContext.getRequest().getServletPath());
         httpContext.getResponse().addCookie(cookie);
-        httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, encoding);
+        if(!webConfigurator.getDefaultEncoding().equals(encoding))
+        {
+            httpContext.setSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY, encoding);
+        }
+        else
+        {
+            httpContext.removeSessionAttribute(I18nWebConstants.ENCODING_SESSION_KEY);
+        }
         httpContext.setEncoding(encoding);
     }
 }

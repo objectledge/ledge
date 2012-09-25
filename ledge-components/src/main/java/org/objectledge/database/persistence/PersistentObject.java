@@ -27,6 +27,8 @@
 // 
 package org.objectledge.database.persistence;
 
+import java.sql.SQLException;
+
 /**
  * Implemented by objects that are made persistent using a relational
  * database.
@@ -58,13 +60,13 @@ public abstract class PersistentObject
      * {@inheritDoc}
      */
     public abstract void getData(OutputRecord record)
-        throws PersistenceException;
+        throws SQLException;
     
     /**
      * {@inheritDoc}
      */
     public abstract void setData(InputRecord record)
-        throws PersistenceException;
+        throws SQLException;
     
     /**
      * {@inheritDoc}

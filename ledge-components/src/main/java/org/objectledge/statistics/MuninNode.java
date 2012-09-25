@@ -96,7 +96,7 @@ public class MuninNode
 
     public void stop()
     {
-
+        System.out.println("TRYING TO STOP MUNIN NODE");
     }
 
     /**

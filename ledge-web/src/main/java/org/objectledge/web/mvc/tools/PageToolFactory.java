@@ -28,6 +28,8 @@
 
 package org.objectledge.web.mvc.tools;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.tools.ContextToolFactory;
@@ -47,16 +49,22 @@ public class PageToolFactory implements ContextToolFactory
     /** The context component. */
     protected Context context;
     
+    /** page tool configuration. */
+    protected PageTool.Configuration pageToolConfiguration;
+   
+    
 	/**
 	 * Component constructor.
 	 * @param linkToolFactory factory for creating
 	 * 		{@link LinkTool}s tools used by {@link PageTool}s.
  	 */
-	public PageToolFactory(LinkToolFactory linkToolFactory, Context context)
-	{
-		this.linkToolFactory = linkToolFactory;
+    public PageToolFactory(Configuration config, LinkToolFactory linkToolFactory, Context context)
+        throws ConfigurationException
+    {
+        this.linkToolFactory = linkToolFactory;
         this.context = context;
-	}
+        this.pageToolConfiguration = new PageTool.Configuration(config);
+    }
 	
     /**
 	 * {@inheritDoc}
@@ -65,7 +73,7 @@ public class PageToolFactory implements ContextToolFactory
         throws ProcessingException
 	{
 		return new PageTool((LinkTool) linkToolFactory.getTool(), 
-            HttpContext.getHttpContext(context));
+            HttpContext.getHttpContext(context), pageToolConfiguration);
 	}
 	
 	/**
@@ -83,5 +91,5 @@ public class PageToolFactory implements ContextToolFactory
 	public String getKey()
 	{
 		return "pageTool";
-	}    
+    }    
 }

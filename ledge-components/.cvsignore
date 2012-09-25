@@ -1,8 +1,0 @@
-bin
-target
-*.ajsym
-*.lst
-*.log
-.clover
-.settings
-build.properties

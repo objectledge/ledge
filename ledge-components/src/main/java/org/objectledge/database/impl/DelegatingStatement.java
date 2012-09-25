@@ -474,4 +474,24 @@ public class DelegatingStatement
             return statement.unwrap(iface);
         }        
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void closeOnCompletion()
+        throws SQLException
+    {
+        statement.closeOnCompletion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCloseOnCompletion()
+        throws SQLException
+    {
+        return statement.isCloseOnCompletion();
+    }
 }

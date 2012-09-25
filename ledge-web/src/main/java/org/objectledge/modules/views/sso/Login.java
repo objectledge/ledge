@@ -62,47 +62,58 @@ public class Login
         log.debug("request from " + client + " sessionId " + httpRequest.getSession().getId());
         if(httpRequest.isSecure())
         {
-            Principal principal = null;
-            try
+            if(login != null && password != null)
             {
-                principal = userManager.getUserByLogin(login);
-                if(userManager.checkUserPassword(principal, password))
+                Principal principal = null;
+                try
                 {
-                    ticket = singleSignOnService.generateTicket(principal, domain, client);
-                    if(ticket != null)
+                    principal = userManager.getUserByLogin(login);
+                    if(userManager.checkUserPassword(principal, password))
                     {
-                        log.debug("ACCEPTED " + client + " login ");
-                        // we don't call SingleSingOnService.logIn() here, since the login has been
-                        // performed to the realm master which does not belong the realm. Login will
-                        // be recored when the one time ticket will be validated by
-                        // SingleSingOnValve in the actual domain the user is trying to access.
+                        ticket = singleSignOnService.generateTicket(principal, domain, client);
+                        if(ticket != null)
+                        {
+                            log.debug("ACCEPTED " + client + " login ");
+                            // we don't call SingleSingOnService.logIn() here, since the login has
+                            // been performed to the realm master which does not belong the realm.
+                            // Login will be recored when the one time ticket will be validated by
+                            // SingleSingOnValve in the actual domain the user is trying to access.
 
-                        // make the session between client and realm master an authenticated one,
-                        // so that subsequent ticket requests from the same clients can succeed
-                        httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY,
-                            principal);
+                            // make the session between client and realm master an authenticated
+                            // one, so that subsequent ticket requests from the same clients can
+                            // succeed
+                            httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY,
+                                principal);
+                        }
+                        else
+                        {
+                            // domain is not a realm master, warning was logged by
+                            // SingleSignOnService
+                            status = "invalid_request";
+                        }
                     }
                     else
                     {
-                        // domain is not a realm master, warning was logged by SingleSignOnService
-                        status = "invalid_request";
+                        log.warn("DECLINED " + client + " login " + login + " invalid password");
+                        status = "invalid_credentials";
                     }
                 }
-                else
+                catch(UserUnknownException e)
                 {
-                    log.warn("DECLINED " + client + " login " + login + " invalid password");
+                    log.warn("DECLINED " + client + " unknown user login " + login);
                     status = "invalid_credentials";
                 }
+                catch(AuthenticationException e)
+                {
+                    log.error("DECLINED " + client + " login " + login
+                        + " AuthenticationException ", e);
+                    status = "internal_error";
+                }
             }
-            catch(UserUnknownException e)
+            else
             {
-                log.warn("DECLINED " + client + " unknown user login " + login);
-                status = "invalid_credentials";
-            }
-            catch(AuthenticationException e)
-            {
-                log.error("DECLINED " + client + " login " + login + " AuthenticationException ", e);
-                status = "internal_error";
+                log.warn("DECLINED " + client + " missing parameters");
+                status = "invalid_request";
             }
         }
         else
@@ -110,16 +121,15 @@ public class Login
             log.warn("DECLINED " + client + " login " + login + " not using secure channel");
             status = "invalid_request";
         }
-        
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("status", status);
         jsonGenerator.writeStringField("ticket", ticket);
         jsonGenerator.writeEndObject();
     }
-    
+
     @Override
     protected String getCallbackParameterName()
-    {        
+    {
         return "callback";
     }
 

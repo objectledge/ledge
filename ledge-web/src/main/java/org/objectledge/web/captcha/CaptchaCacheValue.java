@@ -1,11 +1,5 @@
 package org.objectledge.web.captcha;
 
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
-
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.web.HttpContext;
 
 /**
  * A service that provides CAPTCHA functionality for web applications.
@@ -24,7 +18,7 @@ public class CaptchaCacheValue
     {
         this.value = value;
         this.counter = 0;
-        this.timestamp = (new Date()).getTime();
+        this.timestamp = System.currentTimeMillis();
     }
 
     public boolean getValue()

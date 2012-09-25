@@ -28,13 +28,19 @@
 
 package org.objectledge.web.mvc.tools;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
+import org.jcontainer.dna.Configurable;
+import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.web.HttpContext;
 
 /**
@@ -98,16 +104,23 @@ public class PageTool
     /** The http context. */
     protected HttpContext httpContext;
 
+    /** configuration. */
+    protected PageTool.Configuration config;
+    
+    /** Cache interval. Negative value causes default value set in the config file to be used. */
+    protected int cacheInterval = -1;
+
 	/** 
 	 * Component constructor.
 	 * @param parentLinkTool the link tool used to generate links to page content resources.
 	 * @param httpContext the http context
 	 */
-	public PageTool(LinkTool parentLinkTool, HttpContext httpContext)
+	public PageTool(LinkTool parentLinkTool, HttpContext httpContext, PageTool.Configuration config)
 	{
 		this.parentLinkTool = parentLinkTool;
         this.linkTool = parentLinkTool.sessionless();
         this.httpContext = httpContext;
+        this.config = config;
     }
 
 	/** 
@@ -742,5 +755,116 @@ public class PageTool
     public void setStatus(int status)
     {
         httpContext.getResponse().setStatus(status);
+    }
+    
+    
+    /**
+     * Set cache interval time.
+     * 
+     * @param value the interval time in seconds.
+     */
+    public void setCacheInterval(int value)
+    {
+        cacheInterval = value;
+    }
+    
+    /**
+     * Get cache interval time in seconds.
+     */
+    public int getCacheInterval()
+    {
+        if(cacheInterval < 0)
+        {            
+            cacheInterval = config.getDefaultCacheInterval();
+        }
+        return cacheInterval;
+    }
+    
+    /**
+     * Gets HTTP expires time.
+     */
+    public String getHttpExpires()
+    {
+        Date httpExpiresTime = new Date(System.currentTimeMillis() + getCacheInterval() * 1000);
+        return config.getHttpDateFormat().format(httpExpiresTime);
+    }
+    
+    /**
+     * Gets max age time.
+     */
+    public long getMaxAge()
+    {
+        return getCacheInterval();
+    }
+    
+    /**
+     *  Check if cache is disabled.
+     */    
+    public boolean isCacheEnabled()
+    {
+        return getCacheInterval() > 0;
+    }
+    
+    /**
+     * Represents the shared configuration of the PageTools.
+     *
+     * <p>Created on Jan 14, 2004</p>
+     */
+    public static class Configuration
+        implements Configurable
+    {        
+        /** HTTP date format string, according to RFC 1123. */
+        public static final String RFC_1123_DATE_FORMAT = "EEE, dd-MMM-yyyy HH:mm:ss zzz";
+        
+        /** cache interval in seconds */
+        private int defaultCacheInterval;
+
+        /**
+         * Initializes the configuration object.
+         * 
+         * @param config DNA configuration
+         * @throws ConfigurationException if the configuration is invalid.
+         */
+        public Configuration(org.jcontainer.dna.Configuration config)
+            throws ConfigurationException
+        {
+            configure(config);
+        }
+
+        /**
+         * Initializes the internal state from DNA configuration object.
+         * 
+         * <p>This method may be used to reconfigure page tool at runtime.</p>
+         * 
+         * @param config DNA configuration
+         * @throws ConfigurationException if the configuration is invalid.
+         */
+        public void configure(org.jcontainer.dna.Configuration config)
+            throws ConfigurationException
+        {
+            defaultCacheInterval = config.getChild("default_cache_interval").getValueAsInteger();
+        }
+
+        /**
+         * Return default cache interval in seconds.
+         * 
+         * @return default cache interval in seconds.
+         */
+        public int getDefaultCacheInterval()
+        {
+            return defaultCacheInterval;
+        }
+
+        /**
+         * Returns a date formatter for RFC 1123 HTTP date.
+         * 
+         * @return a DateFormatter
+         */
+        public DateFormat getHttpDateFormat()
+        {
+            DateFormat df = new SimpleDateFormat(RFC_1123_DATE_FORMAT);
+            df.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return df;
+        }
     }
 }

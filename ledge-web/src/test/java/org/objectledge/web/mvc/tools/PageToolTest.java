@@ -55,6 +55,8 @@ import org.objectledge.xml.XMLValidator;
 public class PageToolTest extends LedgeTestCase
 {
 	private LinkToolFactory linkToolFactory;
+	private Configuration configuration;
+	private PageTool.Configuration pageToolConfiguration;
 
 	private Context context;
     private HttpContext httpContext = null;
@@ -63,7 +65,7 @@ public class PageToolTest extends LedgeTestCase
     private HttpServletRequest httpServletRequest;
     private Mock mockHttpServletResponse;
     private HttpServletResponse httpServletResponse;
-
+        
 	public void setUp()
 		throws Exception
 	{
@@ -76,6 +78,8 @@ public class PageToolTest extends LedgeTestCase
 		WebConfigurator webConfigurator = new WebConfigurator(config);
 		config = configFactory.getConfig(LinkToolFactory.class, LinkToolFactoryImpl.class);
 		linkToolFactory = new LinkToolFactoryImpl(config, context, webConfigurator);
+		configuration = configFactory.getConfig(PageToolFactory.class, PageToolFactory.class);
+		pageToolConfiguration = new PageTool.Configuration(configuration);
 
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
@@ -105,8 +109,9 @@ public class PageToolTest extends LedgeTestCase
 
 	public void testFactory()
         throws Exception
-	{
-		PageToolFactory pageToolFactory = new PageToolFactory(linkToolFactory, context);
+	{	    	    
+        PageToolFactory pageToolFactory = new PageToolFactory(configuration, linkToolFactory,
+            context);
 		PageTool pageTool1 = (PageTool) pageToolFactory.getTool();
 		PageTool pageTool2 = (PageTool) pageToolFactory.getTool();
 		assertNotNull(pageTool1);
@@ -121,7 +126,7 @@ public class PageToolTest extends LedgeTestCase
         throws Exception    
     {
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-    	PageTool pageTool = new PageTool(linkTool, httpContext);
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
     	pageTool.setTitle("test title");
     	assertEquals(pageTool.getTitle(), "test title");
     }
@@ -129,149 +134,149 @@ public class PageToolTest extends LedgeTestCase
     public void testAppendTitleSuffix()
         throws Exception
     {
-		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
-		pageTool.setTitle("test title");
-		pageTool.appendTitleSuffix(" suffix");
-		assertEquals(pageTool.getTitle(), "test title suffix");
+        LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
+        pageTool.setTitle("test title");
+        pageTool.appendTitleSuffix(" suffix");
+        assertEquals(pageTool.getTitle(), "test title suffix");
     }
 
     public void testInsertTitlePrefix()
         throws Exception
     {
-		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
-		pageTool.setTitle("test title");
-		pageTool.insertTitlePrefix("prefix ");
-		assertEquals(pageTool.getTitle(), "prefix test title");
+        LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
+        pageTool.setTitle("test title");
+        pageTool.insertTitlePrefix("prefix ");
+        assertEquals(pageTool.getTitle(), "prefix test title");
     }
 
     public void testGetTitle()
         throws Exception
     {
-		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
-		pageTool.setTitle("test title");
-		pageTool.insertTitlePrefix("prefix ");
-		pageTool.appendTitleSuffix(" suffix");
-		assertEquals(pageTool.getTitle(), "prefix test title suffix");
+        LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
+        pageTool.setTitle("test title");
+        pageTool.insertTitlePrefix("prefix ");
+        pageTool.appendTitleSuffix(" suffix");
+        assertEquals(pageTool.getTitle(), "prefix test title suffix");
     }
 
 	public void testAddStyleLink()
         throws Exception
 	{
-		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
-		pageTool.addStyleLink("style/style1.css",1);
-		pageTool.addStyleLink("style/style2.css",2);
-		pageTool.addStyleLink("style/style1.css");
-		List<PageTool.StyleLink> links = pageTool.getStyleLinks();
-		assertEquals(links.size(), 2);
-		Iterator<PageTool.StyleLink> iter = links.iterator();
-		PageTool.StyleLink link1 = iter.next(); 
-		PageTool.StyleLink link2 = iter.next(); 
-		assertEquals(link1.getPriority(), 1);
-		assertEquals(link2.getPriority(), 2);
-		assertEquals(link1.getHref(), "/test/content/style/style1.css");
-		assertEquals(link2.getHref(), "/test/content/style/style2.css");
+	    LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
+	    pageTool.addStyleLink("style/style1.css",1);
+	    pageTool.addStyleLink("style/style2.css",2);
+	    pageTool.addStyleLink("style/style1.css");
+	    List<PageTool.StyleLink> links = pageTool.getStyleLinks();
+	    assertEquals(links.size(), 2);
+	    Iterator<PageTool.StyleLink> iter = links.iterator();
+	    PageTool.StyleLink link1 = iter.next(); 
+	    PageTool.StyleLink link2 = iter.next(); 
+	    assertEquals(link1.getPriority(), 1);
+	    assertEquals(link2.getPriority(), 2);
+	    assertEquals(link1.getHref(), "/test/content/style/style1.css");
+	    assertEquals(link2.getHref(), "/test/content/style/style2.css");
 	}
 
 	public void testAddScriptLink()
         throws Exception
 	{
-		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
-		pageTool.addScriptLink("js/script1.js", "ISO-8859-1");
-		pageTool.addScriptLink("js/script2.js");
-		pageTool.addScriptLink("js/script1.js");
-		List<PageTool.ScriptLink> links = pageTool.getScriptLinks();
-		assertEquals(links.size(), 2);
-		Iterator<PageTool.ScriptLink> iter = links.iterator();
-		PageTool.ScriptLink link1 = iter.next(); 
-		PageTool.ScriptLink link2 = iter.next(); 
-		assertEquals(link1.getCharset(), "ISO-8859-1");
-		assertEquals(link2.getCharset(), "UTF-8");
-		assertEquals(link1.getSrc(), "/test/content/js/script1.js");
-		assertEquals(link2.getSrc(), "/test/content/js/script2.js");
+	    LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
+	    pageTool.addScriptLink("js/script1.js", "ISO-8859-1");
+	    pageTool.addScriptLink("js/script2.js");
+	    pageTool.addScriptLink("js/script1.js");
+	    List<PageTool.ScriptLink> links = pageTool.getScriptLinks();
+	    assertEquals(links.size(), 2);
+	    Iterator<PageTool.ScriptLink> iter = links.iterator();
+	    PageTool.ScriptLink link1 = iter.next(); 
+	    PageTool.ScriptLink link2 = iter.next(); 
+	    assertEquals(link1.getCharset(), "ISO-8859-1");
+	    assertEquals(link2.getCharset(), "UTF-8");
+	    assertEquals(link1.getSrc(), "/test/content/js/script1.js");
+	    assertEquals(link2.getSrc(), "/test/content/js/script2.js");
 	}
 
 	public void testAddNameMeta()
         throws Exception
 	{
-		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
-		pageTool.addNameMeta("author", "Damian Gajda");
-		pageTool.addNameMeta("author", "Dodo");
-		pageTool.addNameMeta("contributor", "ZwieRzem");
-		List<PageTool.Meta> metas = pageTool.getNameMetas();
-		assertEquals(metas.size(), 3);
-		Iterator<PageTool.Meta> iter = metas.iterator();
-		PageTool.Meta meta1 = iter.next(); 
-		PageTool.Meta meta2 = iter.next(); 
-		PageTool.Meta meta3 = iter.next(); 
-		assertEquals(meta1.getName(), "author");
-		assertEquals(meta2.getName(), "author");
-		assertEquals(meta3.getName(), "contributor");
-		assertEquals(meta1.getContent(), "Damian Gajda");
-		assertEquals(meta2.getContent(), "Dodo");
-		assertEquals(meta3.getContent(), "ZwieRzem");
-		assertNull(meta1.getHttpEquiv());
-		assertNull(meta2.getHttpEquiv());
-		assertNull(meta3.getHttpEquiv());
+	    LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
+	    pageTool.addNameMeta("author", "Damian Gajda");
+	    pageTool.addNameMeta("author", "Dodo");
+	    pageTool.addNameMeta("contributor", "ZwieRzem");
+	    List<PageTool.Meta> metas = pageTool.getNameMetas();
+	    assertEquals(metas.size(), 3);
+	    Iterator<PageTool.Meta> iter = metas.iterator();
+	    PageTool.Meta meta1 = iter.next(); 
+	    PageTool.Meta meta2 = iter.next(); 
+	    PageTool.Meta meta3 = iter.next(); 
+	    assertEquals(meta1.getName(), "author");
+	    assertEquals(meta2.getName(), "author");
+	    assertEquals(meta3.getName(), "contributor");
+	    assertEquals(meta1.getContent(), "Damian Gajda");
+	    assertEquals(meta2.getContent(), "Dodo");
+	    assertEquals(meta3.getContent(), "ZwieRzem");
+	    assertNull(meta1.getHttpEquiv());
+	    assertNull(meta2.getHttpEquiv());
+	    assertNull(meta3.getHttpEquiv());
 	}
 
 	public void testAddHttpEquivMeta()
         throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
 		pageTool.addHttpEquivMeta("Header", "Value1");
-		pageTool.addHttpEquivMeta("Header", "Value2");
-		List<PageTool.Meta> metas = pageTool.getHttpEquivMetas();
-		assertEquals(metas.size(), 2);
-		Iterator<PageTool.Meta> iter = metas.iterator();
-		PageTool.Meta meta1 = iter.next(); 
-		PageTool.Meta meta2 = iter.next(); 
-		assertEquals(meta1.getHttpEquiv(), "Header");
-		assertEquals(meta2.getHttpEquiv(), "Header");
-		assertEquals(meta1.getContent(), "Value1");
-		assertEquals(meta2.getContent(), "Value2");
-		assertNull(meta1.getName());
-		assertNull(meta2.getName());
+	    pageTool.addHttpEquivMeta("Header", "Value2");
+	    List<PageTool.Meta> metas = pageTool.getHttpEquivMetas();
+	    assertEquals(metas.size(), 2);
+	    Iterator<PageTool.Meta> iter = metas.iterator();
+	    PageTool.Meta meta1 = iter.next(); 
+	    PageTool.Meta meta2 = iter.next(); 
+	    assertEquals(meta1.getHttpEquiv(), "Header");
+	    assertEquals(meta2.getHttpEquiv(), "Header");
+	    assertEquals(meta1.getContent(), "Value1");
+	    assertEquals(meta2.getContent(), "Value2");
+	    assertNull(meta1.getName());
+	    assertNull(meta2.getName());
 	}
 
 	public void testGetLinkTool()
         throws Exception
 	{
 		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
 		assertEquals(pageTool.getLinkTool(), linkTool);
 	}
 
 	public void testReset()
         throws Exception
 	{
-		LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
-		PageTool pageTool = new PageTool(linkTool, httpContext);
-		pageTool.setTitle("test title");
-		pageTool.insertTitlePrefix("prefix ");
+	    LinkTool linkTool = (LinkTool)linkToolFactory.getTool();
+        PageTool pageTool = new PageTool(linkTool, httpContext, pageToolConfiguration);
+	    pageTool.setTitle("test title");
+	    pageTool.insertTitlePrefix("prefix ");
 		pageTool.appendTitleSuffix(" suffix");
-		pageTool.addStyleLink("style/style1.css",1);
-		pageTool.addStyleLink("style/style2.css",2);
-		pageTool.addStyleLink("style/style1.css");
-		pageTool.addScriptLink("js/script1.js", "ISO-8859-1");
-		pageTool.addScriptLink("js/script2.js");
-		pageTool.addScriptLink("js/script1.js");
-		pageTool.addNameMeta("author", "Damian Gajda");
-		pageTool.addNameMeta("contributor", "ZwieRzem");
-		pageTool.addHttpEquivMeta("Header", "Value1");
-		pageTool.addHttpEquivMeta("Header", "Value2");
+	    pageTool.addStyleLink("style/style1.css",1);
+	    pageTool.addStyleLink("style/style2.css",2);
+	    pageTool.addStyleLink("style/style1.css");
+	    pageTool.addScriptLink("js/script1.js", "ISO-8859-1");
+	    pageTool.addScriptLink("js/script2.js");
+	    pageTool.addScriptLink("js/script1.js");
+	    pageTool.addNameMeta("author", "Damian Gajda");
+	    pageTool.addNameMeta("contributor", "ZwieRzem");
+	    pageTool.addHttpEquivMeta("Header", "Value1");
+	    pageTool.addHttpEquivMeta("Header", "Value2");
 		
-		pageTool.reset();
+	    pageTool.reset();
 
-		assertEquals(pageTool.getTitle(), "");
-		List<PageTool.StyleLink> stylLinks = pageTool.getStyleLinks();
-		assertEquals(stylLinks.size(), 0);
+	    assertEquals(pageTool.getTitle(), "");
+	    List<PageTool.StyleLink> stylLinks = pageTool.getStyleLinks();
+	    assertEquals(stylLinks.size(), 0);
 		List<PageTool.ScriptLink> scriptLinks = pageTool.getScriptLinks();
 		assertEquals(scriptLinks.size(), 0);
 		List<PageTool.Meta> metas = pageTool.getNameMetas();
