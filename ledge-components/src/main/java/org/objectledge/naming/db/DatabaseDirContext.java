@@ -55,7 +55,6 @@ import javax.naming.directory.SearchResult;
 
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.database.persistence.PersistenceException;
 
 /**
  * Database based implementation of java.naming.directory.DirContext interface.
@@ -207,7 +206,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                             persistence.save(pAttribute);
                         }    
                     }   
-                    catch(PersistenceException e)
+                catch(SQLException e)
                     {
                         failures.add(mods[i]);
                     }
@@ -231,7 +230,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                             persistence.save(pAttribute);
                         }    
                     }   
-                    catch(PersistenceException e)
+                catch(SQLException e)
                     {
                         failures.add(mods[i]);
                     }
@@ -266,7 +265,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
                             persistence.delete(sb.toString(), PersistentAttribute.FACTORY);
                         }
                     }    
-                    catch(PersistenceException e)
+                catch(SQLException e)
                     {
                         failures.add(mods[i]);
                     }
@@ -555,7 +554,8 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         Attributes attrs = new BasicAttributes();
         try
         {
-            List<PersistentAttribute> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
+            List<PersistentAttribute> list = persistence.load(PersistentAttribute.FACTORY,
+                "context_id = ?", contextId);
             for(int i = 0; i < list.size(); i++)
             {
                 PersistentAttribute attribute = list.get(i);
@@ -573,7 +573,7 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
             }
             return attrs;
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new DatabaseNamingException("failed to retrieve context from database",e);
         }
@@ -590,14 +590,15 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
     {
         try
         {
-            List<PersistentAttribute> list = persistence.load("context_id = "+contextId, PersistentAttribute.FACTORY);
+            List<PersistentAttribute> list = persistence.load(PersistentAttribute.FACTORY,
+                "context_id = ?", contextId);
             for(int i = 0; i < list.size(); i++)
             {
                 PersistentAttribute attribute = list.get(i);
                 persistence.delete(attribute);
             }
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new DatabaseNamingException("failed to retrieve context from database",e);
         }

@@ -28,6 +28,7 @@
 
 package org.objectledge.naming.db;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -44,7 +45,6 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.database.persistence.PersistenceException;
 
 /**
  * Database implementation of java.naming.Context interface.
@@ -85,9 +85,9 @@ public class DatabaseContext implements Context
         List<PersistentContext> list = null;
         try
         {
-            list = persistence.load("dn = '"+dn+"'", PersistentContext.FACTORY);
+            list = persistence.load(PersistentContext.FACTORY, "dn = ?", dn);
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new RuntimeException("failed to load '"+dn+"' context from database", e);
         }
@@ -227,7 +227,7 @@ public class DatabaseContext implements Context
         {
             persistence.save(delegate);
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new DatabaseNamingException("failed to rename the context name",e);        
         }
@@ -250,7 +250,8 @@ public class DatabaseContext implements Context
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List<PersistentContext> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<PersistentContext> list = persistence.load(PersistentContext.FACTORY,
+                "parent = ?", parentId);
             List<NameClassPair> target = new ArrayList<NameClassPair>();
             for(int i = 0; i < list.size(); i++)
             {
@@ -259,7 +260,7 @@ public class DatabaseContext implements Context
             }
             return new DefaultEnumeration<NameClassPair>(target);            
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new DatabaseNamingException("failed to retrieve child contexts from database",e);
         }        
@@ -302,14 +303,15 @@ public class DatabaseContext implements Context
         long parentId = ctx.getDelegate().getContextId();
         try
         {
-            List<PersistentContext> list = persistence.load("parent = "+parentId, PersistentContext.FACTORY);
+            List<PersistentContext> list = persistence.load(PersistentContext.FACTORY,
+                "parent = ?", parentId);
             if(list.size()>0)
             {
                 throw new NamingException("failed to destroy not empty subcontext");
             }
             persistence.delete(ctx.getDelegate());
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new DatabaseNamingException("failed to delete '"+ctx.getDelegate().getDN()+
                                                "' context from database",e);
@@ -468,9 +470,9 @@ public class DatabaseContext implements Context
     {
         try
         {
-            return persistence.load("dn = '"+dn+"'", PersistentContext.FACTORY);
+            return persistence.load(PersistentContext.FACTORY, "dn = ?", dn);
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new DatabaseNamingException("failed to retrieve context from database",e);
         }        
@@ -511,7 +513,7 @@ public class DatabaseContext implements Context
         {
             persistence.save(subContext);
         }
-        catch(PersistenceException e)
+        catch(SQLException e)
         {
             throw new DatabaseNamingException("failed to add the subcontext with name = '"+
                                                     dn+"'",e);        

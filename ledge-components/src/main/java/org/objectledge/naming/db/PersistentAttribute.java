@@ -28,9 +28,10 @@
 
 package org.objectledge.naming.db;
 
+import java.sql.SQLException;
+
 import org.objectledge.database.persistence.InputRecord;
 import org.objectledge.database.persistence.OutputRecord;
-import org.objectledge.database.persistence.PersistenceException;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
 
@@ -113,7 +114,8 @@ public class PersistentAttribute implements Persistent
     /**
      * {@inheritDoc}
      */
-    public void getData(OutputRecord record) throws PersistenceException
+    public void getData(OutputRecord record)
+        throws SQLException
     {
         record.setLong("context_id", contextId);
         record.setString("name", getName());
@@ -123,7 +125,8 @@ public class PersistentAttribute implements Persistent
     /**
      * {@inheritDoc}
      */
-    public void setData(InputRecord record) throws PersistenceException
+    public void setData(InputRecord record)
+        throws SQLException
     {
         contextId = record.getLong("context_id");
         name = record.getString("name");

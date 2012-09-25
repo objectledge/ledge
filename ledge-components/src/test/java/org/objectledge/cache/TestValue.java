@@ -28,9 +28,10 @@
 
 package org.objectledge.cache;
 
+import java.sql.SQLException;
+
 import org.objectledge.database.persistence.InputRecord;
 import org.objectledge.database.persistence.OutputRecord;
-import org.objectledge.database.persistence.PersistenceException;
 import org.objectledge.database.persistence.Persistent;
 
 /**
@@ -80,13 +81,15 @@ public class TestValue implements Persistent
         return saved;
     }
 
-    public void getData(OutputRecord out) throws PersistenceException
+    public void getData(OutputRecord out)
+        throws SQLException
     {
         out.setString("name", name);
         out.setInteger("quantity", quantity);
     }
 
-    public void setData(InputRecord in) throws PersistenceException
+    public void setData(InputRecord in)
+        throws SQLException
     {
         name = in.getString("name");
         quantity = in.getInteger("quantity");

@@ -29,7 +29,7 @@ package org.objectledge.database;
 
 import javax.sql.DataSource;
 
-import org.hsqldb.jdbc.jdbcDataSource;
+import org.hsqldb.jdbc.JDBCDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.database.impl.DelegatingDataSource;
@@ -54,14 +54,23 @@ public class HsqldbDataSource extends DelegatingDataSource
         super(getDataSource(config));
     }
 
-    private static DataSource getDataSource(Configuration config)
-        throws ConfigurationException
+    /**
+     * Constructs a DataSource instance.
+     * 
+     * @param url a JDBC url
+     * @param user user name
+     * @param password password
+     * @throws ConfigurationException if the configuration is invalid.
+     */
+    public HsqldbDataSource(String url, String user, String password)
     {
-        jdbcDataSource dataSource;
-        String url = config.getChild("url").getValue();
-        String user = config.getChild("user").getValue(null);
-        String password = config.getChild("password").getValue(null);
-        dataSource = new jdbcDataSource();
+        super(getDataSource(url, user, password));
+    }
+
+    public static DataSource getDataSource(String url, String user, String password)
+    {
+        JDBCDataSource dataSource;
+        dataSource = new JDBCDataSource();
         dataSource.setDatabase(url);
         dataSource.setUser(user);
         if(password != null)
@@ -69,5 +78,14 @@ public class HsqldbDataSource extends DelegatingDataSource
             dataSource.setPassword(password);
         }
         return dataSource;
+    }
+
+    private static DataSource getDataSource(Configuration config)
+        throws ConfigurationException
+    {
+        String url = config.getChild("url").getValue();
+        String user = config.getChild("user").getValue(null);
+        String password = config.getChild("password").getValue(null);
+        return getDataSource(url, user, password);
     }
 }

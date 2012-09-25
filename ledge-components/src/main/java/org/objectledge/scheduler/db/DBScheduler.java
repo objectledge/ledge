@@ -28,6 +28,7 @@
 
 package org.objectledge.scheduler.db;
 
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,7 +36,6 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.database.persistence.Persistence;
-import org.objectledge.database.persistence.PersistenceException;
 import org.objectledge.database.persistence.Persistent;
 import org.objectledge.database.persistence.PersistentFactory;
 import org.objectledge.scheduler.AbstractJobDescriptor;
@@ -120,7 +120,7 @@ public class DBScheduler extends AbstractScheduler
         {
             persistence.save(job);
         }
-        catch (PersistenceException e)
+        catch(SQLException e)
         {
             throw new JobModificationException("failed to save new job", e);
         }
@@ -142,7 +142,7 @@ public class DBScheduler extends AbstractScheduler
         {
             persistence.delete((Persistent)job);
         }
-        catch (PersistenceException e)
+        catch(SQLException e)
         {
             throw new JobModificationException("failed to delete job", e);
         }
@@ -163,7 +163,7 @@ public class DBScheduler extends AbstractScheduler
     {
         try
         {
-            List<DBJobDescriptor> jobList = persistence.load(null, this);
+            List<DBJobDescriptor> jobList = persistence.load(this);
             Iterator<DBJobDescriptor> i = jobList.iterator();
             while (i.hasNext())
             {
@@ -171,7 +171,7 @@ public class DBScheduler extends AbstractScheduler
                 jobs.put(job.getName(), job);
             }
         }
-        catch (PersistenceException e)
+        catch(SQLException e)
         {
             ///CLOVER:OFF
             throw new ComponentInitializationError("Failed to load jobs ", e);

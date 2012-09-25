@@ -29,6 +29,7 @@
 package org.objectledge.database.persistence;
 
 import java.io.Reader;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -84,32 +85,32 @@ public class PersistenceTest extends TestCase
      */
     public void testLoadlongPersistentFactory() throws Exception
     {
-        TestObject object = persistence.load(1, testFactory);
+        TestObject object = persistence.load(testFactory, 1);
         assertNull(object);
-        object = persistence.load(0, testFactory);
+        object = persistence.load(testFactory, 0);
         assertNull(object);
         List<TestObject> list;
-        list = persistence.load(null, testFactory);
+        list = persistence.load(testFactory);
         assertEquals(list.size(), 0);
         object = new TestObject("foo", new Date());
         persistence.save(object);
-        object = persistence.load(object.getId(), testFactory);
+        object = persistence.load(testFactory, object.getId());
         assertNotNull(object);
-        list = persistence.load(null, testFactory);
+        list = persistence.load(testFactory);
         assertEquals(list.size(), 1);
-        list = persistence.load("id = " + object.getId(), testFactory);
+        list = persistence.load(testFactory, "id = ?", object.getId());
         assertEquals(list.size(), 1);
-        list = persistence.load("id = -1", testFactory);
+        list = persistence.load(testFactory, "id = ?", -1);
         assertEquals(list.size(), 0);
-        list = persistence.load("value = 'bar'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "bar");
         assertEquals(list.size(), 0);
-        list = persistence.load("value = 'foo'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "foo");
         assertEquals(list.size(), 1);
         object.setValue("bar");
         persistence.save(object);
-        list = persistence.load("value = 'foo'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "foo");
         assertEquals(list.size(), 0);
-        list = persistence.load("value = 'bar'", testFactory);
+        list = persistence.load(testFactory, "value = ?", "bar");
         assertEquals(list.size(), 1);
         object.setValue("foo");
         assertEquals(object.getValue(), "foo");
@@ -132,7 +133,7 @@ public class PersistenceTest extends TestCase
             persistence.revert(object2);
             fail("should throw the exception");
         }
-        catch (PersistenceException e)
+        catch(SQLException e)
         {
             //ok!            
         }
@@ -144,7 +145,7 @@ public class PersistenceTest extends TestCase
         
         assertEquals(list.size(),1);
         persistence.delete(object);
-        list = persistence.load(null, testFactory);
+        list = persistence.load(testFactory);
         assertEquals(list.size(),0);
         
         assertEquals(persistence.exists("test_object",null),false);
@@ -191,7 +192,7 @@ public class PersistenceTest extends TestCase
     {
         DefaultConfiguration conf = new DefaultConfiguration("config", "", "/");
         DefaultConfiguration url = new DefaultConfiguration("url", "", "/config");
-        url.setValue("jdbc:hsqldb:.");
+        url.setValue("jdbc:hsqldb:target/testdb");
         conf.addChild(url);
         DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
         user.setValue("sa");
@@ -207,6 +208,11 @@ public class PersistenceTest extends TestCase
         if(!DatabaseUtils.hasTable(ds, "test_object"))
         {
             reader = fs.getReader("sql/database/persistence/TestObject.sql", "UTF-8");
+            DatabaseUtils.runScript(ds, reader);
+        }
+        else
+        {
+            reader = fs.getReader("sql/database/persistence/TruncateTestObject.sql", "UTF-8");
             DatabaseUtils.runScript(ds, reader);
         }
         return ds;

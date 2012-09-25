@@ -29,354 +29,316 @@
 package org.objectledge.database.persistence;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Ref;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.objectledge.database.DatabaseUtils;
 
 /**
- * An implementation of {@link DefaultInputRecord} that wraps a
+ * An implementation of {@link DefaultInputRecord} that reads data from a
  * <code>java.sql.ResultSet</code>.
  */
-public class DefaultInputRecord implements InputRecord
+public class DefaultInputRecord
+    implements InputRecord
 {
     // Member objects ////////////////////////////////////////////////////////
 
-    /** The wrapped result set. */
-    private ResultSet rs;
+    private final Map<String, Object> data;
+
+    /** flyweight marker for SQL NULL values */
+    private static final Object NULL = new Object();
+
+    private static final Set<String> BOOLEAN_TRUE_LITERALS = new HashSet<String>(Arrays.asList(
+        "true", "t", "y"));
 
     // Initialization ////////////////////////////////////////////////////////
 
     /**
-     * Constructs an <code>InputRecordImpl</code>.
-     *
+     * Constructs a <code>DefaultInputRecord</code> instance.
+     * <p>
+     * {@code ResultSet} must be open and in a valid position to read data.
+     * </p>
+     * <p>
+     * The constructor will not move the {@code ResultSet} position, close it or otherwise modify
+     * it. This object will not store a reference to the result set.
+     * </p>
+     * 
      * @param rs the <code>ResultSet</code>.
+     * @throws SQLException
      */
     public DefaultInputRecord(ResultSet rs)
+        throws SQLException
     {
-        this.rs = rs;
+        ResultSetMetaData md = rs.getMetaData();
+        data = new HashMap<String, Object>(md.getColumnCount());
+        for(int i = 1; i <= md.getColumnCount(); i++)
+        {
+            final Object value = rs.getObject(i);
+            final String name = md.getColumnName(i).toUpperCase();
+            if(rs.wasNull())
+            {
+                data.put(name, NULL);
+            }
+            else
+            {
+                data.put(name, value);
+            }
+        }
+    }
+
+    /**
+     * @param field
+     * @return
+     * @throws SQLException
+     */
+    private Object getNotNull(String field)
+        throws SQLException
+    {
+        Object value = data.get(field.toUpperCase());
+        if(value == null)
+        {
+            throw new SQLException(field + " not found");
+        }
+        if(value == NULL)
+        {
+            throw new SQLException(field + " is NULL");
+        }
+        return value;
     }
 
     // DefaultInputRecord interface /////////////////////////////////////////////////
 
     /**
      * Returns a <code>boolean</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as boolean.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public boolean getBoolean(String field)
-        throws PersistenceException
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Boolean)
         {
-            return rs.getBoolean(field);
+            return ((Boolean)value).booleanValue();
         }
-        catch(SQLException e)
+        if(value instanceof Number)
         {
-            throw new PersistenceException("Failed to read field "+field, e);
+            return ((Number)value).intValue() != 0;
         }
-    }        
+        if(value instanceof String)
+        {
+            return BOOLEAN_TRUE_LITERALS.contains(((String)value).toLowerCase());
+        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
+    }
 
     /**
      * Returns a <code>byte</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as byte.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public byte getByte(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Number)
         {
-            return rs.getByte(field);
+            return ((Number)value).byteValue();
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>short</code> field value.
-     *
+     * 
      * @param field the name of the field.
-     * @return the field value as short.     
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @return the field value as short.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public short getShort(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Number)
         {
-            return rs.getShort(field);
+            return ((Number)value).shortValue();
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns an <code>int</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as integer.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public int getInteger(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Number)
         {
-            return rs.getInt(field);
+            return ((Number)value).intValue();
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>long</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as long.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public long getLong(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Number)
         {
-            return rs.getLong(field);
+            return ((Number)value).longValue();
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>BigDecimal</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as big decimal.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public BigDecimal getBigDecimal(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof BigDecimal)
         {
-            return rs.getBigDecimal(field);
+            return (BigDecimal)value;
         }
-        catch(SQLException e)
+        if(value instanceof Integer || value instanceof Long)
         {
-            throw new PersistenceException("Failed to read field "+field, e);
+            return BigDecimal.valueOf(((Number)value).longValue());
         }
+        if(value instanceof Float || value instanceof Double)
+        {
+            return BigDecimal.valueOf(((Number)value).doubleValue());
+        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>float</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as float.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public float getFloat(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Number)
         {
-            return rs.getFloat(field);
+            return ((Number)value).floatValue();
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>double</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as double.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public double getDouble(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Number)
         {
-            return rs.getDouble(field);
+            return ((Number)value).doubleValue();
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>String</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as string.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public String getString(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof String)
         {
-            return DatabaseUtils.unescapeSqlString(rs.getString(field));
+            return DatabaseUtils.unescapeSqlString((String)value);
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>byte</code> array field value.
-     *
-     * <p>String value read from the database will be BASE64 decoded to obtain
-     * byte array.</p>
-     *
+     * <p>
+     * String value read from the database will be BASE64 decoded to obtain byte array.
+     * </p>
+     * 
      * @param field the name of the field.
      * @return the field value as array of byte.
-     * @throws PersistenceException if the field is missing or otherwise unaccessible.
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public byte[] getBytes(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value.getClass().isArray() && value.getClass().getComponentType().equals(Byte.TYPE))
         {
-            String encoded = rs.getString(field);
-            Base64 decoder = new Base64();
-            return decoder.decode(encoded.getBytes("US-ASCII"));
+            return (byte[])value;
         }
-        catch(Exception e)
+        if(value instanceof String)
         {
-            throw new PersistenceException("Failed to read field "+field, e);
+            Base64.decodeBase64((String)value);
         }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
      * Returns a <code>Date</code> field value.
-     *
+     * 
      * @param field the name of the field.
      * @return the field value as date.
-     * @throws PersistenceException if the field is missing or otherwise
-     *         unaccessible. 
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public Date getDate(String field)
-        throws PersistenceException        
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof Date)
         {
-            java.sql.Timestamp ts = rs.getTimestamp(field);
-            return ts == null ? null : new Date(ts.getTime());
+            return new Date(((Date)value).getTime());
         }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
-    }
-
-    /**
-     * gets a <code>Array</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public Array getArray(String field)
-        throws PersistenceException
-    {
-        try
-        {
-            return rs.getArray(field);
-        }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
-    }
-
-    /**
-     * Returns a <code>Blob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public Blob getBlob(String field)
-        throws PersistenceException
-    {
-        try
-        {
-            return rs.getBlob(field);
-        }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
-    }
-
-    /**
-     * Returns a <code>Clob</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public Clob getClob(String field)
-        throws PersistenceException
-    {
-        try
-        {
-            return rs.getClob(field);
-        }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
-    }
-
-    /**
-     * Returns a <code>Ref</code> field value.
-     * 
-     * @param field the name of the field.
-     * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
-     */
-    public Ref getRef(String field)
-        throws PersistenceException
-    {
-        try
-        {
-            return rs.getRef(field);
-        }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -384,20 +346,28 @@ public class DefaultInputRecord implements InputRecord
      * 
      * @param field the name of the field.
      * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
+     * @throws SQLException if the field could not be get to the specified value.
      */
     public URL getURL(String field)
-        throws PersistenceException
+        throws SQLException
     {
-        try
+        Object value = getNotNull(field);
+        if(value instanceof URL)
         {
-            return rs.getURL(field);
+            return (URL)value;
         }
-        catch(SQLException e)
+        if(value instanceof String)
         {
-            throw new PersistenceException("Failed to read field "+field, e);
+            try
+            {
+                return new URL((String)value);
+            }
+            catch(MalformedURLException e)
+            {
+                throw new SQLException("invalid URL value " + value + " for " + field, e);
+            }
         }
+        throw new SQLException(field + " has unsupported type " + value.getClass());
     }
 
     /**
@@ -405,105 +375,125 @@ public class DefaultInputRecord implements InputRecord
      * 
      * @param field the name of the field.
      * @return value the value of the filed.
-     * @throws PersistenceException if the field could not be get to the
-     *         specified value. 
+     * @throws SQLException if the field could not be get to the specified value.
      */
     public Object getObject(String field)
-        throws PersistenceException
+        throws SQLException
     {
-        try
-        {
-            return rs.getObject(field);
-        }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        return getNotNull(field);
     }
 
     /**
-     * Returns <code>true</code> if the field has <code>SQL NULL</code>
-     * value. 
-     *
+     * Returns <code>true</code> if the field has <code>SQL NULL</code> value.
+     * 
      * @param field the name of the field.
      * @return <code>true</code> if null.
-     * @throws PersistenceException if the field is missing or otherwise
-     *         unaccessible. 
+     * @throws SQLException if the field is missing or otherwise unaccessible.
      */
     public boolean isNull(String field)
-        throws PersistenceException
+        throws SQLException
     {
-        try
-        {
-            rs.getString(field);
-            return rs.wasNull();
-        }
-        catch(SQLException e)
-        {
-            throw new PersistenceException("Failed to read field "+field, e);
-        }
+        return data.get(field.toUpperCase()) == NULL;
     }
-    
+
     // statements ///////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Creates a select statement for fetching an object from the database.
      * 
      * @param object Persistent object.
      * @param conn the connection to use.
      * @return a prepared statement.
-     * @throws PersistenceException if there is a problem retrieving key values from the object.
+     * @throws SQLException if there is a problem retrieving key values from the object.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatements(Persistent object, Connection conn)
-        throws PersistenceException, SQLException
+    public static PreparedStatement getSelectStatement(Persistent object, Connection conn)
+        throws SQLException
     {
         DefaultOutputRecord out = new DefaultOutputRecord(object);
         object.getData(out);
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + object.getTable() + 
-            " WHERE " + out.getWhereClause());
-        out.setValues(stmt, true, false);
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + object.getTable()
+            + " WHERE " + out.getWhereClause());
+        out.setValues(stmt, true, false, 1);
         return stmt;
     }
-    
+
     /**
      * Creates a select statement for fetching an object from the database.
      * 
-     * @param key the key value.
      * @param object Persistent object.
      * @param conn the connection to use.
+     * @param key the key value.
      * @return a prepared statement.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatement(long key, Persistent object, Connection conn)
+    public static PreparedStatement getSelectStatement(Persistent object, Connection conn, long key)
         throws SQLException
     {
-        PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM " + object.getTable() + " WHERE " +
-            object.getKeyColumns()[0] + " = ?");
+        PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM " + object.getTable()
+            + " WHERE " + object.getKeyColumns()[0] + " = ?");
         pstmt.setLong(1, key);
         return pstmt;
     }
-    
+
     /**
      * Creates a select statement for fetching an object from the database.
      * 
-     * @param where where clause, or <code>null</code> to fetch all objects.
      * @param object Persistent object.
      * @param conn the connection to use.
+     * @param where WHERE clause, or <code>null</code> to fetch all objects.
+     * @param parameters optional values for parameter placeholders in the where clause. Null values
+     *        are not supported, because {@link PreparedStatement#setNull(int, int)} requires SQL
+     *        Type specifier, and SQL NULL values don't play nice with equality operator commonly
+     *        found in simple WHERE clauses.
      * @return a prepared statement.
      * @throws SQLException if there is a problem creating the statement.
      */
-    public static PreparedStatement getSelectStatement(String where, Persistent object, 
-        Connection conn)
+    public static PreparedStatement getSelectStatement(Persistent object, Connection conn,
+        String where, Object... parameters)
         throws SQLException
     {
-        if (where != null)
+        if(where != null)
         {
-            return conn.prepareStatement("SELECT * FROM " + object.getTable() + " WHERE " + where);
+            final PreparedStatement stmt = conn.prepareStatement("SELECT * FROM "
+                + object.getTable() + " WHERE " + where);
+            if(parameters != null)
+            {
+                int placeholderCount = 0;
+                for(int i = 0; i < where.length(); i++)
+                {
+                    if(where.charAt(i) == '?')
+                    {
+                        placeholderCount++;
+                    }
+                }
+                if(placeholderCount != parameters.length)
+                {
+                    throw new IllegalArgumentException("where clause specifies " + placeholderCount
+                        + " parameter placeholders but " + parameters.length
+                        + " values were provideded");
+                }
+                for(int i = 0; i < parameters.length; i++)
+                {
+                    if(parameters[i] == null)
+                    {
+                        throw new IllegalArgumentException(
+                            "null parameter values are not supported");
+                    }
+                    DefaultOutputRecord.setValue(i + 1, parameters[i], java.sql.Types.OTHER, stmt);
+                }
+            }
+            return stmt;
         }
         else
         {
             return conn.prepareStatement("SELECT * FROM " + object.getTable());
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return data.toString();
     }
 }

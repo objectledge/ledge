@@ -26,15 +26,12 @@
 -- POSSIBILITY OF SUCH DAMAGE. 
 -- 
 
--- Table schema for the DBParameters
 --
+-- Test of the Persistence component
+-- 
 -- author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
--- version $Id: DBParametersTables.sql,v 1.1 2005-02-16 20:00:43 rafal Exp $
+-- author <a href="mailto:rafal@caltha.pl">Rafał Krzewski</a>
+-- version $Id$
+--
 
-CREATE TABLE ledge_parameters (
-   parameters_id BIGINT NOT NULL,
-   name VARCHAR(255) NOT NULL,
-   value VARCHAR(255) NOT NULL
-);
-
-CREATE INDEX ledge_parameters_id_idx ON ledge_parameters(parameters_id);
+TRUNCATE TABLE test_object;
