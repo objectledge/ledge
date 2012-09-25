@@ -6,7 +6,7 @@
     <groupId>org.objectledge</groupId>
     <artifactId>ledge-common</artifactId>
     <relativePath>../ledge-common/pom.xml</relativePath>
-    <version>1.0.14-SNAPSHOT</version>
+    <version>1.0.15-SNAPSHOT</version>
   </parent>
   <artifactId>ledge-gpl</artifactId>
   <packaging>jar</packaging>
