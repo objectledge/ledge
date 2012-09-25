@@ -83,13 +83,8 @@ public class LocaleLoaderValve
         // get locale from cookie
         if (locale == null)
         {
-            setInSession = true;
             Cookie localeCookie = getCookie(httpContext, localeCookieKey);
-            if (localeCookie == null)
-            {
-                setInCookie = true;
-            }
-            else
+            if (localeCookie != null)
             {
                 if(localeCookie.getMaxAge() <= 60 * 24 * 3600) // less then 60 days left
                 {
@@ -97,19 +92,15 @@ public class LocaleLoaderValve
                 }
                 
                 String localeString = localeCookie.getValue();
-                if(localeString == null)
-                {
-                    setInCookie = true;
-                }
-                else
+                if(localeString != null)
                 {
                     try
                     {
                         locale = StringUtils.getLocale(localeString);
+                        setInSession = true;
                     }
                     catch (IllegalArgumentException e)
                     {
-                        setInCookie = true;
                         logger.error("malformed " + localeCookieKey + " cookie '" + 
                         			 localeString + "' received from client " +
                         			 httpContext.getRequest().getRemoteAddr());
@@ -121,8 +112,6 @@ public class LocaleLoaderValve
         // get default locale
         if (locale == null)
         {
-            setInSession = true;
-            setInCookie = true;
             locale = i18n.getPreferedLocale();
         }
         
