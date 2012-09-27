@@ -2,6 +2,7 @@ package org.objectledge.web;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.objectledge.filesystem.FileSystem;
+import org.picocontainer.PicoContainer;
 
 /**
  * A Servlet that allows serving content from combined ObjectLedge file system.
@@ -31,16 +33,25 @@ import org.objectledge.filesystem.FileSystem;
 public class ContentServlet
     extends HttpServlet
 {
-    private FileSystem fileSystem;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private FileSystem fileSystem;
 
     private ServletContext servletContext;
 
     @Override
     public void init()
     {
-        fileSystem = LedgeServlet.fileSystem(getServletConfig(), getClass().getClassLoader());
-        servletContext = getServletConfig().getServletContext();
-    }
+    	ServletConfig servletConfig = getServletConfig();
+        servletContext = servletConfig.getServletContext();
+        PicoContainer pico = (PicoContainer)servletContext
+            .getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
+
+        fileSystem = (FileSystem)pico.getComponentInstance(FileSystem.class);
+    }    
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

@@ -338,4 +338,8 @@ public class HttpContext
             "no-cache, no-store, must-revalidate, max_age=0, post-check=0, pre-check=0");
         response.addHeader("Expires", "Mon, 12 May 1998 00:00:00 GMT");
     }
+
+	public void setDirectResponse(boolean b) {
+		this.directResponse = b;		
+	}
 }
