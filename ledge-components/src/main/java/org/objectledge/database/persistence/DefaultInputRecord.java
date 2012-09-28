@@ -61,7 +61,7 @@ public class DefaultInputRecord
     private static final Object NULL = new Object();
 
     private static final Set<String> BOOLEAN_TRUE_LITERALS = new HashSet<String>(Arrays.asList(
-        "true", "t", "y"));
+        "true", "t", "y", "1"));
 
     // Initialization ////////////////////////////////////////////////////////
 
