@@ -32,8 +32,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
 
@@ -145,12 +143,11 @@ public class TableStateManagerImpl
 
     private final TableData getTableData(HttpContext httpContext)
     {
-    	HttpSession session = httpContext.getRequest().getSession();
-        TableData tableData = (TableData) session.getAttribute(TABLE_DATA_KEY);
+        TableData tableData = (TableData)httpContext.getSessionAttribute(TABLE_DATA_KEY);
         if(tableData == null)
         {
             tableData = new TableData();
-			session.setAttribute(TABLE_DATA_KEY, tableData);
+            httpContext.setSessionAttribute(TABLE_DATA_KEY, tableData);
         }
         return tableData;
     }
