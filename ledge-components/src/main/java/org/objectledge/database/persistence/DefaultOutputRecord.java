@@ -561,7 +561,7 @@ public class DefaultOutputRecord
         }
         else if(value instanceof Boolean)
         {
-            stmt.setInt(pos, ((Boolean)value).booleanValue() ? 1 : 0);
+            stmt.setBoolean(pos, ((Boolean)value).booleanValue());
         }
         else if(value instanceof String)
         {
