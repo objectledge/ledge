@@ -113,6 +113,33 @@
         <updatePolicy>never</updatePolicy>
       </snapshots>
     </repository>
+<repository>
+	<id>jboss</id>
+	<name>JBoss Hibernate</name>
+	<url>https://repository.jboss.org/nexus/content/groups/public</url>
+	<releases>
+		<enabled>true</enabled>
+	</releases>
+	<snapshots>
+		<enabled>false</enabled>
+		<updatePolicy>never</updatePolicy>
+	</snapshots>
+</repository>
+
+      <repository>
+          <id>sonatype</id>
+          <name>sonatype repo</name>
+          <url>http://repo1.maven.org/maven2</url>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+          <snapshots>
+              <enabled>true</enabled>
+              <updatePolicy>never</updatePolicy>
+          </snapshots>
+      </repository>
+
+
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -287,11 +314,17 @@
         <artifactId>connector-api</artifactId>
         <version>1.5</version>
       </dependency>
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate</artifactId>
-        <version>3.1.2</version>
-      </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.1.7.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.1.7.Final</version>
+        </dependency>
       <dependency>
         <groupId>org.hsqldb</groupId>
         <artifactId>hsqldb</artifactId>

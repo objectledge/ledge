@@ -34,6 +34,7 @@ import java.util.Map;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.SessionFactory;
+import org.hibernate.engine.spi.SessionImplementor;
 
 /**
  * The hibernate interceptor for creation of persistent objects using the container.
@@ -88,7 +89,7 @@ public class PicofyingInterceptor
             }
             Object instance = objectInstantiator.instantiate(clazz);
             // set peristent object's id
-            sessionFactory.getClassMetadata(clazz).setIdentifier(instance, id, entityMode); 
+            sessionFactory.getClassMetadata(clazz).setIdentifier(instance, id, (SessionImplementor)sessionFactory.getCurrentSession());
             return instance;
         }
         catch(ClassNotFoundException e)
