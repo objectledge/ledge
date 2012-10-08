@@ -30,6 +30,7 @@ package org.objectledge.database;
 import java.lang.reflect.Field;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -227,6 +228,7 @@ public class ThreadDataSource
             registerConnection(conn);
             conn = new ThreadConnection(conn, null);
             setCachedConnection(conn, null);
+            setApplicationName(conn, Thread.currentThread().getName());
         }
         else
         {
@@ -472,6 +474,18 @@ public class ThreadDataSource
         return userMap.get(user);
     }
 
+    private void setApplicationName(Connection conn, String name)
+        throws SQLException
+    {
+        DatabaseMetaData md = conn.getMetaData();
+        String dbProd = md.getDatabaseProductName();
+        int dbMaj = md.getDatabaseMajorVersion();
+        if(dbProd.equals("PostgreSQL") && dbMaj >= 9)
+        {
+            conn.setClientInfo("ApplicationName", name);
+        }
+    }
+
     /**
      * Returns the connection openning/closing trace.
      *  
@@ -524,6 +538,7 @@ public class ThreadDataSource
     void unusedConnection(ThreadConnection conn) 
         throws SQLException
     {
+        setApplicationName(conn, null);
         if(!cacheConnection)
         {
             conn.closeConnection();
