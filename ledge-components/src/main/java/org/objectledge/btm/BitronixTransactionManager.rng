@@ -1,0 +1,451 @@
+<?xml version="1.0"?>
+<!--  
+ Copyright (c) 2012, Caltha - Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:a="http://objectledge.org/annotation/1.0" ns="http://objectledge.org/btm/1.0">
+
+  <define name="tmProperties">
+    <!--
+    private volatile String serverId;
+
+    private volatile boolean disableJmx;
+    private volatile boolean allowMultipleLrc; 
+    private volatile boolean currentNodeOnlyRecovery;
+    private volatile String exceptionAnalyzer;
+
+    private volatile boolean asynchronous2Pc;
+    private volatile boolean warnAboutZeroResourceTransaction;
+    private volatile boolean debugZeroResourceTransaction;
+
+    private volatile String jndiUserTransactionName;
+    private volatile String jndiTransactionSynchronizationRegistryName;
+
+    private volatile String journal;
+    private volatile String logPart1Filename;
+    private volatile String logPart2Filename;
+    private volatile boolean forcedWriteEnabled;
+    private volatile boolean forceBatchingEnabled;
+    private volatile int maxLogSizeInMb;
+    private volatile boolean filterLogStatus;
+    private volatile boolean skipCorruptedLogs;
+
+    private volatile int defaultTransactionTimeout;
+    private volatile int gracefulShutdownInterval;
+    private volatile int backgroundRecoveryIntervalSeconds;
+
+    -->
+    <interleave>
+      <optional>
+        <element name="serverId">
+          <data type="string" />
+        </element>
+      </optional>
+      <optional>
+        <element name="disableJmx">
+          <data type="boolean" />
+        </element>
+      </optional>
+      <optional>
+        <element name="allowMultipleLrc">
+          <data type="boolean" />
+        </element>
+      </optional>
+      <optional>
+        <element name="currentNodeOnlyRecovery">
+          <data type="boolean" />
+        </element>
+      </optional>
+      <optional>
+        <element name="exceptionAnalyzer">
+          <data type="string" />
+        </element>
+      </optional>
+
+      <optional>
+        <element name="twopc">
+          <interleave>
+            <optional>
+              <element name="asynchronous2Pc">
+                <data type="boolean" />
+              </element>
+            </optional>
+            <optional>
+              <element name="warnAboutZeroResourceTransaction">
+                <data type="boolean" />
+              </element>
+            </optional>
+            <optional>
+              <element name="debugZeroResourceTransaction">
+                <data type="boolean" />
+              </element>
+            </optional>
+          </interleave>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="jndi">
+          <interleave>
+            <optional>
+              <element name="jndiUserTransactionName">
+                <data type="string" />
+              </element>
+            </optional>
+            <optional>
+              <element name="jndiTransactionSynchronizationRegistryName">
+                <data type="string" />
+              </element>
+            </optional>
+          </interleave>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="journal">
+          <choice>
+            <element name="null">
+              <empty />
+            </element>
+            <element name="class">
+              <data type="string" />
+            </element>
+            <element name="disk">
+              <interleave>
+                <optional>
+                  <element name="logPart1Filename">
+                    <data type="string" />
+                  </element>
+                </optional>
+                <optional>
+                  <element name="logPart2Filename">
+                    <data type="string" />
+                  </element>
+                </optional>
+                <optional>
+                  <element name="forcedWriteEnabled">
+                    <data type="boolean" />
+                  </element>
+                </optional>
+                <optional>
+                  <element name="forceBatchingEnabled">
+                    <data type="boolean" />
+                  </element>
+                </optional>
+                <optional>
+                  <element name="maxLogSizeInMb">
+                    <data type="integer" />
+                  </element>
+                </optional>
+                <optional>
+                  <element name="filterLogStatus">
+                    <data type="boolean" />
+                  </element>
+                </optional>
+                <optional>
+                  <element name="skipCorruptedLogs">
+                    <data type="boolean" />
+                  </element>
+                </optional>
+              </interleave>
+            </element>
+          </choice>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="timer">
+          <interleave>
+            <optional>
+              <element name="defaultTransactionTimeout">
+                <data type="integer" />
+              </element>
+            </optional>
+            <optional>
+              <element name="gracefulShutdownInterval">
+                <data type="integer" />
+              </element>
+            </optional>
+            <optional>
+              <element name="backgroundRecoveryIntervalSeconds">
+                <data type="integer" />
+              </element>
+            </optional>
+          </interleave>
+        </element>
+      </optional>
+    </interleave>
+  </define>
+
+  <define name="poolInfo">
+    <attribute name="uniqueName">
+      <data type="string" />
+    </attribute>
+    <optional>
+      <attribute name="eager">
+        <data type="boolean" />
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="disabled">
+        <data type="boolean" />
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="commonPoolProperties">
+    <!-- 
+    private volatile String className;
+    private volatile String uniqueName;
+    private volatile boolean automaticEnlistingEnabled = true;
+    private volatile boolean useTmJoin = true;
+    private volatile Properties driverProperties = new Properties();
+    private volatile int maxPoolSize = 0;
+    private volatile int minPoolSize = 0;
+    private volatile int maxIdleTime = 60;
+    private volatile int acquireIncrement = 1;
+    private volatile int acquisitionTimeout = 30;
+    private volatile boolean deferConnectionRelease = true;
+    private volatile int acquisitionInterval = 1;
+    private volatile boolean allowLocalTransactions = false;
+    private volatile int twoPcOrderingPosition = 1;
+    private volatile boolean applyTransactionTimeout = false;
+    private volatile boolean shareTransactionConnections = false;
+    private volatile boolean ignoreRecoveryFailures = false;
+     -->
+    <element name="className">
+      <data type="string" />
+    </element>
+    <optional>
+      <element name="automaticEnlistingEnabled">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="useTmJoin">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="minPoolSize">
+        <data type="integer" />
+      </element>
+    </optional>
+    <element name="maxPoolSize">
+      <data type="integer" />
+    </element>
+    <optional>
+      <element name="maxIdleTime">
+        <data type="integer" />
+      </element>
+    </optional>
+    <optional>
+      <element name="acquireIncrement">
+        <data type="integer" />
+      </element>
+    </optional>
+    <optional>
+      <element name="acquisitionTimeout">
+        <data type="integer" />
+      </element>
+    </optional>
+    <optional>
+      <element name="acquisitionInterval">
+        <data type="integer" />
+      </element>
+    </optional>
+    <optional>
+      <element name="deferConnectionRelease">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="twoPcOrderingPosition">
+        <data type="integer" />
+      </element>
+    </optional>
+    <optional>
+      <element name="applyTransactionTimeout">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="allowLocalTransactions">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="shareTransactionConnections">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="ignoreRecoveryFailures">
+        <data type="boolean" />
+      </element>
+    </optional>
+  </define>
+
+  <define name="jdbcPoolProperties">
+    <!--
+    private volatile String testQuery;
+    private volatile boolean enableJdbc4ConnectionTest;
+    private volatile int preparedStatementCacheSize = 0;
+    private volatile String isolationLevel;
+    private volatile String cursorHoldability;
+    private volatile String localAutoCommit;
+    private volatile String jmxName; 
+    -->
+    <optional>
+      <element name="testQuery">
+        <data type="string" />
+      </element>
+    </optional>
+    <optional>
+      <element name="enableJdbc4ConnectionTest">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="preparedStatementCacheSize">
+        <data type="integer" />
+      </element>
+    </optional>
+    <optional>
+      <element name="isolationLevel">
+        <choice>
+          <value>READ_COMMITTED</value>
+          <value>READ_UNCOMMITTED</value>
+          <value>REPEATABLE_READ</value>
+          <value>SERIALIZABLE</value>
+        </choice>
+      </element>
+    </optional>
+    <optional>
+      <element name="cursorHoldability">
+        <choice>
+          <value>CLOSE_CURSORS_AT_COMMIT</value>
+          <value>HOLD_CURSORS_OVER_COMMIT</value>
+        </choice>
+      </element>
+    </optional>
+    <optional>
+      <element name="localAutoCommit">
+        <data type="boolean" />
+      </element>
+    </optional>
+  </define>
+
+  <define name="jmsPoolProperties">
+    <!-- 
+    private volatile boolean cacheProducersConsumers = true;
+    private volatile boolean testConnections = false;
+    private volatile String user;
+    private volatile String password;
+    -->
+    <optional>
+      <element name="cacheProducersConsumers">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="testConnections">
+        <data type="boolean" />
+      </element>
+    </optional>
+    <optional>
+      <element name="user">
+        <data type="string" />
+      </element>
+    </optional>
+    <optional>
+      <element name="password">
+        <data type="string" />
+      </element>
+    </optional>
+  </define>
+
+  <define name="driverProperties">
+    <element name="driverProperties">
+      <oneOrMore>
+        <element name="property">
+          <attribute name="name">
+            <data type="string" />
+          </attribute>
+          <data type="string" />
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="tracingProperties">
+    <element name="depth">
+      <data type="integer" />
+    </element>
+  </define>
+
+  <start>
+    <element name="config">
+      <optional>
+        <element name="tm">
+          <ref name="tmProperties" />
+        </element>
+      </optional>
+      <interleave>
+        <optional>
+          <element name="jdbc">
+            <element name="connectionPool">
+              <ref name="poolInfo" />
+              <interleave>
+                <ref name="commonPoolProperties" />
+                <ref name="jdbcPoolProperties" />
+              </interleave>
+              <ref name="driverProperties" />
+            </element>
+          </element>
+        </optional>
+        <optional>
+          <element name="jms">
+            <element name="connectionPool">
+              <ref name="poolInfo" />
+              <interleave>
+                <ref name="commonPoolProperties" />
+                <ref name="jdbcPoolProperties" />
+              </interleave>
+              <ref name="driverProperties" />
+            </element>
+          </element>
+        </optional>
+        <optional>
+          <element name="tracing">
+            <ref name="tracingProperties" />
+          </element>
+        </optional>
+      </interleave>
+    </element>
+  </start>
+</grammar>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns="http://objectledge.org/btm/1.0">
+  <tm>
+    <serverId>node0</serverId>
+    <journal>
+      <disk>
+        <logPart1Filename>target/btm1.tlog</logPart1Filename>
+        <logPart2Filename>target/btm2.tlog</logPart2Filename>
+      </disk>
+    </journal>
+  </tm>
+  <jdbc>
+    <connectionPool uniqueName="hsql">
+      <className>org.hsqldb.jdbc.pool.JDBCXADataSource</className>
+      <maxPoolSize>5</maxPoolSize>
+      <isolationLevel>READ_COMMITTED</isolationLevel>
+      <driverProperties>
+        <property name="url">jdbc:hsqldb:.</property>
+        <property name="user">sa</property>
+      </driverProperties>
+    </connectionPool>
+  </jdbc>
+</config>
