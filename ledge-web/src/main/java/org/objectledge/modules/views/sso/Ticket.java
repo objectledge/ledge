@@ -6,6 +6,7 @@ import java.net.URL;
 import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
@@ -80,7 +81,9 @@ public class Ticket
         String ticket = null;
         String status = "success";
 
-        log.debug("request from " + client + " sessionId " + httpRequest.getSession().getId());
+        HttpSession session = httpRequest.getSession(false);
+        String sessionId = session != null ? session.getId() : "N/A";
+        log.debug("request from " + client + " sessionId " + sessionId);
         if(authContext.isUserAuthenticated())
         {
             if(targetDomain != null)

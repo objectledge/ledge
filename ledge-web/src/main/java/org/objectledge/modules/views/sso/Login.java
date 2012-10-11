@@ -6,6 +6,7 @@ import java.net.URL;
 import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
@@ -59,7 +60,9 @@ public class Login
         String status = "success";
         String ticket = null;
 
-        log.debug("request from " + client + " sessionId " + httpRequest.getSession().getId());
+        HttpSession session = httpRequest.getSession(false);
+        String sessionId = session != null ? session.getId() : "N/A";
+        log.debug("request from " + client + " sessionId " + sessionId);
         if(httpRequest.isSecure())
         {
             if(login != null && password != null)

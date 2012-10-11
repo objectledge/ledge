@@ -74,7 +74,10 @@ public class LedgeServletContextListener
     @Override
     public void contextDestroyed(ServletContextEvent contextEvent)
     {
-        ledgeContainer.killContainer();
+        if(ledgeContainer != null)
+        {
+            ledgeContainer.killContainer();
+        }
     }
 
     /**

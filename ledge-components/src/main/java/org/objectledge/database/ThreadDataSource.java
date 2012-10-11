@@ -27,6 +27,7 @@
 // 
 package org.objectledge.database;
 
+import java.lang.reflect.Field;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,6 +36,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
@@ -105,6 +107,8 @@ public class ThreadDataSource
     
     private final Statistics statistics;
     
+    private static final Map<String, String> connToThread = new ConcurrentHashMap<>();
+
     /**
      * Creates a ThreadDataSource instance.
      * @param dataSource delegate DataSource.
@@ -220,6 +224,7 @@ public class ThreadDataSource
         if(conn == null)
         {
             conn = super.getConnection();
+            registerConnection(conn);
             conn = new ThreadConnection(conn, null);
             setCachedConnection(conn, null);
         }
@@ -228,6 +233,83 @@ public class ThreadDataSource
             ((ThreadConnection)conn).enter();
         }
         return conn;
+    }
+
+    private String getConnId(Connection conn)
+    {
+        StringBuilder buff = new StringBuilder();
+        if(conn.getClass().getName().startsWith("org.enhydra"))
+        {
+            try
+            {
+                Field c = conn.getClass().getField("con");
+                Object nested = c.get(conn);
+                buff.append(nested.getClass().getName()).append("@")
+                    .append(Integer.toString(System.identityHashCode(nested), 16));
+                if(nested.getClass().getName().contains("postgres"))
+                {
+                    buff.append(" pid: ").append(postgresPid(nested));
+                }
+            }
+            catch(NoSuchFieldException | SecurityException | IllegalArgumentException
+                            | IllegalAccessException e)
+            {
+                log.error("introspection problem ", e);
+            }
+        }
+        else
+        {
+            buff.append(conn.getClass().getName()).append("@")
+                .append(Integer.toString(System.identityHashCode(conn), 16));
+        }
+        return buff.toString();
+    }
+
+    private int postgresPid(Object obj)
+    {
+        try
+        {
+            Class<?> pgAbstractJdbc2Connection = Class
+                .forName("org.postgresql.jdbc2.AbstractJdbc2Connection");
+            Field protoConnectionField = pgAbstractJdbc2Connection
+                .getDeclaredField("protoConnection");
+            protoConnectionField.setAccessible(true);
+            Object protoConnection = protoConnectionField.get(obj);
+            Class<?> pgProtocolConnectionImpl = protoConnection.getClass();
+            Field pidField = pgProtocolConnectionImpl.getDeclaredField("cancelPid");
+            pidField.setAccessible(true);
+            return (Integer)pidField.get(protoConnection);
+        }
+        catch(ClassNotFoundException | NoSuchFieldException | SecurityException
+                        | IllegalArgumentException | IllegalAccessException e)
+        {
+            log.error("introspection problem", e);
+        }
+        return 0;
+    }
+
+    private void registerConnection(Connection conn)
+    {
+        String connId = getConnId(conn);
+        String threadName = Thread.currentThread().getName();
+        if(connToThread.containsKey(connId))
+        {
+            log.error("ERROR connection " + connId + " already associated with thread "
+                + connToThread.get(connId));
+        }
+        else
+        {
+            connToThread.put(connId, threadName);
+            log.info("associating connection " + connId + " with thread " + threadName);
+        }
+    }
+
+    private void unregisterConnection(Connection conn)
+    {
+        String connId = getConnId(conn);
+        String threadName = Thread.currentThread().getName();
+        connToThread.remove(connId);
+        log.info("disassociating connection " + connId + " from thread " + threadName);
     }
 
     /**
@@ -325,7 +407,6 @@ public class ThreadDataSource
         }
     }
     
-    @SuppressWarnings("unchecked")
     private static Map<ThreadDataSource, Map<String, Connection>> getThreadMap(Context context) {
     	return (Map<ThreadDataSource, Map<String, Connection>>) context
     	.getAttribute(THREAD_MAP);
@@ -571,6 +652,7 @@ public class ThreadDataSource
             throws SQLException
         {
             updateStatistics(reads, writes, totalTimeMillis);
+            unregisterConnection(getDelegate());
             getDelegate().close();
             setCachedConnection(null, user);
         }
