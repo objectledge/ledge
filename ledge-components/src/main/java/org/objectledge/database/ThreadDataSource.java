@@ -265,6 +265,18 @@ public class ThreadDataSource
         return buff.toString();
     }
 
+    private String getWrapperId(Connection conn, String connId)
+    {
+        StringBuilder buff = new StringBuilder();
+        buff.append(conn.getClass().getName()).append("@")
+            .append(Integer.toString(System.identityHashCode(conn), 16));
+        if(!buff.toString().equals(connId))
+        {
+            buff.append(" wrapping ").append(connId);
+        }
+        return buff.toString();
+    }
+
     private int postgresPid(Object obj)
     {
         try
@@ -291,25 +303,28 @@ public class ThreadDataSource
     private void registerConnection(Connection conn)
     {
         String connId = getConnId(conn);
+        String wrapperId = getWrapperId(conn, connId);
         String threadName = Thread.currentThread().getName();
         if(connToThread.containsKey(connId))
         {
-            log.error("ERROR connection " + connId + " already associated with thread "
+            log.error("associating connection " + wrapperId + " with thread " + threadName
+                + " while " + connId + " is already associated with thread "
                 + connToThread.get(connId));
         }
         else
         {
             connToThread.put(connId, threadName);
-            log.info("associating connection " + connId + " with thread " + threadName);
+            log.info("associating connection " + wrapperId + " with thread " + threadName);
         }
     }
 
     private void unregisterConnection(Connection conn)
     {
         String connId = getConnId(conn);
+        String wrapperId = getWrapperId(conn, connId);
         String threadName = Thread.currentThread().getName();
         connToThread.remove(connId);
-        log.info("disassociating connection " + connId + " from thread " + threadName);
+        log.info("disassociating connection " + wrapperId + " from thread " + threadName);
     }
 
     /**

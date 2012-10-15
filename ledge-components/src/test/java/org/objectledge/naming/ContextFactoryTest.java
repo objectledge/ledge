@@ -167,7 +167,7 @@ public class ContextFactoryTest extends LedgeTestCase
         DefaultPicoContainer container = new DefaultPicoContainer();
         IdGenerator idGenerator = new IdGenerator(ds);
         JotmTransaction transaction = new JotmTransaction(0, 120,
-            new org.objectledge.context.Context(), log, null);
+            new org.objectledge.context.Context(), log);
         Database database = new DefaultDatabase(ds, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, log);
         container.registerComponentInstance(Persistence.class, persistence);        

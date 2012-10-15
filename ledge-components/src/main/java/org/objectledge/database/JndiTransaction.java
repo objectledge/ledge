@@ -36,6 +36,7 @@ import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.logging.LoggingConfigurator;
 
 /**
  * Operates upon the UserTransaction object provided by the application server through JNDI.
@@ -48,14 +49,14 @@ public class JndiTransaction extends Transaction
     /**
      * Constructs a JndiLogger instance.
      * 
-     * @param tracing tracing depth.
-     * @param defaultTimeout default transaction timeout in seconds.
+     * @param component configuration.
      * @param context the threads processing context.
      * @param log the logger to use for error reporting.
      */
-    public JndiTransaction(int tracing, int defaultTimeout, Context context, Logger log)
+    public JndiTransaction(Transaction.Config config, Context context, Logger log,
+        LoggingConfigurator loggingConfigurator)
     {
-        super(tracing, defaultTimeout, context, log);
+        super(config, context, log, loggingConfigurator);
     }
     
     /**

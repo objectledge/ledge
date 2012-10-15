@@ -68,7 +68,7 @@ public class XaPoolDataSourceTest extends TestCase
         throws Exception
     {
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        transaction = new JotmTransaction(0, 120, new Context(), log, null);
+        transaction = new JotmTransaction(0, 120, new Context(), log);
         
         DefaultConfiguration conf = new DefaultConfiguration("config","","");
         DefaultConfiguration connConf = new DefaultConfiguration("connection","","config");

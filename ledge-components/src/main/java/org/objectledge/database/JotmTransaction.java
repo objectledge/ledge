@@ -55,19 +55,18 @@ public class JotmTransaction
     /**
      * Creates an instance of JOTM based transaction manager.
      * 
-     * @param tracing tracing depth.
-     * @param transactionTimeout transaction timeout in seconds.
+     * @param config component configuration.
      * @param context the threads processing context.
      * @param log the logger to use.
      * @param loggingConfigurator enforces instantiation order on Pico, may be null.
      * @throws NamingException if the manager could not be initialized.
      * @throws SystemException if transaction timeout could not be set.
      */
-    public JotmTransaction(int tracing, int transactionTimeout, Context context, Logger log, 
-        LoggingConfigurator loggingConfigurator)
+    private JotmTransaction(Transaction.Config config,
+        Context context, Logger log, LoggingConfigurator loggingConfigurator)
         throws NamingException, SystemException
     {
-        super(tracing, transactionTimeout, context, log);
+        super(config, context, log, loggingConfigurator);
         tmService = new Jotm(true, false);
     }
     
@@ -81,15 +80,30 @@ public class JotmTransaction
      * @throws NamingException if the manager could not be initialized.
      * @throws SystemException if transaction timeout could not be set.
      */    
-    public JotmTransaction(Configuration config, Context context, Logger log, 
-        LoggingConfigurator loggingConfigurator) 
+    public JotmTransaction(Configuration config, Context context, Logger log,
+        LoggingConfigurator loggingConfigurator)
         throws NamingException, SystemException
     {
-        this(config.getChild("tracing").getValueAsInteger(0), 
-            config.getChild("transactionTimeout").getValueAsInteger(0), context, log, 
-            loggingConfigurator);
+        this(new Transaction.Config(config), context, log,
+                        loggingConfigurator);
     }
     
+    /**
+     * Creates an instance of JOTM based transaction manager.
+     * 
+     * @param tracing tracing depth.
+     * @param transactionTimeout transaction timeout in seconds.
+     * @param context the threads processing context.
+     * @param log the logger to use.
+     * @throws NamingException if the manager could not be initialized.
+     * @throws SystemException if transaction timeout could not be set.
+     */
+    public JotmTransaction(int tracing, int defaultTimeout, Context context, Logger logger)
+        throws NamingException, SystemException
+    {
+        this(new Transaction.Config(tracing, defaultTimeout, null), context, logger, null);
+    }
+
     /**
      * {@inheritDoc}
      */
