@@ -33,8 +33,10 @@ import javax.transaction.Status;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
+import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.utils.StringUtils;
@@ -70,22 +72,48 @@ public abstract class Transaction
     /** Default timeout value. */
     private int defaultTimeout;
 
+    /** The logger for SQL statements, that will also receive transaction demarcation information. */
+    private final Logger statementLog;
+
     /**
      * Constructs a Transaction component.
      * 
      * @param tracing tracing depth.
      * @param defaultTimeout default transaction timeout in seconds.
+     * @param statementLogName The logger for SQL statements, that will also receive transaction
+     *        demarcation information at {@code DEBUG} level. Pass {@code null} to disable.
      * @param context the threads processing context.
      * @param log the logger to use for error reporting.
      */
-    protected Transaction(int tracing, int defaultTimeout, Context context, Logger log)
+    protected Transaction(int tracing, int defaultTimeout, String statementLogName,
+        Context context, Logger log, LoggingConfigurator loggingConfigurator)
     {
         this.tracing = tracing;
         this.defaultTimeout = defaultTimeout;
         this.context = context;
         this.log = log;
+        this.statementLog = statementLogName != null ? loggingConfigurator
+            .createLogger(statementLogName) : null;
     }
     
+    /**
+     * Constructs a Transaction component.
+     * 
+     * @param config component configuration.
+     * @param context the threads processing context.
+     * @param log the logger to use for error reporting.
+     */
+    protected Transaction(Config config, Context context, Logger log,
+        LoggingConfigurator loggingConfigurator)
+    {
+        this.tracing = config.tracing;
+        this.defaultTimeout = config.defaultTimeout;
+        this.context = context;
+        this.log = log;
+        this.statementLog = config.statementLogName != null ? loggingConfigurator
+            .createLogger(config.statementLogName) : null;
+    }
+
     /**
      * Returns the JTA UserTransaction object.
      * 
@@ -119,13 +147,12 @@ public abstract class Transaction
     /**
      * Begin the transaction, if there is none active.
      * 
-     * @return <code>true</code> if the requestor become the controler.
+     * @return <code>true</code> if the requester become the controller.
      * @throws SQLException if the operation fails.
      */
     public boolean begin()
         throws SQLException
     {
-        trace("begin");  
         boolean controler;
         try 
         {
@@ -139,6 +166,7 @@ public abstract class Transaction
             log.error("failed to check transaction status", e);
             throw (SQLException)new SQLException("failed to check transaction status").initCause(e);
         }
+        trace("begin", controler);
         if(controler)
         {
             if(ThreadDataSource.hasOpenConnections(context))
@@ -165,14 +193,14 @@ public abstract class Transaction
     /**
      * Commit the transaction, if the caller is the controller.
      * 
-     * @param controler <code>true</code> if the caller is the controler.
+     * @param controller <code>true</code> if the caller is the controller.
      * @throws SQLException if the commit fails.
      */
-    public void commit(boolean controler)
+    public void commit(boolean controller)
         throws SQLException
     {
-        trace("commit");
-        if(controler)
+        trace("commit", controller);
+        if(controller)
         {
             timeout.remove(); // reset timeout to default value
             try
@@ -190,14 +218,14 @@ public abstract class Transaction
     /**
      * Rollback the transaction, if the caller is the controller.
      * 
-     * @param controler <code>true</code> if the caller is the controler.
+     * @param controller <code>true</code> if the caller is the controller.
      * @throws SQLException if the rollback fails.
      */
-    public void rollback(boolean controler)
+    public void rollback(boolean controller)
         throws SQLException
     {
-        trace("rollback");
-        if(controler)
+        trace("rollback", controller);
+        if(controller)
         {
             timeout.remove(); // reset timeout to default value
             try
@@ -304,8 +332,12 @@ public abstract class Transaction
         }
     }
     
-    private void trace(String op)
+    private void trace(String op, boolean controller)
     {
+        if(statementLog != null)
+        {
+            statementLog.debug((controller ? "actual " : "elided ") + op);
+        }
         if(tracing > 0)
         {
             Counter nestingCounter = (Counter)context.getAttribute(NESTING_COUNTER);
@@ -372,6 +404,44 @@ public abstract class Transaction
         public int get()
         {
             return count;
+        }
+    }
+
+    public static class Config
+    {
+        private int tracing;
+
+        private int defaultTimeout;
+
+        private String statementLogName;
+
+        public Config(int tracing, int defaultTimeout, String statementLogName)
+        {
+            this.tracing = tracing;
+            this.defaultTimeout = defaultTimeout;
+            this.statementLogName = statementLogName;
+        }
+
+        public Config(Configuration config)
+        {
+            tracing = config.getChild("tracing").getValueAsInteger(0);
+            defaultTimeout = config.getChild("transactionTimeout").getValueAsInteger(0);
+            statementLogName = config.getChild("statementLog").getValue(null);
+        }
+
+        public int getTracing()
+        {
+            return tracing;
+        }
+
+        public int getDefaultTimeout()
+        {
+            return defaultTimeout;
+        }
+
+        public String getStatementLogName()
+        {
+            return statementLogName;
         }
     }
 }

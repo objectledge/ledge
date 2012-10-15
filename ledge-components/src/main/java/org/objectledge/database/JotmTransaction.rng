@@ -38,4 +38,9 @@
       <text/>
     </element>
   </optional>
+  <optional>
+    <element name="statementLog">
+      <text/>
+    </element>
+  </optional>
 </element>

@@ -72,7 +72,7 @@ public class DBParametersTest extends TestCase
         DataSource dataSource = getDataSource();
         IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger, null);
+        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         manager = new DefaultDBParametersManager(database, logger);
     }

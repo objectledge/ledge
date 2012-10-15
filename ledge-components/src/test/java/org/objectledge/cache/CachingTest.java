@@ -82,7 +82,7 @@ public class CachingTest extends LedgeTestCase
         pool = new ThreadPool(cleanup, context, config, logger);
         DataSource dataSource = getDataSource();
         IdGenerator idGenerator = new IdGenerator(dataSource);
-        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger, null);
+        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
         notification = new Notification();

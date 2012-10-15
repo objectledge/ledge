@@ -163,7 +163,7 @@ public class ThreadDataSourceTest extends TestCase
         throws Exception
     {
         setUp(0);
-        Transaction transaction = new JotmTransaction(0, 120, context, log, null);
+        Transaction transaction = new JotmTransaction(0, 120, context, log);
         Connection c1 = threadDataSource.getConnection();
         try
         {
