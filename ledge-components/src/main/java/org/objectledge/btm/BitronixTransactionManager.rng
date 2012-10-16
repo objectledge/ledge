@@ -418,26 +418,30 @@
       <interleave>
         <optional>
           <element name="jdbc">
-            <element name="connectionPool">
-              <ref name="poolInfo" />
-              <interleave>
-                <ref name="commonPoolProperties" />
-                <ref name="jdbcPoolProperties" />
-              </interleave>
-              <ref name="driverProperties" />
-            </element>
+            <oneOrMore>
+              <element name="connectionPool">
+                <ref name="poolInfo" />
+                <interleave>
+                  <ref name="commonPoolProperties" />
+                  <ref name="jdbcPoolProperties" />
+                </interleave>
+                <ref name="driverProperties" />
+              </element>
+            </oneOrMore>
           </element>
         </optional>
         <optional>
           <element name="jms">
-            <element name="connectionPool">
-              <ref name="poolInfo" />
-              <interleave>
-                <ref name="commonPoolProperties" />
-                <ref name="jdbcPoolProperties" />
-              </interleave>
-              <ref name="driverProperties" />
-            </element>
+            <oneOrMore>
+              <element name="connectionPool">
+                <ref name="poolInfo" />
+                <interleave>
+                  <ref name="commonPoolProperties" />
+                  <ref name="jdbcPoolProperties" />
+                </interleave>
+                <ref name="driverProperties" />
+              </element>
+            </oneOrMore>
           </element>
         </optional>
         <optional>
