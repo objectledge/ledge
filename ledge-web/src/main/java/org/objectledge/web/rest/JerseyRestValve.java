@@ -45,7 +45,7 @@ public class JerseyRestValve
         this.logger = logger;
         String restPackageNames = config.getChild(REST_PACKAGE_NAMES_KEY).getValue();
 
-        Configuration initParams = config.getChild("init-parmameters", true);
+        Configuration initParams = config.getChild("init-parameters", true);
 
         final ServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
         jerseyContainer = new ServletContainer(new PackagesResourceConfig(restPackageNames))

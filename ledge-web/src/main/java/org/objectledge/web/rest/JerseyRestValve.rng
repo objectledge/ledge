@@ -32,9 +32,9 @@
     <text />
   </element>
   <optional>
-    <element name="init-parmaeters">
+    <element name="init-parameters">
       <zeroOrMore>
-        <element name="init-paramter">
+        <element name="init-parameter">
            <element name="param-name">
              <text/>
            </element>
