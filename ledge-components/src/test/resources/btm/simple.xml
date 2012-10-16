@@ -2,12 +2,16 @@
 <config xmlns="http://objectledge.org/btm/1.0">
   <tm>
     <serverId>node0</serverId>
+    <disableJmx>true</disableJmx>
     <journal>
       <disk>
         <logPart1Filename>target/btm1.tlog</logPart1Filename>
         <logPart2Filename>target/btm2.tlog</logPart2Filename>
       </disk>
     </journal>
+    <timer>
+      <defaultTransactionTimeout>300</defaultTransactionTimeout>
+    </timer>
   </tm>
   <jdbc>
     <connectionPool uniqueName="hsql">
