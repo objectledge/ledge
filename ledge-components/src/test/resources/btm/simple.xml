@@ -19,5 +19,15 @@
         <property name="user">sa</property>
       </driverProperties>
     </connectionPool>
+    <connectionPool uniqueName="derby">
+      <className>org.apache.derby.jdbc.EmbeddedXADataSource40</className>
+      <maxPoolSize>5</maxPoolSize>
+      <isolationLevel>READ_COMMITTED</isolationLevel>
+      <cursorHoldability>CLOSE_CURSORS_AT_COMMIT</cursorHoldability>
+      <driverProperties>
+        <property name="databaseName">target/derby/btm</property>
+        <property name="createDatabase">create</property>
+      </driverProperties>
+    </connectionPool>
   </jdbc>
 </config>
