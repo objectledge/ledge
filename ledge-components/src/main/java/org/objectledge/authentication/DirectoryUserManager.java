@@ -63,6 +63,9 @@ public class DirectoryUserManager extends UserManager
     /** Default value for login attribute name. */
     public static final String LOGIN_ATTRIBUTE_DEFAULT = "uid";
 
+	/** Default value for email attribute name. */
+    public static final String EMAIL_ATTRIBUTE_DEFAULT = "mail";
+
     /** Default password attribute key name. */
     public static final String PASSWORD_ATTRIBUTE_DEFAULT = "userPassword";
     
