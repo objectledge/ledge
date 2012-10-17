@@ -90,6 +90,9 @@ public class DirectoryUserManager extends UserManager
     /** the email attribute key. */
     protected String emailAttribute;
     
+    /** the alternative email attribute key. */
+    protected String altEmailAttribute;
+    
     /** the password attribute key. */
     protected String passwordAttribute;
     
@@ -148,7 +151,9 @@ public class DirectoryUserManager extends UserManager
         loginAttribute = config.getChild("loginAttribute").
             getValue(LOGIN_ATTRIBUTE_DEFAULT);
         emailAttribute = config.getChild("emailAttribute").
-            getValue(EMAIL_ATTRIBUTE_DEFAULT);
+                getValue(EMAIL_ATTRIBUTE_DEFAULT);
+        altEmailAttribute = config.getChild("altEmailAttribute").
+        		getValue(ALT_EMAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").
             getValue(PASSWORD_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
