@@ -190,8 +190,8 @@ public class DirectoryUserManager extends UserManager
             return false;
         }
     }
-
-	/**
+    
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -607,6 +607,36 @@ public class DirectoryUserManager extends UserManager
             closeContext(ctx);
         }
     }
+    
+    /**
+     * Find all dn of the context that match the attribute query given custom search controls.
+     *
+     * @param query attribute query
+     * @param searchControls the search controls to use for query
+     * @return the list of the name of matched context.
+     * @throws NamingException if lookup fails.
+     */
+    private List<String> lookupDNs(String query, SearchControls searchControls)
+            throws NamingException
+    {
+    	DirContext ctx = null;
+        try 
+        {
+        	ctx = directory.getBaseDirContext();
+            NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
+            List<String> results = new ArrayList<String>();
+            while(answer.hasMore())
+            {
+            	SearchResult result = answer.next();
+                results.add(result.getNameInNamespace());
+            }
+            return results;
+        } 
+        finally 
+        {
+            closeContext(ctx);
+        }
+    }
 
     /**
      * Find all dn of the context that match the attribute query.
@@ -618,22 +648,6 @@ public class DirectoryUserManager extends UserManager
     private List<String> lookupDNs(String query)
         throws NamingException
     {
-        DirContext ctx = null;
-        try 
-        {
-            ctx = directory.getBaseDirContext();
-            NamingEnumeration<SearchResult> answer = ctx.search("", query, defaultSearchControls);
-            List<String> results = new ArrayList<String>();
-            while(answer.hasMore())
-            {
-                SearchResult result = answer.next();
-                results.add(result.getNameInNamespace());
-            }
-            return results;
-        } 
-        finally 
-        {
-            closeContext(ctx);
-        }
+        return lookupDNs(query, defaultSearchControls);
     }
 }
