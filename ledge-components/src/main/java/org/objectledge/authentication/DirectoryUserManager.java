@@ -205,6 +205,15 @@ public class DirectoryUserManager extends UserManager
     	return emailExists;
     }
 
+	/**
+     * {@inhertitDoc}
+     */
+    @Override
+    public boolean altEmailExists(String altEmail)
+    {
+    	return false;
+    }
+
     /**
      * {@inheritDoc}
      */

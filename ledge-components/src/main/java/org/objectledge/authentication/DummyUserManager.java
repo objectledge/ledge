@@ -153,4 +153,12 @@ public class DummyUserManager extends UserManager
 	public boolean emailExists(String email) {
 		return false;
 	}
+
+	/**
+     * {@inheritDoc}
+     */
+	@Override
+	public boolean altEmailExists(String altEmail) {
+		return false;
+	}
 }
