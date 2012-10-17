@@ -62,8 +62,8 @@ public class DirectoryUserManager extends UserManager
 {
     /** Default value for login attribute name. */
     public static final String LOGIN_ATTRIBUTE_DEFAULT = "uid";
-
-	/** Default value for email attribute name. */
+    
+    /** Default value for email attribute name. */
     public static final String EMAIL_ATTRIBUTE_DEFAULT = "mail";
     
     /** Default value for email attribute name. */
@@ -212,16 +212,29 @@ public class DirectoryUserManager extends UserManager
         }
     	return emailExists;
     }
-
-	/**
+    
+    /**
      * {@inhertitDoc}
      */
     @Override
     public boolean altEmailExists(String altEmail)
     {
-    	return false;
+    	boolean altEmailExists = false;
+    	try
+        {
+    		List<String> list = lookupDNs(altEmailAttribute, altEmail);
+            if(list.size() > 0)
+            {
+                altEmailExists = true;
+            }
+        }
+        catch(NamingException e)
+        {
+        	// defaults to false
+        }
+    	return altEmailExists;
     }
-
+    
     /**
      * {@inheritDoc}
      */
