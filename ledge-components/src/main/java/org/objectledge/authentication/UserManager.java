@@ -140,7 +140,7 @@ public abstract class UserManager
      * Check if alternative email exists.
      * 
      * @param altEmail the alternative address to check for.
-     * @return <code>true</code> if alernative emails exists in system
+     * @return <code>true</code> if alternative emails exists in system
      */
     public abstract boolean altEmailExists(String altEmail);
     
