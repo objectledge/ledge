@@ -92,7 +92,7 @@ public class JerseyRestValve
             throws ConfigurationException
         {
             this.context = context;
-            for(Configuration param : config.getChildren("init-param"))
+            for(Configuration param : config.getChildren("init-parameter"))
             {
                 final String name = param.getChild("param-name").getValue();
                 final String value = param.getChild("param-value").getValue();
