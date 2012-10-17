@@ -84,6 +84,9 @@ public class DirectoryUserManager extends UserManager
     /** the login attribute key. */
     protected String loginAttribute;
     
+    /** the email attribute key. */
+    protected String emailAttribute;
+    
     /** the password attribute key. */
     protected String passwordAttribute;
     
@@ -141,6 +144,8 @@ public class DirectoryUserManager extends UserManager
         defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").
             getValue(LOGIN_ATTRIBUTE_DEFAULT);
+        emailAttribute = config.getChild("emailAttribute").
+            getValue(EMAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").
             getValue(PASSWORD_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
