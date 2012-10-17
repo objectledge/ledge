@@ -175,6 +175,15 @@ public class DirectoryUserManager extends UserManager
         }
     }
 
+	/**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean emailExists(String email)
+    {
+    	return false;
+    }
+
     /**
      * {@inheritDoc}
      */

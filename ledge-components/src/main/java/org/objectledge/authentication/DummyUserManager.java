@@ -145,4 +145,12 @@ public class DummyUserManager extends UserManager
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	public boolean emailExists(String email) {
+		return false;
+	}
 }

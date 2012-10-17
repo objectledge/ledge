@@ -129,6 +129,14 @@ public abstract class UserManager
     public abstract boolean userExists(String dn);
     
     /**
+     * Check if email exists.
+     * 
+     * @param email the address to check for.
+     * @return <code>true</code> if emails exists in system
+     */
+    public abstract boolean emailExists(String email);
+    
+    /**
      * Creates a new user account.
      * 
      * @param login login name of the user.
