@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.picocontainer.PicoContainer;
 
@@ -134,7 +133,6 @@ public class LedgeServlet
     public void init(ServletConfig servletConfig)
         throws ServletException
     {
-        BasicConfigurator.configure();
         Logger log = Logger.getLogger(LedgeServlet.class);
         PicoContainer container = (PicoContainer)servletConfig.getServletContext().getAttribute(
             LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
