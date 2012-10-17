@@ -189,7 +189,20 @@ public class DirectoryUserManager extends UserManager
     @Override
     public boolean emailExists(String email)
     {
-    	return false;
+    	boolean emailExists = false;
+    	try
+        {
+    		List<String> list = lookupDNs(emailAttribute, email);
+            if(list.size() > 0)
+            {
+                emailExists = true;
+            }
+        }
+        catch(NamingException e)
+        {
+        	// defaults to false
+        }
+    	return emailExists;
     }
 
     /**
