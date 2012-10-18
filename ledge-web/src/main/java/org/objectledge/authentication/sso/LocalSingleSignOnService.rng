@@ -172,13 +172,20 @@
               </attribute>
             </optional>
             <interleave>
-              <optional>
-                <element name="secret">
-                  <a:documentation>HTTP basic authentication password required from clients. It is
-                    recommended to use secret, or authorizedClients restrictions, or both.
-                  </a:documentation>
-                  <data type="string" />
-                </element>
+             <optional>
+              <element name="httpBasic">
+               <a:documentation>HTTP basic authentication. It is
+                                recommended to use user and secret, or authorizedClients restrictions, or both.
+               </a:documentation>
+               <attribute name="user">
+                <a:documentation>HTTP basic authentication user required from clients.</a:documentation>
+                <data type="string" />
+               </attribute>
+               <attribute name="secret">
+                <a:documentation>HTTP basic authentication password required from clients.</a:documentation>
+                <data type="string" />
+               </attribute>
+               </element>
               </optional>
               <optional>
                 <element name="authorizedClients">

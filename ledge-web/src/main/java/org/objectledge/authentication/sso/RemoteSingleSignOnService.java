@@ -49,8 +49,9 @@ public class RemoteSingleSignOnService
         }
         xmlRpcConfig.setEnabledForExtensions(true);
         xmlRpcConfig.setContentLengthOptional(true);
-        String secret = config.getChild("secret").getValue();
-        xmlRpcConfig.setBasicUserName("sso");
+        String userName = config.getChild("httpBasic").getAttribute("user", null);
+        String secret = config.getChild("httpBasic").getAttribute("secret", null);
+        xmlRpcConfig.setBasicUserName(userName);
         xmlRpcConfig.setBasicPassword(secret);
         XmlRpcClient xmlRpcClient = new XmlRpcClient();
         xmlRpcClient.setConfig(xmlRpcConfig);
@@ -92,7 +93,7 @@ public class RemoteSingleSignOnService
     }
 
     @Override
-    public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
+    public boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure)
     {
         throw new UnsupportedOperationException(
             "this functionality is available on realm controler only");

@@ -325,9 +325,9 @@ public class LocalSingleSignOnService
     }
     
     @Override
-    public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
+    public boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure)
     {
-       return serverApiRestrictions.validateApiRequest(secret, remoteAddr, secure);
+       return serverApiRestrictions.validateApiRequest(userName, secret, remoteAddr, secure);
     }    
 
     // ..........................................................................................
