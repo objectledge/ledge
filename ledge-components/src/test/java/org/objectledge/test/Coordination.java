@@ -176,6 +176,14 @@ public class Coordination
         @Override
         public Exception call()
         {
+            try
+            {
+                participant.setup();
+            }
+            catch(Exception e)
+            {
+                return e;
+            }
             for(int i = 1; i <= steps; i++)
             {
                 try
