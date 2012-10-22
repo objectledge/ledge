@@ -31,6 +31,7 @@ package org.objectledge.authentication;
 import java.security.Principal;
 
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 
 /**
@@ -160,5 +161,11 @@ public class DummyUserManager extends UserManager
 	@Override
 	public boolean altEmailExists(String altEmail) {
 		return false;
+	}
+
+	@Override
+	public Principal createAccount(String login, String dn, String password,
+			Attributes attributes) throws AuthenticationException {
+		 throw new UnsupportedOperationException("Dummy manager cannot create new account");
 	}
 }

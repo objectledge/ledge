@@ -241,7 +241,16 @@ public class DirectoryUserManager extends UserManager
     public Principal createAccount(String login, String dn, String password) 
         throws AuthenticationException
     {
-        if(!checkLogin(login))
+        return this.createAccount(login, dn, password, null);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+	public Principal createAccount(String login, String dn, String password,
+			Attributes attributes) throws AuthenticationException {
+    	if(!checkLogin(login))
         {
             throw new AuthenticationException("login '"+login+"' reserved");
         }
@@ -259,6 +268,7 @@ public class DirectoryUserManager extends UserManager
             attrs.put(new BasicAttribute(loginAttribute, login));
             attrs.put(new BasicAttribute(passwordAttribute, passwordDigester
                 .generateDigest(password)));
+            addAdditionalAttributes(attributes, attrs);
             ctx.createSubcontext(directory.getRelativeName(dn), attrs);
             nameByLogin.put(login, dn);
             loginByName.put(dn, login);
@@ -282,7 +292,19 @@ public class DirectoryUserManager extends UserManager
 			p.createAccount(principal);
 		}
 		return principal;
-    }
+	}
+
+	private void addAdditionalAttributes(Attributes attributes, Attributes attrs)
+			throws NamingException {
+		if(attributes != null)
+		{
+			NamingEnumeration<String> ids = attributes.getIDs();
+			while(ids.hasMore()){
+				String attrId = ids.nextElement();
+				attrs.put(attributes.get(attrId));
+			}
+		}
+	}
 
     /**
      * {@inheritDoc}
@@ -650,4 +672,6 @@ public class DirectoryUserManager extends UserManager
     {
         return lookupDNs(query, defaultSearchControls);
     }
+
+	
 }

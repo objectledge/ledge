@@ -31,6 +31,7 @@ import java.security.Principal;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 
 import org.objectledge.parameters.Parameters;
@@ -155,6 +156,20 @@ public abstract class UserManager
      */
     public abstract Principal createAccount(String login, String dn, String password)
         throws AuthenticationException;
+    
+    /**
+     * Creates a new user account with additional Attributes
+     * 
+     * @param login login name of the user.
+     * @param dn distinguished name of the user.
+     * @param password initial password of the user.
+     * @param attributes the additional attributes
+     * @return the newly created account.
+     * @throws AuthenticationException if the account could no be created.
+     */
+    public abstract Principal createAccount(String login, String dn, String password, Attributes attributes)
+        throws AuthenticationException;
+    
     
     /**
      * Removes an user account.
