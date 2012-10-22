@@ -266,8 +266,7 @@ public class DirectoryUserManager extends UserManager
             }
             attrs.put(oc);
             attrs.put(new BasicAttribute(loginAttribute, login));
-            attrs.put(new BasicAttribute(passwordAttribute, passwordDigester
-                .generateDigest(password)));
+            putPasswordAttribute(password, attrs, blockPassword);
             addAdditionalAttributes(attributes, attrs);
             ctx.createSubcontext(directory.getRelativeName(dn), attrs);
             nameByLogin.put(login, dn);
@@ -292,6 +291,15 @@ public class DirectoryUserManager extends UserManager
 			p.createAccount(principal);
 		}
 		return principal;
+	}
+
+	private void putPasswordAttribute(String password, Attributes attrs, Boolean blockPassword) {
+		String hash = passwordDigester.generateDigest(password);
+		if(blockPassword)
+		{
+			hash = "!" + hash;
+		}
+		attrs.put(new BasicAttribute(passwordAttribute, hash));
 	}
 
     /**
@@ -432,8 +440,7 @@ public class DirectoryUserManager extends UserManager
                 throw new UserUnknownException("user "+account.getName()+" does not exist");
             }
             Attributes attrs = new BasicAttributes(true);
-            attrs.put(new BasicAttribute(passwordAttribute, passwordDigester
-                .generateDigest(password)));
+            putPasswordAttribute(password, attrs, false);
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attrs);
             logger.info("User " + account.getName() + "'s password changed");
         }
