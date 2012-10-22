@@ -294,6 +294,14 @@ public class DirectoryUserManager extends UserManager
 		return principal;
 	}
 
+    /**
+     * Adds additional attributes to attrs.
+     * Changes state of attrs.
+     * 
+     * @param attributes the additional attributes to add to attrs
+     * @param attrs
+     * @throws NamingException
+     */
 	private void addAdditionalAttributes(Attributes attributes, Attributes attrs)
 			throws NamingException {
 		if(attributes != null)
