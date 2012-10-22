@@ -415,6 +415,10 @@ public abstract class Transaction
 
         private String statementLogName;
 
+        public Config()
+        {
+        }
+
         public Config(int tracing, int defaultTimeout, String statementLogName)
         {
             this.tracing = tracing;
@@ -434,14 +438,30 @@ public abstract class Transaction
             return tracing;
         }
 
+        public void setTracing(int tracing)
+        {
+            this.tracing = tracing;
+        }
+
         public int getDefaultTimeout()
         {
             return defaultTimeout;
+        }
+
+        public void setDefaultTimeout(int defaultTimeout)
+        {
+            this.defaultTimeout = defaultTimeout;
         }
 
         public String getStatementLogName()
         {
             return statementLogName;
         }
+
+        public void setStatementLogName(String statementLogName)
+        {
+            this.statementLogName = statementLogName;
+        }
+
     }
 }
