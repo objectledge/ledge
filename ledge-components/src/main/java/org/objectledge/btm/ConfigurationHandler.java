@@ -95,11 +95,14 @@ class ConfigurationHandler
         {
             switch(child.getName())
             {
-            case "depth":
-                transactionConfig.setTracing(config.getValueAsInteger());
+            case "disabled":
+                transactionConfig.setTracing(0);
                 break;
-            case "statementLogName":
-                transactionConfig.setStatementLogName(config.getValue());
+            case "depth":
+                transactionConfig.setTracing(child.getValueAsInteger());
+                break;
+            case "statementLog":
+                transactionConfig.setStatementLogName(child.getValue());
                 break;
             default:
                 throw new ConfigurationException("unsupported element " + child.getName(),

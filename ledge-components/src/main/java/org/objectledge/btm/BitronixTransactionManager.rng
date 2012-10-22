@@ -403,9 +403,19 @@
   </define>
 
   <define name="tracingProperties">
-    <element name="depth">
-      <data type="integer" />
-    </element>
+    <choice>
+      <element name="disabled">
+        <empty />
+      </element>
+      <element name="depth">
+        <data type="integer" />
+      </element>
+    </choice>
+    <optional>
+      <element name="statementLog">
+        <data type="string" />
+      </element>
+    </optional>
   </define>
 
   <start>
