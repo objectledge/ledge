@@ -165,7 +165,7 @@ public class DummyUserManager extends UserManager
 
 	@Override
 	public Principal createAccount(String login, String dn, String password,
-			Attributes attributes) throws AuthenticationException {
+			Attributes attributes, Boolean blockPassword) throws AuthenticationException {
 		 throw new UnsupportedOperationException("Dummy manager cannot create new account");
 	}
 }

@@ -241,7 +241,7 @@ public class DirectoryUserManager extends UserManager
     public Principal createAccount(String login, String dn, String password) 
         throws AuthenticationException
     {
-        return this.createAccount(login, dn, password, null);
+        return this.createAccount(login, dn, password, null, false);
     }
     
     /**
@@ -249,7 +249,7 @@ public class DirectoryUserManager extends UserManager
      */
     @Override
 	public Principal createAccount(String login, String dn, String password,
-			Attributes attributes) throws AuthenticationException {
+			Attributes attributes, Boolean blockPassword) throws AuthenticationException {
     	if(!checkLogin(login))
         {
             throw new AuthenticationException("login '"+login+"' reserved");
