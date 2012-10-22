@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.database.Transaction;
 
 import bitronix.tm.TransactionManagerServices;
 import bitronix.tm.resource.common.ResourceBean;
@@ -31,7 +32,7 @@ class ConfigurationHandler
     }
 
     static void configure(Map<String, DataSource> dataSources,
-        Map<String, ConnectionFactory> connectionFactories, TransactionTracingConfig tracing,
+        Map<String, ConnectionFactory> connectionFactories, Transaction.Config tracing,
         Configuration config)
         throws ConfigurationException
     {
@@ -87,7 +88,7 @@ class ConfigurationHandler
         btm.setResourceConfigurationFilename(null);
     }
 
-    private static void configureTracing(TransactionTracingConfig tracking, Configuration config)
+    private static void configureTracing(Transaction.Config transactionConfig, Configuration config)
         throws ConfigurationException
     {
         for(Configuration child : config.getChildren())
@@ -95,7 +96,10 @@ class ConfigurationHandler
             switch(child.getName())
             {
             case "depth":
-                tracking.setDepth(config.getValueAsInteger());
+                transactionConfig.setTracing(config.getValueAsInteger());
+                break;
+            case "statementLogName":
+                transactionConfig.setStatementLogName(config.getValue());
                 break;
             default:
                 throw new ConfigurationException("unsupported element " + child.getName(),

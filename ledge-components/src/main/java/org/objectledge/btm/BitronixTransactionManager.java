@@ -1,6 +1,5 @@
 package org.objectledge.btm;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,17 +9,17 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.database.Transaction;
 import org.picocontainer.Startable;
 
 import bitronix.tm.TransactionManagerServices;
-
 
 public class BitronixTransactionManager
     implements Startable
 {
     private bitronix.tm.BitronixTransactionManager btm;
 
-    private final TransactionTracingConfig tracing = new TransactionTracingConfig();
+    private final Transaction.Config transactionConfig = new Transaction.Config();
 
     private final Map<String, DataSource> dataSources = new HashMap<>();
 
@@ -29,13 +28,13 @@ public class BitronixTransactionManager
     public BitronixTransactionManager(org.jcontainer.dna.Configuration config)
         throws ConfigurationException
     {
-        ConfigurationHandler.configure(dataSources, connectionFactories, tracing, config);
+        ConfigurationHandler.configure(dataSources, connectionFactories, transactionConfig, config);
         btm = TransactionManagerServices.getTransactionManager();
     }
 
-    TransactionTracingConfig getTracingConfiguration()
+    Transaction.Config getTansactionConfig()
     {
-        return tracing;
+        return transactionConfig;
     }
 
     UserTransaction getUserTransaction()

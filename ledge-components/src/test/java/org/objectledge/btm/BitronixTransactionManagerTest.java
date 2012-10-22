@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.test.LedgeTestCase;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
@@ -32,13 +33,14 @@ public class BitronixTransactionManagerTest
     {
         ConfigurationFactory cf = new ConfigurationFactory(getFileSystem(), new XMLValidator(
             new XMLGrammarCache()), "/btm");
+        LoggingConfigurator lf = new LoggingConfigurator();
         initLog4J("INFO");
         BitronixTransactionManager btm = new BitronixTransactionManager(cf.getConfig("simple",
             BitronixTransactionManager.class));
         try
         {
             BitronixDataSource ds = new BitronixDataSource("hsql", btm);
-            BitronixTransaction t = new BitronixTransaction(btm, new Context(), getLogger());
+            BitronixTransaction t = new BitronixTransaction(btm, new Context(), getLogger(), lf);
             t.begin();
             try (Connection c1 = ds.getConnection())
             {
