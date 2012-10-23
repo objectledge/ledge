@@ -262,6 +262,15 @@ public abstract class UserManager
      */
     public abstract void changeUserPassword(Principal account, String password)
         throws AuthenticationException;
+    
+    /**
+     * Gets user's password
+     * 
+     * @param account the account.
+     * @return password, stored password
+     * @throws AuthenticationException if there is a problem performing the operation.
+     */
+    public abstract String getUserPassword(Principal account) throws AuthenticationException;
         
     /**
      * Checks user supplied password.

@@ -453,7 +453,44 @@ public class DirectoryUserManager extends UserManager
             closeContext(ctx);
         }
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    public String getUserPassword(Principal account) throws AuthenticationException
+    {
+        String storedPassword = null;
+        DirContext ctx = null;
+        try
+        {
+            ctx = directory.lookupDirContext(account.getName());
+            if(ctx == null)
+            {
+                throw new UserUnknownException("user "+account.getName()+" does not exist");
+            }
+            String[] attrIds = { passwordAttribute };
+            Attribute attr = ctx.getAttributes("", attrIds).get(passwordAttribute);
+            Object obj = attr.get();
+            if(obj instanceof String)
+            {
+                storedPassword = (String)obj;
+            }
+            else
+            {
+                storedPassword = new String((byte[])obj);
+            }
+        }
+        catch (Exception e) 
+        {
+            throw new AuthenticationException("password retreiveal failed", e);
+        } 
+        finally 
+        {
+            closeContext(ctx);
+        }
+        return storedPassword;
+    }
+    
     /**
      * {@inheritDoc}
      */

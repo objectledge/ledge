@@ -168,4 +168,11 @@ public class DummyUserManager extends UserManager
 			Attributes attributes, Boolean blockPassword) throws AuthenticationException {
 		 throw new UnsupportedOperationException("Dummy manager cannot create new account");
 	}
+
+    @Override
+    public String getUserPassword(Principal account)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot get account's password");
+    }
 }
