@@ -146,6 +146,7 @@ public class DBJobDescriptor extends AbstractJobDescriptor
         {
             record.setNull("run_time_limit_end");
         }
+        record.setBoolean("auto_clean", getAutoClean());
         record.setBoolean("reentrant", isReentrant());
         record.setBoolean("enabled", isEnabled());
     }
