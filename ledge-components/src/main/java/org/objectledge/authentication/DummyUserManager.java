@@ -29,6 +29,7 @@
 package org.objectledge.authentication;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
@@ -169,10 +170,19 @@ public class DummyUserManager extends UserManager
 		 throw new UnsupportedOperationException("Dummy manager cannot create new account");
 	}
 
+
     @Override
     public String getUserPassword(Principal account)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot get account's password");
     }
+
+	@Override
+	public List<Principal> getUserByParameter(String parameter,
+			String parameterValue) throws NamingException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

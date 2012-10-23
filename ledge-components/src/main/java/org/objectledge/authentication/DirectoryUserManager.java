@@ -30,6 +30,7 @@ package org.objectledge.authentication;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -696,6 +697,33 @@ public class DirectoryUserManager extends UserManager
     {
         return lookupDNs(query, defaultSearchControls);
     }
+
+	@Override
+	public List<Principal> getUserByParameter(String parameter,
+			String parameterValue) throws NamingException {
+			
+		List<Principal> results = new ArrayList<Principal>();
+		
+		String query = "("+ parameter + "=" + parameterValue + ")";
+		
+    	DirContext ctx = null;
+        try 
+        {
+        	ctx = directory.getBaseDirContext();
+            NamingEnumeration<SearchResult> answer = ctx.search("", query, null);
+        
+            while(answer.hasMore())
+            {
+            	SearchResult result = answer.next();
+                results.add(new DefaultPrincipal(result.getNameInNamespace()));
+            }
+            return results;
+        } 
+        finally 
+        {
+            closeContext(ctx);
+        }
+	}
 
 	
 }

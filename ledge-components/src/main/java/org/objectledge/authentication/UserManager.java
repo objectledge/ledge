@@ -28,6 +28,7 @@
 package org.objectledge.authentication;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
@@ -327,4 +328,8 @@ public abstract class UserManager
      */
     public abstract Principal[] lookupAccounts(String query)
         throws NamingException;    
+    
+    public abstract List<Principal> getUserByParameter(String parameter, String parameterValue) throws NamingException;
+    
+    
 }
