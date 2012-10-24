@@ -285,8 +285,7 @@ public class DatabaseUtils
             close(stmt);
         }        
     }
-    
-    
+
     /**
      * Checks if the given database contains a table with the given name.
      * 
@@ -298,13 +297,26 @@ public class DatabaseUtils
     public static boolean hasTable(DataSource ds, String table)
         throws SQLException
     {
-        Connection conn = null;
-        ResultSet tables = null;
-        try
+        try (Connection conn = ds.getConnection())
         {
-            conn = ds.getConnection();
-            DatabaseMetaData md = conn.getMetaData();
-            tables = md.getTables(null, null, null, null);
+            return hasTable(conn, table);
+        }
+    }
+
+    /**
+     * Checks if the given database contains a table with the given name.
+     * 
+     * @param conn database connection.
+     * @param table table name, case insensitive.
+     * @return <code>true</code> if the database contains the table.
+     * @throws SQLException if there is a problem executing the check.
+     */
+    public static boolean hasTable(Connection conn, String table)
+        throws SQLException
+    {
+        DatabaseMetaData md = conn.getMetaData();
+        try (ResultSet tables = md.getTables(null, null, null, null))
+        {
             boolean result = false;
             while(tables.next())
             {
@@ -315,12 +327,7 @@ public class DatabaseUtils
             }
             return result;
         }
-        finally
-        {
-            close(tables);
-            close(conn);
-        }
-    }    
+    }
 
     /**
      * Transfer data from one database to another.
