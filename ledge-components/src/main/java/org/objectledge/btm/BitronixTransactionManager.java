@@ -15,7 +15,7 @@ import org.picocontainer.Startable;
 import bitronix.tm.TransactionManagerServices;
 
 public class BitronixTransactionManager
-    implements Startable
+    implements Startable, AutoCloseable
 {
     private bitronix.tm.BitronixTransactionManager btm;
 
@@ -64,6 +64,12 @@ public class BitronixTransactionManager
 
     @Override
     public void stop()
+    {
+        btm.shutdown();
+    }
+
+    @Override
+    public void close()
     {
         btm.shutdown();
     }
