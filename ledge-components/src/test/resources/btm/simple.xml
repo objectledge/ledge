@@ -18,6 +18,8 @@
       <className>org.hsqldb.jdbc.pool.JDBCXADataSource</className>
       <maxPoolSize>5</maxPoolSize>
       <isolationLevel>READ_COMMITTED</isolationLevel>
+      <localAutoCommit>false</localAutoCommit>
+      <allowLocalTransactions>true</allowLocalTransactions>
       <driverProperties>
         <property name="url">jdbc:hsqldb:.</property>
         <property name="user">sa</property>
@@ -28,9 +30,23 @@
       <maxPoolSize>5</maxPoolSize>
       <isolationLevel>READ_COMMITTED</isolationLevel>
       <cursorHoldability>CLOSE_CURSORS_AT_COMMIT</cursorHoldability>
+      <localAutoCommit>false</localAutoCommit>
+      <allowLocalTransactions>true</allowLocalTransactions>
       <driverProperties>
         <property name="databaseName">target/derby/btm</property>
         <property name="createDatabase">create</property>
+      </driverProperties>
+    </connectionPool>
+    <connectionPool uniqueName="pg">
+      <className>org.postgresql.xa.PGXADataSource</className>
+      <maxPoolSize>10</maxPoolSize>
+      <isolationLevel>READ_COMMITTED</isolationLevel>
+      <localAutoCommit>false</localAutoCommit>
+      <driverProperties>
+        <property name="serverName">localhost</property>
+        <property name="databaseName">btm</property>
+        <property name="user">cyklotron</property>
+        <property name="password">coraltest</property>
       </driverProperties>
     </connectionPool>
   </jdbc>
