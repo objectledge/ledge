@@ -28,6 +28,7 @@
 package org.objectledge.database;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -257,6 +258,35 @@ public class ThreadDataSource
                             | IllegalAccessException e)
             {
                 log.error("introspection problem ", e);
+            }
+        }
+        else if(conn.getClass().getName().startsWith("$Proxy"))
+        {
+            buff.append(conn.toString());
+            try
+            {
+                final Class<?> pgConnClass = Class.forName("org.postgresql.PGConnection");
+                final Method getPid = pgConnClass
+                    .getMethod("getBackendPID");
+                if(conn.isWrapperFor(pgConnClass))
+                {
+                    try
+                    {
+                        int pid = (Integer)getPid.invoke(conn.unwrap(Connection.class),
+                            new Object[0]);
+                        buff.append(" pid: ").append(pid);
+                    }
+                    catch(Exception e)
+                    {
+                        log.error("introspection problem ", e);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                log.debug(
+                    "introspection problem, probably not a Postgress connection, or patched driver not avaialable",
+                    e);
             }
         }
         else
