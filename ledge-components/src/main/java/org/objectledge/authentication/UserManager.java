@@ -46,28 +46,28 @@ import org.objectledge.parameters.Parameters;
 public abstract class UserManager
 {
     // instance variables ///////////////////////////////////////////////////////////////////////
-    
+
     /** the naming policy to be used. */
     protected NamingPolicy namingPolicy;
-    
+
     /** the login verifier to be used. */
     protected LoginVerifier loginVerifier;
-    
+
     /** the password digester to be used. */
     protected PasswordDigester passwordDigester;
-    
+
     /** the password generator to be used. */
     protected PasswordGenerator passwordGenerator;
-    
+
     // initialization ///////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * No-arg ctor for mock object testing.
      */
     protected UserManager()
-    {       
+    {
     }
-    
+
     /**
      * Creates an instance of the user manager.
      * 
@@ -76,18 +76,17 @@ public abstract class UserManager
      * @param passwordGenerator the password generator.
      * @param passwordDigester the password digester.
      */
-    public UserManager(NamingPolicy namingPolicy, 
-        LoginVerifier loginVerifier, PasswordGenerator passwordGenerator, 
-        PasswordDigester passwordDigester) 
+    public UserManager(NamingPolicy namingPolicy, LoginVerifier loginVerifier,
+        PasswordGenerator passwordGenerator, PasswordDigester passwordDigester)
     {
         this.namingPolicy = namingPolicy;
         this.loginVerifier = loginVerifier;
         this.passwordGenerator = passwordGenerator;
         this.passwordDigester = passwordDigester;
     }
-    
+
     // account creation + removal ///////////////////////////////////////////////////////////////
-    
+
     /**
      * Checks if a login name is a non-occupied and non-reserved one.
      * 
@@ -109,9 +108,9 @@ public abstract class UserManager
     {
         return loginVerifier.validate(login);
     }
-    
+
     /**
-     * Creates a distinguished name from provided parameters in conformance to configured naming 
+     * Creates a distinguished name from provided parameters in conformance to configured naming
      * policy.
      * 
      * @param parameters the parameters to generate name from.
@@ -122,14 +121,14 @@ public abstract class UserManager
         return namingPolicy.getDn(parameters);
     }
 
-    /** 
+    /**
      * Check if user exists.
      * 
      * @param dn the name of the user.
      * @return <code>true</code> if user exists in system.
      */
     public abstract boolean userExists(String dn);
-    
+
     /**
      * Check if email exists.
      * 
@@ -137,7 +136,7 @@ public abstract class UserManager
      * @return <code>true</code> if emails exists in system
      */
     public abstract boolean emailExists(String email);
-    
+
     /**
      * Check if alternative email exists.
      * 
@@ -145,7 +144,7 @@ public abstract class UserManager
      * @return <code>true</code> if alternative emails exists in system
      */
     public abstract boolean altEmailExists(String altEmail);
-    
+
     /**
      * Creates a new user account.
      * 
@@ -157,7 +156,7 @@ public abstract class UserManager
      */
     public abstract Principal createAccount(String login, String dn, String password)
         throws AuthenticationException;
-    
+
     /**
      * Creates a new user account with additional Attributes
      * 
@@ -165,14 +164,15 @@ public abstract class UserManager
      * @param dn distinguished name of the user.
      * @param password initial password of the user.
      * @param attributes the additional attributes
-     * @param blockPassword the flag indicating if password should have addded ! mark after hashing which blocks it.
+     * @param blockPassword the flag indicating if password should have addded ! mark after hashing
+     *        which blocks it.
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
-    public abstract Principal createAccount(String login, String dn, String password, Attributes attributes, Boolean blockPassword)
+    public abstract Principal createAccount(String login, String dn, String password,
+        Attributes attributes, Boolean blockPassword)
         throws AuthenticationException;
-    
-    
+
     /**
      * Removes an user account.
      * 
@@ -186,7 +186,7 @@ public abstract class UserManager
 
     /**
      * Lookup user by distinguised name.
-     *
+     * 
      * @param dn the users's distinguished name.
      * @return the account's descriptor.
      * @throws AuthenticationException if there is a problem performing the operation.
@@ -196,7 +196,7 @@ public abstract class UserManager
 
     /**
      * Lookup user by login name.
-     *
+     * 
      * @param login the name used for authentication.
      * @return the account's descriptor.
      * @throws AuthenticationException if there is a problem performing the operation.
@@ -205,8 +205,18 @@ public abstract class UserManager
         throws AuthenticationException;
 
     /**
+     * Lookup user by mail.
+     * 
+     * @param mail
+     * @return
+     * @throws AuthenticationException
+     */
+    public abstract Principal getUserByMail(String mail)
+        throws AuthenticationException;
+
+    /**
      * Maps user's distinguished name to login name.
-     *
+     * 
      * @param dn full user name.
      * @return the login name, or <code>null</code> if not found.
      * @throws AuthenticationException if there is a problem performing the operation.
@@ -220,7 +230,7 @@ public abstract class UserManager
 
     /**
      * Returns the login name of an user.
-     *
+     * 
      * @param account the account.
      * @return the login name, or <code>null</code> if not found.
      * @throws AuthenticationException if there is a problem performing the operation.
@@ -231,9 +241,9 @@ public abstract class UserManager
     {
         return namingPolicy.getLogin(account.getName());
     }
-        
+
     // system users /////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Returns the anonymous account.
      * 
@@ -263,7 +273,7 @@ public abstract class UserManager
      */
     public abstract void changeUserPassword(Principal account, String password)
         throws AuthenticationException;
-    
+
     /**
      * Gets user's password
      * 
@@ -271,8 +281,9 @@ public abstract class UserManager
      * @return password, stored password
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract String getUserPassword(Principal account) throws AuthenticationException;
-        
+    public abstract String getUserPassword(Principal account)
+        throws AuthenticationException;
+
     /**
      * Checks user supplied password.
      * 
@@ -283,7 +294,7 @@ public abstract class UserManager
      */
     public abstract boolean checkUserPassword(Principal account, String password)
         throws AuthenticationException;
-        
+
     /**
      * Generates a random password.
      * 
@@ -295,19 +306,19 @@ public abstract class UserManager
     {
         return passwordGenerator.createRandomPassword(min, max);
     }
-    
+
     // personal data ////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Returns the personal data of the accoun't owner.
      * 
      * @param account the account.
-     * @return Parameters view of the account's owner personal data. 
+     * @return Parameters view of the account's owner personal data.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
     public abstract DirContext getPersonalData(Principal account)
         throws AuthenticationException;
-        
+
     /**
      * Looks up user accounts according to personal data attributes.
      * 
@@ -318,7 +329,7 @@ public abstract class UserManager
      */
     public abstract Principal[] lookupAccounts(String attribute, String value)
         throws NamingException;
-        
+
     /**
      * Looks up user accounts according to personal data attributes.
      * 
@@ -327,9 +338,9 @@ public abstract class UserManager
      * @throws NamingException if the opertion could not be performed.
      */
     public abstract Principal[] lookupAccounts(String query)
-        throws NamingException;    
-    
-    public abstract List<Principal> getUserByParameter(String parameter, String parameterValue) throws NamingException;
-    
-    
+        throws NamingException;
+
+    public abstract List<Principal> getUserByParameter(String parameter, String parameterValue)
+        throws NamingException;
+
 }

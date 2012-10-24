@@ -59,68 +59,67 @@ import org.objectledge.naming.ContextHelper;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class DirectoryUserManager extends UserManager
+public class DirectoryUserManager
+    extends UserManager
 {
     /** Default value for login attribute name. */
     public static final String LOGIN_ATTRIBUTE_DEFAULT = "uid";
-    
+
     /** Default value for email attribute name. */
     public static final String EMAIL_ATTRIBUTE_DEFAULT = "mail";
-    
+
     /** Default value for email attribute name. */
     public static final String ALT_EMAIL_ATTRIBUTE_DEFAULT = "altMail";
 
     /** Default password attribute key name. */
     public static final String PASSWORD_ATTRIBUTE_DEFAULT = "userPassword";
-    
+
     /**
-     * Default value for login person object class (uidObject, simpleSecurityObject). 
-     * Minimalistic set of classes was chosen: uidObject (1.3.6.1.1.3.1),
-     * RFC2377 and simpleSecurityObject (0.9.2342.19200300.100.4.19), RFC1274. */ 
-    public static final String[] OBJECT_CLASS_DEFAULT = 
-    { 
-        "uidObject", "simpleSecurityObject" 
-    };
-    
-    /** the logger. */    
+     * Default value for login person object class (uidObject, simpleSecurityObject). Minimalistic
+     * set of classes was chosen: uidObject (1.3.6.1.1.3.1), RFC2377 and simpleSecurityObject
+     * (0.9.2342.19200300.100.4.19), RFC1274.
+     */
+    public static final String[] OBJECT_CLASS_DEFAULT = { "uidObject", "simpleSecurityObject" };
+
+    /** the logger. */
     protected Logger logger;
-    
+
     /** the login attribute key. */
     protected String loginAttribute;
-    
+
     /** the email attribute key. */
     protected String emailAttribute;
-    
+
     /** the alternative email attribute key. */
     protected String altEmailAttribute;
-    
+
     /** the password attribute key. */
     protected String passwordAttribute;
-    
+
     /** the anonymous name. */
     protected String anonymousName;
-    
+
     /** the superuser name. */
     protected String superuserName;
-    
+
     /** The objectClass of newly created containers. */
     protected String[] objectClass;
- 
+
     /** the directory context. */
     protected ContextHelper directory;
 
     /** The principal by name cache */
     private Map<String, String> loginByName;
-    
+
     /** The name by login cache */
     private Map<String, String> nameByLogin;
-    
+
     /** The default search controls */
     private SearchControls defaultSearchControls;
-	
-	/** The list of user management participants */
-	private UserManagementParticipant[] participants;
-    
+
+    /** The list of user management participants */
+    private UserManagementParticipant[] participants;
+
     /**
      * Creates an instance of the user manager.
      * 
@@ -133,14 +132,9 @@ public class DirectoryUserManager extends UserManager
      * @param factory the factory to get context from.
      * @throws NamingException if the context could not be accessed.
      */
-    public DirectoryUserManager(
-        Configuration config,
-        Logger logger,
-        NamingPolicy namingPolicy,
-        LoginVerifier loginVerifier,
-        PasswordGenerator passwordGenerator,
-        PasswordDigester passwordDigester,
-        ContextFactory factory,
+    public DirectoryUserManager(Configuration config, Logger logger, NamingPolicy namingPolicy,
+        LoginVerifier loginVerifier, PasswordGenerator passwordGenerator,
+        PasswordDigester passwordDigester, ContextFactory factory,
         UserManagementParticipant[] participants)
         throws NamingException
     {
@@ -149,21 +143,19 @@ public class DirectoryUserManager extends UserManager
         loginByName = new HashMap<String, String>();
         nameByLogin = new HashMap<String, String>();
         defaultSearchControls = new SearchControls();
-        loginAttribute = config.getChild("loginAttribute").
-            getValue(LOGIN_ATTRIBUTE_DEFAULT);
-        emailAttribute = config.getChild("emailAttribute").
-                getValue(EMAIL_ATTRIBUTE_DEFAULT);
-        altEmailAttribute = config.getChild("altEmailAttribute").
-        		getValue(ALT_EMAIL_ATTRIBUTE_DEFAULT);
-        passwordAttribute = config.getChild("passwordAttribute").
-            getValue(PASSWORD_ATTRIBUTE_DEFAULT);
+        loginAttribute = config.getChild("loginAttribute").getValue(LOGIN_ATTRIBUTE_DEFAULT);
+        emailAttribute = config.getChild("emailAttribute").getValue(EMAIL_ATTRIBUTE_DEFAULT);
+        altEmailAttribute = config.getChild("altEmailAttribute").getValue(
+            ALT_EMAIL_ATTRIBUTE_DEFAULT);
+        passwordAttribute = config.getChild("passwordAttribute").getValue(
+            PASSWORD_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
         superuserName = config.getChild("superuserName").getValue(null);
         String contextId = config.getChild("contextId").getValue("people");
         directory = new ContextHelper(factory, contextId, logger);
-        
+
         String objectClassList = config.getChild("objectClass").getValue("");
-        StringTokenizer st = new StringTokenizer(objectClassList,",");
+        StringTokenizer st = new StringTokenizer(objectClassList, ",");
         objectClass = new String[st.countTokens()];
         for(int i = 0; st.hasMoreTokens(); i++)
         {
@@ -173,10 +165,10 @@ public class DirectoryUserManager extends UserManager
         {
             objectClass = OBJECT_CLASS_DEFAULT;
         }
-		this.participants = participants;
+        this.participants = participants;
     }
 
-    /** 
+    /**
      * {@inheritDoc}
      */
     public boolean userExists(String dn)
@@ -191,17 +183,17 @@ public class DirectoryUserManager extends UserManager
             return false;
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean emailExists(String email)
     {
-    	boolean emailExists = false;
-    	try
+        boolean emailExists = false;
+        try
         {
-    		List<String> list = lookupDNs(emailAttribute, email);
+            List<String> list = lookupDNs(emailAttribute, email);
             if(list.size() > 0)
             {
                 emailExists = true;
@@ -209,21 +201,21 @@ public class DirectoryUserManager extends UserManager
         }
         catch(NamingException e)
         {
-        	// defaults to false
+            // defaults to false
         }
-    	return emailExists;
+        return emailExists;
     }
-    
+
     /**
      * {@inhertitDoc}
      */
     @Override
     public boolean altEmailExists(String altEmail)
     {
-    	boolean altEmailExists = false;
-    	try
+        boolean altEmailExists = false;
+        try
         {
-    		List<String> list = lookupDNs(altEmailAttribute, altEmail);
+            List<String> list = lookupDNs(altEmailAttribute, altEmail);
             if(list.size() > 0)
             {
                 altEmailExists = true;
@@ -231,29 +223,31 @@ public class DirectoryUserManager extends UserManager
         }
         catch(NamingException e)
         {
-        	// defaults to false
+            // defaults to false
         }
-    	return altEmailExists;
+        return altEmailExists;
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public Principal createAccount(String login, String dn, String password) 
+    public Principal createAccount(String login, String dn, String password)
         throws AuthenticationException
     {
         return this.createAccount(login, dn, password, null, false);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-	public Principal createAccount(String login, String dn, String password,
-			Attributes attributes, Boolean blockPassword) throws AuthenticationException {
-    	if(!checkLogin(login))
+    public Principal createAccount(String login, String dn, String password, Attributes attributes,
+        Boolean blockPassword)
+        throws AuthenticationException
+    {
+        if(!checkLogin(login))
         {
-            throw new AuthenticationException("login '"+login+"' reserved");
+            throw new AuthenticationException("login '" + login + "' reserved");
         }
         DirContext ctx = null;
         try
@@ -261,7 +255,7 @@ public class DirectoryUserManager extends UserManager
             ctx = directory.getBaseDirContext();
             Attributes attrs = new BasicAttributes(true);
             BasicAttribute oc = new BasicAttribute("objectClass");
-            for (int i = 0; i < objectClass.length; i++)
+            for(int i = 0; i < objectClass.length; i++)
             {
                 oc.add(objectClass[i]);
             }
@@ -274,11 +268,11 @@ public class DirectoryUserManager extends UserManager
             loginByName.put(dn, login);
             logger.info("User " + dn + " created");
         }
-        catch (NameAlreadyBoundException e)
+        catch(NameAlreadyBoundException e)
         {
             throw new UserAlreadyExistsException("user '" + dn + "' already exists");
         }
-        catch (NamingException e)
+        catch(NamingException e)
         {
             throw new AuthenticationException("account creation failed", e);
         }
@@ -286,85 +280,89 @@ public class DirectoryUserManager extends UserManager
         {
             closeContext(ctx);
         }
-		Principal principal = new DefaultPrincipal(dn);
-		for(UserManagementParticipant p: participants)
-		{
-			p.createAccount(principal);
-		}
-		return principal;
-	}
+        Principal principal = new DefaultPrincipal(dn);
+        for(UserManagementParticipant p : participants)
+        {
+            p.createAccount(principal);
+        }
+        return principal;
+    }
 
-	private void putPasswordAttribute(String password, Attributes attrs, Boolean blockPassword) {
-		String hash = passwordDigester.generateDigest(password);
-		if(blockPassword)
-		{
-			hash = "!" + hash;
-		}
-		attrs.put(new BasicAttribute(passwordAttribute, hash));
-	}
+    private void putPasswordAttribute(String password, Attributes attrs, Boolean blockPassword)
+    {
+        String hash = passwordDigester.generateDigest(password);
+        if(blockPassword)
+        {
+            hash = "!" + hash;
+        }
+        attrs.put(new BasicAttribute(passwordAttribute, hash));
+    }
 
     /**
-     * Adds additional attributes to attrs.
-     * Changes state of attrs.
+     * Adds additional attributes to attrs. Changes state of attrs.
      * 
      * @param attributes the additional attributes to add to attrs
      * @param attrs
      * @throws NamingException
      */
-	private void addAdditionalAttributes(Attributes attributes, Attributes attrs)
-			throws NamingException {
-		if(attributes != null)
-		{
-			NamingEnumeration<String> ids = attributes.getIDs();
-			while(ids.hasMore()){
-				String attrId = ids.nextElement();
-				attrs.put(attributes.get(attrId));
-			}
-		}
-	}
+    private void addAdditionalAttributes(Attributes attributes, Attributes attrs)
+        throws NamingException
+    {
+        if(attributes != null)
+        {
+            NamingEnumeration<String> ids = attributes.getIDs();
+            while(ids.hasMore())
+            {
+                String attrId = ids.nextElement();
+                attrs.put(attributes.get(attrId));
+            }
+        }
+    }
 
     /**
      * {@inheritDoc}
      */
-    public void removeAccount(Principal account) throws AuthenticationException
+    public void removeAccount(Principal account)
+        throws AuthenticationException
     {
         String login = getLoginName(account.getName());
         DirContext ctx = null;
-        try 
+        try
         {
             ctx = directory.getBaseDirContext();
             ctx.destroySubcontext(directory.getRelativeName(account.getName()));
             nameByLogin.remove(login);
             loginByName.remove(account.getName());
             logger.info("User " + account.getName() + " deleted");
-        } 
+        }
         catch(NameNotFoundException e)
         {
-            throw new UserUnknownException("user "+account.getName()+" does not exist");
-        }   
-        catch(NamingException e) 
+            throw new UserUnknownException("user " + account.getName() + " does not exist");
+        }
+        catch(NamingException e)
         {
             throw new AuthenticationException("account removal failed", e);
-        } 
-        finally 
+        }
+        finally
         {
             closeContext(ctx);
-        }    
-		for(UserManagementParticipant p: participants)
-		{
-			if(p.supportsRemoval())
-			{
-				p.removeAccount(account);
-			}
-		}
+        }
+        for(UserManagementParticipant p : participants)
+        {
+            if(p.supportsRemoval())
+            {
+                p.removeAccount(account);
+            }
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal getUserByName(String dn) throws AuthenticationException
+    public Principal getUserByName(String dn)
+        throws AuthenticationException
     {
-        //load the caches
+        // load the caches
         getLoginName(dn);
         return new DefaultPrincipal(dn);
     }
@@ -372,29 +370,30 @@ public class DirectoryUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal getUserByLogin(String login) throws AuthenticationException
+    public Principal getUserByLogin(String login)
+        throws AuthenticationException
     {
         try
         {
             List<String> list = lookupDNs(loginAttribute, login);
-            if(list.size()==0)
+            if(list.size() == 0)
             {
                 throw new UserUnknownException("failed to lookup user by login");
             }
-            if(list.size()>1)
+            if(list.size() > 1)
             {
                 StringBuilder message = new StringBuilder();
                 message.append("ambigous login, following dn's shares the same login '");
                 message.append(login);
                 message.append("':\n");
-                for(int i = 0; i < list.size();i++)
+                for(int i = 0; i < list.size(); i++)
                 {
                     message.append(list.get(i));
                     message.append("\n");
                 }
                 throw new AuthenticationException(message.toString());
             }
-            return new DefaultPrincipal(list.get(0));                           
+            return new DefaultPrincipal(list.get(0));
         }
         catch(NamingException e)
         {
@@ -405,7 +404,34 @@ public class DirectoryUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal getAnonymousAccount() throws AuthenticationException
+    public Principal getUserByMail(String mail)
+        throws AuthenticationException
+    {
+        try
+        {
+            List<String> list = lookupDNs(emailAttribute, mail);
+            if(list.size() == 0)
+            {
+                throw new UserUnknownException("Failed to lookup user by mail");
+            }
+            else if(list.size() > 1)
+            {
+                // maybe add some new kind of exception?
+                throw new AuthenticationException("Failed to look up user. Mail is ambiguous.");
+            }
+            return new DefaultPrincipal(list.get(0));
+        }
+        catch(NamingException e)
+        {
+            throw new AuthenticationException("Failed to loolup user by login");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Principal getAnonymousAccount()
+        throws AuthenticationException
     {
         if(anonymousName == null)
         {
@@ -417,7 +443,8 @@ public class DirectoryUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal getSuperuserAccount() throws AuthenticationException
+    public Principal getSuperuserAccount()
+        throws AuthenticationException
     {
         if(superuserName == null)
         {
@@ -429,7 +456,7 @@ public class DirectoryUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public void changeUserPassword(Principal account, String password) 
+    public void changeUserPassword(Principal account, String password)
         throws AuthenticationException
     {
         DirContext ctx = null;
@@ -438,27 +465,28 @@ public class DirectoryUserManager extends UserManager
             ctx = directory.lookupDirContext(account.getName());
             if(ctx == null)
             {
-                throw new UserUnknownException("user "+account.getName()+" does not exist");
+                throw new UserUnknownException("user " + account.getName() + " does not exist");
             }
             Attributes attrs = new BasicAttributes(true);
             putPasswordAttribute(password, attrs, false);
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attrs);
             logger.info("User " + account.getName() + "'s password changed");
         }
-        catch(NamingException e) 
+        catch(NamingException e)
         {
             throw new AuthenticationException("password modification failed", e);
-        } 
-        finally 
+        }
+        finally
         {
             closeContext(ctx);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public String getUserPassword(Principal account) throws AuthenticationException
+    public String getUserPassword(Principal account)
+        throws AuthenticationException
     {
         String storedPassword = null;
         DirContext ctx = null;
@@ -467,7 +495,7 @@ public class DirectoryUserManager extends UserManager
             ctx = directory.lookupDirContext(account.getName());
             if(ctx == null)
             {
-                throw new UserUnknownException("user "+account.getName()+" does not exist");
+                throw new UserUnknownException("user " + account.getName() + " does not exist");
             }
             String[] attrIds = { passwordAttribute };
             Attribute attr = ctx.getAttributes("", attrIds).get(passwordAttribute);
@@ -481,17 +509,17 @@ public class DirectoryUserManager extends UserManager
                 storedPassword = new String((byte[])obj);
             }
         }
-        catch (Exception e) 
+        catch(Exception e)
         {
             throw new AuthenticationException("password retreiveal failed", e);
-        } 
-        finally 
+        }
+        finally
         {
             closeContext(ctx);
         }
         return storedPassword;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -512,7 +540,8 @@ public class DirectoryUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public DirContext getPersonalData(Principal account) throws AuthenticationException
+    public DirContext getPersonalData(Principal account)
+        throws AuthenticationException
     {
         try
         {
@@ -521,22 +550,23 @@ public class DirectoryUserManager extends UserManager
         }
         catch(NamingException e)
         {
-            throw new AuthenticationException("Failed to lookup user personal data" +
-                    " for principal: "+account.getName(), e);
+            throw new AuthenticationException("Failed to lookup user personal data"
+                + " for principal: " + account.getName(), e);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String attribute, String value) throws NamingException
+    public Principal[] lookupAccounts(String attribute, String value)
+        throws NamingException
     {
         List<String> list = lookupDNs(attribute, value);
         Principal[] principals = new Principal[list.size()];
         int i = 0;
         for(String dn : list)
         {
-            principals[i++] = new DefaultPrincipal(dn);                           
+            principals[i++] = new DefaultPrincipal(dn);
         }
         return principals;
     }
@@ -544,43 +574,44 @@ public class DirectoryUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String query) throws NamingException
+    public Principal[] lookupAccounts(String query)
+        throws NamingException
     {
         List<String> list = lookupDNs(query);
         Principal[] principals = new Principal[list.size()];
         int i = 0;
         for(String dn : list)
         {
-            principals[i++] = new DefaultPrincipal(dn);                           
+            principals[i++] = new DefaultPrincipal(dn);
         }
         return principals;
     }
 
-    // private helper methods. 
-    
+    // private helper methods.
+
     /**
      * Close directory context silently.
-     *
+     * 
      * @param ctx the context.
      */
     private void closeContext(Context ctx)
     {
-        try 
+        try
         {
             if(ctx != null)
             {
                 ctx.close();
             }
-        } 
-        catch (Exception e) 
+        }
+        catch(Exception e)
         {
             logger.error("closing context failed", e);
         }
     }
-     
+
     /**
      * Map full user name to login name.
-     *
+     * 
      * @param name full user name.
      * @return the login name, or <code>null</code> if not found.
      */
@@ -603,29 +634,29 @@ public class DirectoryUserManager extends UserManager
                     {
                         login = (String)obj;
                     }
-                    else    
+                    else
                     {
                         login = new String((byte[])obj);
                     }
                     nameByLogin.put(login, name);
-                    loginByName.put(name,login);
+                    loginByName.put(name, login);
                 }
             }
-            catch(NamingException e) 
+            catch(NamingException e)
             {
                 throw new UserUnknownException("login name lookup failed", e);
-            } 
-            finally 
+            }
+            finally
             {
                 closeContext(user);
             }
         }
         return login;
     }
-    
+
     /**
      * Find all dn of the context that match the attribute query.
-     *
+     * 
      * @param attribute the attribute name.
      * @param value the attribute value.
      * @return the list of the name of matched context.
@@ -635,7 +666,7 @@ public class DirectoryUserManager extends UserManager
         throws NamingException
     {
         DirContext ctx = null;
-        try 
+        try
         {
             ctx = directory.getBaseDirContext();
             Attributes matchAttrs = new BasicAttributes(false);
@@ -648,38 +679,38 @@ public class DirectoryUserManager extends UserManager
                 results.add(result.getNameInNamespace());
             }
             return results;
-        } 
-        finally 
+        }
+        finally
         {
             closeContext(ctx);
         }
     }
-    
+
     /**
      * Find all dn of the context that match the attribute query given custom search controls.
-     *
+     * 
      * @param query attribute query
      * @param searchControls the search controls to use for query
      * @return the list of the name of matched context.
      * @throws NamingException if lookup fails.
      */
     private List<String> lookupDNs(String query, SearchControls searchControls)
-            throws NamingException
+        throws NamingException
     {
-    	DirContext ctx = null;
-        try 
+        DirContext ctx = null;
+        try
         {
-        	ctx = directory.getBaseDirContext();
+            ctx = directory.getBaseDirContext();
             NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
             List<String> results = new ArrayList<String>();
             while(answer.hasMore())
             {
-            	SearchResult result = answer.next();
+                SearchResult result = answer.next();
                 results.add(result.getNameInNamespace());
             }
             return results;
-        } 
-        finally 
+        }
+        finally
         {
             closeContext(ctx);
         }
@@ -687,7 +718,7 @@ public class DirectoryUserManager extends UserManager
 
     /**
      * Find all dn of the context that match the attribute query.
-     *
+     * 
      * @param query attribute query
      * @return the list of the name of matched context.
      * @throws NamingException if lookup fails.
@@ -698,32 +729,34 @@ public class DirectoryUserManager extends UserManager
         return lookupDNs(query, defaultSearchControls);
     }
 
-	@Override
-	public List<Principal> getUserByParameter(String parameter,
-			String parameterValue) throws NamingException {
-			
-		List<Principal> results = new ArrayList<Principal>();
-		
-		String query = "("+ parameter + "=" + parameterValue + ")";
-		
-    	DirContext ctx = null;
-        try 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Principal> getUserByParameter(String parameter, String parameterValue)
+        throws NamingException
+    {
+
+        List<Principal> results = new ArrayList<Principal>();
+
+        String query = "(" + parameter + "=" + parameterValue + ")";
+
+        DirContext ctx = null;
+        try
         {
-        	ctx = directory.getBaseDirContext();
+            ctx = directory.getBaseDirContext();
             NamingEnumeration<SearchResult> answer = ctx.search("", query, null);
-        
+
             while(answer.hasMore())
             {
-            	SearchResult result = answer.next();
+                SearchResult result = answer.next();
                 results.add(new DefaultPrincipal(result.getNameInNamespace()));
             }
             return results;
-        } 
-        finally 
+        }
+        finally
         {
             closeContext(ctx);
         }
-	}
-
-	
+    }
 }

@@ -40,7 +40,8 @@ import javax.naming.directory.DirContext;
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class DummyUserManager extends UserManager
+public class DummyUserManager
+    extends UserManager
 {
     /**
      * Creates an instance of the user manager.
@@ -49,7 +50,7 @@ public class DummyUserManager extends UserManager
     {
     }
 
-    /** 
+    /**
      * {@inheritDoc}
      */
     public boolean userExists(String dn)
@@ -60,7 +61,7 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal createAccount(String login, String dn, String password) 
+    public Principal createAccount(String login, String dn, String password)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot create new account");
@@ -69,15 +70,17 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public void removeAccount(Principal account) throws AuthenticationException
+    public void removeAccount(Principal account)
+        throws AuthenticationException
     {
-        throw new UnsupportedOperationException("Dummy manager cannot create new account");    
+        throw new UnsupportedOperationException("Dummy manager cannot create new account");
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal getUserByName(String dn) throws AuthenticationException
+    public Principal getUserByName(String dn)
+        throws AuthenticationException
     {
         return new DefaultPrincipal(dn);
     }
@@ -85,15 +88,17 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal getUserByLogin(String login) throws AuthenticationException
+    public Principal getUserByLogin(String login)
+        throws AuthenticationException
     {
-        return new DefaultPrincipal(login);                           
+        return new DefaultPrincipal(login);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal getAnonymousAccount() throws AuthenticationException
+    public Principal getAnonymousAccount()
+        throws AuthenticationException
     {
         return new DefaultPrincipal("anonymous");
     }
@@ -101,7 +106,8 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal getSuperuserAccount() throws AuthenticationException
+    public Principal getSuperuserAccount()
+        throws AuthenticationException
     {
         return null;
     }
@@ -109,7 +115,7 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public void changeUserPassword(Principal account, String password) 
+    public void changeUserPassword(Principal account, String password)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot change user password");
@@ -127,7 +133,8 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public DirContext getPersonalData(Principal account) throws AuthenticationException
+    public DirContext getPersonalData(Principal account)
+        throws AuthenticationException
     {
         return null;
     }
@@ -135,7 +142,8 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String attribute, String value) throws NamingException
+    public Principal[] lookupAccounts(String attribute, String value)
+        throws NamingException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
     }
@@ -143,33 +151,37 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String query) throws NamingException
+    public Principal[] lookupAccounts(String query)
+        throws NamingException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
     }
-    
+
     /**
      * {@inheritDoc}
      */
-	@Override
-	public boolean emailExists(String email) {
-		return false;
-	}
+    @Override
+    public boolean emailExists(String email)
+    {
+        return false;
+    }
 
-	/**
+    /**
      * {@inheritDoc}
      */
-	@Override
-	public boolean altEmailExists(String altEmail) {
-		return false;
-	}
+    @Override
+    public boolean altEmailExists(String altEmail)
+    {
+        return false;
+    }
 
-	@Override
-	public Principal createAccount(String login, String dn, String password,
-			Attributes attributes, Boolean blockPassword) throws AuthenticationException {
-		 throw new UnsupportedOperationException("Dummy manager cannot create new account");
-	}
-
+    @Override
+    public Principal createAccount(String login, String dn, String password, Attributes attributes,
+        Boolean blockPassword)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot create new account");
+    }
 
     @Override
     public String getUserPassword(Principal account)
@@ -178,11 +190,18 @@ public class DummyUserManager extends UserManager
         throw new UnsupportedOperationException("Dummy manager cannot get account's password");
     }
 
-	@Override
-	public List<Principal> getUserByParameter(String parameter,
-			String parameterValue) throws NamingException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Principal> getUserByParameter(String parameter, String parameterValue)
+        throws NamingException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot get user by parameter");
+    }
+
+    @Override
+    public Principal getUserByMail(String mail)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot lookup user by mail");
+    }
 
 }
