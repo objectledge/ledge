@@ -42,10 +42,6 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>jotm</groupId>
-      <artifactId>jotm</artifactId>
-    </dependency>
-    <dependency>
       <groupId>pcj</groupId>
       <artifactId>pcj</artifactId>
     </dependency>
