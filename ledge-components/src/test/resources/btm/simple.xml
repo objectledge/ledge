@@ -11,6 +11,7 @@
     </journal>
     <timer>
       <defaultTransactionTimeout>300</defaultTransactionTimeout>
+      <gracefulShutdownInterval>5</gracefulShutdownInterval>
     </timer>
   </tm>
   <jdbc>
@@ -42,6 +43,7 @@
       <maxPoolSize>10</maxPoolSize>
       <isolationLevel>READ_COMMITTED</isolationLevel>
       <localAutoCommit>false</localAutoCommit>
+      <allowLocalTransactions>true</allowLocalTransactions>
       <driverProperties>
         <property name="serverName">localhost</property>
         <property name="databaseName">btm</property>
