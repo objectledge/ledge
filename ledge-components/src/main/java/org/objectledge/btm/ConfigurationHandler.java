@@ -463,4 +463,22 @@ class ConfigurationHandler
         }
     }
 
+    public static void configure(Map<String, DataSource> dataSources, String dsName, String dsClass, Properties dsProperties)
+    {
+        bitronix.tm.Configuration btm = TransactionManagerServices.getConfiguration();
+        setDefaults(btm);
+        btm.setServerId("default");
+        btm.setLogPart1Filename("target/btm1.tlog");
+        btm.setLogPart2Filename("target/btm2.tlog");
+        btm.setDisableJmx(true);
+        PoolingDataSource ds = new PoolingDataSource();
+        ds.setUniqueName(dsName);
+        ds.setClassName(dsClass);
+        ds.setAllowLocalTransactions(true);
+        ds.setShareTransactionConnections(true);
+        ds.setLocalAutoCommit("false");
+        ds.setMaxPoolSize(10);
+        ds.getDriverProperties().putAll(dsProperties);
+        dataSources.put(dsName, ds);
+    }
 }

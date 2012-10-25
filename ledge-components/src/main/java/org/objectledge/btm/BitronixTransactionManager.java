@@ -2,6 +2,7 @@ package org.objectledge.btm;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.jms.ConnectionFactory;
 import javax.sql.DataSource;
@@ -29,6 +30,12 @@ public class BitronixTransactionManager
         throws ConfigurationException
     {
         ConfigurationHandler.configure(dataSources, connectionFactories, transactionConfig, config);
+        btm = TransactionManagerServices.getTransactionManager();
+    }
+
+    public BitronixTransactionManager(String dsName, String dsClass, Properties dsProperties)
+    {
+        ConfigurationHandler.configure(dataSources, dsName, dsClass, dsProperties);
         btm = TransactionManagerServices.getTransactionManager();
     }
 
