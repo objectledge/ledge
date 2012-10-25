@@ -1,16 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.objectledge</groupId>
     <artifactId>ledge-common</artifactId>
-    <relativePath>../ledge-common/pom.xml</relativePath>
+    <groupId>org.objectledge</groupId>
     <version>1.0.15-SNAPSHOT</version>
   </parent>
-  <artifactId>ledge-lgpl</artifactId>
-  <packaging>jar</packaging>
-  <name>ObjectLedge Components - LGPL licensed</name>
+  <artifactId>ledge-legacy</artifactId>
+  <name>Objectledge legacy components</name>
+  
   <dependencies>
     <dependency>
       <groupId>org.objectledge</groupId>
@@ -19,10 +16,12 @@
     <dependency>
       <groupId>jotm</groupId>
       <artifactId>jotm</artifactId>
+      <version>2.0.10</version>
     </dependency>
     <dependency>
       <groupId>com.experlog</groupId>
       <artifactId>xapool</artifactId>
+      <version>1.6-beta</version>
     </dependency>
     <dependency>
       <groupId>howl</groupId>
@@ -50,6 +49,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>dbunit</groupId>
+      <artifactId>dbunit</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
