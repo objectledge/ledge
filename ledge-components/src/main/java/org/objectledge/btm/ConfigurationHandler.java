@@ -37,7 +37,7 @@ class ConfigurationHandler
         throws ConfigurationException
     {
         bitronix.tm.Configuration btm = TransactionManagerServices.getConfiguration();
-        setDefaulst(btm);
+        setDefaults(btm);
         for(Configuration child : config.getChildren())
         {
             switch(child.getName())
@@ -62,7 +62,7 @@ class ConfigurationHandler
         tracing.setDefaultTimeout(btm.getDefaultTransactionTimeout());
     }
 
-    private static void setDefaulst(bitronix.tm.Configuration btm)
+    private static void setDefaults(bitronix.tm.Configuration btm)
     {
         btm.setServerId(null);
         btm.setLogPart1Filename("btm1.tlog");
