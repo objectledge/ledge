@@ -1,5 +1,6 @@
 package org.objectledge.btm;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -10,10 +11,12 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.ConfigurationException;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.Transaction;
 import org.picocontainer.Startable;
 
 import bitronix.tm.TransactionManagerServices;
+import bitronix.tm.resource.common.XAResourceProducer;
 
 public class BitronixTransactionManager
     implements Startable, AutoCloseable
@@ -72,12 +75,24 @@ public class BitronixTransactionManager
     @Override
     public void stop()
     {
+        for(DataSource dataSource : dataSources.values())
+        {
+            try
+            {
+                DatabaseUtils.shutdown(dataSource);
+            }
+            catch(SQLException e)
+            {
+                throw new RuntimeException(e);
+            }
+            ((XAResourceProducer)dataSource).close();
+        }
         btm.shutdown();
     }
 
     @Override
     public void close()
     {
-        btm.shutdown();
+        stop();
     }
 }
