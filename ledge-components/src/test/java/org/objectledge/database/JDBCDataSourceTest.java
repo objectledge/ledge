@@ -41,7 +41,7 @@ public class JDBCDataSourceTest
         DataSource ds = new JDBCDataSource(properties);
         Connection conn = ds.getConnection();
         DatabaseMetaData cmd = conn.getMetaData();
-        assertEquals("HSQL Database Engine", cmd.getDatabaseProductName());
+        assertEquals("Apache Derby", cmd.getDatabaseProductName());
     }
 
     public void testPostgres()

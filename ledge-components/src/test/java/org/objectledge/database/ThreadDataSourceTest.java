@@ -28,14 +28,17 @@
 package org.objectledge.database;
 
 import java.sql.Connection;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Logger;
-import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.btm.BitronixDataSource;
+import org.objectledge.btm.BitronixTransaction;
+import org.objectledge.btm.BitronixTransactionManager;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 
@@ -46,13 +49,30 @@ import org.objectledge.pipeline.Valve;
  */
 public class ThreadDataSourceTest extends TestCase
 {
-    /**
-     * Constructor for ThreadDataSourceTest.
-     * @param arg0
-     */
-    public ThreadDataSourceTest(String arg0)
+    private BitronixTransactionManager btm;
+
+    @Override
+    public void setUp()
+        throws Exception
     {
-        super(arg0);
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
+        btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
+            getDsProperties());
+        dataSource = new BitronixDataSource("hsql", btm);
+        transaction = new BitronixTransaction(btm, new Context(), logger, null);
+    }
+
+    public void tearDown()
+    {
+        btm.stop();
+    }
+
+    private Properties getDsProperties()
+    {
+        Properties properties = new Properties();
+        properties.put("url", "jdbc:hsqldb:.");
+        properties.put("user", "sa");
+        return properties;
     }
     
     private ThreadDataSource threadDataSource;
@@ -62,18 +82,14 @@ public class ThreadDataSourceTest extends TestCase
     private Context context;
     
     private Logger log;
+
+    private DataSource dataSource;
+
+    private Transaction transaction;
     
     public void setUp(int tracing)
         throws Exception
     {
-        DefaultConfiguration conf = new DefaultConfiguration("config","","/");
-        DefaultConfiguration url = new DefaultConfiguration("url","","/config");
-        url.setValue("jdbc:hsqldb:."); 
-        conf.addChild(url);    
-        DefaultConfiguration user = new DefaultConfiguration("user","","/config");
-        user.setValue("sa");
-        conf.addChild(user);
-        DataSource dataSource = new HsqldbDataSource(conf);
         context = new Context();
         context.clearAttributes();
         log = new Log4JLogger(org.apache.log4j.Logger.getLogger(ThreadDataSource.class));
@@ -163,7 +179,6 @@ public class ThreadDataSourceTest extends TestCase
         throws Exception
     {
         setUp(0);
-        Transaction transaction = new JotmTransaction(0, 120, context, log);
         Connection c1 = threadDataSource.getConnection();
         try
         {

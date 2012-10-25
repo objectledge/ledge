@@ -29,6 +29,7 @@
 package org.objectledge.parameters.directory;
 
 import java.util.HashSet;
+import java.util.Properties;
 
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
@@ -38,16 +39,19 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.LogManager;
-import org.hsqldb.jdbc.JDBCDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.btm.BitronixDataSource;
+import org.objectledge.btm.BitronixTransaction;
+import org.objectledge.btm.BitronixTransactionManager;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.DefaultDatabase;
 import org.objectledge.database.IdGenerator;
-import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.SequenceIdGenerator;
+import org.objectledge.database.Transaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.FileSystem;
@@ -72,6 +76,8 @@ public class DirectoryParametersTest extends LedgeTestCase
 {
     private ContextFactory contextFactory;
     
+    private BitronixTransactionManager btm;
+
     public void setUp()
     	throws Exception
 	{
@@ -85,17 +91,44 @@ public class DirectoryParametersTest extends LedgeTestCase
 
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.
             getLogger(ContextFactory.class));
-        DataSource ds = getDataSource();
         DefaultPicoContainer container = new DefaultPicoContainer();
-        IdGenerator idGenerator = new IdGenerator(ds);
-        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger);
-        Database database = new DefaultDatabase(ds, idGenerator, transaction);
+        btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
+            getDsProperties());
+        DataSource dataSource = new BitronixDataSource("hsql", btm);
+        prepareDataSource(dataSource);
+        Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);
+        IdGenerator idGenerator = new SequenceIdGenerator(dataSource);
+        Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
         container.registerComponentInstance(Persistence.class, persistence);            
         Configuration config = getConfig("naming/dbNaming.xml");
             contextFactory = new ContextFactory(container, config, logger);    
 	}
     
+    public void tearDown()
+    {
+        btm.stop();
+    }
+
+    private Properties getDsProperties()
+    {
+        Properties properties = new Properties();
+        properties.put("url", "jdbc:hsqldb:.");
+        properties.put("user", "sa");
+        return properties;
+    }
+
+    private void prepareDataSource(DataSource ds)
+        throws Exception
+    {
+        FileSystem fs = getFileSystem();
+        if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
+        {
+            DatabaseUtils.runScript(ds, fs.getReader("sql/naming/DBNamingTables.sql", "UTF-8"));
+        }
+        DatabaseUtils.runScript(ds, fs.getReader("sql/naming/DBNamingTest.sql", "UTF-8"));
+    }
+
     /*
      * Test for String get(String)
      */
@@ -205,27 +238,6 @@ public class DirectoryParametersTest extends LedgeTestCase
         assertEquals(params.getParameterNames().length,0);
     }
 
-
-    /////////////// private 
-    private DataSource getDataSource()
-        throws Exception
-    {
-        FileSystem fs = getFileSystem();
-        JDBCDataSource ds = new JDBCDataSource();
-        ds.setDatabase("jdbc:hsqldb:.");
-        ds.setUser("sa");
-        ds.setPassword("");
-        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
-        {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8"));
-        }
-        if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
-        {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/naming/DBNamingTables.sql", "UTF-8"));
-        }
-        DatabaseUtils.runScript(ds, fs.getReader("sql/naming/DBNamingTest.sql", "UTF-8"));
-        return ds;
-    }        
 
     private Configuration getConfig(String name)
         throws Exception

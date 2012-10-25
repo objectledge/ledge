@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -39,6 +40,9 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.btm.BitronixDataSource;
+import org.objectledge.btm.BitronixTransaction;
+import org.objectledge.btm.BitronixTransactionManager;
 import org.objectledge.cache.impl.DelegateMap;
 import org.objectledge.cache.spi.CacheFactorySPI;
 import org.objectledge.cache.spi.LRUMap;
@@ -46,9 +50,9 @@ import org.objectledge.cache.spi.StatisticsMap;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
 import org.objectledge.database.DefaultDatabase;
-import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
-import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.SequenceIdGenerator;
+import org.objectledge.database.Transaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.filesystem.ClasspathFileSystemProvider;
@@ -70,6 +74,8 @@ public class CachingTest extends LedgeTestCase
 
     private Notification notification;
     
+    private BitronixTransactionManager btm;
+
     private ThreadPool pool;
 
     public void setUp()
@@ -80,9 +86,11 @@ public class CachingTest extends LedgeTestCase
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         pool = new ThreadPool(cleanup, context, config, logger);
-        DataSource dataSource = getDataSource();
-        IdGenerator idGenerator = new IdGenerator(dataSource);
-        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger);
+        btm = new BitronixTransactionManager("hsql",
+            "org.hsqldb.jdbc.pool.JDBCXADataSource", getDsProperties());
+        DataSource dataSource = new BitronixDataSource("hsql", btm);
+        Transaction transaction = new BitronixTransaction(btm, context, logger, null);
+        IdGenerator idGenerator = new SequenceIdGenerator(dataSource);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
         notification = new Notification();
@@ -95,12 +103,21 @@ public class CachingTest extends LedgeTestCase
         caching = new DefaultCacheFactory(config, logger, pool, notification, persistence, null);
     }
 
+    private Properties getDsProperties()
+    {
+        Properties properties = new Properties();
+        properties.put("url", "jdbc:hsqldb:.");
+        properties.put("user", "sa");
+        return properties;
+    }
+
     public void tearDown()
         throws Exception
     {
         super.tearDown();
         pool.stop();
         pool = null;
+        btm.stop();
     }    
     
     public void testCaching()
@@ -361,18 +378,5 @@ public class CachingTest extends LedgeTestCase
     public void testGetNotification()
     {
         assertNotNull(caching.getNotification());
-    }
-
-    // private
-    private DataSource getDataSource() throws Exception
-    {
-        DefaultConfiguration conf = new DefaultConfiguration("config", "", "/");
-        DefaultConfiguration url = new DefaultConfiguration("url", "", "/config");
-        url.setValue("jdbc:hsqldb:.");
-        conf.addChild(url);
-        DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
-        user.setValue("sa");
-        conf.addChild(user);
-        return new HsqldbDataSource(conf);
     }
 }

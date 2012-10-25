@@ -54,6 +54,12 @@ public class DatabaseUtilsTest extends LedgeTestCase
         dataSource = getDataSource();    
     }    
 
+    public void tearDown()
+        throws Exception
+    {
+        DatabaseUtils.shutdown(dataSource);
+    }
+
     /*
      * Test for void close(Connection)
      */
