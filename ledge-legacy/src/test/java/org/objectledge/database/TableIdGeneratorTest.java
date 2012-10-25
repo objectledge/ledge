@@ -44,7 +44,7 @@ import org.objectledge.filesystem.FileSystem;
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: IdGeneratorTest.java,v 1.8 2005-02-16 20:00:46 rafal Exp $
  */
-public class IdGeneratorTest extends DatabaseTestCase
+public class TableIdGeneratorTest extends DatabaseTestCase
 {
     private DataSource dataSource;
     
@@ -52,7 +52,7 @@ public class IdGeneratorTest extends DatabaseTestCase
      * Constructor for IdGeneratorTest.
      * @param arg0
      */
-    public IdGeneratorTest(String arg0)
+    public TableIdGeneratorTest(String arg0)
         throws Exception
     {
         super(arg0);
@@ -62,7 +62,7 @@ public class IdGeneratorTest extends DatabaseTestCase
     public void testNextId()
         throws Exception
     {
-        IdGenerator idGenerator = new IdGenerator(dataSource);
+        TableIdGenerator idGenerator = new TableIdGenerator(dataSource);
         assertEquals(1, idGenerator.getNextId("test_table_one"));
         assertEquals(2, idGenerator.getNextId("test_table_one"));
         assertEquals(0, idGenerator.getNextId("test_table_two"));
