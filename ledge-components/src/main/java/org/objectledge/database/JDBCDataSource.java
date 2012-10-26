@@ -8,9 +8,6 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,73 +22,38 @@ import org.objectledge.database.impl.DelegatingDataSource;
 public class JDBCDataSource
     extends DelegatingDataSource
 {
-    private static final String DATASOURCE_CLASS_NAME = "datasource.className";
-
-    private static final String DATASOURCE_CLASSPATH = "datasource.classpath";
-
     public JDBCDataSource(Configuration config)
         throws ConfigurationException, SQLException
     {
         super(getDataSource(config));
     }
 
-    public JDBCDataSource(Properties properties)
+    public JDBCDataSource(String driverClasspanh, String dataSourceClass, Properties properties)
         throws SQLException
     {
-        super(getDataSource(properties));
-    }
-
-    private static ClassLoader getClassLoader(String classpath)
-        throws SQLException
-    {
-        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
-        if(currentClassLoader == null)
-        {
-            currentClassLoader = JDBCDataSource.class.getClassLoader();
-        }
-        if(classpath == null || classpath.length() == 0)
-        {
-            return currentClassLoader;
-        }
-        else
-        {
-            String pathSeparator = System.getProperty("path.separator");
-            String[] elements = classpath.split(pathSeparator);
-            try
-            {
-                URL[] urls = new URL[elements.length];
-                for(int i = 0; i < elements.length; i++)
-                {
-                    urls[i] = new URL("file", "", elements[i].trim());
-                }
-                return new URLClassLoader(urls, currentClassLoader);
-            }
-            catch(MalformedURLException e)
-            {
-                throw new SQLException("failed to set up driver classpath", e);
-            }
-        }
+        super(getDataSource(driverClasspanh, dataSourceClass, properties));
     }
 
     private static DataSource getDataSource(Configuration config)
         throws ConfigurationException, SQLException
     {
-        return getDataSource(getProperties(config));
+        return getDataSource(config.getChild("classpath").getValue(""),
+            config.getChild("dataSource").getValue(), getProperties(config));
     }
 
-    private static DataSource getDataSource(Properties properties)
+    private static DataSource getDataSource(String driverClaspath, String dataSourceClass,
+        Properties properties)
         throws SQLException
     {
-        String className = properties.getProperty(DATASOURCE_CLASS_NAME);
-        ClassLoader cassLoader = getClassLoader(properties.getProperty(DATASOURCE_CLASSPATH));
         DataSource ds;
         try
         {
-            ds = (DataSource)Beans.instantiate(cassLoader, className);
+            ClassLoader cassLoader = DatabaseUtils.getDriverClassLoader(driverClaspath);
+            ds = (DataSource)Beans.instantiate(cassLoader, dataSourceClass);
         }
         catch(ClassNotFoundException | IOException e)
         {
-            throw new SQLException("failed to instantiate XADataSource class " + className, e);
+            throw new SQLException("failed to instantiate DataSource class " + dataSourceClass, e);
         }
         setJavaBeanProperties(ds, properties);
         return ds;
@@ -136,7 +98,7 @@ public class JDBCDataSource
         throws ConfigurationException
     {
         Properties properties = new Properties();
-        for(Configuration property : config.getChildren("property"))
+        for(Configuration property : config.getChild("properties").getChildren("property"))
         {
             properties.setProperty(property.getAttribute("name"), property.getValue());
         }

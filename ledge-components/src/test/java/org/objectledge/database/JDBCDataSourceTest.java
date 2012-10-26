@@ -19,11 +19,10 @@ public class JDBCDataSourceTest
         throws SQLException
     {
         Properties properties = new Properties();
-        properties.setProperty("datasource.className", "org.hsqldb.jdbc.JDBCDataSource");
         properties.setProperty("url", "jdbc:hsqldb:.");
         properties.setProperty("user", "sa");
 
-        DataSource ds = new JDBCDataSource(properties);
+        DataSource ds = new JDBCDataSource("", "org.hsqldb.jdbc.JDBCDataSource", properties);
         Connection conn = ds.getConnection();
         DatabaseMetaData cmd = conn.getMetaData();
         assertEquals("HSQL Database Engine", cmd.getDatabaseProductName());
@@ -33,12 +32,11 @@ public class JDBCDataSourceTest
         throws SQLException
     {
         Properties properties = new Properties();
-        properties.setProperty("datasource.className",
-            "org.apache.derby.jdbc.EmbeddedSimpleDataSource");
         properties.setProperty("databaseName", "target/derby/btm");
-        properties.setProperty("createDatabase", "true");
+        properties.setProperty("createDatabase", "create");
 
-        DataSource ds = new JDBCDataSource(properties);
+        DataSource ds = new JDBCDataSource("", "org.apache.derby.jdbc.EmbeddedDataSource40",
+            properties);
         Connection conn = ds.getConnection();
         DatabaseMetaData cmd = conn.getMetaData();
         assertEquals("Apache Derby", cmd.getDatabaseProductName());
@@ -50,12 +48,11 @@ public class JDBCDataSourceTest
         if(new File(PG_PATH).exists())
         {
             Properties properties = new Properties();
-            properties.setProperty("datasource.classpath", PG_PATH);
-            properties.setProperty("datasource.className", "org.postgresql.ds.PGSimpleDataSource");
             properties.setProperty("databaseName", "template1");
             properties.setProperty("user", "postgres");
 
-            DataSource ds = new JDBCDataSource(properties);
+            DataSource ds = new JDBCDataSource(PG_PATH, "org.postgresql.ds.PGSimpleDataSource",
+                properties);
             try
             {
                 Connection conn = ds.getConnection();
