@@ -214,6 +214,7 @@ public class DatabaseUtils
         try
         {
             runScript(conn, reader);
+            conn.commit();
         }
         finally
         {
