@@ -111,6 +111,8 @@ public class ThreadDataSource
     
     private static final Map<String, String> connToThread = new ConcurrentHashMap<>();
 
+    private boolean suppressNonPostgresWarning = false;
+
     /**
      * Creates a ThreadDataSource instance.
      * @param dataSource delegate DataSource.
@@ -284,9 +286,13 @@ public class ThreadDataSource
             }
             catch(Exception e)
             {
-                log.debug(
-                    "introspection problem, probably not a Postgress connection, or patched driver not avaialable",
-                    e);
+                if(!suppressNonPostgresWarning)
+                {
+                    log.warn(
+                        "introspection problem, probably not a Postgress connection, or patched driver not avaialable",
+                        e);
+                    suppressNonPostgresWarning = true;
+                }
             }
         }
         else
