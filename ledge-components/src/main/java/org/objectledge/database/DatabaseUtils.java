@@ -670,4 +670,36 @@ public class DatabaseUtils
             }
         }
     }
+
+    /**
+     * Provides a ClassLoader suitable for loading SQL driver class. You need to call
+     * <code>Thread.currentThread().setContextClassLoader(DataSourceFactory.getDriverClassLoader(DRIVER_CLASSPATH));</code>
+     * before requesting the connection.
+     * 
+     * @param driverClasspath additional classpath entries that will be used for instantiating
+     *        driver class. Entries should be separated with path.separator suitable for the
+     *        platform. When null or empty, driver class is expected to be already available in the
+     *        ClassLoader used to load this class.
+     * @return a ClassLoader suitable for loading SQL driver class.
+     * @throws MalformedURLException when provided classpath is malformed.
+     */
+    public static ClassLoader getDriverClassLoader(String driverClasspath)
+        throws MalformedURLException
+    {
+        if(driverClasspath == null || driverClasspath.length() == 0)
+        {
+            return Thread.currentThread().getContextClassLoader();
+        }
+        else
+        {
+            String pathSeparator = System.getProperty("path.separator");
+            String[] elements = driverClasspath.split(pathSeparator);
+            URL[] urls = new URL[elements.length];
+            for(int i = 0; i < elements.length; i++)
+            {
+                urls[i] = new URL("file", "", elements[i].trim());
+            }
+            return new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+        }
+    }
 }
