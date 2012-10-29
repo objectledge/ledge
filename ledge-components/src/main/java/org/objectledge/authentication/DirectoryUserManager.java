@@ -725,9 +725,8 @@ public class DirectoryUserManager
 
     @Override
     public void updateTrackingInformation(Principal account)
-        throws NamingException
+        throws AuthenticationException
     {
-        // TODO Auto-generated method stub
-        
+            DirContext dirContext = getPersonalData(account);
     }
 }

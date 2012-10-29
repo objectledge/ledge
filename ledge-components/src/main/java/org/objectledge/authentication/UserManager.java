@@ -362,8 +362,8 @@ public abstract class UserManager
      * counter
      * 
      * @param account the account.
-     * @throws NamingException if the opertion could not be performed.
+     * @throws AuthenticationException if the opertion could not be performed.
      */
     public abstract void updateTrackingInformation(Principal account)
-        throws NamingException;
+        throws AuthenticationException;
 }
