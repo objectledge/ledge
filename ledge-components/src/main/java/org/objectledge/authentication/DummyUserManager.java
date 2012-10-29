@@ -166,15 +166,6 @@ public class DummyUserManager
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean altEmailExists(String altEmail)
-    {
-        return false;
-    }
-
     @Override
     public Principal createAccount(String login, String dn, String password, Attributes attributes,
         Boolean blockPassword)

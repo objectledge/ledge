@@ -66,10 +66,7 @@ public class DirectoryUserManager
     public static final String LOGIN_ATTRIBUTE_DEFAULT = "uid";
 
     /** Default value for email attribute name. */
-    public static final String EMAIL_ATTRIBUTE_DEFAULT = "mail";
-
-    /** Default value for email attribute name. */
-    public static final String ALT_EMAIL_ATTRIBUTE_DEFAULT = "altMail";
+    public static final String MAIL_ATTRIBUTE_DEFAULT = "mail";
 
     /** Default password attribute key name. */
     public static final String PASSWORD_ATTRIBUTE_DEFAULT = "userPassword";
@@ -89,9 +86,6 @@ public class DirectoryUserManager
 
     /** the email attribute key. */
     protected String emailAttribute;
-
-    /** the alternative email attribute key. */
-    protected String altEmailAttribute;
 
     /** the password attribute key. */
     protected String passwordAttribute;
@@ -144,9 +138,7 @@ public class DirectoryUserManager
         nameByLogin = new HashMap<String, String>();
         defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").getValue(LOGIN_ATTRIBUTE_DEFAULT);
-        emailAttribute = config.getChild("emailAttribute").getValue(EMAIL_ATTRIBUTE_DEFAULT);
-        altEmailAttribute = config.getChild("altEmailAttribute").getValue(
-            ALT_EMAIL_ATTRIBUTE_DEFAULT);
+        emailAttribute = config.getChild("emailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").getValue(
             PASSWORD_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
@@ -204,28 +196,6 @@ public class DirectoryUserManager
             // defaults to false
         }
         return emailExists;
-    }
-
-    /**
-     * {@inhertitDoc}
-     */
-    @Override
-    public boolean altEmailExists(String altEmail)
-    {
-        boolean altEmailExists = false;
-        try
-        {
-            List<String> list = lookupDNs(altEmailAttribute, altEmail);
-            if(list.size() > 0)
-            {
-                altEmailExists = true;
-            }
-        }
-        catch(NamingException e)
-        {
-            // defaults to false
-        }
-        return altEmailExists;
     }
 
     /**
