@@ -30,7 +30,6 @@ package org.objectledge.authentication;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +52,8 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.naming.ContextHelper;
+import org.objectledge.parameters.UndefinedParameterException;
+import org.objectledge.parameters.directory.DirectoryParameters;
 
 /**
  * The user manager implementation based on ldap.
@@ -70,10 +71,10 @@ public class DirectoryUserManager
 
     /** Default password attribute key name. */
     public static final String PASSWORD_ATTRIBUTE_DEFAULT = "userPassword";
-    
+
     /** Default logon count attribute key name. */
     public static final String LOGON_COUNT_ATTRIBUTE_DEFAULT = "logonCount";
-    
+
     /** Default logon timestamp attribute key name. */
     public static final String LAST_LOGON_TIMESTAMP_ATTRIBUTE_DEFAULT = "lastLogonTimestamp";
 
@@ -95,10 +96,10 @@ public class DirectoryUserManager
 
     /** the password attribute key. */
     protected String passwordAttribute;
-    
+
     /** the logon count attribute key. */
     protected String logonCountAttribute;
-    
+
     /** the last logon timestamp attribute key. */
     protected String lastLogonTimestampAttribute;
 
@@ -153,8 +154,10 @@ public class DirectoryUserManager
         mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").getValue(
             PASSWORD_ATTRIBUTE_DEFAULT);
-        logonCountAttribute = config.getChild("logonCountAttribute").getValue(LOGON_COUNT_ATTRIBUTE_DEFAULT);
-        lastLogonTimestampAttribute = config.getChild("lastLogonTimestampAttribute").getValue(LAST_LOGON_TIMESTAMP_ATTRIBUTE_DEFAULT);
+        logonCountAttribute = config.getChild("logonCountAttribute").getValue(
+            LOGON_COUNT_ATTRIBUTE_DEFAULT);
+        lastLogonTimestampAttribute = config.getChild("lastLogonTimestampAttribute").getValue(
+            LAST_LOGON_TIMESTAMP_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
         superuserName = config.getChild("superuserName").getValue(null);
         String contextId = config.getChild("contextId").getValue("people");
@@ -284,9 +287,9 @@ public class DirectoryUserManager
 
     /**
      * Adds additional attributes to attrs. Changes state of attrs.
+     * 
      * @param attrs
      * @param additionalAttributes the additional attributes to add to attrs
-     * 
      * @throws NamingException
      */
     private void putAll(Attributes attrs, Attributes additionalAttributes)
@@ -737,10 +740,55 @@ public class DirectoryUserManager
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateTrackingInformation(Principal account)
         throws AuthenticationException
     {
             DirContext dirContext = getPersonalData(account);
+            DirectoryParameters params = new DirectoryParameters(dirContext);
+            bumpUpLogonCounter(params);
+            refreshTimestamp(params);
     }
+    
+    /**
+     * Bumps up logon counter
+     * @param params
+     */
+    private void bumpUpLogonCounter(DirectoryParameters params)
+    {
+        String logonCount = "0";
+        boolean existed = true;
+        try
+        {
+            logonCount = params.get(logonCountAttribute);
+        }
+        catch(UndefinedParameterException e)
+        {
+            // parameter was not defined so it remains as 0
+            existed = false;
+        }
+        int bumpedCounter = Integer.parseInt(logonCount);
+        bumpedCounter = bumpedCounter + 1;
+        if(existed)
+        {
+            params.set(logonCountAttribute, Integer.valueOf(bumpedCounter).toString());
+        }
+        else
+        {
+            params.add(logonCountAttribute, Integer.valueOf(bumpedCounter).toString());
+        }
+    }
+
+    /** 
+     * Sets last logon timestamp to now.
+     * @param params
+     */
+    private void refreshTimestamp(DirectoryParameters params)
+    {
+        
+    }
+
 }
