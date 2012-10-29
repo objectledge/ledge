@@ -208,4 +208,12 @@ public class DummyUserManager
         throw new UnsupportedOperationException("Dummy manager cannot perfom lookup");
     }
 
+    @Override
+    public void updateTrackingInformation(Principal account)
+        throws NamingException
+    {
+        throw new UnsupportedOperationException(
+            "Dummy manager cannot perform update tracking information operation");
+    }
+
 }

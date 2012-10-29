@@ -722,4 +722,12 @@ public class DirectoryUserManager
             closeContext(ctx);
         }
     }
+
+    @Override
+    public void updateTrackingInformation(Principal account)
+        throws NamingException
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }

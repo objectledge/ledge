@@ -357,4 +357,13 @@ public abstract class UserManager
     public abstract List<String> lookupDNs(String query, SearchControls searchControls)
         throws NamingException;
 
+    /**
+     * Updates tracking information about account. Updates last logon timestamp and bumps logon
+     * counter
+     * 
+     * @param account the account.
+     * @throws NamingException if the opertion could not be performed.
+     */
+    public abstract void updateTrackingInformation(Principal account)
+        throws NamingException;
 }
