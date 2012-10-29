@@ -70,6 +70,12 @@ public class DirectoryUserManager
 
     /** Default password attribute key name. */
     public static final String PASSWORD_ATTRIBUTE_DEFAULT = "userPassword";
+    
+    /** Default logon count attribute key name. */
+    public static final String LOGON_COUNT_ATTRIBUTE_DEFAULT = "logonCount";
+    
+    /** Default logon timestamp attribute key name. */
+    public static final String LAST_LOGON_TIMESTAMP_ATTRIBUTE_DEFAULT = "lastLogonTimestamp";
 
     /**
      * Default value for login person object class (uidObject, simpleSecurityObject). Minimalistic
@@ -89,6 +95,12 @@ public class DirectoryUserManager
 
     /** the password attribute key. */
     protected String passwordAttribute;
+    
+    /** the logon count attribute key. */
+    protected String logonCountAttribute;
+    
+    /** the last logon timestamp attribute key. */
+    protected String lastLogonTimestampAttribute;
 
     /** the anonymous name. */
     protected String anonymousName;
@@ -141,6 +153,8 @@ public class DirectoryUserManager
         mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").getValue(
             PASSWORD_ATTRIBUTE_DEFAULT);
+        logonCountAttribute = config.getChild("logonCountAttribute").getValue(LOGON_COUNT_ATTRIBUTE_DEFAULT);
+        lastLogonTimestampAttribute = config.getChild("lastLogonTimestampAttribute").getValue(LAST_LOGON_TIMESTAMP_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
         superuserName = config.getChild("superuserName").getValue(null);
         String contextId = config.getChild("contextId").getValue("people");
