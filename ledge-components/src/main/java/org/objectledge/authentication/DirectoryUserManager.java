@@ -232,7 +232,7 @@ public class DirectoryUserManager
             attrs.put(oc);
             attrs.put(new BasicAttribute(loginAttribute, login));
             putPasswordAttribute(attrs, password, blockPassword);
-            addAdditionalAttributes(attributes, attrs);
+            putAll(attrs, attributes);
             ctx.createSubcontext(directory.getRelativeName(dn), attrs);
             nameByLogin.put(login, dn);
             loginByName.put(dn, login);
@@ -270,21 +270,21 @@ public class DirectoryUserManager
 
     /**
      * Adds additional attributes to attrs. Changes state of attrs.
-     * 
-     * @param attributes the additional attributes to add to attrs
      * @param attrs
+     * @param additionalAttributes the additional attributes to add to attrs
+     * 
      * @throws NamingException
      */
-    private void addAdditionalAttributes(Attributes attributes, Attributes attrs)
+    private void putAll(Attributes attrs, Attributes additionalAttributes)
         throws NamingException
     {
-        if(attributes != null)
+        if(additionalAttributes != null)
         {
-            NamingEnumeration<String> ids = attributes.getIDs();
+            NamingEnumeration<String> ids = additionalAttributes.getIDs();
             while(ids.hasMore())
             {
                 String attrId = ids.nextElement();
-                attrs.put(attributes.get(attrId));
+                attrs.put(additionalAttributes.get(attrId));
             }
         }
     }
