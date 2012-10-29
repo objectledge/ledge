@@ -167,7 +167,7 @@ public class DummyUserManager
     }
 
     @Override
-    public Principal createAccount(String login, String dn, String password, Attributes attributes,
+    public Principal createAccount(Attributes attributes, String login, String dn, String password,
         Boolean blockPassword)
         throws AuthenticationException
     {

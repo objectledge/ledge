@@ -204,14 +204,14 @@ public class DirectoryUserManager
     public Principal createAccount(String login, String dn, String password)
         throws AuthenticationException
     {
-        return this.createAccount(login, dn, password, null, false);
+        return this.createAccount(null, login, dn, password, false);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Principal createAccount(String login, String dn, String password, Attributes attributes,
+    public Principal createAccount(Attributes attributes, String login, String dn, String password,
         Boolean blockPassword)
         throws AuthenticationException
     {
