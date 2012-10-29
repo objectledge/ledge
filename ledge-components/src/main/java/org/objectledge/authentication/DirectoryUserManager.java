@@ -85,7 +85,7 @@ public class DirectoryUserManager
     protected String loginAttribute;
 
     /** the email attribute key. */
-    protected String emailAttribute;
+    protected String mailAttribute;
 
     /** the password attribute key. */
     protected String passwordAttribute;
@@ -138,7 +138,7 @@ public class DirectoryUserManager
         nameByLogin = new HashMap<String, String>();
         defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").getValue(LOGIN_ATTRIBUTE_DEFAULT);
-        emailAttribute = config.getChild("emailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
+        mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").getValue(
             PASSWORD_ATTRIBUTE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
@@ -185,7 +185,7 @@ public class DirectoryUserManager
         boolean emailExists = false;
         try
         {
-            List<String> list = lookupDNs(emailAttribute, email);
+            List<String> list = lookupDNs(mailAttribute, email);
             if(list.size() > 0)
             {
                 emailExists = true;
@@ -379,7 +379,7 @@ public class DirectoryUserManager
     {
         try
         {
-            List<String> list = lookupDNs(emailAttribute, mail);
+            List<String> list = lookupDNs(mailAttribute, mail);
             if(list.size() == 0)
             {
                 throw new UserUnknownException("Failed to lookup user by mail");
