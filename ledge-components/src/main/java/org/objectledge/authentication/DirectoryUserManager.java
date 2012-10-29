@@ -30,6 +30,7 @@ package org.objectledge.authentication;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import org.apache.directory.shared.ldap.util.GeneralizedTime;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.naming.ContextFactory;
@@ -747,14 +749,15 @@ public class DirectoryUserManager
     public void updateTrackingInformation(Principal account)
         throws AuthenticationException
     {
-            DirContext dirContext = getPersonalData(account);
-            DirectoryParameters params = new DirectoryParameters(dirContext);
-            bumpUpLogonCounter(params);
-            refreshTimestamp(params);
+        DirContext dirContext = getPersonalData(account);
+        DirectoryParameters params = new DirectoryParameters(dirContext);
+        bumpUpLogonCounter(params);
+        refreshTimestamp(params);
     }
-    
+
     /**
      * Bumps up logon counter
+     * 
      * @param params
      */
     private void bumpUpLogonCounter(DirectoryParameters params)
@@ -782,13 +785,31 @@ public class DirectoryUserManager
         }
     }
 
-    /** 
+    /**
      * Sets last logon timestamp to now.
+     * 
      * @param params
      */
     private void refreshTimestamp(DirectoryParameters params)
     {
-        
+        GeneralizedTime timestamp = new GeneralizedTime(new GregorianCalendar());
+        boolean existed = true;
+        try
+        {
+            params.get(lastLogonTimestampAttribute);
+        }
+        catch(UndefinedParameterException e)
+        {
+            existed = false;
+        }
+        if(existed)
+        {
+            params.set(lastLogonTimestampAttribute, timestamp.toGeneralizedTime());
+        }
+        else
+        {
+            params.add(lastLogonTimestampAttribute, timestamp.toGeneralizedTime());
+        }
     }
 
 }
