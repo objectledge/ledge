@@ -657,14 +657,10 @@ public class DirectoryUserManager
     }
 
     /**
-     * Find all dn of the context that match the attribute query given custom search controls.
-     * 
-     * @param query attribute query
-     * @param searchControls the search controls to use for query
-     * @return the list of the name of matched context.
-     * @throws NamingException if lookup fails.
+     * {@inheritDoc}
      */
-    private List<String> lookupDNs(String query, SearchControls searchControls)
+    @Override
+    public List<String> lookupDNs(String query, SearchControls searchControls)
         throws NamingException
     {
         DirContext ctx = null;
@@ -687,13 +683,10 @@ public class DirectoryUserManager
     }
 
     /**
-     * Find all dn of the context that match the attribute query.
-     * 
-     * @param query attribute query
-     * @return the list of the name of matched context.
-     * @throws NamingException if lookup fails.
+     * {@inheritDoc}
      */
-    private List<String> lookupDNs(String query)
+    @Override
+    public List<String> lookupDNs(String query)
         throws NamingException
     {
         return lookupDNs(query, defaultSearchControls);

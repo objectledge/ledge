@@ -34,6 +34,7 @@ import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
+import javax.naming.directory.SearchControls;
 
 import org.objectledge.parameters.Parameters;
 
@@ -151,13 +152,13 @@ public abstract class UserManager
 
     /**
      * Creates a new user account with additional Attributes
+     * 
      * @param attributes the additional attributes
      * @param login login name of the user.
      * @param dn distinguished name of the user.
      * @param password initial password of the user.
      * @param blockPassword the flag indicating if password should have addded ! mark after hashing
      *        which blocks it.
-     * 
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
@@ -333,6 +334,27 @@ public abstract class UserManager
         throws NamingException;
 
     public abstract List<Principal> getUserByParameter(String parameter, String parameterValue)
+        throws NamingException;
+
+    /**
+     * Find all dn of the context that match the attribute query.
+     * 
+     * @param query attribute query
+     * @return the list of the name of matched context.
+     * @throws NamingException if lookup fails.
+     */
+    public abstract List<String> lookupDNs(String query)
+        throws NamingException;
+
+    /**
+     * Find all dn of the context that match the attribute query given custom search controls.
+     * 
+     * @param query attribute query
+     * @param searchControls the search controls to use for query
+     * @return the list of the name of matched context.
+     * @throws NamingException if lookup fails.
+     */
+    public abstract List<String> lookupDNs(String query, SearchControls searchControls)
         throws NamingException;
 
 }

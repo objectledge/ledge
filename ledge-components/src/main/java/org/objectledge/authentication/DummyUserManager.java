@@ -34,6 +34,7 @@ import java.util.List;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
+import javax.naming.directory.SearchControls;
 
 /**
  * The dummy user manager implementation.
@@ -193,6 +194,18 @@ public class DummyUserManager
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup user by mail");
+    }
+
+    @Override
+    public List<String> lookupDNs(String query)
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot perform lookup");
+    }
+
+    @Override
+    public List<String> lookupDNs(String query, SearchControls searchControls)
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot perfom lookup");
     }
 
 }
