@@ -28,6 +28,7 @@
 package org.objectledge.database;
 
 import java.io.FileInputStream;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -36,7 +37,6 @@ import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
-import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.objectledge.filesystem.FileSystem;
 
 /**
@@ -85,14 +85,10 @@ public class TableIdGeneratorTest extends DatabaseTestCase
     private DataSource getDataSource()
         throws Exception
     {
-        DefaultConfiguration conf = new DefaultConfiguration("config","","/");
-        DefaultConfiguration url = new DefaultConfiguration("url","","/config");
-        url.setValue("jdbc:hsqldb:."); 
-        conf.addChild(url);    
-        DefaultConfiguration user = new DefaultConfiguration("user","","/config");
-        user.setValue("sa");
-        conf.addChild(user);
-        DataSource ds = new HsqldbDataSource(conf);    
+        Properties properties = new Properties();
+        properties.setProperty("url", "jdbc:hsqldb:.");
+        properties.setProperty("user", "sa");
+        DataSource ds = new JDBCDataSource("", "org.hsqldb.jdbc.JDBCDataSource", properties);
         if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
         {
             FileSystem fs = FileSystem.getStandardFileSystem(".");

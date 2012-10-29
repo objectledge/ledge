@@ -32,27 +32,27 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.objectledge.test.LedgeTestCase;
 
 /**
- * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: DatabaseUtilsTest.java,v 1.6 2004-10-25 14:54:54 rafal Exp $
  */
-public class DatabaseUtilsTest extends LedgeTestCase
-{    
+public class DatabaseUtilsTest
+    extends LedgeTestCase
+{
     private DataSource dataSource;
 
     public void setUp()
         throws Exception
     {
         super.setUp();
-        dataSource = getDataSource();    
-    }    
+        dataSource = getDataSource();
+    }
 
     public void tearDown()
         throws Exception
@@ -125,10 +125,10 @@ public class DatabaseUtilsTest extends LedgeTestCase
     public void testEscapeSqlString()
         throws Exception
     {
-        assertEquals("\u05E2\u05D6\u05E8\u05D0''s home directory is "+
-            "c:\\users\\\u05E2\u05D6\u05E8\u05D0",
-            DatabaseUtils.escapeSqlString("\u05E2\u05D6\u05E8\u05D0's home directory is "+
-                "c:\\users\\\u05E2\u05D6\u05E8\u05D0"));
+        assertEquals("\u05E2\u05D6\u05E8\u05D0''s home directory is "
+            + "c:\\users\\\u05E2\u05D6\u05E8\u05D0",
+            DatabaseUtils.escapeSqlString("\u05E2\u05D6\u05E8\u05D0's home directory is "
+                + "c:\\users\\\u05E2\u05D6\u05E8\u05D0"));
     }
 
     public void testRunScript()
@@ -154,25 +154,21 @@ public class DatabaseUtilsTest extends LedgeTestCase
             assertEquals("error executing statement at line 34", e.getMessage());
         }
     }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    
+
+    // ///////////////////////////////////////////////////////////////////////////////////////////
+
     private Reader getScript(String name)
         throws IOException
     {
-        return getFileSystem().getReader("sql/database/"+name, "UTF-8");
+        return getFileSystem().getReader("sql/database/" + name, "UTF-8");
     }
-    
+
     private DataSource getDataSource()
         throws Exception
     {
-        DefaultConfiguration conf = new DefaultConfiguration("config","","/");
-        DefaultConfiguration url = new DefaultConfiguration("url","","/config");
-        url.setValue("jdbc:hsqldb:."); 
-        conf.addChild(url);    
-        DefaultConfiguration user = new DefaultConfiguration("user","","/config");
-        user.setValue("sa");
-        conf.addChild(user);
-        return new HsqldbDataSource(conf);    
-    }    
+        Properties properties = new Properties();
+        properties.setProperty("url", "jdbc:hsqldb:.");
+        properties.setProperty("user", "sa");
+        return new JDBCDataSource("", "org.hsqldb.jdbc.JDBCDataSource", properties);
+    }
 }

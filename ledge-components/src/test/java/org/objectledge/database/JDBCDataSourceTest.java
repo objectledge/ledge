@@ -21,7 +21,6 @@ public class JDBCDataSourceTest
         Properties properties = new Properties();
         properties.setProperty("url", "jdbc:hsqldb:.");
         properties.setProperty("user", "sa");
-
         DataSource ds = new JDBCDataSource("", "org.hsqldb.jdbc.JDBCDataSource", properties);
         Connection conn = ds.getConnection();
         DatabaseMetaData cmd = conn.getMetaData();
