@@ -474,7 +474,14 @@
 		    <groupId>com.sun.jersey</groupId>
 		    <artifactId>jersey-json</artifactId>
 		    <version>1.13</version>
-		</dependency>		   
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.directory.shared</groupId>
+			<artifactId>shared-ldap</artifactId>
+			<version>0.9.17</version>
+		</dependency>
+            		   
 		
     </dependencies>
   </dependencyManagement>

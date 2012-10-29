@@ -157,6 +157,11 @@
     	<artifactId>activemq-all</artifactId>
     	<version>5.6.0</version>
     </dependency>
+    <dependency>
+		<groupId>org.apache.directory.shared</groupId>
+		<artifactId>shared-ldap</artifactId>
+	</dependency>
+            
   </dependencies>
   <build>
     <resources>
