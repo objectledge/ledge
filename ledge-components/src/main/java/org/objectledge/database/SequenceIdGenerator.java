@@ -27,6 +27,9 @@ public class SequenceIdGenerator
         case H2:
             query = "CALL NEXT VALUE FOR %s_seq";
             break;
+        case DERBY:
+            query = "VALUES NEXT VALUE FOR %s_seq";
+            break;
         default:
             throw new IllegalArgumentException("usupported database type");
         }
