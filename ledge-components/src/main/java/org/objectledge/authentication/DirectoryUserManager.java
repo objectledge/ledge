@@ -747,12 +747,13 @@ public class DirectoryUserManager
      */
     @Override
     public void updateTrackingInformation(Principal account)
-        throws AuthenticationException
+        throws AuthenticationException, NamingException
     {
         DirContext dirContext = getPersonalData(account);
         DirectoryParameters params = new DirectoryParameters(dirContext);
         bumpUpLogonCounter(params);
         refreshTimestamp(params);
+        dirContext.close();
     }
 
     /**

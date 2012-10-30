@@ -210,7 +210,6 @@ public class DummyUserManager
 
     @Override
     public void updateTrackingInformation(Principal account)
-        throws AuthenticationException
     {
         throw new UnsupportedOperationException(
             "Dummy manager cannot perform update tracking information operation");

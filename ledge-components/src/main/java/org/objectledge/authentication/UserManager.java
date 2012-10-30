@@ -363,7 +363,8 @@ public abstract class UserManager
      * 
      * @param account the account.
      * @throws AuthenticationException if the opertion could not be performed.
+     * @throws NamingException if closing directory context fails
      */
     public abstract void updateTrackingInformation(Principal account)
-        throws AuthenticationException;
+        throws AuthenticationException, NamingException;
 }
