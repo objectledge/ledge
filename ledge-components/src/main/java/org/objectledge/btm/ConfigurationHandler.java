@@ -6,9 +6,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.jms.ConnectionFactory;
-import javax.sql.DataSource;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.database.Transaction;
@@ -31,9 +28,9 @@ class ConfigurationHandler
             "shareTransactionConnections", "ignoreRecoveryFailures"));
     }
 
-    static void configure(Map<String, DataSource> dataSources,
-        Map<String, ConnectionFactory> connectionFactories, Transaction.Config tracing,
-        Configuration config)
+    static void configure(Map<String, PoolingDataSource> dataSources,
+        Map<String, PoolingConnectionFactory> connectionFactories, Transaction.Config tracing,
+        Set<ResourceBean> started, Configuration config)
         throws ConfigurationException
     {
         bitronix.tm.Configuration btm = TransactionManagerServices.getConfiguration();
@@ -46,10 +43,10 @@ class ConfigurationHandler
                 configureTm(btm, child);
                 break;
             case "jdbc":
-                configureJdbc(dataSources, child);
+                configureJdbc(dataSources, started, child);
                 break;
             case "jms":
-                configureJms(connectionFactories, child);
+                configureJms(connectionFactories, started, child);
                 break;
             case "tracing":
                 configureTracing(tracing, child);
@@ -274,16 +271,18 @@ class ConfigurationHandler
         }
     }
 
-    private static void configureJdbc(Map<String, DataSource> dataSources, Configuration config)
+    private static void configureJdbc(Map<String, PoolingDataSource> dataSources,
+        Set<ResourceBean> started, Configuration config)
         throws ConfigurationException
     {
         for(Configuration child : config.getChildren("connectionPool"))
         {
-            configureJdbcPool(dataSources, child);
+            configureJdbcPool(dataSources, started, child);
         }
     }
 
-    private static void configureJdbcPool(Map<String, DataSource> dataSources, Configuration config)
+    private static void configureJdbcPool(Map<String, PoolingDataSource> dataSources,
+        Set<ResourceBean> started, Configuration config)
         throws ConfigurationException
     {
         PoolingDataSource ds = new PoolingDataSource();
@@ -326,22 +325,23 @@ class ConfigurationHandler
         if(config.getAttributeAsBoolean("eager", false))
         {
             ds.init();
+            started.add(ds);
         }
         dataSources.put(uniqueName, ds);
     }
 
-    private static void configureJms(Map<String, ConnectionFactory> connectionFactories,
-        Configuration config)
+    private static void configureJms(Map<String, PoolingConnectionFactory> connectionFactories,
+        Set<ResourceBean> started, Configuration config)
         throws ConfigurationException
     {
         for(Configuration child : config.getChildren("connectionPool"))
         {
-            configureJmsPool(connectionFactories, child);
+            configureJmsPool(connectionFactories, started, child);
         }
     }
 
-    private static void configureJmsPool(Map<String, ConnectionFactory> connectionFactories,
-        Configuration config)
+    private static void configureJmsPool(Map<String, PoolingConnectionFactory> connectionFactories,
+        Set<ResourceBean> started, Configuration config)
         throws ConfigurationException
     {
         PoolingConnectionFactory cf = new PoolingConnectionFactory();
@@ -378,6 +378,7 @@ class ConfigurationHandler
         if(config.getAttributeAsBoolean("eager", false))
         {
             cf.init();
+            started.add(cf);
         }
         connectionFactories.put(uniqueName, cf);
     }
@@ -463,7 +464,8 @@ class ConfigurationHandler
         }
     }
 
-    public static void configure(Map<String, DataSource> dataSources, String dsName, String dsClass, Properties dsProperties)
+    public static void configure(Map<String, PoolingDataSource> dataSources,
+        String dsName, String dsClass, Properties dsProperties)
     {
         bitronix.tm.Configuration btm = TransactionManagerServices.getConfiguration();
         setDefaults(btm);

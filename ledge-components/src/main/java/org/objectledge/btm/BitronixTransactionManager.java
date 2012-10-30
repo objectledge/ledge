@@ -2,8 +2,10 @@ package org.objectledge.btm;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.jms.ConnectionFactory;
 import javax.sql.DataSource;
@@ -16,7 +18,9 @@ import org.objectledge.database.Transaction;
 import org.picocontainer.Startable;
 
 import bitronix.tm.TransactionManagerServices;
-import bitronix.tm.resource.common.XAResourceProducer;
+import bitronix.tm.resource.common.ResourceBean;
+import bitronix.tm.resource.jdbc.PoolingDataSource;
+import bitronix.tm.resource.jms.PoolingConnectionFactory;
 
 public class BitronixTransactionManager
     implements Startable, AutoCloseable
@@ -25,14 +29,17 @@ public class BitronixTransactionManager
 
     private final Transaction.Config transactionConfig = new Transaction.Config();
 
-    private final Map<String, DataSource> dataSources = new HashMap<>();
+    private final Map<String, PoolingDataSource> dataSources = new HashMap<>();
 
-    private final Map<String, ConnectionFactory> connectionFactories = new HashMap<>();
+    private final Map<String, PoolingConnectionFactory> connectionFactories = new HashMap<>();
+
+    private final Set<ResourceBean> started = new HashSet<>();
 
     public BitronixTransactionManager(org.jcontainer.dna.Configuration config)
         throws ConfigurationException
     {
-        ConfigurationHandler.configure(dataSources, connectionFactories, transactionConfig, config);
+        ConfigurationHandler.configure(dataSources, connectionFactories, transactionConfig,
+            started, config);
         btm = TransactionManagerServices.getTransactionManager();
     }
 
@@ -59,12 +66,16 @@ public class BitronixTransactionManager
 
     DataSource getDataSource(String uniqueName)
     {
-        return dataSources.get(uniqueName);
+        final PoolingDataSource dataSource = dataSources.get(uniqueName);
+        started.add(dataSource);
+        return dataSource;
     }
 
     ConnectionFactory getConnectionFactory(String uniqueName)
     {
-        return connectionFactories.get(uniqueName);
+        final PoolingConnectionFactory connectionFactory = connectionFactories.get(uniqueName);
+        started.add(connectionFactory);
+        return connectionFactory;
     }
 
     @Override
@@ -75,17 +86,27 @@ public class BitronixTransactionManager
     @Override
     public void stop()
     {
-        for(DataSource dataSource : dataSources.values())
+        for(PoolingDataSource dataSource : dataSources.values())
         {
-            try
+            if(started.contains(dataSource))
             {
-                DatabaseUtils.shutdown(dataSource);
+                try
+                {
+                    DatabaseUtils.shutdown(dataSource);
+                }
+                catch(SQLException e)
+                {
+                    throw new RuntimeException(e);
+                }
+                dataSource.close();
             }
-            catch(SQLException e)
+        }
+        for(PoolingConnectionFactory connectionFactory : connectionFactories.values())
+        {
+            if(started.contains(connectionFactory))
             {
-                throw new RuntimeException(e);
+                connectionFactory.close();
             }
-            ((XAResourceProducer)dataSource).close();
         }
         btm.shutdown();
     }
