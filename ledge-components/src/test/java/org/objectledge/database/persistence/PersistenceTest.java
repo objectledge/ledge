@@ -32,21 +32,24 @@ import java.io.Reader;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Logger;
-import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.btm.BitronixDataSource;
+import org.objectledge.btm.BitronixTransaction;
+import org.objectledge.btm.BitronixTransactionManager;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.DefaultDatabase;
-import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
-import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.SequenceIdGenerator;
+import org.objectledge.database.Transaction;
 import org.objectledge.filesystem.FileSystem;
 
 /**
@@ -55,31 +58,55 @@ import org.objectledge.filesystem.FileSystem;
  */
 public class PersistenceTest extends TestCase
 {
-    private DataSource dataSource;
-
     private Persistence persistence;
 
-    /**
-     * Constructor for PersistenceTest.
-     * @param arg0
-     */
-    public PersistenceTest(String arg0) throws Exception
+    private BitronixTransactionManager btm;
+
+    @Override
+    public void setUp()
+        throws Exception
     {
-        super(arg0);
-        dataSource = getDataSource();
-        IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger);
+        btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
+            getDsProperties(), logger);
+        DataSource dataSource = new BitronixDataSource("hsql", btm);
+        prepareDataSource(dataSource);
+        Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);
+        IdGenerator idGenerator = new SequenceIdGenerator(dataSource);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         persistence = new DefaultPersistence(database, logger);
     }
 
-    /*
-        public void testPersistence()
+    public void tearDown()
+    {
+        btm.stop();
+    }
+
+    private Properties getDsProperties()
+    {
+        Properties properties = new Properties();
+        properties.put("url", "jdbc:hsqldb:.");
+        properties.put("user", "sa");
+        return properties;
+    }
+
+    private void prepareDataSource(DataSource ds)
+        throws Exception
+    {
+        FileSystem fs = FileSystem.getStandardFileSystem(".");
+        Reader reader;
+        if(!DatabaseUtils.hasTable(ds, "test_object"))
         {
-            
+            reader = fs.getReader("sql/database/persistence/TestObject.sql", "UTF-8");
+            DatabaseUtils.runScript(ds, reader);
         }
-    */
+        else
+        {
+            reader = fs.getReader("sql/database/persistence/TruncateTestObject.sql", "UTF-8");
+            DatabaseUtils.runScript(ds, reader);
+        }
+    }
+
     /*
      * Test for Persistent load(long, PersistentFactory)
      */
@@ -156,67 +183,7 @@ public class PersistenceTest extends TestCase
         
     }
 
-    /*
-     * Test for List load(String, PersistentFactory)
-     *
-     */
-    /*
-    public void testLoadStringPersistentFactory()
-    {
-    }
-    
-    public void testSave()
-    {
-    }
-    
-    public void testRevert()
-    {
-    }
-    
-    public void testDelete()
-    {
-    }
-    
-    public void testExists()
-    {
-    }
-    
-    public void testCount()
-    {
-    }
-    */
-
     /////////////////////////////////////////////////////////////////////////////////////////////
-
-    private DataSource getDataSource() throws Exception
-    {
-        DefaultConfiguration conf = new DefaultConfiguration("config", "", "/");
-        DefaultConfiguration url = new DefaultConfiguration("url", "", "/config");
-        url.setValue("jdbc:hsqldb:target/testdb");
-        conf.addChild(url);
-        DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
-        user.setValue("sa");
-        conf.addChild(user);
-        DataSource ds = new HsqldbDataSource(conf);
-        FileSystem fs = FileSystem.getStandardFileSystem(".");
-        Reader reader;
-        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
-        {
-            reader =  fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8");
-            DatabaseUtils.runScript(ds, reader);
-        }
-        if(!DatabaseUtils.hasTable(ds, "test_object"))
-        {
-            reader = fs.getReader("sql/database/persistence/TestObject.sql", "UTF-8");
-            DatabaseUtils.runScript(ds, reader);
-        }
-        else
-        {
-            reader = fs.getReader("sql/database/persistence/TruncateTestObject.sql", "UTF-8");
-            DatabaseUtils.runScript(ds, reader);
-        }
-        return ds;
-    }
 
     private PersistentFactory<TestObject> testFactory = new PersistentFactory<TestObject>()
     {

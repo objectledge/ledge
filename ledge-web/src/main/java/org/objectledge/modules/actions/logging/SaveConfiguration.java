@@ -1,5 +1,8 @@
 package org.objectledge.modules.actions.logging;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +62,9 @@ public class SaveConfiguration
     {
         try
         {
-            emitConfig(new PrintWriter(fileSystem.getWriter(CONFIG_PATH, "UTF-8")));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            emitConfig(new PrintWriter(new OutputStreamWriter(baos, "UTF-8")));
+            fileSystem.write(CONFIG_PATH, new ByteArrayInputStream(baos.toByteArray()));
         }
         catch(Exception e)
         {
@@ -111,7 +116,6 @@ public class SaveConfiguration
         pw.println("  </appender>");
     }
     
-    @SuppressWarnings("unchecked")
     private void emitLogger(Logger logger, boolean root, PrintWriter pw)
     {
         if(root)
@@ -157,7 +161,6 @@ public class SaveConfiguration
     
     // ------------------------------------------------------------------------------------------
     
-    @SuppressWarnings("unchecked")
     private List<Logger> getLoggers()
     {
         Enumeration<Logger> loggerEnumeration = LogManager.getCurrentLoggers();
@@ -176,7 +179,6 @@ public class SaveConfiguration
         return loggerList;
     }
     
-    @SuppressWarnings("unchecked")
     private List<Appender> getAppenders(List<Logger> loggers)
     {
         List<Appender> appenderList = new ArrayList<Appender>();

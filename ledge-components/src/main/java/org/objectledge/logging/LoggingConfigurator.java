@@ -123,6 +123,7 @@ public class LoggingConfigurator
         DOMConfigurator configurator = new LedgeDOMConfigurator(fileSystem);
 
         Hierarchy hierarchy = new LedgeLoggerHierarchy(new RootCategory(Level.DEBUG));
+        hierarchy.getRootLogger().removeAllAppenders();
         configurator.doConfigure(config.getDocumentElement(), hierarchy);
         // We use ClassLoader local, but accessible object as the guard. This allows reinitializing 
         // Log4J from within the same sandbox.

@@ -27,3 +27,5 @@
 -- 
 
 DROP TABLE ledge_parameters;
+
+DROP SEQUENCE ledge_parameters_seq;

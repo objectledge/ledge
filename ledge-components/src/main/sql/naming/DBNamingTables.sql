@@ -8,6 +8,8 @@ CREATE TABLE ledge_naming_context
 
 CREATE UNIQUE INDEX ledge_naming_context_dn_idx ON ledge_naming_context (dn);
 
+CREATE SEQUENCE ledge_naming_context_seq;
+
 CREATE TABLE ledge_naming_attribute
 (
     context_id BIGINT NOT NULL,

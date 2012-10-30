@@ -38,9 +38,11 @@ CREATE TABLE ledge_scheduler (
     last_run_time TIMESTAMP,
     run_time_limit_start TIMESTAMP,
     run_time_limit_end TIMESTAMP,
-    auto_clean INTEGER DEFAULT 0,
-    reentrant INTEGER DEFAULT 0,
-    enabled INTEGER DEFAULT 1,
+    auto_clean BOOLEAN DEFAULT FALSE,
+    reentrant BOOLEAN DEFAULT FALSE,
+    enabled BOOLEAN DEFAULT TRUE,
     PRIMARY KEY (job_id),
     UNIQUE (job_name)
 );
+
+CREATE SEQUENCE ledge_scheduler_seq;

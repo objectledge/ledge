@@ -45,3 +45,5 @@ CREATE TABLE test_object (
   value_byte TINYINT,
   value_short SMALLINT
 );
+
+CREATE SEQUENCE test_object_seq;
