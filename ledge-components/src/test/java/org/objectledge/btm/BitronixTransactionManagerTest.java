@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.database.DatabaseUtils;
@@ -50,7 +52,8 @@ public class BitronixTransactionManagerTest
             new XMLGrammarCache()), "/btm");
         initLog4J("INFO");
         return new BitronixTransactionManager(cf.getConfig("simple",
-            BitronixTransactionManager.class));
+            BitronixTransactionManager.class), new Log4JLogger(
+            Logger.getLogger(BitronixTransactionManager.class)));
     }
 
     public void testHsqlLocal()

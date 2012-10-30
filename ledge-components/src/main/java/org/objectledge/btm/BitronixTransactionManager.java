@@ -13,6 +13,7 @@ import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.Transaction;
 import org.picocontainer.Startable;
@@ -35,18 +36,23 @@ public class BitronixTransactionManager
 
     private final Set<ResourceBean> started = new HashSet<>();
 
-    public BitronixTransactionManager(org.jcontainer.dna.Configuration config)
+    private final Logger log;
+
+    public BitronixTransactionManager(org.jcontainer.dna.Configuration config, Logger log)
         throws ConfigurationException
     {
         ConfigurationHandler.configure(dataSources, connectionFactories, transactionConfig,
             started, config);
         btm = TransactionManagerServices.getTransactionManager();
+        this.log = log;
     }
 
-    public BitronixTransactionManager(String dsName, String dsClass, Properties dsProperties)
+    public BitronixTransactionManager(String dsName, String dsClass, Properties dsProperties,
+        Logger logger)
     {
         ConfigurationHandler.configure(dataSources, dsName, dsClass, dsProperties);
         btm = TransactionManagerServices.getTransactionManager();
+        log = logger;
     }
 
     Transaction.Config getTansactionConfig()
@@ -94,9 +100,9 @@ public class BitronixTransactionManager
                 {
                     DatabaseUtils.shutdown(dataSource);
                 }
-                catch(SQLException e)
+                catch(bitronix.tm.resource.ResourceConfigurationException | SQLException e)
                 {
-                    throw new RuntimeException(e);
+                    log.error("excetion while closing data source", e);
                 }
                 dataSource.close();
             }

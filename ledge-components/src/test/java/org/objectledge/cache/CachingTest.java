@@ -86,8 +86,8 @@ public class CachingTest extends LedgeTestCase
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         pool = new ThreadPool(cleanup, context, config, logger);
-        btm = new BitronixTransactionManager("hsql",
-            "org.hsqldb.jdbc.pool.JDBCXADataSource", getDsProperties());
+        btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
+            getDsProperties(), logger);
         DataSource dataSource = new BitronixDataSource("hsql", btm);
         Transaction transaction = new BitronixTransaction(btm, context, logger, null);
         IdGenerator idGenerator = new SequenceIdGenerator(dataSource);

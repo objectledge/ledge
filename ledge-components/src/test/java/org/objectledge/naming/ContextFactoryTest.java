@@ -185,8 +185,9 @@ public class ContextFactoryTest
         throws Exception
     {
         DefaultPicoContainer container = new DefaultPicoContainer();
+        Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties());
+            getDsProperties(), logger);
         DataSource ds = new BitronixDataSource("hsql", btm);
         prepareDataSource(ds);
         Transaction transaction = new BitronixTransaction(btm,

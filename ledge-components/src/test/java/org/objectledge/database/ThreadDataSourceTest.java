@@ -57,7 +57,7 @@ public class ThreadDataSourceTest extends TestCase
     {
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties());
+            getDsProperties(), logger);
         dataSource = new BitronixDataSource("hsql", btm);
         transaction = new BitronixTransaction(btm, new Context(), logger, null);
     }

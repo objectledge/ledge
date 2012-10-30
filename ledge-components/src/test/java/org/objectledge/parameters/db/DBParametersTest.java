@@ -72,7 +72,7 @@ public class DBParametersTest extends TestCase
     {
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties());
+            getDsProperties(), logger);
         DataSource dataSource = new BitronixDataSource("hsql", btm);
         prepareDataSource(dataSource);
         Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);
