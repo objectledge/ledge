@@ -38,7 +38,7 @@
         <property name="createDatabase">create</property>
       </driverProperties>
     </connectionPool>
-    <connectionPool uniqueName="pg">
+    <connectionPool uniqueName="pg" eager="false">
       <className>org.postgresql.xa.PGXADataSource</className>
       <maxPoolSize>10</maxPoolSize>
       <isolationLevel>READ_COMMITTED</isolationLevel>
