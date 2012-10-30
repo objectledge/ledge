@@ -43,10 +43,14 @@ import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.naming.NamingException;
+
 import org.apache.commons.codec.binary.Hex;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
@@ -84,11 +88,14 @@ public class LocalSingleSignOnService
         .synchronizedMap(new HashMap<PrincipalRealm, LoginStatus>());
     
     private final ServerApiRestrictions serverApiRestrictions;
+    
+    private final UserManager userManager;
 
-    public LocalSingleSignOnService(ThreadPool threadPool, Configuration config, Logger log)
+    public LocalSingleSignOnService(ThreadPool threadPool, UserManager userManager, Configuration config, Logger log)
         throws ConfigurationException
     {
         this.log = log;
+        this.userManager = userManager;
         Configuration[] realmConfigs = config.getChild("realms").getChildren("realm");
         List<Realm> realms = new ArrayList<Realm>();
         Set<String> domains = new HashSet<String>();
@@ -257,6 +264,14 @@ public class LocalSingleSignOnService
             {
                 log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
                 userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_IN);
+            }
+            try
+            {
+                userManager.updateTrackingInformation(principal);
+            }
+            catch(AuthenticationException | NamingException e)
+            {
+                log.debug("Failed to update tracking information of user: " + principal, e);
             }
         }
         else
