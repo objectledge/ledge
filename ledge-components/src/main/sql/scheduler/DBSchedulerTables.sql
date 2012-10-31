@@ -44,3 +44,5 @@ CREATE TABLE ledge_scheduler (
     PRIMARY KEY (job_id),
     UNIQUE (job_name)
 );
+
+CREATE SEQUENCE ledge_scheduler_seq;

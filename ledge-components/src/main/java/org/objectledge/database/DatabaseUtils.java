@@ -34,6 +34,9 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -211,6 +214,7 @@ public class DatabaseUtils
         try
         {
             runScript(conn, reader);
+            conn.commit();
         }
         finally
         {
@@ -285,8 +289,7 @@ public class DatabaseUtils
             close(stmt);
         }        
     }
-    
-    
+
     /**
      * Checks if the given database contains a table with the given name.
      * 
@@ -298,13 +301,26 @@ public class DatabaseUtils
     public static boolean hasTable(DataSource ds, String table)
         throws SQLException
     {
-        Connection conn = null;
-        ResultSet tables = null;
-        try
+        try (Connection conn = ds.getConnection())
         {
-            conn = ds.getConnection();
-            DatabaseMetaData md = conn.getMetaData();
-            tables = md.getTables(null, null, null, null);
+            return hasTable(conn, table);
+        }
+    }
+
+    /**
+     * Checks if the given database contains a table with the given name.
+     * 
+     * @param conn database connection.
+     * @param table table name, case insensitive.
+     * @return <code>true</code> if the database contains the table.
+     * @throws SQLException if there is a problem executing the check.
+     */
+    public static boolean hasTable(Connection conn, String table)
+        throws SQLException
+    {
+        DatabaseMetaData md = conn.getMetaData();
+        try (ResultSet tables = md.getTables(null, null, null, null))
+        {
             boolean result = false;
             while(tables.next())
             {
@@ -315,12 +331,7 @@ public class DatabaseUtils
             }
             return result;
         }
-        finally
-        {
-            close(tables);
-            close(conn);
-        }
-    }    
+    }
 
     /**
      * Transfer data from one database to another.
@@ -661,6 +672,38 @@ public class DatabaseUtils
             {
                 // ignore
             }
+        }
+    }
+
+    /**
+     * Provides a ClassLoader suitable for loading SQL driver class. You need to call
+     * <code>Thread.currentThread().setContextClassLoader(DataSourceFactory.getDriverClassLoader(DRIVER_CLASSPATH));</code>
+     * before requesting the connection.
+     * 
+     * @param driverClasspath additional classpath entries that will be used for instantiating
+     *        driver class. Entries should be separated with path.separator suitable for the
+     *        platform. When null or empty, driver class is expected to be already available in the
+     *        ClassLoader used to load this class.
+     * @return a ClassLoader suitable for loading SQL driver class.
+     * @throws MalformedURLException when provided classpath is malformed.
+     */
+    public static ClassLoader getDriverClassLoader(String driverClasspath)
+        throws MalformedURLException
+    {
+        if(driverClasspath == null || driverClasspath.length() == 0)
+        {
+            return Thread.currentThread().getContextClassLoader();
+        }
+        else
+        {
+            String pathSeparator = System.getProperty("path.separator");
+            String[] elements = driverClasspath.split(pathSeparator);
+            URL[] urls = new URL[elements.length];
+            for(int i = 0; i < elements.length; i++)
+            {
+                urls[i] = new URL("file", "", elements[i].trim());
+            }
+            return new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
         }
     }
 }

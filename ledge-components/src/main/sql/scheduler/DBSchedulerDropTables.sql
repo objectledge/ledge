@@ -27,3 +27,6 @@
 -- 
 
 DROP TABLE ledge_scheduler;
+
+DROP SEQUENCE ledge_scheduler_seq;
+

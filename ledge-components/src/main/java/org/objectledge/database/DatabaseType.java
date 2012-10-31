@@ -21,6 +21,7 @@ public enum DatabaseType
     POSTGRES("PostgreSQL", "pg"), 
     MYSQL("MySQL", "mysql"), 
     H2("H2", "h2"),
+    DERBY("Apache Derby", "derby"),
     UNKNOWN(".*", null); // must be last 
     
     // @formatter:on
