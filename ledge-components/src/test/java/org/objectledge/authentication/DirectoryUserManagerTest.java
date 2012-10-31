@@ -31,6 +31,7 @@ package org.objectledge.authentication;
 import java.io.IOException;
 import java.io.Reader;
 import java.security.Principal;
+import java.util.Properties;
 
 import javax.naming.InvalidNameException;
 import javax.sql.DataSource;
@@ -38,16 +39,19 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.LogManager;
-import org.hsqldb.jdbc.JDBCDataSource;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.btm.BitronixDataSource;
+import org.objectledge.btm.BitronixTransaction;
+import org.objectledge.btm.BitronixTransactionManager;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.DefaultDatabase;
 import org.objectledge.database.IdGenerator;
-import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.SequenceIdGenerator;
+import org.objectledge.database.Transaction;
 import org.objectledge.database.persistence.DefaultPersistence;
 import org.objectledge.database.persistence.Persistence;
 import org.objectledge.logging.LedgeDOMConfigurator;
@@ -72,6 +76,8 @@ public class DirectoryUserManagerTest extends LedgeTestCase
 
     private UserManager userManager;
     
+    private BitronixTransactionManager btm;
+
     public void setUp()
         throws Exception
     {
@@ -83,13 +89,17 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         LedgeDOMConfigurator configurator = new LedgeDOMConfigurator(getFileSystem());
         configurator.doConfigure(logConfig.getDocumentElement(), LogManager.getLoggerRepository());
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(ContextFactory.class));
-        DataSource ds = getDataSource();
+
         DefaultPicoContainer container = new DefaultPicoContainer();
-        IdGenerator idGenerator = new IdGenerator(ds);
-        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger);
+        btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
+            getDsProperties(), logger);
+        DataSource ds = new BitronixDataSource("hsql", btm);
+        prepareDataSource(ds);
+        Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);
+        IdGenerator idGenerator = new SequenceIdGenerator(ds);
         Database database = new DefaultDatabase(ds, idGenerator, transaction);
         Persistence persistence = new DefaultPersistence(database, logger);
-        container.registerComponentInstance(Persistence.class, persistence);        
+        container.registerComponentInstance(Persistence.class, persistence);
         
         Configuration config = getConfig("naming/dbNaming.xml");
         contextFactory = new ContextFactory(container, config, logger);
@@ -106,6 +116,19 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         config = getConfig("config/org.objectledge.authentication.DirectoryUserManager.xml");
         userManager = new DirectoryUserManager(config, logger, namingPolicy, loginVerifier, 
             passwordGenerator, passwordDigester, contextFactory, new UserManagementParticipant[]{});
+    }
+
+    public void tearDown()
+    {
+        btm.stop();
+    }
+
+    private Properties getDsProperties()
+    {
+        Properties properties = new Properties();
+        properties.put("url", "jdbc:hsqldb:.");
+        properties.put("user", "sa");
+        return properties;
     }
 
     public void testUserExists()
@@ -343,23 +366,15 @@ public class DirectoryUserManagerTest extends LedgeTestCase
     }
 
     /////////////// private 
-    private DataSource getDataSource()
+
+    private void prepareDataSource(DataSource ds)
         throws Exception
     {
-        JDBCDataSource ds = new JDBCDataSource();
-        ds.setDatabase("jdbc:hsqldb:.");
-        ds.setUser("sa");
-        ds.setPassword("");
-        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
-        {
-            DatabaseUtils.runScript(ds, getScript("sql/database/IdGeneratorTables.sql"));
-        }
         if(!DatabaseUtils.hasTable(ds, "ledge_naming_context"))
         {        
             DatabaseUtils.runScript(ds, getScript("sql/naming/DBNamingTables.sql"));
         }
         DatabaseUtils.runScript(ds, getScript("sql/naming/DBNamingTest.sql"));
-        return ds;
     }    
     
     private Reader getScript(String path)

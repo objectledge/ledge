@@ -30,6 +30,7 @@ package org.objectledge.parameters.db;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.sql.DataSource;
@@ -37,15 +38,17 @@ import javax.sql.DataSource;
 import junit.framework.TestCase;
 
 import org.jcontainer.dna.Logger;
-import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.jcontainer.dna.impl.Log4JLogger;
+import org.objectledge.btm.BitronixDataSource;
+import org.objectledge.btm.BitronixTransaction;
+import org.objectledge.btm.BitronixTransactionManager;
 import org.objectledge.context.Context;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.DefaultDatabase;
-import org.objectledge.database.HsqldbDataSource;
 import org.objectledge.database.IdGenerator;
-import org.objectledge.database.JotmTransaction;
+import org.objectledge.database.SequenceIdGenerator;
+import org.objectledge.database.Transaction;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
@@ -61,20 +64,34 @@ public class DBParametersTest extends TestCase
     private DBParametersManager manager;
     protected long anyTimeStamp = 123123132L;
     protected long anyTimeStamp2 = 232342445L;
+    
+    private BitronixTransactionManager btm;
 
-    /**
-     * Constructor for DBParametersTest.
-     * @param arg0
-     */
-    public DBParametersTest(String arg0) throws Exception
+    public void setUp()
+        throws Exception
     {
-        super(arg0);
-        DataSource dataSource = getDataSource();
-        IdGenerator idGenerator = new IdGenerator(dataSource);
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        JotmTransaction transaction = new JotmTransaction(0, 120, new Context(), logger);
+        btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
+            getDsProperties(), logger);
+        DataSource dataSource = new BitronixDataSource("hsql", btm);
+        prepareDataSource(dataSource);
+        Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);
+        IdGenerator idGenerator = new SequenceIdGenerator(dataSource);
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         manager = new DefaultDBParametersManager(database, logger);
+    }
+    
+    public void tearDown()
+    {
+        btm.stop();
+    }
+
+    private Properties getDsProperties()
+    {
+        Properties properties = new Properties();
+        properties.put("url", "jdbc:hsqldb:.");
+        properties.put("user", "sa");
+        return properties;
     }
 
     public void testDBParameters() throws Exception
@@ -892,28 +909,15 @@ public class DBParametersTest extends TestCase
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    private DataSource getDataSource() throws Exception
+    private void prepareDataSource(DataSource ds)
+        throws Exception
     {
-        DefaultConfiguration conf = new DefaultConfiguration("config", "", "/");
-        DefaultConfiguration url = new DefaultConfiguration("url", "", "/config");
-        url.setValue("jdbc:hsqldb:.");
-        conf.addChild(url);
-        DefaultConfiguration user = new DefaultConfiguration("user", "", "/config");
-        user.setValue("sa");
-        conf.addChild(user);
-        DataSource ds = new HsqldbDataSource(conf);
         FileSystem fs = FileSystem.getStandardFileSystem(".");
-        if(!DatabaseUtils.hasTable(ds, "ledge_id_table"))
-        {
-            DatabaseUtils.runScript(ds, fs.getReader("sql/database/IdGeneratorTables.sql", "UTF-8"));
-        }
         if(!DatabaseUtils.hasTable(ds, "ledge_parameters"))
-        {        
-            DatabaseUtils.runScript(ds, 
+        {
+            DatabaseUtils.runScript(ds,
                 fs.getReader("sql/parameters/DBParametersTables.sql", "UTF-8"));
         }
-        DatabaseUtils.runScript(ds, 
-            fs.getReader("sql/parameters/DBParametersTest.sql", "UTF-8"));
-        return ds;
+        DatabaseUtils.runScript(ds, fs.getReader("sql/parameters/DBParametersTest.sql", "UTF-8"));
     }
 }

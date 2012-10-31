@@ -103,12 +103,12 @@ public class RemoteSingleSignOnService
     {
         try
         {
-            String[] response = remote.validateTicket(ticket, domain, client);
+            Object[] response = remote.validateTicket(ticket, domain, client);
             if(response != null && response.length == 2 && response[0].equals("VALID"))
             {
                 try
                 {
-                    return userManager.getUserByName(response[1]);
+                    return userManager.getUserByName((String)response[1]);
                 }
                 catch(AuthenticationException e)
                 {
