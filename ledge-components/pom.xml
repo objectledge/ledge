@@ -42,10 +42,6 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>jotm</groupId>
-      <artifactId>jotm</artifactId>
-    </dependency>
-    <dependency>
       <groupId>pcj</groupId>
       <artifactId>pcj</artifactId>
     </dependency>
@@ -156,6 +152,22 @@
     	<groupId>org.apache.activemq</groupId>
     	<artifactId>activemq-all</artifactId>
     	<version>5.6.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.btm</groupId>
+      <artifactId>btm</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.1-901.jdbc4</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>

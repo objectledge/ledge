@@ -27,4 +27,8 @@
 -- 
 
 DROP TABLE ledge_naming_attribute;
+
 DROP TABLE ledge_naming_context;
+
+DROP SEQUENCE ledge_naming_context_seq;
+

@@ -64,7 +64,7 @@ public class ServerAPI
     }
 
     @Override
-    public String[] validateTicket(String ticket, String domain, String client)
+    public Object[] validateTicket(String ticket, String domain, String client)
         throws XmlRpcException
     {
         final Principal principal = singleSignOnService.validateTicket(ticket, domain, client);
