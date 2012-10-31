@@ -208,4 +208,12 @@ public class DummyUserManager
         throw new UnsupportedOperationException("Dummy manager cannot perfom lookup");
     }
 
+    @Override
+    public void changeUserAttribiutes(Principal account, Attributes attribiutes)
+        throws AuthenticationException
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

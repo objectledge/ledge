@@ -266,6 +266,16 @@ public abstract class UserManager
      */
     public abstract void changeUserPassword(Principal account, String password)
         throws AuthenticationException;
+    
+    /**
+     * Change user attribiutes 
+     * 
+     * @param account to change
+     * @param attributes to change
+     * @throws AuthenticationException
+     */
+    
+    public abstract void changeUserAttribiutes(Principal account, Attributes attribiutes) throws AuthenticationException;
 
     /**
      * Gets user's password
@@ -332,6 +342,16 @@ public abstract class UserManager
      */
     public abstract Principal[] lookupAccounts(String query)
         throws NamingException;
+    
+    /**
+     * Get user by parameter (for example 'uid') and parameter value
+     * 
+     * 
+     * @param parameter
+     * @param parameterValue
+     * @return
+     * @throws NamingException
+     */
 
     public abstract List<Principal> getUserByParameter(String parameter, String parameterValue)
         throws NamingException;

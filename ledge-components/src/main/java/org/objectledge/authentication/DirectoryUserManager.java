@@ -437,7 +437,7 @@ public class DirectoryUserManager
             {
                 throw new UserUnknownException("user " + account.getName() + " does not exist");
             }
-            Attributes attrs = new BasicAttributes(true);
+            Attributes attrs = new BasicAttributes(true);   
             putPasswordAttribute(attrs, password, false);
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attrs);
             logger.info("User " + account.getName() + "'s password changed");
@@ -716,6 +716,32 @@ public class DirectoryUserManager
                 results.add(new DefaultPrincipal(result.getNameInNamespace()));
             }
             return results;
+        }
+        finally
+        {
+            closeContext(ctx);
+        }
+    }
+
+    @Override
+    public void changeUserAttribiutes(Principal account, Attributes attributes)
+        throws AuthenticationException
+    {
+        DirContext ctx = null;
+        try
+        {
+            ctx = directory.lookupDirContext(account.getName());
+            if(ctx == null)
+            {
+                throw new UserUnknownException("user " + account.getName() + " does not exist");
+            }
+  
+            ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attributes);
+            logger.info("User " + account.getName() + "'s attribiutes changed");
+        }
+        catch(NamingException e)
+        {
+            throw new AuthenticationException("Attribiutes modification failed", e);
         }
         finally
         {
