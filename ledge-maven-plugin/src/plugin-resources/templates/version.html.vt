@@ -1,7 +1,0 @@
-<html>
-  <title>${pom.artifactId} version page</title>
-  <body>
-    <p>${pom.groupId}:${pom.artifactId} version ${pom.currentVersion}#if($buildLabel) / b$buildLabel#end</p>
-    <p>built on $dateFormat.format($date)#if($userName) by $userName#end</p>
-  </body>
-</html>
