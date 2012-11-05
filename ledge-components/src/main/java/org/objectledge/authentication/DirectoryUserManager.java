@@ -476,9 +476,13 @@ public class DirectoryUserManager
     }
 
     /**
-     * {@inheritDoc}
+     * Returns user's password.
+     * 
+     * @param account the account
+     * @return user's password
+     * @throws AuthenticationException
      */
-    protected String getUserPassword(Principal account)
+    private String getUserPassword(Principal account)
         throws AuthenticationException
     {
         String storedPassword = null;
