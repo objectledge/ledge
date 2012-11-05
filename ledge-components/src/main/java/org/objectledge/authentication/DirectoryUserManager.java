@@ -478,7 +478,7 @@ public class DirectoryUserManager
     /**
      * {@inheritDoc}
      */
-    public String getUserPassword(Principal account)
+    protected String getUserPassword(Principal account)
         throws AuthenticationException
     {
         String storedPassword = null;
@@ -881,6 +881,18 @@ public class DirectoryUserManager
             }
             return storedAttribute;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void enableUserPassword(Principal account)
+        throws AuthenticationException
+    {
+        String password = getUserPassword(account);
+        password = password.substring(1);
+        changeUserPassword(account, password);
     }
 
 }

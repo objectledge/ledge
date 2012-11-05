@@ -151,12 +151,12 @@ public abstract class UserManager
 
     /**
      * Creates a new user account with additional Attributes
+     * 
      * @param login login name of the user.
      * @param password initial password of the user.
      * @param blockPassword the flag indicating if password should have addded ! mark after hashing
      *        which blocks it.
      * @param attributes the additional attributes
-     * 
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
@@ -264,25 +264,16 @@ public abstract class UserManager
      */
     public abstract void changeUserPassword(Principal account, String password)
         throws AuthenticationException;
-    
+
     /**
-     * Change user attribiutes 
+     * Change user attribiutes
      * 
      * @param account to change
      * @param attributes to change
      * @throws AuthenticationException
      */
-    
-    public abstract void changeUserAttribiutes(Principal account, Attributes attribiutes) throws AuthenticationException;
 
-    /**
-     * Gets user's password
-     * 
-     * @param account the account.
-     * @return password, stored password
-     * @throws AuthenticationException if there is a problem performing the operation.
-     */
-    public abstract String getUserPassword(Principal account)
+    public abstract void changeUserAttribiutes(Principal account, Attributes attribiutes)
         throws AuthenticationException;
 
     /**
@@ -296,6 +287,17 @@ public abstract class UserManager
     public abstract boolean checkUserPassword(Principal account, String password)
         throws AuthenticationException;
 
+    /**
+     * Enables user's password.
+     * 
+     * Removes ! from the beginning of the user's password
+     * 
+     * @param account the account
+     * @throws AuthenticationException if there is a problem performing the operation.
+     */
+    public abstract void enableUserPassword(Principal account)
+        throws AuthenticationException;
+    
     /**
      * Generates a random password.
      * 
@@ -340,10 +342,9 @@ public abstract class UserManager
      */
     public abstract Principal[] lookupAccounts(String query)
         throws NamingException;
-    
+
     /**
      * Get user by parameter (for example 'uid') and parameter value
-     * 
      * 
      * @param parameter
      * @param parameterValue
@@ -374,6 +375,7 @@ public abstract class UserManager
      */
     public abstract List<String> lookupDNs(String query, SearchControls searchControls)
         throws NamingException;
+
     /**
      * Gets any user attribute data
      * 
@@ -383,8 +385,7 @@ public abstract class UserManager
      * @throws AuthenticationException
      */
     public abstract String getUserAttribute(Principal account, String attribute)
-                    throws AuthenticationException;
-             
+        throws AuthenticationException;
 
     /**
      * Updates tracking information about account. Updates last logon timestamp and bumps logon

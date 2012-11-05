@@ -168,17 +168,11 @@ public class DummyUserManager
     }
 
     @Override
-    public Principal createAccount(String login, String password, Boolean blockPassword, Attributes attributes)
+    public Principal createAccount(String login, String password, Boolean blockPassword,
+        Attributes attributes)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot create new account");
-    }
-
-    @Override
-    public String getUserPassword(Principal account)
-        throws AuthenticationException
-    {
-        throw new UnsupportedOperationException("Dummy manager cannot get account's password");
     }
 
     @Override
@@ -228,7 +222,13 @@ public class DummyUserManager
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot get user attribute");
+    }
 
+    @Override
+    public void enableUserPassword(Principal account)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot enable user password");
     }
 
 }
