@@ -822,14 +822,6 @@ public class DirectoryUserManager
     }
 
     /**
-    * {@inheritDoc}
-    */
-   private List<String> lookupDNs(String query)
-       throws NamingException
-   {
-       return lookupDNs(query, defaultSearchControls);
-   }
-    /**
      * Adds additional attributes to attrs. Changes state of attrs.
      * 
      * @param attrs
