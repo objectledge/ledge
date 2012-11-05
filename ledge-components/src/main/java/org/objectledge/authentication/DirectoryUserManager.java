@@ -30,7 +30,6 @@ package org.objectledge.authentication;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -746,6 +745,44 @@ public class DirectoryUserManager
         finally
         {
             closeContext(ctx);
+        }
+    }
+
+    @Override
+    public String getUserAttribute(Principal account, String attribute)
+        throws AuthenticationException
+    {
+        {
+            String storedAttribute = "";
+            DirContext ctx = null;
+            try
+            {
+                ctx = directory.lookupDirContext(account.getName());
+                if(ctx == null)
+                {
+                    throw new UserUnknownException("user " + account.getName() + " does not exist");
+                }
+                String[] attrIds = { attribute };
+                Attribute attr = ctx.getAttributes("", attrIds).get(attribute);
+                Object obj = attr.get();
+                if(obj instanceof String)
+                {
+                    storedAttribute = (String)obj;
+                }
+                else
+                {
+                    storedAttribute = new String((byte[])obj);
+                }
+            }
+            catch(Exception e)
+            {
+                throw new AuthenticationException("attribute retreiveal failed", e);
+            }
+            finally
+            {
+                closeContext(ctx);
+            }
+            return storedAttribute;
         }
     }
 }

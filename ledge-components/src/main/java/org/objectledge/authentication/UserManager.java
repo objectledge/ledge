@@ -376,5 +376,16 @@ public abstract class UserManager
      */
     public abstract List<String> lookupDNs(String query, SearchControls searchControls)
         throws NamingException;
+    /**
+     * Gets any user attribute data
+     * 
+     * @param account
+     * @param attribute
+     * @return
+     * @throws AuthenticationException
+     */
+    public abstract String getUserAttribute(Principal account, String attribute)
+                    throws AuthenticationException;
+             
 
 }

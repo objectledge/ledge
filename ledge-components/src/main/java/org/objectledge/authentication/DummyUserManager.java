@@ -212,8 +212,14 @@ public class DummyUserManager
     public void changeUserAttribiutes(Principal account, Attributes attribiutes)
         throws AuthenticationException
     {
-        // TODO Auto-generated method stub
-        
+        throw new UnsupportedOperationException("Dummy manager cannot change user attribute");
+    }
+
+    @Override
+    public String getUserAttribute(Principal account, String attribute)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot get user attribute");
     }
 
 }
