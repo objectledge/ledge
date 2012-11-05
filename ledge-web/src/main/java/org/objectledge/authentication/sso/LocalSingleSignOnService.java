@@ -271,7 +271,7 @@ public class LocalSingleSignOnService
             }
             catch(AuthenticationException | NamingException e)
             {
-                log.debug("Failed to update tracking information of user: " + principal, e);
+                log.error("Failed to update tracking information of user: " + principal, e);
             }
         }
         else
