@@ -67,6 +67,11 @@
           </element>
         </optional>
         <optional>
+          <element name="isLogonTrackingEnabled">
+            <text/>
+          </element>
+        </optional>
+        <optional>
           <element name="logonCountAttribute">
             <text/>
           </element>

@@ -78,6 +78,9 @@ public class DirectoryUserManager
     /** Default password attribute key name. */
     public static final String PASSWORD_ATTRIBUTE_DEFAULT = "userPassword";
 
+    /** By default logon tracking is turned off */
+    public static final boolean LOGON_TRACKING_ENABLED = false;
+    
     /** Default logon count attribute key name. */
     public static final String LOGON_COUNT_ATTRIBUTE_DEFAULT = "logonCount";
 
@@ -102,6 +105,9 @@ public class DirectoryUserManager
 
     /** the password attribute key. */
     protected String passwordAttribute;
+    
+    /** logon tracking enabling flag */
+    protected boolean isLogonTrackingEnabled;
 
     /** the logon count attribute key. */
     protected String logonCountAttribute;
@@ -160,6 +166,7 @@ public class DirectoryUserManager
         mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").getValue(
             PASSWORD_ATTRIBUTE_DEFAULT);
+        isLogonTrackingEnabled = config.getChild("isLogonTrackingEnabled").getValueAsBoolean(LOGON_TRACKING_ENABLED);
         logonCountAttribute = config.getChild("logonCountAttribute").getValue(
             LOGON_COUNT_ATTRIBUTE_DEFAULT);
         lastLogonTimestampAttribute = config.getChild("lastLogonTimestampAttribute").getValue(
@@ -620,11 +627,14 @@ public class DirectoryUserManager
     public void updateTrackingInformation(Principal account)
         throws AuthenticationException, NamingException
     {
-        DirContext dirContext = getPersonalData(account);
-        DirectoryParameters params = new DirectoryParameters(dirContext);
-        bumpUpLogonCounter(params);
-        refreshTimestamp(params);
-        dirContext.close();
+        if(isLogonTrackingEnabled)
+        {
+            DirContext dirContext = getPersonalData(account);
+            DirectoryParameters params = new DirectoryParameters(dirContext);
+            bumpUpLogonCounter(params);
+            refreshTimestamp(params);
+            dirContext.close();
+        }
     }
 
     /**
