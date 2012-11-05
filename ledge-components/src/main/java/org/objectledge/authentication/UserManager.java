@@ -28,6 +28,7 @@
 package org.objectledge.authentication;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 
 import javax.naming.InvalidNameException;
@@ -330,7 +331,7 @@ public abstract class UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException if the opertion could not be performed.
      */
-    public abstract Principal[] lookupAccounts(String attribute, String value)
+    public abstract Collection<Principal> lookupAccounts(String attribute, String value)
         throws NamingException;
 
     /**
@@ -340,9 +341,19 @@ public abstract class UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException if the opertion could not be performed.
      */
-    public abstract Principal[] lookupAccounts(String query)
+    public abstract Collection<Principal> lookupAccounts(String query)
         throws NamingException;
 
+    /**
+     * Looks up user accounts according to personal data attributes and search controlls.
+     * 
+     * @param query the JNDI query in format supported by the underlying directory.
+     * @param searchControlls JNDI SearchControlls
+     * @return the accounts that fulfill the condition.
+     * @throws NamingException
+     */
+    public abstract Collection<Principal> lookupAccounts(String query, SearchControls searchControlls) 
+                    throws NamingException;
     /**
      * Get user by parameter (for example 'uid') and parameter value
      * 
@@ -355,26 +366,6 @@ public abstract class UserManager
     public abstract List<Principal> getUserByParameter(String parameter, String parameterValue)
         throws NamingException;
 
-    /**
-     * Find all dn of the context that match the attribute query.
-     * 
-     * @param query attribute query
-     * @return the list of the name of matched context.
-     * @throws NamingException if lookup fails.
-     */
-    public abstract List<String> lookupDNs(String query)
-        throws NamingException;
-
-    /**
-     * Find all dn of the context that match the attribute query given custom search controls.
-     * 
-     * @param query attribute query
-     * @param searchControls the search controls to use for query
-     * @return the list of the name of matched context.
-     * @throws NamingException if lookup fails.
-     */
-    public abstract List<String> lookupDNs(String query, SearchControls searchControls)
-        throws NamingException;
 
     /**
      * Gets any user attribute data

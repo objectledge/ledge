@@ -31,6 +31,7 @@ package org.objectledge.authentication;
 import java.io.IOException;
 import java.io.Reader;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.Properties;
 
 import javax.naming.InvalidNameException;
@@ -285,10 +286,10 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         params.set("uid","foo");
         String dn = userManager.createDN(params);
         userManager.createAccount("foo","bar");
-        Principal[] results = userManager.lookupAccounts("foo","bar");
-        assertEquals(results.length,0);
+        Collection<Principal> results = userManager.lookupAccounts("foo","bar");
+        assertEquals(results.size(),0);
         results = userManager.lookupAccounts("uid","foo");
-        assertEquals(results.length,1);
+        assertEquals(results.size(),1);
     }
 
     public void testLookupAccountsString()

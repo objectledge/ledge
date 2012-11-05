@@ -30,6 +30,8 @@ package org.objectledge.authentication;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -232,11 +234,12 @@ public class DirectoryUserManager
      * {@inheritDoc}
      */
     @Override
-    public Principal createAccount(String login, String password, Boolean blockPassword, Attributes attributes)
+    public Principal createAccount(String login, String password, Boolean blockPassword,
+        Attributes attributes)
         throws AuthenticationException
     {
         Parameters params = new DefaultParameters();
-        params.set(loginAttribute,login);
+        params.set(loginAttribute, login);
         String dn = createDN(params);
         if(!checkLogin(login))
         {
@@ -555,7 +558,7 @@ public class DirectoryUserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String attribute, String value)
+    public Collection<Principal> lookupAccounts(String attribute, String value)
         throws NamingException
     {
         List<String> list = lookupDNs(attribute, value);
@@ -565,23 +568,29 @@ public class DirectoryUserManager
         {
             principals[i++] = new DefaultPrincipal(dn);
         }
-        return principals;
+        return Arrays.asList(principals);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String query)
+    public Collection<Principal> lookupAccounts(String query)
         throws NamingException
     {
-        List<String> list = lookupDNs(query);
+        return lookupAccounts(query, defaultSearchControls);
+    }
+
+    public Collection<Principal> lookupAccounts(String query, SearchControls searchControlls)
+        throws NamingException
+    {
+        List<String> list = lookupDNs(query, searchControlls);
         Principal[] principals = new Principal[list.size()];
         int i = 0;
         for(String dn : list)
         {
             principals[i++] = new DefaultPrincipal(dn);
         }
-        return principals;
+        return Arrays.asList(principals);
     }
 
     // private helper methods.
@@ -684,10 +693,14 @@ public class DirectoryUserManager
     }
 
     /**
-     * {@inheritDoc}
+     * Find all dn of the context that match the attribute query given custom search controls.
+     * 
+     * @param query attribute query
+     * @param searchControls the search controls to use for query
+     * @return the list of the name of matched context.
+     * @throws NamingException if lookup fails.
      */
-    @Override
-    public List<String> lookupDNs(String query, SearchControls searchControls)
+    private List<String> lookupDNs(String query, SearchControls searchControls)
         throws NamingException
     {
         DirContext ctx = null;
@@ -707,16 +720,6 @@ public class DirectoryUserManager
         {
             closeContext(ctx);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> lookupDNs(String query)
-        throws NamingException
-    {
-        return lookupDNs(query, defaultSearchControls);
     }
 
     /**
@@ -775,7 +778,6 @@ public class DirectoryUserManager
             closeContext(ctx);
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -847,7 +849,6 @@ public class DirectoryUserManager
             params.add(lastLogonTimestampAttribute, timestamp.toGeneralizedTime());
         }
     }
-
 
     @Override
     public String getUserAttribute(Principal account, String attribute)

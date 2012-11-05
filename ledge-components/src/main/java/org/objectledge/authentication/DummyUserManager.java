@@ -29,6 +29,7 @@
 package org.objectledge.authentication;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -143,7 +144,7 @@ public class DummyUserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String attribute, String value)
+    public Collection<Principal> lookupAccounts(String attribute, String value)
         throws NamingException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
@@ -152,7 +153,17 @@ public class DummyUserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String query)
+    @Override
+    public Collection<Principal> lookupAccounts(String query, SearchControls searchControlls)
+        throws NamingException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<Principal> lookupAccounts(String query)
         throws NamingException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
@@ -187,18 +198,6 @@ public class DummyUserManager
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup user by mail");
-    }
-
-    @Override
-    public List<String> lookupDNs(String query)
-    {
-        throw new UnsupportedOperationException("Dummy manager cannot perform lookup");
-    }
-
-    @Override
-    public List<String> lookupDNs(String query, SearchControls searchControls)
-    {
-        throw new UnsupportedOperationException("Dummy manager cannot perfom lookup");
     }
 
     @Override
