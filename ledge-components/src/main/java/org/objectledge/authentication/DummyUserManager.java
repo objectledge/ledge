@@ -30,7 +30,6 @@ package org.objectledge.authentication;
 
 import java.security.Principal;
 import java.util.Collection;
-import java.util.List;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
@@ -187,7 +186,7 @@ public class DummyUserManager
     }
 
     @Override
-    public List<Principal> getUserByParameter(String parameter, String parameterValue)
+    public Collection<Principal> getUserByParameter(String parameter, String parameterValue)
         throws NamingException
     {
         throw new UnsupportedOperationException("Dummy manager cannot get user by parameter");

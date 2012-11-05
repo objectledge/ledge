@@ -509,7 +509,7 @@ public class DirectoryUserManager
      * {@inheritDoc}
      */
     @Override
-    public List<Principal> getUserByParameter(String parameter, String parameterValue)
+    public Collection<Principal> getUserByParameter(String parameter, String parameterValue)
         throws NamingException
     {
 

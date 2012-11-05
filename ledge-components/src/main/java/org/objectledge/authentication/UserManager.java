@@ -29,7 +29,6 @@ package org.objectledge.authentication;
 
 import java.security.Principal;
 import java.util.Collection;
-import java.util.List;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
@@ -363,7 +362,7 @@ public abstract class UserManager
      * @throws NamingException
      */
 
-    public abstract List<Principal> getUserByParameter(String parameter, String parameterValue)
+    public abstract Collection<Principal> getUserByParameter(String parameter, String parameterValue)
         throws NamingException;
 
 
