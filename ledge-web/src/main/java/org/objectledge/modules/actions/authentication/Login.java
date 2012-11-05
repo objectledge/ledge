@@ -141,7 +141,7 @@ public class Login
             }
             catch(AuthenticationException | NamingException e)
             {
-                logger.debug("Failed to update tracking information of user: " + principal, e);
+                logger.error("Failed to update tracking information of user: " + principal, e);
             }
         }
 
