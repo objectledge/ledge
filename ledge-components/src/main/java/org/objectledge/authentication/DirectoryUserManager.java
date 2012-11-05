@@ -54,6 +54,8 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.naming.ContextHelper;
+import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.UndefinedParameterException;
 import org.objectledge.parameters.directory.DirectoryParameters;
 
@@ -220,20 +222,22 @@ public class DirectoryUserManager
     /**
      * {@inheritDoc}
      */
-    public Principal createAccount(String login, String dn, String password)
+    public Principal createAccount(String login, String password)
         throws AuthenticationException
     {
-        return this.createAccount(null, login, dn, password, false);
+        return this.createAccount(login, password, false, null);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Principal createAccount(Attributes attributes, String login, String dn, String password,
-        Boolean blockPassword)
+    public Principal createAccount(String login, String password, Boolean blockPassword, Attributes attributes)
         throws AuthenticationException
     {
+        Parameters params = new DefaultParameters();
+        params.set(loginAttribute,login);
+        String dn = createDN(params);
         if(!checkLogin(login))
         {
             throw new AuthenticationException("login '" + login + "' reserved");

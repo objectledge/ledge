@@ -142,28 +142,26 @@ public abstract class UserManager
      * Creates a new user account.
      * 
      * @param login login name of the user.
-     * @param dn distinguished name of the user.
      * @param password initial password of the user.
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
-    public abstract Principal createAccount(String login, String dn, String password)
+    public abstract Principal createAccount(String login, String password)
         throws AuthenticationException;
 
     /**
      * Creates a new user account with additional Attributes
-     * 
-     * @param attributes the additional attributes
      * @param login login name of the user.
-     * @param dn distinguished name of the user.
      * @param password initial password of the user.
      * @param blockPassword the flag indicating if password should have addded ! mark after hashing
      *        which blocks it.
+     * @param attributes the additional attributes
+     * 
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
-    public abstract Principal createAccount(Attributes attributes, String login, String dn,
-        String password, Boolean blockPassword)
+    public abstract Principal createAccount(String login, String password, Boolean blockPassword,
+        Attributes attributes)
         throws AuthenticationException;
 
     /**

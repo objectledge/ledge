@@ -62,7 +62,7 @@ public class DummyUserManager
     /**
      * {@inheritDoc}
      */
-    public Principal createAccount(String login, String dn, String password)
+    public Principal createAccount(String login, String password)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot create new account");
@@ -168,8 +168,7 @@ public class DummyUserManager
     }
 
     @Override
-    public Principal createAccount(Attributes attributes, String login, String dn, String password,
-        Boolean blockPassword)
+    public Principal createAccount(String login, String password, Boolean blockPassword, Attributes attributes)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot create new account");

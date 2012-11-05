@@ -140,7 +140,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         params.add("uid","foo");
         String dn = userManager.createDN(params);
         assertEquals(dn,"uid=foo,ou=people,dc=objectledge,dc=org");
-        userManager.createAccount("foo",dn, "bar");
+        userManager.createAccount("foo","bar");
         assertEquals(userManager.userExists("uid=foo,ou=people,dc=objectledge,dc=org"),true);
     }
 
@@ -151,14 +151,14 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         params.set("uid","foo");
         String dn = userManager.createDN(params);
         assertEquals(dn,"uid=foo,ou=people,dc=objectledge,dc=org");
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        Principal principal = userManager.createAccount("foo","bar");
         assertEquals(principal, userManager.getUserByName(dn));
         assertEquals(principal.getName(), dn);
         assertEquals(principal.equals(""), false);
         principal.toString();
         try
         {
-            userManager.createAccount("foo",dn, "bar");
+            userManager.createAccount("foo","bar");
             fail("should throw the exception");
         }
         catch(UserAlreadyExistsException e)
@@ -170,7 +170,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         assertEquals(dn,"uid=root,ou=people,dc=objectledge,dc=org");
         try
         {
-            userManager.createAccount("root",dn, "bar");
+            userManager.createAccount("root","bar");
             fail("should throw the exception");
         }
         catch(AuthenticationException e)
@@ -186,7 +186,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         params.set("uid","foo");
         String dn = userManager.createDN(params);
         assertEquals(dn,"uid=foo,ou=people,dc=objectledge,dc=org");
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        Principal principal = userManager.createAccount("foo","bar");
         userManager.removeAccount(principal);
         try
         {
@@ -206,7 +206,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        Principal principal = userManager.createAccount("foo","bar");
         Parameters parameters = new DirectoryParameters(userManager.getPersonalData(principal));
         assertEquals(parameters.get("uid"),"foo");
         userManager.getUserByLogin("foo");
@@ -241,7 +241,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        Principal principal = userManager.createAccount("foo","bar");
         assertEquals(userManager.checkUserPassword(principal, "bar"),true);
         assertEquals(userManager.checkUserPassword(principal, "foo"),false);
         userManager.changeUserPassword(principal, "foo");
@@ -264,7 +264,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        Principal principal = userManager.createAccount("foo","bar");
         params = new DirectoryParameters(userManager.getPersonalData(principal));
         assertEquals(params.get("uid"),"foo");
         try
@@ -284,7 +284,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        userManager.createAccount("foo",dn, "bar");
+        userManager.createAccount("foo","bar");
         Principal[] results = userManager.lookupAccounts("foo","bar");
         assertEquals(results.length,0);
         results = userManager.lookupAccounts("uid","foo");
@@ -297,7 +297,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        userManager.createAccount("foo",dn, "bar");
+        userManager.createAccount("foo","bar");
         /*
         Principal[] results = userManager.lookupAccounts("(foo=bar)");
         assertEquals(results.length,0);
@@ -337,7 +337,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
         Parameters params = new DefaultParameters();
         params.set("uid","foo");
         String dn = userManager.createDN(params);
-        Principal principal = userManager.createAccount("foo",dn, "bar");
+        Principal principal = userManager.createAccount("foo","bar");
         assertEquals(userManager.getLogin(principal),"foo");
         assertEquals(userManager.getLogin(dn),"foo");
         try
