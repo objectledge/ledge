@@ -375,8 +375,7 @@ public class DirectoryUserManager
     /**
      * {@inheritDoc}
      */
-    public DirContext getPersonalData(Principal account)
-        throws AuthenticationException
+    public DirContext getPersonalData(Principal account) throws AuthenticationException
     {
         try
         {
@@ -385,8 +384,8 @@ public class DirectoryUserManager
         }
         catch(NamingException e)
         {
-            throw new AuthenticationException("Failed to lookup user personal data"
-                + " for principal: " + account.getName(), e);
+            throw new AuthenticationException("Failed to lookup user personal data" +
+                    " for principal: "+account.getName(), e);
         }
     }
 
@@ -510,37 +509,6 @@ public class DirectoryUserManager
         // load the caches
         getLoginName(dn);
         return new DefaultPrincipal(dn);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<Principal> getUserByParameter(String parameter, String parameterValue)
-        throws NamingException
-    {
-
-        List<Principal> results = new ArrayList<Principal>();
-
-        String query = "(" + parameter + "=" + parameterValue + ")";
-
-        DirContext ctx = null;
-        try
-        {
-            ctx = directory.getBaseDirContext();
-            NamingEnumeration<SearchResult> answer = ctx.search("", query, null);
-
-            while(answer.hasMore())
-            {
-                SearchResult result = answer.next();
-                results.add(new DefaultPrincipal(result.getNameInNamespace()));
-            }
-            return results;
-        }
-        finally
-        {
-            closeContext(ctx);
-        }
     }
 
     /**
@@ -821,6 +789,7 @@ public class DirectoryUserManager
     }
 
     /**
+<<<<<<< HEAD
      * Find all dn of the context that match the attribute query.
      * 
      * @param attribute the attribute name.
@@ -852,6 +821,14 @@ public class DirectoryUserManager
         }
     }
 
+    /**
+    * {@inheritDoc}
+    */
+   private List<String> lookupDNs(String query)
+       throws NamingException
+   {
+       return lookupDNs(query, defaultSearchControls);
+   }
     /**
      * Adds additional attributes to attrs. Changes state of attrs.
      * 

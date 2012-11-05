@@ -353,18 +353,6 @@ public abstract class UserManager
      */
     public abstract Collection<Principal> lookupAccounts(String query, SearchControls searchControlls) 
                     throws NamingException;
-    /**
-     * Get user by parameter (for example 'uid') and parameter value
-     * 
-     * @param parameter
-     * @param parameterValue
-     * @return
-     * @throws NamingException
-     */
-
-    public abstract Collection<Principal> getUserByParameter(String parameter, String parameterValue)
-        throws NamingException;
-
 
     /**
      * Gets any user attribute data

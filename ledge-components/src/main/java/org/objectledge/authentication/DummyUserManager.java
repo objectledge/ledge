@@ -186,13 +186,6 @@ public class DummyUserManager
     }
 
     @Override
-    public Collection<Principal> getUserByParameter(String parameter, String parameterValue)
-        throws NamingException
-    {
-        throw new UnsupportedOperationException("Dummy manager cannot get user by parameter");
-    }
-
-    @Override
     public Principal getUserByMail(String mail)
         throws AuthenticationException
     {
