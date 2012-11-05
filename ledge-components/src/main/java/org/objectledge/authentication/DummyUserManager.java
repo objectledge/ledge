@@ -212,8 +212,15 @@ public class DummyUserManager
     public void changeUserAttribiutes(Principal account, Attributes attribiutes)
         throws AuthenticationException
     {
-        // TODO Auto-generated method stub
-        
+        throw new UnsupportedOperationException("Dummy manager cannot change user attributes");
+
+    }
+
+    @Override
+    public void updateTrackingInformation(Principal account)
+    {
+        throw new UnsupportedOperationException(
+            "Dummy manager cannot perform update tracking information operation");
     }
 
 }

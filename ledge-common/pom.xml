@@ -454,7 +454,6 @@
         <artifactId>jersey-servlet</artifactId>
         <version>1.13</version>
       </dependency>
-
       <dependency>
         <groupId>com.sun.jersey.contribs</groupId>
         <artifactId>jersey-multipart</artifactId>
@@ -474,6 +473,11 @@
         <groupId>org.apache.derby</groupId>
         <artifactId>derby</artifactId>
         <version>10.9.1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.directory.shared</groupId>
+        <artifactId>shared-ldap</artifactId>
+        <version>0.9.17</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
