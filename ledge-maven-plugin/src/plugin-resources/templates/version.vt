@@ -1,1 +1,0 @@
-${pom.groupId}/${pom.artifactId}/${pom.currentVersion}/$!buildLabel/$dateFormat.format($date)/$!userName
