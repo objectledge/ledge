@@ -221,6 +221,15 @@ public class DummyUserManager
     {
         throw new UnsupportedOperationException(
             "Dummy manager cannot perform update tracking information operation");
+
+    }
+
+    @Override
+    public String getUserAttribute(Principal account, String attribute)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot get user attribute");
+
     }
 
 }
