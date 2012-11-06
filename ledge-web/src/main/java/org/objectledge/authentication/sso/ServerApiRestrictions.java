@@ -249,7 +249,7 @@ public class ServerApiRestrictions
         String remoteAddr, boolean secure, String path, RequestMethod method)
     {
         if(apiRestriction.getPath() != null
-            && !(path == null && path.matches(apiRestriction.getPath())))
+            && !( path != null && path.matches(apiRestriction.getPath())))
         {
             return Status.UNDEFINED;
         }

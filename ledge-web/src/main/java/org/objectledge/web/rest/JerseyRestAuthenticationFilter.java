@@ -29,8 +29,8 @@ public class JerseyRestAuthenticationFilter
     public ContainerRequest filter(ContainerRequest containerRequest)
     {
         final List<ServerApiRestrictionProvider> jerseyFileProviders = getJerseyFileProviders();
-        Status status = Status.UNDEFINED;
 
+        Status status = Status.UNDEFINED;
         for(ServerApiRestrictionProvider provider : jerseyFileProviders)
         {
             ServerApiRestrictions serverApiRestrictions = provider.getServerApiRestrictions();
@@ -48,7 +48,6 @@ public class JerseyRestAuthenticationFilter
         {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
-        
         return containerRequest;
     }
 
