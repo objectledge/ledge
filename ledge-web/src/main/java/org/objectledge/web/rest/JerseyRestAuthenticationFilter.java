@@ -6,9 +6,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 
-import org.objectledge.authentication.sso.ServerApiRestrictionProvider;
-import org.objectledge.authentication.sso.ServerApiRestrictions;
-import org.objectledge.authentication.sso.ServerApiRestrictions.Status;
+import org.objectledge.authentication.ServerApiRestrictionProvider;
+import org.objectledge.authentication.ServerApiRestrictions;
+import org.objectledge.authentication.ServerApiRestrictions.Status;
 import org.objectledge.web.LedgeServletContextListener;
 import org.picocontainer.ComponentAdapter;
 import org.picocontainer.PicoContainer;

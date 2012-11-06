@@ -1,4 +1,5 @@
-package org.objectledge.authentication.sso;
+package org.objectledge.authentication;
+
 
 public interface ServerApiRestrictionProvider
 {

@@ -47,6 +47,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.ServerApiRestrictions;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
