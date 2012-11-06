@@ -205,8 +205,6 @@ public class ServerApiRestrictions
     {
         String userName = null;
         String secret = null;
-        Status status = Status.UNDEFINED;
-
         if(httpAuthorizationHeader != null)
         {
             String[] authorizationParts = httpAuthorizationHeader.split(" ", 2);
@@ -219,14 +217,13 @@ public class ServerApiRestrictions
                 secret = principal[1];
             }
         }
+        Status status = Status.UNDEFINED;
         for(ApiRestriction apiRestriction : apiRestrictions)
         {
             status = validateApiRequest(apiRestriction, userName, secret, remoteAddr, secure, path,
                 requestMethodMap.get(method));
             if(Status.UNDEFINED != status)
-            {
                 break;
-            }
         }
         return status;
     }
@@ -241,6 +238,7 @@ public class ServerApiRestrictions
         }
         if(apiRestrictions.size() == 0)
         {
+            log.debug("ACCEPTED API call from " + remoteAddr);
             return true;
         }
         return Status.AUTHORIZED == validateApiRequest(apiRestrictions.get(0), userName, secret,
@@ -250,8 +248,6 @@ public class ServerApiRestrictions
     public Status validateApiRequest(ApiRestriction apiRestriction, String userName, String secret,
         String remoteAddr, boolean secure, String path, RequestMethod method)
     {
-        String declineReason;
-
         if(apiRestriction.getPath() != null
             && !(path == null && path.matches(apiRestriction.getPath())))
         {
@@ -262,6 +258,7 @@ public class ServerApiRestrictions
             return Status.UNDEFINED;
         }
 
+        String declineReason;
         if(apiRestriction.isEnabled())
         {
             if(secure || !apiRestriction.isRequireSsl())
