@@ -29,25 +29,25 @@ public class JerseyRestAuthenticationFilter
     {
         final List<ServerApiRestrictionProvider> jerseyFileProviders = getJerseyFileProviders();
 
-        ResponseStatus status = ResponseStatus.UNDEFINED;
+        ResponseStatus response = ResponseStatus.UNDEFINED;
         for(ServerApiRestrictionProvider provider : jerseyFileProviders)
         {
             ServerApiRestrictions serverApiRestrictions = provider.getServerApiRestrictions();
             if(serverApiRestrictions == null)
                 continue;
 
-            status = serverApiRestrictions.validateApiRequest(containerRequest.getPath(),
+            response = serverApiRestrictions.validateApiRequest(containerRequest.getPath(),
                 containerRequest.getMethod(), containerRequest.getHeaderValue("Authorization"),
                 httpServletRequest.getRemoteAddr(), containerRequest.isSecure());
 
-            if(!ResponseStatus.UNDEFINED.equals(status))
+            if(!ResponseStatus.UNDEFINED.equals(response))
                 break;
         }
-        if(ResponseStatus.UNAUTHORIZED.equals(status))
+        if(ResponseStatus.UNAUTHORIZED.equals(response))
         {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
-        else if(ResponseStatus.UNDEFINED.equals(status))
+        else if(ResponseStatus.UNDEFINED.equals(response))
         {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
