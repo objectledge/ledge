@@ -27,8 +27,9 @@
  POSSIBILITY OF SUCH DAMAGE. 
 -->
 
-<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
-  xmlns:a="http://objectledge.org/annotation/1.0" ns="http://objectledge.org/sso/local/1.0">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns:a="http://objectledge.org/annotation/1.0"
+  ns="http://objectledge.org/sso/local/1.0">
   <define name="hostName">
     <data type="string">
       <a:documentation>DNS compatible host name</a:documentation>
@@ -37,9 +38,11 @@
   </define>
   <define name="includeMaster">
     <attribute name="includeMaster">
-      <a:documentation>should domain master be considered a member of the realm. NOT
+      <a:documentation>should domain master be considered a member of
+        the realm. NOT
         RECOMMENDED,
-        unless the master host is accessed exclusively through HTTPS
+        unless the master host is accessed
+        exclusively through HTTPS
       </a:documentation>
       <data type="boolean">
         <a:defaultValue>false</a:defaultValue>
@@ -51,7 +54,8 @@
       <interleave>
         <optional>
           <element name="random">
-            <a:documentation>provider and implementation of SecureRandom to use</a:documentation>
+            <a:documentation>provider and implementation of SecureRandom
+              to use</a:documentation>
             <interleave>
               <optional>
                 <element name="provider">
@@ -75,14 +79,16 @@
             <interleave>
               <optional>
                 <element name="size">
-                  <a:documentation>random bytes per ticket</a:documentation>
+                  <a:documentation>random bytes per ticket
+                  </a:documentation>
                   <a:defaultValue>16</a:defaultValue>
                   <data type="integer" />
                 </element>
               </optional>
               <optional>
                 <element name="validityTime">
-                  <a:documentation>ticket validity time in seconds</a:documentation>
+                  <a:documentation>ticket validity time in seconds
+                  </a:documentation>
                   <data type="integer">
                     <a:defaultValue>60</a:defaultValue>
                   </data>
@@ -99,21 +105,27 @@
               </attribute>
               <interleave>
                 <element name="master">
-                  <a:documentation>single point of access to sso.Ticket and sso.Login views
+                  <a:documentation>single point of access to sso.Ticket
+                    and sso.Login views
                   </a:documentation>
                   <ref name="hostName" />
                 </element>
                 <optional>
                   <element name="baseUrlFormat">
-                    <a:documentation>String.format() pattern for building base URL for accessing sso
-                      views. It's expected to contain single parameter reference for hostname.
+                    <a:documentation>String.format() pattern for
+                      building base URL for accessing sso
+                      views. It's
+                      expected to contain single parameter reference for
+                      hostname.
                       Typical values:
 
                       https://%s
                       https://%s:8443/cyklotron/ledge
 
-                      View parameters of the
-                      following form will be appended to the result of
+                      View parameters of
+                      the
+                      following form will be appended to the result
+                      of
                       expansion of this pattern:
 
                       /view/sso.Ticket
@@ -126,9 +138,13 @@
                 </optional>
                 <choice>
                   <element name="allDomains">
-                    <a:documentation>Indication that this realm contains all domains, with possible
-                      exception on the realm master. If a realm contains this indication it must be
-                      the only realm defined in the configuration.
+                    <a:documentation>Indication that this realm contains
+                      all domains, with possible
+                      exception on the realm
+                      master. If a realm contains this indication it
+                      must be
+                      the only realm defined in the
+                      configuration.
                     </a:documentation>
                     <optional>
                       <ref name="includeMaster" />
@@ -136,8 +152,10 @@
                     <empty />
                   </element>
                   <element name="domains">
-                    <a:documentation>Enumeration of hosts contained in this realm. Each host name
-                      may appear only once in all realms definitions.
+                    <a:documentation>Enumeration of hosts contained in
+                      this realm. Each host name
+                      may appear only once in
+                      all realms definitions.
                     </a:documentation>
                     <optional>
                       <ref name="includeMaster" />
@@ -155,55 +173,64 @@
         </element>
         <optional>
           <element name="apiRestrictions">
-           <optional>
-            <element name="restrict">
-            <attribute name="enabled">
-              <a:documentation>Should server API be activated. When false, all requests are
-                declined.
-              </a:documentation>
-              <data type="boolean">
-                <a:defaultValue>false</a:defaultValue>
-              </data>
-            </attribute>
             <optional>
-              <attribute name="requireSsl">
-                <a:documentation>Are clients required to use SSL?</a:documentation>
-                <data type="boolean">
-                  <a:defaultValue>true</a:defaultValue>
-                </data>
-              </attribute>
-            </optional>
-            <interleave>
-             <optional>
-              <element name="httpBasic">
-               <a:documentation>HTTP basic authentication. It is
-                                recommended to use user and secret, or authorizedClients restrictions, or both.
-               </a:documentation>
-               <attribute name="user">
-                <a:documentation>HTTP basic authentication user required from clients.</a:documentation>
-                <data type="string" />
-               </attribute>
-               <attribute name="secret">
-                <a:documentation>HTTP basic authentication password required from clients.</a:documentation>
-                <data type="string" />
-               </attribute>
-               </element>
-              </optional>
-              <optional>
-                <element name="authorizedClients">
-                  <a:documentation>Clients authorized to use the server API. When not present, no
-                    restrictions on client host.</a:documentation>
-                  <oneOrMore>
-                      <element name="addressRange">
-                        <data type="string">
-                          <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}|([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}/[0-9]{1,3}</param>
-                        </data>
-                      </element>
-                  </oneOrMore>
-                </element>
-              </optional>
-            </interleave>
-            </element>
+              <element name="restrict">
+                <attribute name="enabled">
+                  <a:documentation>Should server API be activated. When
+                    false, all requests are
+                    declined.
+                  </a:documentation>
+                  <data type="boolean">
+                    <a:defaultValue>false</a:defaultValue>
+                  </data>
+                </attribute>
+                <optional>
+                  <attribute name="requireSsl">
+                    <a:documentation>Are clients required to use SSL?
+                    </a:documentation>
+                    <data type="boolean">
+                      <a:defaultValue>true</a:defaultValue>
+                    </data>
+                  </attribute>
+                </optional>
+                <interleave>
+                  <optional>
+                    <element name="httpBasic">
+                      <a:documentation>HTTP basic authentication. It is
+                        recommended to use user and secret, or
+                        authorizedClients restrictions, or both.
+                      </a:documentation>
+                      <attribute name="user">
+                        <a:documentation>HTTP basic authentication user
+                          required from clients.</a:documentation>
+                        <data type="string" />
+                      </attribute>
+                      <attribute name="secret">
+                        <a:documentation>HTTP basic authentication
+                          password required from clients.
+                        </a:documentation>
+                        <data type="string" />
+                      </attribute>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="authorizedClients">
+                      <a:documentation>Clients authorized to use the
+                        server API. When not present, no
+                        restrictions on client host.
+                      </a:documentation>
+                      <oneOrMore>
+                        <element name="addressRange">
+                          <data type="string">
+                            <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}|([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}/[0-9]{1,3}
+                            </param>
+                          </data>
+                        </element>
+                      </oneOrMore>
+                    </element>
+                  </optional>
+                </interleave>
+              </element>
             </optional>
           </element>
         </optional>
