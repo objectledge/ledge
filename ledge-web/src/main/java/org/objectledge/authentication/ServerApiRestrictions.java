@@ -24,7 +24,7 @@ public class ServerApiRestrictions
 
     private final Base64 base64 = new Base64();
 
-    public enum Status
+    public enum ResponseStatus
     {
         AUTHORIZED, UNAUTHORIZED, UNDEFINED
     }
@@ -204,7 +204,7 @@ public class ServerApiRestrictions
         }
     }
 
-    public Status validateApiRequest(String path, String method, String httpAuthorizationHeader,
+    public ResponseStatus validateApiRequest(String path, String method, String httpAuthorizationHeader,
         String remoteAddr, boolean secure)
     {
         String userName = null;
@@ -221,12 +221,12 @@ public class ServerApiRestrictions
                 secret = principal[1];
             }
         }
-        Status status = Status.UNDEFINED;
+        ResponseStatus status = ResponseStatus.UNDEFINED;
         for(ApiRestriction apiRestriction : apiRestrictions)
         {
             status = validateApiRequest(apiRestriction, userName, secret, remoteAddr, secure, path,
                 requestMethodMap.get(method));
-            if(Status.UNDEFINED != status)
+            if(ResponseStatus.UNDEFINED != status)
                 break;
         }
         return status;
@@ -245,21 +245,21 @@ public class ServerApiRestrictions
             log.debug("ACCEPTED API call from " + remoteAddr);
             return true;
         }
-        return Status.AUTHORIZED == validateApiRequest(apiRestrictions.get(0), userName, secret,
+        return ResponseStatus.AUTHORIZED == validateApiRequest(apiRestrictions.get(0), userName, secret,
             remoteAddr, secure, null, RequestMethod.ANY);
     }
 
-    public Status validateApiRequest(ApiRestriction apiRestriction, String userName, String secret,
+    public ResponseStatus validateApiRequest(ApiRestriction apiRestriction, String userName, String secret,
         String remoteAddr, boolean secure, String path, RequestMethod method)
     {
         if(apiRestriction.getPath() != null
             && !(path != null && path.matches(apiRestriction.getPath())))
         {
-            return Status.UNDEFINED;
+            return ResponseStatus.UNDEFINED;
         }
         if(!apiRestriction.getMethods().contains(method))
         {
-            return Status.UNDEFINED;
+            return ResponseStatus.UNDEFINED;
         }
 
         String declineReason;
@@ -285,7 +285,7 @@ public class ServerApiRestrictions
                                         if(addressRange.contains(remote))
                                         {
                                             log.debug("ACCEPTED API call from " + remoteAddr);
-                                            return Status.AUTHORIZED;
+                                            return ResponseStatus.AUTHORIZED;
                                         }
                                     }
                                     catch(IllegalArgumentException e)
@@ -311,7 +311,7 @@ public class ServerApiRestrictions
                         else
                         {
                             log.debug("ACCEPTED API call from " + remoteAddr);
-                            return Status.AUTHORIZED;
+                            return ResponseStatus.AUTHORIZED;
                         }
                     }
                     else if(secret == null)
@@ -338,6 +338,6 @@ public class ServerApiRestrictions
             declineReason = "API access disabled";
         }
         log.warn("DECLINED API call from " + remoteAddr + " " + declineReason);
-        return Status.UNAUTHORIZED;
+        return ResponseStatus.UNAUTHORIZED;
     }
 }
