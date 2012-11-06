@@ -192,7 +192,7 @@ public class LocalSingleSignOnService
         this.ticketValidityTime = config.getChild("tickets", true).getChild("validityTime", true)
             .getValueAsInteger(DEFAULT_TICKET_VALIDITY_TIME);
         
-        serverApiRestrictions = new ServerApiRestrictions(config.getChild("serverApi"), log);
+        serverApiRestrictions = new ServerApiRestrictions(config.getChild("apiRestrictions"), log);
 
         threadPool.runDaemon(new TicketExpiryTask());
     }

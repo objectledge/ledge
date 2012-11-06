@@ -154,7 +154,9 @@
           </zeroOrMore>
         </element>
         <optional>
-          <element name="serverApi">
+          <element name="apiRestrictions">
+           <optional>
+            <element name="restrict">
             <attribute name="enabled">
               <a:documentation>Should server API be activated. When false, all requests are
                 declined.
@@ -201,6 +203,8 @@
                 </element>
               </optional>
             </interleave>
+            </element>
+            </optional>
           </element>
         </optional>
       </interleave>

@@ -2,7 +2,11 @@ package org.objectledge.authentication.sso;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
@@ -14,87 +18,195 @@ import org.objectledge.net.IPAddressUtil;
 
 public class ServerApiRestrictions
 {
-    private final boolean enabled;
-
-    private final boolean requireSsl;
-
-    private final String userName;
-    
-    private final String secret;
-
     private final Logger log;
 
-    private final Set<CIDRBlock> addressRanges;
+    private final List<ApiRestriction> apiRestrictions;
 
     private final Base64 base64 = new Base64();
+
+    private Map<String, RequestMethod> requestMethodMap = new HashMap<String, RequestMethod>();
+
+    public enum Status
+    {
+        AUTHORIZED, UNAUTHORIZED, UNDEFINED
+    }
+
+    public enum RequestMethod
+    {
+        POST, GET, PUT, DELETE, HEAD, OPTIONS, ANY
+    }
+
+    private static class ApiRestriction
+    {
+        private final String path;
+
+        private final Set<RequestMethod> methods;
+
+        private final boolean enabled;
+
+        private final boolean requireSsl;
+
+        private final String userName;
+
+        private final String secret;
+
+        private final Set<CIDRBlock> addressRanges;
+
+        public ApiRestriction(String path, Set<RequestMethod> methods, boolean enabled,
+            boolean requireSsl, String userName, String secret, Set<CIDRBlock> addressRanges)
+        {
+            this.path = path;
+            this.methods = methods;
+            this.enabled = enabled;
+            this.requireSsl = requireSsl;
+            this.userName = userName;
+            this.secret = secret;
+            this.addressRanges = addressRanges;
+        }
+
+        public String getPath()
+        {
+            return path;
+        }
+
+        public Set<RequestMethod> getMethods()
+        {
+            return methods;
+        }
+
+        public boolean isEnabled()
+        {
+            return enabled;
+        }
+
+        public boolean isRequireSsl()
+        {
+            return requireSsl;
+        }
+
+        public String getUserName()
+        {
+            return userName;
+        }
+
+        public String getSecret()
+        {
+            return secret;
+        }
+
+        public Set<CIDRBlock> getAddressRanges()
+        {
+            return addressRanges;
+        }
+    }
 
     public ServerApiRestrictions(Configuration config, Logger log)
         throws ConfigurationException
     {
         this.log = log;
-        this.enabled = config.getAttributeAsBoolean("enabled", false);
-        this.requireSsl = config.getAttributeAsBoolean("requireSsl", true);
-        this.userName = config.getChild("httpBasic").getAttribute("user", null);
-        this.secret = config.getChild("httpBasic").getAttribute("secret", null);
-        Configuration authorizedClientsConfig = config.getChild("authorizedClients", false);
-        if(authorizedClientsConfig == null)
+        this.apiRestrictions = new ArrayList<ApiRestriction>();
+        this.requestMethodMap.put("GET", RequestMethod.GET);
+        this.requestMethodMap.put("PUT", RequestMethod.PUT);
+        this.requestMethodMap.put("POST", RequestMethod.POST);
+        this.requestMethodMap.put("DELETE", RequestMethod.DELETE);
+        this.requestMethodMap.put("OPTIONS", RequestMethod.OPTIONS);
+        this.requestMethodMap.put("HEAD", RequestMethod.HEAD);
+
+        Configuration[] restrictsConfig = config.getChildren("restrict");
+
+        for(Configuration restrictConfig : restrictsConfig)
         {
-            addressRanges = null;
-        }
-        else
-        {
-            addressRanges = new HashSet<CIDRBlock>();
-            for(Configuration addressRangeConfig : authorizedClientsConfig.getChildren())
+            String path = restrictConfig.getAttribute("path", null);
+            String methods = restrictConfig.getAttribute("methods", null);
+            boolean enabled = restrictConfig.getAttributeAsBoolean("enabled", false);
+            boolean requireSsl = restrictConfig.getAttributeAsBoolean("requireSsl", false);
+            String userName = restrictConfig.getChild("httpBasic").getAttribute("user", null);
+            String secret = restrictConfig.getChild("httpBasic").getAttribute("secret", null);
+            Configuration authorizedClientsConfig = restrictConfig.getChild("authorizedClients",
+                false);
+            Set<CIDRBlock> addressRanges;
+
+            if(authorizedClientsConfig == null)
             {
-                String[] rangeDef = addressRangeConfig.getValue().split("/");
-                if(rangeDef.length != 2)
+                addressRanges = null;
+            }
+            else
+            {
+                addressRanges = new HashSet<CIDRBlock>();
+                for(Configuration addressRangeConfig : authorizedClientsConfig.getChildren())
                 {
-                    throw new ConfigurationException("invalid CIDR block specification "
-                        + addressRangeConfig.getValue(), addressRangeConfig.getPath(),
-                        addressRangeConfig.getLocation());
-                }
-                InetAddress networkPrefix;
-                try
-                {
-                    networkPrefix = IPAddressUtil.byAddress(rangeDef[0]);
-                }
-                catch(IllegalArgumentException e)
-                {
-                    throw new ConfigurationException("invalid IP address " + rangeDef[0],
-                        addressRangeConfig.getPath(), addressRangeConfig.getLocation(), e);
-                }
-                catch(UnknownHostException e)
-                {
-                    throw new ConfigurationException("invalid IP address " + rangeDef[0],
-                        addressRangeConfig.getPath(), addressRangeConfig.getLocation(), e);
-                }
-                int prefixLength;
-                try
-                {
-                    prefixLength = Integer.parseInt(rangeDef[1]);
-                }
-                catch(NumberFormatException e)
-                {
-                    throw new ConfigurationException("invalid prefix length",
-                        addressRangeConfig.getPath(), addressRangeConfig.getLocation(), e);
-                }
-                try
-                {
-                    addressRanges.add(new CIDRBlock(networkPrefix, prefixLength));
-                }
-                catch(IllegalArgumentException e)
-                {
-                    throw new ConfigurationException("invalid CIDR block specification "
-                                    + addressRangeConfig.getValue(), addressRangeConfig.getPath(),
-                                    addressRangeConfig.getLocation(), e);
+                    String[] rangeDef = addressRangeConfig.getValue().split("/");
+                    if(rangeDef.length != 2)
+                    {
+                        throw new ConfigurationException("invalid CIDR block specification "
+                            + addressRangeConfig.getValue(), addressRangeConfig.getPath(),
+                            addressRangeConfig.getLocation());
+                    }
+                    InetAddress networkPrefix;
+                    try
+                    {
+                        networkPrefix = IPAddressUtil.byAddress(rangeDef[0]);
+                    }
+                    catch(IllegalArgumentException e)
+                    {
+                        throw new ConfigurationException("invalid IP address " + rangeDef[0],
+                            addressRangeConfig.getPath(), addressRangeConfig.getLocation(), e);
+                    }
+                    catch(UnknownHostException e)
+                    {
+                        throw new ConfigurationException("invalid IP address " + rangeDef[0],
+                            addressRangeConfig.getPath(), addressRangeConfig.getLocation(), e);
+                    }
+                    int prefixLength;
+                    try
+                    {
+                        prefixLength = Integer.parseInt(rangeDef[1]);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        throw new ConfigurationException("invalid prefix length",
+                            addressRangeConfig.getPath(), addressRangeConfig.getLocation(), e);
+                    }
+                    try
+                    {
+                        addressRanges.add(new CIDRBlock(networkPrefix, prefixLength));
+                    }
+                    catch(IllegalArgumentException e)
+                    {
+                        throw new ConfigurationException("invalid CIDR block specification "
+                            + addressRangeConfig.getValue(), addressRangeConfig.getPath(),
+                            addressRangeConfig.getLocation(), e);
+                    }
                 }
             }
+
+            Set<RequestMethod> requestMethods = new HashSet<RequestMethod>();
+            if(methods != null)
+            {
+                for(String method : methods.split(","))
+                {
+                    if(requestMethodMap.containsKey(method.toUpperCase()))
+                    {
+                        requestMethods.add(requestMethodMap.get(method));
+                    }
+                }
+            }
+            else
+            {
+                requestMethods.add(RequestMethod.ANY);
+            }
+            apiRestrictions.add(new ApiRestriction(path, requestMethods, enabled, requireSsl,
+                userName, secret, addressRanges));
         }
     }
 
-    public boolean validateBasicAuth(String httpAuthorizationHeader, String remoteAddr,
-        boolean secure)
+    public Status validateApiRequest(String path, String method, String httpAuthorizationHeader,
+        String remoteAddr, boolean secure)
     {
+        String userName = null;
+        String secret = null;
+        Status status = Status.UNDEFINED;
+
         if(httpAuthorizationHeader != null)
         {
             String[] authorizationParts = httpAuthorizationHeader.split(" ", 2);
@@ -103,42 +215,76 @@ public class ServerApiRestrictions
                 String basicAuthorization = new String(base64.decode(authorizationParts[1]
                     .getBytes()));
                 String[] principal = basicAuthorization.split(":", 2);
-                String userName = principal[0];
-                String secret = principal[1];
-
-                if(validateApiRequest(userName, secret, remoteAddr, secure))
-                {
-                    return true;
-                }
+                userName = principal[0];
+                secret = principal[1];
             }
         }
-        return false;
+        for(ApiRestriction apiRestriction : apiRestrictions)
+        {
+            status = validateApiRequest(apiRestriction, userName, secret, remoteAddr, secure, path,
+                requestMethodMap.get(method));
+            if(Status.UNDEFINED != status)
+            {
+                break;
+            }
+        }
+        return status;
     }
 
-    public boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure)
+    public boolean validateApiRequest(String userName, String secret, String remoteAddr,
+        boolean secure)
+    {
+        if(apiRestrictions.size() > 1)
+        {
+            log.warn("DECLINED API call ambiguous config parameters");
+            return false;
+        }
+        if(apiRestrictions.size() == 0)
+        {
+            return true;
+        }
+        return Status.AUTHORIZED == validateApiRequest(apiRestrictions.get(0), userName, secret,
+            remoteAddr, secure, null, RequestMethod.ANY);
+    }
+
+    public Status validateApiRequest(ApiRestriction apiRestriction, String userName, String secret,
+        String remoteAddr, boolean secure, String path, RequestMethod method)
     {
         String declineReason;
-        if(enabled)
+
+        if(apiRestriction.getPath() != null
+            && !(path == null && path.matches(apiRestriction.getPath())))
         {
-            if(secure || !requireSsl)
+            return Status.UNDEFINED;
+        }
+        if(!apiRestriction.getMethods().contains(method))
+        {
+            return Status.UNDEFINED;
+        }
+
+        if(apiRestriction.isEnabled())
+        {
+            if(secure || !apiRestriction.isRequireSsl())
             {
-                if(this.userName == null || this.userName.equals(userName))
+                if(apiRestriction.getUserName() == null
+                    || apiRestriction.getUserName().equals(userName))
                 {
-                    if(this.secret == null || this.secret.equals(secret))
+                    if(apiRestriction.getSecret() == null
+                        || apiRestriction.getSecret().equals(secret))
                     {
-                        if(this.addressRanges != null)
+                        if(apiRestriction.addressRanges != null)
                         {
                             try
                             {
                                 InetAddress remote = IPAddressUtil.byAddress(remoteAddr);
-                                for(CIDRBlock addressRange : addressRanges)
+                                for(CIDRBlock addressRange : apiRestriction.addressRanges)
                                 {
                                     try
                                     {
                                         if(addressRange.contains(remote))
                                         {
                                             log.debug("ACCEPTED API call from " + remoteAddr);
-                                            return true;
+                                            return Status.AUTHORIZED;
                                         }
                                     }
                                     catch(IllegalArgumentException e)
@@ -164,7 +310,7 @@ public class ServerApiRestrictions
                         else
                         {
                             log.debug("ACCEPTED API call from " + remoteAddr);
-                            return true;
+                            return Status.AUTHORIZED;
                         }
                     }
                     else if(secret == null)
@@ -191,6 +337,6 @@ public class ServerApiRestrictions
             declineReason = "API access disabled";
         }
         log.warn("DECLINED API call from " + remoteAddr + " " + declineReason);
-        return false;
+        return Status.UNAUTHORIZED;
     }
 }
