@@ -24,17 +24,27 @@ public class ServerApiRestrictions
 
     private final Base64 base64 = new Base64();
 
-    private Map<String, RequestMethod> requestMethodMap = new HashMap<String, RequestMethod>();
-
     public enum Status
     {
         AUTHORIZED, UNAUTHORIZED, UNDEFINED
     }
 
-    public enum RequestMethod
+    private enum RequestMethod
     {
         POST, GET, PUT, DELETE, HEAD, OPTIONS, ANY
     }
+
+    private final Map<String, RequestMethod> requestMethodMap = new HashMap<String, RequestMethod>()
+        {
+            {
+                put("GET", RequestMethod.GET);
+                put("POST", RequestMethod.POST);
+                put("PUT", RequestMethod.PUT);
+                put("DELETE", RequestMethod.DELETE);
+                put("OPTIONS", RequestMethod.OPTIONS);
+                put("HEAD", RequestMethod.HEAD);
+            }
+        };
 
     private static class ApiRestriction
     {
@@ -105,12 +115,6 @@ public class ServerApiRestrictions
     {
         this.log = log;
         this.apiRestrictions = new ArrayList<ApiRestriction>();
-        this.requestMethodMap.put("GET", RequestMethod.GET);
-        this.requestMethodMap.put("PUT", RequestMethod.PUT);
-        this.requestMethodMap.put("POST", RequestMethod.POST);
-        this.requestMethodMap.put("DELETE", RequestMethod.DELETE);
-        this.requestMethodMap.put("OPTIONS", RequestMethod.OPTIONS);
-        this.requestMethodMap.put("HEAD", RequestMethod.HEAD);
 
         Configuration[] restrictsConfig = config.getChildren("restrict");
 
@@ -249,7 +253,7 @@ public class ServerApiRestrictions
         String remoteAddr, boolean secure, String path, RequestMethod method)
     {
         if(apiRestriction.getPath() != null
-            && !( path != null && path.matches(apiRestriction.getPath())))
+            && !(path != null && path.matches(apiRestriction.getPath())))
         {
             return Status.UNDEFINED;
         }
