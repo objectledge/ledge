@@ -275,7 +275,7 @@ public class DirectoryUserManager
      * {@inheritDoc}
      */
     @Override
-    public Principal createAccount(String login, String password, Boolean blockPassword,
+    public Principal createAccount(String login, String password, boolean blockPassword,
         Attributes attributes)
         throws AuthenticationException
     {
@@ -842,7 +842,7 @@ public class DirectoryUserManager
         }
     }
 
-    private void putPasswordAttribute(Attributes attrs, String password, Boolean blockPassword)
+    private void putPasswordAttribute(Attributes attrs, String password, boolean blockPassword)
     {
         String hash = passwordDigester.generateDigest(password);
         if(blockPassword)

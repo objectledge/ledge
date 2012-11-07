@@ -160,7 +160,7 @@ public abstract class UserManager
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
-    public abstract Principal createAccount(String login, String password, Boolean blockPassword,
+    public abstract Principal createAccount(String login, String password, boolean blockPassword,
         Attributes attributes)
         throws AuthenticationException;
 
