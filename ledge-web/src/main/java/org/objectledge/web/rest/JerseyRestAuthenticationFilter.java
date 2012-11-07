@@ -8,7 +8,7 @@ import javax.ws.rs.WebApplicationException;
 
 import org.objectledge.authentication.ServerApiRestrictionProvider;
 import org.objectledge.authentication.ServerApiRestrictions;
-import org.objectledge.authentication.ServerApiRestrictions.ResponseStatus;
+import org.objectledge.authentication.ServerApiRestrictions.AutorizationStatus;
 import org.objectledge.web.LedgeServletContextListener;
 import org.picocontainer.PicoContainer;
 import javax.ws.rs.core.Response;
@@ -29,7 +29,7 @@ public class JerseyRestAuthenticationFilter
     {
         final List<ServerApiRestrictionProvider> jerseyFileProviders = getJerseyFileProviders();
 
-        ResponseStatus response = ResponseStatus.UNDEFINED;
+        AutorizationStatus response = AutorizationStatus.UNDEFINED;
         for(ServerApiRestrictionProvider provider : jerseyFileProviders)
         {
             ServerApiRestrictions serverApiRestrictions = provider.getServerApiRestrictions();
@@ -40,14 +40,14 @@ public class JerseyRestAuthenticationFilter
                 containerRequest.getMethod(), containerRequest.getHeaderValue("Authorization"),
                 httpServletRequest.getRemoteAddr(), containerRequest.isSecure());
 
-            if(!ResponseStatus.UNDEFINED.equals(response))
+            if(!AutorizationStatus.UNDEFINED.equals(response))
                 break;
         }
-        if(ResponseStatus.UNAUTHORIZED.equals(response))
+        if(AutorizationStatus.UNAUTHORIZED.equals(response))
         {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
-        else if(ResponseStatus.UNDEFINED.equals(response))
+        else if(AutorizationStatus.UNDEFINED.equals(response))
         {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
