@@ -356,7 +356,8 @@ public class DirectoryUserManager
     {
         String password = getUserPassword(account);
         password = password.substring(1);
-        changeUserPassword(account, password);
+        DirectoryParameters params = new DirectoryParameters(getPersonalData(account));
+        params.set(passwordAttribute, password);
     }
 
     /**
