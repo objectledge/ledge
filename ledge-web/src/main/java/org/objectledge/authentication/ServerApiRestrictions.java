@@ -273,12 +273,12 @@ public class ServerApiRestrictions
                     if(apiRestriction.getSecret() == null
                         || apiRestriction.getSecret().equals(secret))
                     {
-                        if(apiRestriction.addressRanges != null)
+                        if(apiRestriction.getAddressRanges() != null)
                         {
                             try
                             {
                                 InetAddress remote = IPAddressUtil.byAddress(remoteAddr);
-                                for(CIDRBlock addressRange : apiRestriction.addressRanges)
+                                for(CIDRBlock addressRange : apiRestriction.getAddressRanges())
                                 {
                                     try
                                     {
