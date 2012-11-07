@@ -3,10 +3,8 @@ package org.objectledge.authentication;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
@@ -33,18 +31,6 @@ public class ServerApiRestrictions
     {
         POST, GET, PUT, DELETE, HEAD, OPTIONS, ANY
     }
-
-    private final Map<String, RequestMethod> requestMethodMap = new HashMap<String, RequestMethod>()
-        {
-            {
-                put("GET", RequestMethod.GET);
-                put("POST", RequestMethod.POST);
-                put("PUT", RequestMethod.PUT);
-                put("DELETE", RequestMethod.DELETE);
-                put("OPTIONS", RequestMethod.OPTIONS);
-                put("HEAD", RequestMethod.HEAD);
-            }
-        };
 
     private static class ApiRestriction
     {
@@ -189,10 +175,7 @@ public class ServerApiRestrictions
             {
                 for(String method : methods.split(","))
                 {
-                    if(requestMethodMap.containsKey(method.toUpperCase()))
-                    {
-                        requestMethods.add(requestMethodMap.get(method));
-                    }
+                    requestMethods.add(RequestMethod.valueOf(method));
                 }
             }
             else
@@ -204,8 +187,8 @@ public class ServerApiRestrictions
         }
     }
 
-    public AutorizationStatus validateApiRequest(String path, String method, String httpAuthorizationHeader,
-        String remoteAddr, boolean secure)
+    public AutorizationStatus validateApiRequest(String path, String method,
+        String httpAuthorizationHeader, String remoteAddr, boolean secure)
     {
         String userName = null;
         String secret = null;
@@ -225,7 +208,7 @@ public class ServerApiRestrictions
         for(ApiRestriction apiRestriction : apiRestrictions)
         {
             status = validateApiRequest(apiRestriction, userName, secret, remoteAddr, secure, path,
-                requestMethodMap.get(method));
+                RequestMethod.valueOf(method));
             if(AutorizationStatus.UNDEFINED != status)
                 break;
         }
@@ -245,12 +228,12 @@ public class ServerApiRestrictions
             log.debug("ACCEPTED API call from " + remoteAddr);
             return true;
         }
-        return AutorizationStatus.AUTHORIZED == validateApiRequest(apiRestrictions.get(0), userName, secret,
-            remoteAddr, secure, null, RequestMethod.ANY);
+        return AutorizationStatus.AUTHORIZED == validateApiRequest(apiRestrictions.get(0),
+            userName, secret, remoteAddr, secure, null, RequestMethod.ANY);
     }
 
-    public AutorizationStatus validateApiRequest(ApiRestriction apiRestriction, String userName, String secret,
-        String remoteAddr, boolean secure, String path, RequestMethod method)
+    public AutorizationStatus validateApiRequest(ApiRestriction apiRestriction, String userName,
+        String secret, String remoteAddr, boolean secure, String path, RequestMethod method)
     {
         if(apiRestriction.getPath() != null
             && !(path != null && path.matches(apiRestriction.getPath())))
