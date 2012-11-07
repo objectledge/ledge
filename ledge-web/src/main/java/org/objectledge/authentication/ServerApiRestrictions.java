@@ -20,8 +20,6 @@ public class ServerApiRestrictions
 
     private final List<ApiRestriction> apiRestrictions;
 
-    private final Base64 base64 = new Base64();
-
     public enum AutorizationStatus
     {
         AUTHORIZED, UNAUTHORIZED, UNDEFINED
@@ -197,8 +195,7 @@ public class ServerApiRestrictions
             String[] authorizationParts = httpAuthorizationHeader.split(" ", 2);
             if("Basic".equals(authorizationParts[0]) && authorizationParts[1] != null)
             {
-                String basicAuthorization = new String(base64.decode(authorizationParts[1]
-                    .getBytes()));
+                String basicAuthorization = new String(Base64.decodeBase64(authorizationParts[1]));
                 String[] principal = basicAuthorization.split(":", 2);
                 userName = principal[0];
                 secret = principal[1];
