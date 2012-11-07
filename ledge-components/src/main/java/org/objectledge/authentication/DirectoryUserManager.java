@@ -790,7 +790,6 @@ public class DirectoryUserManager
     }
 
     /**
-<<<<<<< HEAD
      * Find all dn of the context that match the attribute query.
      * 
      * @param attribute the attribute name.
