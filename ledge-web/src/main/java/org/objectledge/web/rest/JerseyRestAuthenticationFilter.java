@@ -27,10 +27,8 @@ public class JerseyRestAuthenticationFilter
 
     public ContainerRequest filter(ContainerRequest containerRequest)
     {
-        final List<ServerApiRestrictionProvider> jerseyFileProviders = getJerseyFileProviders();
-
         AutorizationStatus response = AutorizationStatus.UNDEFINED;
-        for(ServerApiRestrictionProvider provider : jerseyFileProviders)
+        for(ServerApiRestrictionProvider provider : getRestrctionProviders())
         {
             ServerApiRestrictions serverApiRestrictions = provider.getServerApiRestrictions();
             if(serverApiRestrictions == null)
@@ -54,7 +52,7 @@ public class JerseyRestAuthenticationFilter
         return containerRequest;
     }
 
-    private List<ServerApiRestrictionProvider> getJerseyFileProviders()
+    private List<ServerApiRestrictionProvider> getRestrctionProviders()
     {
         final PicoContainer container = (PicoContainer)context
             .getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
