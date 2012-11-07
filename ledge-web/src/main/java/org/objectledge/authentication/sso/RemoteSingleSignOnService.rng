@@ -27,8 +27,9 @@
  POSSIBILITY OF SUCH DAMAGE. 
 -->
 
-<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
-  xmlns:a="http://objectledge.org/annotation/1.0" ns="http://objectledge.org/sso/local/1.0">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns:a="http://objectledge.org/annotation/1.0"
+  ns="http://objectledge.org/sso/local/1.0">
   <start>
     <interleave>
       <element name="config">
@@ -36,8 +37,21 @@
           <data type="anyURI" />
         </element>
         <optional>
-          <element name="secret">
-            <data type="string" />
+          <element name="httpBasic">
+            <a:documentation>HTTP basic authentication. It is
+              recommended to use user and secret, or authorizedClients
+              restrictions, or both.
+            </a:documentation>
+            <attribute name="user">
+              <a:documentation>HTTP basic authentication user required
+                from clients.</a:documentation>
+              <data type="string" />
+            </attribute>
+            <attribute name="secret">
+              <a:documentation>HTTP basic authentication password
+                required from clients.</a:documentation>
+              <data type="string" />
+            </attribute>
           </element>
         </optional>
         <optional>

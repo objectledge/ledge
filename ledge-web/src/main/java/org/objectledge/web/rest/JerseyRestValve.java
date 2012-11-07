@@ -3,6 +3,7 @@ package org.objectledge.web.rest;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -45,10 +46,12 @@ public class JerseyRestValve
         this.logger = logger;
         String restPackageNames = config.getChild(REST_PACKAGE_NAMES_KEY).getValue();
 
-        Configuration initParams = config.getChild("init-parmameters", true);
+        Configuration initParams = config.getChild("init-parameters", true);
 
-        final ServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
-        jerseyContainer = new ServletContainer(new PackagesResourceConfig(restPackageNames))
+        final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
+        PackagesResourceConfig packagesResourceConfig = new PackagesResourceConfig(restPackageNames);
+        packagesResourceConfig.setPropertiesAndFeatures(ledgeServletConfig.getParameters());
+        jerseyContainer = new ServletContainer(packagesResourceConfig)
             {
                 @Override
                 public ServletConfig getServletConfig()
@@ -86,13 +89,13 @@ public class JerseyRestValve
     {
         private final ServletContext context;
 
-        private Hashtable<String, String> parameters = new Hashtable<String, String>();
+        private Hashtable<String, Object> parameters = new Hashtable<String, Object>();
 
         public LedgeServletConfig(ServletContext context, Configuration config)
             throws ConfigurationException
         {
             this.context = context;
-            for(Configuration param : config.getChildren("init-param"))
+            for(Configuration param : config.getChildren("init-parameter"))
             {
                 final String name = param.getChild("param-name").getValue();
                 final String value = param.getChild("param-value").getValue();
@@ -115,7 +118,7 @@ public class JerseyRestValve
         @Override
         public String getInitParameter(String name)
         {
-            return parameters.get(name);
+            return (String)parameters.get(name);
         }
 
         @Override
@@ -123,5 +126,11 @@ public class JerseyRestValve
         {
             return parameters.keys();
         }
+        
+        public Map<String, Object> getParameters()
+        {
+            return (Map<String, Object>)parameters;
+        }
+        
     }
 }

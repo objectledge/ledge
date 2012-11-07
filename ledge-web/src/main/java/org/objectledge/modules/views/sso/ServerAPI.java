@@ -53,10 +53,11 @@ public class ServerAPI
                 {
                     XmlRpcHttpRequestConfig requestConfig = (XmlRpcHttpRequestConfig)request
                         .getConfig();
+                    String userName = requestConfig.getBasicUserName();
                     String secret = requestConfig.getBasicPassword();
                     String remoteAddr = requestConfig.getRemoteAddr();
                     boolean secure = requestConfig.isSecure();
-                    return singleSignOnService.validateApiRequest(secret, remoteAddr, secure);
+                    return singleSignOnService.validateApiRequest(userName, secret, remoteAddr, secure);
                 }
             });
         return handlerMapping;

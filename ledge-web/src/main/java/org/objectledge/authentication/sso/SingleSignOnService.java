@@ -18,7 +18,7 @@ public interface SingleSignOnService
 
     String ssoBaseUrl(String domain);
 
-    boolean validateApiRequest(String secret, String remoteAddr, boolean secure);
+    boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure);
 
     public enum LoginStatus
     {

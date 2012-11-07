@@ -51,6 +51,7 @@ import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.authentication.ServerApiRestrictions;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
@@ -199,7 +200,7 @@ public class LocalSingleSignOnService
         this.ticketValidityTime = config.getChild("tickets", true).getChild("validityTime", true)
             .getValueAsInteger(DEFAULT_TICKET_VALIDITY_TIME);
         
-        serverApiRestrictions = new ServerApiRestrictions(config.getChild("serverApi"), log);
+        serverApiRestrictions = new ServerApiRestrictions(config.getChild("apiRestrictions"), log);
 
         threadPool.runDaemon(new TicketExpiryTask());
     }
@@ -340,9 +341,9 @@ public class LocalSingleSignOnService
     }
     
     @Override
-    public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
+    public boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure)
     {
-       return serverApiRestrictions.validateApiRequest(secret, remoteAddr, secure);
+       return serverApiRestrictions.validateApiRequest(userName, secret, remoteAddr, secure);
     }    
 
     // ..........................................................................................

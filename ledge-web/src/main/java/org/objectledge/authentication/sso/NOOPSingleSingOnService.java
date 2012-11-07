@@ -42,7 +42,7 @@ public class NOOPSingleSingOnService
     }
 
     @Override
-    public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
+    public boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure)
     {
         return false;
     }
