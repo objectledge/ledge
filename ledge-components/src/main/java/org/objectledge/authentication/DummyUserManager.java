@@ -222,4 +222,11 @@ public class DummyUserManager
         throw new UnsupportedOperationException("Dummy manager cannot enable user password");
     }
 
+    @Override
+    public boolean accountBlocked(String login)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot check if account is disabled");
+    }
+
 }

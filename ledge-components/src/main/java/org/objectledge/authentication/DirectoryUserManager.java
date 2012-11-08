@@ -80,7 +80,7 @@ public class DirectoryUserManager
 
     /** By default logon tracking is turned off */
     public static final boolean LOGON_TRACKING_ENABLED = false;
-    
+
     /** Default logon count attribute key name. */
     public static final String LOGON_COUNT_ATTRIBUTE_DEFAULT = "logonCount";
 
@@ -105,7 +105,7 @@ public class DirectoryUserManager
 
     /** the password attribute key. */
     protected String passwordAttribute;
-    
+
     /** logon tracking enabling flag */
     protected boolean isLogonTrackingEnabled;
 
@@ -166,7 +166,8 @@ public class DirectoryUserManager
         mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
         passwordAttribute = config.getChild("passwordAttribute").getValue(
             PASSWORD_ATTRIBUTE_DEFAULT);
-        isLogonTrackingEnabled = config.getChild("isLogonTrackingEnabled").getValueAsBoolean(LOGON_TRACKING_ENABLED);
+        isLogonTrackingEnabled = config.getChild("isLogonTrackingEnabled").getValueAsBoolean(
+            LOGON_TRACKING_ENABLED);
         logonCountAttribute = config.getChild("logonCountAttribute").getValue(
             LOGON_COUNT_ATTRIBUTE_DEFAULT);
         lastLogonTimestampAttribute = config.getChild("lastLogonTimestampAttribute").getValue(
@@ -376,7 +377,8 @@ public class DirectoryUserManager
     /**
      * {@inheritDoc}
      */
-    public DirContext getPersonalData(Principal account) throws AuthenticationException
+    public DirContext getPersonalData(Principal account)
+        throws AuthenticationException
     {
         try
         {
@@ -385,8 +387,8 @@ public class DirectoryUserManager
         }
         catch(NamingException e)
         {
-            throw new AuthenticationException("Failed to lookup user personal data" +
-                    " for principal: "+account.getName(), e);
+            throw new AuthenticationException("Failed to lookup user personal data"
+                + " for principal: " + account.getName(), e);
         }
     }
 
@@ -577,12 +579,12 @@ public class DirectoryUserManager
         finally
         {
             closeContext(ctx);
-        }
-        for(UserManagementParticipant p : participants)
+        }                
+        for(int i = participants.length - 1; i >= 0; i--)
         {
-            if(p.supportsRemoval())
+            if(participants[i].supportsRemoval())
             {
-                p.removeAccount(account);
+                participants[i].removeAccount(account);
             }
         }
     }
@@ -879,4 +881,24 @@ public class DirectoryUserManager
         }
     }
 
+    @Override
+    public boolean accountBlocked(String login)
+        throws AuthenticationException
+    {
+        String query = "(&(uid=" + login + ")(shadowFlag=*))";
+        boolean accountBlocked = false;
+        try
+        {
+            Collection<Principal> col = lookupAccounts(query);
+            if(col.size() > 0)
+            {
+                accountBlocked = true;
+            }
+        }
+        catch(NamingException e)
+        {
+            // defaults to false
+        }
+        return accountBlocked;
+    }
 }
