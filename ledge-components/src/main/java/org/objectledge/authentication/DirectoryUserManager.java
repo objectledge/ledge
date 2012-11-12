@@ -79,7 +79,7 @@ public class DirectoryUserManager
     public static final String PASSWORD_ATTRIBUTE_DEFAULT = "userPassword";
 
     /** By default logon tracking is turned off */
-    public static final boolean LOGON_TRACKING_ENABLED = false;
+    public static final boolean LOGON_TRACKING_ENABLED_DEFAULT = false;
 
     /** Default logon count attribute key name. */
     public static final String LOGON_COUNT_ATTRIBUTE_DEFAULT = "logonCount";
@@ -167,7 +167,7 @@ public class DirectoryUserManager
         passwordAttribute = config.getChild("passwordAttribute").getValue(
             PASSWORD_ATTRIBUTE_DEFAULT);
         isLogonTrackingEnabled = config.getChild("isLogonTrackingEnabled").getValueAsBoolean(
-            LOGON_TRACKING_ENABLED);
+            LOGON_TRACKING_ENABLED_DEFAULT);
         logonCountAttribute = config.getChild("logonCountAttribute").getValue(
             LOGON_COUNT_ATTRIBUTE_DEFAULT);
         lastLogonTimestampAttribute = config.getChild("lastLogonTimestampAttribute").getValue(
