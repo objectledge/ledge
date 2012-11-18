@@ -27,5 +27,8 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 <config>
- <restPackageNames>org.objectledge.web.rest.resources</restPackageNames>
+ <packages>
+     <package>org.objectledge.web.rest.resources</package>
+ </packages>
+
 </config>
