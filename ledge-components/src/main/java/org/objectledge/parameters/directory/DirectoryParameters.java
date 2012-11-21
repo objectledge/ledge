@@ -28,7 +28,10 @@
 
 package org.objectledge.parameters.directory;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +44,7 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 
+import org.apache.directory.shared.ldap.util.GeneralizedTime;
 import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -52,14 +56,15 @@ import org.objectledge.parameters.UndefinedParameterException;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: DirectoryParameters.java,v 1.6 2005-07-22 17:19:41 pablo Exp $
  */
-public class DirectoryParameters extends DefaultParameters
+public class DirectoryParameters
+    extends DefaultParameters
 {
     /** the context */
     private DirContext ctx;
 
     /**
      * Create a new container.
-     *
+     * 
      * @param ctx the underlying directory context.
      */
     public DirectoryParameters(DirContext ctx)
@@ -70,30 +75,30 @@ public class DirectoryParameters extends DefaultParameters
     /**
      * {@inheritDoc}
      */
+    @Override
     public String get(String name)
     {
         try
         {
-            Attributes attrs = ctx.getAttributes("", new String[]{ name });
+            Attributes attrs = ctx.getAttributes("", new String[] { name });
             if(attrs == null)
             {
                 throw new UndefinedParameterException("Parameter '" + name + "'is undefined");
             }
             Attribute attr = attrs.get(name);
-            if(attr == null || attr.size()==0)
+            if(attr == null || attr.size() == 0)
             {
                 throw new UndefinedParameterException("Parameter '" + name + "'is undefined");
             }
             if(attr.size() > 1)
             {
-                throw new AmbiguousParameterException("Parameter '" + name + 
-                                                       "'has multiple values");
+                throw new AmbiguousParameterException("Parameter '" + name + "'has multiple values");
             }
-            return attr.get().toString();                   
+            return attr.get().toString();
         }
         catch(NamingException e)
         {
-            throw new UndefinedParameterException("Parameter '" + name + "'is undefined",e);
+            throw new UndefinedParameterException("Parameter '" + name + "'is undefined", e);
         }
     }
 
@@ -108,8 +113,212 @@ public class DirectoryParameters extends DefaultParameters
         }
         catch(UndefinedParameterException e)
         {
-            return defaultValue;        
+            return defaultValue;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getInt(String name, int defaultValue)
+    {
+        try
+        {
+            return Integer.parseInt(get(name));
+        }
+        catch(UndefinedParameterException e)
+        {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getInt(String name)
+    {
+        return Integer.parseInt(get(name));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getBoolean(String name)
+    {
+        return Boolean.parseBoolean(get(name));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getBoolean(String name, boolean defaultValue)
+    {
+        try
+        {
+            return Boolean.parseBoolean(get(name));
+        }
+        catch(UndefinedParameterException e)
+        {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean[] getBooleans(String name)
+    {
+        String[] strings = getStrings(name);
+        boolean[] booleans = new boolean[strings.length];
+        for(int i = 0; i < strings.length; ++i)
+        {
+            booleans[i] = Boolean.parseBoolean(strings[i]);
+        }
+        return booleans;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Date getDate(String name)
+    {
+        String dateStr = get(name);
+        try
+        {
+            return new GeneralizedTime(dateStr).getCalendar().getTime();
+        }
+        catch(ParseException e)
+        {
+            throw new UndefinedParameterException("Failed to parse timestamp", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Date getDate(String name, Date defaultValue)
+    {
+        try
+        {
+            return getDate(name);
+        }
+        catch(UndefinedParameterException e)
+        {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Date[] getDates(String name)
+    {
+        String[] datesStr = getStrings(name);
+        Date[] dates = new Date[datesStr.length];
+        for(int i = 0; i < datesStr.length; i++)
+        {
+            try
+            {
+                dates[i] = new GeneralizedTime(datesStr[i]).getCalendar().getTime();
+            }
+            catch(ParseException e)
+            {
+                throw new UndefinedParameterException("Failed to parse timestamp: " + datesStr[i],
+                    e);
+            }
+        }
+        return dates;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getFloat(String name)
+        throws NumberFormatException
+    {
+        return Float.parseFloat(get(name));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getFloat(String name, float defaultValue)
+    {
+        try
+        {
+            return getFloat(name);
+        }
+        catch(UndefinedParameterException e)
+        {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int[] getInts(String name)
+    {
+        String[] intStrs = getStrings(name);
+        int[] ints = new int[intStrs.length];
+        for(int i = 0; i < intStrs.length; i++)
+        {
+            ints[i] = Integer.parseInt(intStrs[i]);
+        }
+        return ints;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getLong(String name)
+        throws NumberFormatException
+    {
+        return Long.parseLong(get(name));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getLong(String name, long defaultValue)
+    {
+        try
+        {
+            return getLong(name);
+        }
+        catch(UndefinedParameterException e)
+        {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long[] getLongs(String name)
+        throws NumberFormatException
+    {
+        String[] longStrs = getStrings(name);
+        long[] longs = new long[longStrs.length];
+        for(int i = 0; i < longStrs.length; i++)
+        {
+            longs[i] = Long.parseLong(longStrs[i]);
+        }
+        return longs;
     }
 
     /**
@@ -119,19 +328,19 @@ public class DirectoryParameters extends DefaultParameters
     {
         try
         {
-            Attributes attrs = ctx.getAttributes("", new String[]{ name });
+            Attributes attrs = ctx.getAttributes("", new String[] { name });
             if(attrs == null)
             {
                 return new String[0];
             }
             Attribute attr = attrs.get(name);
-            if(attr == null || attr.size()==0)
+            if(attr == null || attr.size() == 0)
             {
                 return new String[0];
             }
             String[] values = new String[attr.size()];
             int i = 0;
-            NamingEnumeration<?> e=attr.getAll();
+            NamingEnumeration<?> e = attr.getAll();
             while(e.hasMore())
             {
                 values[i++] = e.next().toString();
@@ -158,7 +367,7 @@ public class DirectoryParameters extends DefaultParameters
             }
             String[] keys = new String[attrs.size()];
             int i = 0;
-            NamingEnumeration<String> e=attrs.getIDs();
+            NamingEnumeration<String> e = attrs.getIDs();
             while(e.hasMore())
             {
                 keys[i++] = e.next().toString();
@@ -181,7 +390,7 @@ public class DirectoryParameters extends DefaultParameters
             Attributes attrs = ctx.getAttributes("");
             if(attrs == null)
             {
-                return false; 
+                return false;
             }
             return (attrs.get(name) == null) ? false : true;
         }
@@ -200,12 +409,12 @@ public class DirectoryParameters extends DefaultParameters
         {
             ctx.modifyAttributes("", DirContext.REMOVE_ATTRIBUTE, ctx.getAttributes(""));
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove all parameter", e);
-        }        
-        ///CLOVER:ON        
+        }
+        // /CLOVER:ON
     }
 
     /**
@@ -215,18 +424,16 @@ public class DirectoryParameters extends DefaultParameters
     {
         try
         {
-            ModificationItem[] items = new ModificationItem[]
-            {
-                new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(name))
-            };
+            ModificationItem[] items = new ModificationItem[] { new ModificationItem(
+                DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(name)) };
             ctx.modifyAttributes("", items);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
-            throw new RuntimeException("Failed to remove '"+name+"' parameter", e);
-        }        
-        ///CLOVER:ON        
+            throw new RuntimeException("Failed to remove '" + name + "' parameter", e);
+        }
+        // /CLOVER:ON
     }
 
     /**
@@ -240,17 +447,17 @@ public class DirectoryParameters extends DefaultParameters
             atts.put(new BasicAttribute(name, value));
             ctx.modifyAttributes("", DirContext.REMOVE_ATTRIBUTE, atts);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
-            throw new RuntimeException("Failed to remove '"+name+"' parameter", e);            
+            throw new RuntimeException("Failed to remove '" + name + "' parameter", e);
         }
-        ///CLOVER:ON                
+        // /CLOVER:ON
     }
 
     /**
      * Remove all parameters with a name contained in given set.
-     *
+     * 
      * @param keys the set of keys.
      */
     public void remove(Set<String> keys)
@@ -271,22 +478,22 @@ public class DirectoryParameters extends DefaultParameters
             ModificationItem[] items = new ModificationItem[filteredKeys.size()];
             for(int i = 0; i < filteredKeys.size(); i++)
             {
-                items[i] =  new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
-                    new BasicAttribute(filteredKeys.get(i)));
+                items[i] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(
+                    filteredKeys.get(i)));
             }
             ctx.modifyAttributes("", items);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove some parameters", e);
         }
-        ///CLOVER:ON        
+        // /CLOVER:ON
     }
 
     /**
      * Remove all except those with a keys specified in the set.
-     *
+     * 
      * @param keys the set of names.
      */
     public void removeExcept(Set<String> keys)
@@ -307,17 +514,17 @@ public class DirectoryParameters extends DefaultParameters
             ModificationItem[] items = new ModificationItem[filteredKeys.size()];
             for(int i = 0; i < filteredKeys.size(); i++)
             {
-                items[i] =  new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
-                    new BasicAttribute(filteredKeys.get(i)));
+                items[i] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(
+                    filteredKeys.get(i)));
             }
             ctx.modifyAttributes("", items);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
             throw new RuntimeException("Failed to remove some parameters", e);
         }
-        ///CLOVER:ON        
+        // /CLOVER:ON
     }
 
     /**
@@ -331,12 +538,12 @@ public class DirectoryParameters extends DefaultParameters
             atts.put(new BasicAttribute(name, value));
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, atts);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
-            throw new RuntimeException("Failed to set '"+name+"' parameter", e);            
-        }        
-        ///CLOVER:ON        
+            throw new RuntimeException("Failed to set '" + name + "' parameter", e);
+        }
+        // /CLOVER:ON
     }
 
     /**
@@ -346,22 +553,21 @@ public class DirectoryParameters extends DefaultParameters
     {
         try
         {
-            ModificationItem[] items = new ModificationItem[values.length+1];
-            items[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, 
-                                                new BasicAttribute(name));
+            ModificationItem[] items = new ModificationItem[values.length + 1];
+            items[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(name));
             for(int i = 0; i < values.length; i++)
             {
-                items[i+1] = new ModificationItem(DirContext.ADD_ATTRIBUTE, 
-                                                     new BasicAttribute(name, values[i]));
+                items[i + 1] = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute(
+                    name, values[i]));
             }
             ctx.modifyAttributes("", items);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
-            throw new RuntimeException("Failed to add '"+name+" parameter", e);
+            throw new RuntimeException("Failed to add '" + name + " parameter", e);
         }
-        ///CLOVER:ON        
+        // /CLOVER:ON
     }
 
     /**
@@ -370,11 +576,11 @@ public class DirectoryParameters extends DefaultParameters
     public void set(String name, boolean[] values)
     {
         String[] target = new String[values.length];
-        for (int i = 0; i < values.length; i++)
+        for(int i = 0; i < values.length; i++)
         {
             target[i] = Boolean.toString(values[i]);
         }
-        set(name,target);
+        set(name, target);
     }
 
     /**
@@ -383,11 +589,11 @@ public class DirectoryParameters extends DefaultParameters
     public void set(String name, float[] values)
     {
         String[] target = new String[values.length];
-        for (int i = 0; i < values.length; i++)
+        for(int i = 0; i < values.length; i++)
         {
             target[i] = Float.toString(values[i]);
         }
-        set(name,target);
+        set(name, target);
     }
 
     /**
@@ -396,7 +602,7 @@ public class DirectoryParameters extends DefaultParameters
     public void set(String name, int[] values)
     {
         String[] target = new String[values.length];
-        for (int i = 0; i < values.length; i++)
+        for(int i = 0; i < values.length; i++)
         {
             target[i] = Integer.toString(values[i]);
         }
@@ -409,7 +615,7 @@ public class DirectoryParameters extends DefaultParameters
     public void set(String name, long[] values)
     {
         String[] target = new String[values.length];
-        for (int i = 0; i < values.length; i++)
+        for(int i = 0; i < values.length; i++)
         {
             target[i] = Long.toString(values[i]);
         }
@@ -424,16 +630,16 @@ public class DirectoryParameters extends DefaultParameters
         try
         {
             ModificationItem[] items = new ModificationItem[1];
-            items[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, 
-                       new BasicAttribute(name, value));
+            items[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute(name,
+                value));
             ctx.modifyAttributes("", items);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
-            throw new RuntimeException("Failed to add '"+name+"' parameter", e);            
-        }        
-        ///CLOVER:ON        
+            throw new RuntimeException("Failed to add '" + name + "' parameter", e);
+        }
+        // /CLOVER:ON
     }
 
     /**
@@ -446,17 +652,17 @@ public class DirectoryParameters extends DefaultParameters
             ModificationItem[] items = new ModificationItem[values.length];
             for(int i = 0; i < values.length; i++)
             {
-                items[i] = new ModificationItem(DirContext.ADD_ATTRIBUTE, 
-                                                     new BasicAttribute(name, values[i]));
+                items[i] = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute(name,
+                    values[i]));
             }
             ctx.modifyAttributes("", items);
         }
-        ///CLOVER:OFF        
+        // /CLOVER:OFF
         catch(NamingException e)
         {
-            throw new RuntimeException("Failed to add '"+name+" parameter", e);
+            throw new RuntimeException("Failed to add '" + name + " parameter", e);
         }
-        ///CLOVER:ON        
+        // /CLOVER:ON
     }
 
     /**
@@ -468,28 +674,28 @@ public class DirectoryParameters extends DefaultParameters
         {
             Attributes attrs = ctx.getAttributes("");
             String[] keys = parameters.getParameterNames();
-            for(int i=0; i<keys.length; i++)
+            for(int i = 0; i < keys.length; i++)
             {
                 String[] values = parameters.getStrings(keys[i]);
                 if(attrs != null && attrs.get(keys[i]) != null && overwrite)
                 {
                     remove(keys[i]);
                 }
-                for(int j=0; j<values.length; j++)
+                for(int j = 0; j < values.length; j++)
                 {
                     add(keys[i], values[j]);
                 }
             }
         }
-        ///CLOVER:OFF
+        // /CLOVER:OFF
         catch(NamingException e)
         {
-            throw new RuntimeException("failed to add parameters to the context",e);
+            throw new RuntimeException("failed to add parameters to the context", e);
         }
-        ///CLOVER:ON
-        
-    }        
-    
+        // /CLOVER:ON
+
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -519,7 +725,7 @@ public class DirectoryParameters extends DefaultParameters
         for(int i = 0; i < keys.length; i++)
         {
             String name = keys[i];
-            if (name.startsWith(prefix) && name.length() > prefix.length())
+            if(name.startsWith(prefix) && name.length() > prefix.length())
             {
                 target.set(name.substring(prefix.length()), getStrings(name));
             }
