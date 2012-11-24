@@ -110,7 +110,7 @@ implements HibernateSessionFactory
     {
         if(interceptor != null)
         {
-            return sessionFactory.openSession(interceptor);
+            return sessionFactory.withOptions().interceptor(interceptor).openSession();
         }
         return sessionFactory.openSession();
     }
