@@ -15,7 +15,7 @@ public interface LongRunningOperationRegistry
 
     void cancel(LongRunningOperation operation);
 
-    void unregisted(LongRunningOperation operation);
+    void unregister(LongRunningOperation operation);
 
     LongRunningOperation getOperation(String identifier);
 
