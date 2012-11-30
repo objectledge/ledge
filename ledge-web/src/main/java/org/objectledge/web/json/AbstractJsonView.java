@@ -145,6 +145,7 @@ public abstract class AbstractJsonView
                 }
                 if(tree != null)
                 {
+                    jsonGenerator.setCodec(objectMapper);
                     jsonGenerator.writeTree(tree);
                 }
                 jsonGenerator.flush();
