@@ -51,6 +51,11 @@ public interface LongRunningOperation
     Date getStartTime();
 
     /**
+     * Time the last time operation progress information was updated.
+     */
+    Date getLastUpdateTime();
+
+    /**
      * The estimated time of completion of the operation.
      * 
      * @return returns {@code null} no work has been completed yet.

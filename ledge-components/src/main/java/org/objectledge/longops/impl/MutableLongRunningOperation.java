@@ -24,6 +24,8 @@ class MutableLongRunningOperation
 
     private final long startTime;
 
+    private volatile long lastUpdateTime;
+
     MutableLongRunningOperation(String identifier, String code, String description, Principal user,
         int totalUnitsOfWork)
     {
@@ -38,12 +40,14 @@ class MutableLongRunningOperation
     void update(int completedUnitsOfWork)
     {
         this.completedUnitsOfWork = completedUnitsOfWork;
+        lastUpdateTime = System.currentTimeMillis();
     }
 
     void update(int completedUnitsOfWork, int totalUnitsOfWork)
     {
         this.completedUnitsOfWork = completedUnitsOfWork;
         this.totalUnitsOfWork = totalUnitsOfWork;
+        lastUpdateTime = System.currentTimeMillis();
     }
 
     void cancel()
@@ -97,6 +101,12 @@ class MutableLongRunningOperation
     public Date getStartTime()
     {
         return new Date(startTime);
+    }
+
+    @Override
+    public Date getLastUpdateTime()
+    {
+        return new Date(lastUpdateTime);
     }
 
     @Override

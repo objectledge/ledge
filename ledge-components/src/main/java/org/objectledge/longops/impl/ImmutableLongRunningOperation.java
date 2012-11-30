@@ -24,6 +24,8 @@ public class ImmutableLongRunningOperation
 
     private final long startTime;
 
+    private final long lastUpdateTime;
+
     private final long estimatedEndTime;
 
     ImmutableLongRunningOperation(LongRunningOperation op)
@@ -36,6 +38,7 @@ public class ImmutableLongRunningOperation
         completedUnitsOfWork = op.getCompletedUnitsOfWork();
         canceled = op.isCanceled();
         startTime = op.getStartTime().getTime();
+        lastUpdateTime = op.getLastUpdateTime().getTime();
         final Date estEndTime = op.getEstimatedEndTime();
         estimatedEndTime = estEndTime == null ? -1l : estEndTime.getTime();
     }
@@ -86,6 +89,12 @@ public class ImmutableLongRunningOperation
     public Date getStartTime()
     {
         return new Date(startTime);
+    }
+
+    @Override
+    public Date getLastUpdateTime()
+    {
+        return new Date(lastUpdateTime);
     }
 
     @Override
