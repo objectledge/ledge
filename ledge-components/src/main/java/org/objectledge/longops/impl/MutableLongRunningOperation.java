@@ -113,7 +113,7 @@ class MutableLongRunningOperation
     public Date getEstimatedEndTime()
     {
         final int currentUnitsOfWork = completedUnitsOfWork;
-        if(currentUnitsOfWork > 0)
+        if(totalUnitsOfWork > 0 && currentUnitsOfWork > 0)
         {
             final long now = System.currentTimeMillis();
             final long eta = (long)(((float)(now - startTime) / currentUnitsOfWork) * totalUnitsOfWork);

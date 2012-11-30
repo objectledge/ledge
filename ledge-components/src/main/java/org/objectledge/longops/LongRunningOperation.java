@@ -58,7 +58,8 @@ public interface LongRunningOperation
     /**
      * The estimated time of completion of the operation.
      * 
-     * @return returns {@code null} no work has been completed yet.
+     * @return returns {@code null} no work has been completed yet, or total amount of work is not
+     *         defined (is not a positive integer).
      */
     Date getEstimatedEndTime();
 }
