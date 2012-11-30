@@ -195,7 +195,7 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public Collection<LongRunningOperation> getCurrentOperations()
+    public Collection<LongRunningOperation> getActiveOperations()
     {
         synchronized(byId)
         {
@@ -209,7 +209,7 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public Collection<LongRunningOperation> getOperations(String codePrefix)
+    public Collection<LongRunningOperation> getActiveOperations(String codePrefix)
     {
         if(codePrefix == null)
         {
@@ -226,6 +226,24 @@ public class LongRunningOperationRegistryImpl
                     {
                         list.add(new ImmutableLongRunningOperation(op));
                     }
+                }
+            }
+            return list;
+        }
+    }
+
+    @Override
+    public Collection<LongRunningOperation> getActiveOperations(Principal user)
+    {
+        synchronized(byId)
+        {
+            List<LongRunningOperation> list = new ArrayList<>();
+            for(Map.Entry<String, MutableLongRunningOperation> entry : byId.entrySet())
+            {
+                final MutableLongRunningOperation op = entry.getValue();
+                if(user == null ? op.getUser() == user : user.equals(op.getUser()))
+                {
+                    list.add(new ImmutableLongRunningOperation(op));
                 }
             }
             return list;

@@ -22,9 +22,9 @@ import java.util.Set;
  * <li>After all units of work have been processed, {@link #unregister(LongRunningOperation)} is
  * called to discard the operation data.</li>
  * </ul>
- * While the operation is executing, other threads may call {@link #getCurrentOperations()} and
- * {@link #getOperations(String)} to inquire about active operations and their progress. The user
- * may be presented with an option to cancel a selected operation. In this case, {@link
+ * While the operation is executing, other threads may call {@link #getActiveOperations()} and
+ * {@link #getActiveOperations(String)} to inquire about active operations and their progress. The
+ * user may be presented with an option to cancel a selected operation. In this case, {@link
  * #cancel(LongRunningOperation} is called. The thread executing the operation will become aware of
  * the cancel request after it's current unit of work is completed, by calling
  * {@link LongRunningOperation#isCanceled()} or {@link #update(LongRunningOperation, int)}.
@@ -106,14 +106,27 @@ public interface LongRunningOperationRegistry
      * 
      * @return all operations that are currently active.
      */
-    Collection<LongRunningOperation> getCurrentOperations();
+    Collection<LongRunningOperation> getActiveOperations();
 
     /**
      * Returns all active operations that share a common code prefix.
      * 
+     * @param codePrefix a prefix of the code shared by the operations to be reported.
      * @return all active operations that share a common code prefix.
      */
-    Collection<LongRunningOperation> getOperations(String codePrefix);
+    Collection<LongRunningOperation> getActiveOperations(String codePrefix);
+
+    /**
+     * Returns all active operations initiated by a specific user.
+     * 
+     * @param user the user that initiated the operation. May be {@code null} in which case,
+     *        operations that had {@code null} user passed to the
+     *        {@link #register(String, String, Principal, int)} will be returned. Otherwise
+     *        {@link Principal} objects will be checked for equivalence using
+     *        {@link Object#equals(Object)}.
+     * @return all active operations initiated by a specific user.
+     */
+    Collection<LongRunningOperation> getActiveOperations(Principal user);
 
     /**
      * Register a listener for operation - related events.
