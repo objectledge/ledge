@@ -87,4 +87,10 @@ public class ImmutableLongRunningOperation
         return obj instanceof LongRunningOperation
             && ((LongRunningOperation)obj).getIdentifier().equals(delegate.getIdentifier());
     }
+
+    @Override
+    public String toString()
+    {
+        return "#" + delegate.getIdentifier() + " code: " + delegate.getCode();
+    }
 }

@@ -402,5 +402,11 @@ public class LongRunningOperationRegistryImpl
         {
             return operation;
         }
+
+        @Override
+        public String toString()
+        {
+            return type.name() + " " + operation.toString();
+        }
     }
 }
