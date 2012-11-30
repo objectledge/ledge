@@ -38,6 +38,7 @@ class MutableLongRunningOperation
         this.totalUnitsOfWork = totalUnitsOfWork;
         this.clock = clock;
         this.startTime = clock.currentTimeMillis();
+        this.lastUpdateTime = startTime;
     }
 
     void update(int completedUnitsOfWork)
@@ -115,12 +116,13 @@ class MutableLongRunningOperation
     @Override
     public Date getEstimatedEndTime()
     {
-        final int currentUnitsOfWork = completedUnitsOfWork;
-        if(totalUnitsOfWork > 0 && currentUnitsOfWork > 0)
+        final int curCompletedUnitsOfWork = completedUnitsOfWork;
+        final int curTotalUnitsOfWork = totalUnitsOfWork;
+        if(totalUnitsOfWork > 0 && curCompletedUnitsOfWork > 0)
         {
             final long now = clock.currentTimeMillis();
-            final long eta = (long)(((float)(now - startTime) / currentUnitsOfWork) * totalUnitsOfWork);
-            return new Date(now + eta);
+            final long estTotal = (long)(((float)(now - startTime) / curCompletedUnitsOfWork) * curTotalUnitsOfWork);
+            return new Date(startTime + estTotal);
         }
         else
         {
