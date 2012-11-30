@@ -21,7 +21,7 @@ public interface LongRunningOperationRegistry
 
     Collection<LongRunningOperation> getCurrentOperations();
 
-    Collection<LongRunningOperation> getOperations(String code);
+    Collection<LongRunningOperation> getOperations(String codePrefix);
 
     void addListener(LongRunningOperationListener listener,
         Set<LongRunningOperationEvent.Type> types, String codePrefix);

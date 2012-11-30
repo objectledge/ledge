@@ -206,17 +206,23 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public Collection<LongRunningOperation> getOperations(String code)
+    public Collection<LongRunningOperation> getOperations(String codePrefix)
     {
+        if(codePrefix == null)
+        {
+            throw new IllegalArgumentException("codePrefix may not be null");
+        }
         synchronized(byCode)
         {
-            Set<MutableLongRunningOperation> opSet = byCode.get(code);
-            List<LongRunningOperation> list = new ArrayList<>(opSet == null ? 0 : opSet.size());
-            if(opSet != null)
+            List<LongRunningOperation> list = new ArrayList<>();
+            for(Map.Entry<String, Set<MutableLongRunningOperation>> entry : byCode.entrySet())
             {
-                for(MutableLongRunningOperation op : opSet)
+                if(entry.getKey().startsWith(codePrefix))
                 {
-                    list.add(new ImmutableLongRunningOperation(op));
+                    for(MutableLongRunningOperation op : entry.getValue())
+                    {
+                        list.add(new ImmutableLongRunningOperation(op));
+                    }
                 }
             }
             return list;
