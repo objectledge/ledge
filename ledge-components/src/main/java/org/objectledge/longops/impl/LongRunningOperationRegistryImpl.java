@@ -91,14 +91,14 @@ public class LongRunningOperationRegistryImpl
             {
                 if(op.isCanceled())
                 {
-                    throw new IllegalStateException("operation #" + op.getIdentifier()
+                    throw new OperationCancelledException("operation #" + op.getIdentifier()
                         + " has been canceled");
                 }
                 op.update(completedUnitsOfWork);
             }
             else
             {
-                throw new OperationCancelledException("invalid operation #"
+                throw new IllegalArgumentException("invalid operation #"
                     + operation.getIdentifier());
             }
         }
