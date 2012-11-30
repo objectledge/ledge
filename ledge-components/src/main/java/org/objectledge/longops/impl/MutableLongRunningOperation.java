@@ -83,7 +83,7 @@ class MutableLongRunningOperation
     }
 
     @Override
-    public int getTotalUnitOfWork()
+    public int getTotalUnitsOfWork()
     {
         return totalUnitsOfWork;
     }

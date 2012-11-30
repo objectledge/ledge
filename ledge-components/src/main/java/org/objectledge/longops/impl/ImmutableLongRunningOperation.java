@@ -34,7 +34,7 @@ public class ImmutableLongRunningOperation
         code = op.getCode();
         description = op.getDescription();
         user = op.getUser();
-        totalUnitsOfWork = op.getTotalUnitOfWork();
+        totalUnitsOfWork = op.getTotalUnitsOfWork();
         completedUnitsOfWork = op.getCompletedUnitsOfWork();
         canceled = op.isCanceled();
         startTime = op.getStartTime().getTime();
@@ -68,7 +68,7 @@ public class ImmutableLongRunningOperation
     }
 
     @Override
-    public int getTotalUnitOfWork()
+    public int getTotalUnitsOfWork()
     {
         return totalUnitsOfWork;
     }

@@ -33,7 +33,7 @@ public interface LongRunningOperation
     /**
      * Total number of units of work to be performed in this operation.
      */
-    int getTotalUnitOfWork();
+    int getTotalUnitsOfWork();
 
     /**
      * Number of units of work completed in this operation until now.
