@@ -4,7 +4,7 @@ public interface LongRunningOperationEvent
 {
     public enum Type
     {
-        REGISTERED, UPDATED, CANCELED, UNREGISTERED
+        REGISTERED, UPDATED, CANCELLED, UNREGISTERED
     }
 
     Type getType();

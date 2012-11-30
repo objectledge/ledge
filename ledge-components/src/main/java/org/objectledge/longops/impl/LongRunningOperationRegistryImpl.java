@@ -157,7 +157,7 @@ public class LongRunningOperationRegistryImpl
                     + operation.getIdentifier());
             }
         }
-        dispatchEvent(LongRunningOperationEvent.Type.CANCELED, op);
+        dispatchEvent(LongRunningOperationEvent.Type.CANCELLED, op);
     }
 
     @Override
