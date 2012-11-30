@@ -28,6 +28,18 @@ public class LongRunningOperationRegistryImpl
 
     private final Set<ListenerRegistration> listeners = new HashSet<>();
 
+    private final Clock clock;
+
+    public LongRunningOperationRegistryImpl()
+    {
+        clock = new SystemClock();
+    }
+
+    LongRunningOperationRegistryImpl(Clock clock)
+    {
+        this.clock = clock;
+    }
+
     @Override
     public LongRunningOperation register(String code, String description, Principal user,
         int totalUnitsOfWork)
@@ -38,7 +50,7 @@ public class LongRunningOperationRegistryImpl
         }
         final String identifier = nextIdentifier();
         MutableLongRunningOperation op = new MutableLongRunningOperation(identifier, code,
-            description, user, totalUnitsOfWork);
+            description, user, totalUnitsOfWork, clock);
         synchronized(byId)
         {
             byId.put(identifier, op);
@@ -308,6 +320,16 @@ public class LongRunningOperationRegistryImpl
             {
                 receiver.receive(event);
             }
+        }
+    }
+
+    private static class SystemClock
+        implements Clock
+    {
+        @Override
+        public long currentTimeMillis()
+        {
+            return System.currentTimeMillis();
         }
     }
 

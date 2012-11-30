@@ -26,28 +26,31 @@ class MutableLongRunningOperation
 
     private volatile long lastUpdateTime;
 
+    private final Clock clock;
+
     MutableLongRunningOperation(String identifier, String code, String description, Principal user,
-        int totalUnitsOfWork)
+        int totalUnitsOfWork, Clock clock)
     {
         this.identifier = identifier;
         this.code = code;
         this.description = description;
         this.user = user;
         this.totalUnitsOfWork = totalUnitsOfWork;
-        this.startTime = System.currentTimeMillis();
+        this.clock = clock;
+        this.startTime = clock.currentTimeMillis();
     }
 
     void update(int completedUnitsOfWork)
     {
         this.completedUnitsOfWork = completedUnitsOfWork;
-        lastUpdateTime = System.currentTimeMillis();
+        lastUpdateTime = clock.currentTimeMillis();
     }
 
     void update(int completedUnitsOfWork, int totalUnitsOfWork)
     {
         this.completedUnitsOfWork = completedUnitsOfWork;
         this.totalUnitsOfWork = totalUnitsOfWork;
-        lastUpdateTime = System.currentTimeMillis();
+        lastUpdateTime = clock.currentTimeMillis();
     }
 
     void cancel()
@@ -115,7 +118,7 @@ class MutableLongRunningOperation
         final int currentUnitsOfWork = completedUnitsOfWork;
         if(totalUnitsOfWork > 0 && currentUnitsOfWork > 0)
         {
-            final long now = System.currentTimeMillis();
+            final long now = clock.currentTimeMillis();
             final long eta = (long)(((float)(now - startTime) / currentUnitsOfWork) * totalUnitsOfWork);
             return new Date(now + eta);
         }
