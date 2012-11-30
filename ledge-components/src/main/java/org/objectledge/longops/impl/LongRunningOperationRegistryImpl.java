@@ -15,6 +15,7 @@ import org.objectledge.longops.LongRunningOperationEvent;
 import org.objectledge.longops.LongRunningOperationEvent.Type;
 import org.objectledge.longops.LongRunningOperationListener;
 import org.objectledge.longops.LongRunningOperationRegistry;
+import org.objectledge.longops.OperationCancelledException;
 
 public class LongRunningOperationRegistryImpl
     implements LongRunningOperationRegistry
@@ -64,6 +65,7 @@ public class LongRunningOperationRegistryImpl
 
     @Override
     public void update(LongRunningOperation operation, int completedUnitsOfWork)
+        throws OperationCancelledException
     {
         if(operation == null)
         {
@@ -84,7 +86,7 @@ public class LongRunningOperationRegistryImpl
             }
             else
             {
-                throw new IllegalArgumentException("invalid operation #"
+                throw new OperationCancelledException("invalid operation #"
                     + operation.getIdentifier());
             }
         }
@@ -94,6 +96,7 @@ public class LongRunningOperationRegistryImpl
     @Override
     public void update(LongRunningOperation operation, int completedUnitsOfWork,
         int totalUnitsOfWork)
+        throws OperationCancelledException
     {
         if(operation == null)
         {
@@ -107,7 +110,7 @@ public class LongRunningOperationRegistryImpl
             {
                 if(op.isCanceled())
                 {
-                    throw new IllegalStateException("operation #" + op.getIdentifier()
+                    throw new OperationCancelledException("operation #" + op.getIdentifier()
                         + " has been canceled");
                 }
                 op.update(completedUnitsOfWork, totalUnitsOfWork);

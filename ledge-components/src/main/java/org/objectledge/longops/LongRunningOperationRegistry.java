@@ -54,10 +54,10 @@ public interface LongRunningOperationRegistry
      * 
      * @param operation representation of the operation that should be updated.
      * @param completedUnitsOfWork the number of units of work that was completed at this time.
-     * @throws IllegalStateException if the operation has been already canceled.
+     * @throws OperationCancelledException if the operation has been already canceled.
      */
     void update(LongRunningOperation operation, int completedUnitsOfWork)
-        throws IllegalStateException;
+        throws OperationCancelledException;
 
     /**
      * Update the progress information, and total work amount information for the operation.
@@ -66,10 +66,10 @@ public interface LongRunningOperationRegistry
      * @param completedUnitsOfWork the number of units of work that was completed at this time.
      * @param totalUnitsOfWork Total number of units of work to be performed in this operation. When
      *        a non-positive integer is provided, the number is assumed to be non determined.
-     * @throws IllegalStateException if the operation has been already canceled.
+     * @throws OperationCancelledException if the operation has been already canceled.
      */
     void update(LongRunningOperation operation, int completedUnitsOfWork, int totalUnitsOfWork)
-        throws IllegalStateException;
+        throws OperationCancelledException;
 
     /**
      * Request the operation to be canceled.
