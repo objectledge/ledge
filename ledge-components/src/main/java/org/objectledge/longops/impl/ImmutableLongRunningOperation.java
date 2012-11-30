@@ -74,4 +74,17 @@ public class ImmutableLongRunningOperation
     {
         return delegate.getEstimatedEndTime();
     }
+
+    @Override
+    public int hashCode()
+    {
+        return delegate.getIdentifier().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof LongRunningOperation
+            && ((LongRunningOperation)obj).getIdentifier().equals(delegate.getIdentifier());
+    }
 }
