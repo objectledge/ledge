@@ -8,98 +8,70 @@ import org.objectledge.longops.LongRunningOperation;
 public class ImmutableLongRunningOperation
     implements LongRunningOperation
 {
-    private final String identifier;
-
-    private final String code;
-
-    private final String description;
-
-    private final Principal user;
-
-    private final int totalUnitsOfWork;
-
-    private final int completedUnitsOfWork;
-
-    private final boolean canceled;
-
-    private final long startTime;
-
-    private final long lastUpdateTime;
-
-    private final long estimatedEndTime;
+    private final LongRunningOperation delegate;
 
     ImmutableLongRunningOperation(LongRunningOperation op)
     {
-        identifier = op.getIdentifier();
-        code = op.getCode();
-        description = op.getDescription();
-        user = op.getUser();
-        totalUnitsOfWork = op.getTotalUnitsOfWork();
-        completedUnitsOfWork = op.getCompletedUnitsOfWork();
-        canceled = op.isCanceled();
-        startTime = op.getStartTime().getTime();
-        lastUpdateTime = op.getLastUpdateTime().getTime();
-        final Date estEndTime = op.getEstimatedEndTime();
-        estimatedEndTime = estEndTime == null ? -1l : estEndTime.getTime();
+        this.delegate = op;
     }
 
     @Override
     public String getIdentifier()
     {
-        return identifier;
+        return delegate.getIdentifier();
     }
 
     @Override
     public String getCode()
     {
-        return code;
+        return delegate.getCode();
     }
 
     @Override
     public String getDescription()
     {
-        return description;
+        return delegate.getDescription();
     }
 
     @Override
     public Principal getUser()
     {
-        return user;
+        return delegate.getUser();
     }
 
     @Override
     public int getTotalUnitsOfWork()
     {
-        return totalUnitsOfWork;
+        return delegate.getTotalUnitsOfWork();
     }
 
     @Override
     public int getCompletedUnitsOfWork()
     {
-        return completedUnitsOfWork;
+        return delegate.getCompletedUnitsOfWork();
     }
 
     @Override
     public boolean isCanceled()
     {
-        return canceled;
+        return delegate.isCanceled();
     }
 
     @Override
     public Date getStartTime()
     {
-        return new Date(startTime);
+        return delegate.getStartTime();
     }
 
     @Override
     public Date getLastUpdateTime()
     {
-        return new Date(lastUpdateTime);
+        return delegate.getLastUpdateTime();
     }
 
     @Override
     public Date getEstimatedEndTime()
     {
-        return estimatedEndTime == -1l ? null : new Date(estimatedEndTime);
+        return delegate.getEstimatedEndTime();
     }
 }
