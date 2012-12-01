@@ -129,6 +129,19 @@ public interface LongRunningOperationRegistry
     Collection<LongRunningOperation> getActiveOperations(Principal user);
 
     /**
+     * Returns all active operations initiated by a specific user that share a common code prefix.
+     * 
+     * @param codePrefix a prefix of the code shared by the operations to be reported.
+     * @param user the user that initiated the operation. May be {@code null} in which case,
+     *        operations that had {@code null} user passed to the
+     *        {@link #register(String, String, Principal, int)} will be returned. Otherwise
+     *        {@link Principal} objects will be checked for equivalence using
+     *        {@link Object#equals(Object)}.
+     * @return all active operations initiated by a specific user.
+     */
+    Collection<LongRunningOperation> getActiveOperations(String codePrefix, Principal user);
+
+    /**
      * Register a listener for operation - related events.
      * <P>
      * When a single listener object instance is passed several times to this method, the

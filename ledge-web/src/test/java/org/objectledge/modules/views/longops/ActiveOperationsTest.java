@@ -204,4 +204,22 @@ public class ActiveOperationsTest
         assertTrue(response.get(0).has("identifier"));
         assertEquals(op1.getIdentifier(), response.get(0).get("identifier").getTextValue());
     }
+
+    public void testOperationsByUserAndCode()
+        throws Exception
+    {
+        Principal user1 = userManager.getUserByLogin("user1");
+        LongRunningOperation op1 = registry.register("op.a.1", null, user1, 3);
+        @SuppressWarnings("unused")
+        LongRunningOperation op2 = registry.register("op.b.1", null, user1, 3);
+        Principal user2 = userManager.getUserByLogin("user2");
+        @SuppressWarnings("unused")
+        LongRunningOperation op3 = registry.register("op.a.1", null, user2, 3);
+
+        JsonNode response = render("code=op.a&uid=user1");
+        assertEquals(1, response.size());
+        assertTrue(response.isArray());
+        assertTrue(response.get(0).has("identifier"));
+        assertEquals(op1.getIdentifier(), response.get(0).get("identifier").getTextValue());
+    }
 }

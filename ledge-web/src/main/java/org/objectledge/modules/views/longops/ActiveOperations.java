@@ -49,15 +49,25 @@ public class ActiveOperations
             if(uid != null)
             {
                 Principal user = userManager.getUserByLogin(uid);
-                activeOperations = registry.getActiveOperations(user);
-            }
-            else if(code != null)
-            {
-                activeOperations = registry.getActiveOperations(code);
+                if(code != null)
+                {
+                    activeOperations = registry.getActiveOperations(code, user);
+                }
+                else
+                {
+                    activeOperations = registry.getActiveOperations(user);
+                }
             }
             else
             {
-                activeOperations = registry.getActiveOperations();
+                if(code != null)
+                {
+                    activeOperations = registry.getActiveOperations(code);
+                }
+                else
+                {
+                    activeOperations = registry.getActiveOperations();
+                }
             }
             return objectMapper.valueToTree(sortOperations(activeOperations));
         }

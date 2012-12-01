@@ -421,6 +421,33 @@ public class LongOpsRegistryImplTest
         assertTrue(noUserOps.contains(op1b));
     }
 
+    public void testGetActiveOperationsByUserAndCode()
+    {
+        LongRunningOperation op1a = reg.register("op.1.a", null, user, 3);
+        LongRunningOperation op1b = reg.register("op.1.b", null, null, 3);
+        reg.register("op.2", null, user, 3);
+        Collection<LongRunningOperation> userOps = reg.getActiveOperations("op.1", user);
+        assertEquals(1, userOps.size());
+        assertTrue(userOps.contains(op1a));
+        Collection<LongRunningOperation> noUserOps = reg.getActiveOperations("op.1",
+            (Principal)null);
+        assertEquals(1, noUserOps.size());
+        assertTrue(noUserOps.contains(op1b));
+    }
+
+    public void testGetActiveOperationsByUserAndNullCode()
+    {
+        try
+        {
+            reg.getActiveOperations((String)null, user);
+            fail("expected an exception");
+        }
+        catch(RuntimeException e)
+        {
+            // OK
+        }
+    }
+
     public void testRegisterUnregisterListener()
     {
         reg.addListener(listener, EnumSet.allOf(LongRunningOperationEvent.Type.class), "");

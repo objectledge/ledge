@@ -245,6 +245,33 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
+    public Collection<LongRunningOperation> getActiveOperations(String codePrefix, Principal user)
+    {
+        if(codePrefix == null)
+        {
+            throw new IllegalArgumentException("codePrefix may not be null");
+        }
+        synchronized(byCode)
+        {
+            List<LongRunningOperation> list = new ArrayList<>();
+            for(Map.Entry<String, Set<MutableLongRunningOperation>> entry : byCode.entrySet())
+            {
+                if(entry.getKey().startsWith(codePrefix))
+                {
+                    for(MutableLongRunningOperation op : entry.getValue())
+                    {
+                        if(user == null ? op.getUser() == user : user.equals(op.getUser()))
+                        {
+                            list.add(new ImmutableLongRunningOperation(op));
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+    }
+
+    @Override
     public Collection<LongRunningOperation> getActiveOperations(Principal user)
     {
         synchronized(byId)
