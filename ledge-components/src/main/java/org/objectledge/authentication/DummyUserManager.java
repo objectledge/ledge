@@ -44,6 +44,9 @@ import javax.naming.directory.SearchControls;
 public class DummyUserManager
     extends UserManager
 {
+    /** A string that may be used as {@code dn} or {@code login} to simulate missing user account. */
+    public static final String MISSSING_USER = "MISSING";
+
     /**
      * Creates an instance of the user manager.
      */
@@ -56,7 +59,7 @@ public class DummyUserManager
      */
     public boolean userExists(String dn)
     {
-        return true;
+        return !dn.equals(MISSSING_USER);
     }
 
     /**
@@ -83,6 +86,10 @@ public class DummyUserManager
     public Principal getUserByName(String dn)
         throws AuthenticationException
     {
+        if(dn.equals(MISSSING_USER))
+        {
+            throw new AuthenticationException("Unknown user");
+        }
         return new DefaultPrincipal(dn);
     }
 
@@ -92,6 +99,10 @@ public class DummyUserManager
     public Principal getUserByLogin(String login)
         throws AuthenticationException
     {
+        if(login.equals(MISSSING_USER))
+        {
+            throw new AuthenticationException("Unknown user");
+        }
         return new DefaultPrincipal(login);
     }
 
@@ -197,7 +208,6 @@ public class DummyUserManager
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot change user attributes");
-
     }
 
     @Override
@@ -205,7 +215,6 @@ public class DummyUserManager
     {
         throw new UnsupportedOperationException(
             "Dummy manager cannot perform update tracking information operation");
-
     }
 
     @Override
@@ -221,5 +230,4 @@ public class DummyUserManager
     {
         throw new UnsupportedOperationException("Dummy manager cannot enable user password");
     }
-
 }
