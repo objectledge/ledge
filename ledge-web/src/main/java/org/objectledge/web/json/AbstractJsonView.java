@@ -169,10 +169,13 @@ public abstract class AbstractJsonView
             log.error("Exception during JSON view processing", e);
             try
             {
-                jsonGenerator.writeStartObject();
-                jsonGenerator.writeStringField("exception", new StackTrace(e).toString());
-                jsonGenerator.writeEndObject();
-                jsonGenerator.flush();
+                if(!httpContext.getResponse().isCommitted())
+                {
+                    jsonGenerator.writeStartObject();
+                    jsonGenerator.writeStringField("exception", new StackTrace(e).toString());
+                    jsonGenerator.writeEndObject();
+                    jsonGenerator.flush();
+                }
             }
             catch(IOException ee)
             {
