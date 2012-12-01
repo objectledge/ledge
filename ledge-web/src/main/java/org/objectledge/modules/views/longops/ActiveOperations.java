@@ -1,5 +1,7 @@
 package org.objectledge.modules.views.longops;
 
+import static org.objectledge.longops.LongRunningOperationOrdering.sortOperations;
+
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
@@ -57,7 +59,7 @@ public class ActiveOperations
             {
                 activeOperations = registry.getActiveOperations();
             }
-            return objectMapper.valueToTree(activeOperations);
+            return objectMapper.valueToTree(sortOperations(activeOperations));
         }
         catch(IllegalArgumentException | AuthenticationException e)
         {
