@@ -370,7 +370,6 @@ public abstract class AbstractJsonView
     {
         if(jsonParser != null)
         {
-            @SuppressWarnings("unchecked")
             T value = (T)objectMapper.readValue(jsonParser, typeRef);
             return value;
         }
