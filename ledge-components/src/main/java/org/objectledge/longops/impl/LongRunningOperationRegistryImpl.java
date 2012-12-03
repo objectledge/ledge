@@ -15,6 +15,7 @@ import org.objectledge.longops.LongRunningOperationEvent;
 import org.objectledge.longops.LongRunningOperationEvent.Type;
 import org.objectledge.longops.LongRunningOperationListener;
 import org.objectledge.longops.LongRunningOperationRegistry;
+import org.objectledge.longops.LongRunningOperationSecurityCallback;
 import org.objectledge.longops.OperationCancelledException;
 
 public class LongRunningOperationRegistryImpl
@@ -44,13 +45,20 @@ public class LongRunningOperationRegistryImpl
     public LongRunningOperation register(String code, String description, Principal user,
         int totalUnitsOfWork)
     {
+        return register(code, description, user, totalUnitsOfWork, null);
+    }
+
+    @Override
+    public LongRunningOperation register(String code, String description, Principal user,
+        int totalUnitsOfWork, LongRunningOperationSecurityCallback securityCallback)
+    {
         if(code == null)
         {
             throw new IllegalArgumentException("code may not be null");
         }
         final String identifier = nextIdentifier();
         MutableLongRunningOperation op = new MutableLongRunningOperation(identifier, code,
-            description, user, totalUnitsOfWork, clock);
+            description, user, totalUnitsOfWork, clock, securityCallback);
         synchronized(byId)
         {
             byId.put(identifier, op);
@@ -137,7 +145,7 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public void cancel(LongRunningOperation operation)
+    public void cancel(LongRunningOperation operation, Principal requestor)
     {
         if(operation == null)
         {
@@ -149,7 +157,16 @@ public class LongRunningOperationRegistryImpl
             op = byId.get(operation.getIdentifier());
             if(op != null)
             {
-                op.cancel();
+                if(op.getSecurityCallback() == null
+                    || op.getSecurityCallback().canCancel(op, requestor))
+                {
+                    op.cancel();
+                }
+                else
+                {
+                    throw new SecurityException("user " + requestor.getName()
+                        + " cannot cancel this operation");
+                }
             }
             else
             {
@@ -190,14 +207,23 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public LongRunningOperation getOperation(String identifier)
+    public LongRunningOperation getOperation(String identifier, Principal requestor)
     {
         synchronized(byId)
         {
             MutableLongRunningOperation op = byId.get(identifier);
             if(op != null)
             {
-                return new ImmutableLongRunningOperation(op);
+                if(op.getSecurityCallback() == null
+                    || op.getSecurityCallback().canView(op, requestor))
+                {
+                    return new ImmutableLongRunningOperation(op);
+                }
+                else
+                {
+                    throw new SecurityException("user " + requestor.getName()
+                        + " cannot access this operation");
+                }
             }
             else
             {
@@ -207,21 +233,27 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public Collection<LongRunningOperation> getActiveOperations()
+    public Collection<LongRunningOperation> getActiveOperations(Principal requestor)
     {
         synchronized(byId)
         {
             List<LongRunningOperation> list = new ArrayList<>(byId.size());
             for(Map.Entry<String, MutableLongRunningOperation> entry : byId.entrySet())
             {
-                list.add(new ImmutableLongRunningOperation(entry.getValue()));
+                final MutableLongRunningOperation op = entry.getValue();
+                if(op.getSecurityCallback() == null
+                    || op.getSecurityCallback().canView(op, requestor))
+                {
+                    list.add(new ImmutableLongRunningOperation(op));
+                }
             }
             return list;
         }
     }
 
     @Override
-    public Collection<LongRunningOperation> getActiveOperations(String codePrefix)
+    public Collection<LongRunningOperation> getActiveOperations(String codePrefix,
+        Principal requestor)
     {
         if(codePrefix == null)
         {
@@ -236,7 +268,11 @@ public class LongRunningOperationRegistryImpl
                 {
                     for(MutableLongRunningOperation op : entry.getValue())
                     {
-                        list.add(new ImmutableLongRunningOperation(op));
+                        if(op.getSecurityCallback() == null
+                            || op.getSecurityCallback().canView(op, requestor))
+                        {
+                            list.add(new ImmutableLongRunningOperation(op));
+                        }
                     }
                 }
             }
@@ -245,7 +281,8 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public Collection<LongRunningOperation> getActiveOperations(String codePrefix, Principal user)
+    public Collection<LongRunningOperation> getActiveOperations(String codePrefix, Principal user,
+        Principal requestor)
     {
         if(codePrefix == null)
         {
@@ -262,7 +299,11 @@ public class LongRunningOperationRegistryImpl
                     {
                         if(user == null ? op.getUser() == user : user.equals(op.getUser()))
                         {
-                            list.add(new ImmutableLongRunningOperation(op));
+                            if(op.getSecurityCallback() == null
+                                || op.getSecurityCallback().canView(op, requestor))
+                            {
+                                list.add(new ImmutableLongRunningOperation(op));
+                            }
                         }
                     }
                 }
@@ -272,7 +313,7 @@ public class LongRunningOperationRegistryImpl
     }
 
     @Override
-    public Collection<LongRunningOperation> getActiveOperations(Principal user)
+    public Collection<LongRunningOperation> getActiveOperations(Principal user, Principal requestor)
     {
         synchronized(byId)
         {
@@ -282,7 +323,11 @@ public class LongRunningOperationRegistryImpl
                 final MutableLongRunningOperation op = entry.getValue();
                 if(user == null ? op.getUser() == user : user.equals(op.getUser()))
                 {
-                    list.add(new ImmutableLongRunningOperation(op));
+                    if(op.getSecurityCallback() == null
+                        || op.getSecurityCallback().canView(op, requestor))
+                    {
+                        list.add(new ImmutableLongRunningOperation(op));
+                    }
                 }
             }
             return list;

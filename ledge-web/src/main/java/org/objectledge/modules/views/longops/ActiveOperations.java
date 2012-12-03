@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.JsonNode;
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
@@ -43,6 +44,8 @@ public class ActiveOperations
         Parameters parameters = context.getAttribute(RequestParameters.class);
         String uid = parameters.get("uid", null);
         String code = parameters.get("code", null);
+        AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
+        Principal requestor = authContext.getUserPrincipal();
         Collection<LongRunningOperation> activeOperations;
         try
         {
@@ -51,22 +54,22 @@ public class ActiveOperations
                 Principal user = userManager.getUserByLogin(uid);
                 if(code != null)
                 {
-                    activeOperations = registry.getActiveOperations(code, user);
+                    activeOperations = registry.getActiveOperations(code, user, requestor);
                 }
                 else
                 {
-                    activeOperations = registry.getActiveOperations(user);
+                    activeOperations = registry.getActiveOperations(user, requestor);
                 }
             }
             else
             {
                 if(code != null)
                 {
-                    activeOperations = registry.getActiveOperations(code);
+                    activeOperations = registry.getActiveOperations(code, requestor);
                 }
                 else
                 {
-                    activeOperations = registry.getActiveOperations();
+                    activeOperations = registry.getActiveOperations(requestor);
                 }
             }
             return objectMapper.valueToTree(sortOperations(activeOperations));

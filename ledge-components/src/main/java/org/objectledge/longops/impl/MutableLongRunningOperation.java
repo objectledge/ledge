@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.Date;
 
 import org.objectledge.longops.LongRunningOperation;
+import org.objectledge.longops.LongRunningOperationSecurityCallback;
 
 class MutableLongRunningOperation
     implements LongRunningOperation
@@ -28,8 +29,10 @@ class MutableLongRunningOperation
 
     private final Clock clock;
 
+    private final LongRunningOperationSecurityCallback securityCallback;
+
     MutableLongRunningOperation(String identifier, String code, String description, Principal user,
-        int totalUnitsOfWork, Clock clock)
+        int totalUnitsOfWork, Clock clock, LongRunningOperationSecurityCallback securityCallback)
     {
         this.identifier = identifier;
         this.code = code;
@@ -37,8 +40,14 @@ class MutableLongRunningOperation
         this.user = user;
         this.totalUnitsOfWork = totalUnitsOfWork;
         this.clock = clock;
+        this.securityCallback = securityCallback;
         this.startTime = clock.currentTimeMillis();
         this.lastUpdateTime = startTime;
+    }
+
+    LongRunningOperationSecurityCallback getSecurityCallback()
+    {
+        return securityCallback;
     }
 
     void update(int completedUnitsOfWork)
@@ -128,5 +137,11 @@ class MutableLongRunningOperation
         {
             return null;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "mutable operation #" + identifier + " code: " + code;
     }
 }

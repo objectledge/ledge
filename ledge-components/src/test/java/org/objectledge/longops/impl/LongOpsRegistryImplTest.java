@@ -1,5 +1,6 @@
 package org.objectledge.longops.impl;
 
+import static org.hamcrest.core.IsNot.not;
 import static org.objectledge.longops.impl.LongRunningOperationCodeMatcher.opCodeMatching;
 import static org.objectledge.longops.impl.LongRunningOperationEventMatcher.event;
 
@@ -15,6 +16,7 @@ import org.objectledge.longops.LongRunningOperation;
 import org.objectledge.longops.LongRunningOperationEvent;
 import org.objectledge.longops.LongRunningOperationListener;
 import org.objectledge.longops.LongRunningOperationRegistry;
+import org.objectledge.longops.LongRunningOperationSecurityCallback;
 import org.objectledge.longops.OperationCancelledException;
 
 public class LongOpsRegistryImplTest
@@ -28,6 +30,9 @@ public class LongOpsRegistryImplTest
 
     @Mock
     private LongRunningOperationListener listener;
+
+    @Mock
+    private LongRunningOperationSecurityCallback securityCallback;
 
     private LongRunningOperationRegistry reg = new LongRunningOperationRegistryImpl(clock);
 
@@ -43,6 +48,9 @@ public class LongOpsRegistryImplTest
                     will(onConsecutiveCalls(returnValue(clockStart),
                         returnValue(clockStart + 1000), returnValue(clockStart + 2000),
                         returnValue(clockStart + 3000), returnValue(clockStart + 4000)));
+
+                    allowing(user).getName();
+                    will(returnValue("user"));
                 }
             });
     }
@@ -224,7 +232,7 @@ public class LongOpsRegistryImplTest
             reg.update(op, 1);
             assertFalse(op.isCanceled());
             reg.update(op, 2);
-            reg.cancel(op);
+            reg.cancel(op, null);
             assertTrue(op.isCanceled());
         }
         catch(OperationCancelledException e)
@@ -232,6 +240,28 @@ public class LongOpsRegistryImplTest
             fail("unexpected OperationCancelledException");
         }
         reg.unregister(op);
+    }
+
+    public void testCancelNotAuthorized()
+    {
+        final LongRunningOperation op = reg.register("op", null, null, 3, securityCallback);
+        checking(new Expectations()
+            {
+                {
+                    oneOf(securityCallback).canCancel(with(any(LongRunningOperation.class)),
+                        with(same(user)));
+                    will(returnValue(false));
+                }
+            });
+        try
+        {
+            reg.cancel(op, user);
+            fail("expected SecurityException");
+        }
+        catch(Exception e)
+        {
+            assertTrue("expected SecurityException", e instanceof SecurityException);
+        }
     }
 
     public void testCancelUpdateException()
@@ -250,7 +280,7 @@ public class LongOpsRegistryImplTest
         }
         try
         {
-            reg.cancel(op);
+            reg.cancel(op, null);
             assertTrue(op.isCanceled());
             reg.update(op, 3);
             fail("expected an OperationCancelledException");
@@ -278,7 +308,7 @@ public class LongOpsRegistryImplTest
         }
         try
         {
-            reg.cancel(op);
+            reg.cancel(op, null);
             assertTrue(op.isCanceled());
             reg.update(op, 2, 5);
             fail("expected an OperationCancelledException");
@@ -299,9 +329,9 @@ public class LongOpsRegistryImplTest
             reg.update(op, 1);
             assertFalse(op.isCanceled());
             reg.update(op, 2);
-            reg.cancel(op);
-            reg.cancel(op);
-            reg.cancel(op);
+            reg.cancel(op, null);
+            reg.cancel(op, null);
+            reg.cancel(op, null);
             assertTrue(op.isCanceled());
         }
         catch(OperationCancelledException e)
@@ -315,7 +345,7 @@ public class LongOpsRegistryImplTest
     {
         try
         {
-            reg.cancel(null);
+            reg.cancel(null, null);
             fail("expected an exception");
         }
         catch(RuntimeException e)
@@ -330,7 +360,7 @@ public class LongOpsRegistryImplTest
         reg.unregister(op);
         try
         {
-            reg.cancel(op);
+            reg.cancel(op, null);
             fail("expected an exception");
         }
         catch(RuntimeException e)
@@ -342,7 +372,7 @@ public class LongOpsRegistryImplTest
     public void testGetById()
     {
         LongRunningOperation op1 = reg.register("op", null, null, 3);
-        LongRunningOperation op2 = reg.getOperation(op1.getIdentifier());
+        LongRunningOperation op2 = reg.getOperation(op1.getIdentifier(), user);
         assertEquals(op1.getIdentifier(), op2.getIdentifier());
     }
 
@@ -350,7 +380,7 @@ public class LongOpsRegistryImplTest
     {
         try
         {
-            reg.getOperation("INVALID");
+            reg.getOperation("INVALID", user);
             fail("expected an exception");
         }
         catch(RuntimeException e)
@@ -359,10 +389,32 @@ public class LongOpsRegistryImplTest
         }
     }
 
+    public void testGetByIdNotAuthorized()
+    {
+        final LongRunningOperation op = reg.register("op", null, null, 3, securityCallback);
+        checking(new Expectations()
+            {
+                {
+                    oneOf(securityCallback).canView(with(any(LongRunningOperation.class)),
+                        with(same(user)));
+                    will(returnValue(false));
+                }
+            });
+        try
+        {
+            reg.getOperation(op.getIdentifier(), user);
+            fail("expected SecurityException");
+        }
+        catch(Exception e)
+        {
+            assertTrue("expected SecurityException", e instanceof SecurityException);
+        }
+    }
+
     public void testOperationEquivalence()
     {
         LongRunningOperation op1 = reg.register("op", null, null, 3);
-        LongRunningOperation op2 = reg.getOperation(op1.getIdentifier());
+        LongRunningOperation op2 = reg.getOperation(op1.getIdentifier(), user);
         assertTrue(op2.equals(op1));
         assertTrue(op1.equals(op2));
         assertEquals(op1.hashCode(), op2.hashCode());
@@ -372,10 +424,29 @@ public class LongOpsRegistryImplTest
     {
         LongRunningOperation op1 = reg.register("op", null, null, 3);
         LongRunningOperation op2 = reg.register("op", null, null, 3);
-        Collection<LongRunningOperation> all = reg.getActiveOperations();
+        Collection<LongRunningOperation> all = reg.getActiveOperations(null);
         assertEquals(2, all.size());
         assertTrue(all.contains(op1));
         assertTrue(all.contains(op2));
+    }
+
+    public void testGetActiveOperationsAuthFiltered()
+    {
+        checking(new Expectations()
+            {
+                {
+                    oneOf(securityCallback).canView(with(opCodeMatching("op.1")), with(same(user)));
+                    will(returnValue(true));
+                    oneOf(securityCallback).canView(with(opCodeMatching("op.2")), with(same(user)));
+                    will(returnValue(false));
+                }
+            });
+
+        LongRunningOperation op1 = reg.register("op.1", null, null, 3, securityCallback);
+        reg.register("op.2", null, null, 3, securityCallback);
+        Collection<LongRunningOperation> all = reg.getActiveOperations(user);
+        assertEquals(1, all.size());
+        assertTrue(all.contains(op1));
     }
 
     public void testGetActiveOperationsByCode()
@@ -383,22 +454,47 @@ public class LongOpsRegistryImplTest
         LongRunningOperation op1a = reg.register("op.1.a", null, null, 3);
         LongRunningOperation op1b = reg.register("op.1.b", null, null, 3);
         LongRunningOperation op2 = reg.register("op.2", null, null, 3);
-        Collection<LongRunningOperation> ops1 = reg.getActiveOperations("op.1");
+        Collection<LongRunningOperation> ops1 = reg.getActiveOperations("op.1", null);
         assertEquals(2, ops1.size());
         assertTrue(ops1.contains(op1a));
         assertTrue(ops1.contains(op1b));
-        Collection<LongRunningOperation> ops2 = reg.getActiveOperations("op.2");
+        Collection<LongRunningOperation> ops2 = reg.getActiveOperations("op.2", null);
         assertEquals(1, ops2.size());
         assertTrue(ops2.contains(op2));
-        Collection<LongRunningOperation> ops3 = reg.getActiveOperations("op.3");
+        Collection<LongRunningOperation> ops3 = reg.getActiveOperations("op.3", null);
         assertEquals(0, ops3.size());
+    }
+
+    public void testGetActiveOperationsByCodeAuthFiltered()
+    {
+        checking(new Expectations()
+            {
+                {
+                    exactly(2).of(securityCallback).canView(with(opCodeMatching("op\\.1\\..")),
+                        with(same(user)));
+                    will(returnValue(true));
+                    oneOf(securityCallback).canView(with(not(opCodeMatching("op\\.1\\.."))),
+                        with(same(user)));
+                    will(returnValue(false));
+                }
+            });
+
+        LongRunningOperation op1a = reg.register("op.1.a", null, null, 3, securityCallback);
+        LongRunningOperation op1b = reg.register("op.1.b", null, null, 3, securityCallback);
+        reg.register("op.2", null, null, 3, securityCallback);
+        Collection<LongRunningOperation> ops1 = reg.getActiveOperations("op.1", null, user);
+        assertEquals(2, ops1.size());
+        assertTrue(ops1.contains(op1a));
+        assertTrue(ops1.contains(op1b));
+        Collection<LongRunningOperation> ops2 = reg.getActiveOperations("op.2", null, user);
+        assertEquals(0, ops2.size());
     }
 
     public void testGetActiveOperationsByNullCode()
     {
         try
         {
-            reg.getActiveOperations((String)null);
+            reg.getActiveOperations((String)null, null);
             fail("expected an exception");
         }
         catch(RuntimeException e)
@@ -412,11 +508,36 @@ public class LongOpsRegistryImplTest
         LongRunningOperation op1a = reg.register("op.1.a", null, user, 3);
         LongRunningOperation op1b = reg.register("op.1.b", null, null, 3);
         LongRunningOperation op2 = reg.register("op.2", null, user, 3);
-        Collection<LongRunningOperation> userOps = reg.getActiveOperations(user);
+        Collection<LongRunningOperation> userOps = reg.getActiveOperations(user, null);
         assertEquals(2, userOps.size());
         assertTrue(userOps.contains(op1a));
         assertTrue(userOps.contains(op2));
-        Collection<LongRunningOperation> noUserOps = reg.getActiveOperations((Principal)null);
+        Collection<LongRunningOperation> noUserOps = reg.getActiveOperations((Principal)null, null);
+        assertEquals(1, noUserOps.size());
+        assertTrue(noUserOps.contains(op1b));
+    }
+
+    public void testGetActiveOperationsByUserAuthFiltered()
+    {
+        checking(new Expectations()
+            {
+                {
+                    exactly(2).of(securityCallback).canView(with(opCodeMatching("op\\.1\\..")),
+                        with(same(user)));
+                    will(returnValue(true));
+                    oneOf(securityCallback).canView(with(not(opCodeMatching("op\\.1\\.."))),
+                        with(same(user)));
+                    will(returnValue(false));
+                }
+            });
+
+        LongRunningOperation op1a = reg.register("op.1.a", null, user, 3, securityCallback);
+        LongRunningOperation op1b = reg.register("op.1.b", null, null, 3, securityCallback);
+        reg.register("op.2", null, user, 3, securityCallback);
+        Collection<LongRunningOperation> userOps = reg.getActiveOperations(user, user);
+        assertEquals(1, userOps.size());
+        assertTrue(userOps.contains(op1a));
+        Collection<LongRunningOperation> noUserOps = reg.getActiveOperations((Principal)null, user);
         assertEquals(1, noUserOps.size());
         assertTrue(noUserOps.contains(op1b));
     }
@@ -426,11 +547,37 @@ public class LongOpsRegistryImplTest
         LongRunningOperation op1a = reg.register("op.1.a", null, user, 3);
         LongRunningOperation op1b = reg.register("op.1.b", null, null, 3);
         reg.register("op.2", null, user, 3);
-        Collection<LongRunningOperation> userOps = reg.getActiveOperations("op.1", user);
+        Collection<LongRunningOperation> userOps = reg.getActiveOperations("op.1", user, null);
         assertEquals(1, userOps.size());
         assertTrue(userOps.contains(op1a));
         Collection<LongRunningOperation> noUserOps = reg.getActiveOperations("op.1",
-            (Principal)null);
+            (Principal)null, null);
+        assertEquals(1, noUserOps.size());
+        assertTrue(noUserOps.contains(op1b));
+    }
+
+    public void testGetActiveOperationsByUserAndCodeAuthFiltered()
+    {
+        checking(new Expectations()
+            {
+                {
+                    exactly(2).of(securityCallback).canView(with(opCodeMatching("op\\.1\\..")),
+                        with(same(user)));
+                    will(returnValue(true));
+                    allowing(securityCallback).canView(with(not(opCodeMatching("op\\.1\\.."))),
+                        with(same(user)));
+                    will(returnValue(false));
+                }
+            });
+
+        LongRunningOperation op1a = reg.register("op.1.a", null, user, 3, securityCallback);
+        LongRunningOperation op1b = reg.register("op.1.b", null, null, 3, securityCallback);
+        reg.register("op.2", null, user, 3, securityCallback);
+        Collection<LongRunningOperation> userOps = reg.getActiveOperations("op.1", user, user);
+        assertEquals(1, userOps.size());
+        assertTrue(userOps.contains(op1a));
+        Collection<LongRunningOperation> noUserOps = reg.getActiveOperations("op.1",
+            (Principal)null, user);
         assertEquals(1, noUserOps.size());
         assertTrue(noUserOps.contains(op1b));
     }
@@ -439,7 +586,7 @@ public class LongOpsRegistryImplTest
     {
         try
         {
-            reg.getActiveOperations((String)null, user);
+            reg.getActiveOperations((String)null, user, null);
             fail("expected an exception");
         }
         catch(RuntimeException e)
@@ -572,7 +719,7 @@ public class LongOpsRegistryImplTest
                 }
             });
         LongRunningOperation op = reg.register("op", null, user, 3);
-        reg.cancel(op);
+        reg.cancel(op, null);
     }
 
     public void testUnregisterListener()

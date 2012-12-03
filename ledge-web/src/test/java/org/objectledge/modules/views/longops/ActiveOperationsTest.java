@@ -1,5 +1,8 @@
 package org.objectledge.modules.views.longops;
 
+import static org.hamcrest.core.IsNot.not;
+import static org.objectledge.longops.impl.LongRunningOperationCodeMatcher.opCodeMatching;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,11 +21,13 @@ import org.jcontainer.dna.Logger;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit3.MockObjectTestCase;
+import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.DummyUserManager;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.longops.LongRunningOperation;
 import org.objectledge.longops.LongRunningOperationRegistry;
+import org.objectledge.longops.LongRunningOperationSecurityCallback;
 import org.objectledge.longops.impl.LongRunningOperationRegistryImpl;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -41,11 +46,16 @@ public class ActiveOperationsTest
     @Mock
     private HttpServletResponse servletResponse;
 
+    @Mock
+    private LongRunningOperationSecurityCallback securityCallback;
+
     private UserManager userManager = new DummyUserManager();
 
     private final Context context = new Context();
 
     private final HttpContext httpContext = new HttpContext(servletRequest, servletResponse);
+
+    private final AuthenticationContext authContext = new AuthenticationContext(null, false);
 
     private final LongRunningOperationRegistry registry = new LongRunningOperationRegistryImpl();
 
@@ -60,6 +70,7 @@ public class ActiveOperationsTest
     public void setUp()
     {
         context.setAttribute(HttpContext.class, httpContext);
+        context.setAttribute(AuthenticationContext.class, authContext);
         checking(new Expectations()
             {
                 {
@@ -221,5 +232,34 @@ public class ActiveOperationsTest
         assertTrue(response.isArray());
         assertTrue(response.get(0).has("identifier"));
         assertEquals(op1.getIdentifier(), response.get(0).get("identifier").getTextValue());
+    }
+
+    public void testOperationsAuthFiltered()
+        throws Exception
+    {
+        final Principal user1 = userManager.getUserByLogin("user1");
+        final Principal user2 = userManager.getUserByLogin("user2");
+        checking(new Expectations()
+            {
+                {
+                    oneOf(securityCallback).canView(with(opCodeMatching("op\\.1\\..")),
+                        with(same(user1)));
+                    will(returnValue(true));
+                    oneOf(securityCallback).canView(with(not(opCodeMatching("op\\.1\\.."))),
+                        with(same(user1)));
+                    will(returnValue(false));
+                }
+            });
+        authContext.setUserPrincipal(user1, true);
+
+        LongRunningOperation op1a = registry.register("op.1.a", null, user1, 3, securityCallback);
+        registry.register("op.1.b", null, user2, 3, securityCallback);
+        registry.register("op.2", null, user1, 3, securityCallback);
+
+        JsonNode response = render("uid=user1");
+        assertEquals(1, response.size());
+        assertTrue(response.isArray());
+        assertTrue(response.get(0).has("identifier"));
+        assertEquals(op1a.getIdentifier(), response.get(0).get("identifier").getTextValue());
     }
 }

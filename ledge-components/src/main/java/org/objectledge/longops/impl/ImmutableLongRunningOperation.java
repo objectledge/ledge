@@ -91,6 +91,6 @@ public class ImmutableLongRunningOperation
     @Override
     public String toString()
     {
-        return "#" + delegate.getIdentifier() + " code: " + delegate.getCode();
+        return "immutable operation #" + delegate.getIdentifier() + " code: " + delegate.getCode();
     }
 }
