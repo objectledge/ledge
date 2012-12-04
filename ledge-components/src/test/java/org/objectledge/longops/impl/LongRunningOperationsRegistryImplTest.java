@@ -19,7 +19,7 @@ import org.objectledge.longops.LongRunningOperationRegistry;
 import org.objectledge.longops.LongRunningOperationSecurityCallback;
 import org.objectledge.longops.OperationCancelledException;
 
-public class LongOpsRegistryImplTest
+public class LongRunningOperationsRegistryImplTest
     extends MockObjectTestCase
 {
     @Mock
