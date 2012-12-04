@@ -1118,9 +1118,12 @@ public class FileSystem
     }
     
     /**
-     * {@inheritDoc}
+     * Unzip file source under given <code>outputPath</code>
+     * 
+     * @param is zip file InputStream
+     * @param outputPath output directory path
      */
-    public void unpackZipFile(String path, InputStream is)
+    public void unpackZipFile(InputStream is, String outputPath)
     {
         ZipInputStream zis = new ZipInputStream(is);
         ZipEntry ze;
@@ -1140,7 +1143,7 @@ public class FileSystem
                         name = filePath.substring(last + 1);
                         parentPath = filePath.substring(0, last);
                     }
-                    String dirParent = path;
+                    String dirParent = outputPath;
                     if(parentPath.length() > 0)
                     {
                         StringTokenizer st = new StringTokenizer(parentPath, "/");
