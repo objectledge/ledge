@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.threads.impl.Daemon;
@@ -102,6 +103,44 @@ public class ThreadPool
         runDaemon(workerPool.getSchedulingTask());
     }
     
+    /**
+     * Builds custom configuration
+     * 
+     * @param daemonPriority priority of daemon threads.
+     * @param workerPriority priority of worker threads.
+     * @param workerPoolCapacity capacity of worker thread pool.
+     * @return
+     */
+    public static Configuration buildConfiguration(int daemonPriority, int workerPriority,
+        int workerPoolCapacity)
+    {
+        DefaultConfiguration config = new DefaultConfiguration("config", "", "/config");
+        final DefaultConfiguration daemonPriorityConfig = new DefaultConfiguration(
+            "daemon-priority", "", "/config/daemon-priority");
+        daemonPriorityConfig.setValue(Integer.toString(daemonPriority));
+        config.addChild(daemonPriorityConfig);
+        final DefaultConfiguration workerPriorityConfig = new DefaultConfiguration(
+            "daemon-priority", "", "/config/worker-priority");
+        workerPriorityConfig.setValue(Integer.toString(workerPriority));
+        config.addChild(workerPriorityConfig);
+        final DefaultConfiguration wokerPoolCapacityConfig = new DefaultConfiguration(
+            "daemon-priority", "", "/config/worker-pool-capacity");
+        wokerPoolCapacityConfig.setValue(Integer.toString(workerPoolCapacity));
+        config.addChild(wokerPoolCapacityConfig);
+        return config;
+    }
+
+    /**
+     * Builds default configuration.
+     * 
+     * @return default configuration.
+     */
+    public static Configuration defaultConfiguration()
+    {
+        DefaultConfiguration config = new DefaultConfiguration("config", "", "/config");
+        return config;
+    }
+
     /**
      * Run the worker task.
      * 
