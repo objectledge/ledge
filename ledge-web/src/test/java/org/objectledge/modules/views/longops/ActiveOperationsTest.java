@@ -1,7 +1,7 @@
 package org.objectledge.modules.views.longops;
 
 import static org.hamcrest.core.IsNot.not;
-import static org.objectledge.longops.impl.LongRunningOperationCodeMatcher.opCodeMatching;
+import static org.objectledge.longops.matchers.LongRunningOperationCodeMatcher.opCodeMatching;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

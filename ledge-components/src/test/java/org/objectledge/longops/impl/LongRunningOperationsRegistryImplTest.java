@@ -1,8 +1,8 @@
 package org.objectledge.longops.impl;
 
 import static org.hamcrest.core.IsNot.not;
-import static org.objectledge.longops.impl.LongRunningOperationCodeMatcher.opCodeMatching;
-import static org.objectledge.longops.impl.LongRunningOperationEventMatcher.event;
+import static org.objectledge.longops.matchers.LongRunningOperationCodeMatcher.opCodeMatching;
+import static org.objectledge.longops.matchers.LongRunningOperationEventMatcher.event;
 
 import java.security.Principal;
 import java.util.Collection;

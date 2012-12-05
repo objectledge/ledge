@@ -239,6 +239,7 @@
             <configuration>
               <includes>
                 <include>org/objectledge/test/*</include>
+                <include>org/objectledge/longops/matchers/*</include>
               </includes>
             </configuration>
           </execution>

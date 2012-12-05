@@ -1,4 +1,4 @@
-package org.objectledge.longops.impl;
+package org.objectledge.longops.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

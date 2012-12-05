@@ -1,7 +1,7 @@
 package org.objectledge.modules.actions.longops;
 
-import static org.objectledge.longops.impl.LongRunningOperationCodeMatcher.opCodeMatching;
-import static org.objectledge.longops.impl.LongRunningOperationEventMatcher.event;
+import static org.objectledge.longops.matchers.LongRunningOperationCodeMatcher.opCodeMatching;
+import static org.objectledge.longops.matchers.LongRunningOperationEventMatcher.event;
 
 import java.io.IOException;
 import java.security.Principal;
