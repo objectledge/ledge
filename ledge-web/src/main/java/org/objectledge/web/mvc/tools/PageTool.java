@@ -110,7 +110,7 @@ public class PageTool
     /** Cache interval. Negative value causes default value set in the config file to be used. */
     protected int cacheInterval = -1;
     
-    protected HTMLDoctype doctype;
+    protected HTMLDoctype doctype = HTMLDoctype.DEFAULT;
 
 	/** 
 	 * Component constructor.
@@ -123,7 +123,6 @@ public class PageTool
         this.linkTool = parentLinkTool.sessionless();
         this.httpContext = httpContext;
         this.config = config;      
-    //    this.doctype = HTMLDoctype.DEFAULT;
     }
 
 	/** 
