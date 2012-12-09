@@ -12,4 +12,6 @@
   <component key="cmsDispatcher"
   			 class="org.objectledge.web.dispatcher.StaticHttpDispatcher">
   </component>
+
+  <component class="org.objectledge.web.rest.resources.HelloRestResource"/>
 </container>
