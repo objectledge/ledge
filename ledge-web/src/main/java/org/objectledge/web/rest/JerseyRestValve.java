@@ -1,6 +1,7 @@
 package org.objectledge.web.rest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -21,12 +22,13 @@ import org.objectledge.web.HttpContext;
 
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
+import org.objectledge.web.LedgeServletContextListener;
+import org.objectledge.web.rest.ioc.PicoComponentProviderFactory;
+import org.picocontainer.PicoContainer;
 
 public class JerseyRestValve
     implements Valve
 {
-    private static final String REST_PACKAGE_NAMES_KEY = "restPackageNames";
-
     private final ServletContainer jerseyContainer;
 
     private final Logger logger;
@@ -34,8 +36,9 @@ public class JerseyRestValve
     /**
      * Creates a new jersey REST dispatcher.
      * 
-     * @param pipeline the pipeline
-     * @param context the thread context
+     * @param logger the logger
+     * @param config the configuration
+     * @param servletContext the servlet context
      * @throws ConfigurationException if the configuration is malformed.
      * @throws ServletException
      */
@@ -44,14 +47,15 @@ public class JerseyRestValve
         throws ConfigurationException, ServletException
     {
         this.logger = logger;
-        String restPackageNames = config.getChild(REST_PACKAGE_NAMES_KEY).getValue();
 
+        ArrayList<String> packageNames = getPackageNamesFromConfig(config);
         Configuration initParams = config.getChild("init-parameters", true);
-
         final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
-        PackagesResourceConfig packagesResourceConfig = new PackagesResourceConfig(restPackageNames);
-        packagesResourceConfig.setPropertiesAndFeatures(ledgeServletConfig.getParameters());
-        jerseyContainer = new ServletContainer(packagesResourceConfig)
+        final PackagesResourceConfig resourceConfig = new PackagesResourceConfig(packageNames.toArray(new String[packageNames.size()]));
+        resourceConfig.setPropertiesAndFeatures(ledgeServletConfig.getParameters());
+        PicoComponentProviderFactory.initialize(resourceConfig, packageNames, (PicoContainer) servletContext.
+        getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY));
+        jerseyContainer = new ServletContainer(resourceConfig)
             {
                 @Override
                 public ServletConfig getServletConfig()
@@ -59,7 +63,19 @@ public class JerseyRestValve
                     return ledgeServletConfig;
                 }
             };
+
         jerseyContainer.init();
+    }
+
+    private ArrayList<String> getPackageNamesFromConfig(Configuration config) throws ConfigurationException
+    {
+        ArrayList<String> packageNames = new ArrayList<>();
+        final Configuration packages = config.getChild("packages");
+        for(Configuration packageConfig : packages.getChildren("package"))
+        {
+            packageNames.add(packageConfig.getValue());
+        }
+        return packageNames;
     }
 
     @Override
