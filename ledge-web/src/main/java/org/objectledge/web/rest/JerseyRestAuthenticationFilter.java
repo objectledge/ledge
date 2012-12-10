@@ -1,17 +1,13 @@
 package org.objectledge.web.rest;
 
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.objectledge.authentication.ServerApiRestrictionProvider;
 import org.objectledge.authentication.ServerApiRestrictions;
 import org.objectledge.authentication.ServerApiRestrictions.AutorizationStatus;
-import org.objectledge.web.LedgeServletContextListener;
-import org.picocontainer.PicoContainer;
-import javax.ws.rs.core.Response;
+import org.objectledge.context.Context;
+import org.objectledge.web.HttpContext;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
@@ -19,16 +15,22 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
 public class JerseyRestAuthenticationFilter
     implements ContainerRequestFilter
 {
-    @javax.ws.rs.core.Context
-    private ServletContext context;
+    private final ServerApiRestrictionProvider[] providers;
 
-    @javax.ws.rs.core.Context
-    private HttpServletRequest httpServletRequest;
+    private final Context context;
+
+    public JerseyRestAuthenticationFilter(ServerApiRestrictionProvider[] providers,
+        Context context)
+    {
+        this.providers = providers;
+        this.context = context;
+    }
 
     public ContainerRequest filter(ContainerRequest containerRequest)
     {
         AutorizationStatus response = AutorizationStatus.UNDEFINED;
-        for(ServerApiRestrictionProvider provider : getRestrctionProviders())
+        HttpContext httpContext = context.getAttribute(HttpContext.class);
+        for(ServerApiRestrictionProvider provider : providers)
         {
             ServerApiRestrictions serverApiRestrictions = provider.getServerApiRestrictions();
             if(serverApiRestrictions == null)
@@ -36,7 +38,7 @@ public class JerseyRestAuthenticationFilter
 
             response = serverApiRestrictions.validateApiRequest(containerRequest.getPath(),
                 containerRequest.getMethod(), containerRequest.getHeaderValue("Authorization"),
-                httpServletRequest.getRemoteAddr(), containerRequest.isSecure());
+                httpContext.getRequest().getRemoteAddr(), containerRequest.isSecure());
 
             if(!AutorizationStatus.UNDEFINED.equals(response))
                 break;
@@ -50,14 +52,5 @@ public class JerseyRestAuthenticationFilter
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         return containerRequest;
-    }
-
-    private List<ServerApiRestrictionProvider> getRestrctionProviders()
-    {
-        final PicoContainer container = (PicoContainer)context
-            .getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
-        final List<ServerApiRestrictionProvider> providers = container
-            .getComponentInstancesOfType(ServerApiRestrictionProvider.class);
-        return providers;
     }
 }
