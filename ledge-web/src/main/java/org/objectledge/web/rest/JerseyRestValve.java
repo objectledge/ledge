@@ -19,12 +19,10 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
+import org.picocontainer.MutablePicoContainer;
 
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
-import org.objectledge.web.LedgeServletContextListener;
-import org.objectledge.web.rest.ioc.PicoComponentProviderFactory;
-import org.picocontainer.PicoContainer;
 
 public class JerseyRestValve
     implements Valve
@@ -42,8 +40,8 @@ public class JerseyRestValve
      * @throws ConfigurationException if the configuration is malformed.
      * @throws ServletException
      */
-    public JerseyRestValve(Logger logger, final Configuration config,
-        final ServletContext servletContext)
+    public JerseyRestValve(MutablePicoContainer restResourcesContaier, Logger logger,
+        final Configuration config, final ServletContext servletContext)
         throws ConfigurationException, ServletException
     {
         this.logger = logger;
@@ -53,8 +51,8 @@ public class JerseyRestValve
         final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
         final PackagesResourceConfig resourceConfig = new PackagesResourceConfig(packageNames.toArray(new String[packageNames.size()]));
         resourceConfig.setPropertiesAndFeatures(ledgeServletConfig.getParameters());
-        PicoComponentProviderFactory.initialize(resourceConfig, packageNames, (PicoContainer) servletContext.
-        getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY));
+        resourceConfig.getSingletons().add(
+            new PicoComponentProviderFactory(restResourcesContaier, packageNames, logger));
         jerseyContainer = new ServletContainer(resourceConfig)
             {
                 @Override

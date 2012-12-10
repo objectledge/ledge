@@ -1,17 +1,18 @@
-package org.objectledge.web.rest.ioc;
+package org.objectledge.web.rest;
 
 
-import com.sun.jersey.api.core.ResourceConfig;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.Pattern;
+
+import org.jcontainer.dna.Logger;
+import org.picocontainer.MutablePicoContainer;
+
 import com.sun.jersey.core.spi.component.ComponentContext;
 import com.sun.jersey.core.spi.component.ComponentScope;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProvider;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
 import com.sun.jersey.core.spi.component.ioc.IoCFullyManagedComponentProvider;
-import org.picocontainer.PicoContainer;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.regex.Pattern;
 
 /**
  * @author Marek Lewandowski <marek.m.lewandowski@gmail.com>
@@ -20,24 +21,21 @@ import java.util.regex.Pattern;
  */
 public class PicoComponentProviderFactory implements IoCComponentProviderFactory
 {
+    private final MutablePicoContainer container;
 
-    private final PicoContainer container;
-    private Collection<Pattern> patterns;
+    private final Collection<Pattern> patterns = new ArrayList<>();
 
-    public static void initialize(ResourceConfig rc, Collection<String> packageNames, PicoContainer container)
+    private final Logger logger;
+
+    public PicoComponentProviderFactory(MutablePicoContainer container,
+        Collection<String> packageNames, Logger logger)
     {
-        Collection<Pattern> patterns = new ArrayList<>();
+        this.container = container;
+        this.logger = logger;
         for(String packageName : packageNames)
         {
             patterns.add(Pattern.compile(packageName + ".*"));
         }
-        rc.getSingletons().add(new PicoComponentProviderFactory(container, patterns));
-    }
-
-    public PicoComponentProviderFactory(PicoContainer container, Collection<Pattern> patterns)
-    {
-        this.container = container;
-        this.patterns = patterns;
     }
 
     @Override
@@ -47,15 +45,21 @@ public class PicoComponentProviderFactory implements IoCComponentProviderFactory
     }
 
     @Override
-    public IoCComponentProvider getComponentProvider(ComponentContext cc, Class<?> c)
+    public IoCComponentProvider getComponentProvider(ComponentContext cc, Class<?> clazz)
     {
-        String name = c.getName();
+        String name = clazz.getName();
         for(Pattern pattern : patterns)
         {
             if(pattern.matcher(name).matches())
             {
-                Object object = container.getComponentInstanceOfType(c);
-                return new PicoManagedComponentProvider(object);
+                if(container.getComponentAdapter(clazz) == null)
+                {
+                    logger.warn("component " + name
+                        + " is not registered, attempting to wire it automatically");
+                    container.registerComponentImplementation(clazz);
+                }
+                Object instance = container.getComponentInstance(clazz);
+                return new PicoManagedComponentProvider(instance);
             }
         }
         return null;
