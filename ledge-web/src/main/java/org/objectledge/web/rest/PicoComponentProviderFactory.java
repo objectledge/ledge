@@ -34,8 +34,9 @@ public class PicoComponentProviderFactory implements IoCComponentProviderFactory
         this.logger = logger;
         for(String packageName : packageNames)
         {
-            patterns.add(Pattern.compile(packageName + ".*"));
+            patterns.add(Pattern.compile(packageName.replace(".", "\\.") + ".*"));
         }
+        patterns.add(Pattern.compile("org\\.objectledge\\.web\\.rest\\.[^.]+"));
     }
 
     @Override
