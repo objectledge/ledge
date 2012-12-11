@@ -47,6 +47,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
 
@@ -1113,6 +1115,58 @@ public class FileSystem
             }
         }
         return true;
+    }
+    
+    /**
+     * Unzip file source under given <code>outputPath</code>
+     * 
+     * @param is zip file InputStream
+     * @param outputPath output directory path
+     */
+    public void unpackZipFile(InputStream is, String outputPath)
+    {
+        ZipInputStream zis = new ZipInputStream(is);
+        ZipEntry ze;
+        try
+        {
+            ze = zis.getNextEntry();
+            while(ze != null)
+            {
+                if(!ze.isDirectory())
+                {
+                    String filePath = ze.getName();
+                    String parentPath = "";
+                    String name = ze.getName();
+                    int last = filePath.lastIndexOf('/');
+                    if(last != -1)
+                    {
+                        name = filePath.substring(last + 1);
+                        parentPath = filePath.substring(0, last);
+                    }
+                    String dirParent = outputPath;
+                    if(parentPath.length() > 0)
+                    {
+                        StringTokenizer st = new StringTokenizer(parentPath, "/");
+                        while(st.hasMoreTokens())
+                        {
+                            String dirName = st.nextToken();
+                            dirParent = dirParent + "/" + dirName;
+                            if(!isDirectory(dirParent))
+                            {
+                                mkdirs(dirParent);
+                            }
+                        }
+                    }
+                    write(dirParent + "/" + filePath, zis);
+                    zis.closeEntry();
+                }
+                ze = zis.getNextEntry();
+            }
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
     
     // standard filesystems /////////////////////////////////////////////////
