@@ -1,17 +1,22 @@
 <?xml version="1.0"?>
 <container xmlns="http://objectledge.org/container/1.0">
 
-  <!-- end of core config -->
+  <container key="restResourceContainer" />
 
- <component key="restDispatcher"
-             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">	
-	  <component class="org.objectledge.web.rest.JerseyRestValve"/>
-	  <component class="org.objectledge.context.Context"/>
-  </component>
-     
-  <component key="cmsDispatcher"
-  			 class="org.objectledge.web.dispatcher.StaticHttpDispatcher">
+  <component class="org.objectledge.web.rest.JerseyRestValve">
+    <parameter key="restResourceContainer" />
+    <parameter />
+    <parameter />
+    <parameter />
   </component>
 
-  <component class="org.objectledge.web.rest.resources.HelloRestResource"/>
+  <component key="restDispatcher" class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+    <parameter class-key="org.objectledge.web.rest.JerseyRestValve" />
+    <component class="org.objectledge.context.Context" />
+  </component>
+
+  <component key="cmsDispatcher" class="org.objectledge.web.dispatcher.StaticHttpDispatcher" />
+
+  <component class="org.objectledge.web.rest.resources.HelloRestResource" />
+
 </container>
