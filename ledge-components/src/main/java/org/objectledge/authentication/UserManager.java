@@ -163,7 +163,16 @@ public abstract class UserManager
     public abstract Principal createAccount(String login, String password, boolean blockPassword,
         Attributes attributes)
         throws AuthenticationException;
-
+    
+    /**
+     * Check if account is blocked
+     * 
+     * @param login
+     * @return
+     * @throws AuthenticationException
+     */
+    public abstract boolean accountBlocked(String login) throws AuthenticationException;
+    
     /**
      * Removes an user account.
      * 
@@ -271,8 +280,7 @@ public abstract class UserManager
      * @param account to change
      * @param attributes to change
      * @throws AuthenticationException
-     */
-
+    */
     public abstract void changeUserAttribiutes(Principal account, Attributes attribiutes)
         throws AuthenticationException;
 

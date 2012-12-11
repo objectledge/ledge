@@ -109,6 +109,8 @@ public class PageTool
     
     /** Cache interval. Negative value causes default value set in the config file to be used. */
     protected int cacheInterval = -1;
+    
+    protected HTMLDoctype doctype = HTMLDoctype.DEFAULT;
 
 	/** 
 	 * Component constructor.
@@ -120,7 +122,7 @@ public class PageTool
 		this.parentLinkTool = parentLinkTool;
         this.linkTool = parentLinkTool.sessionless();
         this.httpContext = httpContext;
-        this.config = config;
+        this.config = config;      
     }
 
 	/** 
@@ -865,6 +867,26 @@ public class PageTool
             DateFormat df = new SimpleDateFormat(RFC_1123_DATE_FORMAT);
             df.setTimeZone(TimeZone.getTimeZone("GMT"));
             return df;
-        }
+        }  
+    }
+
+    public String getDoctype()
+    {
+        return doctype.name();
+    }  
+    
+    public String getDoctypeDeclr()
+    {       
+        return HTMLDoctype.getDoctypeDecl(doctype);
+    }
+    
+    public void setDoctype(String doctypeName)
+    {      
+        doctype = HTMLDoctype.valueOf(doctypeName);
+    }
+    
+    public void setDoctype(HTMLDoctype doctype)
+    {      
+        this.doctype = doctype;
     }
 }
