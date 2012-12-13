@@ -17,7 +17,7 @@ public enum HTMLDoctype
         + "//W3C//DTD XHTML 1.0 Transitional//EN"
         + "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" + ">";
 
-    public static final HTMLDoctype DEFAULT = HTML5;
+    public static final HTMLDoctype DEFAULT = HTML4;
 
     public static String getDoctypeDecl(HTMLDoctype type)
     {
