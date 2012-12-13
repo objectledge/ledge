@@ -122,7 +122,7 @@ public class PageTool
 		this.parentLinkTool = parentLinkTool;
         this.linkTool = parentLinkTool.sessionless();
         this.httpContext = httpContext;
-        this.config = config;      
+        this.config = config;
     }
 
 	/** 
@@ -190,7 +190,7 @@ public class PageTool
      */
     public String getTitle()
     {
-        return this.title.toString();
+        return this.config.getTitlePrefix() + this.title.toString();
     }
 
     //-------------------------------
@@ -821,6 +821,8 @@ public class PageTool
         /** cache interval in seconds */
         private int defaultCacheInterval;
 
+        private String titlePrefix;
+
         /**
          * Initializes the configuration object.
          * 
@@ -845,6 +847,7 @@ public class PageTool
             throws ConfigurationException
         {
             defaultCacheInterval = config.getChild("default_cache_interval").getValueAsInteger();
+            titlePrefix = config.getChild("title_prefix").getValue("");
         }
 
         /**
@@ -868,6 +871,17 @@ public class PageTool
             df.setTimeZone(TimeZone.getTimeZone("GMT"));
             return df;
         }  
+
+        /**
+         * Returns title prefix to be used on all pages (useful for identifying dev/staging
+         * servers).
+         * 
+         * @return title prefix.
+         */
+        public String getTitlePrefix()
+        {
+            return titlePrefix;
+        }
     }
 
     public String getDoctype()
