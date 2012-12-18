@@ -81,7 +81,7 @@ $(document).ready(function(){
 	setInterval(function(){
 	
     	jQuery.ajax({
-    			url: '$link.view('longops.ActiveOperationsDummy')',
+    			url: '$link.view('longops.ActiveOperations')',
     			type: 'GET',
     			data: { 
         			#if($operationCode) ## if operation code is not defined then component 
