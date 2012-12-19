@@ -8,7 +8,6 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jackson.JsonNode;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
@@ -21,6 +20,8 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class ActiveOperations
     extends AbstractJsonView

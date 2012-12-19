@@ -8,13 +8,14 @@ import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
 
 /**
  * Retrieve one-time authentication ticket from SingleSignOn service.

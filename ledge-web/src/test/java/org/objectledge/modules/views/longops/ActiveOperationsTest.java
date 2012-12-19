@@ -13,9 +13,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.hamcrest.core.StringContains;
 import org.jcontainer.dna.Logger;
 import org.jmock.Expectations;
@@ -33,6 +30,10 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.builders.BuildException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ActiveOperationsTest
     extends MockObjectTestCase
@@ -174,7 +175,7 @@ public class ActiveOperationsTest
         assertEquals(1, response.size());
         assertTrue(response.isArray());
         assertTrue(response.get(0).has("identifier"));
-        assertEquals(op.getIdentifier(), response.get(0).get("identifier").getTextValue());
+        assertEquals(op.getIdentifier(), response.get(0).get("identifier").asText());
     }
 
     public void testOperationsByUser()
@@ -190,8 +191,8 @@ public class ActiveOperationsTest
         assertEquals(1, response.size());
         assertTrue(response.isArray());
         assertTrue(response.get(0).has("identifier"));
-        assertEquals(op1.getIdentifier(), response.get(0).get("identifier").getTextValue());
-        assertEquals(user1.getName(), response.get(0).get("user").get("name").getTextValue());
+        assertEquals(op1.getIdentifier(), response.get(0).get("identifier").asText());
+        assertEquals(user1.getName(), response.get(0).get("user").get("name").asText());
     }
 
     public void testOperationsByInvalidUser()
@@ -213,7 +214,7 @@ public class ActiveOperationsTest
         assertEquals(1, response.size());
         assertTrue(response.isArray());
         assertTrue(response.get(0).has("identifier"));
-        assertEquals(op1.getIdentifier(), response.get(0).get("identifier").getTextValue());
+        assertEquals(op1.getIdentifier(), response.get(0).get("identifier").asText());
     }
 
     public void testOperationsByUserAndCode()
@@ -231,7 +232,7 @@ public class ActiveOperationsTest
         assertEquals(1, response.size());
         assertTrue(response.isArray());
         assertTrue(response.get(0).has("identifier"));
-        assertEquals(op1.getIdentifier(), response.get(0).get("identifier").getTextValue());
+        assertEquals(op1.getIdentifier(), response.get(0).get("identifier").asText());
     }
 
     public void testOperationsAuthFiltered()
@@ -260,6 +261,6 @@ public class ActiveOperationsTest
         assertEquals(1, response.size());
         assertTrue(response.isArray());
         assertTrue(response.get(0).has("identifier"));
-        assertEquals(op1a.getIdentifier(), response.get(0).get("identifier").getTextValue());
+        assertEquals(op1a.getIdentifier(), response.get(0).get("identifier").asText());
     }
 }

@@ -8,12 +8,13 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.apache.activemq.jaas.UserPrincipal;
-import org.codehaus.jackson.JsonNode;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.longops.LongRunningOperation;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.json.AbstractJsonView;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class ActiveOperationsDummy
     extends AbstractJsonView
