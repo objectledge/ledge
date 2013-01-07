@@ -189,10 +189,14 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>nanocontainer</groupId>
+        <groupId>org.nanocontainer</groupId>
         <artifactId>nanocontainer</artifactId>
         <version>1.0</version>
         <exclusions>
+          <exclusion>
+            <groupId>org.picocontainer</groupId>
+            <artifactId>picocontainer</artifactId>
+          </exclusion>
           <exclusion>
             <artifactId>groovy-all</artifactId>
             <groupId>groovy</groupId>
@@ -286,11 +290,6 @@
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate</artifactId>
         <version>3.1.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.hsqldb</groupId>
-        <artifactId>hsqldb</artifactId>
-        <version>2.2.9</version>
       </dependency>
       <dependency>
         <groupId>org.hsqldb</groupId>
