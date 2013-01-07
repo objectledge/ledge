@@ -579,7 +579,7 @@ public class DirectoryUserManager
         finally
         {
             closeContext(ctx);
-        }                
+        }
         for(int i = participants.length - 1; i >= 0; i--)
         {
             if(participants[i].supportsRemoval())
@@ -778,10 +778,17 @@ public class DirectoryUserManager
             ctx = directory.getBaseDirContext();
             NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
             List<String> results = new ArrayList<String>();
-            while(answer.hasMore())
+            try
             {
-                SearchResult result = answer.next();
-                results.add(result.getNameInNamespace());
+                while(answer.hasMore())
+                {
+                    SearchResult result = answer.next();
+                    results.add(result.getNameInNamespace());
+                }
+            }
+            catch(Exception ex)
+            {
+                return results;
             }
             return results;
         }
