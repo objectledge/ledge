@@ -764,7 +764,6 @@ public class DirectoryUserManager
     /**
      * Find all dn of the context that match the attribute query given custom search controls.
      * 
-     * @param query attribute query
      * @param searchControls the search controls to use for query
      * @return the list of the name of matched context.
      * @throws NamingException if lookup fails.
@@ -778,17 +777,12 @@ public class DirectoryUserManager
             ctx = directory.getBaseDirContext();
             NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
             List<String> results = new ArrayList<String>();
-            try
+            int counter = 0;
+            while(counter < searchControls.getCountLimit() &&answer.hasMore())
             {
-                while(answer.hasMore())
-                {
-                    SearchResult result = answer.next();
-                    results.add(result.getNameInNamespace());
-                }
-            }
-            catch(Exception ex)
-            {
-                return results;
+                SearchResult result = answer.next();
+                results.add(result.getNameInNamespace());
+                counter++;
             }
             return results;
         }
