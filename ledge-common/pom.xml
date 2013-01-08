@@ -94,7 +94,6 @@
   <modules>
     <module>../ledge-components</module>
     <module>../ledge-container</module>
-    <module>../ledge-gpl</module>
     <module>../ledge-web</module>
     <module>../ledge-forms</module>
     <module>../ledge-forms-fckeditor</module>
