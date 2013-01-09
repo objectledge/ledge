@@ -1,0 +1,145 @@
+##<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+##<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+## This component needs jquery and jquery ui scripts but 
+## if you add jquery twice then stange things happen
+
+$pageTool.addScriptLink('script/handlebars.js')
+
+<style>	
+	#long-running-operations-container {
+		margin : 0px 0px 20px 0px;
+		padding: 5px 0px 20px 0px;
+	}
+	.times {
+		
+	}
+	.start {
+		float : left;
+	}
+	
+	.end {
+		float : right;
+	}
+	
+	.operation {
+		clear : both;
+	}
+	
+	.abortOperation
+	{
+		display: inline-block;
+	}
+	.progressBarWrapper
+	{
+		display: inline-block;
+		width: 96%;
+	}
+	.abortOperationWrapper {
+		display: inline-block;
+	}
+	
+</style>
+
+<script id="operation-progress-template" type="text/x-handlebars-template">
+  <div class="operation ui-widget ui-corner-all" data-identifier="{{identifier}}">
+  	<p class="ui-widget-header">#{{identifier}} {{description}}</p>
+	<div>
+    	<div class="progressBarWrapper" title="Last update {{printDate lastUpdateTime}}">
+    		{{createProgressBar completedUnitsOfWork totalUnitsOfWork}}
+    	</div>
+		<div class="abortOperationWrapper">
+			<span class="abortOperation ui-icon ui-icon-closethick" title="Cancel operation" data-identifier="{{identifier}}"></span>
+		</div>
+	</div>
+	<div class="times">
+		<span class="start">{{printDate startTime}}</span>
+		<span class="end">{{printDate estimatedEndTime}}</span>
+	</div>
+  </div>
+</script>
+
+<script>
+$(document).ready(function(){
+	// Perform operation lookup every two seconds
+
+	var source   = $("#operation-progress-template").html();
+	var template = Handlebars.compile(source);
+	
+	var timeout = 5000;
+	
+	Handlebars.registerHelper('createProgressBar', function(completed, total) {
+		var html = $('<div class="progressBar"></div>').progressbar({max: total, value: completed, create: function( event, ui ) {}}).wrap('<div></div>').parent().html();
+		return new Handlebars.SafeString(html);
+	});
+	
+	Handlebars.registerHelper('printDate', function(miliseconds){
+		var date = new Date(miliseconds);
+		return date.toLocaleString();
+	});
+	
+	setInterval(function(){
+	
+    	jQuery.ajax({
+    			url: '$link.view('longops.ActiveOperations')',
+    			type: 'GET',
+    			data: { 
+        			#if($operationCode) ## if operation code is not defined then component 
+    									## monitors every long running operation in system
+        			code : '$operationCode',
+        			#end
+    				uid : 'root' // TODO TODO TODO change it to get uid of current user
+    			},
+    			success : function(data){
+					var tempNode = $('<div></div>');
+					jQuery.each(data, function(idx, operation){
+						var html = template(operation);
+						tempNode.append(html);
+					});
+					$('#long-running-operations-container-ops').html(tempNode.html());
+					$('#long-running-operations-container').tooltip();
+					$('.abortOperation').live("click", function(){
+						var id = $(this).attr('data-identifier');
+						cancelOperation(id);						
+					});
+    			},
+    			error : function(jqXHR, textStatus, errorThrown)
+    			{
+    				console.log('request sie nie udal');
+    				console.log(jqXHR);
+    				console.log(textStatus);
+    				console.log(errorThrown);
+    			}
+    	});	
+	
+	}, timeout);
+	
+	function cancelOperation(id)
+	{
+		var actionUrl = "$link.action('longops.Cancel')";
+		
+		jQuery.ajax({
+			url : actionUrl,
+			data : { id: id },
+			success : function(data){
+				$('#long-running-operations-result').html("Pomyślnie odwołano akcję");
+			},
+			error : function(jqXHR, textStatus, errorThrown)
+			{
+				$('#long-running-operations-result').html("Wystąpił błąd");
+				console.log('request sie nie udal');
+				console.log(jqXHR);
+				console.log(textStatus);
+				console.log(errorThrown);
+			}
+		});
+	}
+	
+});
+</script>
+
+
+<div id="long-running-operations-container">
+	<p id="long-running-operations-result"></p>
+	<div id="long-running-operations-container-ops"></div>
+</div>

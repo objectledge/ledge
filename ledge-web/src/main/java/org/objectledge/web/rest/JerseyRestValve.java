@@ -1,8 +1,10 @@
 package org.objectledge.web.rest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -17,6 +19,7 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
+import org.picocontainer.MutablePicoContainer;
 
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
@@ -24,8 +27,6 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 public class JerseyRestValve
     implements Valve
 {
-    private static final String REST_PACKAGE_NAMES_KEY = "restPackageNames";
-
     private final ServletContainer jerseyContainer;
 
     private final Logger logger;
@@ -33,22 +34,26 @@ public class JerseyRestValve
     /**
      * Creates a new jersey REST dispatcher.
      * 
-     * @param pipeline the pipeline
-     * @param context the thread context
+     * @param logger the logger
+     * @param config the configuration
+     * @param servletContext the servlet context
      * @throws ConfigurationException if the configuration is malformed.
      * @throws ServletException
      */
-    public JerseyRestValve(Logger logger, final Configuration config,
-        final ServletContext servletContext)
+    public JerseyRestValve(MutablePicoContainer restResourcesContaier, Logger logger,
+        final Configuration config, final ServletContext servletContext)
         throws ConfigurationException, ServletException
     {
         this.logger = logger;
-        String restPackageNames = config.getChild(REST_PACKAGE_NAMES_KEY).getValue();
 
-        Configuration initParams = config.getChild("init-parmameters", true);
-
-        final ServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
-        jerseyContainer = new ServletContainer(new PackagesResourceConfig(restPackageNames))
+        ArrayList<String> packageNames = getPackageNamesFromConfig(config);
+        Configuration initParams = config.getChild("init-parameters", true);
+        final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
+        final PackagesResourceConfig resourceConfig = new PackagesResourceConfig(packageNames.toArray(new String[packageNames.size()]));
+        resourceConfig.setPropertiesAndFeatures(ledgeServletConfig.getParameters());
+        resourceConfig.getSingletons().add(
+            new PicoComponentProviderFactory(restResourcesContaier, packageNames, logger));
+        jerseyContainer = new ServletContainer(resourceConfig)
             {
                 @Override
                 public ServletConfig getServletConfig()
@@ -56,7 +61,19 @@ public class JerseyRestValve
                     return ledgeServletConfig;
                 }
             };
+
         jerseyContainer.init();
+    }
+
+    private ArrayList<String> getPackageNamesFromConfig(Configuration config) throws ConfigurationException
+    {
+        ArrayList<String> packageNames = new ArrayList<>();
+        final Configuration packages = config.getChild("packages");
+        for(Configuration packageConfig : packages.getChildren("package"))
+        {
+            packageNames.add(packageConfig.getValue());
+        }
+        return packageNames;
     }
 
     @Override
@@ -86,13 +103,13 @@ public class JerseyRestValve
     {
         private final ServletContext context;
 
-        private Hashtable<String, String> parameters = new Hashtable<String, String>();
+        private Hashtable<String, Object> parameters = new Hashtable<String, Object>();
 
         public LedgeServletConfig(ServletContext context, Configuration config)
             throws ConfigurationException
         {
             this.context = context;
-            for(Configuration param : config.getChildren("init-param"))
+            for(Configuration param : config.getChildren("init-parameter"))
             {
                 final String name = param.getChild("param-name").getValue();
                 final String value = param.getChild("param-value").getValue();
@@ -115,7 +132,7 @@ public class JerseyRestValve
         @Override
         public String getInitParameter(String name)
         {
-            return parameters.get(name);
+            return (String)parameters.get(name);
         }
 
         @Override
@@ -123,5 +140,11 @@ public class JerseyRestValve
         {
             return parameters.keys();
         }
+        
+        public Map<String, Object> getParameters()
+        {
+            return (Map<String, Object>)parameters;
+        }
+        
     }
 }

@@ -29,6 +29,8 @@ package org.objectledge.modules.actions.authentication;
 
 import java.security.Principal;
 
+import javax.naming.NamingException;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
@@ -132,7 +134,15 @@ public class Login
                 singleSignOnService.logOut(previousPrincipal, domain);
             }
             httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
-            singleSignOnService.logIn(principal, domain);            
+            singleSignOnService.logIn(principal, domain); 
+            try
+            {
+                userManager.updateTrackingInformation(principal);
+            }
+            catch(AuthenticationException | NamingException e)
+            {
+                logger.error("Failed to update tracking information of user: " + principal, e);
+            }
         }
 
         authenticationContext.setUserPrincipal(principal, authenticated);

@@ -8,7 +8,6 @@ import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
@@ -19,6 +18,8 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
 import org.objectledge.web.json.AbstractJsonView;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
 
 public class Login
     extends AbstractJsonView

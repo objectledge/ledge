@@ -43,10 +43,15 @@ import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.naming.NamingException;
+
 import org.apache.commons.codec.binary.Hex;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.authentication.ServerApiRestrictions;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
@@ -84,11 +89,14 @@ public class LocalSingleSignOnService
         .synchronizedMap(new HashMap<PrincipalRealm, LoginStatus>());
     
     private final ServerApiRestrictions serverApiRestrictions;
+    
+    private final UserManager userManager;
 
-    public LocalSingleSignOnService(ThreadPool threadPool, Configuration config, Logger log)
+    public LocalSingleSignOnService(ThreadPool threadPool, UserManager userManager, Configuration config, Logger log)
         throws ConfigurationException
     {
         this.log = log;
+        this.userManager = userManager;
         Configuration[] realmConfigs = config.getChild("realms").getChildren("realm");
         List<Realm> realms = new ArrayList<Realm>();
         Set<String> domains = new HashSet<String>();
@@ -192,7 +200,7 @@ public class LocalSingleSignOnService
         this.ticketValidityTime = config.getChild("tickets", true).getChild("validityTime", true)
             .getValueAsInteger(DEFAULT_TICKET_VALIDITY_TIME);
         
-        serverApiRestrictions = new ServerApiRestrictions(config.getChild("serverApi"), log);
+        serverApiRestrictions = new ServerApiRestrictions(config.getChild("apiRestrictions"), log);
 
         threadPool.runDaemon(new TicketExpiryTask());
     }
@@ -257,6 +265,14 @@ public class LocalSingleSignOnService
             {
                 log.debug("LOGGED IN user " + principal.getName() + " to realm " + realm.getName());
                 userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_IN);
+            }
+            try
+            {
+                userManager.updateTrackingInformation(principal);
+            }
+            catch(AuthenticationException | NamingException e)
+            {
+                log.error("Failed to update tracking information of user: " + principal, e);
             }
         }
         else
@@ -325,9 +341,9 @@ public class LocalSingleSignOnService
     }
     
     @Override
-    public boolean validateApiRequest(String secret, String remoteAddr, boolean secure)
+    public boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure)
     {
-       return serverApiRestrictions.validateApiRequest(secret, remoteAddr, secure);
+       return serverApiRestrictions.validateApiRequest(userName, secret, remoteAddr, secure);
     }    
 
     // ..........................................................................................

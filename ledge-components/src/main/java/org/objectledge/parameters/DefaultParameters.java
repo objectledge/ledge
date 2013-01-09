@@ -167,11 +167,11 @@ public class DefaultParameters implements Parameters
         String[] values = map.get(name);
         if (values == null || values.length == 0)
         {
-            throw new UndefinedParameterException("Parameter '" + name + "'is undefined");
+            throw new UndefinedParameterException("Parameter '" + name + "' is undefined");
         }
         if (values.length > 1)
         {
-            throw new AmbiguousParameterException("Parameter '" + name + "'has multiple values");
+            throw new AmbiguousParameterException("Parameter '" + name + "' has multiple values");
         }
         return values[0];
     }

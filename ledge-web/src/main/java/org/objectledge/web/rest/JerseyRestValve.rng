@@ -28,13 +28,17 @@
 --> 
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <element name="restPackageNames">
-    <text />
+  <element name="packages">
+    <oneOrMore>
+      <element name="package">
+        <text/>
+      </element>
+    </oneOrMore>
   </element>
   <optional>
-    <element name="init-parmaeters">
+    <element name="init-parameters">
       <zeroOrMore>
-        <element name="init-paramter">
+        <element name="init-parameter">
            <element name="param-name">
              <text/>
            </element>

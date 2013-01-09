@@ -29,12 +29,13 @@ package org.objectledge.modules.views.captcha;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.json.AbstractJsonView;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
 
 /**
  * A view that verify captch'a code.

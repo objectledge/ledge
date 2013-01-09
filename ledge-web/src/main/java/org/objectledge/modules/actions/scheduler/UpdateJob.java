@@ -102,6 +102,7 @@ public class UpdateJob
         String runTimeLimitEndStr = parameters.get("runTimeLimitEnd",null);
         boolean reentrant = parameters.getBoolean("reentrant",false);
         boolean enabled = parameters.getBoolean("enabled",false);
+        String runArguments = parameters.get("jobArgument");
 
         Date runTimeLimitStart = null;
         Date runTimeLimitEnd = null;
@@ -141,6 +142,7 @@ public class UpdateJob
 		        job.setRunCountLimit(runCountLimit);
 		        job.setTimeLimit(runTimeLimitStart, runTimeLimitEnd);
 		        job.setReentrant(reentrant);
+		        job.setArgument(runArguments);
 		        if(enabled)
 		        {
 		            scheduler.enable(job);

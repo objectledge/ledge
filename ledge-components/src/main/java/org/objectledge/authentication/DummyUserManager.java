@@ -29,17 +29,24 @@
 package org.objectledge.authentication;
 
 import java.security.Principal;
+import java.util.Collection;
 
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
+import javax.naming.directory.SearchControls;
 
 /**
  * The dummy user manager implementation.
  * 
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
-public class DummyUserManager extends UserManager
+public class DummyUserManager
+    extends UserManager
 {
+    /** A string that may be used as {@code dn} or {@code login} to simulate missing user account. */
+    public static final String MISSSING_USER = "MISSING";
+
     /**
      * Creates an instance of the user manager.
      */
@@ -47,18 +54,18 @@ public class DummyUserManager extends UserManager
     {
     }
 
-    /** 
+    /**
      * {@inheritDoc}
      */
     public boolean userExists(String dn)
     {
-        return true;
+        return !dn.equals(MISSSING_USER);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal createAccount(String login, String dn, String password) 
+    public Principal createAccount(String login, String password)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot create new account");
@@ -67,31 +74,43 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public void removeAccount(Principal account) throws AuthenticationException
+    public void removeAccount(Principal account)
+        throws AuthenticationException
     {
-        throw new UnsupportedOperationException("Dummy manager cannot create new account");    
+        throw new UnsupportedOperationException("Dummy manager cannot create new account");
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal getUserByName(String dn) throws AuthenticationException
+    public Principal getUserByName(String dn)
+        throws AuthenticationException
     {
+        if(dn.equals(MISSSING_USER))
+        {
+            throw new AuthenticationException("Unknown user");
+        }
         return new DefaultPrincipal(dn);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal getUserByLogin(String login) throws AuthenticationException
+    public Principal getUserByLogin(String login)
+        throws AuthenticationException
     {
-        return new DefaultPrincipal(login);                           
+        if(login.equals(MISSSING_USER))
+        {
+            throw new AuthenticationException("Unknown user");
+        }
+        return new DefaultPrincipal(login);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Principal getAnonymousAccount() throws AuthenticationException
+    public Principal getAnonymousAccount()
+        throws AuthenticationException
     {
         return new DefaultPrincipal("anonymous");
     }
@@ -99,7 +118,8 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal getSuperuserAccount() throws AuthenticationException
+    public Principal getSuperuserAccount()
+        throws AuthenticationException
     {
         return null;
     }
@@ -107,7 +127,7 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public void changeUserPassword(Principal account, String password) 
+    public void changeUserPassword(Principal account, String password)
         throws AuthenticationException
     {
         throw new UnsupportedOperationException("Dummy manager cannot change user password");
@@ -125,7 +145,8 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public DirContext getPersonalData(Principal account) throws AuthenticationException
+    public DirContext getPersonalData(Principal account)
+        throws AuthenticationException
     {
         return null;
     }
@@ -133,7 +154,8 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String attribute, String value) throws NamingException
+    public Collection<Principal> lookupAccounts(String attribute, String value)
+        throws NamingException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
     }
@@ -141,8 +163,78 @@ public class DummyUserManager extends UserManager
     /**
      * {@inheritDoc}
      */
-    public Principal[] lookupAccounts(String query) throws NamingException
+    @Override
+    public Collection<Principal> lookupAccounts(String query, SearchControls searchControlls)
+        throws NamingException
     {
         throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<Principal> lookupAccounts(String query)
+        throws NamingException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot lookup accounts");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean emailExists(String email)
+    {
+        return false;
+    }
+
+    @Override
+    public Principal createAccount(String login, String password, boolean blockPassword,
+        Attributes attributes)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot create new account");
+    }
+
+    @Override
+    public Principal getUserByMail(String mail)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot lookup user by mail");
+    }
+
+    @Override
+    public void changeUserAttribiutes(Principal account, Attributes attribiutes)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot change user attributes");
+    }
+
+    @Override
+    public void updateTrackingInformation(Principal account)
+    {
+        throw new UnsupportedOperationException(
+            "Dummy manager cannot perform update tracking information operation");
+    }
+
+    @Override
+    public String getUserAttribute(Principal account, String attribute)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot get user attribute");
+    }
+
+    @Override
+    public void enableUserPassword(Principal account)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot enable user password");
+    }
+
+    @Override
+    public boolean accountBlocked(String login)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot check if account is disabled");
     }
 }

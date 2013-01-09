@@ -304,9 +304,22 @@ public class DefaultPersistence implements Persistence
      * Removes an object from the database.
      * 
      * @param object the object to be removed.
-     * @throws SQLException if any exception occured.
+     * @throws SQLException if object was not present in the database or any exception occurred.
      */
     public void delete(Persistent object)
+        throws SQLException
+    {
+        delete(object, true);
+    }
+
+    /**
+     * Removes an object from the database.
+     * 
+     * @param object the object to be removed.
+     * @param mustExist should an exception be thrown if the object was not present in the database.
+     * @throws SQLException if any exception occurred.
+     */
+    public void delete(Persistent object, boolean mustExist)
         throws SQLException
     {
         synchronized (object)
@@ -320,7 +333,7 @@ public class DefaultPersistence implements Persistence
                 object.getData(record);
                 statement = record.getDeleteStatement(conn); 
                 statement.execute();
-                if(statement.getUpdateCount() != 1)
+                if(mustExist && statement.getUpdateCount() != 1)
                 {
                     throw new SQLException("unsuccessful DELETE statement");
                 }

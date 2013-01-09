@@ -61,6 +61,26 @@
             <text/>
           </element>
         </optional>
+        <optional>
+          <element name="mailAttribute">
+            <text/>
+          </element>
+        </optional>
+        <optional>
+          <element name="isLogonTrackingEnabled">
+            <text/>
+          </element>
+        </optional>
+        <optional>
+          <element name="logonCountAttribute">
+            <text/>
+          </element>
+        </optional>
+        <optional>
+          <element name="lastLogonTimestampAttribute">
+            <text/>
+          </element>
+        </optional>
       </interleave>
     </element>
   </start>

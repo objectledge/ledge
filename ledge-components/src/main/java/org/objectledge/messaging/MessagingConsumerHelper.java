@@ -80,7 +80,6 @@ public class MessagingConsumerHelper<S extends Session, C extends Connection>
 
     public MessagingConsumerHelper(C connection, MessageListener messageListener,
         ExceptionListener exceptionListener, Configuration configuration)
-        throws Exception
     {
         this.connection = connection;
         this.messageListener = messageListener;
