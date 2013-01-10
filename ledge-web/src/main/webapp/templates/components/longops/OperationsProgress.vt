@@ -84,11 +84,12 @@ $(document).ready(function(){
     			url: '$link.view('longops.ActiveOperations')',
     			type: 'GET',
     			data: { 
-        			#if($operationCode) ## if operation code is not defined then component 
-    									## monitors every long running operation in system
+        			#if($operationCode) ## if operation code is not defined, operations of all types are shown
         			code : '$operationCode',
         			#end
-    				uid : 'root' // TODO TODO TODO change it to get uid of current user
+					#if($uid)           ## if uid is not defined, all users' operations are shown					
+    				uid : '$uid'
+					#end
     			},
     			success : function(data){
 					var tempNode = $('<div></div>');
