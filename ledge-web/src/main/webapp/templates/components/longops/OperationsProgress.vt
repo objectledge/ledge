@@ -1,11 +1,7 @@
-##<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-##<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-
-## This component needs jquery and jquery ui scripts but 
-## if you add jquery twice then stange things happen
-
-$pageTool.addScriptLink('script/handlebars.js')
-
+$pageTool.addScriptLink('http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js')##
+$pageTool.addScriptLink('http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js')##
+$pageTool.addScriptLink('http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.1/handlebars.min.js')##
+$pageTool.addStyleLink('/style/cyklotron-theme/jquery-ui-1.9.2.custom.css')##
 <style>	
 	#long-running-operations-container {
 		margin : 0px 0px 20px 0px;
