@@ -74,10 +74,10 @@ $(document).ready(function(){
 		return date.toLocaleString();
 	});
 	
-	setInterval(function(){
-	
-    	jQuery.ajax({
-    			url: '$link.view('longops.ActiveOperations')',
+	function fetchOperations()
+	{
+		jQuery.ajax({
+    			url: '$link.view('longops.ActiveOperationsDummy')',
     			type: 'GET',
     			data: { 
         			#if($operationCode) ## if operation code is not defined, operations of all types are shown
@@ -108,7 +108,11 @@ $(document).ready(function(){
     				console.log(errorThrown);
     			}
     	});	
+	}
 	
+	fetchOperations(); // fetch them at once and then after some interval
+	setInterval(function(){
+    	fetchOperations();
 	}, timeout);
 	
 	function cancelOperation(id)
