@@ -3,12 +3,13 @@ $pageTool.addScriptLink('http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jqu
 $pageTool.addScriptLink('http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.1/handlebars.min.js')##
 $pageTool.addStyleLink('/style/cyklotron-theme/jquery-ui-1.9.2.custom.css')##
 <style>	
-	#long-running-operations-container {
+
+	#operation {
 		margin : 0px 0px 20px 0px;
-		padding: 5px 0px 20px 0px;
+		padding: 5px 0px 40px 0px;
 	}
 	.times {
-		
+		padding: 5px 0px 20px 0px;
 	}
 	.start {
 		float : left;
@@ -77,7 +78,7 @@ $(document).ready(function(){
 	function fetchOperations()
 	{
 		jQuery.ajax({
-    			url: '$link.view('longops.ActiveOperationsDummy')',
+    			url: '$link.view('longops.ActiveOperations')',
     			type: 'GET',
     			data: { 
         			#if($operationCode) ## if operation code is not defined, operations of all types are shown
