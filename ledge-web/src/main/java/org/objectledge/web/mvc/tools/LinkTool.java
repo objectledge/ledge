@@ -29,6 +29,9 @@
 package org.objectledge.web.mvc.tools;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
@@ -42,6 +45,7 @@ import java.util.StringTokenizer;
 import org.jcontainer.dna.Configurable;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.parameters.SortedParameters;
@@ -564,6 +568,42 @@ public class LinkTool
         }
     }
     
+    public LinkTool uri(URI uri)
+    {
+        LinkTool target = getLinkTool(this);
+        if(uri.getScheme() != null)
+        {
+            target.protocolName = uri.getScheme();
+        }
+        if(uri.getHost() != null)
+        {
+            target.host = uri.getHost();
+        }
+        if(uri.getPort() != -1)
+        {
+            target.port = uri.getPort();
+        }
+        if(uri.getPath() != null)
+        {
+            target.path = uri.getPath();
+        }
+        if(uri.getQuery() != null)
+        {
+            target.parameters = parseParameters(uri.getQuery());
+        }
+        if(uri.getFragment() != null)
+        {
+            this.fragment = uri.getFragment();
+        }
+        return target;
+    }
+
+    public LinkTool url(URL url)
+        throws URISyntaxException
+    {
+        return uri(url.toURI());
+    }
+
     /**
      * Parse given string to obtain link tool object
      * @param url - string of the toString() shape
@@ -696,6 +736,32 @@ public class LinkTool
             throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
         }
         ///CLOVER:ON
+    }
+
+    private Parameters parseParameters(String queryString)
+    {
+        Parameters result = new DefaultParameters();
+        String[] pp = queryString.split("&");
+        try
+        {
+            for(String p : pp)
+            {
+                if(p.indexOf('=') > 0)
+                {
+                    String[] kv = p.split("=");
+                    result.add(URLDecoder.decode(kv[0], "UTF-8"), URLDecoder.decode(kv[1], "UTF-8"));
+                }
+                else
+                {
+                    result.add(URLDecoder.decode(p, "UTF-8"), "");
+                }
+            }
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new RuntimeException("UTF-8 not supported?", e);
+        }
+        return result;
     }
 
     // parameter add methods ---------------------------------------------------------------------- 
