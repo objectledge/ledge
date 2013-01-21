@@ -29,6 +29,7 @@
 package org.objectledge.filesystem;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -39,6 +40,7 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +53,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
+
+import com.google.common.base.Optional;
 
 /**
  * Provides an abstration of files available in the local file system, in the ClassLoader, web 
@@ -72,6 +76,8 @@ public class FileSystem
     /** Maximum size of a file that is loaded into memory in one chunk by the. 
      * read() methods. */
     private int maxReadSize;
+
+    private String localFileSystemName;
 
     /**
      * Protected no-arg constructor to allow mocking.
@@ -1202,4 +1208,28 @@ public class FileSystem
             FileSystem.class.getClassLoader());
         return new FileSystem(new FileSystemProvider[] { cfs }, 4096, 65536);
     }
+
+    /**
+     * Returns File given text path relative to local file system provider
+     * 
+     * @param path the path to the file
+     * @return Path the java.nio.Path object
+     * @throws MalformedURLException
+     * @throws URISyntaxException
+     */
+    public Optional<File> getFileRelativeToLocalFileSystem(String path)
+        throws MalformedURLException, URISyntaxException
+    {
+        URL resource = getResource(path);
+        if(resource != null)
+        {
+            return Optional.of(new File(resource.toURI()));
+        }
+        else
+        {
+            return Optional.absent();
+        }
+    }
+
+
 }
