@@ -1210,26 +1210,40 @@ public class FileSystem
     }
 
     /**
-     * Returns File given text path relative to local file system provider
+     * Returns File given text path relative to local file system provider This method only
+     * retrieves File handler to existing file. It does not create it.
      * 
      * @param path the path to the file
-     * @return Path the java.nio.Path object
+     * @return Optional<File> the optional with file if found, absent otherwise.
      * @throws MalformedURLException
      * @throws URISyntaxException
      */
     public Optional<File> getFileRelativeToLocalFileSystem(String path)
         throws MalformedURLException, URISyntaxException
     {
-        URL resource = getResource(path);
-        if(resource != null)
+        URL found = null;
+        for(FileSystemProvider provider : providers)
         {
-            return Optional.of(new File(resource.toURI()));
+            if(provider instanceof LocalFileSystemProvider)
+            {
+                LocalFileSystemProvider local = (LocalFileSystemProvider)provider;
+                URL resource = local.getResource(path);
+                if(resource != null)
+                {
+                    found = resource;
+                    break;
+                }
+            }
+        }
+
+        if(found != null)
+        {
+            return Optional.of(new File(found.toURI()));
         }
         else
         {
             return Optional.absent();
         }
     }
-
 
 }
