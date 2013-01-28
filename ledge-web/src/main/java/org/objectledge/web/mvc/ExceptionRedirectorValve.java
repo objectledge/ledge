@@ -111,7 +111,7 @@ public class ExceptionRedirectorValve implements Valve
     {
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         Throwable t = (Throwable)context.getAttribute(ErrorHandlingPipeline.PIPELINE_EXCEPTION);
-        if (t != null)
+        if(mvcContext != null && t != null)
         {
             Class<?> leafException = null;
             Throwable tt;
