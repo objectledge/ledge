@@ -64,7 +64,7 @@ public class MVCResultsValve
 		if(!httpContext.getDirectResponse())
 		{
             MVCContext mvcContext = MVCContext.getMVCContext(context);
-            String result = mvcContext.getBuildResult();
+            String result = mvcContext != null ? mvcContext.getBuildResult() : null;
 			try
 			{
 				if(result == null)
