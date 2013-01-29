@@ -50,8 +50,8 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
-import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.ServerApiRestrictions;
+import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
@@ -227,7 +227,11 @@ public class LocalSingleSignOnService
 
     public Principal validateTicket(String ticketId, String domain, String client)
     {
-        Ticket ticket = tickets.remove(ticketId);
+        Ticket ticket;
+        synchronized(tickets)
+        {
+            ticket = tickets.remove(ticketId);
+        }
         if(ticket != null)
         {
             if(ticket.getClient().equals(client))
@@ -355,7 +359,10 @@ public class LocalSingleSignOnService
         String id = new String(Hex.encodeHex(idBytes));
 
         Ticket ticket = new Ticket(principal, realm, client, id);
-        tickets.put(id, ticket);
+        synchronized(tickets)
+        {
+            tickets.put(id, ticket);
+        }
         return ticket;
     }
 
