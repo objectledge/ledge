@@ -525,17 +525,28 @@ public class LocalSingleSignOnService
         public void process(Context context)
             throws ProcessingException
         {
-            synchronized(tickets)
+            while(!Thread.interrupted())
             {
-                Iterator<Ticket> i = tickets.values().iterator();
-                while(i.hasNext())
+                synchronized(tickets)
                 {
-                    Ticket ticket = i.next();
-                    if(ticket.getAge() > ticketValidityTime)
+                    Iterator<Ticket> i = tickets.values().iterator();
+                    while(i.hasNext())
                     {
-                        log.debug("EXPIRED ticket " + ticket.toString());
-                        i.remove();
+                        Ticket ticket = i.next();
+                        if(ticket.getAge() > ticketValidityTime)
+                        {
+                            log.debug("EXPIRED ticket " + ticket.toString());
+                            i.remove();
+                        }
                     }
+                }
+                try
+                {
+                    Thread.sleep(60 * 1000);
+                }
+                catch(InterruptedException e)
+                {
+                    return;
                 }
             }
         }
