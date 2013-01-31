@@ -205,9 +205,11 @@ public class VelocityTemplating
             throw new ComponentInitializationError("failed to initialze Velocity", t);
         }
         // /CLOVER:ON
-        templateExistsCache.clear();
-        templateCache.clear();
-
+        synchronized(templateCache)
+        {
+            templateExistsCache.clear();
+            templateCache.clear();
+        }
         // replace old engine with new one
         this.engine = newEngine;
     }
