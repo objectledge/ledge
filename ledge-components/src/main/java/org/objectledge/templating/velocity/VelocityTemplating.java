@@ -182,12 +182,10 @@ public class VelocityTemplating
         newEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, logger);
         newEngine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
         newEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "objectledge");
-        newEngine.setProperty("objectledge.resource.loader.class",
-            "org.objectledge.templating.velocity.LedgeResourceLoader");
-        newEngine.setProperty("objectledge.resource.loader."
-            + LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
-        newEngine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
-            logger);
+        newEngine.setProperty(LedgeResourceLoader.LEDGE_LOADER_CLASS,
+            LedgeResourceLoader.class.getName());
+        newEngine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
+        newEngine.setProperty(LedgeResourceLoader.LEDGE_LOG_SYSTEM, logger);
         newEngine.setProperty(RuntimeConstants.INPUT_ENCODING, config.getEncoding());
         try
         {
