@@ -29,6 +29,8 @@
 package org.objectledge.templating.velocity;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.objectledge.templating.TemplatingContext;
 
@@ -46,11 +48,21 @@ public class VelocityContext
     private org.apache.velocity.context.Context context;
 
     /**
-     * Contstructs a VelocityContext.
+     * Constructs an empty VelocityContext.
      */
     public VelocityContext()
     {
     	context = new org.apache.velocity.VelocityContext();
+    }
+
+    /**
+     * Constructs a VelocityContext.
+     * 
+     * @param contents initial contents of the context.
+     */
+    public VelocityContext(Map<String, Object> contents)
+    {
+        context = new org.apache.velocity.VelocityContext(new HashMap<>(contents));
     }
 
     /**

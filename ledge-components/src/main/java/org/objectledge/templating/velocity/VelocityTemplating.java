@@ -212,10 +212,19 @@ public class VelocityTemplating
     /**
      * {@inheritDoc}
      */
+    @Override
     public TemplatingContext createContext()
     {
-        // TODO use pooling here...
         return new VelocityContext();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TemplatingContext createContext(Map<String, Object> contents)
+    {
+        return new VelocityContext(contents);
     }
 
     /**

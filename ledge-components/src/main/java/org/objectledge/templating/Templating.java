@@ -30,6 +30,7 @@ package org.objectledge.templating;
 
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Map;
 
 import org.objectledge.ComponentInitializationError;
 
@@ -58,6 +59,14 @@ public interface Templating
 	 * @return a Context.
 	 */
 	public TemplatingContext createContext();
+
+    /**
+     * Create a @link TemplatingContext} object.
+     * 
+     * @param contents initial contents of the context.
+     * @return a Context.
+     */
+    public TemplatingContext createContext(Map<String, Object> contents);
 
 	/**
 	 * Checks if the template with a given name exists.
