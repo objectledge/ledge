@@ -187,6 +187,7 @@ public class VelocityTemplating
         newEngine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
         newEngine.setProperty(LedgeResourceLoader.LEDGE_LOG_SYSTEM, logger);
         newEngine.setProperty(RuntimeConstants.INPUT_ENCODING, config.getEncoding());
+        newEngine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, false);
         try
         {
             newEngine.init();
@@ -547,6 +548,11 @@ public class VelocityTemplating
         {
             this.properties.addProperty(key, value);
             return this;
+        }
+
+        public Config withLibrary(String path)
+        {
+            return withProperty("velocimacro.library", path);
         }
 
         void applyProperties(VelocityEngine target)
