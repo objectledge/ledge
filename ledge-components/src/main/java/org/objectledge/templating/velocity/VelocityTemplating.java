@@ -30,9 +30,13 @@ package org.objectledge.templating.velocity;
 
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.runtime.RuntimeConstants;
@@ -61,26 +65,19 @@ public class VelocityTemplating
 {
     private static final String CACHE_NAME = "velocityTemplates";
 
+    /**
+     * Engine configuration.
+     */
+    private final Config config;
+
     /** logger */
-    private DNALogChute logger;
+    private final DNALogChute logger;
 
     /** velocity engine */
-    private VelocityEngine engine;
-
-    /** template paths */
-    private String[] paths;
-
-    /** template file extension */
-    private String extension = ".vt";
-
-    /** template encoding */
-    private String encoding = "ISO-8859-1";
-
-    /** config */
-    private Configuration config;
+    private volatile VelocityEngine engine;
 
     /** file system */
-    private FileSystem fileSystem;
+    private final FileSystem fileSystem;
 
     /** template objects/nulls keyed by name strings. */
     private final Map<String, Template> templateCache;
@@ -88,22 +85,23 @@ public class VelocityTemplating
     /** boolean objects/nulls keyed by name strings. */
     private final Map<String, Boolean> templateExistsCache = new HashMap<String, Boolean>();
 
-    /** Caching flag. */
-    private boolean cache = false;
-
     /**
      * Creates a new instance of the templating system.
      * 
      * @param config the configuration.
      * @param logger the logger.
      * @param fileSystem the filesystem to read files from.
+     * @param templateCache template cache implementation
+     * @throws ConfigurationException
      */
-    public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem)
+    private VelocityTemplating(Config config, Logger logger, FileSystem fileSystem,
+        Map<String, Template> templateCache)
+        throws ConfigurationException
     {
         this.config = config;
         this.logger = new DNALogChute(logger);
         this.fileSystem = fileSystem;
-        this.templateCache = new HashMap<String, Template>();
+        this.templateCache = templateCache;
         restart();
     }
 
@@ -113,23 +111,60 @@ public class VelocityTemplating
      * @param config the configuration.
      * @param logger the logger.
      * @param fileSystem the filesystem to read files from.
+     * @throws ConfigurationException
+     */
+    public VelocityTemplating(Config config, Logger logger, FileSystem fileSystem)
+        throws ConfigurationException
+    {
+        this(config, logger, fileSystem, new HashMap<String, Template>());
+    }
+
+    /**
+     * Creates a new instance of the templating system.
+     * 
+     * @param config the configuration.
+     * @param logger the logger.
+     * @param fileSystem the filesystem to read files from.
+     * @throws ConfigurationException
+     */
+    public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem)
+        throws ConfigurationException
+    {
+        this(new Config(config), logger, fileSystem, new HashMap<String, Template>());
+    }
+
+    /**
+     * Creates a new instance of the templating system.
+     * 
+     * @param config the configuration.
+     * @param logger the logger.
+     * @param fileSystem the filesystem to read files from.
+     * @param cacheFactory CacheFactory component
      */
     public VelocityTemplating(Configuration config, Logger logger, FileSystem fileSystem,
         CacheFactory cacheFactory)
+        throws ConfigurationException
     {
-        this.config = config;
-        this.logger = new DNALogChute(logger);
-        this.fileSystem = fileSystem;
+        this(new Config(config), logger, fileSystem, getCache(cacheFactory));
+    }
+
+    /**
+     * Helper method to initialize cache using CacheFactory.
+     * 
+     * @param cacheFactory CacheFactory component.
+     * @return cache implementation.
+     */
+    private static Map<String, Template> getCache(CacheFactory cacheFactory)
+    {
         if(cacheFactory.getInstanceNames().contains(CACHE_NAME))
         {
-            this.templateCache = cacheFactory.getInstance(CACHE_NAME);
+            return cacheFactory.getInstance(CACHE_NAME);
         }
         else
         {
             // fall back to simple, permanent cache
-            this.templateCache = new HashMap<String, Template>();
+            return new HashMap<String, Template>();
         }
-        restart();
     }
 
     /**
@@ -137,43 +172,13 @@ public class VelocityTemplating
      * 
      * @throws ComponentInitializationError if the restart fails for some reason.
      */
+    @Override
     public void restart()
         throws ComponentInitializationError
     {
         // create and initialize a new engine
         VelocityEngine newEngine = new VelocityEngine();
-
-        extension = config.getChild("extension").getValue(".vt");
-        encoding = config.getChild("encoding").getValue("ISO-8859-1");
-        cache = config.getChild("cache").getValueAsBoolean(false);
-        try
-        {
-            Configuration[] path = config.getChild("paths").getChildren("path");
-            paths = new String[path.length];
-            for(int i = 0; i < path.length; i++)
-            {
-                paths[i] = path[i].getValue();
-            }
-            Configuration node = config.getChild("properties");
-            if(node != null)
-            {
-                Configuration[] properties = node.getChildren("property");
-                for(int i = 0; i < properties.length; i++)
-                {
-                    String name = properties[i].getAttribute("name");
-                    String value = properties[i].getAttribute("value", null);
-                    if(value == null)
-                    {
-                        value = properties[i].getValue();
-                    }
-                    newEngine.addProperty(name, value);
-                }
-            }
-        }
-        catch(ConfigurationException e)
-        {
-            throw new ComponentInitializationError("failed to initialze Velocity", e);
-        }
+        config.applyProperties(newEngine);
         newEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, logger);
         newEngine.setProperty(LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
         newEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "objectledge");
@@ -183,7 +188,7 @@ public class VelocityTemplating
             + LedgeResourceLoader.LEDGE_FILE_SYSTEM, fileSystem);
         newEngine.setProperty("objectledge.resource.loader." + LedgeResourceLoader.LOG_SYSTEM,
             logger);
-        newEngine.setProperty(RuntimeConstants.INPUT_ENCODING, encoding);
+        newEngine.setProperty(RuntimeConstants.INPUT_ENCODING, config.getEncoding());
         try
         {
             newEngine.init();
@@ -230,9 +235,10 @@ public class VelocityTemplating
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean templateExists(String name)
     {
-        if(cache)
+        if(config.isCacheEnabled())
         {
             synchronized(templateCache)
             {
@@ -246,9 +252,9 @@ public class VelocityTemplating
         boolean exists = false;
         try
         {
-            for(int i = 0; i < paths.length; i++)
+            for(String basePath : config.getPaths())
             {
-                String path = paths[i] + name + extension;
+                String path = basePath + name + config.getExtension();
                 if(engine.resourceExists(path))
                 {
                     exists = true;
@@ -262,7 +268,7 @@ public class VelocityTemplating
             throw new RuntimeException("Velocity internal error", e);
         }
         // /CLOVER ON
-        if(cache)
+        if(config.isCacheEnabled())
         {
             synchronized(templateCache)
             {
@@ -275,10 +281,11 @@ public class VelocityTemplating
     /**
      * {@inheritDoc}
      */
+    @Override
     public Template getTemplate(String name)
         throws TemplateNotFoundException
     {
-        if(cache)
+        if(config.isCacheEnabled())
         {
             synchronized(templateCache)
             {
@@ -295,8 +302,8 @@ public class VelocityTemplating
                     }
                     else
                     {
-                        throw new TemplateNotFoundException("template " + name + extension
-                            + " not found");
+                        throw new TemplateNotFoundException("template " + name
+                            + config.getExtension() + " not found");
                     }
                 }
             }
@@ -306,9 +313,9 @@ public class VelocityTemplating
         String path = null;
         try
         {
-            for(int i = 0; i < paths.length; i++)
+            for(String basePath : config.getPaths())
             {
-                path = paths[i] + name + extension;
+                path = basePath + name + config.getExtension();
                 if(engine.resourceExists(path))
                 {
                     template = new VelocityTemplate(this, name, engine.getTemplate(path));
@@ -323,7 +330,7 @@ public class VelocityTemplating
         // /CLOVER:ON
         if(template != null)
         {
-            if(cache)
+            if(config.isCacheEnabled())
             {
                 synchronized(templateCache)
                 {
@@ -333,12 +340,14 @@ public class VelocityTemplating
             }
             return template;
         }
-        throw new TemplateNotFoundException("template " + name + extension + " not found");
+        throw new TemplateNotFoundException("template " + name + config.getExtension()
+            + " not found");
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void merge(TemplatingContext context, Reader source, Writer target, String logTag)
         throws MergingException
     {
@@ -366,6 +375,7 @@ public class VelocityTemplating
     /**
      * {@inheritDoc}
      */
+    @Override
     public void merge(TemplatingContext context, Template template, Writer target)
         throws MergingException
     {
@@ -392,14 +402,15 @@ public class VelocityTemplating
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTemplateEncoding()
     {
-        return encoding;
+        return config.getEncoding();
     }
 
     public String getTemplateExtension()
     {
-        return extension;
+        return config.getExtension();
     }
 
     // Velocity logging interface implementation
@@ -407,23 +418,140 @@ public class VelocityTemplating
     /**
      * {@inheritDoc}
      */
-    public void init(RuntimeServices services)
-    {
-        // does nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void invalidateTemplate(String name)
     {
-        if(cache)
+        if(config.isCacheEnabled())
         {
             synchronized(templateCache)
             {
                 templateCache.remove(name);
                 templateExistsCache.remove(name);
             }
+        }
+    }
+
+    /**
+     * Template engine configuration.
+     */
+    public static class Config
+    {
+        /** template paths */
+        private final List<String> paths = new ArrayList<>();
+
+        /** template file extension */
+        private String extension = ".vt";
+
+        /** template encoding */
+        private String encoding = "UTF-8";
+
+        /** Caching flag. */
+        private boolean cacheEnabled = false;
+
+        /** Engine properties. */
+        private final ExtendedProperties properties = new ExtendedProperties();
+
+        /**
+         * Create a blank configuration.
+         */
+        public Config()
+        {
+        }
+
+        /**
+         * Create configuration from DNA Configuration object.
+         * 
+         * @param config DNA Configuration
+         * @throws ConfigurationException
+         */
+        public Config(Configuration config)
+            throws ConfigurationException
+        {
+            extension = config.getChild("extension").getValue(extension);
+            encoding = config.getChild("encoding").getValue(encoding);
+            cacheEnabled = config.getChild("cache").getValueAsBoolean(cacheEnabled);
+
+            Configuration[] path = config.getChild("paths").getChildren("path");
+            for(int i = 0; i < path.length; i++)
+            {
+                paths.add(path[i].getValue());
+            }
+            Configuration node = config.getChild("properties");
+            if(node != null)
+            {
+                Configuration[] properties = node.getChildren("property");
+                for(int i = 0; i < properties.length; i++)
+                {
+                    String name = properties[i].getAttribute("name");
+                    String value = properties[i].getAttribute("value", null);
+                    if(value == null)
+                    {
+                        value = properties[i].getValue();
+                    }
+                    this.properties.addProperty(name, value);
+                }
+            }
+        }
+
+        public List<String> getPaths()
+        {
+            return paths;
+        }
+
+        public Config withPath(String path)
+        {
+            this.paths.add(path);
+            return this;
+        }
+
+        public Config withPaths(Collection<String> paths)
+        {
+            this.paths.addAll(paths);
+            return this;
+        }
+
+        public String getExtension()
+        {
+            return extension;
+        }
+
+        public Config withExtension(String extension)
+        {
+            this.extension = extension;
+            return this;
+        }
+
+        public String getEncoding()
+        {
+            return encoding;
+        }
+
+        public Config withEncoding(String encoding)
+        {
+            this.encoding = encoding;
+            return this;
+        }
+
+        public boolean isCacheEnabled()
+        {
+            return cacheEnabled;
+        }
+
+        public Config withCacheEnabled(boolean cacheEnabled)
+        {
+            this.cacheEnabled = cacheEnabled;
+            return this;
+        }
+
+        public Config withProperty(String key, String value)
+        {
+            this.properties.addProperty(key, value);
+            return this;
+        }
+
+        void applyProperties(VelocityEngine target)
+        {
+            target.setExtendedProperties(properties);
         }
     }
 
