@@ -116,6 +116,13 @@ public interface Templating
 	 * @return character encoding name.
 	 */
 	public String getTemplateEncoding();
+
+    /**
+     * Return the filename extension used to identify template files.
+     * 
+     * @return filename extension.
+     */
+    public String getTemplateExtension();
     
     /**
      * Invalidate template in local cache.

@@ -409,6 +409,10 @@ public class VelocityTemplating
         return config.getEncoding();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getTemplateExtension()
     {
         return config.getExtension();
