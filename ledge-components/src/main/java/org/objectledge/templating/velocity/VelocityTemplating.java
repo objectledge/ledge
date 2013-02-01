@@ -559,6 +559,15 @@ public class VelocityTemplating
             return withProperty("velocimacro.library", path);
         }
 
+        public Config withLibraries(Collection<String> paths)
+        {
+            for(String path : paths)
+            {
+                withLibrary(path);
+            }
+            return this;
+        }
+
         void applyProperties(VelocityEngine target)
         {
             target.setExtendedProperties(properties);
