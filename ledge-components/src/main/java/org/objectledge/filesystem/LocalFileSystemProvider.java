@@ -496,7 +496,7 @@ public class LocalFileSystemProvider
     }
 
     /**
-     * Returns a java.io.File object at the given abstract path.
+     * Returns a local java.io.File object equivalent the given abstract path.
      * 
      * @param path the pathname.
      * @return java.io.File object.

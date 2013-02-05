@@ -40,7 +40,6 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,8 +52,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
-
-import com.google.common.base.Optional;
 
 /**
  * Provides an abstration of files available in the local file system, in the ClassLoader, web 
@@ -1210,40 +1207,21 @@ public class FileSystem
     }
 
     /**
-     * Returns File given text path relative to local file system provider This method only
-     * retrieves File handler to existing file. It does not create it.
+     * Returns a local java.io.File object equivalent the given abstract path.
      * 
      * @param path the path to the file
-     * @return Optional<File> the optional with file if found, absent otherwise.
-     * @throws MalformedURLException
-     * @throws URISyntaxException
+     * @return a File at given abstract path, or {@code null} if LocalFileSystem provider is not
+     *         available.
      */
-    public Optional<File> getFileRelativeToLocalFileSystem(String path)
-        throws MalformedURLException, URISyntaxException
+    public File getFile(String path)
     {
-        URL found = null;
         for(FileSystemProvider provider : providers)
         {
             if(provider instanceof LocalFileSystemProvider)
             {
-                LocalFileSystemProvider local = (LocalFileSystemProvider)provider;
-                URL resource = local.getResource(path);
-                if(resource != null)
-                {
-                    found = resource;
-                    break;
-                }
+                return ((LocalFileSystemProvider)provider).getFile(path);
             }
         }
-
-        if(found != null)
-        {
-            return Optional.of(new File(found.toURI()));
-        }
-        else
-        {
-            return Optional.absent();
-        }
+        return null;
     }
-
 }
