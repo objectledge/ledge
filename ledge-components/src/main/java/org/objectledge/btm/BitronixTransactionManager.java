@@ -16,6 +16,7 @@ import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.database.Transaction;
+import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.Startable;
 
 import bitronix.tm.TransactionManagerServices;
@@ -38,19 +39,20 @@ public class BitronixTransactionManager
 
     private final Logger log;
 
-    public BitronixTransactionManager(org.jcontainer.dna.Configuration config, Logger log)
+    public BitronixTransactionManager(org.jcontainer.dna.Configuration config,
+        FileSystem fileSystem, Logger log)
         throws ConfigurationException
     {
         ConfigurationHandler.configure(dataSources, connectionFactories, transactionConfig,
-            started, config);
+            started, config, fileSystem);
         btm = TransactionManagerServices.getTransactionManager();
         this.log = log;
     }
 
     public BitronixTransactionManager(String dsName, String dsClass, Properties dsProperties,
-        Logger logger)
+        FileSystem fileSystem, Logger logger)
     {
-        ConfigurationHandler.configure(dataSources, dsName, dsClass, dsProperties);
+        ConfigurationHandler.configure(dataSources, dsName, dsClass, dsProperties, fileSystem);
         btm = TransactionManagerServices.getTransactionManager();
         log = logger;
     }

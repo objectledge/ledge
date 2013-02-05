@@ -36,8 +36,6 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.btm.BitronixDataSource;
@@ -51,12 +49,14 @@ import org.objectledge.database.IdGenerator;
 import org.objectledge.database.SequenceIdGenerator;
 import org.objectledge.database.Transaction;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  *
  */
-public class PersistenceTest extends TestCase
+public class PersistenceTest
+    extends LedgeTestCase
 {
     private Persistence persistence;
 
@@ -68,7 +68,7 @@ public class PersistenceTest extends TestCase
     {
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties(), logger);
+            getDsProperties(), getFileSystem(), logger);
         DataSource dataSource = new BitronixDataSource("hsql", btm);
         prepareDataSource(dataSource);
         Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);

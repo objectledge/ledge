@@ -17,6 +17,7 @@ import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.configuration.ConfigurationFactory;
 import org.objectledge.context.Context;
 import org.objectledge.database.DatabaseUtils;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.test.Coordination;
 import org.objectledge.test.LedgeTestCase;
@@ -54,11 +55,12 @@ public class BitronixTransactionManagerTest
     private BitronixTransactionManager startBtm()
         throws IOException, ParserConfigurationException, SAXException, ConfigurationException
     {
-        ConfigurationFactory cf = new ConfigurationFactory(getFileSystem(), new XMLValidator(
+        final FileSystem fileSystem = getFileSystem();
+        ConfigurationFactory cf = new ConfigurationFactory(fileSystem, new XMLValidator(
             new XMLGrammarCache()), "/btm");
         initLog4J("INFO");
         return new BitronixTransactionManager(cf.getConfig("simple",
-            BitronixTransactionManager.class), new Log4JLogger(
+            BitronixTransactionManager.class), getFileSystem(), new Log4JLogger(
             Logger.getLogger(BitronixTransactionManager.class)));
     }
 
