@@ -93,7 +93,7 @@ public class DirectoryUserManagerTest extends LedgeTestCase
 
         DefaultPicoContainer container = new DefaultPicoContainer();
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties(), logger);
+            getDsProperties(), getFileSystem(), logger);
         DataSource ds = new BitronixDataSource("hsql", btm);
         prepareDataSource(ds);
         Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);

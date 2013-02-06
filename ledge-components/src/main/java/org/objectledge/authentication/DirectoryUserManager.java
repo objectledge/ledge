@@ -601,11 +601,18 @@ public class DirectoryUserManager
     {
         if(isLogonTrackingEnabled)
         {
-            DirContext dirContext = getPersonalData(account);
-            DirectoryParameters params = new DirectoryParameters(dirContext);
-            bumpUpLogonCounter(params);
-            refreshTimestamp(params);
-            dirContext.close();
+            try
+            {
+                DirContext dirContext = getPersonalData(account);
+                DirectoryParameters params = new DirectoryParameters(dirContext);
+                bumpUpLogonCounter(params);
+                refreshTimestamp(params);
+                dirContext.close();
+            }
+            catch(Exception e)
+            {
+                logger.error("failed to update logon tracking information", e);
+            }
         }
     }
 

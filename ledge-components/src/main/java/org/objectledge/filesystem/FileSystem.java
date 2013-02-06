@@ -29,6 +29,7 @@
 package org.objectledge.filesystem;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -72,6 +73,8 @@ public class FileSystem
     /** Maximum size of a file that is loaded into memory in one chunk by the. 
      * read() methods. */
     private int maxReadSize;
+
+    private String localFileSystemName;
 
     /**
      * Protected no-arg constructor to allow mocking.
@@ -1201,5 +1204,24 @@ public class FileSystem
             ClasspathFileSystemProvider("classpath", 
             FileSystem.class.getClassLoader());
         return new FileSystem(new FileSystemProvider[] { cfs }, 4096, 65536);
+    }
+
+    /**
+     * Returns a local java.io.File object equivalent the given abstract path.
+     * 
+     * @param path the path to the file
+     * @return a File at given abstract path, or {@code null} if LocalFileSystem provider is not
+     *         available.
+     */
+    public File getFile(String path)
+    {
+        for(FileSystemProvider provider : providers)
+        {
+            if(provider instanceof LocalFileSystemProvider)
+            {
+                return ((LocalFileSystemProvider)provider).getFile(path);
+            }
+        }
+        return null;
     }
 }

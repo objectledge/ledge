@@ -45,15 +45,24 @@ import org.objectledge.filesystem.FileSystem;
  */
 public class LedgeResourceLoader extends ResourceLoader
 {
-	/** FileSystem properties key. */
-	public static final String LEDGE_FILE_SYSTEM = "filesystem";
+    private static final String SCOPE = "objectledge.resource.loader.";
+    
+    /** ResourceLoader implementation propreties key. */
+    public static final String LEDGE_LOADER_CLASS = SCOPE + "class";
 
+    private static final String FILE_SYSTEM = "filesystem";
+    
+	/** FileSystem properties key. */
+    public static final String LEDGE_FILE_SYSTEM = SCOPE + FILE_SYSTEM;
+
+    private static final String LOG_SYSTEM = "logsystem";
+    
     /** LogSystem properties key. */
-    public static final String LOG_SYSTEM = "logsystem";
+    public static final String LEDGE_LOG_SYSTEM = SCOPE + LOG_SYSTEM;
 	 
 	/** the file system */
 	private FileSystem fileSystem;
-    
+
     /** the logger */
     private LogChute logChute;
 	
@@ -62,7 +71,7 @@ public class LedgeResourceLoader extends ResourceLoader
 	 */
 	public void init(ExtendedProperties properties)
 	{		
-		fileSystem = (FileSystem)properties.get(LEDGE_FILE_SYSTEM);
+        fileSystem = (FileSystem)properties.get(FILE_SYSTEM);
         logChute = (LogChute)properties.get(LOG_SYSTEM);
 	}
 

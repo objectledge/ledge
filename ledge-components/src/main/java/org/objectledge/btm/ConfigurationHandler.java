@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.database.Transaction;
+import org.objectledge.filesystem.FileSystem;
 
 import bitronix.tm.TransactionManagerServices;
 import bitronix.tm.resource.common.ResourceBean;
@@ -30,7 +31,7 @@ class ConfigurationHandler
 
     static void configure(Map<String, PoolingDataSource> dataSources,
         Map<String, PoolingConnectionFactory> connectionFactories, Transaction.Config tracing,
-        Set<ResourceBean> started, Configuration config)
+        Set<ResourceBean> started, Configuration config, FileSystem fileSystem)
         throws ConfigurationException
     {
         bitronix.tm.Configuration btm = TransactionManagerServices.getConfiguration();
@@ -40,7 +41,7 @@ class ConfigurationHandler
             switch(child.getName())
             {
             case "tm":
-                configureTm(btm, child);
+                configureTm(btm, child, fileSystem);
                 break;
             case "jdbc":
                 configureJdbc(dataSources, started, child);
@@ -108,7 +109,8 @@ class ConfigurationHandler
         }
     }
 
-    private static void configureTm(bitronix.tm.Configuration btm, Configuration config)
+    private static void configureTm(bitronix.tm.Configuration btm, Configuration config,
+        FileSystem fileSystem)
         throws ConfigurationException
     {
         for(Configuration child : config.getChildren())
@@ -137,7 +139,7 @@ class ConfigurationHandler
                 configureJndi(btm, child);
                 break;
             case "journal":
-                configureJournal(btm, child);
+                configureJournal(btm, child, fileSystem);
                 break;
             case "timer":
                 configureTimer(btm, child);
@@ -192,7 +194,7 @@ class ConfigurationHandler
         }
     }
 
-    private static void configureJournal(bitronix.tm.Configuration btm, Configuration config)
+    private static void configureJournal(bitronix.tm.Configuration btm, Configuration config, FileSystem fileSystem)
         throws ConfigurationException
     {
         for(Configuration child : config.getChildren())
@@ -205,7 +207,7 @@ class ConfigurationHandler
                 btm.setJournal(child.getValue());
                 break;
             case "disk":
-                configureDiskJournal(btm, child);
+                configureDiskJournal(btm, child, fileSystem);
                 break;
             default:
                 throw new ConfigurationException("unsupported element " + child.getName(),
@@ -214,7 +216,7 @@ class ConfigurationHandler
         }
     }
 
-    private static void configureDiskJournal(bitronix.tm.Configuration btm, Configuration config)
+    private static void configureDiskJournal(bitronix.tm.Configuration btm, Configuration config, FileSystem fileSystem)
         throws ConfigurationException
     {
         for(Configuration child : config.getChildren())
@@ -222,10 +224,10 @@ class ConfigurationHandler
             switch(child.getName())
             {
             case "logPart1Filename":
-                btm.setLogPart1Filename(child.getValue());
+                btm.setLogPart1Filename(resolvePath(child.getValue(), fileSystem));
                 break;
             case "logPart2Filename":
-                btm.setLogPart2Filename(child.getValue());
+                btm.setLogPart2Filename(resolvePath(child.getValue(), fileSystem));
                 break;
             case "forcedWriteEnabled":
                 btm.setForcedWriteEnabled(child.getValueAsBoolean());
@@ -246,6 +248,18 @@ class ConfigurationHandler
                 throw new ConfigurationException("unsupported element " + child.getName(),
                     child.getPath(), child.getLocation());
             }
+        }
+    }
+
+    private static String resolvePath(String path, FileSystem fileSystem)
+    {
+        if(path.startsWith("/"))
+        {
+            return path;
+        }
+        else
+        {
+            return fileSystem.getFile(path).getAbsolutePath();
         }
     }
 
@@ -465,13 +479,13 @@ class ConfigurationHandler
     }
 
     public static void configure(Map<String, PoolingDataSource> dataSources,
-        String dsName, String dsClass, Properties dsProperties)
+        String dsName, String dsClass, Properties dsProperties, FileSystem fileSystem)
     {
         bitronix.tm.Configuration btm = TransactionManagerServices.getConfiguration();
         setDefaults(btm);
         btm.setServerId("default");
-        btm.setLogPart1Filename("target/btm1.tlog");
-        btm.setLogPart2Filename("target/btm2.tlog");
+        btm.setLogPart1Filename(resolvePath("target/btm1.tlog", fileSystem));
+        btm.setLogPart2Filename(resolvePath("target/btm2.tlog", fileSystem));
         btm.setDisableJmx(true);
         PoolingDataSource ds = new PoolingDataSource();
         ds.setUniqueName(dsName);

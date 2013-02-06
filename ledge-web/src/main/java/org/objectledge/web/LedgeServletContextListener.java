@@ -1,5 +1,6 @@
 package org.objectledge.web;
 
+import java.io.File;
 import java.util.Collections;
 
 import javax.servlet.ServletContext;
@@ -137,7 +138,7 @@ public class LedgeServletContextListener
         String fsRoot = context.getInitParameter(ROOT_PARAM);
         if(fsRoot == null)
         {
-            fsRoot = (String)context.getAttribute(SERVLET_TEMPDIR_ATTR);
+            fsRoot = ((File)context.getAttribute(SERVLET_TEMPDIR_ATTR)).getAbsolutePath();
         }
         if(fsRoot == null)
         {
