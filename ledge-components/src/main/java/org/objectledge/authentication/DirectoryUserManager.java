@@ -161,6 +161,7 @@ public class DirectoryUserManager
         this.logger = logger;
         loginByName = new HashMap<String, String>();
         nameByLogin = new HashMap<String, String>();
+     
         defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").getValue(LOGIN_ATTRIBUTE_DEFAULT);
         mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
@@ -778,7 +779,7 @@ public class DirectoryUserManager
             NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
             List<String> results = new ArrayList<String>();
             int counter = 0;
-            while(counter < searchControls.getCountLimit() &&answer.hasMore())
+            while(counter <= searchControls.getCountLimit() && answer.hasMore())
             {
                 SearchResult result = answer.next();
                 results.add(result.getNameInNamespace());
@@ -886,7 +887,7 @@ public class DirectoryUserManager
     public boolean accountBlocked(String login)
         throws AuthenticationException
     {
-        String query = "(&(uid=" + login + ")(shadowFlag=*))";
+        String query = "(&(uid="+login+")(shadowFlag=*))";
         boolean accountBlocked = false;
         try
         {
