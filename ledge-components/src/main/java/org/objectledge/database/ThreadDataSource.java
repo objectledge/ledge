@@ -531,14 +531,20 @@ public class ThreadDataSource
     }
 
     private void setApplicationName(Connection conn, String name)
-        throws SQLException
     {
-        DatabaseMetaData md = conn.getMetaData();
-        String dbProd = md.getDatabaseProductName();
-        int dbMaj = md.getDatabaseMajorVersion();
-        if(dbProd.equals("PostgreSQL") && dbMaj >= 9)
+        try
         {
-            conn.setClientInfo("ApplicationName", name);
+            DatabaseMetaData md = conn.getMetaData();
+            String dbProd = md.getDatabaseProductName();
+            int dbMaj = md.getDatabaseMajorVersion();
+            if(dbProd.equals("PostgreSQL") && dbMaj >= 9)
+            {
+                conn.setClientInfo("ApplicationName", name);
+            }
+        }
+        catch(SQLException e)
+        {
+            log.error("failed to set ApplicationName", e);
         }
     }
 
