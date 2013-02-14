@@ -113,6 +113,8 @@ public class ThreadDataSource
 
     private static final int VALIDATION_TIMEOUT = 0;
 
+    private static final int ACQUIRE_RETRIES = 1;
+
     private boolean suppressNonPostgresWarning = false;
 
     /**
@@ -229,11 +231,25 @@ public class ThreadDataSource
         Connection conn = getCachedConnection(null);
         if(conn == null)
         {
-            conn = super.getConnection();
-            registerConnection(conn);
-            conn = new ThreadConnection(conn, null);
-            setCachedConnection(conn, null);
-            setApplicationName(conn, Thread.currentThread().getName());
+            conn = acquireConnection(null, null, ACQUIRE_RETRIES);
+        }
+        else
+        {
+            ((ThreadConnection)conn).enter();
+        }
+        return conn;
+    }
+
+    /**
+     * {@inheritDoc}
+     */    
+    public Connection getConnection(String user, String password)
+        throws SQLException
+    {
+        Connection conn = getCachedConnection(user);
+        if(conn == null)
+        {
+            conn = acquireConnection(user, password, ACQUIRE_RETRIES);
         }
         else
         {
@@ -367,26 +383,56 @@ public class ThreadDataSource
         log.info("disassociating connection " + wrapperId + " from thread " + threadName);
     }
 
-    /**
-     * {@inheritDoc}
-     */    
-    public Connection getConnection(String user, String password)
+    private Connection acquireConnection(String user, String password, int retries)
         throws SQLException
     {
-        Connection conn = getCachedConnection(user);
-        if(conn == null)
+        if(retries > 0)
         {
-            conn = super.getConnection(user, password);
-            conn = new ThreadConnection(conn, user);
-            setCachedConnection(conn, user);
+            try
+            {
+                Connection conn;
+                if(user != null)
+                {
+                    conn = super.getConnection(user, password);
+                }
+                else
+                {
+                    conn = super.getConnection();
+                }
+                setApplicationName(conn, Thread.currentThread().getName());
+                if(conn.isValid(VALIDATION_TIMEOUT))
+                {
+                    registerConnection(conn);
+                    conn = new ThreadConnection(conn, user);
+                    setCachedConnection(conn, user);
+                    return conn;
+                }
+                else
+                {
+                    log.error("invalid connection acquired, attempting to reconnect");
+                    try
+                    {
+                        conn.close();
+                    }
+                    catch(SQLException e)
+                    {
+                        log.error("exception when closing invalid connection", e);
+                    }
+                    return acquireConnection(user, password, retries - 1);
+                }
+            }
+            catch(SQLException e)
+            {
+                log.error("failed to acquire connection, attempting to reconnect", e);
+                return acquireConnection(user, password, retries - 1);
+            }
         }
         else
         {
-            ((ThreadConnection)conn).enter();
+            throw new SQLException("unable to acquire a valid connection");
         }
-        return conn;
     }
-    
+
     // GuardValve ///////////////////////////////////////////////////////////////////////////////
     
     /**
@@ -519,8 +565,7 @@ public class ThreadDataSource
             else
             {
                 log.error("Invalid cached connection detected - attempting to reconnect");
-                userMap.remove(user);
-                conn.close();
+                ((ThreadConnection)conn).closeConnection();
             }
         }
         catch(SQLException e)
@@ -745,8 +790,8 @@ public class ThreadDataSource
         {
             updateStatistics(reads, writes, totalTimeMillis);
             unregisterConnection(getDelegate());
-            getDelegate().close();
             setCachedConnection(null, user);
+            getDelegate().close();
         }
 
         // dependant objects handling ///////////////////////////////////////////////////////////
