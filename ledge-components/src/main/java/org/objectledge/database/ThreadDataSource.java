@@ -556,21 +556,24 @@ public class ThreadDataSource
             return null;
         }
         final Connection conn = userMap.get(user);
-        try
+        if(conn != null)
         {
-            if(conn.isValid(VALIDATION_TIMEOUT))
+            try
             {
-                return conn;
+                if(conn.isValid(VALIDATION_TIMEOUT))
+                {
+                    return conn;
+                }
+                else
+                {
+                    log.error("Invalid cached connection detected - attempting to reconnect");
+                    ((ThreadConnection)conn).closeConnection();
+                }
             }
-            else
+            catch(SQLException e)
             {
-                log.error("Invalid cached connection detected - attempting to reconnect");
-                ((ThreadConnection)conn).closeConnection();
+                log.error("error when closing connection", e);
             }
-        }
-        catch(SQLException e)
-        {
-            log.error("error when closing connection", e);
         }
         return null;
     }
