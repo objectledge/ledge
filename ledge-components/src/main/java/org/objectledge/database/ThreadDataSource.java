@@ -111,6 +111,8 @@ public class ThreadDataSource
     
     private static final Map<String, String> connToThread = new ConcurrentHashMap<>();
 
+    private static final int VALIDATION_TIMEOUT = 0;
+
     private boolean suppressNonPostgresWarning = false;
 
     /**
@@ -507,7 +509,25 @@ public class ThreadDataSource
         {
             return null;
         }
-        return userMap.get(user);
+        final Connection conn = userMap.get(user);
+        try
+        {
+            if(conn.isValid(VALIDATION_TIMEOUT))
+            {
+                return conn;
+            }
+            else
+            {
+                log.error("Invalid cached connection detected - attempting to reconnect");
+                userMap.remove(user);
+                conn.close();
+            }
+        }
+        catch(SQLException e)
+        {
+            log.error("error when closing connection", e);
+        }
+        return null;
     }
 
     private void setApplicationName(Connection conn, String name)
