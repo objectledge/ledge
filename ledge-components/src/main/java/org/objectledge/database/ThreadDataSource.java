@@ -400,7 +400,7 @@ public class ThreadDataSource
                     conn = super.getConnection();
                 }
                 setApplicationName(conn, Thread.currentThread().getName());
-                if(conn.isValid(VALIDATION_TIMEOUT))
+                if(validateConnection(conn))
                 {
                     registerConnection(conn);
                     conn = new ThreadConnection(conn, user);
@@ -430,6 +430,20 @@ public class ThreadDataSource
         else
         {
             throw new SQLException("unable to acquire a valid connection");
+        }
+    }
+
+    private boolean validateConnection(Connection conn)
+    {
+        try(Statement stmt = conn.createStatement())
+        {
+            stmt.executeQuery("SELECT 1");
+            return true;
+        }
+        catch(SQLException e)
+        {
+            log.debug("connection validation failed", e);
+            return false;
         }
     }
 
@@ -560,7 +574,7 @@ public class ThreadDataSource
         {
             try
             {
-                if(conn.isValid(VALIDATION_TIMEOUT))
+                if(validateConnection(conn))
                 {
                     return conn;
                 }
