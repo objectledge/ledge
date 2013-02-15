@@ -93,7 +93,9 @@ public class ThreadDataSourceTest
         context = new Context();
         context.clearAttributes();
         log = new Log4JLogger(org.apache.log4j.Logger.getLogger(ThreadDataSource.class));
-        threadDataSource = new ThreadDataSource(dataSource, tracing, false, null, context, null, log);
+        threadDataSource = new ThreadDataSource(dataSource, new ThreadDataSource.Config()
+            .withTracing(tracing).withValidationQuery("SELECT * FROM (VALUES(1))"), context, null,
+            null, log);
         guardValve = new ThreadDataSource.GuardValve(log);
     }
     
