@@ -43,4 +43,14 @@
       <text/>
     </element>
   </optional>
+  <optional>
+    <element name="retryCount">
+      <text/>
+    </element>
+  </optional>
+  <optional>
+    <element name="validationQuery">
+      <text/>
+    </element>
+  </optional>
 </element>
