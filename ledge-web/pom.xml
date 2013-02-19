@@ -83,19 +83,7 @@
     <dependency>
       <groupId>org.jmock</groupId>
       <artifactId>jmock-junit3</artifactId>
-    </dependency>
-    <dependency>
-	    <groupId>com.sun.jersey</groupId>
-	    <artifactId>jersey-server</artifactId>
-	</dependency>    
-	<dependency>
-	    <groupId>com.sun.jersey</groupId>
-	    <artifactId>jersey-servlet</artifactId>
-	</dependency>    
-	<dependency>
-	    <groupId>com.sun.jersey.contribs</groupId>
-	    <artifactId>jersey-multipart</artifactId>
-	</dependency> 	
+    </dependency>	
   </dependencies>
   <build>
     <resources>
