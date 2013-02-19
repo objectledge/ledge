@@ -1,6 +1,10 @@
 package org.objectledge.web.rest;
 
+import java.io.IOException;
+
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 
 import org.objectledge.authentication.ServerApiRestrictionProvider;
@@ -9,8 +13,6 @@ import org.objectledge.authentication.ServerApiRestrictions.AutorizationStatus;
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
 
 public class JerseyRestAuthenticationFilter
     implements ContainerRequestFilter
@@ -26,7 +28,9 @@ public class JerseyRestAuthenticationFilter
         this.context = context;
     }
 
-    public ContainerRequest filter(ContainerRequest containerRequest)
+    @Override
+    public void filter(ContainerRequestContext requestContext)
+        throws IOException
     {
         AutorizationStatus response = AutorizationStatus.UNDEFINED;
         HttpContext httpContext = context.getAttribute(HttpContext.class);
@@ -36,9 +40,10 @@ public class JerseyRestAuthenticationFilter
             if(serverApiRestrictions == null)
                 continue;
 
-            response = serverApiRestrictions.validateApiRequest(containerRequest.getPath(),
-                containerRequest.getMethod(), containerRequest.getHeaderValue("Authorization"),
-                httpContext.getRequest().getRemoteAddr(), containerRequest.isSecure());
+            response = serverApiRestrictions.validateApiRequest(requestContext.getUriInfo()
+                .getPath(), requestContext.getMethod(), requestContext
+                .getHeaderString("Authorization"), httpContext.getRequest().getRemoteAddr(),
+                requestContext.getSecurityContext().isSecure());
 
             if(!AutorizationStatus.UNDEFINED.equals(response))
                 break;
@@ -51,6 +56,5 @@ public class JerseyRestAuthenticationFilter
         {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
-        return containerRequest;
     }
 }
