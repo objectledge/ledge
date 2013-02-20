@@ -1,5 +1,7 @@
 package org.objectledge.pico;
 
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 import org.picocontainer.MutablePicoContainer;
@@ -26,8 +28,9 @@ public class ComponentProxyFactoryTest
     {
         MutablePicoContainer pico = new DefaultPicoContainer();
         pico.registerComponentImplementation(Contract.class, Impl.class);
-        Contract proxy = (Contract)ComponentProxyFactory.proxy(
-            pico.getComponentAdapter(Contract.class), pico, getClass().getClassLoader());
+        Map<Class<?>, Object> proxies = ComponentProxyFactory.proxies(pico, getClass()
+            .getClassLoader());
+        Contract proxy = (Contract)proxies.get(Contract.class);
         assertEquals(1, proxy.fun());
     }
 }
