@@ -30,21 +30,28 @@ public abstract class LazyValue<T>
     public final T get()
         throws InterruptedException, ExecutionException
     {
-        FutureTask<T> future = new FutureTask<>(new Callable<T>()
-            {
-                public T call()
-                    throws Exception
+        FutureTask<T> future = futureRef.get();
+        if(future == null)
+        {
+            // prepare to compute the value in this thread
+            future = new FutureTask<>(new Callable<T>()
                 {
-                    return compute();
-                }
-            });
-        if(futureRef.compareAndSet(null, future))
-        {
-            future.run();
-        }
-        else
-        {
-            future = futureRef.get();
+                    public T call()
+                        throws Exception
+                    {
+                        return compute();
+                    }
+                });
+            if(futureRef.compareAndSet(null, future))
+            {
+                // our thread is in the lead, proceed with computation
+                future.run();
+            }
+            else
+            {
+                // another thread beat us to it, wait for their computation to complete
+                future = futureRef.get();
+            }
         }
         return future.get();
     }
