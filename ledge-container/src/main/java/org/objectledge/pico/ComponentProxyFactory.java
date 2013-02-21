@@ -1,6 +1,7 @@
 package org.objectledge.pico;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
@@ -77,7 +78,14 @@ public class ComponentProxyFactory
         public Object invoke(Object proxy, Method method, Object[] args)
             throws Throwable
         {
-            return method.invoke(instance.get(), args);
+            try
+            {
+                return method.invoke(instance.get(), args);
+            }
+            catch(InvocationTargetException e)
+            {
+                throw e.getTargetException();
+            }
         }
     }
 }
