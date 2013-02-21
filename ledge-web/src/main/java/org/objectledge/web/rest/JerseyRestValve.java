@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.internal.FormDataParameterInjectionFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.jcontainer.dna.Configuration;
@@ -60,6 +61,7 @@ public class JerseyRestValve
         resourceConfig.packages(packageNamesArray);
         resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(compositeJacksonMapper);
+        resourceConfig.register(FormDataParameterInjectionFeature.class);
 
         resourceConfig.register(new LedgeBinder(container));
         for(AbstractBinder binder : binders)
