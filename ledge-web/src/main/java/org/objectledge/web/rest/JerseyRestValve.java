@@ -48,7 +48,8 @@ public class JerseyRestValve
      */
     public JerseyRestValve(MutablePicoContainer container, Logger logger,
         final Configuration config, final ServletContext servletContext,
-        final CompositeJacksonMapper compositeJacksonMapper, AbstractBinder[] binders)
+        final CompositeJacksonMapper compositeJacksonMapper, AbstractBinder[] binders,
+        JerseyConfigurationHook[] configurationHooks)
         throws ConfigurationException, ServletException
     {
         this.logger = logger;
@@ -68,6 +69,11 @@ public class JerseyRestValve
         for(AbstractBinder binder : binders)
         {
             resourceConfig.register(binder);
+        }
+
+        for(JerseyConfigurationHook configurationHook : configurationHooks)
+        {
+            configurationHook.configure(resourceConfig);
         }
 
         final Map<String, Object> parameters = ledgeServletConfig.getParameters();
