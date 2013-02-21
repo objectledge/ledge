@@ -62,6 +62,7 @@ public class JerseyRestValve
         resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(compositeJacksonMapper);
         resourceConfig.register(FormDataParameterInjectionFeature.class);
+        resourceConfig.register(JerseyRestAuthenticationFilter.class);
 
         resourceConfig.register(new LedgeBinder(container));
         for(AbstractBinder binder : binders)
