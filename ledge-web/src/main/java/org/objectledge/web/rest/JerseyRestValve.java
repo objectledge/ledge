@@ -12,6 +12,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
@@ -21,9 +25,10 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.picocontainer.MutablePicoContainer;
 
-import com.sun.jersey.api.core.PackagesResourceConfig;
-import com.sun.jersey.spi.container.servlet.ServletContainer;
-
+/**
+ * @author Marta Kalamar - original design
+ * @author Marek Lewandowski - rewrite for JAX-RS 2
+ */
 public class JerseyRestValve
     implements Valve
 {
@@ -40,8 +45,9 @@ public class JerseyRestValve
      * @throws ConfigurationException if the configuration is malformed.
      * @throws ServletException
      */
-    public JerseyRestValve(MutablePicoContainer restResourcesContaier, Logger logger,
-        final Configuration config, final ServletContext servletContext)
+    public JerseyRestValve(MutablePicoContainer container, Logger logger,
+        final Configuration config, final ServletContext servletContext,
+        final CompositeJacksonMapper compositeJacksonMapper, AbstractBinder[] binders)
         throws ConfigurationException, ServletException
     {
         this.logger = logger;
@@ -49,10 +55,21 @@ public class JerseyRestValve
         ArrayList<String> packageNames = getPackageNamesFromConfig(config);
         Configuration initParams = config.getChild("init-parameters", true);
         final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
-        final PackagesResourceConfig resourceConfig = new PackagesResourceConfig(packageNames.toArray(new String[packageNames.size()]));
-        resourceConfig.setPropertiesAndFeatures(ledgeServletConfig.getParameters());
-        resourceConfig.getSingletons().add(
-            new PicoComponentProviderFactory(restResourcesContaier, packageNames, logger));
+        final String[] packageNamesArray = packageNames.toArray(new String[packageNames.size()]);
+        ResourceConfig resourceConfig = new ResourceConfig();
+        resourceConfig.packages(packageNamesArray);
+        resourceConfig.register(JacksonFeature.class);
+        resourceConfig.register(compositeJacksonMapper);
+
+        resourceConfig.register(new LedgeBinder(container));
+        for(AbstractBinder binder : binders)
+        {
+            resourceConfig.register(binder);
+        }
+
+        final Map<String, Object> parameters = ledgeServletConfig.getParameters();
+        resourceConfig.addProperties(parameters);
+
         jerseyContainer = new ServletContainer(resourceConfig)
             {
                 @Override
