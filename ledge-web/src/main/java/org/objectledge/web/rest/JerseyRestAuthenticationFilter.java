@@ -7,9 +7,9 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 
-import org.objectledge.authentication.ServerApiRestrictionProvider;
-import org.objectledge.authentication.ServerApiRestrictions;
-import org.objectledge.authentication.ServerApiRestrictions.AutorizationStatus;
+import org.objectledge.authentication.api.ServerApiRestrictionProvider;
+import org.objectledge.authentication.api.ServerApiRestrictions;
+import org.objectledge.authentication.api.ServerApiRestrictions.AutorizationStatus;
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
 

@@ -1,4 +1,4 @@
-package org.objectledge.authentication;
+package org.objectledge.authentication.api;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

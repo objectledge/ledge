@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!--  
+ Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+-->
+
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  xmlns:a="http://objectledge.org/annotation/1.0" ns="http://objectledge.org/authentication/api/1.0">
+  <start>
+    <element name="config">
+      <zeroOrMore>
+        <element name="restrict">
+          <attribute name="enabled">
+            <a:documentation>Should server API be activated. When
+              false, all requests are
+              declined.
+            </a:documentation>
+            <data type="boolean">
+              <a:defaultValue>false</a:defaultValue>
+            </data>
+          </attribute>
+          <optional>
+            <attribute name="requireSsl">
+              <a:documentation>Are clients required to use SSL?
+              </a:documentation>
+              <data type="boolean">
+                <a:defaultValue>true</a:defaultValue>
+              </data>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="path">
+              <a:documentation>path or regexp path
+              </a:documentation>
+              <data type="string" />
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="methods">
+              <a:documentation>Methods splitted by comma
+                GET,POST,PUT,DELETE,HEAD,OPTION
+              </a:documentation>
+              <data type="string" />
+            </attribute>
+          </optional>
+          <interleave>
+            <optional>
+              <element name="httpBasic">
+                <a:documentation>HTTP basic authentication. It is
+                  recommended to use user and secret, or
+                  authorizedClients restrictions, or both.
+                </a:documentation>
+                <attribute name="user">
+                  <a:documentation>HTTP basic authentication user
+                    required from clients.
+                  </a:documentation>
+                  <data type="string" />
+                </attribute>
+                <attribute name="secret">
+                  <a:documentation>HTTP basic authentication
+                    password required from clients.
+                  </a:documentation>
+                  <data type="string" />
+                </attribute>
+              </element>
+            </optional>
+            <optional>
+              <element name="authorizedClients">
+                <a:documentation>Clients authorized to use the
+                  server API. When not present, no
+                  restrictions on
+                  client host.
+                </a:documentation>
+                <oneOrMore>
+                  <element name="addressRange">
+                    <data type="string">
+                      <param name="pattern">([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}|([a-fA-F0-9]{0,4}:){1,7}[a-fA-F0-9]{0,4}/[0-9]{1,3}
+                      </param>
+                    </data>
+                  </element>
+                </oneOrMore>
+              </element>
+            </optional>
+          </interleave>
+        </element>
+      </zeroOrMore>
+    </element>
+  </start>
+</grammar>
