@@ -5,7 +5,7 @@ import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 
 public class ServerApiRestrictionsProviderImpl
-    implements ServerApiRestrictionProvider
+    implements ServerApiRestrictionsProvider
 {
     private final ServerApiRestrictions serverApiRestrictions;
 

@@ -3,7 +3,7 @@ package org.objectledge.web.rest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import org.objectledge.authentication.api.ServerApiRestrictionProvider;
+import org.objectledge.authentication.api.ServerApiRestrictionsProvider;
 import org.objectledge.authentication.api.ServerApiRestrictions;
 import org.objectledge.authentication.api.ServerApiRestrictions.AutorizationStatus;
 import org.objectledge.context.Context;
@@ -15,11 +15,11 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
 public class JerseyRestAuthenticationFilter
     implements ContainerRequestFilter
 {
-    private final ServerApiRestrictionProvider[] providers;
+    private final ServerApiRestrictionsProvider[] providers;
 
     private final Context context;
 
-    public JerseyRestAuthenticationFilter(ServerApiRestrictionProvider[] providers,
+    public JerseyRestAuthenticationFilter(ServerApiRestrictionsProvider[] providers,
         Context context)
     {
         this.providers = providers;
@@ -30,7 +30,7 @@ public class JerseyRestAuthenticationFilter
     {
         AutorizationStatus response = AutorizationStatus.UNDEFINED;
         HttpContext httpContext = context.getAttribute(HttpContext.class);
-        for(ServerApiRestrictionProvider provider : providers)
+        for(ServerApiRestrictionsProvider provider : providers)
         {
             ServerApiRestrictions serverApiRestrictions = provider.getServerApiRestrictions();
             if(serverApiRestrictions == null)

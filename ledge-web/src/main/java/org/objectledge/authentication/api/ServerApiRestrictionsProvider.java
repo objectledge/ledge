@@ -1,7 +1,7 @@
 package org.objectledge.authentication.api;
 
 
-public interface ServerApiRestrictionProvider
+public interface ServerApiRestrictionsProvider
 {
     public ServerApiRestrictions getServerApiRestrictions();
 }
