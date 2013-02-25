@@ -8,9 +8,9 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 
-import org.objectledge.authentication.api.ServerApiRestrictionProvider;
 import org.objectledge.authentication.api.ServerApiRestrictions;
 import org.objectledge.authentication.api.ServerApiRestrictions.AutorizationStatus;
+import org.objectledge.authentication.api.ServerApiRestrictionsProvider;
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
 
@@ -19,7 +19,7 @@ public class JerseyRestAuthenticationFilter
     implements ContainerRequestFilter
 {
     @Inject
-    private ServerApiRestrictionProvider provider;
+    private ServerApiRestrictionsProvider provider;
 
     @Override
     public void filter(ContainerRequestContext requestContext)
