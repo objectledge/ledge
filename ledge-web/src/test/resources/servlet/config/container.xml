@@ -4,10 +4,22 @@
   <container key="restResourceContainer" />
 
   <component class="org.objectledge.web.rest.JerseyRestValve">
-    <parameter key="restResourceContainer" />
+    <parameter key="restResourceContainer"/>
     <parameter />
     <parameter />
     <parameter />
+    <parameter />
+    <sequence>
+    	<!-- Add binders for @Inject -->
+    </sequence>
+    <sequence>
+   		<!-- Jersey configuration hooks, register filters, features, properties etc. -->
+    </sequence>
+  </component>
+  
+  <component class="org.objectledge.web.rest.CompositeJacksonMapper">
+    <sequence>
+    </sequence>
   </component>
 
   <component key="restDispatcher" class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
