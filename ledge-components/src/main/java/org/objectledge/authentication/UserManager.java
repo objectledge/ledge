@@ -20,7 +20,7 @@ public interface UserManager
      * @param login the login name to be checked.
      * @return <code>true</code> if a login name is a non-occupied and non-reserved.
      */
-    public abstract boolean checkLogin(String login);
+    public boolean checkLogin(String login);
 
     /**
      * Checks if a login name is acceptable.
@@ -28,7 +28,7 @@ public interface UserManager
      * @param login the login name to be checked.
      * @return <code>true</code> if a login name is correct.
      */
-    public abstract boolean validateLogin(String login);
+    public boolean validateLogin(String login);
 
     /**
      * Creates a distinguished name from provided parameters in conformance to configured naming
@@ -37,7 +37,7 @@ public interface UserManager
      * @param parameters the parameters to generate name from.
      * @return the distinghished name.
      */
-    public abstract String createDN(Parameters parameters);
+    public String createDN(Parameters parameters);
 
     /**
      * Check if user exists.
@@ -45,7 +45,7 @@ public interface UserManager
      * @param dn the name of the user.
      * @return <code>true</code> if user exists in system.
      */
-    public abstract boolean userExists(String dn);
+    public boolean userExists(String dn);
 
     /**
      * Check if email exists.
@@ -53,7 +53,7 @@ public interface UserManager
      * @param email the address to check for.
      * @return <code>true</code> if emails exists in system
      */
-    public abstract boolean emailExists(String email);
+    public boolean emailExists(String email);
 
     /**
      * Creates a new user account.
@@ -63,7 +63,7 @@ public interface UserManager
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
-    public abstract Principal createAccount(String login, String password)
+    public Principal createAccount(String login, String password)
         throws AuthenticationException;
 
     /**
@@ -77,7 +77,7 @@ public interface UserManager
      * @return the newly created account.
      * @throws AuthenticationException if the account could no be created.
      */
-    public abstract Principal createAccount(String login, String password, boolean blockPassword,
+    public Principal createAccount(String login, String password, boolean blockPassword,
         Attributes attributes)
         throws AuthenticationException;
 
@@ -88,7 +88,7 @@ public interface UserManager
      * @return
      * @throws AuthenticationException
      */
-    public abstract boolean accountBlocked(String login)
+    public boolean accountBlocked(String login)
         throws AuthenticationException;
 
     /**
@@ -97,7 +97,7 @@ public interface UserManager
      * @param account the account.
      * @throws AuthenticationException if the account could no be removed.
      */
-    public abstract void removeAccount(Principal account)
+    public void removeAccount(Principal account)
         throws AuthenticationException;
 
     /**
@@ -107,7 +107,7 @@ public interface UserManager
      * @return the account's descriptor.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract Principal getUserByName(String dn)
+    public Principal getUserByName(String dn)
         throws AuthenticationException;
 
     /**
@@ -117,7 +117,7 @@ public interface UserManager
      * @return the account's descriptor.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract Principal getUserByLogin(String login)
+    public Principal getUserByLogin(String login)
         throws AuthenticationException;
 
     /**
@@ -127,7 +127,7 @@ public interface UserManager
      * @return
      * @throws AuthenticationException
      */
-    public abstract Principal getUserByMail(String mail)
+    public Principal getUserByMail(String mail)
         throws AuthenticationException;
 
     /**
@@ -138,7 +138,7 @@ public interface UserManager
      * @throws AuthenticationException if there is a problem performing the operation.
      * @throws InvalidNameException if the name does not conform to the configured naming policy.
      */
-    public abstract String getLogin(String dn)
+    public String getLogin(String dn)
         throws AuthenticationException, InvalidNameException;
 
     /**
@@ -149,7 +149,7 @@ public interface UserManager
      * @throws AuthenticationException if there is a problem performing the operation.
      * @throws InvalidNameException if the name does not conform to the configured naming policy.
      */
-    public abstract String getLogin(Principal account)
+    public String getLogin(Principal account)
         throws AuthenticationException, InvalidNameException;
 
     /**
@@ -158,7 +158,7 @@ public interface UserManager
      * @return the anonyomous user.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract Principal getAnonymousAccount()
+    public Principal getAnonymousAccount()
         throws AuthenticationException;
 
     /**
@@ -167,7 +167,7 @@ public interface UserManager
      * @return the superuser.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract Principal getSuperuserAccount()
+    public Principal getSuperuserAccount()
         throws AuthenticationException;
 
     /**
@@ -177,7 +177,7 @@ public interface UserManager
      * @param password the new password for the account.
      * @throws AuthenticationException if the password could not be changed.
      */
-    public abstract void changeUserPassword(Principal account, String password)
+    public void changeUserPassword(Principal account, String password)
         throws AuthenticationException;
 
     /**
@@ -187,7 +187,7 @@ public interface UserManager
      * @param attributes to change
      * @throws AuthenticationException
      */
-    public abstract void changeUserAttribiutes(Principal account, Attributes attribiutes)
+    public void changeUserAttribiutes(Principal account, Attributes attribiutes)
         throws AuthenticationException;
 
     /**
@@ -198,7 +198,7 @@ public interface UserManager
      * @return <code>true</code> if the supplied password is correct.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract boolean checkUserPassword(Principal account, String password)
+    public boolean checkUserPassword(Principal account, String password)
         throws AuthenticationException;
 
     /**
@@ -209,7 +209,7 @@ public interface UserManager
      * @param account the account
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract void enableUserPassword(Principal account)
+    public void enableUserPassword(Principal account)
         throws AuthenticationException;
 
     /**
@@ -219,7 +219,7 @@ public interface UserManager
      * @param max maximum length.
      * @return a random passeword.
      */
-    public abstract String createRandomPassword(int min, int max);
+    public String createRandomPassword(int min, int max);
 
     /**
      * Returns the personal data of the accoun't owner.
@@ -228,7 +228,7 @@ public interface UserManager
      * @return Parameters view of the account's owner personal data.
      * @throws AuthenticationException if there is a problem performing the operation.
      */
-    public abstract DirContext getPersonalData(Principal account)
+    public DirContext getPersonalData(Principal account)
         throws AuthenticationException;
 
     /**
@@ -239,7 +239,7 @@ public interface UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException if the opertion could not be performed.
      */
-    public abstract Collection<Principal> lookupAccounts(String attribute, String value)
+    public Collection<Principal> lookupAccounts(String attribute, String value)
         throws NamingException;
 
     /**
@@ -249,7 +249,7 @@ public interface UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException if the opertion could not be performed.
      */
-    public abstract Collection<Principal> lookupAccounts(String query)
+    public Collection<Principal> lookupAccounts(String query)
         throws NamingException;
 
     /**
@@ -260,7 +260,7 @@ public interface UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException
      */
-    public abstract Collection<Principal> lookupAccounts(String query,
+    public Collection<Principal> lookupAccounts(String query,
         SearchControls searchControlls)
         throws NamingException;
 
@@ -272,7 +272,7 @@ public interface UserManager
      * @return
      * @throws AuthenticationException
      */
-    public abstract String getUserAttribute(Principal account, String attribute)
+    public String getUserAttribute(Principal account, String attribute)
         throws AuthenticationException;
 
     /**
@@ -283,7 +283,7 @@ public interface UserManager
      * @throws AuthenticationException if the opertion could not be performed.
      * @throws NamingException if closing directory context fails
      */
-    public abstract void updateTrackingInformation(Principal account)
+    public void updateTrackingInformation(Principal account)
         throws AuthenticationException, NamingException;
 
 }
