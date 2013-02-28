@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,10 +43,15 @@ public class ComponentProxyFactory
         for(ComponentAdapter adapter : (Collection<ComponentAdapter>)container
             .getComponentAdapters())
         {
-            Class<?>[] interfaces = adapter.getComponentImplementation().getInterfaces();
-            if(interfaces.length > 0)
+            final Class<?> clazz = adapter.getComponentImplementation();
+            Collection<Class<?>> interfaces = new ArrayList<>();
+            interfaces = getInheritedInterfaces(interfaces, clazz);
+            final Class<?>[] declaredInterfaces = clazz.getInterfaces();
+            interfaces.addAll(Arrays.asList(declaredInterfaces));
+            if(interfaces.size() > 0)
             {
-                Object proxy = Proxy.newProxyInstance(cl, interfaces,
+                Object proxy = Proxy.newProxyInstance(cl,
+                    interfaces.toArray(new Class[interfaces.size()]),
                     new ComponentInvocationHandler(container, adapter));
                 for(Class<?> iface : interfaces)
                 {
@@ -53,6 +60,21 @@ public class ComponentProxyFactory
             }
         }
         return proxies;
+    }
+
+    private static Collection<Class<?>> getInheritedInterfaces(
+        Collection<Class<?>> inheritedInterfaces, Class<?> clazz)
+    {
+        final Class<?> superclass = clazz.getSuperclass();
+        if(superclass != null && !superclass.equals(Object.class))
+        {
+            inheritedInterfaces.addAll(Arrays.asList(superclass.getInterfaces()));
+            return getInheritedInterfaces(inheritedInterfaces, superclass);
+        }
+        else
+        {
+            return inheritedInterfaces;
+        }
     }
 
     private static class ComponentInvocationHandler
