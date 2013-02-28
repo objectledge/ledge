@@ -67,7 +67,7 @@ import org.objectledge.parameters.directory.DirectoryParameters;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class DirectoryUserManager
-    extends UserManager
+    extends AbstractUserManager
 {
     /** Default value for login attribute name. */
     public static final String LOGIN_ATTRIBUTE_DEFAULT = "uid";

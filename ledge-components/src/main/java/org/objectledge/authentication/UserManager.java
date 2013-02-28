@@ -1,30 +1,3 @@
-// 
-// Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
-// All rights reserved. 
-// 
-// Redistribution and use in source and binary forms, with or without modification,  
-// are permitted provided that the following conditions are met: 
-//  
-// * Redistributions of source code must retain the above copyright notice,  
-//	 this list of conditions and the following disclaimer. 
-// * Redistributions in binary form must reproduce the above copyright notice,  
-//	 this list of conditions and the following disclaimer in the documentation  
-//	 and/or other materials provided with the distribution. 
-// * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-//	 nor the names of its contributors may be used to endorse or promote products  
-//	 derived from this software without specific prior written permission. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-// IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
-// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
-// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
-// OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
-// POSSIBILITY OF SUCH DAMAGE. 
-// 
 package org.objectledge.authentication;
 
 import java.security.Principal;
@@ -38,55 +11,8 @@ import javax.naming.directory.SearchControls;
 
 import org.objectledge.parameters.Parameters;
 
-/**
- * A base implementation of the UserManager interface.
- * 
- * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
- * @version $Id: UserManager.java,v 1.5 2006-04-24 09:50:50 rafal Exp $
- */
-public abstract class UserManager
+public interface UserManager
 {
-    // instance variables ///////////////////////////////////////////////////////////////////////
-
-    /** the naming policy to be used. */
-    protected NamingPolicy namingPolicy;
-
-    /** the login verifier to be used. */
-    protected LoginVerifier loginVerifier;
-
-    /** the password digester to be used. */
-    protected PasswordDigester passwordDigester;
-
-    /** the password generator to be used. */
-    protected PasswordGenerator passwordGenerator;
-
-    // initialization ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * No-arg ctor for mock object testing.
-     */
-    protected UserManager()
-    {
-    }
-
-    /**
-     * Creates an instance of the user manager.
-     * 
-     * @param namingPolicy the namig policy to be used.
-     * @param loginVerifier the login verifier.
-     * @param passwordGenerator the password generator.
-     * @param passwordDigester the password digester.
-     */
-    public UserManager(NamingPolicy namingPolicy, LoginVerifier loginVerifier,
-        PasswordGenerator passwordGenerator, PasswordDigester passwordDigester)
-    {
-        this.namingPolicy = namingPolicy;
-        this.loginVerifier = loginVerifier;
-        this.passwordGenerator = passwordGenerator;
-        this.passwordDigester = passwordDigester;
-    }
-
-    // account creation + removal ///////////////////////////////////////////////////////////////
 
     /**
      * Checks if a login name is a non-occupied and non-reserved one.
@@ -94,10 +20,7 @@ public abstract class UserManager
      * @param login the login name to be checked.
      * @return <code>true</code> if a login name is a non-occupied and non-reserved.
      */
-    public boolean checkLogin(String login)
-    {
-        return loginVerifier.checkLogin(login);
-    }
+    public abstract boolean checkLogin(String login);
 
     /**
      * Checks if a login name is acceptable.
@@ -105,10 +28,7 @@ public abstract class UserManager
      * @param login the login name to be checked.
      * @return <code>true</code> if a login name is correct.
      */
-    public boolean validateLogin(String login)
-    {
-        return loginVerifier.validate(login);
-    }
+    public abstract boolean validateLogin(String login);
 
     /**
      * Creates a distinguished name from provided parameters in conformance to configured naming
@@ -117,10 +37,7 @@ public abstract class UserManager
      * @param parameters the parameters to generate name from.
      * @return the distinghished name.
      */
-    public String createDN(Parameters parameters)
-    {
-        return namingPolicy.getDn(parameters);
-    }
+    public abstract String createDN(Parameters parameters);
 
     /**
      * Check if user exists.
@@ -163,7 +80,7 @@ public abstract class UserManager
     public abstract Principal createAccount(String login, String password, boolean blockPassword,
         Attributes attributes)
         throws AuthenticationException;
-    
+
     /**
      * Check if account is blocked
      * 
@@ -171,8 +88,9 @@ public abstract class UserManager
      * @return
      * @throws AuthenticationException
      */
-    public abstract boolean accountBlocked(String login) throws AuthenticationException;
-    
+    public abstract boolean accountBlocked(String login)
+        throws AuthenticationException;
+
     /**
      * Removes an user account.
      * 
@@ -181,8 +99,6 @@ public abstract class UserManager
      */
     public abstract void removeAccount(Principal account)
         throws AuthenticationException;
-
-    // user lookups /////////////////////////////////////////////////////////////////////////////
 
     /**
      * Lookup user by distinguised name.
@@ -222,11 +138,8 @@ public abstract class UserManager
      * @throws AuthenticationException if there is a problem performing the operation.
      * @throws InvalidNameException if the name does not conform to the configured naming policy.
      */
-    public String getLogin(String dn)
-        throws AuthenticationException, InvalidNameException
-    {
-        return namingPolicy.getLogin(dn);
-    }
+    public abstract String getLogin(String dn)
+        throws AuthenticationException, InvalidNameException;
 
     /**
      * Returns the login name of an user.
@@ -236,13 +149,8 @@ public abstract class UserManager
      * @throws AuthenticationException if there is a problem performing the operation.
      * @throws InvalidNameException if the name does not conform to the configured naming policy.
      */
-    public String getLogin(Principal account)
-        throws AuthenticationException, InvalidNameException
-    {
-        return namingPolicy.getLogin(account.getName());
-    }
-
-    // system users /////////////////////////////////////////////////////////////////////////////
+    public abstract String getLogin(Principal account)
+        throws AuthenticationException, InvalidNameException;
 
     /**
      * Returns the anonymous account.
@@ -262,8 +170,6 @@ public abstract class UserManager
     public abstract Principal getSuperuserAccount()
         throws AuthenticationException;
 
-    // passwords ////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Changes user password.
      * 
@@ -280,7 +186,7 @@ public abstract class UserManager
      * @param account to change
      * @param attributes to change
      * @throws AuthenticationException
-    */
+     */
     public abstract void changeUserAttribiutes(Principal account, Attributes attribiutes)
         throws AuthenticationException;
 
@@ -305,7 +211,7 @@ public abstract class UserManager
      */
     public abstract void enableUserPassword(Principal account)
         throws AuthenticationException;
-    
+
     /**
      * Generates a random password.
      * 
@@ -313,12 +219,7 @@ public abstract class UserManager
      * @param max maximum length.
      * @return a random passeword.
      */
-    public String createRandomPassword(int min, int max)
-    {
-        return passwordGenerator.createRandomPassword(min, max);
-    }
-
-    // personal data ////////////////////////////////////////////////////////////////////////////
+    public abstract String createRandomPassword(int min, int max);
 
     /**
      * Returns the personal data of the accoun't owner.
@@ -359,8 +260,9 @@ public abstract class UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException
      */
-    public abstract Collection<Principal> lookupAccounts(String query, SearchControls searchControlls) 
-                    throws NamingException;
+    public abstract Collection<Principal> lookupAccounts(String query,
+        SearchControls searchControlls)
+        throws NamingException;
 
     /**
      * Gets any user attribute data
@@ -383,4 +285,5 @@ public abstract class UserManager
      */
     public abstract void updateTrackingInformation(Principal account)
         throws AuthenticationException, NamingException;
+
 }
