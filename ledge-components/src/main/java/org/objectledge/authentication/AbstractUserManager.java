@@ -28,13 +28,8 @@
 package org.objectledge.authentication;
 
 import java.security.Principal;
-import java.util.Collection;
 
 import javax.naming.InvalidNameException;
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.SearchControls;
 
 import org.objectledge.parameters.Parameters;
 
@@ -116,69 +111,6 @@ public abstract class AbstractUserManager implements UserManager
     }
 
     /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#userExists(java.lang.String)
-     */
-    @Override
-    public abstract boolean userExists(String dn);
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#emailExists(java.lang.String)
-     */
-    @Override
-    public abstract boolean emailExists(String email);
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#createAccount(java.lang.String, java.lang.String)
-     */
-    @Override
-    public abstract Principal createAccount(String login, String password)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#createAccount(java.lang.String, java.lang.String, boolean, javax.naming.directory.Attributes)
-     */
-    @Override
-    public abstract Principal createAccount(String login, String password, boolean blockPassword,
-        Attributes attributes)
-        throws AuthenticationException;
-    
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#accountBlocked(java.lang.String)
-     */
-    @Override
-    public abstract boolean accountBlocked(String login) throws AuthenticationException;
-    
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#removeAccount(java.security.Principal)
-     */
-    @Override
-    public abstract void removeAccount(Principal account)
-        throws AuthenticationException;
-
-    // user lookups /////////////////////////////////////////////////////////////////////////////
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#getUserByName(java.lang.String)
-     */
-    @Override
-    public abstract Principal getUserByName(String dn)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#getUserByLogin(java.lang.String)
-     */
-    @Override
-    public abstract Principal getUserByLogin(String login)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#getUserByMail(java.lang.String)
-     */
-    @Override
-    public abstract Principal getUserByMail(String mail)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
      * @see org.objectledge.authentication.UserManager#getLogin(java.lang.String)
      */
     @Override
@@ -198,52 +130,6 @@ public abstract class AbstractUserManager implements UserManager
         return namingPolicy.getLogin(account.getName());
     }
 
-    // system users /////////////////////////////////////////////////////////////////////////////
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#getAnonymousAccount()
-     */
-    @Override
-    public abstract Principal getAnonymousAccount()
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#getSuperuserAccount()
-     */
-    @Override
-    public abstract Principal getSuperuserAccount()
-        throws AuthenticationException;
-
-    // passwords ////////////////////////////////////////////////////////////////////////////////
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#changeUserPassword(java.security.Principal, java.lang.String)
-     */
-    @Override
-    public abstract void changeUserPassword(Principal account, String password)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#changeUserAttribiutes(java.security.Principal, javax.naming.directory.Attributes)
-     */
-    @Override
-    public abstract void changeUserAttribiutes(Principal account, Attributes attribiutes)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#checkUserPassword(java.security.Principal, java.lang.String)
-     */
-    @Override
-    public abstract boolean checkUserPassword(Principal account, String password)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#enableUserPassword(java.security.Principal)
-     */
-    @Override
-    public abstract void enableUserPassword(Principal account)
-        throws AuthenticationException;
-    
     /* (non-Javadoc)
      * @see org.objectledge.authentication.UserManager#createRandomPassword(int, int)
      */
@@ -252,48 +138,4 @@ public abstract class AbstractUserManager implements UserManager
     {
         return passwordGenerator.createRandomPassword(min, max);
     }
-
-    // personal data ////////////////////////////////////////////////////////////////////////////
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#getPersonalData(java.security.Principal)
-     */
-    @Override
-    public abstract DirContext getPersonalData(Principal account)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#lookupAccounts(java.lang.String, java.lang.String)
-     */
-    @Override
-    public abstract Collection<Principal> lookupAccounts(String attribute, String value)
-        throws NamingException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#lookupAccounts(java.lang.String)
-     */
-    @Override
-    public abstract Collection<Principal> lookupAccounts(String query)
-        throws NamingException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#lookupAccounts(java.lang.String, javax.naming.directory.SearchControls)
-     */
-    @Override
-    public abstract Collection<Principal> lookupAccounts(String query, SearchControls searchControlls) 
-                    throws NamingException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#getUserAttribute(java.security.Principal, java.lang.String)
-     */
-    @Override
-    public abstract String getUserAttribute(Principal account, String attribute)
-        throws AuthenticationException;
-
-    /* (non-Javadoc)
-     * @see org.objectledge.authentication.UserManager#updateTrackingInformation(java.security.Principal)
-     */
-    @Override
-    public abstract void updateTrackingInformation(Principal account)
-        throws AuthenticationException, NamingException;
 }
