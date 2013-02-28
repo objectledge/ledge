@@ -112,33 +112,40 @@ public class ErrorHandlingPipeline
         ///CLOVER:ON
         catch(Throwable e)
         {
-            // log with debug verbosity only - the application is attempting to recover or 
-            // report the error at this point
-            logger.debug("Exception in try section", e);
-            context.setAttribute(PIPELINE_EXCEPTION, e);
-            try
+            if(catchValves.length > 0)
             {
-                for(int i = 0; i < catchValves.length; i++)
+                // the application is attempting to recover or report the error at this point
+                // log with debug verbosity only
+                logger.debug("Exception in try section", e);
+                context.setAttribute(PIPELINE_EXCEPTION, e);
+                try
                 {
-                    catchValves[i].process(context);
+                    for(int i = 0; i < catchValves.length; i++)
+                    {
+                        catchValves[i].process(context);
+                    }
+                }
+                // /CLOVER:OFF
+                catch(VirtualMachineError ee)
+                {
+                    throw ee;
+                }
+                catch(ThreadDeath ee)
+                {
+                    throw ee;
+                }
+                // /CLOVER:ON
+                catch(Throwable ee)
+                {
+                    context.setAttribute(PIPELINE_EXCEPTION, new ProcessingException(
+                        "exception occured while handling the exception: " + e.toString()
+                        + " see logs for detailed message", ee));
+                    logger.error("Exception in catch section", ee);
                 }
             }
-            ///CLOVER:OFF
-            catch(VirtualMachineError ee)
+            else
             {
-                throw ee;
-            }
-            catch(ThreadDeath ee)
-            {
-                throw ee;
-            }
-            ///CLOVER:ON
-            catch(Throwable ee)
-            {
-                context.setAttribute(PIPELINE_EXCEPTION, new ProcessingException(
-                    "exception occured while handling the exception: " + e.toString()
-                        + " see logs for detailed message", ee));
-                logger.error("Exception in catch section", ee);
+                logger.error("Exception in try section", e);
             }
         }
         finally
