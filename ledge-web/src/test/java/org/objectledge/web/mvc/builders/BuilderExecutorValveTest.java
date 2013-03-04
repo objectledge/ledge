@@ -97,6 +97,7 @@ public class BuilderExecutorValveTest
         Mock mockServletResponse = mock(HttpServletResponse.class);
         HttpContext httpContext = new HttpContext((HttpServletRequest)mockServletRequest.proxy(), 
             (HttpServletResponse)mockServletResponse.proxy());
+        mockServletResponse.stubs().method("isCommitted").will(returnValue(false));
         context.setAttribute(MVCContext.class, mvcContext);
         TemplatingContext templatingContext = templating.createContext();
         templatingContext.put(viewEnclosureManager.getKey(), viewEnclosureManager.getTool());
