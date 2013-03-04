@@ -15,6 +15,7 @@ import javax.security.auth.spi.LoginModule;
 
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.DefaultPrincipal;
+import org.objectledge.authentication.AbstractUserManager;
 import org.objectledge.authentication.UserManager;
 
 public class UserManagerLoginModule
@@ -36,7 +37,7 @@ public class UserManagerLoginModule
         Map<String, ? > sharedState, Map<String, ? > options)
     {
         this.subject = subject;
-        userManager = (UserManager)options.get(UserManager.class.getName());
+        userManager = (UserManager)options.get(AbstractUserManager.class.getName());
         if(userManager == null)
         {
             throw new RuntimeException("Unable to access UserManager");

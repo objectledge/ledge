@@ -42,7 +42,7 @@ import javax.naming.directory.SearchControls;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class DummyUserManager
-    extends UserManager
+    extends AbstractUserManager
 {
     /** A string that may be used as {@code dn} or {@code login} to simulate missing user account. */
     public static final String MISSSING_USER = "MISSING";
