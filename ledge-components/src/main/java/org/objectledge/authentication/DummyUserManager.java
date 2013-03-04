@@ -237,4 +237,17 @@ public class DummyUserManager
     {
         throw new UnsupportedOperationException("Dummy manager cannot check if account is disabled");
     }
+
+    @Override
+    public long checkUserPasswordExpiration(Principal account)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Dummy manager cannot check if account is blocked");
+    }
+
+    @Override
+    public BlockedReason checkAccountFlag(Principal account)
+    {
+        throw new UnsupportedOperationException("Failed to check account shadowFlag");        
+    }
 }

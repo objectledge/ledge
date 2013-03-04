@@ -31,7 +31,9 @@ package org.objectledge.authentication;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -161,7 +163,7 @@ public class DirectoryUserManager
         this.logger = logger;
         loginByName = new HashMap<String, String>();
         nameByLogin = new HashMap<String, String>();
-     
+
         defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").getValue(LOGIN_ATTRIBUTE_DEFAULT);
         mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
@@ -894,7 +896,7 @@ public class DirectoryUserManager
     public boolean accountBlocked(String login)
         throws AuthenticationException
     {
-        String query = "(&(uid="+login+")(shadowFlag=*))";
+        String query = "(&(uid=" + login + ")(shadowFlag=*))";
         boolean accountBlocked = false;
         try
         {
@@ -909,5 +911,51 @@ public class DirectoryUserManager
             // defaults to false
         }
         return accountBlocked;
+    }
+
+    @Override
+    public long checkUserPasswordExpiration(Principal account)
+        throws AuthenticationException
+    {
+        final Parameters params = new DirectoryParameters(getPersonalData(account));
+        if(params.isDefined("shadowLastChange")
+            && params.isDefined("shadowMax")
+            && params.isDefined("shadowWarning"))
+        {
+            long lastChange = params.getLong("shadowLastChange");
+            long expirationMax = params.getLong("shadowMax");
+            long expirationWarningDays = params
+                .getInt("shadowWarning");                  
+            long passwordUnchanged = countPasswordUnchangedDays(lastChange);            
+            long actualExpirationDays = expirationMax - passwordUnchanged;
+            if(actualExpirationDays > expirationWarningDays)
+            {
+                return -1;
+            }
+            return actualExpirationDays;
+        }
+        return -1;
+    }
+    
+    private long countPasswordUnchangedDays(long lastChange)
+    {
+        Calendar lastChangeTime = Calendar.getInstance();
+        Calendar currentTime = Calendar.getInstance();
+        lastChangeTime.setTimeInMillis(lastChange);
+        currentTime.setTime(new Date());
+        long diff = currentTime.getTimeInMillis() - lastChangeTime.getTimeInMillis();
+        long diffDays = diff / (24 * 60 * 60 * 1000);   
+        return diffDays;
+    }
+
+    @Override
+    public BlockedReason checkAccountFlag(Principal account) throws AuthenticationException
+    {        
+        final Parameters params = new DirectoryParameters(getPersonalData(account));
+        if(!params.isDefined("shadowFlag"))
+        {
+            return BlockedReason.OK;
+        }
+        return BlockedReason.getByCode(params.getInt("shadowFlag"));
     }
 }
