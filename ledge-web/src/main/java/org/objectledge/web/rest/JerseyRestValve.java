@@ -115,7 +115,7 @@ public class JerseyRestValve
         }
         catch(ServletException e)
         {
-            throw new ProcessingException(e);
+            throw new ProcessingException(e.getCause() != null ? e.getCause() : e);
         }
         catch(IOException e)
         {

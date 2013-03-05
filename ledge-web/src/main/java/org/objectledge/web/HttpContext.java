@@ -170,7 +170,7 @@ public class HttpContext
      */
 	public boolean getDirectResponse()
 	{
-		return directResponse;
+        return directResponse || response.isCommitted();
 	}
 	
     /**
