@@ -239,15 +239,29 @@ public class DummyUserManager
     }
 
     @Override
-    public long checkUserPasswordExpiration(Principal account)
-        throws AuthenticationException
-    {
-        throw new UnsupportedOperationException("Dummy manager cannot check if account is blocked");
-    }
-
-    @Override
     public BlockedReason checkAccountFlag(Principal account)
     {
         throw new UnsupportedOperationException("Failed to check account shadowFlag");        
+    }
+
+    @Override
+    public long getUserPasswordExpirationDays(Principal account)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Failed to get password expiration days");        
+    }
+
+    @Override
+    public boolean isUserPasswordExpired(Principal account)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Failed to check if password is expired");        
+    }
+
+    @Override
+    public void setUserShadowFlag(Principal user, String code)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Failed to set account shadowFlag");               
     }
 }

@@ -293,7 +293,17 @@ public interface UserManager
      * @return
      * @throws AuthenticationException
      */
-    public long checkUserPasswordExpiration(Principal account) throws AuthenticationException;
+    public long getUserPasswordExpirationDays(Principal account) throws AuthenticationException;
+    
+    
+    /**
+     * Check if user password is expired;
+     * 
+     * @param account
+     * @return
+     * @throws AuthenticationException
+     */
+    public boolean isUserPasswordExpired(Principal account) throws AuthenticationException;
     
     /**
      * Check account shadow flag and return enum with reason
@@ -303,5 +313,13 @@ public interface UserManager
      * @throws AuthenticationException
      */
     public BlockedReason checkAccountFlag(Principal account) throws AuthenticationException;
-    
+
+    /**
+     * Block user account for some reason
+     * 
+     * @param p
+     * @param code
+     */
+    public void setUserShadowFlag(Principal user, String code)
+        throws AuthenticationException ;
 }

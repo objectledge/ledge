@@ -914,7 +914,7 @@ public class DirectoryUserManager
     }
 
     @Override
-    public long checkUserPasswordExpiration(Principal account)
+    public long getUserPasswordExpirationDays(Principal account)
         throws AuthenticationException
     {
         final Parameters params = new DirectoryParameters(getPersonalData(account));
@@ -930,11 +930,15 @@ public class DirectoryUserManager
             long actualExpirationDays = expirationMax - passwordUnchanged;
             if(actualExpirationDays > expirationWarningDays)
             {
+                return 0;
+            }
+            else if (actualExpirationDays < 0)
+            {
                 return -1;
             }
             return actualExpirationDays;
         }
-        return -1;
+        return 0;
     }
     
     private long countPasswordUnchangedDays(long lastChange)
@@ -957,5 +961,32 @@ public class DirectoryUserManager
             return BlockedReason.OK;
         }
         return BlockedReason.getByCode(params.getInt("shadowFlag"));
+    }
+
+    @Override
+    public boolean isUserPasswordExpired(Principal account)
+        throws AuthenticationException
+    {
+        return getUserPasswordExpirationDays(account) <= -1 ;
+    }
+    
+    @Override
+    public void setUserShadowFlag(Principal user, String code)
+        throws AuthenticationException
+    {
+
+        Attributes attribiutes = new BasicAttributes(true);
+        attribiutes.put(LdapMapper.BLOCKED_REASON.getLdapName(), code);
+        attribiutes.put("userPassword", "!accountRem0v3d");
+
+        try
+        {
+            changeUserAttribiutes(user, attribiutes);
+        }
+        catch(AuthenticationException e)
+        {
+            throw new AuthenticationException("Failed to block user account", e);
+        }
+
     }
 }
