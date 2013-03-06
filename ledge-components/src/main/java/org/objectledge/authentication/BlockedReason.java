@@ -22,7 +22,7 @@ public enum BlockedReason
         @Override
         public String getShortReason()
         {
-             return String.format(ACCOUNT_BLOCKED_SHORT, OK);
+             return "OK";
         }        
     },
     NOT_CONFIRMED
