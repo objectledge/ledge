@@ -74,6 +74,13 @@ public class Login
                     principal = userManager.getUserByLogin(login);
                     if(userManager.checkUserPassword(principal, password))
                     {
+                        
+                        boolean passwordExpired =  userManager.isUserPasswordExpired(principal) ;
+                        boolean accountExpired = userManager.isUserAccountExpired(principal);
+                        if(passwordExpired && accountExpired)
+                        {
+                            log.info("Account password, and Account expiration - OK");
+                        }
                         BlockedReason reason = userManager.checkAccountFlag(principal);
                         if(!reason.equals(BlockedReason.OK))
                         {
