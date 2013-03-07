@@ -240,15 +240,23 @@ public class DirectoryUserManager
             logger.info("User " + account.getName() + "'s password changed");
 
             final Parameters params = new DirectoryParameters(getPersonalData(account));
+            if(params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
+            {
+                if(params.get(LdapMapper.BLOCKED_REASON.getLdapName()) == BlockedReason.PASSWORD_EXPIRED.toString())
+                {
+                    params.remove(LdapMapper.BLOCKED_REASON.getLdapName());
+                }
+            }
+            
             if(params.isDefined(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName()))
             {
                 params.set(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName(),
-                    System.currentTimeMillis() / (24 * 3600));
+                    System.currentTimeMillis() / (24 * 3600 * 1000));
             }
             else
             {
                 params.add(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName(),
-                    System.currentTimeMillis() / (24 * 3600));
+                    System.currentTimeMillis() / (24 * 3600 * 1000));
             }
         }
         catch(NamingException e)
@@ -959,7 +967,8 @@ public class DirectoryUserManager
 
     private long countPasswordUnchangedDays(long lastChange)
     {
-        long diff = System.currentTimeMillis() / (24 * 3600) - lastChange;
+        long currentDays = System.currentTimeMillis() / (24 * 3600 * 1000); 
+        long diff = currentDays - lastChange;
         return diff;
     }
 
@@ -1009,7 +1018,7 @@ public class DirectoryUserManager
             return false;
         }
         long expirationDate = params.getLong(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName());
-        long actualDays = System.currentTimeMillis() / (24 * 3600);
+        long actualDays = System.currentTimeMillis() / (24 * 3600 * 1000);
         if(actualDays > expirationDate)
         {
             setUserShadowFlag(account, BlockedReason.ACCOUNT_EXPIRED.getCode().toString());
