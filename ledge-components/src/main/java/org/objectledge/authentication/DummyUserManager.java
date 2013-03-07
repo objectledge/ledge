@@ -264,4 +264,11 @@ public class DummyUserManager
     {
         throw new UnsupportedOperationException("Failed to set account shadowFlag");               
     }
+
+    @Override
+    public boolean isUserAccountExpired(Principal account)
+        throws AuthenticationException
+    {
+        throw new UnsupportedOperationException("Failed to check if account is expired");               
+    }
 }

@@ -295,7 +295,6 @@ public interface UserManager
      */
     public long getUserPasswordExpirationDays(Principal account) throws AuthenticationException;
     
-    
     /**
      * Check if user password is expired;
      * 
@@ -304,6 +303,14 @@ public interface UserManager
      * @throws AuthenticationException
      */
     public boolean isUserPasswordExpired(Principal account) throws AuthenticationException;
+    
+    /**
+     * Check if user account expired;
+     * 
+     * @param account
+     * @return
+     */
+    public boolean isUserAccountExpired(Principal account) throws AuthenticationException;
     
     /**
      * Check account shadow flag and return enum with reason

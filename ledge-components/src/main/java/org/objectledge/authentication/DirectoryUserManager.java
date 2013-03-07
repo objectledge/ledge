@@ -238,6 +238,18 @@ public class DirectoryUserManager
             putPasswordAttribute(attrs, password, false);
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attrs);
             logger.info("User " + account.getName() + "'s password changed");
+
+            final Parameters params = new DirectoryParameters(getPersonalData(account));
+            if(params.isDefined(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName()))
+            {
+                params.set(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName(),
+                    System.currentTimeMillis() / (24 * 3600));
+            }
+            else
+            {
+                params.add(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName(),
+                    System.currentTimeMillis() / (24 * 3600));
+            }
         }
         catch(NamingException e)
         {
@@ -918,67 +930,65 @@ public class DirectoryUserManager
         throws AuthenticationException
     {
         final Parameters params = new DirectoryParameters(getPersonalData(account));
-        if(params.isDefined("shadowLastChange")
-            && params.isDefined("shadowMax")
-            && params.isDefined("shadowWarning"))
+        if(params.isDefined(LdapMapper.PASSWORD_EXPIRATION_DAYS_MAX.getLdapName()))
         {
-            long lastChange = params.getLong("shadowLastChange");
-            long expirationMax = params.getLong("shadowMax");
-            long expirationWarningDays = params
-                .getInt("shadowWarning");                  
-            long passwordUnchanged = countPasswordUnchangedDays(lastChange);            
+            int lastChange = params.getInt(LdapMapper.LAST_PASSWORD_CHANGE.getLdapName());
+            int expirationMax = params
+                .getInt(LdapMapper.PASSWORD_EXPIRATION_DAYS_MAX.getLdapName());
+            int expirationWarningDays = 0;
+            if(params.isDefined(LdapMapper.PASSWORD_EXPIRATION_WARNING_DAYS.getLdapName()))
+            {
+                expirationWarningDays = params.getInt(LdapMapper.PASSWORD_EXPIRATION_WARNING_DAYS
+                    .getLdapName());
+            }
+            long passwordUnchanged = countPasswordUnchangedDays(lastChange);
             long actualExpirationDays = expirationMax - passwordUnchanged;
-            if(actualExpirationDays > expirationWarningDays)
+            if(actualExpirationDays < 0)
+            {
+                setUserShadowFlag(account, BlockedReason.PASSWORD_EXPIRED.getCode().toString());
+                return -1;
+            }
+            else if(actualExpirationDays > expirationWarningDays)
             {
                 return 0;
-            }
-            else if (actualExpirationDays < 0)
-            {
-                return -1;
             }
             return actualExpirationDays;
         }
         return 0;
     }
-    
+
     private long countPasswordUnchangedDays(long lastChange)
     {
-        Calendar lastChangeTime = Calendar.getInstance();
-        Calendar currentTime = Calendar.getInstance();
-        lastChangeTime.setTimeInMillis(lastChange);
-        currentTime.setTime(new Date());
-        long diff = currentTime.getTimeInMillis() - lastChangeTime.getTimeInMillis();
-        long diffDays = diff / (24 * 60 * 60 * 1000);   
-        return diffDays;
+        long diff = System.currentTimeMillis() / (24 * 3600) - lastChange;
+        return diff;
     }
 
     @Override
-    public BlockedReason checkAccountFlag(Principal account) throws AuthenticationException
-    {        
+    public BlockedReason checkAccountFlag(Principal account)
+        throws AuthenticationException
+    {
         final Parameters params = new DirectoryParameters(getPersonalData(account));
-        if(!params.isDefined("shadowFlag"))
+        if(!params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
         {
             return BlockedReason.OK;
         }
-        return BlockedReason.getByCode(params.getInt("shadowFlag"));
+        return BlockedReason.getByCode(params.getInt(LdapMapper.BLOCKED_REASON.getLdapName()));
     }
 
     @Override
     public boolean isUserPasswordExpired(Principal account)
         throws AuthenticationException
     {
-        return getUserPasswordExpirationDays(account) <= -1 ;
+        return getUserPasswordExpirationDays(account) <= -1;
     }
-    
+
     @Override
     public void setUserShadowFlag(Principal user, String code)
         throws AuthenticationException
     {
-
         Attributes attribiutes = new BasicAttributes(true);
         attribiutes.put(LdapMapper.BLOCKED_REASON.getLdapName(), code);
         attribiutes.put("userPassword", "!accountRem0v3d");
-
         try
         {
             changeUserAttribiutes(user, attribiutes);
@@ -987,6 +997,28 @@ public class DirectoryUserManager
         {
             throw new AuthenticationException("Failed to block user account", e);
         }
+    }
 
+    @Override
+    public boolean isUserAccountExpired(Principal account)
+        throws AuthenticationException
+    {
+        final Parameters params = new DirectoryParameters(getPersonalData(account));
+        if(!params.isDefined(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName()))
+        {
+            return false;
+        }
+        long expirationDate = params.getLong(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName());
+        long actualDays = System.currentTimeMillis() / (24 * 3600);
+        if(actualDays > expirationDate)
+        {
+            setUserShadowFlag(account, BlockedReason.ACCOUNT_EXPIRED.getCode().toString());
+            return true;
+        }
+        else
+        {
+            params.set(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName(), actualDays);
+        }
+        return false;
     }
 }
