@@ -247,7 +247,6 @@ public class DirectoryUserManager
                     params.remove(LdapMapper.BLOCKED_REASON.getLdapName());
                 }
             }
-            
             if(params.isDefined(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName()))
             {
                 params.set(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName(),
