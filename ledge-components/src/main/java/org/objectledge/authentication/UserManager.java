@@ -8,7 +8,6 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
-
 import org.objectledge.parameters.Parameters;
 
 public interface UserManager
@@ -285,5 +284,49 @@ public interface UserManager
      */
     public void updateTrackingInformation(Principal account)
         throws AuthenticationException, NamingException;
+  
+    /**
+     * Check user password expiration time, if expiration time is equals or smaller than ShadowWarning attribute then method returns
+     * day count to password expiry. If expiration time is bigger than ShadowWarning Value then method returns value smaller than 0
+     * 
+     * @param account
+     * @return
+     * @throws AuthenticationException
+     */
+    public long getUserPasswordExpirationDays(Principal account) throws AuthenticationException;
+    
+    /**
+     * Check if user password is expired;
+     * 
+     * @param account
+     * @return
+     * @throws AuthenticationException
+     */
+    public boolean isUserPasswordExpired(Principal account) throws AuthenticationException;
+    
+    /**
+     * Check if user account expired;
+     * 
+     * @param account
+     * @return
+     */
+    public boolean isUserAccountExpired(Principal account) throws AuthenticationException;
+    
+    /**
+     * Check account shadow flag and return enum with reason
+     * 
+     * @param account
+     * @return
+     * @throws AuthenticationException
+     */
+    public BlockedReason checkAccountFlag(Principal account) throws AuthenticationException;
 
+    /**
+     * Block user account for some reason
+     * 
+     * @param p
+     * @param code
+     */
+    public void setUserShadowFlag(Principal user, String code)
+        throws AuthenticationException ;
 }

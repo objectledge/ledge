@@ -110,6 +110,9 @@ public class LinkTool
 	/** include session information */
 	private boolean includeSession;
 	
+    /** include context path */
+    private boolean includeContext;
+
 	/** show the protocol in link */
 	private boolean showProtocolName;
 	
@@ -158,6 +161,7 @@ public class LinkTool
 		protocolName = ""; 
         port = 0;
         host = null;
+        includeContext = true;
         // this means no override for view
         view = null;
 		action = "";
@@ -288,6 +292,22 @@ public class LinkTool
         LinkTool target = getLinkTool(this);
         target.contentLink = true;
         target.includeSession = this.includeSession && !config.externalContent;
+        target.path = path;
+        return target;
+    }
+
+    /**
+     * Set link to point to content stored in the root directory of the host.
+     * 
+     * @param path path to the content.
+     * @return the link tool.
+     */
+    public LinkTool serverContent(String path)
+    {
+        LinkTool target = getLinkTool(this);
+        target.contentLink = true;
+        target.includeSession = false;
+        target.includeContext = false;
         target.path = path;
         return target;
     }
@@ -571,29 +591,27 @@ public class LinkTool
     public LinkTool uri(URI uri)
     {
         LinkTool target = getLinkTool(this);
-        if(uri.getScheme() != null)
+        target = target.absolute();
+        target = target.unsetView();
+        if(uri.getScheme().equals("http"))
         {
-            target.protocolName = uri.getScheme();
+            target = target.http();
+        }
+        if(uri.getScheme().equals("https"))
+        {
+            target = target.https();
         }
         if(uri.getHost() != null)
         {
-            target.host = uri.getHost();
-        }
-        if(uri.getPort() != -1)
-        {
-            target.port = uri.getPort();
+            target = target.host(uri.getHost());
         }
         if(uri.getPath() != null)
         {
-            target.path = uri.getPath();
-        }
-        if(uri.getQuery() != null)
-        {
-            target.parameters = parseParameters(uri.getQuery());
+            target = target.serverContent(uri.getPath());
         }
         if(uri.getFragment() != null)
         {
-            this.fragment = uri.getFragment();
+            target = target.fragment(uri.getFragment());
         }
         return target;
     }
@@ -1133,7 +1151,7 @@ public class LinkTool
      */
     protected String getContextPath()
     {
-        if(config.rewrite)
+        if(config.rewrite || !includeContext)
         {
             // rely on mod rewrite to put context path into URL
             return "";
@@ -1350,6 +1368,7 @@ public class LinkTool
 		target.port = source.port;
         target.host = source.host;
 		target.path = source.path;
+        target.includeContext = source.includeContext;
         target.pathInfoSuffix = source.pathInfoSuffix;
 		target.fragment = source.fragment;
 	    target.parameters = new SortedParameters(source.parameters);
