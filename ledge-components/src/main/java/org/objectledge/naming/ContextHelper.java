@@ -28,6 +28,7 @@
 
 package org.objectledge.naming;
 
+import javax.naming.CommunicationException;
 import javax.naming.Context;
 import javax.naming.InvalidNameException;
 import javax.naming.Name;
@@ -146,9 +147,9 @@ public class ContextHelper
         {
             return context.lookup(relativeName);
         }
-        catch(Exception e)
+        catch(CommunicationException e)
         {
-            logger.error("context lookup failed, will attempt to reconnect", e);
+            logger.error("CommunicationException occured, will attempt to reconnect", e);
             reconnect();
             logger.info("reconnect successful");
             return context.lookup(relativeName);
