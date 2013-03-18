@@ -53,6 +53,7 @@ public class MockInitialContextFactory implements InitialContextFactory
     {
         Mock mockContext = new Mock(DirContext.class);
         mockContext.stubs().method("lookup").will(new ReturnStub(mockContext.proxy()));
+        mockContext.stubs().method("close").isVoid();
         return (Context)mockContext.proxy();
     }
 }
