@@ -385,6 +385,11 @@ public class DirectoryUserManager
             DirContext ctx = directory.lookupDirContext(account.getName());
             return ctx;
         }
+        catch(NameNotFoundException e)
+        {
+            throw new UserUnknownException("User " + account.getName()
+                + " not foudn in the directory");
+        }
         catch(NamingException e)
         {
             throw new AuthenticationException("Failed to lookup user personal data"
