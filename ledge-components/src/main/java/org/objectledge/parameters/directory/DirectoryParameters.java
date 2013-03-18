@@ -31,7 +31,6 @@ package org.objectledge.parameters.directory;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -58,6 +57,7 @@ import org.objectledge.parameters.UndefinedParameterException;
  */
 public class DirectoryParameters
     extends DefaultParameters
+    implements AutoCloseable
 {
     /** the context */
     private DirContext ctx;
@@ -731,5 +731,11 @@ public class DirectoryParameters
             }
         }
         return target;
+    }
+
+    public void close()
+        throws NamingException
+    {
+        ctx.close();
     }
 }
