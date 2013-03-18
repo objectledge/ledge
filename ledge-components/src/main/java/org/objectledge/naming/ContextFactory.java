@@ -203,6 +203,14 @@ public class ContextFactory
         {
             name = alias.get(name);
         }
-        context.remove(name);
+        Context ctx = context.remove(name);
+        try
+        {
+            ctx.close();
+        }
+        catch(NamingException e)
+        {
+            // swallow exception
+        }
     }
 }
