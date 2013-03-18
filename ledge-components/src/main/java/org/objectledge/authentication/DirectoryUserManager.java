@@ -31,9 +31,7 @@ package org.objectledge.authentication;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -406,6 +404,11 @@ public class DirectoryUserManager
         {
             DirContext ctx = directory.lookupDirContext(account.getName());
             return ctx;
+        }
+        catch(NameNotFoundException e)
+        {
+            throw new UserUnknownException("User " + account.getName()
+                + " not foudn in the directory");
         }
         catch(NamingException e)
         {
