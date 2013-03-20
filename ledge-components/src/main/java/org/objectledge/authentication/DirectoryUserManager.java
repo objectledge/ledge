@@ -273,6 +273,10 @@ public class DirectoryUserManager
         throws AuthenticationException
     {
         String storedPassword = getUserPassword(account);
+        if(storedPassword.length() == 0 || storedPassword.charAt(0) == '!')
+        {
+            return false;
+        }
         try
         {
             return passwordDigester.validateDigest(password, storedPassword);
