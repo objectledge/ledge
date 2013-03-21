@@ -274,6 +274,10 @@ public class DirectoryUserManager
         throws AuthenticationException
     {
         String storedPassword = getUserPassword(account);
+        if(storedPassword.length() == 0 || storedPassword.charAt(0) == '!')
+        {
+            return false;
+        }
         try
         {
             return passwordDigester.validateDigest(password, storedPassword);
@@ -377,9 +381,12 @@ public class DirectoryUserManager
         throws AuthenticationException
     {
         String password = getUserPassword(account);
-        password = password.substring(1);
-        DirectoryParameters params = new DirectoryParameters(getPersonalData(account));
-        params.set(passwordAttribute, password);
+        if(password.length() > 0 && password.charAt(0) == '!')
+        {
+            password = password.substring(1);
+            DirectoryParameters params = new DirectoryParameters(getPersonalData(account));
+            params.set(passwordAttribute, password);
+        }
     }
 
     /**
