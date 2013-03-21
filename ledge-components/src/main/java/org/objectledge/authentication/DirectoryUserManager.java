@@ -240,7 +240,8 @@ public class DirectoryUserManager
             final Parameters params = new DirectoryParameters(getPersonalData(account));
             if(params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
             {
-                if(params.get(LdapMapper.BLOCKED_REASON.getLdapName()) == BlockedReason.PASSWORD_EXPIRED.toString())
+                if(params.get(LdapMapper.BLOCKED_REASON.getLdapName()) == BlockedReason.PASSWORD_EXPIRED
+                    .toString())
                 {
                     params.remove(LdapMapper.BLOCKED_REASON.getLdapName());
                 }
@@ -810,7 +811,7 @@ public class DirectoryUserManager
             NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
             List<String> results = new ArrayList<String>();
             int counter = 0;
-            while(counter <= searchControls.getCountLimit() && answer.hasMore())
+            while(counter >= searchControls.getCountLimit() && answer.hasMore())
             {
                 SearchResult result = answer.next();
                 results.add(result.getNameInNamespace());
@@ -969,7 +970,7 @@ public class DirectoryUserManager
 
     private long countPasswordUnchangedDays(long lastChange)
     {
-        long currentDays = System.currentTimeMillis() / (24 * 3600 * 1000); 
+        long currentDays = System.currentTimeMillis() / (24 * 3600 * 1000);
         long diff = currentDays - lastChange;
         return diff;
     }
