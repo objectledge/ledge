@@ -811,12 +811,24 @@ public class DirectoryUserManager
             NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
             List<String> results = new ArrayList<String>();
             int counter = 0;
-            while(counter >= searchControls.getCountLimit() && answer.hasMore())
+            if(searchControls.getCountLimit() == 0)
             {
-                SearchResult result = answer.next();
-                results.add(result.getNameInNamespace());
-                counter++;
+                while(answer.hasMore())
+                {
+                    SearchResult result = answer.next();
+                    results.add(result.getNameInNamespace());
+                }
             }
+            else
+            {
+                while(counter <= searchControls.getCountLimit() && answer.hasMore())
+                {
+                    SearchResult result = answer.next();
+                    results.add(result.getNameInNamespace());
+                    counter++;
+                }
+            }
+
             return results;
         }
         finally
