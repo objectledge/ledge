@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -56,11 +55,12 @@ public class JerseyRestValve
 
         ArrayList<String> packageNames = getPackageNamesFromConfig(config);
         Configuration initParams = config.getChild("init-parameters", true);
-        final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
+        final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext,
+            initParams);
         final String[] packageNamesArray = packageNames.toArray(new String[packageNames.size()]);
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.packages(packageNamesArray);
-        resourceConfig.register(JacksonFeature.class);
+        resourceConfig.register(JacksonFasterXmlFeature.class);
         resourceConfig.register(compositeJacksonMapper);
         resourceConfig.register(MultiPartFeature.class);
 
@@ -90,7 +90,8 @@ public class JerseyRestValve
         jerseyContainer.init();
     }
 
-    private ArrayList<String> getPackageNamesFromConfig(Configuration config) throws ConfigurationException
+    private ArrayList<String> getPackageNamesFromConfig(Configuration config)
+        throws ConfigurationException
     {
         ArrayList<String> packageNames = new ArrayList<>();
         final Configuration packages = config.getChild("packages");
@@ -165,11 +166,11 @@ public class JerseyRestValve
         {
             return parameters.keys();
         }
-        
+
         public Map<String, Object> getParameters()
         {
             return (Map<String, Object>)parameters;
         }
-        
+
     }
 }

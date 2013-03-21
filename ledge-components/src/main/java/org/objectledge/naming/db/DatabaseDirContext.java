@@ -33,6 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -45,6 +46,7 @@ import javax.naming.Name;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
+import javax.naming.directory.AttributeModificationException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
@@ -172,130 +174,104 @@ public class DatabaseDirContext extends DatabaseContext implements DirContext
         modifyAttributes(new CompositeName(name), modOp, attrs);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void modifyAttributes(Name name, ModificationItem[] mods) throws NamingException
+    public void modifyAttributes(Name name, ModificationItem[] mods)
+        throws NamingException
     {
-        List<ModificationItem> failures = new ArrayList<ModificationItem>();
-        DatabaseDirContext ctx = (DatabaseDirContext)lookup(name);
-        boolean transactionControler;
+        List<ModificationItem> remaining = new ArrayList<ModificationItem>(Arrays.asList(mods));
         try
         {
-            transactionControler = persistence.getDatabase().beginTransaction();
-        }
-        catch(SQLException e)
-        {
-            throw new RuntimeException("Failed to begin transaction",e);
-        }
-        for (int i=0; i<mods.length; i++)
-        {      
-            Attribute attribute = mods[i].getAttribute();
-            NamingEnumeration<?> values = attribute.getAll();
-            switch (mods[i].getModificationOp())
+
+            boolean transactionControler = persistence.getDatabase().beginTransaction();
+            try
             {
-                case ADD_ATTRIBUTE:
-                    try
+                DatabaseDirContext ctx = (DatabaseDirContext)lookup(name);
+                while(!remaining.isEmpty())
+                {
+                    StringBuilder sb = new StringBuilder();
+                    ModificationItem mod = remaining.remove(0);
+                    Attribute attribute = mod.getAttribute();
+                    NamingEnumeration<?> values = attribute.getAll();
+                    switch(mod.getModificationOp())
                     {
-                        while (values.hasMore())
+                    case ADD_ATTRIBUTE:
+                        while(values.hasMore())
                         {
                             String value = (String)values.next();
-                            PersistentAttribute pAttribute = new PersistentAttribute(
-                                ctx.getDelegate().getContextId(),
-                                attribute.getID(), value);
+                            PersistentAttribute pAttribute = new PersistentAttribute(ctx
+                                .getDelegate().getContextId(), attribute.getID(), value);
                             persistence.save(pAttribute);
-                        }    
-                    }   
-                catch(SQLException e)
-                    {
-                        failures.add(mods[i]);
-                    }
-                    break;
-                case REPLACE_ATTRIBUTE:
-                    try
-                    {
-                        StringBuilder sb = new StringBuilder();
+                        }
+                        break;
+                    case REPLACE_ATTRIBUTE:
                         sb.append("context_id = ");
                         sb.append(ctx.getDelegate().getContextId());
                         sb.append(" and name = '");
                         sb.append(attribute.getID());
                         sb.append("'");
                         persistence.delete(sb.toString(), PersistentAttribute.FACTORY);
-                        while (values.hasMore())
+                        while(values.hasMore())
                         {
                             String value = (String)values.next();
-                            PersistentAttribute pAttribute = new PersistentAttribute(
-                                ctx.getDelegate().getContextId(),
-                                attribute.getID(), value);
+                            PersistentAttribute pAttribute = new PersistentAttribute(ctx
+                                .getDelegate().getContextId(), attribute.getID(), value);
                             persistence.save(pAttribute);
-                        }    
-                    }   
-                catch(SQLException e)
-                    {
-                        failures.add(mods[i]);
-                    }
-                    break;
-                case REMOVE_ATTRIBUTE:
-                    try
-                    {
+                        }
+                        break;
+                    case REMOVE_ATTRIBUTE:
                         if(values.hasMore())
                         {
                             while(values.hasMore())
                             {
                                 String value = (String)values.next();
-                                StringBuilder sb = new StringBuilder();
                                 sb.append("context_id = ");
                                 sb.append(ctx.getDelegate().getContextId());
                                 sb.append(" and name = '");
                                 sb.append(attribute.getID());
                                 sb.append("' and value = '");
                                 sb.append(value);
-                                sb.append("'");                            
+                                sb.append("'");
                                 persistence.delete(sb.toString(), PersistentAttribute.FACTORY);
+                                sb.setLength(0);
                             }
                         }
                         else
                         {
-                            StringBuilder sb = new StringBuilder();
                             sb.append("context_id = ");
                             sb.append(ctx.getDelegate().getContextId());
                             sb.append(" and name = '");
                             sb.append(attribute.getID());
-                            sb.append("'");                            
+                            sb.append("'");
                             persistence.delete(sb.toString(), PersistentAttribute.FACTORY);
                         }
-                    }    
-                catch(SQLException e)
-                    {
-                        failures.add(mods[i]);
                     }
-                
-                    break;
-                default:
-                    break;
-            }
-        }
-        if( failures.size() > 0)
-        {
-            try
-            {
-                persistence.getDatabase().rollbackTransaction(transactionControler);
-            }
-            catch(SQLException e)
-            {
-                throw new RuntimeException("Failed to begin transaction",e);
-            }
-        }
-        else
-        {
-            try
-            {
+                }
                 persistence.getDatabase().commitTransaction(transactionControler);
             }
             catch(SQLException e)
             {
-                throw new RuntimeException("Failed to begin transaction",e);
-            }                    
+                AttributeModificationException ame = new AttributeModificationException(
+                    "database operation failed");
+                ame.initCause(e);
+                ame.setUnexecutedModifications(remaining.toArray(new ModificationItem[remaining
+                    .size()]));
+                try
+                {
+                    persistence.getDatabase().rollbackTransaction(transactionControler);
+                }
+                catch(SQLException ee)
+                {
+                    ame.addSuppressed(ee);
+                }
+                throw ame;
+            }
+        }
+        catch(SQLException e)
+        {
+            AttributeModificationException ame = new AttributeModificationException(
+                "begin transaction failed");
+            ame.initCause(e);
+            ame.setUnexecutedModifications(mods);
+            throw ame;
         }
     }
 
