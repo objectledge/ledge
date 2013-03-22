@@ -828,7 +828,7 @@ public class DirectoryUserManager
             }
             else
             {
-                while(counter <= searchControls.getCountLimit() && answer.hasMore())
+                while(counter < searchControls.getCountLimit() && answer.hasMore())
                 {
                     SearchResult result = answer.next();
                     results.add(result.getNameInNamespace());

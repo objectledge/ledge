@@ -22,8 +22,8 @@ public enum BlockedReason
         @Override
         public String getShortReason()
         {
-             return "OK";
-        }        
+            return "OK";
+        }
     },
     NOT_CONFIRMED
     {
@@ -122,7 +122,8 @@ public enum BlockedReason
         @Override
         public String getShortReason()
         {
-            return String.format(ACCOUNT_BLOCKED_SHORT, BLOCKED_BY_ADMIN_DUE_TO_BREAKING_RULES_CODE);
+            return String
+                .format(ACCOUNT_BLOCKED_SHORT, BLOCKED_BY_ADMIN_DUE_TO_BREAKING_RULES_CODE);
         }
     },
     BLOCKED_BY_ADMIN_DUE_TO_SPAM
@@ -145,7 +146,6 @@ public enum BlockedReason
             return String.format(ACCOUNT_BLOCKED_SHORT, BLOCKED_BY_ADMIN_DUE_TO_SPAM_CODE);
         }
 
- 
     },
     BLOCKED_BY_ADMIN
     {
@@ -173,17 +173,49 @@ public enum BlockedReason
         return codeToReason.get(code);
     }
 
+    public static String translateReason(int reasonCode)
+    {
+        String result = "";
+        switch(reasonCode)
+        {
+        case 1:
+            result = "Konto nie zostało potwierdzone, potwierdz wysłany emailem link";
+            break;
+        case 2:
+            result = "Konto zostało zablokowane w wyniku jego nieaktywności";
+            break;
+        case 3:
+            result = "Konto zostało zablokowane w wyniku wygaśnięcia hasła";
+            break;
+        case 4:
+            result = "Konto zostało zablokowane przez admina z powodu naruszenia regulaminu";
+            break;
+        case 5:
+            result = "Konto zostało zablokowane przez admina z powodu spamu";
+            break;
+        case 6:
+            result = "Konto zostało zablokowane przez admina";
+            break;
+        case 7:
+            result = "Konto zostało usunięte";
+            break;
+        default:
+            result = "Konto jest zablokowane z nieznanej przyczyny skontaktuj się z administratorem systemu";
+        }
+        return result;
+    }
+
     public abstract Integer getCode();
 
     public abstract String getReason();
-    
+
     public abstract String getShortReason();
 
     // todo
     // maybe some method which takes locale and returns proper translation ??
-    
+
     private final static String ACCOUNT_BLOCKED_SHORT = "account_blocked_%s";
-    
+
     private final static Integer OK_CODE = 0;
 
     private final static Integer NOT_CONFIRMED_CODE = 1;
