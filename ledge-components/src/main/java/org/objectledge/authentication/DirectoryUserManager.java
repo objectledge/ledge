@@ -274,10 +274,6 @@ public class DirectoryUserManager
         throws AuthenticationException
     {
         String storedPassword = getUserPassword(account);
-        if(storedPassword.length() == 0 || storedPassword.charAt(0) == '!')
-        {
-            return false;
-        }
         try
         {
             return passwordDigester.validateDigest(password, storedPassword);
@@ -1019,7 +1015,7 @@ public class DirectoryUserManager
     {
         Attributes attribiutes = new BasicAttributes(true);
         attribiutes.put(LdapMapper.BLOCKED_REASON.getLdapName(), code);
-        attribiutes.put("userPassword", "!accountRem0v3d");
+        // attribiutes.put("userPassword", "!accountRem0v3d");
         try
         {
             changeUserAttribiutes(user, attribiutes);
