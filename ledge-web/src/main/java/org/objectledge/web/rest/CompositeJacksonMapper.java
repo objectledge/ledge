@@ -16,6 +16,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * component in container to sequence of mappers. CompositeJacksonMapper works with default
  * configuration for any type out of the box so you don't do anything specific like wrapping root
  * object then you do not have to do anything.
+ * <p>
+ * Also keep in mind that most of the configuration can be done using Jackskon annotations. If you
+ * cannot configure something using annotations then {@link JacksonMapper} is your fallback
+ * </p>
  * 
  * <pre>
  * Register it in container like so:
