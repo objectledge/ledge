@@ -18,11 +18,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * object then you do not have to do anything.
  * <p>
  * Also keep in mind that most of the configuration can be done using Jackskon annotations. If you
- * cannot configure something using annotations then {@link JacksonMapper} is your fallback
- * </p>
+ * cannot configure something using annotations then {@link JacksonMapper} is your fallback.
+ * <p>
+ * Register it in container like so:
  * 
  * <pre>
- * Register it in container like so:
  * {@code
  * <component class="org.objectledge.web.rest.CompositeJacksonMapper">
  *   <sequence>

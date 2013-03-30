@@ -33,7 +33,6 @@ import org.picocontainer.MutablePicoContainer;
  * non-default configuration of ObjectMapper for some specific type
  * <p>
  * Example configuration:
- * </p>
  * 
  * <pre>
  * 
