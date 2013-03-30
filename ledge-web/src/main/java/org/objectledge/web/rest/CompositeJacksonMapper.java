@@ -8,6 +8,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
+import org.objectledge.web.json.ObjectMapperProvider;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -41,12 +43,13 @@ public class CompositeJacksonMapper
 {
     private final List<JacksonMapper> mappers;
 
-    private final JacksonMapper defaultMapper = new DefaultJacksonMapper();
+    private final ObjectMapperProvider objectMapperProvider;
 
-    public CompositeJacksonMapper(JacksonMapper[] mappers)
+    public CompositeJacksonMapper(JacksonMapper[] mappers, ObjectMapperProvider objectMapperProvider)
     {
         final List<JacksonMapper> listed = Arrays.asList(mappers);
         this.mappers = listed;
+        this.objectMapperProvider = objectMapperProvider;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class CompositeJacksonMapper
                 return mapper.getMapper();
             }
         }
-        return defaultMapper.getMapper();
+        return objectMapperProvider.provide();
     }
 
 }
