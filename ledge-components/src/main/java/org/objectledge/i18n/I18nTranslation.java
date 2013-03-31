@@ -24,4 +24,10 @@ public final class I18nTranslation
         return translation;
     }
 
+    @Override
+    public String toString()
+    {
+        return "I18nTranslation [locale=" + locale + ", translation=" + translation + "]";
+    }
+
 }
