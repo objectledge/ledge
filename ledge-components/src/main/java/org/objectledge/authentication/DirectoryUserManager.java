@@ -240,8 +240,8 @@ public class DirectoryUserManager
             final Parameters params = new DirectoryParameters(getPersonalData(account));
             if(params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
             {
-                if(params.get(LdapMapper.BLOCKED_REASON.getLdapName()) == BlockedReason.PASSWORD_EXPIRED
-                    .toString())
+                if(params.getInt(LdapMapper.BLOCKED_REASON.getLdapName()) == BlockedReason.PASSWORD_EXPIRED
+                    .getCode())
                 {
                     params.remove(LdapMapper.BLOCKED_REASON.getLdapName());
                 }

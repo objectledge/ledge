@@ -178,6 +178,9 @@ public enum BlockedReason
         String result = "";
         switch(reasonCode)
         {
+        case 0:
+            result = "Aktywne";
+            break;
         case 1:
             result = "Konto nie zostało potwierdzone, potwierdz wysłany emailem link";
             break;
