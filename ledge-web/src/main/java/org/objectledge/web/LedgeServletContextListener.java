@@ -79,6 +79,7 @@ public class LedgeServletContextListener
         {
             ledgeContainer.killContainer();
         }
+        log.info("ServletContext destoryed.");
     }
 
     /**
