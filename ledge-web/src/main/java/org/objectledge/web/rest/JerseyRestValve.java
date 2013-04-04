@@ -20,14 +20,51 @@ import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.i18n.I18nLocale;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.picocontainer.MutablePicoContainer;
 
 /**
+ * JerseyRestValve provides Jersey intergation. JerseyRestValve can be configured using
+ * {@link JerseyConfigurationHook} as well as {@link AbstractBinder} JerseyRestValve by default
+ * configured Jersey to use Jackson as JSON marshaller. See {@link JacksonMapper} if you want
+ * non-default configuration of ObjectMapper for some specific type
+ * <p>
+ * Example configuration:
+ * 
+ * <pre>
+ * 
+ * {@code
+ *  <container key="forwardMeToParent"/>
+ *  <component class="org.objectledge.web.rest.JerseyRestValve">
+ *     <parameter key="forwardMeToParent" />
+ *     <parameter />
+ *     <parameter />
+ *     <parameter />
+ *     <parameter />
+ *     <sequence>
+ *       <!-- Add binders for @Inject. Binders can be used to add Factories -->
+ *       <component class="org.objectledge.web.rest.I18nLocaleFactoryBinder"/>
+ *     </sequence>
+ *     <sequence>
+ *       <!-- Jersey configuration hooks, register filters, features, properties etc. -->
+ *       <component class="org.objectledge.web.rest.RegisterAuthenticationFilter" />
+ *     </sequence>
+ *   </component>
+ * 
+ * }
+ * </pre>
+ * 
  * @author Marta Kalamar - original design
  * @author Marek Lewandowski - rewrite for JAX-RS 2
+ * @see JacksonMapper
+ * @see CompositeJacksonMapper
+ * @see I18nLocale
+ * @see I18nLocaleFactoryBinder
+ * @see JerseyConfigurationHook
+ * @see JerseyRestAuthenticationFilter
  */
 public class JerseyRestValve
     implements Valve

@@ -40,6 +40,7 @@ import org.objectledge.context.Context;
  * @version $Id: I18nContext.java,v 1.3 2005-02-21 17:42:06 rafal Exp $
  */
 public class I18nContext
+    implements I18nLocale
 {
 	/**
 	 *  Usefull method to retrieve http context from context.
@@ -91,5 +92,11 @@ public class I18nContext
     public void setLocale(Locale locale)
     {
     	this.locale = locale;
+    }
+
+    @Override
+    public Locale get()
+    {
+        return locale;
     }
 }

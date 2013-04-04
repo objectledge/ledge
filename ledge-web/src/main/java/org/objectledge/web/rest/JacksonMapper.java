@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * JacksonMapper is a specific configuration for mapping your objects if default is not what your
- * into.
+ * into. Create your own mappers and configure them in {@link CompositeJacksonMapper}
  * 
  * @author Marek Lewandowski
  * @since 2013-02-19
