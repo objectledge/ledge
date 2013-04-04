@@ -16,10 +16,14 @@
    		<!-- Jersey configuration hooks, register filters, features, properties etc. -->
     </sequence>
   </component>
+   
+  <component class-key="org.objectledge.web.json.ObjectMapperProvider"
+   class="org.objectledge.web.json.ObjectMapperProviderImpl" />
   
   <component class="org.objectledge.web.rest.CompositeJacksonMapper">
     <sequence>
     </sequence>
+    <parameter />
   </component>
 
   <component key="restDispatcher" class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
