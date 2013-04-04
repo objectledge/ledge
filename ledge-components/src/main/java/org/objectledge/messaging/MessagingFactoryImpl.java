@@ -29,6 +29,8 @@
 package org.objectledge.messaging;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.WeakHashMap;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -40,17 +42,23 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
+import org.jcontainer.dna.Logger;
 import org.objectledge.pipeline.ProcessingException;
+import org.picocontainer.Startable;
 
 public class MessagingFactoryImpl
-    implements MessagingFactory
+    implements MessagingFactory, Startable
 {
-
     private HashMap<String, Object> connectionFactoryPool;
 
-    public MessagingFactoryImpl(Configuration config)
+    private WeakHashMap<Connection, Object> connections = new WeakHashMap<>();
+
+    private final Logger logger;
+
+    public MessagingFactoryImpl(Configuration config, Logger logger)
         throws ProcessingException
     {
+        this.logger = logger;
         try
         {
             connectionFactoryPool = new HashMap<String, Object>();
@@ -104,6 +112,42 @@ public class MessagingFactoryImpl
         {
             connection = (C)((ConnectionFactory)connectionFactory).createConnection();
         }
+        synchronized(connections)
+        {
+            connections.put(connection, null);
+        }
         return connection;
+    }
+
+    @Override
+    public void start()
+    {
+        // nothing to do
+    }
+
+    @Override
+    public void stop()
+    {
+        synchronized(connections)
+        {
+            Iterator<Connection> i = connections.keySet().iterator();
+            while(i.hasNext())
+            {
+                Connection conn = i.next();
+                if(conn != null)
+                {
+                    try
+                    {
+                        conn.close();
+                    }
+                    catch(JMSException e)
+                    {
+                        logger.error("error closing connection", e);
+                    }
+                }
+                i.remove();
+            }
+        }
+        logger.info("all connections closed");
     }
 }
