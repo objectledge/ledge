@@ -1,0 +1,16 @@
+a
+a = a
+'a'
+/a/
+a ~ /a//
+a = '
+a = 'a'b'
+b = 'c' and .a = 'x'
+a = 'a'b'
+a = 'a' and
+or b = 'c'
+a in ('a')
+a ~ 'a'
+a in {'a'
+a in {'a' 'b'}
+
