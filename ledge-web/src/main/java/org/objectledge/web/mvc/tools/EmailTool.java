@@ -38,7 +38,7 @@ package org.objectledge.web.mvc.tools;
 public class EmailTool
 {
     /**
-     * Encode the given email address as html/javascript. 
+     * Encode the given email address as html/javascript.
      * 
      * @param eMail the address to encode.
      * @return encoded representation.
@@ -49,7 +49,7 @@ public class EmailTool
         jSEncode.append("document.write('<a href=\"mailto:").append(eMail).append("\">")
             .append(eMail).append("</a>');");
         String value = jSEncode.toString();
-        
+
         jSEncode.setLength(0);
         jSEncode.append("<script language=\"javascript\">eval(unescape('");
         jSEncode.append(string2hex(value));
@@ -58,7 +58,15 @@ public class EmailTool
         return jSEncode.toString();
     }
 
-    
+    public String encodeSafe(String eMail)
+    {
+        StringBuilder jSEncode = new StringBuilder();
+        jSEncode.append("<span class=emailEncode data-encoded=");
+        jSEncode.append(string2hex(eMail));
+        jSEncode.append(">s</span>");
+        return jSEncode.toString();
+    }
+
     /**
      * Return javascript code generating A element with mailto href.
      * 
@@ -77,7 +85,7 @@ public class EmailTool
         jsEncode.append("'))");
         return jsEncode.toString();
     }
-    
+
     /**
      * Return javascript code generating email address.
      * 
@@ -96,7 +104,7 @@ public class EmailTool
     }
 
     /**
-     * Provide hexadecimal ordinal of an UTF character. 
+     * Provide hexadecimal ordinal of an UTF character.
      * 
      * @param c a character
      * @return hexadecimal representation of character's ordinal nubmer.
@@ -113,7 +121,7 @@ public class EmailTool
             }
             else
             {
-                stringEncode.append('%').append(String.format("%02x", ch));                
+                stringEncode.append('%').append(String.format("%02x", ch));
             }
         }
         return stringEncode.toString();
