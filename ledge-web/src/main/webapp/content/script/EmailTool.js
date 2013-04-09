@@ -1,13 +1,12 @@
 jQuery(document).ready(function() {
-	emailTool = new EmailTool();
-	emailTool.encodeSafe();
+	EmailTool.encodeSafe(document);
 });
 
 EmailTool = function() { };
 
-EmailTool.prototype.encodeSafe = function ( ) {
+EmailTool.encodeSafe = function ( context ) {
 
-	jQuery("span.emailEncode").each(function() {
+	jQuery("span[class=emailEncode]",jQuery(context)).each(function() {
 		var data_encoded = $(this).attr("data-encoded");
 		if (data_encoded) {
 			$(this).text(unescape(data_encoded));

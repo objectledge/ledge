@@ -61,9 +61,9 @@ public class EmailTool
     public String encodeSafe(String eMail)
     {
         StringBuilder jSEncode = new StringBuilder();
-        jSEncode.append("<span class=emailEncode data-encoded=");
+        jSEncode.append("<span class='emailEncode' data-encoded='");
         jSEncode.append(string2hex(eMail));
-        jSEncode.append(">s</span>");
+        jSEncode.append("'></span>");
         return jSEncode.toString();
     }
 
