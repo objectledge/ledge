@@ -1,0 +1,27 @@
+a = 'a'
+a = 'a''b'
+a ~ /a/
+a ~ /x\/y/
+a in {'a', 'b'}
+a = 'b' and c = 'd'
+a = 'b' or c = 'd'
+(a = 'a')
+(a = 'b' and c = 'd')
+(a = 'b' or c = 'd')
+(a = 'b' or c = 'd') and e = 'f'
+not a = 'b'
+a = 'b' and not c = 'd'
+a in {'x', 'y'} or b ~ /pat/ and not c = 'd'
+aa = 'a'
+a_a = 'a'
+a.a = 'a'
+a.a.a = 'a'
+Aa.Ba = 'baa'
+a[0] = 'a'
+[0] = 'a'
+a.b[0] = 'a'
+a['b'] = 'a'
+a[b = '1'] = 'a'
+a[b[1] = '1' and b[2] = '2'] = 'x'
+a[b ~ /pat/] = 'x'
+a[a = '1' and b ~ /pat/] = 'x'

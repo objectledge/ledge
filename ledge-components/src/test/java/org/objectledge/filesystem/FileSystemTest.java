@@ -30,6 +30,7 @@ package org.objectledge.filesystem;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,7 +62,9 @@ public class FileSystemTest extends TestCase
         throws Exception
     {
         super.setUp();
-        fs = FileSystem.getStandardFileSystem("src/test/resources");
+        File f = new File("target/fs_tests");
+        f.mkdirs();
+        fs = FileSystem.getStandardFileSystem(f.getPath());
         
         fs.createNewFile("file_1");
         fs.mkdirs("directory_1");
@@ -76,7 +79,14 @@ public class FileSystemTest extends TestCase
         }
         if(fs.exists("new_directory_1"))
         {
-            fs.deleteRecursive("new_directory_1");
+            if(fs.isDirectory("new_directory_1"))
+            {
+                fs.deleteRecursive("new_directory_1");
+            }
+            else
+            {
+                fs.delete("new_directory_1");
+            }
         }
         if(fs.exists("new_directory_2"))
         {
@@ -100,7 +110,14 @@ public class FileSystemTest extends TestCase
         }
         if(fs.exists("new_directory_1"))
         {
-            fs.deleteRecursive("new_directory_1");
+            if(fs.isDirectory("new_directory_1"))
+            {
+                fs.deleteRecursive("new_directory_1");
+            }
+            else
+            {
+                fs.delete("new_directory_1");
+            }
         }
         if(fs.exists("new_directory_2"))
         {
@@ -428,7 +445,7 @@ public class FileSystemTest extends TestCase
         }
         try
         {
-            fs.copyFile("directory","new_directory_1");
+            fs.copyFile("directory_1", "new_directory_1");
             fail("should throw the exception");
         }
         catch(Exception e)
