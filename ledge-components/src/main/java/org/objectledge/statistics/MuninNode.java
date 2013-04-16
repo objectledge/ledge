@@ -33,6 +33,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
@@ -91,12 +92,10 @@ public class MuninNode
 
     public void start()
     {
-
     }
 
     public void stop()
     {
-        System.out.println("TRYING TO STOP MUNIN NODE");
     }
 
     /**
@@ -146,6 +145,10 @@ public class MuninNode
                     ProcessorTask processor = new ProcessorTask(clientChannel, bufferSize,
                         statistics, log);
                     threadPool.runWorker(processor);
+                }
+                catch(ClosedByInterruptException e)
+                {
+                    log.info("shutting down");
                 }
                 catch(IOException e)
                 {

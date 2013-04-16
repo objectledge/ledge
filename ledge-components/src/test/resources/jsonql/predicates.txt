@@ -1,0 +1,11 @@
+{"a":"1", "b":"2"}  | a = '1' and b = '2' | true
+{"a":"1", "b":"2"}  | a = '1' or b = '1' | true
+{"a":"1", "b":"2"}  | a = '2' and b = '2' | false
+{"a":"1"}  | not a = '1' | false
+{"a":"1"} | a in { '1', '2'} | true
+{"a":"3"} | a in { '1', '2'} | false
+{"a":"aa"} | a ~ /a{3,}/ | false
+{"a":"x", "b":"fa", "c":"c"} | a in {'x', 'y'} or b ~ /[a-z]+/ and not c = 'd' | true
+{"arr":["a", "b", "c"]} | arr[1] = 'b' | true
+["a", "b", "c"] | [0] = 'a' | true
+[{"a":"1", "b":"1"}, {"a":"2", "b":"2"}] | [a = '1'].b = '1' | true

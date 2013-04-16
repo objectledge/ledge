@@ -29,6 +29,9 @@
 package org.objectledge.web.mvc.tools;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
@@ -42,6 +45,7 @@ import java.util.StringTokenizer;
 import org.jcontainer.dna.Configurable;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.parameters.SortedParameters;
@@ -106,6 +110,9 @@ public class LinkTool
 	/** include session information */
 	private boolean includeSession;
 	
+    /** include context path */
+    private boolean includeContext;
+
 	/** show the protocol in link */
 	private boolean showProtocolName;
 	
@@ -154,6 +161,7 @@ public class LinkTool
 		protocolName = ""; 
         port = 0;
         host = null;
+        includeContext = true;
         // this means no override for view
         view = null;
 		action = "";
@@ -284,6 +292,22 @@ public class LinkTool
         LinkTool target = getLinkTool(this);
         target.contentLink = true;
         target.includeSession = this.includeSession && !config.externalContent;
+        target.path = path;
+        return target;
+    }
+
+    /**
+     * Set link to point to content stored in the root directory of the host.
+     * 
+     * @param path path to the content.
+     * @return the link tool.
+     */
+    public LinkTool serverContent(String path)
+    {
+        LinkTool target = getLinkTool(this);
+        target.contentLink = true;
+        target.includeSession = false;
+        target.includeContext = false;
         target.path = path;
         return target;
     }
@@ -564,6 +588,40 @@ public class LinkTool
         }
     }
     
+    public LinkTool uri(URI uri)
+    {
+        LinkTool target = getLinkTool(this);
+        target = target.absolute();
+        target = target.unsetView();
+        if(uri.getScheme().equals("http"))
+        {
+            target = target.http();
+        }
+        if(uri.getScheme().equals("https"))
+        {
+            target = target.https();
+        }
+        if(uri.getHost() != null)
+        {
+            target = target.host(uri.getHost());
+        }
+        if(uri.getPath() != null)
+        {
+            target = target.serverContent(uri.getPath());
+        }
+        if(uri.getFragment() != null)
+        {
+            target = target.fragment(uri.getFragment());
+        }
+        return target;
+    }
+
+    public LinkTool url(URL url)
+        throws URISyntaxException
+    {
+        return uri(url.toURI());
+    }
+
     /**
      * Parse given string to obtain link tool object
      * @param url - string of the toString() shape
@@ -696,6 +754,32 @@ public class LinkTool
             throw new IllegalArgumentException("Unsupported encoding exception " + e.getMessage());
         }
         ///CLOVER:ON
+    }
+
+    private Parameters parseParameters(String queryString)
+    {
+        Parameters result = new DefaultParameters();
+        String[] pp = queryString.split("&");
+        try
+        {
+            for(String p : pp)
+            {
+                if(p.indexOf('=') > 0)
+                {
+                    String[] kv = p.split("=");
+                    result.add(URLDecoder.decode(kv[0], "UTF-8"), URLDecoder.decode(kv[1], "UTF-8"));
+                }
+                else
+                {
+                    result.add(URLDecoder.decode(p, "UTF-8"), "");
+                }
+            }
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new RuntimeException("UTF-8 not supported?", e);
+        }
+        return result;
     }
 
     // parameter add methods ---------------------------------------------------------------------- 
@@ -1067,7 +1151,7 @@ public class LinkTool
      */
     protected String getContextPath()
     {
-        if(config.rewrite)
+        if(config.rewrite || !includeContext)
         {
             // rely on mod rewrite to put context path into URL
             return "";
@@ -1284,6 +1368,7 @@ public class LinkTool
 		target.port = source.port;
         target.host = source.host;
 		target.path = source.path;
+        target.includeContext = source.includeContext;
         target.pathInfoSuffix = source.pathInfoSuffix;
 		target.fragment = source.fragment;
 	    target.parameters = new SortedParameters(source.parameters);

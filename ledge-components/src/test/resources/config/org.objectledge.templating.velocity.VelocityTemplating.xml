@@ -35,7 +35,6 @@
     <path>/templates2/</path>
   </paths>
   <properties>
-    <property name="file.resource.loader.cache" value="true"/>
     <property name="velocimacro.library.autoreload">false</property>
   </properties>  
 </config>

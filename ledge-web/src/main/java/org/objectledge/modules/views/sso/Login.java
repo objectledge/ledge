@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.BlockedReason;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.authentication.sso.SingleSignOnService;
@@ -60,7 +61,6 @@ public class Login
 
         String status = "success";
         String ticket = null;
-
         HttpSession session = httpRequest.getSession(false);
         String sessionId = session != null ? session.getId() : "N/A";
         log.debug("request from " + client + " sessionId " + sessionId);
@@ -74,27 +74,42 @@ public class Login
                     principal = userManager.getUserByLogin(login);
                     if(userManager.checkUserPassword(principal, password))
                     {
-                        ticket = singleSignOnService.generateTicket(principal, domain, client);
-                        if(ticket != null)
+                        
+                        boolean passwordExpired =  userManager.isUserPasswordExpired(principal) ;
+                        boolean accountExpired = userManager.isUserAccountExpired(principal);
+                        if(passwordExpired && accountExpired)
                         {
-                            log.debug("ACCEPTED " + client + " login ");
-                            // we don't call SingleSingOnService.logIn() here, since the login has
-                            // been performed to the realm master which does not belong the realm.
-                            // Login will be recored when the one time ticket will be validated by
-                            // SingleSingOnValve in the actual domain the user is trying to access.
+                            log.info("Account password, and Account expiration - OK");
+                        }
+                        BlockedReason reason = userManager.checkAccountFlag(principal);
+                        if(!reason.equals(BlockedReason.OK))
+                        {
+                           log.warn("DECLINED " + client + "login " + login + "reason " + reason.getReason());
+                           status = reason.getShortReason();
+                        }
+                        else{
+                            ticket = singleSignOnService.generateTicket(principal, domain, client);
+                            if(ticket != null)
+                            {
+                                log.debug("ACCEPTED " + client + " login ");
+                                // we don't call SingleSingOnService.logIn() here, since the login has
+                                // been performed to the realm master which does not belong the realm.
+                                // Login will be recored when the one time ticket will be validated by
+                                // SingleSingOnValve in the actual domain the user is trying to access.
 
-                            // make the session between client and realm master an authenticated
-                            // one, so that subsequent ticket requests from the same clients can
-                            // succeed
-                            httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY,
-                                principal);
-                        }
-                        else
-                        {
-                            // domain is not a realm master, warning was logged by
-                            // SingleSignOnService
-                            status = "invalid_request";
-                        }
+                                // make the session between client and realm master an authenticated
+                                // one, so that subsequent ticket requests from the same clients can
+                                // succeed
+                                httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY,
+                                    principal);
+                            }
+                            else
+                            {
+                                // domain is not a realm master, warning was logged by
+                                // SingleSignOnService
+                                status = "invalid_request";
+                            }
+                        }                     
                     }
                     else
                     {

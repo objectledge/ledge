@@ -178,6 +178,10 @@
       <version>9.1-901.jdbc4</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <resources>
@@ -214,6 +218,9 @@
           <include>**/*.sql</include>
         </includes>
       </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
     </testResources>
     <plugins>
       <plugin>
@@ -222,6 +229,7 @@
         <executions>
           <execution>
             <goals>
+              <goal>jjtree-javacc</goal>
               <goal>javacc</goal>
             </goals>
           </execution>

@@ -67,7 +67,7 @@ import org.objectledge.parameters.directory.DirectoryParameters;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  */
 public class DirectoryUserManager
-    extends UserManager
+    extends AbstractUserManager
 {
     /** Default value for login attribute name. */
     public static final String LOGIN_ATTRIBUTE_DEFAULT = "uid";
@@ -161,6 +161,7 @@ public class DirectoryUserManager
         this.logger = logger;
         loginByName = new HashMap<String, String>();
         nameByLogin = new HashMap<String, String>();
+
         defaultSearchControls = new SearchControls();
         loginAttribute = config.getChild("loginAttribute").getValue(LOGIN_ATTRIBUTE_DEFAULT);
         mailAttribute = config.getChild("mailAttribute").getValue(MAIL_ATTRIBUTE_DEFAULT);
@@ -235,6 +236,26 @@ public class DirectoryUserManager
             putPasswordAttribute(attrs, password, false);
             ctx.modifyAttributes("", DirContext.REPLACE_ATTRIBUTE, attrs);
             logger.info("User " + account.getName() + "'s password changed");
+
+            final Parameters params = new DirectoryParameters(getPersonalData(account));
+            if(params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
+            {
+                if(params.getInt(LdapMapper.BLOCKED_REASON.getLdapName()) == BlockedReason.PASSWORD_EXPIRED
+                    .getCode())
+                {
+                    params.remove(LdapMapper.BLOCKED_REASON.getLdapName());
+                }
+            }
+            if(params.isDefined(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName()))
+            {
+                params.set(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName(),
+                    System.currentTimeMillis() / (24 * 3600 * 1000));
+            }
+            else
+            {
+                params.add(LdapMapper.PASSWORD_LAST_CHANGE.getLdapName(),
+                    System.currentTimeMillis() / (24 * 3600 * 1000));
+            }
         }
         catch(NamingException e)
         {
@@ -356,9 +377,12 @@ public class DirectoryUserManager
         throws AuthenticationException
     {
         String password = getUserPassword(account);
-        password = password.substring(1);
-        DirectoryParameters params = new DirectoryParameters(getPersonalData(account));
-        params.set(passwordAttribute, password);
+        if(password.length() > 0 && password.charAt(0) == '!')
+        {
+            password = password.substring(1);
+            DirectoryParameters params = new DirectoryParameters(getPersonalData(account));
+            params.set(passwordAttribute, password);
+        }
     }
 
     /**
@@ -790,12 +814,24 @@ public class DirectoryUserManager
             NamingEnumeration<SearchResult> answer = ctx.search("", query, searchControls);
             List<String> results = new ArrayList<String>();
             int counter = 0;
-            while(counter < searchControls.getCountLimit() &&answer.hasMore())
+            if(searchControls.getCountLimit() == 0)
             {
-                SearchResult result = answer.next();
-                results.add(result.getNameInNamespace());
-                counter++;
+                while(answer.hasMore())
+                {
+                    SearchResult result = answer.next();
+                    results.add(result.getNameInNamespace());
+                }
             }
+            else
+            {
+                while(counter < searchControls.getCountLimit() && answer.hasMore())
+                {
+                    SearchResult result = answer.next();
+                    results.add(result.getNameInNamespace());
+                    counter++;
+                }
+            }
+
             return results;
         }
         finally
@@ -913,5 +949,103 @@ public class DirectoryUserManager
             // defaults to false
         }
         return accountBlocked;
+    }
+
+    @Override
+    public long getUserPasswordExpirationDays(Principal account)
+        throws AuthenticationException
+    {
+        final Parameters params = new DirectoryParameters(getPersonalData(account));
+        if(params.isDefined(LdapMapper.PASSWORD_EXPIRATION_DAYS_MAX.getLdapName()))
+        {
+            int lastChange = params.getInt(LdapMapper.LAST_PASSWORD_CHANGE.getLdapName());
+            int expirationMax = params
+                .getInt(LdapMapper.PASSWORD_EXPIRATION_DAYS_MAX.getLdapName());
+            int expirationWarningDays = 0;
+            if(params.isDefined(LdapMapper.PASSWORD_EXPIRATION_WARNING_DAYS.getLdapName()))
+            {
+                expirationWarningDays = params.getInt(LdapMapper.PASSWORD_EXPIRATION_WARNING_DAYS
+                    .getLdapName());
+            }
+            long passwordUnchanged = countPasswordUnchangedDays(lastChange);
+            long actualExpirationDays = expirationMax - passwordUnchanged;
+            if(actualExpirationDays < 0)
+            {
+                setUserShadowFlag(account, BlockedReason.PASSWORD_EXPIRED.getCode().toString());
+                return -1;
+            }
+            else if(actualExpirationDays > expirationWarningDays)
+            {
+                return 0;
+            }
+            return actualExpirationDays;
+        }
+        return 0;
+    }
+
+    private long countPasswordUnchangedDays(long lastChange)
+    {
+        long currentDays = System.currentTimeMillis() / (24 * 3600 * 1000);
+        long diff = currentDays - lastChange;
+        return diff;
+    }
+
+    @Override
+    public BlockedReason checkAccountFlag(Principal account)
+        throws AuthenticationException
+    {
+        final Parameters params = new DirectoryParameters(getPersonalData(account));
+        if(!params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
+        {
+            return BlockedReason.OK;
+        }
+        return BlockedReason.getByCode(params.getInt(LdapMapper.BLOCKED_REASON.getLdapName()));
+    }
+
+    @Override
+    public boolean isUserPasswordExpired(Principal account)
+        throws AuthenticationException
+    {
+        return getUserPasswordExpirationDays(account) <= -1;
+    }
+
+    @Override
+    public void setUserShadowFlag(Principal user, String code)
+        throws AuthenticationException
+    {
+        Attributes attribiutes = new BasicAttributes(true);
+        attribiutes.put(LdapMapper.BLOCKED_REASON.getLdapName(), code);
+        // attribiutes.put("userPassword", "!accountRem0v3d");
+        try
+        {
+            changeUserAttribiutes(user, attribiutes);
+        }
+        catch(AuthenticationException e)
+        {
+            throw new AuthenticationException("Failed to block user account", e);
+        }
+    }
+
+    @Override
+    public boolean isUserAccountExpired(Principal account)
+        throws AuthenticationException
+    {
+        final Parameters params = new DirectoryParameters(getPersonalData(account));
+        if(!params.isDefined(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName()))
+        {
+            return false;
+        }
+        long expirationDate = params.getLong(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName());
+        long actualDays = System.currentTimeMillis() / (24 * 3600 * 1000);
+        if(actualDays > expirationDate)
+        {
+            setUserShadowFlag(account, BlockedReason.ACCOUNT_EXPIRED.getCode().toString());
+            return true;
+        }
+        else
+        {
+            params.set(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName(), actualDays);
+        }
+        return false;
     }
 }

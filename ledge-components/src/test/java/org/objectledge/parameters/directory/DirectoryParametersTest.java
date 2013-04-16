@@ -93,7 +93,7 @@ public class DirectoryParametersTest extends LedgeTestCase
             getLogger(ContextFactory.class));
         DefaultPicoContainer container = new DefaultPicoContainer();
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties(), logger);
+            getDsProperties(), getFileSystem(), logger);
         DataSource dataSource = new BitronixDataSource("hsql", btm);
         prepareDataSource(dataSource);
         Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);

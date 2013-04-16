@@ -35,8 +35,6 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.btm.BitronixDataSource;
@@ -54,17 +52,20 @@ import org.objectledge.parameters.AmbiguousParameterException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.UndefinedParameterException;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
- *
  */
-public class DBParametersTest extends TestCase
+public class DBParametersTest
+    extends LedgeTestCase
 {
     private DBParametersManager manager;
+
     protected long anyTimeStamp = 123123132L;
+
     protected long anyTimeStamp2 = 232342445L;
-    
+
     private BitronixTransactionManager btm;
 
     public void setUp()
@@ -72,7 +73,7 @@ public class DBParametersTest extends TestCase
     {
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties(), logger);
+            getDsProperties(), getFileSystem(), logger);
         DataSource dataSource = new BitronixDataSource("hsql", btm);
         prepareDataSource(dataSource);
         Transaction transaction = new BitronixTransaction(btm, new Context(), logger, null);
@@ -80,7 +81,7 @@ public class DBParametersTest extends TestCase
         Database database = new DefaultDatabase(dataSource, idGenerator, transaction);
         manager = new DefaultDBParametersManager(database, logger);
     }
-    
+
     public void tearDown()
     {
         btm.stop();
@@ -94,7 +95,8 @@ public class DBParametersTest extends TestCase
         return properties;
     }
 
-    public void testDBParameters() throws Exception
+    public void testDBParameters()
+        throws Exception
     {
         Parameters parameters = manager.createContainer();
         assertNotNull(parameters);
@@ -110,9 +112,9 @@ public class DBParametersTest extends TestCase
             parameters = manager.getParameters(((DBParameters)parameters).getId());
             fail("should throw the exception");
         }
-        catch (DBParametersException e)
+        catch(DBParametersException e)
         {
-            //ok!.
+            // ok!.
         }
 
         parameters = manager.getParameters(1000);
@@ -121,9 +123,10 @@ public class DBParametersTest extends TestCase
     }
 
     /**
-      * Test for String get(String)
-      */
-    public void testGet() throws Exception
+     * Test for String get(String)
+     */
+    public void testGet()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         try
@@ -131,7 +134,7 @@ public class DBParametersTest extends TestCase
             assertEquals(params.get("foo"), "bar");
             fail("Should throw UndefinedParameterException");
         }
-        catch (UndefinedParameterException e)
+        catch(UndefinedParameterException e)
         {
             // expected
         }
@@ -143,7 +146,7 @@ public class DBParametersTest extends TestCase
             assertEquals(params.get("foo"), "bar");
             fail("Should throw AmbiguousParameterException");
         }
-        catch (AmbiguousParameterException e)
+        catch(AmbiguousParameterException e)
         {
             // expected
         }
@@ -152,7 +155,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for String get(String, String)
      */
-    public void testGetStringString() throws Exception
+    public void testGetStringString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.get("foo", "bar"), "bar");
@@ -164,16 +168,17 @@ public class DBParametersTest extends TestCase
             assertEquals(params.get("foo", "buzz"), "bar");
             fail("Should throw AmbiguousParameterException");
         }
-        catch (AmbiguousParameterException e)
+        catch(AmbiguousParameterException e)
         {
-            //expected
+            // expected
         }
     }
 
     /**
      * Test for String getStrings(String)
      */
-    public void testGetStrings() throws Exception
+    public void testGetStrings()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getStrings("foo").length, 0);
@@ -187,7 +192,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for boolean getBoolean(String)
      */
-    public void testGetBooleanString() throws Exception
+    public void testGetBooleanString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         try
@@ -195,7 +201,7 @@ public class DBParametersTest extends TestCase
             assertEquals(params.getBoolean("foo"), false);
             fail("Should throw UndefinedParameterException");
         }
-        catch (UndefinedParameterException e)
+        catch(UndefinedParameterException e)
         {
             // expected
         }
@@ -208,7 +214,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for boolean getBoolean(String, boolean)
      */
-    public void testGetBooleanStringboolean() throws Exception
+    public void testGetBooleanStringboolean()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getBoolean("foo", false), false);
@@ -223,7 +230,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for boolean getBooleans(String)
      */
-    public void testGetBooleans() throws Exception
+    public void testGetBooleans()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getBooleans("foo").length, 0);
@@ -237,7 +245,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for boolean getDate(String)
      */
-    public void testGetDateString() throws Exception
+    public void testGetDateString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         try
@@ -245,7 +254,7 @@ public class DBParametersTest extends TestCase
             assertEquals(params.getDate("foo"), new Date());
             fail("Should throw UndefinedParameterException");
         }
-        catch (UndefinedParameterException e)
+        catch(UndefinedParameterException e)
         {
             // expected
         }
@@ -257,7 +266,7 @@ public class DBParametersTest extends TestCase
             params.getDate("foo");
             fail("Should throw AmbiguousParameterException");
         }
-        catch (AmbiguousParameterException e)
+        catch(AmbiguousParameterException e)
         {
             // expected
         }
@@ -267,7 +276,7 @@ public class DBParametersTest extends TestCase
             params.getDate("foo");
             fail("Should throw NumberFormatException");
         }
-        catch (NumberFormatException e)
+        catch(NumberFormatException e)
         {
             // expected
         }
@@ -276,7 +285,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for boolean getDate(String, Date)
      */
-    public void testGetDateStringDate() throws Exception
+    public void testGetDateStringDate()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getDate("foo", new Date(anyTimeStamp)), new Date(anyTimeStamp));
@@ -287,7 +297,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for boolean getDates(String)
      */
-    public void testGetDates() throws Exception
+    public void testGetDates()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getDates("foo").length, 0);
@@ -297,11 +308,12 @@ public class DBParametersTest extends TestCase
         assertEquals(params.getDates("foo")[0], new Date(anyTimeStamp));
         assertEquals(params.getDates("foo")[1], new Date(anyTimeStamp2));
     }
-    
+
     /**
      * Test for float getFloat(String)
      */
-    public void testGetFloatString() throws Exception
+    public void testGetFloatString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         try
@@ -309,7 +321,7 @@ public class DBParametersTest extends TestCase
             assertEquals(params.getFloat("foo"), 1, 1);
             fail("Should throw UndefinedParameterException");
         }
-        catch (UndefinedParameterException e)
+        catch(UndefinedParameterException e)
         {
             // expected
         }
@@ -321,7 +333,7 @@ public class DBParametersTest extends TestCase
             params.getFloat("foo");
             fail("Should throw AmbiguousParameterException");
         }
-        catch (AmbiguousParameterException e)
+        catch(AmbiguousParameterException e)
         {
             // expected
         }
@@ -331,7 +343,7 @@ public class DBParametersTest extends TestCase
             params.getFloat("foo");
             fail("Should throw NumberFormatException");
         }
-        catch (NumberFormatException e)
+        catch(NumberFormatException e)
         {
             // expected
         }
@@ -340,7 +352,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for float getFloat(String, float)
      */
-    public void testGetFloatStringfloat() throws Exception
+    public void testGetFloatStringfloat()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getFloat("foo", 1.5F), 1.5F, 1.5F);
@@ -351,7 +364,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for float getFloats(String)
      */
-    public void testGetFloats() throws Exception
+    public void testGetFloats()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", 2.5F);
@@ -363,7 +377,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for int getInt(String)
      */
-    public void testGetIntString() throws Exception
+    public void testGetIntString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         try
@@ -371,7 +386,7 @@ public class DBParametersTest extends TestCase
             assertEquals(params.getInt("foo"), 1, 1);
             fail("Should throw UndefinedParameterException");
         }
-        catch (UndefinedParameterException e)
+        catch(UndefinedParameterException e)
         {
             // expected
         }
@@ -383,7 +398,7 @@ public class DBParametersTest extends TestCase
             params.getInt("foo");
             fail("Should throw AmbiguousParameterException");
         }
-        catch (AmbiguousParameterException e)
+        catch(AmbiguousParameterException e)
         {
             // expected
         }
@@ -393,7 +408,7 @@ public class DBParametersTest extends TestCase
             params.getInt("foo");
             fail("Should throw NumberFormatException");
         }
-        catch (NumberFormatException e)
+        catch(NumberFormatException e)
         {
             // expected
         }
@@ -403,7 +418,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for int getInt(String, int)
      */
-    public void testGetIntStringint() throws Exception
+    public void testGetIntStringint()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getInt("foo", 1), 1, 1);
@@ -414,7 +430,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for get ints.
      */
-    public void testGetInts() throws Exception
+    public void testGetInts()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", 2);
@@ -426,7 +443,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for long getLong(String)
      */
-    public void testGetLongString() throws Exception
+    public void testGetLongString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         try
@@ -434,7 +452,7 @@ public class DBParametersTest extends TestCase
             assertEquals(params.getLong("foo"), 1, 1);
             fail("Should throw UndefinedParameterException");
         }
-        catch (UndefinedParameterException e)
+        catch(UndefinedParameterException e)
         {
             // expected
         }
@@ -446,7 +464,7 @@ public class DBParametersTest extends TestCase
             params.getLong("foo");
             fail("Should throw AmbiguousParameterException");
         }
-        catch (AmbiguousParameterException e)
+        catch(AmbiguousParameterException e)
         {
             // expected
         }
@@ -456,7 +474,7 @@ public class DBParametersTest extends TestCase
             params.getLong("foo");
             fail("Should throw NumberFormatException");
         }
-        catch (NumberFormatException e)
+        catch(NumberFormatException e)
         {
             // expected
         }
@@ -465,7 +483,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for long getLong(String, long)
      */
-    public void testGetLongStringlong() throws Exception
+    public void testGetLongStringlong()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.getLong("foo", 1), 1, 1);
@@ -476,7 +495,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for long getLongs()
      */
-    public void testGetLongs() throws Exception
+    public void testGetLongs()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", 2);
@@ -488,7 +508,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for getParameterNames()
      */
-    public void testGetParameterNames() throws Exception
+    public void testGetParameterNames()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
@@ -501,7 +522,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for boolean isDefined()
      */
-    public void testIsDefined() throws Exception
+    public void testIsDefined()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.isDefined("foo"), false);
@@ -514,7 +536,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void remove()
      */
-    public void testRemove() throws Exception
+    public void testRemove()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
@@ -527,15 +550,17 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void remove(String)
      */
-    public void testRemoveString() throws Exception
+    public void testRemoveString()
+        throws Exception
     {
-        //already tested
+        // already tested
     }
 
     /**
      * Test for void remove(String, String)
      */
-    public void testRemoveStringString() throws Exception
+    public void testRemoveStringString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
@@ -549,7 +574,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void remove(String, float)
      */
-    public void testRemoveStringfloat() throws Exception
+    public void testRemoveStringfloat()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", 1F);
@@ -562,7 +588,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void remove(String, int)
      */
-    public void testRemoveStringint() throws Exception
+    public void testRemoveStringint()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", 1);
@@ -575,7 +602,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void remove(String, long)
      */
-    public void testRemoveStringlong() throws Exception
+    public void testRemoveStringlong()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", 1L);
@@ -588,7 +616,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void remove(Set)
      */
-    public void testRemoveSet() throws Exception
+    public void testRemoveSet()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
@@ -603,7 +632,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void remove(Set)
      */
-    public void testRemoveExcept() throws Exception
+    public void testRemoveExcept()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
@@ -618,7 +648,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, String)
      */
-    public void testSetStringString() throws Exception
+    public void testSetStringString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", "bar");
@@ -631,21 +662,22 @@ public class DBParametersTest extends TestCase
             params.get("foo");
             fail("should throw the exception");
         }
-        catch (AmbiguousParameterException e)
+        catch(AmbiguousParameterException e)
         {
-            //was expected
+            // was expected
         }
     }
 
     /**
      * Test for void set(String, String[])
      */
-    public void testSetStringStringArray() throws Exception
+    public void testSetStringStringArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", new String[] { "foo", "bar" });
         String[] result = params.getStrings("foo");
-        if (result[0].equals("foo"))
+        if(result[0].equals("foo"))
         {
             assertEquals(result[1], "bar");
         }
@@ -659,7 +691,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, boolean)
      */
-    public void testSetStringboolean() throws Exception
+    public void testSetStringboolean()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", true);
@@ -671,7 +704,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, boolean[])
      */
-    public void testSetStringbooleanArray() throws Exception
+    public void testSetStringbooleanArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", new boolean[] { true, false, true });
@@ -682,7 +716,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, float)
      */
-    public void testSetStringfloat() throws Exception
+    public void testSetStringfloat()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", 1F);
@@ -692,7 +727,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, float[])
      */
-    public void testSetStringfloatArray() throws Exception
+    public void testSetStringfloatArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", new float[] { 1, 2, 3 });
@@ -702,7 +738,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, int)
      */
-    public void testSetStringint() throws Exception
+    public void testSetStringint()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", 1);
@@ -712,7 +749,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, int[])
      */
-    public void testSetStringintArray() throws Exception
+    public void testSetStringintArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", new int[] { 1, 2, 3 });
@@ -722,7 +760,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, long)
      */
-    public void testSetStringlong() throws Exception
+    public void testSetStringlong()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", 1L);
@@ -732,7 +771,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void set(String, long[])
      */
-    public void testSetStringlongArray() throws Exception
+    public void testSetStringlongArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.set("foo", new long[] { 1, 2, 3 });
@@ -742,7 +782,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, String)
      */
-    public void testAddStringString() throws Exception
+    public void testAddStringString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", "bar");
@@ -755,7 +796,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, String[])
      */
-    public void testAddStringStringArray() throws Exception
+    public void testAddStringStringArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", new String[] { "bar" });
@@ -768,7 +810,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, boolean)
      */
-    public void testAddStringboolean() throws Exception
+    public void testAddStringboolean()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", true);
@@ -782,7 +825,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, boolean[])
      */
-    public void testAddStringbooleanArray() throws Exception
+    public void testAddStringbooleanArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", new boolean[] { true });
@@ -795,7 +839,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, float)
      */
-    public void testAddStringfloat() throws Exception
+    public void testAddStringfloat()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", 1F);
@@ -809,7 +854,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, float[])
      */
-    public void testAddStringfloatArray() throws Exception
+    public void testAddStringfloatArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", new float[] { 1 });
@@ -822,7 +868,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, int)
      */
-    public void testAddStringint() throws Exception
+    public void testAddStringint()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", 1);
@@ -836,7 +883,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, int[])
      */
-    public void testAddStringintArray() throws Exception
+    public void testAddStringintArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", new int[] { 1 });
@@ -849,7 +897,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, long)
      */
-    public void testAddStringlong() throws Exception
+    public void testAddStringlong()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", 1L);
@@ -863,7 +912,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(String, long[])
      */
-    public void testAddStringlongArray() throws Exception
+    public void testAddStringlongArray()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         params.add("foo", new long[] { 1 });
@@ -876,7 +926,8 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(Parameters, boolean)
      */
-    public void testAddParametersboolean() throws Exception
+    public void testAddParametersboolean()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         Parameters temp = new DefaultParameters();
@@ -900,14 +951,15 @@ public class DBParametersTest extends TestCase
     /**
      * Test for void add(Parameters, boolean)
      */
-    public void testToString() throws Exception
+    public void testToString()
+        throws Exception
     {
         Parameters params = manager.createContainer();
         assertEquals(params.toString(), "");
         assertEquals(params.getChild("prefix").getParameterNames().length, 0);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////////////////
 
     private void prepareDataSource(DataSource ds)
         throws Exception

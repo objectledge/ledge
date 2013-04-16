@@ -98,6 +98,7 @@ public class MVCTest extends LedgeTestCase
             httpServletResponse = (HttpServletResponse)mockHttpServletResponse.proxy();
             mockHttpServletResponse.stubs().method("setContentLength").with(ANYTHING).isVoid();
             mockHttpServletResponse.stubs().method("setContentType").with(ANYTHING).isVoid();
+            mockHttpServletResponse.stubs().method("isCommitted").will(returnValue(false));
             ServletOutputStream sos = new ServletOutputStream()
             {
                 public void write(int b) throws IOException

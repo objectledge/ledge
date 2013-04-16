@@ -12,18 +12,60 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.i18n.I18nLocale;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 import org.picocontainer.MutablePicoContainer;
 
-import com.sun.jersey.api.core.PackagesResourceConfig;
-import com.sun.jersey.spi.container.servlet.ServletContainer;
-
+/**
+ * JerseyRestValve provides Jersey intergation. JerseyRestValve can be configured using
+ * {@link JerseyConfigurationHook} as well as {@link AbstractBinder} JerseyRestValve by default
+ * configured Jersey to use Jackson as JSON marshaller. See {@link JacksonMapper} if you want
+ * non-default configuration of ObjectMapper for some specific type
+ * <p>
+ * Example configuration:
+ * 
+ * <pre>
+ * 
+ * {@code
+ *  <container key="forwardMeToParent"/>
+ *  <component class="org.objectledge.web.rest.JerseyRestValve">
+ *     <parameter key="forwardMeToParent" />
+ *     <parameter />
+ *     <parameter />
+ *     <parameter />
+ *     <parameter />
+ *     <sequence>
+ *       <!-- Add binders for @Inject. Binders can be used to add Factories -->
+ *       <component class="org.objectledge.web.rest.I18nLocaleFactoryBinder"/>
+ *     </sequence>
+ *     <sequence>
+ *       <!-- Jersey configuration hooks, register filters, features, properties etc. -->
+ *       <component class="org.objectledge.web.rest.RegisterAuthenticationFilter" />
+ *     </sequence>
+ *   </component>
+ * 
+ * }
+ * </pre>
+ * 
+ * @author Marta Kalamar - original design
+ * @author Marek Lewandowski - rewrite for JAX-RS 2
+ * @see JacksonMapper
+ * @see CompositeJacksonMapper
+ * @see I18nLocale
+ * @see I18nLocaleFactoryBinder
+ * @see JerseyConfigurationHook
+ * @see JerseyRestAuthenticationFilter
+ */
 public class JerseyRestValve
     implements Valve
 {
@@ -40,19 +82,39 @@ public class JerseyRestValve
      * @throws ConfigurationException if the configuration is malformed.
      * @throws ServletException
      */
-    public JerseyRestValve(MutablePicoContainer restResourcesContaier, Logger logger,
-        final Configuration config, final ServletContext servletContext)
+    public JerseyRestValve(MutablePicoContainer container, Logger logger,
+        final Configuration config, final ServletContext servletContext,
+        final CompositeJacksonMapper compositeJacksonMapper, AbstractBinder[] binders,
+        JerseyConfigurationHook[] configurationHooks)
         throws ConfigurationException, ServletException
     {
         this.logger = logger;
 
         ArrayList<String> packageNames = getPackageNamesFromConfig(config);
         Configuration initParams = config.getChild("init-parameters", true);
-        final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext, initParams);
-        final PackagesResourceConfig resourceConfig = new PackagesResourceConfig(packageNames.toArray(new String[packageNames.size()]));
-        resourceConfig.setPropertiesAndFeatures(ledgeServletConfig.getParameters());
-        resourceConfig.getSingletons().add(
-            new PicoComponentProviderFactory(restResourcesContaier, packageNames, logger));
+        final LedgeServletConfig ledgeServletConfig = new LedgeServletConfig(servletContext,
+            initParams);
+        final String[] packageNamesArray = packageNames.toArray(new String[packageNames.size()]);
+        ResourceConfig resourceConfig = new ResourceConfig();
+        resourceConfig.packages(packageNamesArray);
+        resourceConfig.register(JacksonFasterXmlFeature.class);
+        resourceConfig.register(compositeJacksonMapper);
+        resourceConfig.register(MultiPartFeature.class);
+
+        resourceConfig.register(new LedgeBinder(container));
+        for(AbstractBinder binder : binders)
+        {
+            resourceConfig.register(binder);
+        }
+
+        for(JerseyConfigurationHook configurationHook : configurationHooks)
+        {
+            configurationHook.configure(resourceConfig);
+        }
+
+        final Map<String, Object> parameters = ledgeServletConfig.getParameters();
+        resourceConfig.addProperties(parameters);
+
         jerseyContainer = new ServletContainer(resourceConfig)
             {
                 @Override
@@ -65,7 +127,8 @@ public class JerseyRestValve
         jerseyContainer.init();
     }
 
-    private ArrayList<String> getPackageNamesFromConfig(Configuration config) throws ConfigurationException
+    private ArrayList<String> getPackageNamesFromConfig(Configuration config)
+        throws ConfigurationException
     {
         ArrayList<String> packageNames = new ArrayList<>();
         final Configuration packages = config.getChild("packages");
@@ -90,7 +153,7 @@ public class JerseyRestValve
         }
         catch(ServletException e)
         {
-            throw new ProcessingException(e);
+            throw new ProcessingException(e.getCause() != null ? e.getCause() : e);
         }
         catch(IOException e)
         {
@@ -140,11 +203,11 @@ public class JerseyRestValve
         {
             return parameters.keys();
         }
-        
+
         public Map<String, Object> getParameters()
         {
             return (Map<String, Object>)parameters;
         }
-        
+
     }
 }

@@ -32,8 +32,6 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import junit.framework.TestCase;
-
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.btm.BitronixDataSource;
@@ -41,13 +39,15 @@ import org.objectledge.btm.BitronixTransaction;
 import org.objectledge.btm.BitronixTransactionManager;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.test.LedgeTestCase;
 
 /**
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: ThreadDataSourceTest.java,v 1.7 2005-10-09 19:43:21 rafal Exp $
  */
-public class ThreadDataSourceTest extends TestCase
+public class ThreadDataSourceTest
+    extends LedgeTestCase
 {
     private BitronixTransactionManager btm;
 
@@ -57,7 +57,7 @@ public class ThreadDataSourceTest extends TestCase
     {
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
-            getDsProperties(), logger);
+            getDsProperties(), getFileSystem(), logger);
         dataSource = new BitronixDataSource("hsql", btm);
         transaction = new BitronixTransaction(btm, new Context(), logger, null);
     }

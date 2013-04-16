@@ -51,7 +51,7 @@ import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
-import org.objectledge.authentication.ServerApiRestrictions;
+import org.objectledge.authentication.api.ServerApiRestrictions;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.threads.Task;
@@ -227,7 +227,11 @@ public class LocalSingleSignOnService
 
     public Principal validateTicket(String ticketId, String domain, String client)
     {
-        Ticket ticket = tickets.remove(ticketId);
+        Ticket ticket;
+        synchronized(tickets)
+        {
+            ticket = tickets.remove(ticketId);
+        }
         if(ticket != null)
         {
             if(ticket.getClient().equals(client))
@@ -355,7 +359,10 @@ public class LocalSingleSignOnService
         String id = new String(Hex.encodeHex(idBytes));
 
         Ticket ticket = new Ticket(principal, realm, client, id);
-        tickets.put(id, ticket);
+        synchronized(tickets)
+        {
+            tickets.put(id, ticket);
+        }
         return ticket;
     }
 
@@ -518,17 +525,28 @@ public class LocalSingleSignOnService
         public void process(Context context)
             throws ProcessingException
         {
-            synchronized(tickets)
+            while(!Thread.interrupted())
             {
-                Iterator<Ticket> i = tickets.values().iterator();
-                while(i.hasNext())
+                synchronized(tickets)
                 {
-                    Ticket ticket = i.next();
-                    if(ticket.getAge() > ticketValidityTime)
+                    Iterator<Ticket> i = tickets.values().iterator();
+                    while(i.hasNext())
                     {
-                        log.debug("EXPIRED ticket " + ticket.toString());
-                        i.remove();
+                        Ticket ticket = i.next();
+                        if(ticket.getAge() > ticketValidityTime)
+                        {
+                            log.debug("EXPIRED ticket " + ticket.toString());
+                            i.remove();
+                        }
                     }
+                }
+                try
+                {
+                    Thread.sleep(60 * 1000);
+                }
+                catch(InterruptedException e)
+                {
+                    return;
                 }
             }
         }
