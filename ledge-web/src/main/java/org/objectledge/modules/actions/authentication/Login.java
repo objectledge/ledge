@@ -113,9 +113,6 @@ public class Login
                     logger.debug("User account expired " + login);
                     principal = null;
                 }
-                else{
-                    httpContext.clearSessionAttributes();
-                }
             }
             else
             {
@@ -130,6 +127,7 @@ public class Login
         }
         AuthenticationContext authenticationContext = AuthenticationContext
             .getAuthenticationContext(context);
+        httpContext.clearSessionAttributes();
         boolean authenticated;
         if(principal == null)
         {
@@ -146,7 +144,7 @@ public class Login
                 singleSignOnService.logOut(previousPrincipal, domain);
             }
             httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
-            singleSignOnService.logIn(principal, domain); 
+            singleSignOnService.logIn(principal, domain);
             try
             {
                 userManager.updateTrackingInformation(principal);

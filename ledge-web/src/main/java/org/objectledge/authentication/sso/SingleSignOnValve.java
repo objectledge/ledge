@@ -77,6 +77,7 @@ public class SingleSignOnValve
                                     .getAttribute(AuthenticationContext.class);
                                 authenticationContext.setUserPrincipal(principal, true);
                                 
+                                httpContext.clearSessionAttributes();
                                 httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
                                 singleSignOnService.logIn(principal, domain);
                                 
