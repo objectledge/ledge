@@ -90,10 +90,13 @@ public class PageTool
     protected Set<ContentLink> scriptLinksSet = new HashSet<ContentLink>();
 
     /** Contains {@link Meta} objects. */
-    protected ArrayList<Meta> nameMetas = new ArrayList<Meta>();
+    protected List<Meta> nameMetas = new ArrayList<Meta>();
+
+    /** Contains {@link Meta} objects. */
+    protected List<Meta> propertyMetas = new ArrayList<Meta>();
     
     /** Contains {@link Meta} objects. */
-    protected ArrayList<Meta> httpEquivMetas = new ArrayList<Meta>();
+    protected List<Meta> httpEquivMetas = new ArrayList<Meta>();
 
     /** Parent of LinkTool used to generate content resource links. */
     protected LinkTool parentLinkTool;
@@ -638,7 +641,7 @@ public class PageTool
      */
     public void addNameMeta(String name, String content)
     {
-        nameMetas.add(new Meta(name, null, content));
+        nameMetas.add(new Meta(name, null, null, content));
     }
 
     /**
@@ -652,13 +655,35 @@ public class PageTool
     }
 
     /**
+     * Adds a meta tag with property attribute.
+     * 
+     * @param property value of <code>property</code> attribute of the meta tag
+     * @param content value of <code>content</code> attribute of the meta tag
+     */
+    public void addPropertyMeta(String property, String content)
+    {
+        propertyMetas.add(new Meta(null, property, null, content));
+    }
+
+    /**
+     * Returns a collection of <code>&lt;meta&gt;</code> tag definitions, with <b>defined names</b>
+     * (<code>name</code> attribute).
+     * 
+     * @return a list of <i>name</i> meta tags added to this page tool
+     */
+    public List<Meta> getPropertyMetas()
+    {
+        return propertyMetas;
+    }
+
+    /**
      * Adds a meta tag with <code>http-equiv</code> attribute.
      * @param httpEquiv value of <code>http-equiv</code> attribute of the meta tag
      * @param content value of <code>content</code> attribute of the meta tag
      */
     public void addHttpEquivMeta(String httpEquiv, String content)
     {
-        httpEquivMetas.add(new Meta(null, httpEquiv, content));
+        httpEquivMetas.add(new Meta(null, null, httpEquiv, content));
     }
 
     /**
@@ -671,18 +696,19 @@ public class PageTool
         return httpEquivMetas;
     }
 
-	/**
-	 * This class represents properties of a <code>meta</code> tag with <code>name</code>
-	 * or <code>http-equiv</code> atribute set. It also contains a value of <code>content</code>\
-	 * attribute.  
-	 */
+    /**
+     * This class represents properties of a <code>meta</code> tag with <code>name</code>,
+     * <code>property</code> or <code>http-equiv</code> atribute set. It also contains a value of
+     * <code>content</code>\ attribute.
+     */
     public class Meta
     {
         private String name;
+        private String property;
         private String httpEquiv;
         private String content;
 
-        Meta(String name, String httpEquiv, String content)
+        Meta(String name, String property, String httpEquiv, String content)
         {
             this.name = name;
             this.httpEquiv = httpEquiv;
@@ -691,6 +717,7 @@ public class PageTool
 
         /**
          * Getter for <code>name</code> attribute value.
+         * 
          * @return Value of <code>name</code> attribute.
          */
         public String getName()
@@ -698,19 +725,31 @@ public class PageTool
             return name;
         }
 
-		/**
-		 * Getter for <code>http-equiv</code> attribute value.
-		 * @return Value of <code>http-equiv</code> attribute.
-		 */
+        /**
+         * Getter for <code>property</code> attribute value.
+         * 
+         * @return Value of <code>property</code> attribute.
+         */
+        public String getProperty()
+        {
+            return property;
+        }
+
+        /**
+         * Getter for <code>http-equiv</code> attribute value.
+         * 
+         * @return Value of <code>http-equiv</code> attribute.
+         */
         public String getHttpEquiv()
         {
             return httpEquiv;
         }
 
-		/**
-		 * Getter for <code>content</code> attribute value.
-		 * @return Value of <code>content</code> attribute.
-		 */
+        /**
+         * Getter for <code>content</code> attribute value.
+         * 
+         * @return Value of <code>content</code> attribute.
+         */
         public String getContent()
         {
             return content;
