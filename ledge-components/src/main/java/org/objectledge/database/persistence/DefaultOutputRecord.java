@@ -557,7 +557,7 @@ public class DefaultOutputRecord
         }
         else if(value instanceof java.util.Date)
         {
-            stmt.setDate(pos, new java.sql.Date(((java.util.Date)value).getTime()));
+            stmt.setTimestamp(pos, new java.sql.Timestamp(((java.util.Date)value).getTime()));
         }
         else if(value instanceof URL)
         {
