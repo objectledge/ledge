@@ -514,27 +514,7 @@ public class ThreadDataSource
         {
             return null;
         }
-        final Connection conn = userMap.get(user);
-        if(conn != null)
-        {
-            try
-            {
-                if(validateConnection(conn))
-                {
-                    return conn;
-                }
-                else
-                {
-                    log.error("Invalid cached connection detected - attempting to reconnect");
-                    ((ThreadConnection)conn).closeConnection();
-                }
-            }
-            catch(SQLException e)
-            {
-                log.error("error when closing connection", e);
-            }
-        }
-        return null;
+        return userMap.get(user);
     }
 
     private void setApplicationName(Connection conn, String name)
