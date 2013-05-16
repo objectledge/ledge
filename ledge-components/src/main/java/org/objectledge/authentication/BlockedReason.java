@@ -166,6 +166,30 @@ public enum BlockedReason
         {
             return String.format(ACCOUNT_BLOCKED_SHORT, BLOCKED_BY_ADMIN_CODE);
         }
+    },
+    ACCOUNT_EMAIL_DUPLICATED
+    {
+
+        @Override
+        public Integer getCode()
+        {
+
+            return EMAIL_DUPLICATED;
+        }
+
+        @Override
+        public String getReason()
+        {
+
+            return "Account Email is connected also with other accounts";
+        }
+
+        @Override
+        public String getShortReason()
+        {
+            return String.format(ACCOUNT_BLOCKED_SHORT, EMAIL_DUPLICATED);
+        }
+
     };
 
     public static BlockedReason getByCode(int code)
@@ -234,6 +258,8 @@ public enum BlockedReason
     private final static Integer BLOCKED_BY_ADMIN_CODE = 6;
 
     private final static Integer ACCOUNT_DELETED_CODE = 7;
+
+    private final static Integer EMAIL_DUPLICATED = 8;
 
     private static final Map<Integer, BlockedReason> codeToReason;
 

@@ -32,6 +32,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -1047,5 +1048,36 @@ public class DirectoryUserManager
             params.set(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName(), actualDays);
         }
         return false;
+    }
+
+    @Override
+    public Collection<Principal> getLoginsForGivenEmail(String email)
+        throws AuthenticationException
+    {
+        String query = "(mail=" + email + ")";
+        Collection<Principal> col = Collections.emptyList();
+        try
+        {
+            col = lookupAccounts(query);
+        }
+        catch(NamingException e)
+        {
+            logger.error("Naming error when getting logins for given email", e);
+        }
+        return col;
+    }
+
+    @Override
+    public boolean isEmailDuplicated(String email)
+        throws AuthenticationException
+    {
+        if(getLoginsForGivenEmail(email).size() > 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
