@@ -81,6 +81,11 @@
             <text/>
           </element>
         </optional>
+        <optional>
+          <element name="isEmailDuplicationCheckEnabled">
+            <text/>
+          </element>
+        </optional>
       </interleave>
     </element>
   </start>
