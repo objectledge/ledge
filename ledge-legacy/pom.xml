@@ -4,7 +4,7 @@
     <artifactId>ledge-common</artifactId>
     <groupId>org.objectledge</groupId>
     <relativePath>../ledge-common/pom.xml</relativePath>
-    <version>1.0.16.5</version>
+    <version>1.0.16.6</version>
   </parent>
   <artifactId>ledge-legacy</artifactId>
   <name>Objectledge legacy components</name>
