@@ -325,4 +325,17 @@ public class StringTool
     {
         return StringUtils.formatInterval(interval/1000000000);
     }
+
+    /**
+     * Encodes characters with syntactic meaning in XML ( &lt; &gt; " ' &amp; ) as character entity
+     * references.
+     * 
+     * @param string a String
+     * @return encoded String.
+     */
+    public String xmlSafe(String string)
+    {
+        return string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            .replace("\"", "&quot;").replace("'", "&apos;");
+    }
 }
