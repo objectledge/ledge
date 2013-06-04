@@ -87,12 +87,13 @@ public class LocalSingleSignOnService
 
     private final Map<PrincipalRealm, LoginStatus> userStatus = Collections
         .synchronizedMap(new HashMap<PrincipalRealm, LoginStatus>());
-    
+
     private final ServerApiRestrictions serverApiRestrictions;
-    
+
     private final UserManager userManager;
 
-    public LocalSingleSignOnService(ThreadPool threadPool, UserManager userManager, Configuration config, Logger log)
+    public LocalSingleSignOnService(ThreadPool threadPool, UserManager userManager,
+        Configuration config, Logger log)
         throws ConfigurationException
     {
         this.log = log;
@@ -199,7 +200,7 @@ public class LocalSingleSignOnService
             .getValueAsInteger(DEFAULT_BYTES_PER_TICKET);
         this.ticketValidityTime = config.getChild("tickets", true).getChild("validityTime", true)
             .getValueAsInteger(DEFAULT_TICKET_VALIDITY_TIME);
-        
+
         serverApiRestrictions = new ServerApiRestrictions(config.getChild("apiRestrictions"), log);
 
         threadPool.runDaemon(new TicketExpiryTask());
@@ -295,7 +296,8 @@ public class LocalSingleSignOnService
             // mark user as logged out
             synchronized(userStatus)
             {
-                log.debug("LOGGED OUT user " + principal.getName() + " from realm " + realm.getName());
+                log.debug("LOGGED OUT user " + principal.getName() + " from realm "
+                    + realm.getName());
                 userStatus.put(new PrincipalRealm(principal, realm), LoginStatus.LOGGED_OUT);
             }
             // invalidate outstanding tickets
@@ -307,11 +309,12 @@ public class LocalSingleSignOnService
                     Ticket ticket = i.next();
                     if(ticket.getPrincipal().equals(principal) && ticket.getRealm().equals(realm))
                     {
-                        log.debug("INVALIDATED ticket " + ticket.toString() + " because of user logout");
+                        log.debug("INVALIDATED ticket " + ticket.toString()
+                            + " because of user logout");
                         i.remove();
                     }
                 }
-            }            
+            }
         }
         else
         {
@@ -331,8 +334,13 @@ public class LocalSingleSignOnService
         }
         else
         {
-            log.warn("FAILED login status check for user " + principal.getName() + " domain "
-                            + domain + " does not belong to any realm");            
+            // skip spurious warning when the requested host is a realm master itself (happens
+            // routinely when processing /views/sso.Ticket)
+            if(findRealmByMaster(domain) == null)
+            {
+                log.warn("FAILED login status check for user " + principal.getName() + " domain "
+                    + domain + " does not belong to any realm");
+            }
             return LoginStatus.UNKNOWN;
         }
     }
@@ -343,12 +351,13 @@ public class LocalSingleSignOnService
         Realm realm = findRealmByMember(domain);
         return realm != null ? realm.getBaseUrl() : null;
     }
-    
+
     @Override
-    public boolean validateApiRequest(String userName, String secret, String remoteAddr, boolean secure)
+    public boolean validateApiRequest(String userName, String secret, String remoteAddr,
+        boolean secure)
     {
-       return serverApiRestrictions.validateApiRequest(userName, secret, remoteAddr, secure);
-    }    
+        return serverApiRestrictions.validateApiRequest(userName, secret, remoteAddr, secure);
+    }
 
     // ..........................................................................................
 
