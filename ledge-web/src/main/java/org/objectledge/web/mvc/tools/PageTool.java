@@ -216,7 +216,7 @@ public class PageTool
 		 */
         public ContentLink(String href)
         {
-            if(href.contains("://"))
+            if(href.contains("//"))
             {
                 this.href = href;
             } 
