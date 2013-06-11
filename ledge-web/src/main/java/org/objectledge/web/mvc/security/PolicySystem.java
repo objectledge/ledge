@@ -32,6 +32,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -390,25 +391,19 @@ public class PolicySystem
             {
                 return true;
             }
-            String[] userRoles = roleChecking.getRoles(user);
-            if(userRoles != null)
+            Set<String> userRoles = roleChecking.getRoles(user);
+            for(int i = 0; i < roles.length; i++)
             {
-                for (int i = 0; i < roles.length; i++)
+                if(userRoles.contains(roles[i]))
                 {
-                    for (int j = 0; j < userRoles.length; j++)
-                    {
-                        if (roles[i].equals(userRoles[j]))
-                        {
-                            return true;
-                        }
-                    }
+                    return true;
                 }
             }
             return false;
         }
         catch(UserUnknownException e)
         {
-            logger.error("checking roles of unknown user "+user.getName(), e);
+            logger.error("checking roles of unknown user " + user.getName(), e);
             return false;
         }
     }

@@ -29,6 +29,8 @@
 package org.objectledge.security;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Set;
 
 import org.objectledge.authentication.UserUnknownException;
 
@@ -48,9 +50,24 @@ public class DummyRoleChecking implements RoleChecking
      * @return the roles of an user, or <code>null</code> if user unknown.
      * @throws UserUnknownException thrown if user is unknown.
      */ 
-    public String[] getRoles(Principal user)
+    @Override
+    public Set<String> getRoles(Principal user)
         throws UserUnknownException
     {
-        return new String[]{};
+        return Collections.emptySet();
+    }
+
+    /**
+     * Checks if the user has a specific role.
+     * 
+     * @param user the user.
+     * @param role the role.
+     * @return {@code true} if the user has the specified role.
+     */
+    @Override
+    public boolean hasRole(Principal user, String role)
+        throws UserUnknownException
+    {
+        return false;
     }
 }
