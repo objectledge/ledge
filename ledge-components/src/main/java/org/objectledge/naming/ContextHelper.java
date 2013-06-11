@@ -274,4 +274,19 @@ public class ContextHelper
         contextFactory.reconnect(contextAlias);
         context = contextFactory.getContext(contextAlias);
     }
+
+    public void close(Context ctx)
+    {
+        try
+        {
+            if(ctx != null)
+            {
+                ctx.close();
+            }
+        }
+        catch(Exception e)
+        {
+            logger.error("closing context failed", e);
+        }
+    }
 }

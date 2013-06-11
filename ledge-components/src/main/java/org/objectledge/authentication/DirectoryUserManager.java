@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.naming.Context;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -223,7 +222,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
@@ -272,7 +271,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
@@ -346,7 +345,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
         Principal principal = new DefaultPrincipal(dn);
         for(UserManagementParticipant p : participants)
@@ -475,7 +474,7 @@ public class DirectoryUserManager
             }
             finally
             {
-                closeContext(ctx);
+                directory.close(ctx);
             }
             return storedAttribute;
         }
@@ -616,7 +615,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
         for(int i = participants.length - 1; i >= 0; i--)
         {
@@ -700,26 +699,6 @@ public class DirectoryUserManager
     }
 
     /**
-     * Close directory context silently.
-     * 
-     * @param ctx the context.
-     */
-    private void closeContext(Context ctx)
-    {
-        try
-        {
-            if(ctx != null)
-            {
-                ctx.close();
-            }
-        }
-        catch(Exception e)
-        {
-            logger.error("closing context failed", e);
-        }
-    }
-
-    /**
      * Map full user name to login name.
      * 
      * @param name full user name.
@@ -758,7 +737,7 @@ public class DirectoryUserManager
             }
             finally
             {
-                closeContext(user);
+                directory.close(user);
             }
         }
         return login;
@@ -801,7 +780,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
         return storedPassword;
     }
@@ -845,7 +824,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
@@ -877,7 +856,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
