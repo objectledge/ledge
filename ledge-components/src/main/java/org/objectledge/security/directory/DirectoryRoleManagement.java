@@ -52,12 +52,9 @@ public class DirectoryRoleManagement
 
     private ContextHelper ctxHelper;
 
-    private final Logger logger;
-
     public DirectoryRoleManagement(ContextFactory contextFactory, Logger logger)
         throws NamingException
     {
-        this.logger = logger;
         ctxHelper = new ContextHelper(contextFactory, CONTEXT_ALIAS, logger);
     }
 
@@ -79,9 +76,11 @@ public class DirectoryRoleManagement
         DirContext ctx = getContext();
         try
         {
+            final SearchControls ctl = new SearchControls();
+            ctl.setReturningAttributes(new String[] { CN_ATTR });
             NamingEnumeration<SearchResult> results = ctx.search(CURRENT_CTX, HAS_ROLE_QUERY,
-                new Object[] { role, user.getName() }, new SearchControls());
-            final boolean exists = results.hasMoreElements();
+                new Object[] { role, user.getName() }, ctl);
+            final boolean exists = results.hasMore();
             results.close();
             return exists;
         }
@@ -98,12 +97,14 @@ public class DirectoryRoleManagement
     private DirContext getRole(DirContext baseDirContext, String role)
         throws NamingException
     {
+        final SearchControls ctl = new SearchControls();
+        ctl.setReturningAttributes(new String[] { CN_ATTR });
         NamingEnumeration<SearchResult> results = baseDirContext.search(CURRENT_CTX,
-            ROLE_EXISTS_QUERY, new Object[] { role }, new SearchControls());
+            ROLE_EXISTS_QUERY, new Object[] { role }, ctl);
         DirContext result = null;
-        if(results.hasMoreElements())
+        if(results.hasMore())
         {
-            final SearchResult element = results.nextElement();
+            final SearchResult element = results.next();
             result = (DirContext)baseDirContext.lookup(element.getName());
         }
         results.close();
@@ -180,7 +181,7 @@ public class DirectoryRoleManagement
             NamingEnumeration<SearchResult> results = ctx.search(CURRENT_CTX, USER_ROLES_QUERY,
                 new Object[] { user.getName() }, new SearchControls());
             Set<String> roles = new HashSet<>();
-            while(results.hasMoreElements())
+            while(results.hasMore())
             {
                 SearchResult result = results.next();
                 roles.add((String)result.getAttributes().get(CN_ATTR).get());
