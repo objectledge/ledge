@@ -124,15 +124,6 @@ public enum LdapMapper
             return "logonCount";
         }
     },
-    MODERATION()
-    {
-
-        @Override
-        public String getLdapName()
-        {
-            return "organizationTrustedEditor";
-        }
-    },
     ;
     public abstract String getLdapName();
 }
