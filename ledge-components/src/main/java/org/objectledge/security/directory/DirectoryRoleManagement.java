@@ -20,6 +20,7 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.naming.ContextFactory;
 import org.objectledge.naming.ContextHelper;
 import org.objectledge.security.RoleManagement;
@@ -44,7 +45,7 @@ public class DirectoryRoleManagement
 
     private static final String HAS_ROLE_QUERY = "(&(objectClass=organizationalRole)(cn={0})(roleOccupant={1}))";
 
-    private static final String ROLE_EXISTS_QUERY = "(&(objectClass=organizationalRole)(cn={0}))";
+    private static final String ROLE_QUERY = "(&(objectClass=organizationalRole)(cn={0}))";
 
     private static final String USER_ROLES_QUERY = "(&(objectClass=organizationalRole)(roleOccupant={0}))";
 
@@ -99,8 +100,8 @@ public class DirectoryRoleManagement
     {
         final SearchControls ctl = new SearchControls();
         ctl.setReturningAttributes(new String[] { CN_ATTR });
-        NamingEnumeration<SearchResult> results = baseDirContext.search(CURRENT_CTX,
-            ROLE_EXISTS_QUERY, new Object[] { role }, ctl);
+        NamingEnumeration<SearchResult> results = baseDirContext.search(CURRENT_CTX, ROLE_QUERY,
+            new Object[] { role }, ctl);
         DirContext result = null;
         if(results.hasMore())
         {
@@ -188,6 +189,40 @@ public class DirectoryRoleManagement
             }
             results.close();
             return roles;
+        }
+        catch(NamingException e)
+        {
+            throw new RuntimeException("Directory query failed", e);
+        }
+        finally
+        {
+            ctxHelper.close(ctx);
+        }
+    }
+
+    public Set<Principal> getRoleOccupants(String role)
+    {
+        DirContext ctx = getContext();
+        try
+        {
+            final SearchControls ctl = new SearchControls();
+            ctl.setReturningAttributes(new String[] { ROLE_OCCUPANT_ATTR });
+            NamingEnumeration<SearchResult> results = ctx.search(CURRENT_CTX, ROLE_QUERY,
+                new Object[] { role }, ctl);
+            Set<Principal> principals = new HashSet<>();
+            if(results.hasMore())
+            {
+                SearchResult result = results.next();
+                NamingEnumeration<String> occupants = (NamingEnumeration<String>)result
+                    .getAttributes().get(ROLE_OCCUPANT_ATTR).getAll();
+                while(occupants.hasMore())
+                {
+                    principals.add(new DefaultPrincipal(occupants.next()));
+                }
+                occupants.close();
+            }
+            results.close();
+            return principals;
         }
         catch(NamingException e)
         {
