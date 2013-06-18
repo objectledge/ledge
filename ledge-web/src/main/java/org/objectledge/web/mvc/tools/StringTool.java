@@ -335,7 +335,6 @@ public class StringTool
      */
     public String xmlSafe(String string)
     {
-        return string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-            .replace("\"", "&quot;").replace("'", "&apos;");
+        return StringUtils.escapeXMLCharacters(string);
     }
 }

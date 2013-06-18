@@ -34,7 +34,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -712,22 +711,28 @@ public class StringUtils
     public static String escapeXMLCharacters(String string)
     {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < string.length(); i++)
+        for(int i = 0; i < string.length(); i++)
         {
             char c = string.charAt(i);
-            switch (c)
+            switch(c)
             {
-                case '<' :
-                    sb.append("&lt;");
-                    break;
-                case '>':
-                    sb.append("&gt;");
-                    break;
-                case '&':
-                    sb.append("&amp;");
-                    break;
-                default:
-                    sb.append(c);
+            case '<':
+                sb.append("&lt;");
+                break;
+            case '>':
+                sb.append("&gt;");
+                break;
+            case '&':
+                sb.append("&amp;");
+                break;
+            case '"':
+                sb.append("&quot;");
+                break;
+            case '\'':
+                sb.append("&apos;");
+                break;
+            default:
+                sb.append(c);
             }
         }
         return sb.toString();
