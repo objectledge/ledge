@@ -177,7 +177,8 @@ public class RewriteInfoBuilder
         return map;
     }
 
-    private static String formatRequestURL(final HttpServletRequest request, final String pathInfo)
+    private static String formatRequestURL(final HttpServletRequest request, String servletPath,
+        final String pathInfo)
     {
         final StringBuilder b = new StringBuilder();
         b.append(request.isSecure() ? "https" : "http");
@@ -200,7 +201,11 @@ public class RewriteInfoBuilder
             }
         }
         b.append(request.getContextPath());
-        b.append(pathInfo);
+        b.append(servletPath);
+        if(pathInfo != null)
+        {
+            b.append(pathInfo);
+        }
         return b.toString();
     }
 
