@@ -98,8 +98,10 @@ public class RewriteInfoBuilder
         return map;
     }
 
-    private String formatQueryString(final List<String[]> queryString, final String encoding)
+    private static String formatQueryString(final List<String[]> queryString,
+        final String characterEncoding)
     {
+        final String encoding = characterEncoding != null ? characterEncoding : "UTF-8";
         try
         {
             final StringBuilder b = new StringBuilder();
@@ -360,11 +362,9 @@ public class RewriteInfoBuilder
         public RequestWrapper()
         {
             super(request);
-            final String characterEncoding = request.getCharacterEncoding();
-            this.queryString = formatQueryString(qsParams,
-                characterEncoding != null ? characterEncoding : "UTF-8");
+            this.queryString = formatQueryString(qsParams, request.getCharacterEncoding());
             this.parameterMap = formatParameterMap(qsParams, params);
-            this.requestURL = formatRequestURL(request, pathInfo);
+            this.requestURL = formatRequestURL(request, servletPath, pathInfo);
             this.requestURI = requestURL + (queryString == null ? "" : "?" + queryString);
         }
 
