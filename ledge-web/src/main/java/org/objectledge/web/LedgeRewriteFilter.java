@@ -22,11 +22,11 @@ public class LedgeRewriteFilter
 {
     public static final String REWRITER_KEY = "rewriter";
 
-    private final AtomicReference<UrlRewriter> rewriterRef = new AtomicReference<>();
-
     private final Logger log = Logger.getLogger(LedgeServlet.class);
 
     private String filterName;
+
+    private UrlRewriter rewriter;
 
     @Override
     public void init(final FilterConfig filterConfig)
@@ -41,10 +41,9 @@ public class LedgeRewriteFilter
                 + " is missing from SerlvetContext");
         }
         final String rewriterName = filterConfig.getInitParameter(REWRITER_KEY);
-        rewriterRef.set((UrlRewriter)container
-            .getComponentInstance(rewriterName != null ? rewriterName : UrlRewriter.class));
-
-        if(rewriterRef == null)
+        rewriter = (UrlRewriter)container.getComponentInstance(rewriterName != null ? rewriterName
+            : UrlRewriter.class);
+        if(rewriter == null)
         {
             throw new ServletException("UrlRewriter component "
                 + (rewriterName != null ? rewriterName + " " : " ") + "is missing");
@@ -59,12 +58,11 @@ public class LedgeRewriteFilter
         final FilterChain chain)
         throws IOException, ServletException
     {
-        final UrlRewriter urlRewriter = rewriterRef.get();
         final RewriteInfo original = RewriteInfoBuilder.fromRequest((HttpServletRequest)request)
             .build();
-        if(urlRewriter.matches(original))
+        if(rewriter.matches(original))
         {
-            final ServletRequest target = urlRewriter.rewrite(original).getRequest();
+            final ServletRequest target = rewriter.rewrite(original).getRequest();
             chain.doFilter(target, response);
         }
         else
