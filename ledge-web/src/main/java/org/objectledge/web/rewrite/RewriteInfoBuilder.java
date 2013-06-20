@@ -42,38 +42,41 @@ public class RewriteInfoBuilder
         try
         {
             final List<String[]> qsParams = new ArrayList<>();
-            int state = 0; // 0 - param name, 1 - param value
-            final StringBuilder b = new StringBuilder();
-            String[] pair = new String[2];
-            for(char c : params.toCharArray())
+            if(params != null)
             {
-                if(c == '=')
+                int state = 0; // 0 - param name, 1 - param value
+                final StringBuilder b = new StringBuilder();
+                String[] pair = new String[2];
+                for(char c : params.toCharArray())
                 {
-                    if(state == 0)
+                    if(c == '=')
                     {
-                        pair[0] = URLDecoder.decode(b.toString(), encoding);
-                        b.setLength(0);
-                        state = 1;
+                        if(state == 0)
+                        {
+                            pair[0] = URLDecoder.decode(b.toString(), encoding);
+                            b.setLength(0);
+                            state = 1;
+                        }
+                        else
+                        {
+                            b.append(c);
+                        }
+                    }
+                    else if(c == '&')
+                    {
+                        if(state == 1)
+                        {
+                            pair[1] = URLDecoder.decode(b.toString(), encoding);
+                            b.setLength(0);
+                        }
+                        qsParams.add(pair);
+                        pair = new String[2];
+                        state = 0;
                     }
                     else
                     {
                         b.append(c);
                     }
-                }
-                else if(c == '&')
-                {
-                    if(state == 1)
-                    {
-                        pair[1] = URLDecoder.decode(b.toString(), encoding);
-                        b.setLength(0);
-                    }
-                    qsParams.add(pair);
-                    pair = new String[2];
-                    state = 0;
-                }
-                else
-                {
-                    b.append(c);
                 }
             }
             return qsParams;
