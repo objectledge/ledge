@@ -1,7 +1,6 @@
 package org.objectledge.web;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -81,7 +80,8 @@ public class LedgeRewriteFilter
     @Override
     public void destroy()
     {
-        rewriterRef.lazySet(null);
+        rewriter = null;
+        servletContext = null;
         log.info("Filter " + filterName + " destroyed.");
     }
 }
