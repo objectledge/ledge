@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -26,13 +28,16 @@ public class LedgeRewriteFilter
 
     private String filterName;
 
+    private ServletContext servletContext;
+
     private UrlRewriter rewriter;
 
     @Override
     public void init(final FilterConfig filterConfig)
         throws ServletException
     {
-        final PicoContainer container = (PicoContainer)filterConfig.getServletContext()
+        servletContext = filterConfig.getServletContext();
+        final PicoContainer container = (PicoContainer)servletContext
             .getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
 
         if(container == null)
@@ -62,8 +67,10 @@ public class LedgeRewriteFilter
             .build();
         if(rewriter.matches(original))
         {
-            final ServletRequest target = rewriter.rewrite(original).getRequest();
-            chain.doFilter(target, response);
+            final RewriteInfo target = rewriter.rewrite(original);
+            final RequestDispatcher dispatcher = servletContext.getRequestDispatcher(target
+                .getServletPath());
+            dispatcher.forward(target.getRequest(), response);
         }
         else
         {
