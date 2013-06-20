@@ -191,10 +191,13 @@ public class RewriteInfoBuilder
         {
             b.append(request.getLocalName());
         }
-        if((!request.isSecure() && request.getLocalPort() != 80)
-            || (request.isSecure() && request.getLocalPort() != 443))
+        if(host == null || !host.contains(":"))
         {
-            b.append(':').append(request.getLocalPort());
+            if((!request.isSecure() && request.getLocalPort() != 80)
+                || (request.isSecure() && request.getLocalPort() != 443))
+            {
+                b.append(':').append(request.getLocalPort());
+            }
         }
         b.append(request.getContextPath());
         b.append(pathInfo);
