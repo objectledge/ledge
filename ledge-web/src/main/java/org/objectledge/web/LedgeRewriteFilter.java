@@ -62,6 +62,10 @@ public class LedgeRewriteFilter
         final FilterChain chain)
         throws IOException, ServletException
     {
+        if(request.getCharacterEncoding() == null)
+        {
+            request.setCharacterEncoding("UTF-8");
+        }
         final RewriteInfo original = RewriteInfoBuilder.fromRequest((HttpServletRequest)request)
             .build();
         if(rewriter.matches(original))
