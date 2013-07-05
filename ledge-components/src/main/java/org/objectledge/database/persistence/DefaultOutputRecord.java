@@ -593,7 +593,7 @@ public class DefaultOutputRecord
         }
         else if(value instanceof Float)
         {
-            stmt.setFloat(pos, ((Float)value).byteValue());
+            stmt.setFloat(pos, ((Float)value).floatValue());
         }
         else if(value instanceof BigDecimal)
         {
