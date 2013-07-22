@@ -78,6 +78,11 @@ public class RewriteInfoBuilder
                         b.append(c);
                     }
                 }
+                if(state == 1)
+                {
+                    pair[1] = URLDecoder.decode(b.toString(), encoding);
+                    qsParams.add(pair);
+                }
             }
             return qsParams;
         }
