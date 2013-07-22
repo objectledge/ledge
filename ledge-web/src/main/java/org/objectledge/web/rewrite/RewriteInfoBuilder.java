@@ -14,6 +14,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+
 public class RewriteInfoBuilder
 {
     private final HttpServletRequest request;
@@ -140,46 +143,16 @@ public class RewriteInfoBuilder
         }
     }
 
-    private static Map<String, String[]> formatParameterMap(final List<String[]> qsParams,
+    private static Map<String, String[]> formatParameterMap(
         final Map<String, List<String>> parameters)
     {
-        final Map<String, List<String>> temp = new LinkedHashMap<>();
-
-        for(String[] pair : qsParams)
-        {
-            List<String> values = temp.get(pair[0]);
-            if(values == null)
+        return Maps.transformValues(parameters, new Function<List<String>, String[]>()
             {
-                values = new ArrayList<>();
-                temp.put(pair[0], values);
-            }
-            if(pair[1] != null)
-            {
-                values.add(pair[1]);
-            }
-        }
-
-        for(Map.Entry<String, List<String>> entry : parameters.entrySet())
-        {
-            List<String> values = temp.get(entry.getKey());
-            if(values == null)
-            {
-                values = new ArrayList<>(entry.getValue());
-                temp.put(entry.getKey(), values);
-            }
-            else
-            {
-                values.addAll(entry.getValue());
-            }
-        }
-
-        final Map<String, String[]> map = new LinkedHashMap<>();
-        for(Map.Entry<String, List<String>> entry : temp.entrySet())
-        {
-            final String[] values = new String[entry.getValue().size()];
-            map.put(entry.getKey(), entry.getValue().toArray(values));
-        }
-        return map;
+                public String[] apply(List<String> input)
+                {
+                    return input.toArray(new String[input.size()]);
+                }
+            });
     }
 
     private static String formatRequestURL(final HttpServletRequest request, String servletPath,
@@ -376,7 +349,7 @@ public class RewriteInfoBuilder
         {
             super(request);
             this.queryString = formatQueryString(qsParams, request.getCharacterEncoding());
-            this.parameterMap = formatParameterMap(qsParams, params);
+            this.parameterMap = formatParameterMap(params);
             this.requestURL = formatRequestURL(request, servletPath, pathInfo);
             this.requestURI = requestURL + (queryString == null ? "" : "?" + queryString);
         }
