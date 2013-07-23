@@ -99,7 +99,8 @@ public class PipelineHttpDispatcher
             pipeline.process(context);
             if(context.getAttribute(ConcurrencyControlValve.DROPPED_REQUEST_MARKER) != null)
             {
-                response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+                response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,
+                    "Server capacity exceeded, please try again in a few minutes.");
             }
         }
         catch(ProcessingException e)
