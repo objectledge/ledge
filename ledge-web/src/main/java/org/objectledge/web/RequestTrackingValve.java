@@ -52,6 +52,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.context.Context;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.pipeline.ConcurrencyControlValve;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.statistics.AbstractMuninGraph;
@@ -98,6 +99,10 @@ public class RequestTrackingValve
 
     private int totalRequests = 0;
     
+    private int processedRequests = 0;
+
+    private int droppedRequests = 0;
+
     private int totalSessions = 0;
     
     private int concurrentSessions = 0;
@@ -246,6 +251,14 @@ public class RequestTrackingValve
                 updateCurrentTime(startTime);
             }
             nested.process(context);
+            if(context.getAttribute(ConcurrencyControlValve.DROPPED_REQUEST_MARKER) != null)
+            {
+                processedRequests++;
+            }
+            else
+            {
+                droppedRequests++;
+            }
         }
         finally
         {
@@ -458,13 +471,33 @@ public class RequestTrackingValve
         }
         
         /**
-         * Returns the total number of served requests.
+         * Returns the total number of received requests.
          * 
-         * @return the total number of served requests.
+         * @return the total number of received requests.
          */
         public Number getCount()
         {
             return Integer.valueOf(totalRequests);
+        }
+
+        /**
+         * Returns the total number of served requests.
+         * 
+         * @return the total number of served requests.
+         */
+        public Number getProcessedCount()
+        {
+            return Integer.valueOf(processedRequests);
+        }
+
+        /**
+         * Returns the total number of dropped requests.
+         * 
+         * @return the total number of dropped requests.
+         */
+        public Number getDroppedConnt()
+        {
+            return Integer.valueOf(droppedRequests);
         }
     }
    

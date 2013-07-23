@@ -28,6 +28,7 @@
 package org.objectledge.pipeline;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -53,7 +54,7 @@ public class ConcurrencyControlValve
 
     private final Semaphore semaphore;
 
-    private final int limit;
+    private final Config config;
 
     private volatile int threadCount = 0;
     
@@ -62,21 +63,36 @@ public class ConcurrencyControlValve
     private final Logger log;
 
     /**
+     * When Context attribute with this key is present, session is treated as privileged.
+     * {@link org.objectledge.web.dispatcher.PipelineHttpDispatcher} sets this attribute to the value
+     * of {@code HttpSession} attribute with the same name.
+     */
+    public static final String PRIVILEGED_SESSION_MARKER = "org.objectledge.pipeline.concurrency.PrivilegedSession";
+
+    /**
+     * When request is dropped because timeout occurs while waiting on semaphore, Context attribute
+     * with this name is. {@link org.objectledge.web.RequestTrackingValve} uses it to update request
+     * counts correctly.
+     */
+    public static final String DROPPED_REQUEST_MARKER = "org.objectledge.pipeline.concurrency.DroppedRequest";
+
+    /**
      * Creates new ConcurrencyControlValve instance.
      * 
      * @param nestedValve the valve to control.
      * @param limit the maximum number of threads allowed to execute, or 0 for unlimited.
      * @param log logger
      */
-    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs, final int limit,
+    public ConcurrencyControlValve(final Valve nestedValve, final FileSystem fs,
+        final Config config,
         final Logger log)
     {
         this.nestedValve = nestedValve;
-        this.limit = limit;
+        this.config = config;
         this.log = log;
-        if(limit > 0)
+        if(config.getLimit() > 0)
         {
-            semaphore = new Semaphore(limit, true);
+            semaphore = new Semaphore(config.getLimit(), true);
         }
         else
         {
@@ -97,7 +113,7 @@ public class ConcurrencyControlValve
         final Configuration config, final Logger log)
         throws ConfigurationException
     {
-        this(nestedValve, fs, config.getChild("limit").getValueAsInteger(), log);
+        this(nestedValve, fs, new Config(config), log);
     }
     
     /**
@@ -115,18 +131,45 @@ public class ConcurrencyControlValve
             }
             try
             {
-                semaphore.acquireUninterruptibly();
-                if(log.isInfoEnabled())
+                int timeout = context.getAttribute(PRIVILEGED_SESSION_MARKER) != null ? config
+                    .getPrivilegedTimeout() : config.getTimeout();
+                if(semaphore.tryAcquire(timeout, TimeUnit.SECONDS))
                 {
+                    if(log.isInfoEnabled())
+                    {
+                        long endTime = System.currentTimeMillis();
+                        if(endTime > startTime)
+                        {
+                            log.info("queued for "
+                                + StringUtils.formatMilliIntervalAsSeconds(endTime - startTime));
+                        }
+                        startTime = endTime;
+                    }
+                    nestedValve.process(context);
+                }
+                else
+                {
+                    context.setAttribute(DROPPED_REQUEST_MARKER, Boolean.TRUE);
                     long endTime = System.currentTimeMillis();
                     if(endTime > startTime)
                     {
-                        log.info("queued for "
+                        log.info("dropped after "
                             + StringUtils.formatMilliIntervalAsSeconds(endTime - startTime));
                     }
-                    startTime = endTime;
                 }
-                nestedValve.process(context);
+            }
+            catch(InterruptedException e)
+            {
+                long endTime = System.currentTimeMillis();
+                if(endTime > startTime)
+                {
+                    log.error("interrupted while waiting on semaphore after "
+                        + StringUtils.formatMilliIntervalAsSeconds(endTime - startTime));
+                }
+                else
+                {
+                    log.error("interrupted while waiting on semaphore", e);
+                }
             }
             finally
             {
@@ -185,7 +228,7 @@ public class ConcurrencyControlValve
         {
             if(semaphore != null)
             {
-                return Integer.valueOf(limit - semaphore.availablePermits());
+                return Integer.valueOf(config.getLimit() - semaphore.availablePermits());
             }
             else
             {
@@ -208,6 +251,45 @@ public class ConcurrencyControlValve
             {
                 return 0;
             }
+        }
+    }
+
+    public static class Config
+    {
+        private final int limit;
+
+        private final int timeout;
+
+        private final int privilegedTimeout;
+
+        public Config(final int limit, final int timeout, final int privilegedTimeout)
+        {
+            this.limit = limit;
+            this.timeout = timeout;
+            this.privilegedTimeout = privilegedTimeout;
+        }
+
+        public Config(Configuration config)
+            throws ConfigurationException
+        {
+            this.limit = config.getChild("limit").getValueAsInteger();
+            this.timeout = config.getChild("timeout").getValueAsInteger();
+            this.privilegedTimeout = config.getChild("privilegedTimeout").getValueAsInteger();
+        }
+
+        public int getLimit()
+        {
+            return limit;
+        }
+
+        public int getTimeout()
+        {
+            return timeout;
+        }
+
+        public int getPrivilegedTimeout()
+        {
+            return privilegedTimeout;
         }
     }
 }
