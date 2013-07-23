@@ -253,11 +253,11 @@ public class RequestTrackingValve
             nested.process(context);
             if(context.getAttribute(ConcurrencyControlValve.DROPPED_REQUEST_MARKER) != null)
             {
-                processedRequests++;
+                droppedRequests++;
             }
             else
             {
-                droppedRequests++;
+                processedRequests++;
             }
         }
         finally
@@ -495,7 +495,7 @@ public class RequestTrackingValve
          * 
          * @return the total number of dropped requests.
          */
-        public Number getDroppedConnt()
+        public Number getDroppedCount()
         {
             return Integer.valueOf(droppedRequests);
         }
