@@ -1,8 +1,16 @@
 graph_title Request rate
-graph_order count
-graph_vlabel requests / ${graph_period}
-count.label request rate
 graph_category requests
+graph_vlabel requests / ${graph_period}
+graph_order processedCount droppedCount count
+processedCount.label processed requests
+processedCount.type DERIVE
+processedCount.draw AREA
+processedCount.min 0
+droppedCount.label dropped requests
+droppedCount.type DERIVE
+droppedCount.draw STACK
+droppedCount.min 0
+count total requests
 count.type DERIVE
 count.draw LINE1
 count.min 0

@@ -33,9 +33,11 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ConcurrencyControlValve;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
@@ -81,9 +83,24 @@ public class PipelineHttpDispatcher
     {
         HttpContext httpContext = new HttpContext(request, response);
         context.setAttribute(HttpContext.class, httpContext);
+        final HttpSession session = request.getSession(false);
+        if(session != null)
+        {
+            Object privilegedSession = session
+                .getAttribute(ConcurrencyControlValve.PRIVILEGED_SESSION_MARKER);
+            if(privilegedSession != null)
+            {
+                context.setAttribute(ConcurrencyControlValve.PRIVILEGED_SESSION_MARKER,
+                    privilegedSession);
+            }
+        }
         try
         {
             pipeline.process(context);
+            if(context.getAttribute(ConcurrencyControlValve.DROPPED_REQUEST_MARKER) != null)
+            {
+                response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+            }
         }
         catch(ProcessingException e)
         {
