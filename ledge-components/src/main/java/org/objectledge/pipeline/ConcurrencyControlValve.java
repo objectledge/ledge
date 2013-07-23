@@ -145,7 +145,20 @@ public class ConcurrencyControlValve
                         }
                         startTime = endTime;
                     }
-                    nestedValve.process(context);
+                    try
+                    {
+                        nestedValve.process(context);
+                    }
+                    finally
+                    {
+                        if(log.isInfoEnabled())
+                        {
+                            long endTime = System.currentTimeMillis();
+                            log.info("processed in "
+                                + StringUtils.formatMilliIntervalAsSeconds(endTime - startTime));
+                        }
+                        semaphore.release();
+                    }
                 }
                 else
                 {
@@ -170,16 +183,6 @@ public class ConcurrencyControlValve
                 {
                     log.error("interrupted while waiting on semaphore", e);
                 }
-            }
-            finally
-            {
-                if(log.isInfoEnabled())
-                {
-                    long endTime = System.currentTimeMillis();
-                    log.info("processed in "
-                        + StringUtils.formatMilliIntervalAsSeconds(endTime - startTime));
-                }
-                semaphore.release();
             }
         }
         else
