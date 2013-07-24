@@ -1,6 +1,6 @@
-$pageTool.addScriptLink('http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js')##
-$pageTool.addScriptLink('http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js')##
-$pageTool.addScriptLink('http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.1/handlebars.min.js')##
+$pageTool.addScriptLink('//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js')##
+$pageTool.addScriptLink('//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js')##
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.1/handlebars.min.js')##
 $pageTool.addStyleLink('/style/cyklotron-theme/jquery-ui-1.9.2.custom.css')##
 <style>	
 

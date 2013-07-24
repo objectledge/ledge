@@ -25,10 +25,28 @@
  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
---> 
+-->
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <element name="limit">
-    <text/>
-  </element>
+<element name="config" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://objectledge.org/annotation/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <interleave>
+        <element name="limit">
+            <data type="integer" />
+            <a:documentation>
+                Maximum number of requests processed concurrently.
+            </a:documentation>
+        </element>
+        <element name="timeout">
+            <data type="integer" />
+            <a:documentation>
+                Queue wait timeout in seconds for requests of ordinary users.
+            </a:documentation>
+        </element>
+        <element name="privilegedTimeout">
+            <data type="integer" />
+            <a:documentation>
+                Queue wait timeout in seconds for requests of privileged users.
+            </a:documentation>
+        </element>
+    </interleave>
 </element>

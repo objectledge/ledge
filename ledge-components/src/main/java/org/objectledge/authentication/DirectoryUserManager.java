@@ -32,13 +32,13 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.naming.Context;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingEnumeration;
@@ -81,6 +81,9 @@ public class DirectoryUserManager
     /** By default logon tracking is turned off */
     public static final boolean LOGON_TRACKING_ENABLED_DEFAULT = false;
 
+    /** By default email duplication check is turned off */
+    public static final boolean EMAIL_DUPLICATION_CHECK_ENABLE_DEFAULT = false;
+
     /** Default logon count attribute key name. */
     public static final String LOGON_COUNT_ATTRIBUTE_DEFAULT = "logonCount";
 
@@ -108,6 +111,9 @@ public class DirectoryUserManager
 
     /** logon tracking enabling flag */
     protected boolean isLogonTrackingEnabled;
+
+    /** email duplication check flag */
+    protected boolean isEmailDuplicationCheckEnabled;
 
     /** the logon count attribute key. */
     protected String logonCountAttribute;
@@ -173,6 +179,8 @@ public class DirectoryUserManager
             LOGON_COUNT_ATTRIBUTE_DEFAULT);
         lastLogonTimestampAttribute = config.getChild("lastLogonTimestampAttribute").getValue(
             LAST_LOGON_TIMESTAMP_ATTRIBUTE_DEFAULT);
+        isEmailDuplicationCheckEnabled = config.getChild("isEmailDuplicationCheckEnabled")
+            .getValueAsBoolean(EMAIL_DUPLICATION_CHECK_ENABLE_DEFAULT);
         anonymousName = config.getChild("anonymousName").getValue(null);
         superuserName = config.getChild("superuserName").getValue(null);
         String contextId = config.getChild("contextId").getValue("people");
@@ -214,7 +222,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
@@ -263,7 +271,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
@@ -337,7 +345,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
         Principal principal = new DefaultPrincipal(dn);
         for(UserManagementParticipant p : participants)
@@ -466,7 +474,7 @@ public class DirectoryUserManager
             }
             finally
             {
-                closeContext(ctx);
+                directory.close(ctx);
             }
             return storedAttribute;
         }
@@ -607,7 +615,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
         for(int i = participants.length - 1; i >= 0; i--)
         {
@@ -691,26 +699,6 @@ public class DirectoryUserManager
     }
 
     /**
-     * Close directory context silently.
-     * 
-     * @param ctx the context.
-     */
-    private void closeContext(Context ctx)
-    {
-        try
-        {
-            if(ctx != null)
-            {
-                ctx.close();
-            }
-        }
-        catch(Exception e)
-        {
-            logger.error("closing context failed", e);
-        }
-    }
-
-    /**
      * Map full user name to login name.
      * 
      * @param name full user name.
@@ -749,7 +737,7 @@ public class DirectoryUserManager
             }
             finally
             {
-                closeContext(user);
+                directory.close(user);
             }
         }
         return login;
@@ -792,7 +780,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
         return storedPassword;
     }
@@ -836,7 +824,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
@@ -868,7 +856,7 @@ public class DirectoryUserManager
         }
         finally
         {
-            closeContext(ctx);
+            directory.close(ctx);
         }
     }
 
@@ -1047,5 +1035,36 @@ public class DirectoryUserManager
             params.set(LdapMapper.ACCOUNT_EXPIRATION_DATE.getLdapName(), actualDays);
         }
         return false;
+    }
+
+    @Override
+    public Collection<Principal> getLoginsForGivenEmail(String email)
+        throws AuthenticationException
+    {
+        String query = "(mail=" + email + ")";
+        Collection<Principal> col = Collections.emptyList();
+        try
+        {
+            col = lookupAccounts(query);
+        }
+        catch(NamingException e)
+        {
+            logger.error("Naming error when getting logins for given email", e);
+        }
+        return col;
+    }
+
+    @Override
+    public boolean isEmailDuplicated(String email)
+        throws AuthenticationException
+    {
+        if(!isEmailDuplicationCheckEnabled || getLoginsForGivenEmail(email).size() <= 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

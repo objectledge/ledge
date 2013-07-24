@@ -8,6 +8,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
+
 import org.objectledge.parameters.Parameters;
 
 public interface UserManager
@@ -201,9 +202,7 @@ public interface UserManager
         throws AuthenticationException;
 
     /**
-     * Enables user's password.
-     * 
-     * Removes ! from the beginning of the user's password
+     * Enables user's password. Removes ! from the beginning of the user's password
      * 
      * @param account the account
      * @throws AuthenticationException if there is a problem performing the operation.
@@ -259,8 +258,7 @@ public interface UserManager
      * @return the accounts that fulfill the condition.
      * @throws NamingException
      */
-    public Collection<Principal> lookupAccounts(String query,
-        SearchControls searchControlls)
+    public Collection<Principal> lookupAccounts(String query, SearchControls searchControlls)
         throws NamingException;
 
     /**
@@ -284,17 +282,19 @@ public interface UserManager
      */
     public void updateTrackingInformation(Principal account)
         throws AuthenticationException, NamingException;
-  
+
     /**
-     * Check user password expiration time, if expiration time is equals or smaller than ShadowWarning attribute then method returns
-     * day count to password expiry. If expiration time is bigger than ShadowWarning Value then method returns value smaller than 0
+     * Check user password expiration time, if expiration time is equals or smaller than
+     * ShadowWarning attribute then method returns day count to password expiry. If expiration time
+     * is bigger than ShadowWarning Value then method returns value smaller than 0
      * 
      * @param account
      * @return
      * @throws AuthenticationException
      */
-    public long getUserPasswordExpirationDays(Principal account) throws AuthenticationException;
-    
+    public long getUserPasswordExpirationDays(Principal account)
+        throws AuthenticationException;
+
     /**
      * Check if user password is expired;
      * 
@@ -302,16 +302,18 @@ public interface UserManager
      * @return
      * @throws AuthenticationException
      */
-    public boolean isUserPasswordExpired(Principal account) throws AuthenticationException;
-    
+    public boolean isUserPasswordExpired(Principal account)
+        throws AuthenticationException;
+
     /**
      * Check if user account expired;
      * 
      * @param account
      * @return
      */
-    public boolean isUserAccountExpired(Principal account) throws AuthenticationException;
-    
+    public boolean isUserAccountExpired(Principal account)
+        throws AuthenticationException;
+
     /**
      * Check account shadow flag and return enum with reason
      * 
@@ -319,7 +321,8 @@ public interface UserManager
      * @return
      * @throws AuthenticationException
      */
-    public BlockedReason checkAccountFlag(Principal account) throws AuthenticationException;
+    public BlockedReason checkAccountFlag(Principal account)
+        throws AuthenticationException;
 
     /**
      * Block user account for some reason
@@ -328,5 +331,26 @@ public interface UserManager
      * @param code
      */
     public void setUserShadowFlag(Principal user, String code)
-        throws AuthenticationException ;
+        throws AuthenticationException;
+
+    /**
+     * Get data if user email is connected with other accounts
+     * 
+     * @param login
+     * @return
+     * @throws AuthenticationException
+     */
+
+    public Collection<Principal> getLoginsForGivenEmail(String email)
+        throws AuthenticationException;
+
+    /**
+     * Check if user email is duplicated
+     * 
+     * @param email
+     * @return
+     */
+    public boolean isEmailDuplicated(String email)
+        throws AuthenticationException;
+
 }

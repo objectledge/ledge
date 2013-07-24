@@ -29,6 +29,10 @@
 package org.objectledge.web.mvc.security;
 
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,30 +62,38 @@ public class PolicyCheckingValveTest extends LedgeWebTestCase
     
     private PolicyCheckingValve policyValve;
 
-    public void setUp() throws Exception
+    public void setUp()
+        throws Exception
     {
         FileSystem fs = getFileSystem("src/test/resources/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(LocaleLoaderValve.class));
         Configuration config = getConfig(fs, PolicySystem.class, PolicySystem.class);
         RoleChecking roleChecking = new RoleChecking()
-        {
-            public String[] getRoles(Principal user) throws UserUnknownException
             {
-                if (user.getName() == "root")
+                public Set<String> getRoles(Principal user)
+                    throws UserUnknownException
                 {
-                    return new String[] { "admin", "moderator" };
+                    if(user.getName() == "root")
+                    {
+                        return set("admin", "moderator");
+                    }
+                    if(user.getName() == "user")
+                    {
+                        return set("user");
+                    }
+                    if(user.getName() == "anon")
+                    {
+                        return set();
+                    }
+                    throw new UserUnknownException("unknown user: " + user.getName());
                 }
-                if (user.getName() == "user")
+
+                public boolean hasRole(Principal user, String role)
+                    throws UserUnknownException
                 {
-                    return new String[] { "user" };
+                    return getRoles(user).contains(role);
                 }
-                if (user.getName() == "anon")
-                {
-                    return null;
-                }
-                throw new UserUnknownException("unknown user: " + user.getName());
-            }
-        };
+            };
 
         context = new Context();
         context.clearAttributes();
@@ -91,11 +103,17 @@ public class PolicyCheckingValveTest extends LedgeWebTestCase
         context.setAttribute(RequestParameters.class, new MockRequestParameters());
         context.setAttribute(MVCContext.class, mvcContext);
         context.setAttribute(HttpContext.class, httpContext);
-        
+
         PolicySystem policySystem = new PolicySystem(config, logger, roleChecking);
         config = getConfig(fs, WebConfigurator.class, WebConfigurator.class);
         WebConfigurator webConfigurator = new WebConfigurator(config);
         policyValve = new PolicyCheckingValve(logger, webConfigurator, policySystem);
+    }
+
+    private Set<String> set(String... strings)
+    {
+        return strings != null ? new HashSet<>(Arrays.asList(strings)) : Collections
+            .<String> emptySet();
     }
 
     public void testValve()

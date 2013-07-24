@@ -29,12 +29,13 @@
 package org.objectledge.security;
 
 import java.security.Principal;
+import java.util.Set;
 
 import org.objectledge.authentication.UserUnknownException;
 
 /**
- * Implemented by the service that provides the auguments the policy service
- * with the capability to check the roles of an user. 
+ * Implemented by the service that provides the auguments the policy service with the capability to
+ * check the roles of an user.
  * 
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
  * @version $Id: RoleChecking.java,v 1.1 2004-02-28 13:39:12 pablo Exp $
@@ -42,12 +43,25 @@ import org.objectledge.authentication.UserUnknownException;
 public interface RoleChecking
 {
     /**
-     * Checks the roles the user currently has.
+     * Retrieves the roles the user currently has.
      * 
      * @param user the user whose roles are to be checked.
      * @return the roles of an user, or <code>null</code> if user unknown.
      * @throws UserUnknownException thrown if user is unknown.
-     */ 
-    public String[] getRoles(Principal user)
+     */
+    Set<String> getRoles(Principal user)
+        throws UserUnknownException;
+
+    /**
+     * Checks if the user has a specific role.
+     * <p>
+     * Calling this method should provide results consistent with
+     * {@code getRoles(user).contains(role)} but may exploit backend-specific optimizations.
+     * 
+     * @param user the user.
+     * @param role the role.
+     * @return {@code true} if the user has the specified role.
+     */
+    boolean hasRole(Principal user, String role)
         throws UserUnknownException;
 }
