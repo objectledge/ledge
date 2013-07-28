@@ -10,7 +10,7 @@ droppedCount.label dropped requests
 droppedCount.type DERIVE
 droppedCount.draw STACK
 droppedCount.min 0
-count total requests
+count.label total requests
 count.type DERIVE
 count.draw LINE1
 count.min 0
