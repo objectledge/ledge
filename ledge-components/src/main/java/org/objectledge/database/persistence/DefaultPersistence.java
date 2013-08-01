@@ -215,48 +215,54 @@ public class DefaultPersistence implements Persistence
         synchronized (object)
         {
             DefaultOutputRecord record = new DefaultOutputRecord(object);
-            String table = object.getTable();
-            String[] keys = object.getKeyColumns();
             object.getData(record);
-            Connection conn = null;
-            PreparedStatement statement = null;
-
-            try
+            try(Connection conn = database.getConnection())
             {
-                conn = database.getConnection();
                 if(object.getSaved())
                 {
                     if(record.hasNonKeyValues())
                     {
-                        statement = record.getUpdateStatement(conn);
-                        statement.execute();
+                        try(PreparedStatement statement = record.getUpdateStatement(conn))
+                        {
+                            statement.execute();
+                            if(statement.getUpdateCount() == 0)
+                            {
+                                insertRecord(object, record, conn);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    long id = -1l;
-                    if(keys.length == 1)
-                    {
-                        if(record.containsValue(keys[0]))
-                        {
-                            id = record.getValue(keys[0], Long.class);
-                        }
-                        if(id == -1l)
-                        {
-                            id = database.getNextId(table);
-                            record.setLong(keys[0], id);
-                        }
-                    }
-                    statement = record.getInsertStatement(conn);
-                    statement.execute();
-                    object.setSaved(id);
+                    insertRecord(object, record, conn);
                 }
             }
-            finally
+        }
+    }
+
+    public void insertRecord(Persistent object, DefaultOutputRecord record,
+        Connection conn)
+        throws SQLException
+    {
+        String table = object.getTable();
+        String[] keys = object.getKeyColumns();
+        long id = -1l;
+        if(keys.length == 1)
+        {
+            if(record.containsValue(keys[0]))
             {
-                DatabaseUtils.close(statement);
-                DatabaseUtils.close(conn);
+                id = record.getValue(keys[0], Long.class);
             }
+            if(id == -1l)
+            {
+                id = database.getNextId(table);
+                record.setLong(keys[0], id);
+            }
+        }
+        try(PreparedStatement statement = record.getInsertStatement(conn))
+        {
+            statement.execute();
+            object.setSaved(id);
         }
     }
 
