@@ -38,7 +38,6 @@ import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.Database;
-import org.objectledge.database.DatabaseUtils;
 
 /**
  * Provides Object-Relational DB mapping.
@@ -77,28 +76,24 @@ public class DefaultPersistence implements Persistence
     public <V extends Persistent> V load(PersistentFactory<V> factory, long id)
         throws SQLException
     {
-        Connection conn = null;
-        PreparedStatement statement = null;
-        try
+        try(Connection conn = database.getConnection())
         {
-            conn = database.getConnection();
             V obj;
             obj = newInstance(factory);
-            statement = DefaultInputRecord.getSelectStatement(obj, conn, id);
-            ResultSet rs = statement.executeQuery();
-            if (!rs.next())
+            try(PreparedStatement statement = DefaultInputRecord.getSelectStatement(obj, conn, id))
             {
-                return null;
+                try(ResultSet rs = statement.executeQuery())
+                {
+                    if(!rs.next())
+                    {
+                        return null;
+                    }
+                    InputRecord record = new DefaultInputRecord(rs);
+                    obj.setData(record);
+                    obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
+                    return obj;
+                }
             }
-            InputRecord record = new DefaultInputRecord(rs);
-            obj.setData(record);
-            obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
-            return obj;
-        }
-        finally
-        {
-            DatabaseUtils.close(statement);
-            DatabaseUtils.close(conn);
         }
     }
 
@@ -137,31 +132,26 @@ public class DefaultPersistence implements Persistence
         Object... parameters)
         throws SQLException
     {
-        Connection conn = null;
-        PreparedStatement statement = null;
-        ResultSet rs = null;
-        try
+        try(Connection conn = database.getConnection())
         {
-            conn = database.getConnection();
             V obj = newInstance(factory);
-            statement = DefaultInputRecord.getSelectStatement(obj, conn, where, parameters);
-            rs = statement.executeQuery();
-            List<V> list = new ArrayList<V>();
-            while(rs.next())
+            try(PreparedStatement statement = DefaultInputRecord.getSelectStatement(obj, conn,
+                where, parameters))
             {
-                InputRecord record = new DefaultInputRecord(rs);
-                obj.setData(record);
-                obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
-                list.add(obj);
-                obj = newInstance(factory);
+                try(ResultSet rs = statement.executeQuery())
+                {
+                    List<V> list = new ArrayList<V>();
+                    while(rs.next())
+                    {
+                        InputRecord record = new DefaultInputRecord(rs);
+                        obj.setData(record);
+                        obj.setSaved(record.getLong(obj.getKeyColumns()[0]));
+                        list.add(obj);
+                        obj = newInstance(factory);
+                    }
+                    return list;
+                }
             }
-            return list;
-        }
-        finally
-        {
-            DatabaseUtils.close(rs);
-            DatabaseUtils.close(statement);
-            DatabaseUtils.close(conn);
         }
     }
 
@@ -179,28 +169,22 @@ public class DefaultPersistence implements Persistence
         Object... parameters)
         throws SQLException
     {
-        Connection conn = null;
-        PreparedStatement statement = null;
-        ResultSet rs = null;
-        try
+        try(Connection conn = database.getConnection())
         {
-            conn = database.getConnection();
-            statement = DefaultInputRecord.getSelectStatement(template, conn, where, parameters);
-            rs = statement.executeQuery();
-            List<InputRecord> list = new ArrayList<InputRecord>();
-            while(rs.next())
+            try(PreparedStatement statement = DefaultInputRecord.getSelectStatement(template, conn,
+                where, parameters))
             {
-                list.add(new DefaultInputRecord(rs));
+                try(ResultSet rs = statement.executeQuery())
+                {
+                    List<InputRecord> list = new ArrayList<InputRecord>();
+                    while(rs.next())
+                    {
+                        list.add(new DefaultInputRecord(rs));
+                    }
+                    return list;
+                }
             }
-            return list;
         }
-        finally
-        {
-            DatabaseUtils.close(rs);
-            DatabaseUtils.close(statement);
-            DatabaseUtils.close(conn);
-        }
-
     }
 
     /**
@@ -215,48 +199,54 @@ public class DefaultPersistence implements Persistence
         synchronized (object)
         {
             DefaultOutputRecord record = new DefaultOutputRecord(object);
-            String table = object.getTable();
-            String[] keys = object.getKeyColumns();
             object.getData(record);
-            Connection conn = null;
-            PreparedStatement statement = null;
-
-            try
+            try(Connection conn = database.getConnection())
             {
-                conn = database.getConnection();
                 if(object.getSaved())
                 {
                     if(record.hasNonKeyValues())
                     {
-                        statement = record.getUpdateStatement(conn);
-                        statement.execute();
+                        try(PreparedStatement statement = record.getUpdateStatement(conn))
+                        {
+                            statement.execute();
+                            if(statement.getUpdateCount() == 0)
+                            {
+                                insertRecord(object, record, conn);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    long id = -1l;
-                    if(keys.length == 1)
-                    {
-                        if(record.containsValue(keys[0]))
-                        {
-                            id = record.getValue(keys[0], Long.class);
-                        }
-                        if(id == -1l)
-                        {
-                            id = database.getNextId(table);
-                            record.setLong(keys[0], id);
-                        }
-                    }
-                    statement = record.getInsertStatement(conn);
-                    statement.execute();
-                    object.setSaved(id);
+                    insertRecord(object, record, conn);
                 }
             }
-            finally
+        }
+    }
+
+    private void insertRecord(Persistent object, DefaultOutputRecord record,
+        Connection conn)
+        throws SQLException
+    {
+        String table = object.getTable();
+        String[] keys = object.getKeyColumns();
+        long id = -1l;
+        if(keys.length == 1)
+        {
+            if(record.containsValue(keys[0]))
             {
-                DatabaseUtils.close(statement);
-                DatabaseUtils.close(conn);
+                id = record.getValue(keys[0], Long.class);
             }
+            if(id == -1l)
+            {
+                id = database.getNextId(table);
+                record.setLong(keys[0], id);
+            }
+        }
+        try(PreparedStatement statement = record.getInsertStatement(conn))
+        {
+            statement.execute();
+            object.setSaved(id);
         }
     }
 
@@ -276,26 +266,21 @@ public class DefaultPersistence implements Persistence
             {
                 throw new IllegalStateException("no state has been saved yet");
             }
-            Connection conn = null;
-            PreparedStatement statement = null;
-            ResultSet rs = null;
-            try
+            try(Connection conn = database.getConnection())
             {
-                conn = database.getConnection();
-                statement = DefaultInputRecord.getSelectStatement(object, conn);
-                rs = statement.executeQuery();
-                if (!rs.next())
+                try(PreparedStatement statement = DefaultInputRecord.getSelectStatement(object,
+                    conn))
                 {
-                    throw new SQLException("saved state was lost");
+                    try(ResultSet rs = statement.executeQuery())
+                    {
+                        if(!rs.next())
+                        {
+                            throw new SQLException("saved state was lost");
+                        }
+                        InputRecord irecord = new DefaultInputRecord(rs);
+                        object.setData(irecord);
+                    }
                 }
-                InputRecord irecord = new DefaultInputRecord(rs);
-                object.setData(irecord);
-            }
-            finally
-            {
-                DatabaseUtils.close(rs);
-                DatabaseUtils.close(statement);
-                DatabaseUtils.close(conn);
             }
         }
     }
@@ -324,24 +309,18 @@ public class DefaultPersistence implements Persistence
     {
         synchronized (object)
         {
-            Connection conn = null;
-            PreparedStatement statement = null;
-            try
+            try(Connection conn = database.getConnection())
             {
-                conn = database.getConnection();
                 DefaultOutputRecord record = new DefaultOutputRecord(object);
                 object.getData(record);
-                statement = record.getDeleteStatement(conn); 
-                statement.execute();
-                if(mustExist && statement.getUpdateCount() != 1)
+                try(PreparedStatement statement = record.getDeleteStatement(conn))
                 {
-                    throw new SQLException("unsuccessful DELETE statement");
+                    statement.execute();
+                    if(mustExist && statement.getUpdateCount() != 1)
+                    {
+                        throw new SQLException("unsuccessful DELETE statement");
+                    }
                 }
-            }
-            finally
-            {
-                DatabaseUtils.close(statement);
-                DatabaseUtils.close(conn);
             }
         }
     }
@@ -356,21 +335,15 @@ public class DefaultPersistence implements Persistence
     public <V extends Persistent> void delete(String where, PersistentFactory<V> factory)
         throws SQLException
     {
-        Connection conn = null;
-        PreparedStatement statement = null;
-        try
+        try(Connection conn = database.getConnection())
         {
-            conn = database.getConnection();
             Persistent obj = newInstance(factory);
-            statement = conn.prepareStatement("DELETE FROM " + obj.getTable() + 
-                                                                " WHERE " + where);
-            statement.executeUpdate();
+            try(PreparedStatement statement = conn.prepareStatement("DELETE FROM " + obj.getTable()
+                + " WHERE " + where))
+            {
+                statement.executeUpdate();
+            }
         }
-        finally
-        {
-            DatabaseUtils.close(statement);
-            DatabaseUtils.close(conn);
-        }        
     }
     
     /**
@@ -385,28 +358,24 @@ public class DefaultPersistence implements Persistence
     public boolean exists(String table, String where)
         throws SQLException
     {
-        Connection conn = null;
-        Statement statement = null;
-        ResultSet rs = null;
-        try
+        try(Connection conn = database.getConnection())
         {
-            conn = database.getConnection();
-            statement = conn.createStatement();
-            if (where != null)
+            try(Statement statement = conn.createStatement())
             {
-                rs = statement.executeQuery("SELECT DISTINCT 1 FROM " + table + " WHERE " + where);
+                String query;
+                if(where != null)
+                {
+                    query = "SELECT DISTINCT 1 FROM " + table + " WHERE " + where;
+                }
+                else
+                {
+                    query = "SELECT DISTINCT 1 FROM " + table;
+                }
+                try(ResultSet rs = statement.executeQuery(query))
+                {
+                    return (rs.next());
+                }
             }
-            else
-            {
-                rs = statement.executeQuery("SELECT DISTINCT 1 FROM " + table);
-            }
-            return (rs.next());
-        }
-        finally
-        {
-            DatabaseUtils.close(rs);
-            DatabaseUtils.close(statement);
-            DatabaseUtils.close(conn);
         }
     }
 
@@ -421,32 +390,28 @@ public class DefaultPersistence implements Persistence
     public int count(String table, String where)
         throws SQLException
     {
-        Connection conn = null;
-        Statement statement = null;
-        ResultSet rs = null;
-        try
+        try(Connection conn = database.getConnection())
         {
-            conn = database.getConnection();
-            statement = conn.createStatement();
-            if (where != null)
+            try(Statement statement = conn.createStatement())
             {
-                rs = statement.executeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + where);
+                String query;
+                if(where != null)
+                {
+                    query = "SELECT COUNT(*) FROM " + table + " WHERE " + where;
+                }
+                else
+                {
+                    query = "SELECT COUNT(*) FROM " + table;
+                }
+                try(ResultSet rs = statement.executeQuery(query))
+                {
+                    if(!rs.next())
+                    {
+                        throw new SQLException("internal error - no data???");
+                    }
+                    return (rs.getInt(1));
+                }
             }
-            else
-            {
-                rs = statement.executeQuery("SELECT COUNT(*) FROM " + table);
-            }
-            if (!rs.next())
-            {
-                throw new SQLException("internal error - no data???");
-            }
-            return (rs.getInt(1));
-        }
-        finally
-        {
-            DatabaseUtils.close(rs);
-            DatabaseUtils.close(statement);
-            DatabaseUtils.close(conn);
         }
     }
     

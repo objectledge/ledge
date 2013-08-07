@@ -99,6 +99,29 @@ public class DefaultInputRecord
     }
 
     /**
+     * Constructs a <code>DefaultInputRecord</code> instance.
+     * 
+     * @param input a map that contains input data. Keys are case-insensitive. {@code null} values
+     *        are treated as SQL NULL values.
+     */
+    public DefaultInputRecord(Map<String, Object> input)
+    {
+        data = new HashMap<>(input);
+        for(String col : input.keySet())
+        {
+            final Object value = input.get(col);
+            if(value != null)
+            {
+                data.put(col.toUpperCase(), value);
+            }
+            else
+            {
+                data.put(col.toUpperCase(), NULL);
+            }
+        }
+    }
+
+    /**
      * @param field
      * @return
      * @throws SQLException
