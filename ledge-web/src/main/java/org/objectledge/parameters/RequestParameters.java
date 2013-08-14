@@ -132,7 +132,7 @@ public class RequestParameters extends SortedParameters
         }
 
         // get path info parameters
-        addURLParams(request.getPathInfo(), "/");
+        addURLParams(request.getServletPath() + request.getPathInfo(), "/");
         pathParams.addAll(map.keySet());
         pathParams.removeAll(queryParams);
         pathParams.removeAll(postParams);        
