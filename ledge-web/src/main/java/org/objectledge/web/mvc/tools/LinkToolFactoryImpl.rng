@@ -39,11 +39,6 @@
         <text/>
       </element>
     </optional>
-    <optional>    
-      <element name="rewrite">  
-        <text/>
-      </element>
-    </optional>
     <optional>
       <element name="base_content_path">
         <text/>
