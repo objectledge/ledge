@@ -62,7 +62,7 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 import org.objectledge.notification.Notification;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.test.LedgeTestCase;
-import org.objectledge.threads.ThreadPool;
+import org.objectledge.threads.DefaultThreadPool;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -76,7 +76,7 @@ public class CachingTest extends LedgeTestCase
     
     private BitronixTransactionManager btm;
 
-    private ThreadPool pool;
+    private DefaultThreadPool pool;
 
     public void setUp()
     throws Exception
@@ -85,7 +85,7 @@ public class CachingTest extends LedgeTestCase
         Valve cleanup = null;
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        pool = new ThreadPool(cleanup, context, config, logger);
+        pool = new DefaultThreadPool(cleanup, context, config, logger);
         btm = new BitronixTransactionManager("hsql", "org.hsqldb.jdbc.pool.JDBCXADataSource",
             getDsProperties(), getFileSystem(), logger);
         DataSource dataSource = new BitronixDataSource("hsql", btm);

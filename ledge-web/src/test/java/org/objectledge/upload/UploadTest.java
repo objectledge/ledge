@@ -45,6 +45,7 @@ import org.objectledge.parameters.RequestParametersLoaderValve;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.velocity.VelocityTemplating;
 import org.objectledge.test.LedgeTestCase;
+import org.objectledge.threads.DefaultThreadPool;
 import org.objectledge.threads.ThreadPool;
 import org.objectledge.web.HttpContext;
 
@@ -69,7 +70,7 @@ public class UploadTest extends LedgeTestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(FileUploadValve.class));
         
         // thread pool
-        ThreadPool threadPool = new ThreadPool(null, context, null, logger);
+        ThreadPool threadPool = new DefaultThreadPool(null, context, null, logger);
 
         // templating
         Configuration config = getConfig(fs,"config/org.objectledge.templating.Templating.xml");
