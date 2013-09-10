@@ -278,11 +278,11 @@ public class ReCaptchaCaptchaServiceImpl
 
         String message = fetchJSOptions(options);
 
-        message += "<script type=\"text/javascript\" src=\"" + recaptchaServer + "/challenge?k=" + publicKeyWidget + errorPart + "\"></script>\r\n";
+        message += "<script type=\"text/javascript\" src=\"" + recaptchaServer + "/api/challenge?k=" + publicKeyWidget + errorPart + "\"></script>\r\n";
 
         if (includeNoscript) {
             String noscript = "<noscript>\r\n" + 
-                    "   <iframe src=\""+recaptchaServer+"/noscript?k="+publicKeyWidget + errorPart + "\" height=\"300\" width=\"500\" frameborder=\"0\"></iframe><br>\r\n" + 
+                    "   <iframe src=\""+recaptchaServer+"/api/noscript?k="+publicKeyWidget + errorPart + "\" height=\"300\" width=\"500\" frameborder=\"0\"></iframe><br>\r\n" + 
                     "   <textarea name=\"recaptcha_challenge_field\" rows=\"3\" cols=\"40\"></textarea>\r\n" + 
                     "   <input type=\"hidden\" name=\"recaptcha_response_field\" value=\"manual_challenge\">\r\n" + 
                     "</noscript>";
