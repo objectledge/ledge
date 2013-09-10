@@ -30,6 +30,14 @@ public interface CaptchaService
     public String createCaptchaWidget(Locale locale, Map<String, String> properties);
 
     /**
+     * Create CAPTCHA Mailhide widget.
+     * 
+     * @param email email address.
+     * @return HTML markup of CAPTCHA hideMail widget.
+     */
+    public String createrCaptchaEmailWidget(String email);
+
+    /**
      * Verify CAPTCHA solved by the user.
      * 
      * @param remoteAddr IP address of the user

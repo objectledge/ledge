@@ -2,6 +2,12 @@
 <grammar xmlns="http://relaxng.org/ns/structure/1.0">
   <start>
     <element name="config">
+     <optional>
+        <element name="recaptchaServer">
+          <text />
+        </element>
+     </optional>    
+     <element name="widget">
       <element name="publicKey">
         <text />
       </element>
@@ -23,11 +29,6 @@
         </element>
       </optional>     
       <optional>
-        <element name="recaptchaServer">
-          <text />
-        </element>
-      </optional>
-      <optional>
         <element name="includeNoscript">
           <text />
         </element>
@@ -47,6 +48,20 @@
           </zeroOrMore>
         </element>
       </optional>
+     </element>      
+     <element name="email">
+      <element name="publicKey">
+        <text />
+      </element>
+      <element name="privateKey">
+        <text />
+      </element> 
+      <optional>
+       <element name="title">
+         <text />
+       </element>
+       </optional>    
+     </element>
     </element>
   </start>
 </grammar>
