@@ -140,17 +140,16 @@ public class ReCaptchaCaptchaServiceImpl
         String[] emailParts = email.split("@");        
         if(emailParts.length == 2)
         {
-            return emailParts[0].substring(0, (int)emailParts[0].length() < 7 ? (int)emailParts[0].length() / 2 : 3)
-                + "<a href='#' onclick=\"window.open('"
+            return "<a href='#' onclick=\"window.open('"
                 + url
-                + "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300');\" title='"
-                + emailTitle + "'>...</a>@" + emailParts[1];
+                + "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300');return false;\" title='"
+                + emailTitle + "'>" + emailParts[0].substring(0, (int)emailParts[0].length() < 7 ? (int)emailParts[0].length() / 2 : 3) + "...@" + emailParts[1] + "</a>";
         }
         else
         {
             return "<a href='#' onclick=\"window.open('"
                 + url
-                + "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300');\" title='"
+                + "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300');return false;\" title='"
                 + emailTitle + "'>...</a>";
         }
     }
