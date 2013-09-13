@@ -391,12 +391,11 @@ public class VelocityTemplating
         }
         catch(MethodInvocationException e)
         {
-            throw new MergingException("failed to render template - "
-                + " exception during method invocation", e.getWrappedThrowable());
+            throw new MergingException(e.getMessage(), e.getWrappedThrowable());
         }
         catch(Exception e)
         {
-            throw new MergingException("failed to render template", e);
+            throw new MergingException(e.getMessage(), e);
         }
     }
 
