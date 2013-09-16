@@ -9,7 +9,7 @@ import java.util.Set;
 import org.objectledge.jsonql.EvaluationContext;
 
 public class ASTcontainmentPredicate
-    extends SimpleNode
+    extends RelationPredicate
 {
     private final Set<String> values = new HashSet<>();
 

@@ -263,7 +263,7 @@ public class JSONQLServiceImpl
         @Override
         public Object visit(ASTequalityPredicate node, EvaluationContext context)
         {
-            EvaluationContext variable = (EvaluationContext)node.children[0].jjtAccept(this,
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this,
                 context);
             if(!variable.getNode().isMissingNode())
             {
@@ -279,7 +279,7 @@ public class JSONQLServiceImpl
         @Override
         public Object visit(ASTmatchPredicate node, EvaluationContext context)
         {
-            EvaluationContext variable = (EvaluationContext)node.children[0].jjtAccept(this,
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this,
                 context);
             if(!variable.getNode().isMissingNode())
             {
@@ -295,7 +295,7 @@ public class JSONQLServiceImpl
         @Override
         public Object visit(ASTcontainmentPredicate node, EvaluationContext context)
         {
-            EvaluationContext variable = (EvaluationContext)node.children[0].jjtAccept(this,
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this,
                 context);
             if(!variable.getNode().isMissingNode())
             {
