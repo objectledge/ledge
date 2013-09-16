@@ -326,6 +326,10 @@ public class JSONQLServiceImpl
                 {
                     return node.getOperator().compare(Integer.parseInt(value), node.getValue());
                 }
+                else
+                {
+                    variable.addError(" is not a number");
+                }
             }
             return false;
         }
