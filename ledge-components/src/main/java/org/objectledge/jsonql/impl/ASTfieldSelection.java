@@ -34,5 +34,12 @@ public class ASTfieldSelection
     {
         return visitor.visit(this, data);
     }
+
+    @Override
+    public String toString()
+    {
+        return super.toString() + " " + identifier;
+    }
+
 }
 /* JavaCC - OriginalChecksum=56fa5be7887cd290c505dfcbc9b5e11b (do not edit this line) */

@@ -64,7 +64,7 @@ public class EvaluationContextImpl implements EvaluationContext
             addError(" is not an object");
         }
         JsonNode variable = n;
-        return new EvaluationContextImpl(this, (outer == this ? "" : ":") + field, variable);
+        return new EvaluationContextImpl(this, (outer == this ? "" : ".") + field, variable);
     }
 
     /* (non-Javadoc)

@@ -29,4 +29,33 @@ public class RelationPredicate
     {
         return visitor.visit(this, data);
     }
+
+    @Override
+    public String toString(String prefix)
+    {
+        return super.toString(prefix) + "\n" + stripNl(toString(prefix + " ", lhs));
+    }
+
+    private String toString(String prefix, SimpleNode node)
+    {
+        StringBuilder buff = new StringBuilder();
+        buff.append(node.toString(prefix)).append('\n');
+        if(node.children != null)
+        {
+            for(int i = 0; i < node.children.length; ++i)
+            {
+                SimpleNode n = (SimpleNode)node.children[i];
+                if(n != null)
+                {
+                    buff.append(toString(prefix + " ", n));
+                }
+            }
+        }
+        return buff.toString();
+    }
+
+    private String stripNl(String s)
+    {
+        return s.endsWith("\n") ? s.substring(0, s.length() - 1) : s;
+    }
 }
