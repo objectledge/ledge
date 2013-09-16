@@ -93,6 +93,17 @@ public class EvaluationContextImpl implements EvaluationContext
         return new EvaluationContextImpl(this, "[" + index + "]", variable);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see net.cyklotron.bazy.organizations.autocat.parser.EvaluationContextContract#getMissing()
+     */
+    @Override
+    public EvaluationContext getMissing()
+    {
+        JsonNode variable = MissingNode.getInstance();
+        return new EvaluationContextImpl(this, (outer == this ? "" : ".") + "<MISSING>", variable);
+    }
+
     /* (non-Javadoc)
      * @see net.cyklotron.bazy.organizations.autocat.parser.EvaluationContextContract#getValue()
      */

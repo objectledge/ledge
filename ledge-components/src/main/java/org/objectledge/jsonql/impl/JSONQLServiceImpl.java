@@ -360,6 +360,7 @@ public class JSONQLServiceImpl
                     {
                         context.addError(" does not contain child node satisfying "
                             + node.children[0].toString());
+                        value = context.getMissing();
                     }
                 }
                 else if(context.getNode().isArray())
@@ -376,6 +377,7 @@ public class JSONQLServiceImpl
                     {
                         context.addError(" does not contain child node satisfying "
                             + node.children[0].toString());
+                        value = context.getMissing();
                     }
                 }
                 else
