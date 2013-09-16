@@ -309,6 +309,13 @@ public class JSONQLServiceImpl
         }
 
         @Override
+        public Object visit(ASTexistencePredicate node, EvaluationContext context)
+        {
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this, context);
+            return !variable.getNode().isMissingNode();
+        }
+
+        @Override
         public Object visit(ASTvalue node, EvaluationContext data)
         {
             EvaluationContext p = data;

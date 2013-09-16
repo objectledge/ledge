@@ -25,3 +25,7 @@ a[b = '1'] = 'a'
 a[b[1] = '1' and b[2] = '2'] = 'x'
 a[b ~ /pat/] = 'x'
 a[a = '1' and b ~ /pat/] = 'x'
+a =*
+a = *
+a[a = '1' and b ~ /pat/] = *
+a[a = *].a = '1'
