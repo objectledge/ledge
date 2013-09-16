@@ -316,6 +316,21 @@ public class JSONQLServiceImpl
         }
 
         @Override
+        public Object visit(ASTcomparisonPredicate node, EvaluationContext context)
+        {
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this, context);
+            if(!variable.getNode().isMissingNode())
+            {
+                String value = variable.getValue();
+                if(value.matches("[0-9]+"))
+                {
+                    return node.getOperator().compare(Integer.parseInt(value), node.getValue());
+                }
+            }
+            return false;
+        }
+
+        @Override
         public Object visit(ASTvalue node, EvaluationContext data)
         {
             EvaluationContext p = data;
