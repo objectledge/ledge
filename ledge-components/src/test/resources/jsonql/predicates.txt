@@ -17,6 +17,7 @@
 [{"a":"2"}] | [a = '1'] = * | false
 [{"a":"1"}] | [a = *].a = '1' | true
 [{"a":"2"}] | [b = *].a = '1' | false
+{"a":null} | a = * | false
 {"a":"1"} | a < 1 | false
 {"a":"1"} | a < 2 | true
 {"a":"1"} | a > 1 | false

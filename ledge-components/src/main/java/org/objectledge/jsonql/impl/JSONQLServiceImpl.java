@@ -312,7 +312,7 @@ public class JSONQLServiceImpl
         public Object visit(ASTexistencePredicate node, EvaluationContext context)
         {
             EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this, context);
-            return !variable.getNode().isMissingNode();
+            return !(variable.getNode().isMissingNode() || variable.getNode().isNull());
         }
 
         @Override
