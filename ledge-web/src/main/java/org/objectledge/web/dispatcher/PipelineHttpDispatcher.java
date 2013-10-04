@@ -101,6 +101,7 @@ public class PipelineHttpDispatcher
             {
                 response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,
                     "Server capacity exceeded, please try again in a few minutes.");
+                return true;
             }
         }
         catch(ProcessingException e)
