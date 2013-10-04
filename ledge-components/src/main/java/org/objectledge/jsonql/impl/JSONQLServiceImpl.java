@@ -386,7 +386,7 @@ public class JSONQLServiceImpl
                 {
                     for(int i = 0; i < context.getNode().size(); i++)
                     {
-                        EvaluationContext elment = context.getElement(node.getIndex());
+                        EvaluationContext elment = context.getElement(i);
                         if(((Boolean)node.children[0].jjtAccept(this, elment)).booleanValue())
                         {
                             value = elment;
