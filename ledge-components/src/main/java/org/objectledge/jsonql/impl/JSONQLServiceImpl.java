@@ -377,8 +377,12 @@ public class JSONQLServiceImpl
                     }
                     if(value == null)
                     {
-                        context.addError(" does not contain child node satisfying "
-                            + node.children[0].toString());
+                        if(node.parent != null
+                            && !(node.parent.jjtGetParent() instanceof ASTexistencePredicate))
+                        {
+                            context.addError(" does not contain child node satisfying "
+                                + node.children[0].toString());
+                        }
                         value = context.getMissing();
                     }
                 }
@@ -394,8 +398,12 @@ public class JSONQLServiceImpl
                     }
                     if(value == null)
                     {
-                        context.addError(" does not contain child node satisfying "
-                            + node.children[0].toString());
+                        if(node.parent != null
+                            && !(node.parent.jjtGetParent() instanceof ASTexistencePredicate))
+                        {
+                            context.addError(" does not contain child node satisfying "
+                                + node.children[0].toString());
+                        }
                         value = context.getMissing();
                     }
                 }

@@ -23,6 +23,7 @@ public class RelationPredicate
     public void setLhs(ASTvalue lhs)
     {
         this.lhs = lhs;
+        lhs.parent = this;
     }
 
     public Object jjtAccept(JSONQLVisitor visitor, org.objectledge.jsonql.EvaluationContext data)
