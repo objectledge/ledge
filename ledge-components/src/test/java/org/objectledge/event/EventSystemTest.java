@@ -39,7 +39,7 @@ import org.objectledge.cache.CacheFactory;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.test.LedgeTestCase;
-import org.objectledge.threads.ThreadPool;
+import org.objectledge.threads.DefaultThreadPool;
 
 /**
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
@@ -59,7 +59,7 @@ public class EventSystemTest extends LedgeTestCase
     private Mock mockCacheFactory;
     private CacheFactory cacheFactory;
 
-    private ThreadPool pool;
+    private DefaultThreadPool pool;
         
     public void setUp()
     {
@@ -67,7 +67,7 @@ public class EventSystemTest extends LedgeTestCase
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         Valve cleanup = null;
-        pool = new ThreadPool(cleanup, context, config, logger);
+        pool = new DefaultThreadPool(cleanup, context, config, logger);
         mockCacheFactory = mock(CacheFactory.class);
         mockCacheFactory.stubs().method("registerForPeriodicExpunge").isVoid();
         cacheFactory = (CacheFactory)mockCacheFactory.proxy();        

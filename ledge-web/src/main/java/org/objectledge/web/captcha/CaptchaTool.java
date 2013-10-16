@@ -43,6 +43,16 @@ public class CaptchaTool
     }
     
     /**
+     * Create CAPTCHA MAILHIDE widget.
+     * 
+     * @return HTML markup of CAPTCHA MAILHIDE widget.
+     */
+    public String createrCaptchaEmailWidget(String email)
+    {
+        return captchaService.createrCaptchaEmailWidget(email);
+    }
+    
+    /**
      * Create CAPTCHA widget with current locale and specified options.
      * 
      * @return HTML markup of CAPTCHA widget.

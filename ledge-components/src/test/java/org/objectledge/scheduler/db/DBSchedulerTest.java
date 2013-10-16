@@ -65,6 +65,8 @@ import org.objectledge.scheduler.Schedule;
 import org.objectledge.scheduler.ScheduleFactory;
 import org.objectledge.test.LedgeTestCase;
 import org.objectledge.threads.ThreadPool;
+import org.objectledge.threads.DefaultThreadPool;
+import org.objectledge.threads.ThreadPool;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.defaults.DefaultPicoContainer;
 import org.w3c.dom.Document;
@@ -96,7 +98,7 @@ public class DBSchedulerTest
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(DBScheduler.class));
         Configuration config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
         Context context = new Context();
-        ThreadPool threadPool = new ThreadPool(null, context, config, logger);
+        ThreadPool threadPool = new DefaultThreadPool(null, context, config, logger);
         config = getConfig("config/org.objectledge.scheduler.TransientScheduler.xml");
         ScheduleFactory[] scheduleFactories = new ScheduleFactory[1];
         scheduleFactories[0] = new AtScheduleFactory();

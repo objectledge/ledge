@@ -263,7 +263,7 @@ public class JSONQLServiceImpl
         @Override
         public Object visit(ASTequalityPredicate node, EvaluationContext context)
         {
-            EvaluationContext variable = (EvaluationContext)node.children[0].jjtAccept(this,
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this,
                 context);
             if(!variable.getNode().isMissingNode())
             {
@@ -279,7 +279,7 @@ public class JSONQLServiceImpl
         @Override
         public Object visit(ASTmatchPredicate node, EvaluationContext context)
         {
-            EvaluationContext variable = (EvaluationContext)node.children[0].jjtAccept(this,
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this,
                 context);
             if(!variable.getNode().isMissingNode())
             {
@@ -295,7 +295,7 @@ public class JSONQLServiceImpl
         @Override
         public Object visit(ASTcontainmentPredicate node, EvaluationContext context)
         {
-            EvaluationContext variable = (EvaluationContext)node.children[0].jjtAccept(this,
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this,
                 context);
             if(!variable.getNode().isMissingNode())
             {
@@ -306,6 +306,32 @@ public class JSONQLServiceImpl
             {
                 return false;
             }
+        }
+
+        @Override
+        public Object visit(ASTexistencePredicate node, EvaluationContext context)
+        {
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this, context);
+            return !(variable.getNode().isMissingNode() || variable.getNode().isNull());
+        }
+
+        @Override
+        public Object visit(ASTcomparisonPredicate node, EvaluationContext context)
+        {
+            EvaluationContext variable = (EvaluationContext)node.getLhs().jjtAccept(this, context);
+            if(!variable.getNode().isMissingNode())
+            {
+                String value = variable.getValue();
+                if(value.matches("[0-9]+"))
+                {
+                    return node.getOperator().compare(Integer.parseInt(value), node.getValue());
+                }
+                else
+                {
+                    variable.addError(" is not a number");
+                }
+            }
+            return false;
         }
 
         @Override
@@ -351,15 +377,20 @@ public class JSONQLServiceImpl
                     }
                     if(value == null)
                     {
-                        context.addError(" does not contain child node satisfying "
-                            + node.children[0].toString());
+                        if(node.parent != null
+                            && !(node.parent.jjtGetParent() instanceof ASTexistencePredicate))
+                        {
+                            context.addError(" does not contain child node satisfying "
+                                + node.children[0].toString());
+                        }
+                        value = context.getMissing();
                     }
                 }
                 else if(context.getNode().isArray())
                 {
                     for(int i = 0; i < context.getNode().size(); i++)
                     {
-                        EvaluationContext elment = context.getElement(node.getIndex());
+                        EvaluationContext elment = context.getElement(i);
                         if(((Boolean)node.children[0].jjtAccept(this, elment)).booleanValue())
                         {
                             value = elment;
@@ -367,8 +398,13 @@ public class JSONQLServiceImpl
                     }
                     if(value == null)
                     {
-                        context.addError(" does not contain child node satisfying "
-                            + node.children[0].toString());
+                        if(node.parent != null
+                            && !(node.parent.jjtGetParent() instanceof ASTexistencePredicate))
+                        {
+                            context.addError(" does not contain child node satisfying "
+                                + node.children[0].toString());
+                        }
+                        value = context.getMissing();
                     }
                 }
                 else

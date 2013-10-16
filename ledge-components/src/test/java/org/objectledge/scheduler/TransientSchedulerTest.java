@@ -47,7 +47,7 @@ import org.objectledge.logging.LedgeDOMConfigurator;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.scheduler.cron.TokenMgrError;
 import org.objectledge.test.LedgeTestCase;
-import org.objectledge.threads.ThreadPool;
+import org.objectledge.threads.DefaultThreadPool;
 import org.objectledge.xml.XMLGrammarCache;
 import org.objectledge.xml.XMLValidator;
 import org.picocontainer.MutablePicoContainer;
@@ -62,7 +62,8 @@ import org.xml.sax.InputSource;
 public class TransientSchedulerTest extends LedgeTestCase
 {
     private TransientScheduler scheduler;
-    private ThreadPool threadPool;
+    
+    private DefaultThreadPool threadPool;
 
     /*
      * @see TestCase#setUp()
@@ -80,7 +81,7 @@ public class TransientSchedulerTest extends LedgeTestCase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(MailSystem.class));
         Configuration config = getConfig("config/org.objectledge.threads.ThreadPool.xml");
         Context context = new Context();
-        threadPool = new ThreadPool(null, context,config, logger);
+        threadPool = new DefaultThreadPool(null, context,config, logger);
         config = getConfig("config/org.objectledge.scheduler.TransientScheduler.xml");
         XMLValidator validator = new XMLValidator(new XMLGrammarCache());
         I18n i18n = new XMLI18n(config, logger, fs, validator);

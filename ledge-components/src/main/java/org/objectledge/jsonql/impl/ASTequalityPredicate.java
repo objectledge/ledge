@@ -5,7 +5,7 @@ package org.objectledge.jsonql.impl;
 import org.objectledge.jsonql.EvaluationContext;
 
 public class ASTequalityPredicate
-    extends SimpleNode
+    extends RelationPredicate
 {
     private String value;
 

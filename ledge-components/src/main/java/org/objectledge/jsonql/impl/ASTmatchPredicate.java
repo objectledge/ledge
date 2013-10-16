@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import org.objectledge.jsonql.EvaluationContext;
 
 public class ASTmatchPredicate
-    extends SimpleNode
+    extends RelationPredicate
 {
     private Pattern pattern;
 

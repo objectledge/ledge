@@ -10,6 +10,8 @@ public interface EvaluationContext
 
     EvaluationContext getField(String field);
 
+    EvaluationContext getMissing();
+
     EvaluationContext getElement(int index);
 
     String getValue();

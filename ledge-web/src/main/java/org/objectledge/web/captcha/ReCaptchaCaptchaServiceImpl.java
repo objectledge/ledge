@@ -9,6 +9,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
+
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
@@ -43,11 +50,15 @@ public class ReCaptchaCaptchaServiceImpl
 
     private final String errorMessage;
     
+    private final String emailTitle;
+    
     private final String recaptchaServer;
     
     private final boolean includeNoscript;
     
-    private final String publicKey;
+    private final String publicKeyWidget;
+    
+    private final String publicKeyEmail;
     
     private final long cacheTimeLimit;
     
@@ -59,34 +70,42 @@ public class ReCaptchaCaptchaServiceImpl
 
     private final Map<CaptchaCacheKey, CaptchaCacheValue> captchaCache;
 
+    private final ReCaptchaEmailHides reCaptchaEmailHides;
+
     public ReCaptchaCaptchaServiceImpl(I18n i18n, Configuration config, Logger log, UserManager userManager)
         throws ConfigurationException
     {
         this.i18n = i18n;
         this.log = log;
         this.reCaptcha = new ReCaptchaImpl();
-        publicKey = config.getChild("publicKey").getValue();
-        reCaptcha.setPublicKey(publicKey);
-        reCaptcha.setPrivateKey(config.getChild("privateKey").getValue());
-        recaptchaServer = config.getChild("recapthaServer", true).getValue("http://api.recaptcha.net");
+        publicKeyWidget = config.getChild("widget").getChild("publicKey").getValue();
+        publicKeyEmail = config.getChild("email").getChild("publicKey").getValue();
+        reCaptcha.setPublicKey(publicKeyWidget);
+        reCaptcha.setPrivateKey(config.getChild("widget").getChild("privateKey").getValue());
+        recaptchaServer = config.getChild("recapthaServer", true).getValue("http://www.google.com/recaptcha");
+
         if(recaptchaServer != null)
         {
             reCaptcha.setRecaptchaServer(recaptchaServer);
         }
-        includeNoscript = config.getChild("includeNoScript", true).getValueAsBoolean(false);
+        includeNoscript = config.getChild("widget").getChild("includeNoScript", true).getValueAsBoolean(false);
         reCaptcha.setIncludeNoscript(includeNoscript);
-        this.errorMessage = config.getChild("errorMessage", true).getValue(null);
-        Configuration options = config.getChild("options", true);
+        this.errorMessage = config.getChild("widget").getChild("errorMessage", true).getValue(null);
+        Configuration options = config.getChild("widget").getChild("options", true);
         for(Configuration option : options.getChildren())
         {
             defaultOptions.put(option.getAttribute("name"), option.getValue().trim());
         }
-        cacheTimeLimit = config.getChild("cacheValidity").getChild("timeLimit").getValueAsLong(60000);
-        cacheHitLimit = config.getChild("cacheValidity").getChild("hitLimit").getValueAsLong(2);
+        cacheTimeLimit = config.getChild("widget").getChild("cacheValidity").getChild("timeLimit")
+            .getValueAsLong(60000);
+        cacheHitLimit = config.getChild("widget").getChild("cacheValidity").getChild("hitLimit").getValueAsLong(2);
         this.userManager = userManager;
         Cache<CaptchaCacheKey, CaptchaCacheValue> cache = CacheBuilder.newBuilder()
             .expireAfterWrite(cacheTimeLimit, TimeUnit.MILLISECONDS).build();
         captchaCache = cache.asMap();
+        reCaptchaEmailHides = new ReCaptchaEmailHides(config.getChild("email")
+            .getChild("privateKey").getValue(), publicKeyEmail, recaptchaServer);
+        emailTitle = config.getChild("email").getChild("title", true).getValue();
     }
 
     @Override
@@ -108,6 +127,31 @@ public class ReCaptchaCaptchaServiceImpl
         properties.put("custom_translations", getTranslations(locale));
         
         return createRecaptchaHtml(errorMessage, properties);
+    }
+
+    @Override
+    public String createrCaptchaEmailWidget(String email)
+    {
+        if(email == null)
+        {
+            return null;
+        }
+        String url = reCaptchaEmailHides.createEmailHideUrl(email);
+        String[] emailParts = email.split("@");        
+        if(emailParts.length == 2)
+        {
+            return "<a href='#' onclick=\"window.open('"
+                + url
+                + "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300');return false;\" title='"
+                + emailTitle + "'>" + emailParts[0].substring(0, (int)emailParts[0].length() < 7 ? (int)emailParts[0].length() / 2 : 3) + "...@" + emailParts[1] + "</a>";
+        }
+        else
+        {
+            return "<a href='#' onclick=\"window.open('"
+                + url
+                + "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300');return false;\" title='"
+                + emailTitle + "'>...</a>";
+        }
     }
 
     @Override
@@ -233,11 +277,11 @@ public class ReCaptchaCaptchaServiceImpl
 
         String message = fetchJSOptions(options);
 
-        message += "<script type=\"text/javascript\" src=\"" + recaptchaServer + "/challenge?k=" + publicKey + errorPart + "\"></script>\r\n";
+        message += "<script type=\"text/javascript\" src=\"" + recaptchaServer + "/api/challenge?k=" + publicKeyWidget + errorPart + "\"></script>\r\n";
 
         if (includeNoscript) {
             String noscript = "<noscript>\r\n" + 
-                    "   <iframe src=\""+recaptchaServer+"/noscript?k="+publicKey + errorPart + "\" height=\"300\" width=\"500\" frameborder=\"0\"></iframe><br>\r\n" + 
+                    "   <iframe src=\""+recaptchaServer+"/api/noscript?k="+publicKeyWidget + errorPart + "\" height=\"300\" width=\"500\" frameborder=\"0\"></iframe><br>\r\n" + 
                     "   <textarea name=\"recaptcha_challenge_field\" rows=\"3\" cols=\"40\"></textarea>\r\n" + 
                     "   <input type=\"hidden\" name=\"recaptcha_response_field\" value=\"manual_challenge\">\r\n" + 
                     "</noscript>";
@@ -260,5 +304,65 @@ public class ReCaptchaCaptchaServiceImpl
             }
         }
         return translations;
+    }
+
+    private class ReCaptchaEmailHides
+    {
+        private String privateKey;
+
+        private String publicKey;
+
+        private String reCaptchaServer;
+
+        private final Base64 base64 = new Base64();
+
+        public ReCaptchaEmailHides(String privateKey, String publicKey, String reCaptchaServer)
+        {
+
+            this.privateKey = privateKey;
+            this.publicKey = publicKey;
+            this.reCaptchaServer = reCaptchaServer;
+        }
+
+        public String createEmailHideUrl(String email)
+        {
+            return reCaptchaServer + "/mailhide/d?k=" + publicKey + "&c="
+                + b64(encryptAES(email.getBytes()));
+        }
+
+        private String b64(byte[] b)
+        {
+            String b64Str = new String(base64.encode(b));
+            return b64Str.replace('+', '-').replace('/', '_');
+        }
+
+        private byte[] encryptAES(byte[] input)
+        {
+            try
+            {
+                SecretKey secret = new SecretKeySpec(hexStringToByteArray(privateKey),0, 16, "AES");
+                // PKCS5Padding is exactly what google describes on http://code.google.com/apis/recaptcha/docs/mailhideapi.html
+                // No need to implement that separately
+                Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                cipher.init(Cipher.ENCRYPT_MODE, secret, new IvParameterSpec(new byte[16]));
+                return cipher.doFinal(input);
+            }
+            catch(Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private byte[] hexStringToByteArray(String s)
+        {
+            int len = s.length();
+            byte[] data = new byte[len / 2];
+            for(int i = 0; i < len; i += 2)
+            {
+                data[i / 2] = (byte)((Character.digit(s.charAt(i), 16) << 4) + Character.digit(
+                    s.charAt(i + 1), 16));
+            }
+            return data;
+        }
     }
 }

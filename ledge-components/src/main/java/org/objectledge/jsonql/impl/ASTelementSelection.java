@@ -59,6 +59,25 @@ public class ASTelementSelection
         return visitor.visit(this, data);
     }
 
+    @Override
+    public String toString()
+    {
+        StringBuilder buff = new StringBuilder();
+        buff.append(super.toString());
+        switch(kind)
+        {
+        case INDEX:
+            buff.append(" ").append(index);
+            break;
+        case FIELD:
+            buff.append(" '").append(identifier).append('\'');
+            break;
+        default:
+            break;
+        }
+        return buff.toString();
+    }
+
     public enum Kind
     {
         INDEX, FIELD, PREDICATE

@@ -60,7 +60,7 @@ public class ThreadPoolTest extends TestCase
         Valve cleanup = null;
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        ThreadPool pool = new ThreadPool(cleanup, context, config, log);
+        DefaultThreadPool pool = new DefaultThreadPool(cleanup, context, config, log);
         pool.runDaemon(new TestTask());
         Thread.sleep(100);
         pool.stop();
@@ -73,7 +73,7 @@ public class ThreadPoolTest extends TestCase
         Valve cleanup = null;
         Configuration config = new DefaultConfiguration("config", "", "/config");
         Logger log = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
-        ThreadPool pool = new ThreadPool(cleanup, context, config, log);
+        DefaultThreadPool pool = new DefaultThreadPool(cleanup, context, config, log);
         pool.runWorker(new TestTask());
         Thread.sleep(100);
         pool.stop();
