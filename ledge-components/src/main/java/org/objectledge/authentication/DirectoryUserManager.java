@@ -983,11 +983,19 @@ public class DirectoryUserManager
         throws AuthenticationException
     {
         final Parameters params = new DirectoryParameters(getPersonalData(account));
-        if(!params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
+        if(params.isDefined(LdapMapper.BLOCKED_REASON.getLdapName()))
         {
-            return BlockedReason.OK;
+            return BlockedReason.getByCode(params.getInt(LdapMapper.BLOCKED_REASON.getLdapName()));
         }
-        return BlockedReason.getByCode(params.getInt(LdapMapper.BLOCKED_REASON.getLdapName()));
+        String[] emails = params.getStrings("mail");
+        for(String email : emails)
+        {
+            if(isEmailDuplicated(email))
+            {
+                return BlockedReason.ACCOUNT_EMAIL_DUPLICATED;
+            }
+        }
+        return BlockedReason.OK;
     }
 
     @Override
