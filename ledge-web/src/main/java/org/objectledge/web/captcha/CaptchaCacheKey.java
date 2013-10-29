@@ -1,11 +1,6 @@
 package org.objectledge.web.captcha;
 
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
-
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.web.HttpContext;
+import java.io.Serializable;
 
 /**
  * A service that provides CAPTCHA functionality for web applications.
@@ -13,6 +8,7 @@ import org.objectledge.web.HttpContext;
  * @author rafal 
  */
 public class CaptchaCacheKey
+    implements Serializable
 {
     private String remoteAddr;
     
