@@ -87,7 +87,8 @@ public class Login
                            log.warn("DECLINED " + client + "login " + login + "reason " + reason.getReason());
                            status = reason.getShortReason();
                         }
-                        else{
+                        else
+                        {
                             ticket = singleSignOnService.generateTicket(principal, domain, client);
                             if(ticket != null)
                             {

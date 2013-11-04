@@ -34,6 +34,7 @@ import javax.naming.NamingException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.BlockedReason;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
@@ -112,6 +113,15 @@ public class Login
                 {
                     logger.debug("User account expired " + login);
                     principal = null;
+                }
+                else
+                {
+                    BlockedReason reason = userManager.checkAccountFlag(principal);
+                    if(!reason.equals(BlockedReason.OK))
+                    {
+                        logger.debug("User " + login + " account blocked: " + reason.getReason());
+                        principal = null;
+                    }
                 }
             }
             else

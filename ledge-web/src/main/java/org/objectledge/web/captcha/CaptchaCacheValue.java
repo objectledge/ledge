@@ -1,5 +1,7 @@
 package org.objectledge.web.captcha;
 
+import java.io.Serializable;
+
 
 /**
  * A service that provides CAPTCHA functionality for web applications.
@@ -7,6 +9,7 @@ package org.objectledge.web.captcha;
  * @author rafal
  */
 public class CaptchaCacheValue
+    implements Serializable
 {
     private boolean value;
 
