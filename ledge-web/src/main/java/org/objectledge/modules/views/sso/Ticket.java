@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
+import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.web.HttpContext;
@@ -58,12 +59,16 @@ public class Ticket
 {
     private final SingleSignOnService singleSignOnService;
 
+    private final UserManager userManager;
+
     private final Logger log;
 
-    public Ticket(Context context, SingleSignOnService singleSignOnService, Logger log)
+    public Ticket(Context context, SingleSignOnService singleSignOnService,
+        UserManager userManager, Logger log)
     {
         super(context, log);
         this.singleSignOnService = singleSignOnService;
+        this.userManager = userManager;
         this.log = log;
     }
 
@@ -80,56 +85,73 @@ public class Ticket
         AuthenticationContext authContext = context.getAttribute(AuthenticationContext.class);
 
         String ticket = null;
+        String uid = null;
         String status = "success";
 
         HttpSession session = httpRequest.getSession(false);
         String sessionId = session != null ? session.getId() : "N/A";
         log.debug("request from " + client + " sessionId " + sessionId);
-        if(authContext.isUserAuthenticated())
+        Principal principal = authContext.getUserPrincipal();
+        try
         {
-            if(targetDomain != null)
+            uid = userManager.getLogin(principal);
+            if(authContext.isUserAuthenticated())
             {
-                Principal principal = authContext.getUserPrincipal();
-                if(singleSignOnService.checkStatus(principal, targetDomain) == SingleSignOnService.LoginStatus.LOGGED_IN)
+                if(targetDomain != null)
                 {
-                    if(httpRequest.isSecure())
+                    if(singleSignOnService.checkStatus(principal, targetDomain) == SingleSignOnService.LoginStatus.LOGGED_IN)
                     {
-                        ticket = singleSignOnService.generateTicket(principal, domain, client);
-                        if(ticket == null)
+                        if(httpRequest.isSecure())
                         {
-                            // domain is not a realm master, warning was logged by
-                            // SingleSignOnService
+                            ticket = singleSignOnService.generateTicket(principal, domain, client);
+                            if(ticket == null)
+                            {
+                                // domain is not a realm master, warning was logged by
+                                // SingleSignOnService
+                                status = "invalid_request";
+                            }
+                        }
+                        else
+                        {
                             status = "invalid_request";
+                            log.warn("DECLINED " + client + ", " + principal.getName()
+                                + " not using secure channel");
                         }
                     }
                     else
                     {
-                        status = "invalid_request";
-                        log.warn("DECLINED " + client + ", " + principal.getName()
-                            + " not using secure channel");
+                        status = "not_logged_on";
+                        log.warn("DECLINED " + client + " principal recenly logged out");
                     }
                 }
                 else
                 {
-                    status = "not_logged_on";
-                    log.warn("DECLINED " + client + " principal recenly logged out");
+                    status = "invalid_request";
+                    log.warn("DECLINED " + client + " missing or malformed Referer header");
                 }
             }
             else
             {
-                status = "invalid_request";
-                log.warn("DECLINED " + client + " missing or malformed Referer header");
+                status = "not_logged_on";
+                log.warn("DECLINED " + client + " session not authenticated");
             }
+
         }
-        else
+        catch(Exception e)
         {
-            status = "not_logged_on";
-            log.warn("DECLINED " + client + " session not authenticated");
+            log.error("internal error", e);
         }
 
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("status", status);
-        jsonGenerator.writeStringField("ticket", ticket);
+        if(ticket != null)
+        {
+            jsonGenerator.writeStringField("ticket", ticket);
+        }
+        if(uid != null)
+        {
+            jsonGenerator.writeStringField("uid", uid);
+        }
         jsonGenerator.writeEndObject();
     }
     
