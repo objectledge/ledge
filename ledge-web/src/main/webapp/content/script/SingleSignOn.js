@@ -26,7 +26,7 @@ SSO.prototype.migrateSession = function(callback) {
 		success : function(data) {
 			if (data && data.status && data.status == "success") {
 				document.cookie = "org.objectledge.web.sso.ticket=" + data.ticket + '; path=/';
-				callback(data.status);
+				callback(data.status, data.uid);
 				return;
 			} else {
 				if (data && data.status) {
@@ -64,7 +64,7 @@ SSO.prototype.login = function(vlogin, vpassword, callback) {
 		success : function(data) {
 			if (data && data.status && data.status == "success") {
 				document.cookie = "org.objectledge.web.sso.ticket=" + data.ticket + '; path=/';
-				callback(data.status);
+				callback(data.status, vlogin);
 				return;
 			} else {
 				if (data && data.status) {
