@@ -218,6 +218,18 @@ public abstract class PropertyBasedComparator<O, V>
                     }
                 };
         }
+        if(Comparable.class.isAssignableFrom(cl))
+        {
+            return (PropertyBasedComparator<O, V>)new PropertyBasedComparator<O, Comparable<V>>(
+                            (PropertyAccessor<O, Comparable<V>>)accessor, direction)
+                {
+                    @Override
+                    protected int compareTo(Comparable<V> v1, Comparable<V> v2)
+                    {
+                        return v1.compareTo((V)v2);
+                    }
+                };
+        }
         throw new IllegalArgumentException("unsupported attribute type " + cl.getName());
     }
 }
