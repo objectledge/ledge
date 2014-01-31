@@ -144,7 +144,7 @@ public abstract class PropertyBasedComparator<O, V>
     {
         Class<V> cl = accessor.getType();
 
-        if(cl.isAssignableFrom(Boolean.class))
+        if(cl.equals(Boolean.class))
         {
             return (PropertyBasedComparator<O, V>)new PropertyBasedComparator<O, Boolean>(
                             (PropertyAccessor<O, Boolean>)accessor, direction)
@@ -156,7 +156,7 @@ public abstract class PropertyBasedComparator<O, V>
                     }
                 };
         }
-        if(cl.isAssignableFrom(Integer.class))
+        if(cl.equals(Integer.class))
         {
             return (PropertyBasedComparator<O, V>)new PropertyBasedComparator<O, Integer>(
                             (PropertyAccessor<O, Integer>)accessor, direction)
@@ -168,7 +168,7 @@ public abstract class PropertyBasedComparator<O, V>
                     }
                 };
         }
-        if(cl.isAssignableFrom(Long.class))
+        if(cl.equals(Long.class))
         {
             return (PropertyBasedComparator<O, V>)new PropertyBasedComparator<O, Long>(
                             (PropertyAccessor<O, Long>)accessor, direction)
@@ -180,7 +180,7 @@ public abstract class PropertyBasedComparator<O, V>
                     }
                 };
         }
-        if(cl.isAssignableFrom(BigDecimal.class))
+        if(cl.equals(BigDecimal.class))
         {
             return (PropertyBasedComparator<O, V>)new PropertyBasedComparator<O, BigDecimal>(
                             (PropertyAccessor<O, BigDecimal>)accessor, direction)
@@ -192,7 +192,7 @@ public abstract class PropertyBasedComparator<O, V>
                     }
                 };
         }
-        if(cl.isAssignableFrom(Date.class))
+        if(Date.class.isAssignableFrom(cl))
         {
             return (PropertyBasedComparator<O, V>)new PropertyBasedComparator<O, Date>(
                             (PropertyAccessor<O, Date>)accessor, direction)
@@ -204,7 +204,7 @@ public abstract class PropertyBasedComparator<O, V>
                     }
                 };
         }
-        if(cl.isAssignableFrom(String.class))
+        if(cl.equals(String.class))
         {
             return (PropertyBasedComparator<O, V>)new PropertyBasedComparator<O, String>(
                             (PropertyAccessor<O, String>)accessor, direction)
