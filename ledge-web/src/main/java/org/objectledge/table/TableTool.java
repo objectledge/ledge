@@ -166,7 +166,7 @@ public class TableTool<T>
      * @throws TableException on construction errors
      */
     @SuppressWarnings("unchecked")
-    public TableTool(TableState state, List<TableFilter<T>> filters, TableModel<T> model)
+    public TableTool(TableState state, List<TableFilter<? super T>> filters, TableModel<T> model)
     throws TableException
     {
         this.state = state;
