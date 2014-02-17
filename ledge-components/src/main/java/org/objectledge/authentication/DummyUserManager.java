@@ -285,4 +285,11 @@ public class DummyUserManager
     {
         throw new UnsupportedOperationException("Failed to check if account email is duplicated");
     }
+
+    @Override
+    public boolean hasMultipleEmailAddresses(Principal user)
+    {
+        throw new UnsupportedOperationException(
+            "Failed to check if account has multiple email addresses");
+    }
 }

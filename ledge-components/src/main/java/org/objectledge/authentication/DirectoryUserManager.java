@@ -1078,4 +1078,21 @@ public class DirectoryUserManager
             return true;
         }
     }
+
+    @Override
+    public boolean hasMultipleEmailAddresses(Principal user)
+    {
+        try
+        {
+            DirContext pd = getPersonalData(user);
+            Attributes attrs = pd.getAttributes("", new String[] { "mail" });
+            Attribute mail = attrs.get("mail");
+            return (mail != null && mail.size() > 1);
+        }
+        catch(AuthenticationException | NamingException e)
+        {
+            logger.error("Naming error when getting logins for given email", e);
+            return false;
+        }
+    }
 }
