@@ -10,6 +10,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 
 public interface UserManager
 {
@@ -353,4 +354,12 @@ public interface UserManager
     public boolean isEmailDuplicated(String email)
         throws AuthenticationException;
 
+    /***
+     * Check if user has multiple email addresses
+     * 
+     * @param user
+     * @return
+     * @throws ProcessingException
+     */
+    public boolean hasMultipleEmailAddresses(Principal user);
 }

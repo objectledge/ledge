@@ -14,7 +14,7 @@ public class ReflectionPropertyAccessor<O, V>
     {
         this.fieldClass = fieldClass;
         this.field = objectClass.getDeclaredField(fieldName);
-        if(!field.getClass().isAssignableFrom(fieldClass))
+        if(!field.getType().isAssignableFrom(fieldClass))
         {
             throw new IllegalArgumentException(fieldName + " has type " + field.getClass()
                 + " not compatible with " + fieldClass);

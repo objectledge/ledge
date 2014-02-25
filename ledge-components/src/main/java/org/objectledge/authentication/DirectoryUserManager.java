@@ -1011,7 +1011,10 @@ public class DirectoryUserManager
     {
         Attributes attribiutes = new BasicAttributes(true);
         attribiutes.put(LdapMapper.BLOCKED_REASON.getLdapName(), code);
-        // attribiutes.put("userPassword", "!accountRem0v3d");
+        if(code == BlockedReason.PASSWORD_EXPIRED.getCode().toString())
+        {
+            attribiutes.put(PASSWORD_ATTRIBUTE_DEFAULT, createRandomPassword(6,8));
+        }
         try
         {
             changeUserAttribiutes(user, attribiutes);
@@ -1073,6 +1076,23 @@ public class DirectoryUserManager
         else
         {
             return true;
+        }
+    }
+
+    @Override
+    public boolean hasMultipleEmailAddresses(Principal user)
+    {
+        try
+        {
+            DirContext pd = getPersonalData(user);
+            Attributes attrs = pd.getAttributes("", new String[] { "mail" });
+            Attribute mail = attrs.get("mail");
+            return (mail != null && mail.size() > 1);
+        }
+        catch(AuthenticationException | NamingException e)
+        {
+            logger.error("Naming error when getting logins for given email", e);
+            return false;
         }
     }
 }
