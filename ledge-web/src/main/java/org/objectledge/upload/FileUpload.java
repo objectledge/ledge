@@ -28,66 +28,113 @@
 
 package org.objectledge.upload;
 
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.threads.ThreadPool;
+import org.objectledge.web.HttpContext;
+import org.picocontainer.Startable;
 
 /**
- * An application access point to the HTML form file upload functionality. For more information
- * see {@link org.objectledge.upload.FileUploadValve}.
- *
+ * An application access point to the HTML form file upload functionality. For more information see
+ * {@link org.objectledge.upload.FileUploadValve}.
+ * 
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: FileUpload.java,v 1.8 2005-05-30 09:10:13 pablo Exp $
  */
 public class FileUpload
+    implements Startable
 {
     // constants ////////////////////////////////////////////////////////////////////////////////
-    
+
     /** context key to store the upload map. */
-    public static final String UPLOAD_CONTEXT_KEY =
-        "org.objectledge.upload.FileUpload.uploadMap";
+    public static final String UPLOAD_CONTEXT_KEY = "org.objectledge.upload.FileUpload.uploadMap";
+
+    /** HTTP session key to the upload bucket holder. */
+    private static final String BUCKET_HOLDER_SESSION_KEY = "org.objectledge.upload.FileUpload.bucketHolder";
 
     /** the default upload limit. */
     public static final int DEFAULT_UPLOAD_LIMIT = 4194304;
 
+    /** Default temporary directory for upload buckets, relative to Ledge filesystem root. */
+    public static final String DEFAULT_WORKING_DIRECTORY = "data/upload";
+
     // instance variables ///////////////////////////////////////////////////////////////////////
-    
+
     /** the thread's processing context. */
     private Context context;
 
     /** the upload size limit */
     private int uploadLimit;
 
+    private String workingDirectory;
+
+    private Map<String, UploadBucket> allBuckets = new ConcurrentHashMap<>();
+
+    private Random bucketIdGen = new SecureRandom();
+
+    private UploadBucketCleaner bucketCleaner;
+
+    private final FileSystem fileSystem;
+
+    private final Logger logger;
+
     // initialization ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a FileUpload component.
-     *
-     * @param config the configuration. 
+     * 
+     * @param config the configuration.
      * @param context the context.
+     * @param fileSystem Ledge file system.
+     * @param threadPool Ledge thread pool.
      */
-    public FileUpload(Configuration config, Context context)
+    public FileUpload(Configuration config, Context context, FileSystem fileSystem,
+        ThreadPool theradPool, Logger logger)
     {
         uploadLimit = config.getChild("upload_limit").getValueAsInteger(DEFAULT_UPLOAD_LIMIT);
+        workingDirectory = config.getChild("working_directory").getValue(DEFAULT_WORKING_DIRECTORY);
         this.context = context;
+        this.fileSystem = fileSystem;
+        this.logger = logger;
+        this.bucketCleaner = new UploadBucketCleaner(workingDirectory, fileSystem, logger);
+        theradPool.runDaemon(bucketCleaner);
     }
-    
+
     // public API ///////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void start()
+    {
+        cleanupStaleBuckets();
+    }
+
+    @Override
+    public void stop()
+    {
+    }
 
     /**
      * Retrieve the upload container, this method should be called in the first place by action
-     * valves before retrieving any multipart POST parameters from the request. This call will
-     * allow identification of file upload size limit exceeding problems.
-     *
+     * valves before retrieving any multipart POST parameters from the request. This call will allow
+     * identification of file upload size limit exceeding problems.
+     * 
      * @param name the name of the item.
      * @return the upload container, or <code>null</code> if not available.
      * @throws UploadLimitExceededException thrown on upload limit exceeding
      */
     @SuppressWarnings("unchecked")
     public UploadContainer getContainer(String name)
-    throws UploadLimitExceededException
+        throws UploadLimitExceededException
     {
         Object value = context.getAttribute(UPLOAD_CONTEXT_KEY);
 
@@ -99,13 +146,13 @@ public class FileUpload
         else if(value instanceof UploadLimitExceededException)
         {
             // upload limit exceeded - message is the limit value
-            throw (UploadLimitExceededException) value;
+            throw (UploadLimitExceededException)value;
         }
         else if(value instanceof Map<?, ?>)
         {
             // upload successful - return a requested container
             // (it may also be null for not uploaded items)
-            Map<String, UploadContainer> map = (Map<String, UploadContainer>) value;
+            Map<String, UploadContainer> map = (Map<String, UploadContainer>)value;
             return map.get(name);
         }
         else
@@ -113,14 +160,103 @@ public class FileUpload
             throw new RuntimeException("Probably a valve conflicting with FileUploadValve exists");
         }
     }
-    
+
     /**
-     * Get the upload size limit. 
-     *
-     * @return the upload limit. 
+     * Get the upload size limit.
+     * 
+     * @return the upload limit.
      */
     public int getUploadLimit()
     {
         return uploadLimit;
+    }
+
+    /**
+     * Creates a new bucket and attaches it to the current session.
+     */
+    public UploadBucket createBucket()
+    {
+        String id;
+        synchronized(bucketIdGen)
+        {
+            do
+            {
+                long i = bucketIdGen.nextLong();
+                id = Long.toString(i, 36);
+            }
+            while(!allBuckets.containsKey(id));
+        }
+        UploadBucket bucket = new UploadBucket(id);
+        allBuckets.put(id, bucket);
+        getHolder().addBucket(bucket);
+        return bucket;
+    }
+
+    /**
+     * @param bucket
+     */
+    public void releaseBucket(UploadBucket bucket)
+    {
+        bucketCleaner.schedule(bucket);
+        allBuckets.remove(bucket.getId());
+        getHolder().removeBucket(bucket);
+    }
+
+    /**
+     * Deletes temporary files and directories left after previous server run.
+     */
+    private void cleanupStaleBuckets()
+    {
+        try
+        {
+            final String[] ids = fileSystem.list(workingDirectory);
+            logger.info("cleaning up " + ids + " upload bucket from prevoios run");
+            for(String id : ids)
+            {
+                bucketCleaner.schedule(new UploadBucket(id));
+            }
+        }
+        catch(IOException e)
+        {
+            logger.error("failed to read the working directory", e);
+        }
+    }
+
+    /**
+     * Returns upload bucket holder for the current session, creating it if necessary.
+     * 
+     * @return
+     */
+    private UploadBucketHolder getHolder()
+    {
+        HttpContext httpContext = context.getAttribute(HttpContext.class);
+        UploadBucketHolder holder = (UploadBucketHolder)httpContext
+            .getSessionAttribute(BUCKET_HOLDER_SESSION_KEY);
+        if(holder == null)
+        {
+            holder = new UploadBucketHolder(this);
+            httpContext.setSessionAttribute(BUCKET_HOLDER_SESSION_KEY, holder);
+        }
+        return holder;
+    }
+
+    /**
+     * Returns active buckets owned by the current session.
+     * 
+     * @return
+     */
+    public Collection<UploadBucket> getBuckets()
+    {
+        return getHolder().getBuckets();
+    }
+
+    /**
+     * Returns upload bucket with the specified id.
+     * 
+     * @param id bucked id.
+     */
+    public UploadBucket getBucket(String id)
+    {
+        return allBuckets.get(id);
     }
 }
