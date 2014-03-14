@@ -15,7 +15,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
@@ -82,7 +81,8 @@ public class ReCaptchaCaptchaServiceImpl
         publicKeyEmail = config.getChild("email").getChild("publicKey").getValue();
         reCaptcha.setPublicKey(publicKeyWidget);
         reCaptcha.setPrivateKey(config.getChild("widget").getChild("privateKey").getValue());
-        recaptchaServer = config.getChild("recapthaServer", true).getValue("http://www.google.com/recaptcha");
+        recaptchaServer = config.getChild("recaptchaServer", true).getValue(
+            "//www.google.com/recaptcha");
 
         if(recaptchaServer != null)
         {
