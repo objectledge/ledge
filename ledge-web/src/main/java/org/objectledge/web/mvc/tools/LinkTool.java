@@ -1049,6 +1049,8 @@ public class LinkTool
             // prepare address part
             sb.append(getContextPath());
 
+            Parameters parametersTmp = getParameters();
+            String[] keys = parametersTmp.getParameterNames();
             if (contentLink)
             {
                 appendContentLink(sb);
@@ -1056,13 +1058,10 @@ public class LinkTool
             else
             {
                 sb.append(getServletPath());
-
-                Parameters parametersTmp = getParameters(); 
-                String[] keys = parametersTmp.getParameterNames();
                 appendPathInfo(sb, keys, parametersTmp);
                 appendPathInfoSuffix(sb);
-                appendQueryString(sb, keys, parametersTmp);
             }
+            appendQueryString(sb, keys, parametersTmp);
             
             if (fragment != null)
             {
