@@ -1317,7 +1317,8 @@ public class LinkTool
         for (int i = 0; i < keys.length; i++)
         {
             String key = keys[i];
-            if (!config.pathinfoParameterNames.contains(key))
+            if(!config.pathinfoParameterNames.contains(key)
+                && (!contentLink || !config.stickyParameterNames.contains(key)))
             {
                 String[] values = parametersTmp.getStrings(key);
                 for (int j = 0; j < values.length; j++)
