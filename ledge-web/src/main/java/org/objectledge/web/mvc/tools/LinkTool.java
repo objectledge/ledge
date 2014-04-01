@@ -1127,6 +1127,16 @@ public class LinkTool
     }
 
     /**
+     * Allows subclasses to query if link is requested to be absolute.
+     * 
+     * @return absolute link flag.
+     */
+    protected boolean isAbsolute()
+    {
+        return showProtocolName;
+    }
+
+    /**
      * Allows subclasses to query current host override, if any.
      * 
      * @return overridden host name.
