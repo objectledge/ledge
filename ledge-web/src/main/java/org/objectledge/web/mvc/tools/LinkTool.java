@@ -571,10 +571,10 @@ public class LinkTool
     }
 
     /**
-     * Prepare link tool pointed to referer page
+     * Prepare link tool pointed to referrer page
+     * 
      * @return the link tool
      */
-    @SuppressWarnings("unchecked")
     public LinkTool getReferer()
     {
         Enumeration<String> enumeration = httpContext.getRequest().getHeaders("referer");
@@ -1127,20 +1127,24 @@ public class LinkTool
     }
 
     /**
+     * Allows subclasses to query current host override, if any.
+     * 
+     * @return overridden host name.
+     */
+    protected String getHost()
+    {
+        return host;
+    }
+
+    /**
      * Allows subclasses to override server name rendered in {@link #toString()} method.
      * 
      * @return the overriden server name
      */
     protected String getServerName()
     {
-        if(host == null)
-        {
-            return httpContext.getRequest().getServerName();
-        }
-        else
-        {
-            return host;
-        }
+        final String hostOverride = getHost();
+        return hostOverride != null ? hostOverride : httpContext.getRequest().getServerName();
     }
 
     /**
