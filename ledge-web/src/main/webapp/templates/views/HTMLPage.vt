@@ -54,6 +54,7 @@ $viewEnclosureTool.top()
 $pageTool.addAutoLoadScriptLink('script/ScriptLoader.js')
 $pageTool.addAutoLoadScriptLink('script/BrowserUtil.js')
 #set($jslink = $link.sessionless())
+$jslink.parameters.remove()##
 <script type="text/javascript">
 <!--
 // initialisation of config parameters for ScriptLoader

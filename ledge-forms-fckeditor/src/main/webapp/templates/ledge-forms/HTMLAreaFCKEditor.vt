@@ -25,6 +25,7 @@ $!htmlValue
 </textarea>
 
 #set($jslink = $link.sessionless())##
+$jslink.parameters.remove()##
 <script type="text/javascript">
 <!--
 var sBasePath = '$jslink.content('ckeditor/')';
