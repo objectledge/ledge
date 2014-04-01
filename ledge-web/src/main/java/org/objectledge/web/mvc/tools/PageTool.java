@@ -89,6 +89,8 @@ public class PageTool
      * the same script link. */
     protected Set<ContentLink> scriptLinksSet = new HashSet<ContentLink>();
 
+    protected ContentLink canonicalLink = null;
+
     /** Contains {@link Meta} objects. */
     protected List<Meta> nameMetas = new ArrayList<Meta>();
 
@@ -629,6 +631,38 @@ public class PageTool
         {
             return charset;
         }
+    }
+
+    // Canonical link --------------------
+
+    /**
+     * Sets canonical link for the current page.
+     * 
+     * @param link configured via LinkTool
+     */
+    public void setCanonicalLink(LinkTool link)
+    {
+        canonicalLink = new ContentLink(link);
+    }
+
+    /**
+     * Sets canonical link for the current page.
+     * 
+     * @param href link href
+     */
+    public void setCanonicalLink(String href)
+    {
+        canonicalLink = new ContentLink(href);
+    }
+
+    /**
+     * Returns canonical link for the page.
+     * 
+     * @return canonical link for the page (may be <code>null</code>)
+     */
+    public ContentLink getCanonicalLink()
+    {
+        return canonicalLink;
     }
 
     //-------------------------------
