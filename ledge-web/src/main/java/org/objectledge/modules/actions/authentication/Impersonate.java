@@ -40,6 +40,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
+import org.objectledge.web.mvc.security.SecurityChecking;
 
 /**
  * Login action.
@@ -50,6 +51,7 @@ import org.objectledge.web.WebConstants;
  */
 public class Impersonate
     extends BaseAuthenticationAction
+    implements SecurityChecking
 {
     /**
      * Action constructor.
