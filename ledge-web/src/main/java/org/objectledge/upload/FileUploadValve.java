@@ -74,8 +74,7 @@ public class FileUploadValve
         if(limitExceeded)
         {
             // store the file upload failure info into the context
-            context.setAttribute(FileUpload.UPLOAD_CONTEXT_KEY,
-                new UploadLimitExceededException(Integer.toString(fileUpload.getUploadLimit()))); 
+            fileUpload.limitExceeded();
             logger.warn("The request size exceeds upload limits "+
                 contentLength+" > "+fileUpload.getUploadLimit());
             return;
@@ -111,7 +110,7 @@ public class FileUploadValve
                 }
                 
                 // store the upload map into the context
-                context.setAttribute(FileUpload.UPLOAD_CONTEXT_KEY, uploadMap);
+                context.setAttribute(FileUploadImpl.UPLOAD_CONTEXT_KEY, uploadMap);
                 logger.debug("UploadValve has stored the upload map in the context");
             }
             catch (IOException e) 

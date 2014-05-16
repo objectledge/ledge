@@ -82,7 +82,7 @@ public class UploadTest extends LedgeTestCase
         MailSystem mailSystem = new MailSystem(config, logger, fs, templating, threadPool);
 
         config = getConfig(fs,"config/org.objectledge.upload.FileUpload.xml");
-        fileUpload = new FileUpload(config, context, getFileSystem(), threadPool, getLogger());
+        fileUpload = new FileUploadImpl(config, context, getFileSystem(), threadPool, getLogger());
 
         //file upload valve
         uploadValve = new FileUploadValve(logger, fileUpload, mailSystem);
