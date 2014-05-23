@@ -1,5 +1,14 @@
 package org.objectledge.upload;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.objectledge.filesystem.FileSystem;
+
 /**
  * Upload bucket may contain multiple items that are being uploaded simultaneously.
  * <p>
@@ -14,13 +23,23 @@ public class UploadBucket
 
     private long lastAccessTime;
 
+    private Map<String, UploadContainer> items = new ConcurrentHashMap<>();
+
+    private AtomicInteger seq = new AtomicInteger();
+
+    private final FileSystem fileSystem;
+
+    private final String workArea;
+
     /**
      * Creates a new upload bucket instance.
      * 
      * @param id bucket identifier.
      */
-    public UploadBucket(String id)
+    public UploadBucket(FileSystem fileSystem, String workArea, String id)
     {
+        this.fileSystem = fileSystem;
+        this.workArea = workArea + "/" + id;
         this.id = id;
         this.lastAccessTime = System.currentTimeMillis();
     }
@@ -43,6 +62,34 @@ public class UploadBucket
     public long getLastAccessTime()
     {
         return lastAccessTime;
+    }
+
+    /**
+     * Returns UploadContainers inside this bucket.
+     * 
+     * @return
+     */
+    public Collection<UploadContainer> getItems()
+    {
+        return items.values();
+    }
+
+    /**
+     * Adds a file to the bucket.
+     * 
+     * @param fileName
+     * @param contentType
+     * @param is
+     * @throws IOException
+     */
+    public void addItem(String fileName, String contentType, InputStream is)
+        throws IOException
+    {
+        String name = Integer.toString(seq.incrementAndGet());
+        UploadContainer container = new DiskUploadContainer(fileSystem, workArea, name, fileName,
+            contentType, is);
+        items.put(name, container);
+        lastAccessTime = System.currentTimeMillis();
     }
 
     @Override

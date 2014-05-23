@@ -179,7 +179,7 @@ public class FileUploadImpl
             }
             while(!allBuckets.containsKey(id));
         }
-        UploadBucket bucket = new UploadBucket(id);
+        UploadBucket bucket = new UploadBucket(fileSystem, workingDirectory, id);
         allBuckets.put(id, bucket);
         getHolder().addBucket(bucket);
         return bucket;
@@ -204,7 +204,7 @@ public class FileUploadImpl
             logger.info("cleaning up " + ids + " upload bucket from prevoios run");
             for(String id : ids)
             {
-                bucketCleaner.schedule(new UploadBucket(id));
+                bucketCleaner.schedule(new UploadBucket(fileSystem, workingDirectory, id));
             }
         }
         catch(IOException e)
