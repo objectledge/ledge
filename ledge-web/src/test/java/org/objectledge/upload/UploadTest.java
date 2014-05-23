@@ -137,7 +137,7 @@ public class UploadTest extends LedgeTestCase
         assertEquals(container.getString(), "bar");
         assertEquals(container.getString("ISO-8859-2"), "bar");
         assertNotNull(container.getInputStream());
-        int size = container.getSize();
+        long size = container.getSize();
         assertEquals(container.getBytes().length, size);
         assertEquals(container.getName(), "item1");
     }

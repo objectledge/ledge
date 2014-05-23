@@ -196,7 +196,7 @@ public class FileUploadValve
         } 
         else 
         {
-            UploadContainer container = new UploadContainer(name, filename, mimeType,
+            UploadContainer container = new MemoryUploadContainer(name, filename, mimeType,
                 part.getSize(), part.getInputStream());
             uploadMap.put(name, container);
             logger.debug("UploadValve - created an upload container '"+name+"'");
