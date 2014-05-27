@@ -28,12 +28,15 @@ public class DiskUploadContainer
 
     public DiskUploadContainer(FileSystem fileSystem, String workArea, String name,
         String fileName, String mimeType, InputStream inputStream)
+        throws IOException
     {
         this.fileSystem = fileSystem;
         this.location = workArea + "/" + name;
         this.name = name;
         this.filename = fileName;
         this.mimeType = mimeType;
+        fileSystem.mkdirs(workArea);
+        fileSystem.write(location, inputStream);
     }
 
     @Override
