@@ -20,7 +20,7 @@ public class UploadTool
     }
 
     /**
-     * Creates a new bucket for the current HTTP sesion and returns it's id.
+     * Creates a new bucket for the current HTTP session and returns it's id.
      * 
      * @return new bucket id.
      */
