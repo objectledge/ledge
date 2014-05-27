@@ -174,10 +174,10 @@ public class FileUploadImpl
         {
             do
             {
-                long i = bucketIdGen.nextLong();
+                long i = bucketIdGen.nextLong() & 0x7ffffffl;
                 id = Long.toString(i, 36);
             }
-            while(!allBuckets.containsKey(id));
+            while(allBuckets.containsKey(id));
         }
         UploadBucket bucket = new UploadBucket(fileSystem, workingDirectory, id);
         allBuckets.put(id, bucket);
