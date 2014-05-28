@@ -3,10 +3,13 @@ package org.objectledge.modules.rest.upload;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -102,5 +105,66 @@ public class UploadEndpoint
         }
         final Response resp = respBuilder.build();
         return resp;
+    }
+
+    private static final Pattern CONTENT_DISPOSITION_RE = Pattern
+        .compile("attachment; filename=\"([^\"]+)\"");
+
+    @POST
+    public Response upload(@PathParam("bucketId") String bucketId,
+        @HeaderParam(HttpHeaders.CONTENT_DISPOSITION) String contentDisposition,
+        @HeaderParam(HttpHeaders.CONTENT_TYPE) String contentType,
+        @HeaderParam(HttpHeaders.ACCEPT) String accept, @Context UriInfo uriInfo, InputStream is)
+    {
+        try
+        {
+            UploadBucket bucket = fileUpload.getBucket(bucketId);
+            if(bucket != null && contentDisposition != null)
+            {
+                Matcher m = CONTENT_DISPOSITION_RE.matcher(contentDisposition);
+                if(m.matches())
+                {
+                    UploadContainer container = bucket.addItem(m.group(1), contentType, is);
+                    return buildResponse(accept, uriInfo, bucket, Optional.of(container));
+                }
+            }
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        catch(IOException e)
+        {
+            return Response.serverError().entity(new StackTrace(e).toString()).build();
+        }
+    }
+
+    private static final Pattern CONTENT_RANGE_RE = Pattern.compile("bytes (\\d+)-(\\d+)/(\\d+)");
+
+    @Path("{itemId}")
+    @PUT
+    public Response uploadChunk(@PathParam("bucketId") String bucketId,
+        @PathParam("itemId") String itemId, @HeaderParam("Content-Range") String contentRange,
+        @HeaderParam(HttpHeaders.ACCEPT) String accept, @Context UriInfo uriInfo, InputStream is)
+    {
+        try
+        {
+            UploadBucket bucket = fileUpload.getBucket(bucketId);
+            if(bucket != null && bucket.getItem(itemId) != null && contentRange != null)
+            {
+                Matcher m = CONTENT_RANGE_RE.matcher(contentRange);
+                if(m.matches())
+                {
+                    int start = Integer.parseInt(m.group(1));
+                    int end = Integer.parseInt(m.group(2));
+                    bucket.addDataChunk(itemId, start, end - start + 1, is);
+
+                    return buildResponse(accept, uriInfo, bucket,
+                        Optional.<UploadContainer> absent());
+                }
+            }
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        catch(IOException e)
+        {
+            return Response.serverError().entity(new StackTrace(e).toString()).build();
+        }
     }
 }
