@@ -71,4 +71,15 @@ public interface UploadContainer
      */
     String getMimeType();
 
+    /**
+     * Add chunk of data to the container;
+     * 
+     * @param offset offset of the chunk to be added
+     * @param length length of the chunk
+     * @param is stream to load chunk from
+     * @return updated chunk
+     * @throws IOException
+     */
+    UploadContainer addChunk(int offset, int length, InputStream is)
+        throws IOException;
 }

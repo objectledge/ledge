@@ -180,4 +180,16 @@ public class MemoryUploadContainer
     {
         return mimeType;
     }
+
+    @Override
+    public UploadContainer addChunk(int offset, int length, InputStream is)
+        throws IOException
+    {
+        byte[] newData = new byte[Math.max(data.length, offset + size)];
+        System.arraycopy(data, 0, newData, 0, data.length);
+        is.read(newData, offset, size);
+
+        return new MemoryUploadContainer(name, filename, mimeType, length,
+            new ByteArrayInputStream(newData));
+    }
 }
