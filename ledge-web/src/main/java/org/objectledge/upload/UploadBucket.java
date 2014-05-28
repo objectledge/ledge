@@ -82,7 +82,7 @@ public class UploadBucket
      * @param is
      * @throws IOException
      */
-    public void addItem(String fileName, String contentType, InputStream is)
+    public UploadContainer addItem(String fileName, String contentType, InputStream is)
         throws IOException
     {
         String name = Integer.toString(seq.incrementAndGet());
@@ -90,6 +90,41 @@ public class UploadBucket
             contentType, is);
         items.put(name, container);
         lastAccessTime = System.currentTimeMillis();
+        return container;
+    }
+
+    /**
+     * Get a specific file.
+     * 
+     * @param itemName
+     * @return
+     */
+    public UploadContainer getItem(String itemName)
+    {
+        return items.get(itemName);
+    }
+
+    /**
+     * Add a data chunk to the specified file.
+     * 
+     * @param itemName
+     * @param offset
+     * @param length
+     * @param is
+     * @throws IOException
+     */
+    public void addDataChunk(String itemName, int offset, int length, InputStream is)
+        throws IOException
+    {
+        UploadContainer container = items.get(itemName);
+        if(container != null)
+        {
+            items.put(itemName, container.addChunk(offset, length, is));
+        }
+        else
+        {
+            throw new IllegalArgumentException(itemName + " container not found");
+        }
     }
 
     @Override
