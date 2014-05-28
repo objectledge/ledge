@@ -82,4 +82,12 @@ public interface UploadContainer
      */
     UploadContainer addChunk(int offset, int length, InputStream is)
         throws IOException;
+
+    /**
+     * Dispose this container's contents.
+     * 
+     * @throws IOException
+     */
+    void dispose()
+        throws IOException;
 }

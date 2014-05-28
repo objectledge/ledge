@@ -114,4 +114,11 @@ public class DiskUploadContainer
             return this;
         }
     }
+
+    @Override
+    public void dispose()
+        throws IOException
+    {
+        fileSystem.delete(location);
+    }
 }

@@ -192,4 +192,10 @@ public class MemoryUploadContainer
         return new MemoryUploadContainer(name, filename, mimeType, length,
             new ByteArrayInputStream(newData));
     }
+
+    @Override
+    public void dispose()
+        throws IOException
+    {
+    }
 }
