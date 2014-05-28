@@ -5,6 +5,7 @@ import java.net.URI;
 import org.objectledge.upload.UploadContainer;
 
 public class FileInfo
+    implements ItemInfo
 {
     private final UploadContainer container;
 
@@ -16,11 +17,13 @@ public class FileInfo
         this.bucketUri = bucketUri;
     }
 
+    @Override
     public String getName()
     {
         return container.getFileName();
     }
 
+    @Override
     public long getSize()
     {
         return container.getSize();

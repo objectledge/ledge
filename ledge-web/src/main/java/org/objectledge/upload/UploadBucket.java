@@ -1,5 +1,8 @@
 package org.objectledge.upload;
 
+import static com.google.common.collect.Collections2.filter;
+import static com.google.common.collect.Collections2.transform;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -8,6 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.objectledge.filesystem.FileSystem;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 
 /**
  * Upload bucket may contain multiple items that are being uploaded simultaneously.
@@ -23,7 +30,7 @@ public class UploadBucket
 
     private long lastAccessTime;
 
-    private final Map<String, UploadContainer> items = new ConcurrentHashMap<>();
+    private final Map<String, Item> items = new ConcurrentHashMap<>();
 
     private final AtomicInteger seq = new AtomicInteger();
 
@@ -68,13 +75,52 @@ public class UploadBucket
     }
 
     /**
+     * Returns items inside this bucket.
+     * 
+     * @return
+     */
+    public Collection<Item> getItems()
+    {
+        return items.values();
+    }
+
+    /**
      * Returns UploadContainers inside this bucket.
      * 
      * @return
      */
-    public Collection<UploadContainer> getItems()
+    public Collection<UploadContainer> getContainers()
     {
-        return items.values();
+        return transform(filter(items.values(), Item.IS_CONTAINER), Item.TO_CONTAINER);
+    }
+
+    /**
+     * Get a specific file.
+     * 
+     * @param itemName
+     * @return
+     */
+    public Item getItem(String itemName)
+    {
+        return items.get(itemName);
+    }
+
+    private Optional<UploadError> checkItem(String fileName, int size)
+    {
+        if(config.getMaxCount() > 0
+            && filter(items.values(), Item.IS_CONTAINER).size() > config.getMaxCount())
+        {
+            return Optional.of(UploadError.ITEM_COUNT_EXCEEDED);
+        }
+        if(config.getMaxSize() > 0 && size > config.getMaxSize())
+        {
+            return Optional.of(UploadError.ITEM_SIZE_EXCEEDED);
+        }
+        if(!config.isAllowed(fileName))
+        {
+            return Optional.of(UploadError.FORMAT_NOT_ALLOWED);
+        }
+        return Optional.<UploadError> absent();
     }
 
     /**
@@ -85,26 +131,25 @@ public class UploadBucket
      * @param is
      * @throws IOException
      */
-    public UploadContainer addItem(String fileName, String contentType, InputStream is)
+    public Item addItem(String fileName, int size, String contentType, InputStream is)
         throws IOException
     {
         String name = Integer.toString(seq.incrementAndGet());
         UploadContainer container = new DiskUploadContainer(fileSystem, workArea, name, fileName,
             contentType, is);
-        items.put(name, container);
+        Optional<UploadError> error = checkItem(fileName, size);
+        Item item;
+        if(error.isPresent())
+        {
+            item = new RejectedItem(name, fileName, size, error.get());
+        }
+        else
+        {
+            item = new ContainerItem(container);
+        }
+        items.put(name, item);
         lastAccessTime = System.currentTimeMillis();
-        return container;
-    }
-
-    /**
-     * Get a specific file.
-     * 
-     * @param itemName
-     * @return
-     */
-    public UploadContainer getItem(String itemName)
-    {
-        return items.get(itemName);
+        return item;
     }
 
     /**
@@ -119,14 +164,33 @@ public class UploadBucket
     public void addDataChunk(String itemName, int offset, int length, InputStream is)
         throws IOException
     {
-        UploadContainer container = items.get(itemName);
-        if(container != null)
+        Item item = items.get(itemName);
+        if(item instanceof ContainerItem)
         {
-            items.put(itemName, container.addChunk(offset, length, is));
+            UploadContainer container = ((ContainerItem)item).getContainer();
+            items.put(itemName, new ContainerItem(container.addChunk(offset, length, is)));
         }
         else
         {
-            throw new IllegalArgumentException(itemName + " container not found");
+            throw new IllegalArgumentException(itemName + " UploadContainer not found or not valid");
+        }
+    }
+
+    /**
+     * Removes the specified item
+     * 
+     * @param itemName
+     * @throws IOException
+     */
+    public void removeItem(String itemName)
+        throws IOException
+    {
+        Item item = items.get(itemName);
+        if(item instanceof ContainerItem)
+        {
+            final UploadContainer container = ((ContainerItem)item).getContainer();
+            container.dispose();
+            items.put(itemName, new DeletedItem(container));
         }
     }
 
@@ -156,5 +220,97 @@ public class UploadBucket
             return false;
         }
         return true;
+    }
+
+    public static abstract class Item
+    {
+        private final String name;
+
+        private final String fileName;
+
+        private final long size;
+
+        public Item(String name, String fileName, long size)
+        {
+            this.name = name;
+            this.fileName = fileName;
+            this.size = size;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public String getFileName()
+        {
+            return fileName;
+        }
+
+        public long getSize()
+        {
+            return size;
+        }
+
+        public static final Predicate<Item> IS_CONTAINER = new Predicate<Item>()
+            {
+                @Override
+                public boolean apply(Item input)
+                {
+                    return input instanceof ContainerItem;
+                }
+            };
+
+        public static final Function<Item, UploadContainer> TO_CONTAINER = new Function<Item, UploadContainer>()
+            {
+                @Override
+                public UploadContainer apply(Item input)
+                {
+                    return ((ContainerItem)input).getContainer();
+                }
+            };
+    }
+
+    public static class ContainerItem
+        extends Item
+    {
+        private final UploadContainer container;
+
+        public ContainerItem(UploadContainer container)
+        {
+            super(container.getName(), container.getFileName(), container.getSize());
+            this.container = container;
+        }
+
+        public UploadContainer getContainer()
+        {
+            return container;
+        }
+    }
+
+    public static class DeletedItem
+        extends Item
+    {
+        public DeletedItem(UploadContainer container)
+        {
+            super(container.getName(), container.getFileName(), container.getSize());
+        }
+    }
+
+    public static class RejectedItem
+        extends Item
+    {
+        private final UploadError error;
+
+        public RejectedItem(String name, String fileName, long size, UploadError error)
+        {
+            super(name, fileName, size);
+            this.error = error;
+        }
+
+        public UploadError getError()
+        {
+            return error;
+        }
     }
 }

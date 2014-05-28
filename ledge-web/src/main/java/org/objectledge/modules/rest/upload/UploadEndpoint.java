@@ -76,7 +76,15 @@ public class UploadEndpoint
                 {
                     FormDataContentDisposition disposition = part.getFormDataContentDisposition();
                     InputStream is = part.getValueAs(InputStream.class);
-                    bucket.addItem(disposition.getFileName(), part.getMediaType().toString(), is);
+                    String contentLength = part.getHeaders().getFirst(HttpHeaders.CONTENT_LENGTH);
+                    // when Content-Length for the part is set, use length of the full request
+                    if(contentLength == null)
+                    {
+                        contentLength = multiPart.getHeaders().getFirst(HttpHeaders.CONTENT_LENGTH);
+                    }
+                    int size = contentLength != null ? Integer.parseInt(contentLength) : 0;
+                    bucket.addItem(disposition.getFileName(), size, part.getMediaType().toString(),
+                        is);
                 }
             }
         }
@@ -113,6 +121,8 @@ public class UploadEndpoint
     @POST
     public Response upload(@PathParam("bucketId") String bucketId,
         @HeaderParam(HttpHeaders.CONTENT_DISPOSITION) String contentDisposition,
+        @HeaderParam("Content-Range") String contentRange,
+        @HeaderParam(HttpHeaders.CONTENT_LENGTH) int contentLength,
         @HeaderParam(HttpHeaders.CONTENT_TYPE) String contentType,
         @HeaderParam(HttpHeaders.ACCEPT) String accept, @Context UriInfo uriInfo, InputStream is)
     {
@@ -121,11 +131,25 @@ public class UploadEndpoint
             UploadBucket bucket = fileUpload.getBucket(bucketId);
             if(bucket != null && contentDisposition != null)
             {
-                Matcher m = CONTENT_DISPOSITION_RE.matcher(contentDisposition);
-                if(m.matches())
+                Matcher dispMatch = CONTENT_DISPOSITION_RE.matcher(contentDisposition);
+                if(dispMatch.matches())
                 {
-                    UploadContainer container = bucket.addItem(m.group(1), contentType, is);
-                    return buildResponse(accept, uriInfo, bucket, Optional.of(container));
+                    int size = contentLength;
+                    if(contentRange != null)
+                    {
+                        Matcher rangeMatch = CONTENT_RANGE_RE.matcher(contentRange);
+                        if(rangeMatch.matches())
+                        {
+                            size = Integer.parseInt(rangeMatch.group(3));
+                        }
+                    }
+
+                    UploadBucket.Item item = bucket.addItem(dispMatch.group(1), size, contentType,
+                        is);
+                    Optional<UploadContainer> container = item instanceof UploadBucket.ContainerItem ? Optional
+                        .of(((UploadBucket.ContainerItem)item).getContainer()) : Optional
+                        .<UploadContainer> absent();
+                    return buildResponse(accept, uriInfo, bucket, container);
                 }
             }
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -147,7 +171,8 @@ public class UploadEndpoint
         try
         {
             UploadBucket bucket = fileUpload.getBucket(bucketId);
-            if(bucket != null && bucket.getItem(itemId) != null && contentRange != null)
+            if(bucket != null && bucket.getItem(itemId) instanceof UploadBucket.ContainerItem
+                && contentRange != null)
             {
                 Matcher m = CONTENT_RANGE_RE.matcher(contentRange);
                 if(m.matches())

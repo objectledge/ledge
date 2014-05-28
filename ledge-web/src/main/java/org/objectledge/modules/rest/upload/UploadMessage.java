@@ -5,27 +5,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.objectledge.upload.UploadBucket;
-import org.objectledge.upload.UploadContainer;
 
 public class UploadMessage
 {
-    private final List<FileInfo> files;
+    private final List<ItemInfo> files;
 
     public UploadMessage(UploadBucket bucket, URI bucketUri)
     {
         files = new ArrayList<>();
-        for(UploadContainer container : bucket.getItems())
+        for(UploadBucket.Item item : bucket.getItems())
         {
-            files.add(new FileInfo(container, bucketUri));
+            if(item instanceof UploadBucket.ContainerItem)
+            {
+                files
+                    .add(new FileInfo(((UploadBucket.ContainerItem)item).getContainer(), bucketUri));
+            }
+            if(item instanceof UploadBucket.RejectedItem)
+            {
+                files.add(new ErrorInfo(item.getFileName(), item.getSize(),
+                    ((UploadBucket.RejectedItem)item).getError()));
+            }
         }
     }
 
-    public UploadMessage(List<FileInfo> files)
-    {
-        this.files = files;
-    }
-
-    public List<FileInfo> getFiles()
+    public List<ItemInfo> getFiles()
     {
         return files;
     }
