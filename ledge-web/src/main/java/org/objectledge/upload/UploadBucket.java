@@ -23,24 +23,27 @@ public class UploadBucket
 
     private long lastAccessTime;
 
-    private Map<String, UploadContainer> items = new ConcurrentHashMap<>();
+    private final Map<String, UploadContainer> items = new ConcurrentHashMap<>();
 
-    private AtomicInteger seq = new AtomicInteger();
+    private final AtomicInteger seq = new AtomicInteger();
 
     private final FileSystem fileSystem;
 
     private final String workArea;
+
+    private final UploadBucketConfig config;
 
     /**
      * Creates a new upload bucket instance.
      * 
      * @param id bucket identifier.
      */
-    public UploadBucket(FileSystem fileSystem, String workArea, String id)
+    public UploadBucket(FileSystem fileSystem, String workArea, String id, UploadBucketConfig config)
     {
         this.fileSystem = fileSystem;
         this.workArea = workArea + "/" + id;
         this.id = id;
+        this.config = config;
         this.lastAccessTime = System.currentTimeMillis();
     }
 

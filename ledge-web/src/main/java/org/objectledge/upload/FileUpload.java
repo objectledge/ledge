@@ -28,8 +28,10 @@ public interface FileUpload
 
     /**
      * Creates a new bucket and attaches it to the current session.
+     * 
+     * @param config upload bucket configuration
      */
-    UploadBucket createBucket();
+    UploadBucket createBucket(UploadBucketConfig config);
 
     /**
      * @param bucket

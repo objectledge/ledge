@@ -167,7 +167,7 @@ public class FileUploadImpl
     }
 
     @Override
-    public UploadBucket createBucket()
+    public UploadBucket createBucket(UploadBucketConfig config)
     {
         String id;
         synchronized(bucketIdGen)
@@ -179,7 +179,7 @@ public class FileUploadImpl
             }
             while(allBuckets.containsKey(id));
         }
-        UploadBucket bucket = new UploadBucket(fileSystem, workingDirectory, id);
+        UploadBucket bucket = new UploadBucket(fileSystem, workingDirectory, id, config);
         allBuckets.put(id, bucket);
         getHolder().addBucket(bucket);
         return bucket;
@@ -204,7 +204,8 @@ public class FileUploadImpl
             logger.info("cleaning up " + ids + " upload bucket from prevoios run");
             for(String id : ids)
             {
-                bucketCleaner.schedule(new UploadBucket(fileSystem, workingDirectory, id));
+                bucketCleaner.schedule(new UploadBucket(fileSystem, workingDirectory, id,
+                    UploadBucketConfig.DEFAULT));
             }
         }
         catch(IOException e)

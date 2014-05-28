@@ -26,6 +26,23 @@ public class UploadTool
      */
     public String newBucket()
     {
-        return fileUpload.createBucket().getId();
+        return fileUpload.createBucket(UploadBucketConfig.DEFAULT).getId();
+    }
+
+    /**
+     * Creates a new bucket for the current HTTP session and returns it's id.
+     * 
+     * @param maxCount Maximum number of files that may be uploaded into the bucket, or -1 for no
+     *        restriction.
+     * @param maxSize Maximum size of a file that may be uploaded into the bucket in bytes, or -1
+     *        for no restriction.
+     * @param allowedFormats space separated list of file name extensions, or empty string for no
+     *        restriction.
+     * @return new bucket id.
+     */
+    public String newBucket(int maxCount, int maxSize, String allowedFormats)
+    {
+        return fileUpload.createBucket(new UploadBucketConfig(maxCount, maxSize, allowedFormats))
+            .getId();
     }
 }
