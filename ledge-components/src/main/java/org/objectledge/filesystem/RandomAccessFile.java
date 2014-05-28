@@ -39,6 +39,7 @@ import java.io.IOException;
  * @version $Id: RandomAccessFile.java,v 1.3 2003-12-03 14:14:13 mover Exp $
  */
 public interface RandomAccessFile
+    extends AutoCloseable
 {
     /**
      * Closes this random access file stream.
