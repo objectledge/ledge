@@ -14,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -21,7 +22,10 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadBucket;
+import org.objectledge.upload.UploadContainer;
 import org.objectledge.utils.StackTrace;
+
+import com.google.common.base.Optional;
 
 @Path("upload/{bucketId}")
 public class UploadEndpoint
@@ -45,18 +49,7 @@ public class UploadEndpoint
             if(bucket != null)
             {
                 saveParts(multiPart, bucket);
-                UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
-                final ResponseBuilder respBuilder = Response.ok(msg).header(HttpHeaders.VARY,
-                    HttpHeaders.ACCEPT);
-                if(accept != null && accept.contains(MediaType.APPLICATION_JSON))
-                {
-                    respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
-                }
-                else
-                {
-                    respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
-                }
-                return respBuilder.build();
+                return buildResponse(accept, uriInfo, bucket, Optional.<UploadContainer> absent());
             }
             else
             {
@@ -84,5 +77,30 @@ public class UploadEndpoint
                 }
             }
         }
+    }
+
+    private Response buildResponse(String accept, UriInfo uriInfo, UploadBucket bucket,
+        Optional<UploadContainer> created)
+    {
+        UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
+        final ResponseBuilder respBuilder = created.isPresent() ? Response.status(Status.CREATED)
+            : Response.ok();
+        if(created.isPresent())
+        {
+            final String path = bucket.getId() + "/" + created.get().getName();
+            respBuilder.header(HttpHeaders.LOCATION, uriInfo.getAbsolutePath().resolve(path));
+        }
+        respBuilder.entity(msg);
+        respBuilder.header(HttpHeaders.VARY, HttpHeaders.ACCEPT);
+        if(accept != null && accept.contains(MediaType.APPLICATION_JSON))
+        {
+            respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        }
+        else
+        {
+            respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
+        }
+        final Response resp = respBuilder.build();
+        return resp;
     }
 }
