@@ -40,38 +40,39 @@ import java.io.UnsupportedEncodingException;
  * @author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: UploadContainer.java,v 1.2 2004-01-14 13:18:09 fil Exp $
  */
-public class MemoryUploadContainer implements UploadContainer
+public class MemoryUploadContainer
+    implements UploadContainer
 {
-	/** resource data */
-	private byte[] data;
+    /** resource data */
+    private byte[] data;
 
-	/** resource name */
-	private String name;
+    /** resource name */
+    private String name;
 
-	/** file name */
-	private String filename;
+    /** file name */
+    private String filename;
 
-	/** size of resource data */
-	private int size;
+    /** size of resource data */
+    private int size;
 
-	/** mime type */
-	private String mimeType;
+    /** mime type */
+    private String mimeType;
 
-	/**
-	 * Constructs the Upload container.
-	 * 
-	 * @param name the name of the resource.
-	 * @param filename the file name.
-     * @param mimeType the mime type. 
-	 * @param size the size of data to load (-1 if unknown).
+    /**
+     * Constructs the Upload container.
+     * 
+     * @param name the name of the resource.
+     * @param filename the file name.
+     * @param mimeType the mime type.
+     * @param size the size of data to load (-1 if unknown).
      * @param dataStream a stream to load data from.
      * @throws IOException if the data could not be loaded.
-	 */
-	public MemoryUploadContainer(String name, String filename, String mimeType, int size, 
+     */
+    public MemoryUploadContainer(String name, String filename, String mimeType, int size,
         InputStream dataStream)
         throws IOException
-	{
-		this.name = name;
+    {
+        this.name = name;
         if(size > 0)
         {
             this.size = size;
@@ -82,99 +83,101 @@ public class MemoryUploadContainer implements UploadContainer
         {
             this.size = load(dataStream);
         }
-		this.mimeType = mimeType;
-		if (filename == null || filename.equals("")) 
-		{
-			this.filename = name;
-		}
-		else
-		{
-			this.filename = filename;
-		}
-	}
-    
-	/**
-	 * Load data to the container.
-	 *
-	 * @param is the data input stream.
-     * @param count the number of bytes to read.
-	 * @throws IOException if occured.
-	 */
-	private void load(InputStream is, int count) throws IOException 
-	{
-		is.read(data, 0, count);
-	}
+        this.mimeType = mimeType;
+        if(filename == null || filename.equals(""))
+        {
+            this.filename = name;
+        }
+        else
+        {
+            this.filename = filename;
+        }
+    }
 
     /**
      * Load data to the container.
-     *
+     * 
+     * @param is the data input stream.
+     * @param count the number of bytes to read.
+     * @throws IOException if occured.
+     */
+    private void load(InputStream is, int count)
+        throws IOException
+    {
+        is.read(data, 0, count);
+    }
+
+    /**
+     * Load data to the container.
+     * 
      * @param is the data input stream.
      * @return the number of successfully written bytes.
      * @throws IOException if occured.
      */
-    private int load(InputStream is) throws IOException 
+    private int load(InputStream is)
+        throws IOException
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int count = 0;
         byte[] buff = new byte[4096];
         while(count > 0)
         {
-            count = is.read(buff,0,buff.length);
+            count = is.read(buff, 0, buff.length);
             if(count > 0)
             {
-                baos.write(buff,0,count);
+                baos.write(buff, 0, count);
             }
         }
         data = baos.toByteArray();
         return data.length;
     }
-    
-	@Override
+
+    @Override
     public String getName()
-	{
-		return name;
-	}
+    {
+        return name;
+    }
 
-	@Override
-    public String getFileName() 
-	{
-		return filename;
-	}
-    
-	@Override
+    @Override
+    public String getFileName()
+    {
+        return filename;
+    }
+
+    @Override
     public long getSize()
-	{
-		return size;
-	}
+    {
+        return size;
+    }
 
-	@Override
+    @Override
     public byte[] getBytes()
-	{
-		return data;
-	}
+    {
+        return data;
+    }
 
-	@Override
+    @Override
     public String getString()
-	{
-		return new String(data);
-	}
+    {
+        return new String(data);
+    }
 
-	@Override
+    @Override
     public String getString(String encoding)
-		throws UnsupportedEncodingException
-	{
-		return new String(data, encoding);
-	}
+        throws UnsupportedEncodingException
+    {
+        return new String(data, encoding);
+    }
 
-	@Override
-    public InputStream getInputStream() 
-	{
-		return new ByteArrayInputStream(data);
-	}
-    
-	@Override
-    public String getMimeType() 
-	{
-		return mimeType;
-	}
+    @Override
+    public InputStream getInputStream()
+    {
+        return new ByteArrayInputStream(data);
+    }
+
+    @Override
+    public String getMimeType()
+    {
+        return mimeType;
+    }
 }
