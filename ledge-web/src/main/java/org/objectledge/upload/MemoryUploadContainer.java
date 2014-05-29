@@ -28,11 +28,20 @@
 
 package org.objectledge.upload;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
 
 /**
  * In-memory uploaded resource container.
@@ -57,6 +66,8 @@ public class MemoryUploadContainer
 
     /** mime type */
     private String mimeType;
+
+    private Map<Integer, byte[]> thumbnails = new HashMap<>();
 
     /**
      * Constructs the Upload container.
@@ -191,6 +202,52 @@ public class MemoryUploadContainer
 
         return new MemoryUploadContainer(name, filename, mimeType, length,
             new ByteArrayInputStream(newData));
+    }
+
+    @Override
+    public synchronized byte[] getThumbnail(int size)
+        throws IOException
+    {
+        byte[] thumbnail = thumbnails.get(size);
+        if(thumbnail == null)
+        {
+            if(mimeType.startsWith("image/"))
+            {
+                InputStream in = new ByteArrayInputStream(data);
+                BufferedImage srcImage = ImageIO.read(in);
+                BufferedImage targetImage = null;
+                try
+                {
+                    if(srcImage.getWidth() > size || srcImage.getHeight() > size)
+                    {
+                        targetImage = Scalr.resize(srcImage, Method.QUALITY, Mode.AUTOMATIC, size,
+                            size);
+                    }
+                    else
+                    {
+                        targetImage = srcImage;
+                    }
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    ImageIO.write(targetImage, "jpeg", baos);
+                    thumbnail = baos.toByteArray();
+                    thumbnails.put(size, thumbnail);
+                }
+                finally
+                {
+                    srcImage.flush();
+                    if(targetImage != null && targetImage != srcImage)
+                    {
+                        targetImage.flush();
+                    }
+                }
+            }
+            else
+            {
+                throw new UnsupportedOperationException("unable to generate thumbnail for "
+                    + mimeType);
+            }
+        }
+        return thumbnail;
     }
 
     @Override

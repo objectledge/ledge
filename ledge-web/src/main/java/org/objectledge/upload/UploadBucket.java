@@ -176,6 +176,21 @@ public class UploadBucket
         }
     }
 
+    public byte[] getThumbnail(String itemName)
+        throws IOException
+    {
+        Item item = items.get(itemName);
+        if(item instanceof ContainerItem)
+        {
+            UploadContainer container = ((ContainerItem)item).getContainer();
+            return container.getThumbnail(config.getThumbnailSize());
+        }
+        else
+        {
+            throw new IllegalArgumentException(itemName + " UploadContainer not found or not valid");
+        }
+    }
+
     /**
      * Removes the specified item
      * 

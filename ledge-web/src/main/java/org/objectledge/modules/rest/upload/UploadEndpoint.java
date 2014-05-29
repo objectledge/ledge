@@ -8,12 +8,12 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -33,7 +33,6 @@ import org.objectledge.utils.StackTrace;
 import com.google.common.base.Optional;
 
 @Path("upload/{bucketId}")
-@Produces(MediaType.APPLICATION_JSON)
 public class UploadEndpoint
 {
     private final FileUpload fileUpload;
@@ -105,6 +104,13 @@ public class UploadEndpoint
             respBuilder.header(HttpHeaders.LOCATION, uriInfo.getAbsolutePath().resolve(path));
         }
         respBuilder.entity(msg);
+        acceptVaryContentType(accept, respBuilder);
+        final Response resp = respBuilder.build();
+        return resp;
+    }
+
+    private void acceptVaryContentType(String accept, final ResponseBuilder respBuilder)
+    {
         respBuilder.header(HttpHeaders.VARY, HttpHeaders.ACCEPT);
         if(accept != null && accept.contains(MediaType.APPLICATION_JSON))
         {
@@ -114,8 +120,6 @@ public class UploadEndpoint
         {
             respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
         }
-        final Response resp = respBuilder.build();
-        return resp;
     }
 
     private static final Pattern CONTENT_DISPOSITION_RE = Pattern
@@ -199,7 +203,7 @@ public class UploadEndpoint
     @Path("{itemId}")
     @DELETE
     public Response delete(@PathParam("bucketId") String bucketId,
-        @PathParam("itemId") String itemId)
+        @PathParam("itemId") String itemId, @HeaderParam(HttpHeaders.ACCEPT) String accept)
     {
         try
         {
@@ -210,7 +214,39 @@ public class UploadEndpoint
                 if(item instanceof UploadBucket.ContainerItem)
                 {
                     bucket.removeItem(itemId);
-                    return Response.ok(new DeleteMessage(item.getFileName())).build();
+                    final ResponseBuilder respBuilder = Response.ok(new DeleteMessage(item
+                        .getFileName()));
+                    acceptVaryContentType(accept, respBuilder);
+                    return respBuilder.build();
+                }
+            }
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        catch(IOException e)
+        {
+            return Response.serverError().entity(new StackTrace(e).toString()).build();
+        }
+    }
+
+    @GET
+    @Path("{itemId}/thumbnail")
+    public Response thumbnail(@PathParam("bucketId") String bucketId,
+        @PathParam("itemId") String itemId)
+    {
+        try
+        {
+            UploadBucket bucket = fileUpload.getBucket(bucketId);
+            if(bucket != null)
+            {
+                if(bucket.getItem(itemId) instanceof UploadBucket.ContainerItem)
+                {
+                    UploadContainer container = ((UploadBucket.ContainerItem)bucket.getItem(itemId))
+                        .getContainer();
+                    if(container.getMimeType().startsWith("image/"))
+                    {
+                        return Response.ok(bucket.getThumbnail(itemId))
+                            .header(HttpHeaders.CONTENT_TYPE, "image/jpeg").build();
+                    }
                 }
             }
             return Response.status(Response.Status.BAD_REQUEST).build();

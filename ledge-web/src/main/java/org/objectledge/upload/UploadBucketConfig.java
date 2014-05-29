@@ -24,6 +24,8 @@ public class UploadBucketConfig
 
     private final Collection<Pattern> patterns;
 
+    private final int thumbnailSize;
+
     /**
      * Creates a new UploadBucket configuration.
      * 
@@ -33,12 +35,15 @@ public class UploadBucketConfig
      *        for no restriction.
      * @param allowedFormats space separated list of file name extensions, or empty string for no
      *        restriction.
+     * @param thumbnailSize maximum size of server-side generated image thumbnails. It might be
+     *        width or height dependent on image orientation.
      */
-    public UploadBucketConfig(int maxCount, int maxSize, String allowedFormats)
+    public UploadBucketConfig(int maxCount, int maxSize, String allowedFormats, int thumbnailSize)
     {
         this.maxCount = maxCount;
         this.maxSize = maxSize;
         this.allowedFormats = allowedFormats;
+        this.thumbnailSize = thumbnailSize;
         this.patterns = allowedFormats != null && allowedFormats.trim().length() > 0 ? Collections2
             .transform(Arrays.asList(allowedFormats.split(" ")), new Function<String, Pattern>()
                 {
@@ -106,5 +111,16 @@ public class UploadBucketConfig
         }
     }
 
-    public static final UploadBucketConfig DEFAULT = new UploadBucketConfig(-1, -1, "");
+    /**
+     * Maximum size of server-side generated image thumbnails. It might be width or height dependent
+     * on image orientation.
+     * 
+     * @return Maximum size of server-side generated image thumbnails.
+     */
+    public int getThumbnailSize()
+    {
+        return thumbnailSize;
+    }
+
+    public static final UploadBucketConfig DEFAULT = new UploadBucketConfig(-1, -1, "", 64);
 }

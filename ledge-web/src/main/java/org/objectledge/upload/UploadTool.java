@@ -38,11 +38,13 @@ public class UploadTool
      *        for no restriction.
      * @param allowedFormats space separated list of file name extensions, or empty string for no
      *        restriction.
+     * @param thumbnailSize maximum size of server-side generated image thumbnails. It might be
+     *        width or height dependent on image orientation.
      * @return new bucket id.
      */
-    public String newBucket(int maxCount, int maxSize, String allowedFormats)
+    public String newBucket(int maxCount, int maxSize, String allowedFormats, int thumbnailSize)
     {
-        return fileUpload.createBucket(new UploadBucketConfig(maxCount, maxSize, allowedFormats))
-            .getId();
+        return fileUpload.createBucket(
+            new UploadBucketConfig(maxCount, maxSize, allowedFormats, thumbnailSize)).getId();
     }
 }

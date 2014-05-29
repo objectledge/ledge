@@ -9,21 +9,21 @@ public interface UploadContainer
 
     /**
      * get the name of the item.
-     *
+     * 
      * @return the name.
      */
     String getName();
 
     /**
-     * get the uploaded file name. 
-     *
+     * get the uploaded file name.
+     * 
      * @return the file name.
      */
     String getFileName();
 
     /**
-     * get the size of the uploaded item.   
-     *
+     * get the size of the uploaded item.
+     * 
      * @return the size.
      */
     long getSize();
@@ -58,15 +58,15 @@ public interface UploadContainer
         throws UnsupportedEncodingException, IOException;
 
     /**
-     * get the stream of bytes of the uploaded data. 
-     *
+     * get the stream of bytes of the uploaded data.
+     * 
      * @return the input stream of the item.
      */
     InputStream getInputStream();
 
     /**
-     * get the mime type of the uploaded item.   
-     *
+     * get the mime type of the uploaded item.
+     * 
      * @return the mime type of the item.
      */
     String getMimeType();
@@ -81,6 +81,18 @@ public interface UploadContainer
      * @throws IOException
      */
     UploadContainer addChunk(int offset, int length, InputStream is)
+        throws IOException;
+
+    /**
+     * Returns JPEG image of the desired maximum size.
+     * 
+     * @param size desired maximum size. If the image is already smaller than provided size, it size
+     *        will not be changed.
+     * @throws UnsupportedOperationException if the container does contain an image.
+     * @return image data, converted to JPEG format.
+     * @throws IOException when a problem during image processing occurs
+     */
+    byte[] getThumbnail(int size)
         throws IOException;
 
     /**
