@@ -34,8 +34,8 @@ public class UploadTool
      * 
      * @param maxCount Maximum number of files that may be uploaded into the bucket, or -1 for no
      *        restriction.
-     * @param maxSize Maximum size of a file that may be uploaded into the bucket in bytes, or -1
-     *        for no restriction.
+     * @param maxSize Maximum size of a file that may be uploaded into the bucket in kilobytes, or
+     *        -1 for no restriction.
      * @param allowedFormats space separated list of file name extensions, or empty string for no
      *        restriction.
      * @param thumbnailSize maximum size of server-side generated image thumbnails. It might be

@@ -112,7 +112,7 @@ public class UploadBucket
         {
             return Optional.of(UploadError.ITEM_COUNT_EXCEEDED);
         }
-        if(config.getMaxSize() > 0 && size > config.getMaxSize())
+        if(config.getMaxSize() > 0 && size > config.getMaxSize() * 1024)
         {
             return Optional.of(UploadError.ITEM_SIZE_EXCEEDED);
         }
