@@ -44,7 +44,7 @@ public class UploadEndpoint
     }
 
     @POST
-    public Response upload(@PathParam("bucketId") String bucketId,
+    public Response uploadMultipart(@PathParam("bucketId") String bucketId,
         @HeaderParam(HttpHeaders.ACCEPT) String accept, @Context UriInfo uriInfo,
         FormDataMultiPart multiPart)
     {
@@ -54,7 +54,8 @@ public class UploadEndpoint
             if(bucket != null)
             {
                 saveParts(multiPart, bucket);
-                return buildResponse(accept, uriInfo, bucket, Optional.<UploadContainer> absent());
+                return buildResponse(Status.OK, accept, uriInfo, bucket,
+                    Optional.<UploadContainer> absent());
             }
             else
             {
@@ -92,12 +93,11 @@ public class UploadEndpoint
         }
     }
 
-    private Response buildResponse(String accept, UriInfo uriInfo, UploadBucket bucket,
-        Optional<UploadContainer> created)
+    private Response buildResponse(Status status, String accept, UriInfo uriInfo,
+        UploadBucket bucket, Optional<UploadContainer> created)
     {
         UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
-        final ResponseBuilder respBuilder = created.isPresent() ? Response.status(Status.CREATED)
-            : Response.ok();
+        final ResponseBuilder respBuilder = Response.status(status);
         if(created.isPresent())
         {
             final String path = bucket.getId() + "/" + created.get().getName();
@@ -156,7 +156,8 @@ public class UploadEndpoint
                     Optional<UploadContainer> container = item instanceof UploadBucket.ContainerItem ? Optional
                         .of(((UploadBucket.ContainerItem)item).getContainer()) : Optional
                         .<UploadContainer> absent();
-                    return buildResponse(accept, uriInfo, bucket, container);
+                    return buildResponse(container.isPresent() ? Status.CREATED
+                        : Status.BAD_REQUEST, accept, uriInfo, bucket, container);
                 }
             }
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -188,7 +189,7 @@ public class UploadEndpoint
                     int end = Integer.parseInt(m.group(2));
                     bucket.addDataChunk(itemId, start, end - start + 1, is);
 
-                    return buildResponse(accept, uriInfo, bucket,
+                    return buildResponse(Status.OK, accept, uriInfo, bucket,
                         Optional.<UploadContainer> absent());
                 }
             }
