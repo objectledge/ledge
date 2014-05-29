@@ -182,7 +182,7 @@ public class UploadBucket
      * @param itemName
      * @throws IOException
      */
-    public void removeItem(String itemName)
+    public Item removeItem(String itemName)
         throws IOException
     {
         Item item = items.get(itemName);
@@ -190,7 +190,13 @@ public class UploadBucket
         {
             final UploadContainer container = ((ContainerItem)item).getContainer();
             container.dispose();
-            items.put(itemName, new DeletedItem(container));
+            final DeletedItem marker = new DeletedItem(container);
+            items.put(itemName, marker);
+            return marker;
+        }
+        else
+        {
+            throw new IllegalArgumentException(itemName + " UploadContainer not found or not valid");
         }
     }
 
