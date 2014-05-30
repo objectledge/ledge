@@ -22,7 +22,7 @@ public class UploadMessage
             }
             if(item instanceof UploadBucket.RejectedItem)
             {
-                files.add(new ErrorInfo(item.getFileName(), item.getSize(),
+                files.add(new ErrorInfo(item.getName(), item.getFileName(), item.getSize(),
                     ((UploadBucket.RejectedItem)item).getError()));
             }
         }

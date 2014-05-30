@@ -7,21 +7,30 @@ public class ErrorInfo
 {
     private final String name;
 
+    private final String fileName;
+
     private final long size;
 
     private final UploadError error;
 
-    public ErrorInfo(String fileName, long size, UploadError error)
+    public ErrorInfo(String name, String fileName, long size, UploadError error)
     {
-        this.name = fileName;
+        this.name = name;
+        this.fileName = fileName;
         this.size = size;
         this.error = error;
     }
 
     @Override
+    public int getId()
+    {
+        return Integer.parseInt(name);
+    }
+
+    @Override
     public String getName()
     {
-        return name;
+        return fileName;
     }
 
     @Override

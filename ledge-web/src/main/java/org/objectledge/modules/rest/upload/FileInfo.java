@@ -17,6 +17,11 @@ public class FileInfo
         this.bucketUri = bucketUri;
     }
 
+    public int getId()
+    {
+        return Integer.parseInt(container.getName());
+    }
+
     @Override
     public String getName()
     {
