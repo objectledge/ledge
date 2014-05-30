@@ -103,14 +103,13 @@ public class UploadEndpoint
             final String path = bucket.getId() + "/" + created.get().getName();
             respBuilder.header(HttpHeaders.LOCATION, uriInfo.getAbsolutePath().resolve(path));
         }
-        respBuilder.entity(msg);
-        acceptVaryContentType(accept, respBuilder);
-        final Response resp = respBuilder.build();
-        return resp;
+        return acceptVaryContentType(msg, accept, respBuilder);
     }
 
-    private void acceptVaryContentType(String accept, final ResponseBuilder respBuilder)
+    private Response acceptVaryContentType(Object entity, String accept,
+        final ResponseBuilder respBuilder)
     {
+        respBuilder.entity(entity);
         respBuilder.header(HttpHeaders.VARY, HttpHeaders.ACCEPT);
         if(accept != null && accept.contains(MediaType.APPLICATION_JSON))
         {
@@ -120,6 +119,7 @@ public class UploadEndpoint
         {
             respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
         }
+        return respBuilder.build();
     }
 
     private static final Pattern CONTENT_DISPOSITION_RE = Pattern
@@ -215,10 +215,8 @@ public class UploadEndpoint
                 if(item instanceof UploadBucket.ContainerItem)
                 {
                     bucket.removeItem(itemId);
-                    final ResponseBuilder respBuilder = Response.ok(new DeleteMessage(item
-                        .getFileName()));
-                    acceptVaryContentType(accept, respBuilder);
-                    return respBuilder.build();
+                    final DeleteMessage msg = new DeleteMessage(item.getFileName());
+                    return acceptVaryContentType(msg, accept, Response.ok());
                 }
             }
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -265,10 +263,8 @@ public class UploadEndpoint
         UploadBucket bucket = fileUpload.getBucket(bucketId);
         if(bucket != null)
         {
-            UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
-            final ResponseBuilder respBuilder = Response.ok(msg);
-            acceptVaryContentType(accept, respBuilder);
-            return respBuilder.build();
+            final UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
+            return acceptVaryContentType(msg, accept, Response.ok());
         }
         return Response.status(Status.NOT_FOUND).build();
     }
