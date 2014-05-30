@@ -14,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -30,6 +31,8 @@ import org.objectledge.upload.UploadBucket;
 import org.objectledge.upload.UploadContainer;
 import org.objectledge.utils.StackTrace;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 
 @Path("upload/{bucketId}")
@@ -103,21 +106,30 @@ public class UploadEndpoint
             final String path = bucket.getId() + "/" + created.get().getName();
             respBuilder.header(HttpHeaders.LOCATION, uriInfo.getAbsolutePath().resolve(path));
         }
-        return acceptVaryContentType(msg, accept, respBuilder);
+        return encodeResponse(msg, accept, respBuilder);
     }
 
-    private Response acceptVaryContentType(Object entity, String accept,
+    private Response encodeResponse(Object entity, String accept,
         final ResponseBuilder respBuilder)
     {
-        respBuilder.entity(entity);
         respBuilder.header(HttpHeaders.VARY, HttpHeaders.ACCEPT);
         if(accept != null && accept.contains(MediaType.APPLICATION_JSON))
         {
             respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+            respBuilder.entity(entity);
         }
         else
         {
             respBuilder.header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN);
+            try
+            {
+                ObjectMapper om = new ObjectMapper();
+                respBuilder.entity(om.writer().writeValueAsString(entity));
+            }
+            catch(JsonProcessingException e)
+            {
+                throw new WebApplicationException(e);
+            }
         }
         return respBuilder.build();
     }
@@ -216,7 +228,7 @@ public class UploadEndpoint
                 {
                     bucket.removeItem(itemId);
                     final DeleteMessage msg = new DeleteMessage(item.getFileName());
-                    return acceptVaryContentType(msg, accept, Response.ok());
+                    return encodeResponse(msg, accept, Response.ok());
                 }
             }
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -264,7 +276,7 @@ public class UploadEndpoint
         if(bucket != null)
         {
             final UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
-            return acceptVaryContentType(msg, accept, Response.ok());
+            return encodeResponse(msg, accept, Response.ok());
         }
         return Response.status(Status.NOT_FOUND).build();
     }
