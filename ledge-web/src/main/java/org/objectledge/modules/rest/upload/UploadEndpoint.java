@@ -257,4 +257,19 @@ public class UploadEndpoint
             return Response.serverError().entity(new StackTrace(e).toString()).build();
         }
     }
+
+    @GET
+    public Response list(@PathParam("bucketId") String bucketId,
+        @HeaderParam(HttpHeaders.ACCEPT) String accept, @Context UriInfo uriInfo)
+    {
+        UploadBucket bucket = fileUpload.getBucket(bucketId);
+        if(bucket != null)
+        {
+            UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
+            final ResponseBuilder respBuilder = Response.ok(msg);
+            acceptVaryContentType(accept, respBuilder);
+            return respBuilder.build();
+        }
+        return Response.status(Status.NOT_FOUND).build();
+    }
 }
