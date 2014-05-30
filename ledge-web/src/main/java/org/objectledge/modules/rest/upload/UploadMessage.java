@@ -2,6 +2,7 @@ package org.objectledge.modules.rest.upload;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.objectledge.upload.UploadBucket;
@@ -26,6 +27,7 @@ public class UploadMessage
                     ((UploadBucket.RejectedItem)item).getError()));
             }
         }
+        Collections.sort(files, ItemInfo.BY_ID);
     }
 
     public List<ItemInfo> getFiles()
