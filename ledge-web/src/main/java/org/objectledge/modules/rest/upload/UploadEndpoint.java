@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -47,6 +48,7 @@ public class UploadEndpoint
     }
 
     @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadMultipart(@PathParam("bucketId") String bucketId,
         @HeaderParam(HttpHeaders.ACCEPT) String accept, @Context UriInfo uriInfo,
         FormDataMultiPart multiPart)
