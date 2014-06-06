@@ -135,17 +135,17 @@ public class UploadBucket
         throws IOException
     {
         String name = Integer.toString(seq.incrementAndGet());
-        UploadContainer container = new DiskUploadContainer(fileSystem, workArea, name, fileName,
-            contentType, is);
         Optional<UploadError> error = checkItem(fileName, size);
         Item item;
-        if(error.isPresent())
+        if(!error.isPresent())
         {
-            item = new RejectedItem(name, fileName, size, error.get());
+            UploadContainer container = new DiskUploadContainer(fileSystem, workArea, name,
+                fileName, contentType, is);
+            item = new ContainerItem(container);
         }
         else
         {
-            item = new ContainerItem(container);
+            item = new RejectedItem(name, fileName, size, error.get());
         }
         items.put(name, item);
         lastAccessTime = System.currentTimeMillis();
