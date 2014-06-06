@@ -2,6 +2,8 @@ package org.objectledge.modules.rest.upload;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +31,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadBucket;
+import org.objectledge.upload.UploadBucket.Item;
 import org.objectledge.upload.UploadContainer;
 import org.objectledge.utils.StackTrace;
 
@@ -58,8 +61,8 @@ public class UploadEndpoint
             UploadBucket bucket = fileUpload.getBucket(bucketId);
             if(bucket != null)
             {
-                saveParts(multiPart, bucket);
-                return buildResponse(Status.OK, accept, uriInfo, bucket,
+                List<UploadBucket.Item> addedItems = saveParts(multiPart, bucket);
+                return buildResponse(Status.OK, accept, uriInfo, bucket, addedItems,
                     Optional.<UploadContainer> absent());
             }
             else
@@ -73,9 +76,10 @@ public class UploadEndpoint
         }
     }
 
-    private void saveParts(FormDataMultiPart multiPart, UploadBucket bucket)
+    private List<UploadBucket.Item> saveParts(FormDataMultiPart multiPart, UploadBucket bucket)
         throws IOException
     {
+        List<UploadBucket.Item> added = new ArrayList<>();
         for(List<FormDataBodyPart> field : multiPart.getFields().values())
         {
             for(FormDataBodyPart part : field)
@@ -91,17 +95,19 @@ public class UploadEndpoint
                         contentLength = multiPart.getHeaders().getFirst(HttpHeaders.CONTENT_LENGTH);
                     }
                     int size = contentLength != null ? Integer.parseInt(contentLength) : 0;
-                    bucket.addItem(disposition.getFileName(), size, part.getMediaType().toString(),
-                        is);
+                    UploadBucket.Item item = bucket.addItem(disposition.getFileName(), size, part
+                        .getMediaType().toString(), is);
+                    added.add(item);
                 }
             }
         }
+        return added;
     }
 
     private Response buildResponse(Status status, String accept, UriInfo uriInfo,
-        UploadBucket bucket, Optional<UploadContainer> created)
+        UploadBucket bucket, List<UploadBucket.Item> items, Optional<UploadContainer> created)
     {
-        UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
+        UploadMessage msg = new UploadMessage(items, uriInfo.getRequestUri());
         final ResponseBuilder respBuilder = Response.status(status);
         if(created.isPresent())
         {
@@ -111,8 +117,7 @@ public class UploadEndpoint
         return encodeResponse(msg, accept, respBuilder);
     }
 
-    private Response encodeResponse(Object entity, String accept,
-        final ResponseBuilder respBuilder)
+    private Response encodeResponse(Object entity, String accept, final ResponseBuilder respBuilder)
     {
         respBuilder.header(HttpHeaders.VARY, HttpHeaders.ACCEPT);
         if(accept != null && accept.contains(MediaType.APPLICATION_JSON))
@@ -171,7 +176,8 @@ public class UploadEndpoint
                         .of(((UploadBucket.ContainerItem)item).getContainer()) : Optional
                         .<UploadContainer> absent();
                     return buildResponse(container.isPresent() ? Status.CREATED
-                        : Status.BAD_REQUEST, accept, uriInfo, bucket, container);
+                        : Status.BAD_REQUEST, accept, uriInfo, bucket,
+                        Collections.singletonList(item), container);
                 }
             }
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -193,18 +199,21 @@ public class UploadEndpoint
         try
         {
             UploadBucket bucket = fileUpload.getBucket(bucketId);
-            if(bucket != null && bucket.getItem(itemId) instanceof UploadBucket.ContainerItem
-                && contentRange != null)
+            if(bucket != null && contentRange != null)
             {
-                Matcher m = CONTENT_RANGE_RE.matcher(contentRange);
-                if(m.matches())
+                Item item = bucket.getItem(itemId);
+                if(item instanceof UploadBucket.ContainerItem)
                 {
-                    int start = Integer.parseInt(m.group(1));
-                    int end = Integer.parseInt(m.group(2));
-                    bucket.addDataChunk(itemId, start, end - start + 1, is);
+                    Matcher m = CONTENT_RANGE_RE.matcher(contentRange);
+                    if(m.matches())
+                    {
+                        int start = Integer.parseInt(m.group(1));
+                        int end = Integer.parseInt(m.group(2));
+                        bucket.addDataChunk(itemId, start, end - start + 1, is);
 
-                    return buildResponse(Status.OK, accept, uriInfo, bucket,
-                        Optional.<UploadContainer> absent());
+                        return buildResponse(Status.OK, accept, uriInfo, bucket,
+                            Collections.singletonList(item), Optional.<UploadContainer> absent());
+                    }
                 }
             }
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -277,7 +286,7 @@ public class UploadEndpoint
         UploadBucket bucket = fileUpload.getBucket(bucketId);
         if(bucket != null)
         {
-            final UploadMessage msg = new UploadMessage(bucket, uriInfo.getRequestUri());
+            final UploadMessage msg = new UploadMessage(bucket.getItems(), uriInfo.getRequestUri());
             return encodeResponse(msg, accept, Response.ok());
         }
         return Response.status(Status.NOT_FOUND).build();

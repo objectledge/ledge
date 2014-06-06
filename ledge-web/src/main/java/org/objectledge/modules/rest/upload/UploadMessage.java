@@ -2,6 +2,7 @@ package org.objectledge.modules.rest.upload;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,10 +12,10 @@ public class UploadMessage
 {
     private final List<ItemInfo> files;
 
-    public UploadMessage(UploadBucket bucket, URI bucketUri)
+    public UploadMessage(Collection<UploadBucket.Item> items, URI bucketUri)
     {
         files = new ArrayList<>();
-        for(UploadBucket.Item item : bucket.getItems())
+        for(UploadBucket.Item item : items)
         {
             if(item instanceof UploadBucket.ContainerItem)
             {
