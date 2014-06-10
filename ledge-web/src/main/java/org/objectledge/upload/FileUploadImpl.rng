@@ -25,12 +25,19 @@
  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
---> 
+-->
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <optional>    
-    <element name="upload_limit">
-      <text/>
-    </element>
-  </optional>    
+  <interleave>
+    <optional>    
+      <element name="upload_limit">
+        <text />
+      </element>
+    </optional>
+    <optional>
+      <element name="working_directory">
+        <text />
+      </element>
+    </optional>
+  </interleave>
 </element>

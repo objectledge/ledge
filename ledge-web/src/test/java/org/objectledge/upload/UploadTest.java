@@ -34,6 +34,7 @@ import java.util.Vector;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
@@ -81,7 +82,7 @@ public class UploadTest extends LedgeTestCase
         MailSystem mailSystem = new MailSystem(config, logger, fs, templating, threadPool);
 
         config = getConfig(fs,"config/org.objectledge.upload.FileUpload.xml");
-        fileUpload = new FileUpload(config, context);
+        fileUpload = new FileUploadImpl(config, context, getFileSystem(), threadPool, getLogger());
 
         //file upload valve
         uploadValve = new FileUploadValve(logger, fileUpload, mailSystem);
@@ -136,7 +137,7 @@ public class UploadTest extends LedgeTestCase
         assertEquals(container.getString(), "bar");
         assertEquals(container.getString("ISO-8859-2"), "bar");
         assertNotNull(container.getInputStream());
-        int size = container.getSize();
+        long size = container.getSize();
         assertEquals(container.getBytes().length, size);
         assertEquals(container.getName(), "item1");
     }
