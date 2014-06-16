@@ -2,6 +2,8 @@ package org.objectledge.modules.rest.upload;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,7 +109,7 @@ public class UploadEndpoint
     private Response buildResponse(Status status, String accept, UriInfo uriInfo,
         UploadBucket bucket, List<UploadBucket.Item> items, Optional<UploadContainer> created)
     {
-        UploadMessage msg = new UploadMessage(items, uriInfo.getRequestUri());
+        UploadMessage msg = new UploadMessage(items, getBucketUri(uriInfo));
         final ResponseBuilder respBuilder = Response.status(status);
         if(created.isPresent())
         {
@@ -115,6 +117,19 @@ public class UploadEndpoint
             respBuilder.header(HttpHeaders.LOCATION, uriInfo.getAbsolutePath().resolve(path));
         }
         return encodeResponse(msg, accept, respBuilder);
+    }
+
+    private URI getBucketUri(UriInfo uriInfo)
+    {
+        try
+        {
+            return new URI(uriInfo.getRequestUri().getScheme(), uriInfo.getRequestUri()
+                .getSchemeSpecificPart() + "/", null);
+        }
+        catch(URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     private Response encodeResponse(Object entity, String accept, final ResponseBuilder respBuilder)
@@ -286,7 +301,7 @@ public class UploadEndpoint
         UploadBucket bucket = fileUpload.getBucket(bucketId);
         if(bucket != null)
         {
-            final UploadMessage msg = new UploadMessage(bucket.getItems(), uriInfo.getRequestUri());
+            final UploadMessage msg = new UploadMessage(bucket.getItems(), getBucketUri(uriInfo));
             return encodeResponse(msg, accept, Response.ok());
         }
         return Response.status(Status.NOT_FOUND).build();
