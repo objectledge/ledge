@@ -1,6 +1,7 @@
 package org.objectledge.web.json;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -32,23 +33,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractJsonView
     extends AbstractBuilder
 {
-    /**
-     * JsonGenerator object. It may only be used by {@link #buildJsonStream()} method
-     * implementation.
-     */
-    protected JsonGenerator jsonGenerator;
+    /** Cached instance of JsonFactory returned by newJsonFactory. */
+    private JsonFactory factory;
 
-    /**
-     * JsonParser object. When request content type is not {@code application/json}, jsonParser
-     * fields is {@code null}. The object may only be used by {@link #buildJsonStream()} and
-     * {@link #buildJsonTree()} method implementations.
-     */
-    protected JsonParser jsonParser;
-
-    /**
-     * JSON Object reader that will be used for parsing request data.
-     */
-    protected ObjectMapper objectMapper;
+    /** JSON Object reader that will be used for parsing request data. */
+    private ObjectMapper objectMapper;
 
     /** The logger. */
     protected final Logger log;
@@ -63,6 +52,8 @@ public abstract class AbstractJsonView
     {
         super(context);
         this.log = log;
+        this.factory = newJsonFactory();
+        this.objectMapper = new ObjectMapper(factory);
     }
 
     /**
@@ -88,21 +79,6 @@ public abstract class AbstractJsonView
         throws BuildException, ProcessingException
     {
         HttpContext httpContext = getHttpContext();
-        JsonFactory factory = newJsonFactory();
-        objectMapper = new ObjectMapper(factory);
-        try
-        {
-            String requestContentType = httpContext.getRequest().getHeader("Content-Type");
-            if(requestContentType != null && requestContentType.equals("application/json"))
-            {
-                jsonParser = factory.createJsonParser(httpContext.getRequest().getInputStream());
-            }
-        }
-        catch(IOException e)
-        {
-            log.error("failed to create JSON parser", e);
-            return null;
-        }
 
         String callbackParameterName = getCallbackParameterName();
         String callback = null;
@@ -121,39 +97,30 @@ public abstract class AbstractJsonView
 
         try
         {
-            jsonGenerator = factory.createJsonGenerator(httpContext.getPrintWriter());
-        }
-        catch(IOException e)
-        {
-            log.error("failed to create JSON generator", e);
-            return null;
-        }
-
-        try
-        {
             buildResponseHeaders(httpContext);
             try
             {
+                final PrintWriter printWriter = httpContext.getPrintWriter();
                 if(callback != null)
                 {
-                    httpContext.getPrintWriter().append(callback).append("(");
+                    printWriter.append(callback).append("(");
                 }
-                JsonNode tree = null;
-                tree = buildJsonTree();
+                final JsonGenerator jsonGenerator = factory.createJsonGenerator(printWriter)
+                    .setCodec(objectMapper);
+                JsonNode tree = buildJsonTree();
                 if(tree == null)
                 {
-                    buildJsonStream();
+                    buildJsonStream(jsonGenerator);
                 }
-                if(tree != null)
+                else
                 {
-                    jsonGenerator.setCodec(objectMapper);
                     jsonGenerator.writeTree(tree);
                 }
                 jsonGenerator.flush();
                 if(callback != null)
                 {
-                    httpContext.getPrintWriter().append(");");
-                    httpContext.getPrintWriter().flush();
+                    printWriter.append(");");
+                    printWriter.flush();
                 }
             }
             catch(JsonProcessingException e)
@@ -172,6 +139,10 @@ public abstract class AbstractJsonView
             {
                 if(!httpContext.getResponse().isCommitted())
                 {
+                    final JsonGenerator jsonGenerator1 = factory.createJsonGenerator(getHttpContext()
+                        .getPrintWriter());
+                    jsonGenerator1.setCodec(objectMapper);
+                    final JsonGenerator jsonGenerator = jsonGenerator1;
                     jsonGenerator.writeStartObject();
                     jsonGenerator.writeStringField("exception", new StackTrace(e).toString());
                     jsonGenerator.writeEndObject();
@@ -229,7 +200,7 @@ public abstract class AbstractJsonView
      * Build JSON tree to be sent to the client.
      * <p>
      * {@link #build(Template, String)} calls this method, and if it returns a non-null value,
-     * writers it out to the client. Otherwise {@link #buildJsonStream()} is called.}
+     * writers it out to the client. Otherwise {@link #buildJsonStream(JsonGenerator)} is called.}
      * </p>
      * <p>
      * The default implementation returns {@code null}.
@@ -241,8 +212,8 @@ public abstract class AbstractJsonView
      * the server side.
      * </p>
      * 
-     * @return JSON tree to be sent to the client, or null if {@link #buildJsonStream()} should be
-     *         called instead.
+     * @return JSON tree to be sent to the client, or null if
+     *         {@link #buildJsonStream(JsonGenerator)} should be called instead.
      * @throws ProcessingException when there is an application level problem generating the
      *         response.
      */
@@ -269,17 +240,33 @@ public abstract class AbstractJsonView
      * exception will be logged only on the server side.
      * </p>
      * 
+     * @param jsonGenerator JsonGenereator used for writing
      * @throws ProcessingException when there is an application level problem generating the
      *         response.
      * @throws JsonGenerationException when there is a structural problem with JSON repose
      *         (non-matching end-object for example).
      * @throws IOException when there is a problem writing the response to the client.
      */
-    protected void buildJsonStream()
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
         throws ProcessingException, JsonGenerationException, IOException
     {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeEndObject();
+    }
+
+    /**
+     * Write the response data as JSON-mapped Java object.
+     * 
+     * @param jsonGenerator JsonGenereator used for writing
+     * @param value response data.
+     * @throws JsonGenerationException when there is a problem generating JSON response.
+     * @throws JsonMappingException when there is a problem mapping Java object to JSON.
+     * @throws IOException when there ie a problem writing response data to client.
+     */
+    protected void writeResponseValue(JsonGenerator jsonGenerator, Object value)
+        throws JsonGenerationException, JsonMappingException, IOException, ProcessingException
+    {
+        objectMapper.writeValue(jsonGenerator, value);
     }
 
     // XDM support
@@ -329,12 +316,32 @@ public abstract class AbstractJsonView
     }
 
     /**
+     * Creates a JsonParser object. When request content type is not {@code application/json},
+     * jsonParser fields is {@code null}. The object may only be used by
+     * {@link #buildJsonStream(JsonGenerator)} and {@link #buildJsonTree()} method implementations.
+     */
+    protected JsonParser getJsonParser()
+        throws IOException
+    {
+        String requestContentType = getHttpContext().getRequest().getHeader("Content-Type");
+        if(requestContentType != null && requestContentType.equals("application/json"))
+        {
+            return factory.createJsonParser(getHttpContext().getRequest().getInputStream());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
      * Read the request data as JSON-mapped Java object.
      * <p>
      * If the request content type is not {@code application/json} this method will return
      * {@code null}.
      * </p>
      * 
+     * @param jsonParser JsonParser
      * @param clazz requested object class.
      * @return request data converted to Java object.
      * @throws JsonParseException if the request data is not well formed.
@@ -342,7 +349,7 @@ public abstract class AbstractJsonView
      *         class.
      * @throws IOException if there was a problem reading the request data from client.
      */
-    protected <T> T readRequestValue(Class<T> clazz)
+    protected <T> T readRequestValue(JsonParser jsonParser, Class<T> clazz)
         throws JsonParseException, JsonMappingException, IOException
     {
         if(jsonParser != null)
@@ -366,7 +373,7 @@ public abstract class AbstractJsonView
      *         type.
      * @throws IOException if there was a problem reading the request data from client.
      */
-    protected <T> T readRequestValue(TypeReference<T> typeRef)
+    protected <T> T readRequestValue(JsonParser jsonParser, TypeReference<T> typeRef)
         throws JsonParseException, JsonMappingException, IOException
     {
         if(jsonParser != null)
@@ -375,20 +382,5 @@ public abstract class AbstractJsonView
             return value;
         }
         return null;
-    }
-    
-    /**
-     * Write the response data as JSON-mapped Java object.
-     * 
-     * @param value response data.
-     * 
-     * @throws JsonGenerationException when there is a problem generating JSON response.
-     * @throws JsonMappingException when there is a problem mapping Java object to JSON.
-     * @throws IOException when there ie a problem writing response data to client.
-     */
-    protected void writeResponseValue(Object value)
-        throws JsonGenerationException, JsonMappingException, IOException
-    {
-        objectMapper.writeValue(jsonGenerator, value);
     }
 }

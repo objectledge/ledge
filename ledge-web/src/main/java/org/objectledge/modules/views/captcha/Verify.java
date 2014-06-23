@@ -36,6 +36,7 @@ import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.json.AbstractJsonView;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * A view that verify captch'a code.
@@ -56,7 +57,7 @@ public class Verify
     }
 
     @Override
-    protected void buildJsonStream()
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
         throws ProcessingException, JsonGenerationException, IOException
     {
         boolean result = captchaService.checkCaptcha(getHttpContext(), getRequestParameters());

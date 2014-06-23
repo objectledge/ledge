@@ -21,6 +21,7 @@ import org.objectledge.web.WebConstants;
 import org.objectledge.web.json.AbstractJsonView;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class Login
     extends AbstractJsonView
@@ -47,7 +48,7 @@ public class Login
     }
 
     @Override
-    public void buildJsonStream()
+    public void buildJsonStream(JsonGenerator jsonGenerator)
         throws JsonGenerationException, IOException
     {
         Parameters parameters = getRequestParameters();
