@@ -1,7 +1,5 @@
 package org.objectledge.modules.views.longops;
 
-import static org.objectledge.longops.LongRunningOperationOrdering.sortOperations;
-
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
@@ -21,7 +19,8 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class ActiveOperations
     extends AbstractJsonView
@@ -39,8 +38,8 @@ public class ActiveOperations
     }
 
     @Override
-    protected JsonNode buildJsonTree()
-        throws ProcessingException
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
+        throws ProcessingException, JsonGenerationException, IOException
     {
         Parameters parameters = context.getAttribute(RequestParameters.class);
         String uid = parameters.get("uid", null);
@@ -73,7 +72,7 @@ public class ActiveOperations
                     activeOperations = registry.getActiveOperations(requestor);
                 }
             }
-            return objectMapper.valueToTree(sortOperations(activeOperations));
+            writeResponseValue(jsonGenerator, activeOperations);
         }
         catch(IllegalArgumentException | AuthenticationException e)
         {

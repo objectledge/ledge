@@ -1,7 +1,6 @@
 package org.objectledge.modules.views.longops;
 
-import static org.objectledge.longops.LongRunningOperationOrdering.sortOperations;
-
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +13,8 @@ import org.objectledge.longops.LongRunningOperation;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.json.AbstractJsonView;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class ActiveOperationsDummy
     extends AbstractJsonView
@@ -26,8 +26,8 @@ public class ActiveOperationsDummy
     }
 
     @Override
-    protected JsonNode buildJsonTree()
-        throws ProcessingException
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
+        throws ProcessingException, JsonGenerationException, IOException
     {
         Collection<LongRunningOperation> activeOperations;
 
@@ -38,7 +38,7 @@ public class ActiveOperationsDummy
             "bazy.organizations.autocat.UpdateAll", "automatic categorization", new UserPrincipal(
                 "root"), 20, 8, false, new Date().getTime(), new Date().getTime() + 1000000L);
         activeOperations = Arrays.asList(op1, op2);
-        return objectMapper.valueToTree(sortOperations(activeOperations));
+        writeResponseValue(jsonGenerator, activeOperations);
     }
 
     private static class LongRunningOperationDummy
