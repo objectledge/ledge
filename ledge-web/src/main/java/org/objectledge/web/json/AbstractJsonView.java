@@ -3,6 +3,9 @@ package org.objectledge.web.json;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
@@ -33,6 +36,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractJsonView
     extends AbstractBuilder
 {
+    private static final String OPTIONS_METHOD = "OPTIONS";
+    
+    private static final String ORIGIN_HEADER = "Origin";
+
+    private static final String ACCESS_CONTROL_REQUEST_METHOD_HEADER = "Access-Control-Request-Method";
+    
+    private static final String ACCESS_CONTROL_REQUEST_HEADERS_HEADER = "Access-Control-Request-Headers";
+    
+    private static final String ACCESS_CONTROL_ALLOW_METHODS_HEADER = "Access-Control-Allow-Methods";
+
+    private static final String ACCESS_CONTROL_ALLOW_HEADERS_HEADER = "Access-Control-Allow-Headers";
+
     /** Cached instance of JsonFactory returned by newJsonFactory. */
     private JsonFactory factory;
 
@@ -82,7 +97,7 @@ public abstract class AbstractJsonView
         try
         {
             buildResponseHeaders(httpContext);
-            if(httpContext.getRequest().getMethod().equals("OPTIONS"))
+            if(httpContext.getRequest().getMethod().equals(OPTIONS_METHOD))
             {
                 httpContext.getResponse().setContentLength(0);
                 httpContext.setDirectResponse(true);
@@ -200,6 +215,62 @@ public abstract class AbstractJsonView
     protected void buildResponseHeaders(HttpContext httpContext)
         throws ProcessingException
     {
+        HttpServletRequest request = httpContext.getRequest();
+        HttpServletResponse response = httpContext.getResponse();
+        String origin = request.getHeader(ORIGIN_HEADER);
+        if(origin != null)
+        {
+            String reqMethod = request.getHeader(ACCESS_CONTROL_REQUEST_METHOD_HEADER);
+            if(request.getMethod().equals(OPTIONS_METHOD) && reqMethod != null)
+            {
+                // a pre-flight request
+                if(reqMethod != null)
+                {
+                    if(isCORSMethodAllowed(reqMethod))
+                    {
+                        response.addHeader(ACCESS_CONTROL_ALLOW_METHODS_HEADER, reqMethod);
+                    }
+                    else
+                    {
+                        log.error("rejected CORS request because of invalid method " + reqMethod);
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        return;
+                    }
+                }
+
+                final String reqHeadersList = request
+                    .getHeader(ACCESS_CONTROL_REQUEST_HEADERS_HEADER);
+                if(reqHeadersList != null)
+                {
+                    boolean reqHeadersValid = true;
+                    String[] reqHeaders = reqHeadersList.trim().split(",");
+                    for(String reqHeder : reqHeaders)
+                    {
+                        if(!isCORSHeaderAllowed(reqHeder.trim()))
+                        {
+                            log.error("rejected CORS request because of invalid header "
+                                + reqHeder.trim());
+                            reqHeadersValid = false;
+                            break;
+                        }
+                    }
+                    if(reqHeadersValid)
+                    {
+                        response.addHeader(ACCESS_CONTROL_ALLOW_HEADERS_HEADER, reqHeadersList);
+                    }
+                    else
+                    {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        return;
+                    }
+                }
+            }
+            String host = request.getProtocol() + "://" + request.getServerName();
+            if(isCORSOriginAllowed(host, origin))
+            {
+                response.addHeader("Access-Control-Allow-Origin", origin);
+            }
+        }
     }
 
     /**
@@ -297,6 +368,39 @@ public abstract class AbstractJsonView
     protected String getCallbackParameterName()
     {
         return null;
+    }
+
+    /**
+     * Invoked on CORS pre-flight requests to determine if the view allows a specific HTTP method.
+     * 
+     * @param method HTTP method name.
+     */
+    protected boolean isCORSMethodAllowed(String method)
+    {
+        return true;
+    }
+
+    /**
+     * Invoked on CORS pre-flight request to determine if the view allows specific HTTP headers.
+     * 
+     * @param header HTTP header name.
+     */
+    protected boolean isCORSHeaderAllowed(String header)
+    {
+        return true;
+    }
+
+    /**
+     * Invoked on CORS requests to determine if the view allows specific request origin. Default
+     * implementation allows only host == origin, effectively disabling CORS.
+     * 
+     * @param host protocol and host part of current request's URI
+     * @param origin protocol and host part of request origin URI
+     * @see org.objectledge.web.cors.CrossOriginRequestValidator
+     */
+    protected boolean isCORSOriginAllowed(String host, String origin)
+    {
+        return host.equals(origin);
     }
 
     // convenience methods
