@@ -13,7 +13,9 @@ import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.cors.CrossOriginRequestValidator;
 import org.objectledge.web.json.AbstractJsonView;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -64,12 +66,15 @@ public class Ticket
 
     private final Logger log;
 
+    private final CrossOriginRequestValidator cors;
+
     public Ticket(Context context, SingleSignOnService singleSignOnService,
-        UserManager userManager, Logger log)
+        UserManager userManager, CrossOriginRequestValidator cors, Logger log)
     {
         super(context, log);
         this.singleSignOnService = singleSignOnService;
         this.userManager = userManager;
+        this.cors = cors;
         this.log = log;
     }
 
@@ -160,6 +165,20 @@ public class Ticket
     protected String getCallbackParameterName()
     {        
         return "callback";
+    }
+
+    @Override
+    protected boolean isCORSOriginAllowed(String host, String origin)
+    {
+        return host.equals(origin) || cors.isAllowed(origin);
+    }
+
+    @Override
+    protected void buildResponseHeaders(HttpContext httpContext)
+        throws ProcessingException
+    {
+        super.buildResponseHeaders(httpContext);
+        httpContext.getResponse().addHeader("Access-Control-Allow-Credentials", "true");
     }
 
     private String refererDomain(HttpServletRequest request)

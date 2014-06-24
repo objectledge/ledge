@@ -16,8 +16,10 @@ import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.WebConstants;
+import org.objectledge.web.cors.CrossOriginRequestValidator;
 import org.objectledge.web.json.AbstractJsonView;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -38,12 +40,15 @@ public class Login
 
     private final Logger log;
 
-    public Login(UserManager userManager, SingleSignOnService singleSignOnService, Context context,
-        Logger log)
+    private final CrossOriginRequestValidator cors;
+
+    public Login(UserManager userManager, SingleSignOnService singleSignOnService,
+        CrossOriginRequestValidator cors, Context context, Logger log)
     {
         super(context, log);
         this.userManager = userManager;
         this.singleSignOnService = singleSignOnService;
+        this.cors = cors;
         this.log = log;
     }
 
@@ -152,6 +157,20 @@ public class Login
     protected String getCallbackParameterName()
     {
         return "callback";
+    }
+
+    @Override
+    protected boolean isCORSOriginAllowed(String host, String origin)
+    {
+        return host.equals(origin) || cors.isAllowed(origin);
+    }
+
+    @Override
+    protected void buildResponseHeaders(HttpContext httpContext)
+        throws ProcessingException
+    {
+        super.buildResponseHeaders(httpContext);
+        httpContext.getResponse().addHeader("Access-Control-Allow-Credentials", "true");
     }
 
     protected String refererDomain(HttpServletRequest request)
