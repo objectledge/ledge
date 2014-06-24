@@ -79,57 +79,63 @@ public abstract class AbstractJsonView
         throws BuildException, ProcessingException
     {
         HttpContext httpContext = getHttpContext();
-
-        String callbackParameterName = getCallbackParameterName();
-        String callback = null;
-        if(callbackParameterName != null)
-        {
-            callback = getRequestParameters().get(callbackParameterName, null);
-            if(callback != null)
-            {
-                httpContext.setContentType("text/javascript");
-            }
-        }
-        if(callbackParameterName == null || callback == null)
-        {
-            httpContext.setContentType("application/json");
-        }
-
         try
         {
             buildResponseHeaders(httpContext);
-            try
+            if(httpContext.getRequest().getMethod().equals("OPTIONS"))
             {
-                final PrintWriter printWriter = httpContext.getPrintWriter();
-                if(callback != null)
-                {
-                    printWriter.append(callback).append("(");
-                }
-                final JsonGenerator jsonGenerator = factory.createJsonGenerator(printWriter)
-                    .setCodec(objectMapper);
-                JsonNode tree = buildJsonTree();
-                if(tree == null)
-                {
-                    buildJsonStream(jsonGenerator);
-                }
-                else
-                {
-                    jsonGenerator.writeTree(tree);
-                }
-                jsonGenerator.flush();
-                if(callback != null)
-                {
-                    printWriter.append(");");
-                    printWriter.flush();
-                }
+                httpContext.getResponse().setContentLength(0);
+                httpContext.setDirectResponse(true);
             }
-            catch(JsonProcessingException e)
+            else
             {
-                log.error("Exception while serializing JSON tree", e);
-            }
-            catch(IOException e)
-            {
-                log.error("Exception while sending results to client", e);
+                try
+                {
+                    final String callbackParameterName = getCallbackParameterName();
+                    String callback = null;
+                    if(callbackParameterName != null)
+                    {
+                        callback = getRequestParameters().get(callbackParameterName, null);
+                        if(callback != null)
+                        {
+                            httpContext.setContentType("text/javascript");
+                        }
+                    }
+                    if(callbackParameterName == null || callback == null)
+                    {
+                        httpContext.setContentType("application/json");
+                    }
+                    final PrintWriter printWriter = httpContext.getPrintWriter();
+                    if(callback != null)
+                    {
+                        printWriter.append(callback).append("(");
+                    }
+                    final JsonGenerator jsonGenerator = factory.createJsonGenerator(printWriter)
+                        .setCodec(objectMapper);
+                    JsonNode tree = buildJsonTree();
+                    if(tree == null)
+                    {
+                        buildJsonStream(jsonGenerator);
+                    }
+                    else
+                    {
+                        jsonGenerator.writeTree(tree);
+                    }
+                    jsonGenerator.flush();
+                    if(callback != null)
+                    {
+                        printWriter.append(");");
+                        printWriter.flush();
+                    }
+                }
+                catch(JsonProcessingException e)
+                {
+                    log.error("Exception while serializing JSON tree", e);
+                }
+                catch(IOException e)
+                {
+                    log.error("Exception while sending results to client", e);
+                }
             }
         }
         catch(ProcessingException e)
