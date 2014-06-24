@@ -81,6 +81,9 @@ public class ActiveOperationsTest
                     oneOf(servletRequest).getCharacterEncoding();
                     will(returnValue("UTF-8"));
 
+                    oneOf(servletRequest).getHeader("Origin");
+                    will(returnValue(null));
+
                     oneOf(servletResponse).setContentType("application/json");
 
                     oneOf(servletRequest).getParameterNames();
