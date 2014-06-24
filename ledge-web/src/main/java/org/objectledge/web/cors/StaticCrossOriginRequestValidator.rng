@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <element name="config">
+    <zeroOrMore>
+      <element name="allowed">
+        <attribute name="host" />
+        <optional>
+          <attribute name="protocol">
+            <list>
+              <choice>
+                <value>http</value>
+                <value>https</value>
+              </choice>
+            </list>
+          </attribute>
+        </optional>
+      </element>
+    </zeroOrMore>
+  </element>
+</grammar>
