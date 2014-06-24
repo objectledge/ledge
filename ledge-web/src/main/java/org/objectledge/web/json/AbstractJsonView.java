@@ -145,10 +145,10 @@ public abstract class AbstractJsonView
             {
                 if(!httpContext.getResponse().isCommitted())
                 {
-                    final JsonGenerator jsonGenerator1 = factory.createJsonGenerator(getHttpContext()
-                        .getPrintWriter());
-                    jsonGenerator1.setCodec(objectMapper);
-                    final JsonGenerator jsonGenerator = jsonGenerator1;
+                    httpContext.setContentType("application/json");
+                    final JsonGenerator jsonGenerator = factory
+                        .createJsonGenerator(getHttpContext().getPrintWriter());
+                    jsonGenerator.setCodec(objectMapper);
                     jsonGenerator.writeStartObject();
                     jsonGenerator.writeStringField("exception", new StackTrace(e).toString());
                     jsonGenerator.writeEndObject();
