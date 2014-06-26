@@ -183,19 +183,31 @@ public class Ticket
 
     private String refererDomain(HttpServletRequest request)
     {
-        String referer = request.getHeader("Referer");
-        if(referer == null)
+        String refererDomain = null;
+        String origin = request.getParameter("origin");
+        if(origin != null)
         {
-            return request.getServerName();
+            refererDomain = origin;
         }
-        try
+        else
         {
-            URL refererUrl = new URL(referer);
-            return refererUrl.getHost();
+            String referer = request.getHeader("Referer");
+            if(referer != null)
+            {
+                try
+                {
+                    refererDomain = new URL(referer).getHost();
+                }
+                catch(MalformedURLException e)
+                {
+                    // ignore
+                }
+            }
+            else
+            {
+                refererDomain = request.getServerName();
+            }
         }
-        catch(MalformedURLException e)
-        {
-            return null;
-        }
+        return refererDomain;
     }
 }
