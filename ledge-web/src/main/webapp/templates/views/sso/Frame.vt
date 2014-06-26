@@ -1,0 +1,48 @@
+$viewEnclosureTool.top()##
+<html>
+    <head>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>
+            $(window).load(function() {
+                window.addEventListener("message", function(event) {
+                    var data = JSON.parse(event.data)
+            
+                    function invoke(action, params) {
+                        jQuery.ajax({
+                            url : "sso." + action,
+                            type : "POST",
+                            xhrFields : {
+                                withCredentials: true
+                            },
+                            data : jQuery.extend({
+                                origin : event.origin.replace(/https?:\/\//,"")
+                            }, params)
+                        }).done(function(response, textStatus) {
+                            event.source.postMessage(JSON.stringify({
+                                action : action,
+                                status : textStatus,
+                                response : response
+                            }), event.origin);
+                        }).fail(function(jqXHR, textStatus, errorThrown) {
+                            event.source.postMessage(JSON.stringify({
+                                action : action,
+                                status : textStatus,
+                                error : errorThrown
+                            }), event.origin);
+                        });
+                    }
+                    
+                    if (data.action === "Ticket") {
+                        invoke("Ticket", {});
+                    } else if (data.action === "Login") {
+                        invoke("Login", {
+                            login : data.login,
+                            password : data.password
+                        });
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body></body>
+</html>
