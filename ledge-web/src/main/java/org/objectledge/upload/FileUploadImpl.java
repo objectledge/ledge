@@ -167,7 +167,7 @@ public class FileUploadImpl
     }
 
     @Override
-    public UploadBucket createBucket(UploadBucketConfig config)
+    public UploadBucket createBucket(UploadBucketConfig config, int minSeq)
     {
         String id;
         synchronized(bucketIdGen)
@@ -179,7 +179,7 @@ public class FileUploadImpl
             }
             while(allBuckets.containsKey(id));
         }
-        UploadBucket bucket = new UploadBucket(fileSystem, workingDirectory, id, config);
+        UploadBucket bucket = new UploadBucket(fileSystem, workingDirectory, id, config, minSeq);
         allBuckets.put(id, bucket);
         getHolder().addBucket(bucket);
         return bucket;
@@ -205,7 +205,7 @@ public class FileUploadImpl
             for(String id : ids)
             {
                 bucketCleaner.schedule(new UploadBucket(fileSystem, workingDirectory, id,
-                    UploadBucketConfig.DEFAULT));
+                    UploadBucketConfig.DEFAULT, 1));
             }
         }
         catch(IOException e)

@@ -26,7 +26,18 @@ public class UploadTool
      */
     public String newBucket()
     {
-        return fileUpload.createBucket(UploadBucketConfig.DEFAULT).getId();
+        return fileUpload.createBucket(UploadBucketConfig.DEFAULT, 1).getId();
+    }
+
+    /**
+     * Creates a new bucket for the current HTTP session and returns it's id.
+     * 
+     * @return new bucket id.
+     * @param minSeq initial item sequence number (typically 1)
+     */
+    public String newBucket(int minSeq)
+    {
+        return fileUpload.createBucket(UploadBucketConfig.DEFAULT, minSeq).getId();
     }
 
     /**
@@ -40,11 +51,14 @@ public class UploadTool
      *        restriction.
      * @param thumbnailSize maximum size of server-side generated image thumbnails. It might be
      *        width or height dependent on image orientation.
+     * @param minSeq initial item sequence number (typically 1)
      * @return new bucket id.
      */
-    public String newBucket(int maxCount, int maxSize, String allowedFormats, int thumbnailSize)
+    public String newBucket(int maxCount, int maxSize, String allowedFormats, int thumbnailSize,
+        int minSeq)
     {
         return fileUpload.createBucket(
-            new UploadBucketConfig(maxCount, maxSize, allowedFormats, thumbnailSize)).getId();
+            new UploadBucketConfig(maxCount, maxSize, allowedFormats, thumbnailSize), minSeq)
+            .getId();
     }
 }

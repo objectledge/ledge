@@ -30,8 +30,9 @@ public interface FileUpload
      * Creates a new bucket and attaches it to the current session.
      * 
      * @param config upload bucket configuration
+     * @param minSeq initial item sequence number (typically 1)
      */
-    UploadBucket createBucket(UploadBucketConfig config);
+    UploadBucket createBucket(UploadBucketConfig config, int minSeq);
 
     /**
      * @param bucket
