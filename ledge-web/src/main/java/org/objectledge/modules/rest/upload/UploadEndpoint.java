@@ -3,7 +3,6 @@ package org.objectledge.modules.rest.upload;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -121,14 +120,15 @@ public class UploadEndpoint
 
     private URI getBucketUri(UriInfo uriInfo)
     {
-        try
+        Pattern p = Pattern.compile("(/upload/[0-9a-z]+)(/\\d+)?");
+        Matcher m = p.matcher(uriInfo.getPath());
+        if(m.matches())
         {
-            return new URI(uriInfo.getRequestUri().getScheme(), uriInfo.getRequestUri()
-                .getSchemeSpecificPart() + "/", null);
+            return uriInfo.getBaseUri().resolve(m.group(1) + "/");
         }
-        catch(URISyntaxException e)
+        else
         {
-            throw new RuntimeException(e);
+            throw new RuntimeException("unexpected path " + uriInfo.getPath());
         }
     }
 
