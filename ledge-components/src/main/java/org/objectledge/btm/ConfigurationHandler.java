@@ -63,8 +63,7 @@ class ConfigurationHandler
     private static void setDefaults(bitronix.tm.Configuration btm)
     {
         btm.setServerId(null);
-        btm.setLogPart1Filename("btm1.tlog");
-        btm.setLogPart2Filename("btm2.tlog");
+        btm.setJournal("null");
         btm.setForcedWriteEnabled(true);
         btm.setForceBatchingEnabled(true);
         btm.setMaxLogSizeInMb(2);
@@ -484,8 +483,6 @@ class ConfigurationHandler
         bitronix.tm.Configuration btm = TransactionManagerServices.getConfiguration();
         setDefaults(btm);
         btm.setServerId("default");
-        btm.setLogPart1Filename(resolvePath("target/btm1.tlog", fileSystem));
-        btm.setLogPart2Filename(resolvePath("target/btm2.tlog", fileSystem));
         btm.setDisableJmx(true);
         PoolingDataSource ds = new PoolingDataSource();
         ds.setUniqueName(dsName);
