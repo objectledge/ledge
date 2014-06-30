@@ -118,10 +118,11 @@ public class UploadEndpoint
         return encodeResponse(msg, accept, respBuilder);
     }
 
+    private static final Pattern BUCKET_URI_RE = Pattern.compile("/(upload/[0-9a-z]+)(/\\d+)?");
+
     private URI getBucketUri(UriInfo uriInfo)
     {
-        Pattern p = Pattern.compile("(/upload/[0-9a-z]+)(/\\d+)?");
-        Matcher m = p.matcher(uriInfo.getPath());
+        Matcher m = BUCKET_URI_RE.matcher(uriInfo.getPath());
         if(m.matches())
         {
             return uriInfo.getBaseUri().resolve(m.group(1) + "/");
