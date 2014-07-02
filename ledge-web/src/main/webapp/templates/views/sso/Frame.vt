@@ -2,6 +2,7 @@ $viewEnclosureTool.top()##
 <html>
     <head>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>
         <script>
             $(window).load(function() {
                 window.addEventListener("message", function(event) {
