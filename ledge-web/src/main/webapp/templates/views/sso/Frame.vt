@@ -5,8 +5,9 @@ $viewEnclosureTool.top()##
 		<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js"></script>
         <script>
             $(window).load(function() {
-                window.addEventListener("message", function(event) {
-                    var data = JSON.parse(event.data)
+                $(window).bind("message", function(event) {
+                    event = event.originalEvent;
+                    var data = JSON.parse(event.data);
             
                     function invoke(action, params) {
                         jQuery.ajax({
