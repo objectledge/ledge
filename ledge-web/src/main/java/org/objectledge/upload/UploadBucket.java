@@ -114,7 +114,7 @@ public class UploadBucket
     private Optional<UploadError> checkItem(String fileName, int size)
     {
         if(config.getMaxCount() > 0
-            && filter(items.values(), Item.IS_CONTAINER).size() > config.getMaxCount())
+            && filter(items.values(), Item.IS_CONTAINER).size() >= config.getMaxCount())
         {
             return Optional.of(UploadError.ITEM_COUNT_EXCEEDED);
         }
