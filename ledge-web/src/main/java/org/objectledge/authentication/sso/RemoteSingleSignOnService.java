@@ -127,6 +127,20 @@ public class RemoteSingleSignOnService
     }
 
     @Override
+    public String realmMaster(String memberDomain)
+    {
+        try
+        {
+            return remote.realmMaster(memberDomain);
+        }
+        catch(XmlRpcException e)
+        {
+            log.error("XmlRpc call failed", e);
+            return null;
+        }
+    }
+
+    @Override
     public void logIn(Principal principal, String domain)
     {
         try

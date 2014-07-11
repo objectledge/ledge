@@ -18,6 +18,12 @@ public class NOOPSingleSingOnService
     }
 
     @Override
+    public String realmMaster(String memberDomain)
+    {
+        return null;
+    }
+
+    @Override
     public void logIn(Principal principal, String domain)
     {
         // does nothing

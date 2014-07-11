@@ -10,6 +10,8 @@ public interface SingleSignOnService
 
     Principal validateTicket(String ticket, String domain, String client);
 
+    String realmMaster(String memberDomain);
+
     void logIn(Principal principal, String domain);
 
     void logOut(Principal principal, String domain);
