@@ -79,6 +79,13 @@ public class ServerAPI
     }
 
     @Override
+    public String realmMaster(String memberDomain)
+        throws XmlRpcException
+    {
+        return singleSignOnService.realmMaster(memberDomain);
+    }
+
+    @Override
     public String logIn(String principalName, String domain)
         throws XmlRpcException
     {
