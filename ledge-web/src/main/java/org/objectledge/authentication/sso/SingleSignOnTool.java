@@ -51,25 +51,33 @@ public class SingleSignOnTool
         HttpServletRequest httpRequest = httpContext.getRequest();
         String client = httpRequest.getRemoteAddr();
         String domain = httpRequest.getServerName();
+        String master = singleSignOnService.realmMaster(domain);
         Principal principal = authContext.getUserPrincipal();
 
         if(authContext.isUserAuthenticated())
         {
-            if(singleSignOnService.checkStatus(principal, domain) == SingleSignOnService.LoginStatus.LOGGED_IN)
+            if(master != null)
             {
-                if(httpRequest.isSecure())
+                if(singleSignOnService.checkStatus(principal, domain) == SingleSignOnService.LoginStatus.LOGGED_IN)
                 {
-                    return singleSignOnService.generateTicket(principal, domain, client);
+                    if(httpRequest.isSecure())
+                    {
+                        return singleSignOnService.generateTicket(principal, master, client);
+                    }
+                    else
+                    {
+                        log.warn("DECLINED " + client + ", " + principal.getName()
+                            + " not using secure channel");
+                    }
                 }
                 else
                 {
-                    log.warn("DECLINED " + client + ", " + principal.getName()
-                        + " not using secure channel");
+                    log.warn("DECLINED " + client + " principal recenly logged out");
                 }
             }
             else
             {
-                log.warn("DECLINED " + client + " principal recenly logged out");
+                log.warn("DECLINED " + domain + " does not belong to any realm");
             }
         }
         else
