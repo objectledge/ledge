@@ -78,6 +78,7 @@ var FileMultiUpload = (function() {
 														'.template-download')
 														.remove();
 												if ($('#multiupload-files .template-download').length == 0) {
+													jQuery('#progress .progress-bar').css('width', '0%');
 													hide_file_rights();
 												}
 											});
@@ -257,7 +258,7 @@ var FileMultiUpload = (function() {
 		dot = filename.lastIndexOf(".") || 0;
 		if (dot > 0) {
 			ext = filename.substring(dot).toLowerCase();
-			if (ext == ".doc" || ext == ".xdoc" || ext == ".odt") {
+			if (ext == ".doc" || ext == ".docx" || ext == ".odt") {
 				return "word";
 			}
 			if (ext == ".jpg" || ext == ".png" || ext == ".gif") {
@@ -280,8 +281,8 @@ var FileMultiUpload = (function() {
 
 		var translateUploadError = {
 			'ITEM_COUNT_EXCEEDED' : 'Przekroczono ilość plików do podłączenia.',
-			'ITEM_SIZE_EXCEEDED' : 'Zbyt duży rozmair pliku.',
-			'FORMAT_NOT_ALLOWED' : 'Niedozwolony format pliku'
+			'ITEM_SIZE_EXCEEDED' : 'Zbyt duży rozmiar pliku.',
+			'FORMAT_NOT_ALLOWED' : 'Niedozwolony format pliku.'
 		};
 
 		return translateUploadError[uploadError] || message;
