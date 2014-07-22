@@ -1,6 +1,10 @@
 package org.objectledge.web.json;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -32,23 +36,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractJsonView
     extends AbstractBuilder
 {
-    /**
-     * JsonGenerator object. It may only be used by {@link #buildJsonStream()} method
-     * implementation.
-     */
-    protected JsonGenerator jsonGenerator;
+    private static final String OPTIONS_METHOD = "OPTIONS";
+    
+    private static final String ORIGIN_HEADER = "Origin";
 
-    /**
-     * JsonParser object. When request content type is not {@code application/json}, jsonParser
-     * fields is {@code null}. The object may only be used by {@link #buildJsonStream()} and
-     * {@link #buildJsonTree()} method implementations.
-     */
-    protected JsonParser jsonParser;
+    private static final String ACCESS_CONTROL_REQUEST_METHOD_HEADER = "Access-Control-Request-Method";
+    
+    private static final String ACCESS_CONTROL_REQUEST_HEADERS_HEADER = "Access-Control-Request-Headers";
+    
+    private static final String ACCESS_CONTROL_ALLOW_METHODS_HEADER = "Access-Control-Allow-Methods";
 
-    /**
-     * JSON Object reader that will be used for parsing request data.
-     */
-    protected ObjectMapper objectMapper;
+    private static final String ACCESS_CONTROL_ALLOW_HEADERS_HEADER = "Access-Control-Allow-Headers";
+
+    /** Cached instance of JsonFactory returned by newJsonFactory. */
+    private JsonFactory factory;
+
+    /** JSON Object reader that will be used for parsing request data. */
+    private ObjectMapper objectMapper;
 
     /** The logger. */
     protected final Logger log;
@@ -63,6 +67,8 @@ public abstract class AbstractJsonView
     {
         super(context);
         this.log = log;
+        this.factory = newJsonFactory();
+        this.objectMapper = new ObjectMapper(factory);
     }
 
     /**
@@ -88,81 +94,63 @@ public abstract class AbstractJsonView
         throws BuildException, ProcessingException
     {
         HttpContext httpContext = getHttpContext();
-        JsonFactory factory = newJsonFactory();
-        objectMapper = new ObjectMapper(factory);
-        try
-        {
-            String requestContentType = httpContext.getRequest().getHeader("Content-Type");
-            if(requestContentType != null && requestContentType.equals("application/json"))
-            {
-                jsonParser = factory.createJsonParser(httpContext.getRequest().getInputStream());
-            }
-        }
-        catch(IOException e)
-        {
-            log.error("failed to create JSON parser", e);
-            return null;
-        }
-
-        String callbackParameterName = getCallbackParameterName();
-        String callback = null;
-        if(callbackParameterName != null)
-        {
-            callback = getRequestParameters().get(callbackParameterName, null);
-            if(callback != null)
-            {
-                httpContext.setContentType("text/javascript");
-            }
-        }
-        if(callbackParameterName == null || callback == null)
-        {
-            httpContext.setContentType("application/json");
-        }
-
-        try
-        {
-            jsonGenerator = factory.createJsonGenerator(httpContext.getPrintWriter());
-        }
-        catch(IOException e)
-        {
-            log.error("failed to create JSON generator", e);
-            return null;
-        }
-
         try
         {
             buildResponseHeaders(httpContext);
-            try
+            if(httpContext.getRequest().getMethod().equals(OPTIONS_METHOD))
             {
-                if(callback != null)
-                {
-                    httpContext.getPrintWriter().append(callback).append("(");
-                }
-                JsonNode tree = null;
-                tree = buildJsonTree();
-                if(tree == null)
-                {
-                    buildJsonStream();
-                }
-                if(tree != null)
-                {
-                    jsonGenerator.setCodec(objectMapper);
-                    jsonGenerator.writeTree(tree);
-                }
-                jsonGenerator.flush();
-                if(callback != null)
-                {
-                    httpContext.getPrintWriter().append(");");
-                    httpContext.getPrintWriter().flush();
-                }
+                httpContext.getResponse().setContentLength(0);
+                httpContext.setDirectResponse(true);
             }
-            catch(JsonProcessingException e)
+            else
             {
-                log.error("Exception while serializing JSON tree", e);
-            }
-            catch(IOException e)
-            {
-                log.error("Exception while sending results to client", e);
+                try
+                {
+                    final String callbackParameterName = getCallbackParameterName();
+                    String callback = null;
+                    if(callbackParameterName != null)
+                    {
+                        callback = getRequestParameters().get(callbackParameterName, null);
+                        if(callback != null)
+                        {
+                            httpContext.setContentType("text/javascript");
+                        }
+                    }
+                    if(callbackParameterName == null || callback == null)
+                    {
+                        httpContext.setContentType("application/json");
+                    }
+                    final PrintWriter printWriter = httpContext.getPrintWriter();
+                    if(callback != null)
+                    {
+                        printWriter.append(callback).append("(");
+                    }
+                    final JsonGenerator jsonGenerator = factory.createJsonGenerator(printWriter)
+                        .setCodec(objectMapper);
+                    JsonNode tree = buildJsonTree();
+                    if(tree == null)
+                    {
+                        buildJsonStream(jsonGenerator);
+                    }
+                    else
+                    {
+                        jsonGenerator.writeTree(tree);
+                    }
+                    jsonGenerator.flush();
+                    if(callback != null)
+                    {
+                        printWriter.append(");");
+                        printWriter.flush();
+                    }
+                }
+                catch(JsonProcessingException e)
+                {
+                    log.error("Exception while serializing JSON tree", e);
+                }
+                catch(IOException e)
+                {
+                    log.error("Exception while sending results to client", e);
+                }
             }
         }
         catch(ProcessingException e)
@@ -172,6 +160,10 @@ public abstract class AbstractJsonView
             {
                 if(!httpContext.getResponse().isCommitted())
                 {
+                    httpContext.setContentType("application/json");
+                    final JsonGenerator jsonGenerator = factory
+                        .createJsonGenerator(getHttpContext().getPrintWriter());
+                    jsonGenerator.setCodec(objectMapper);
                     jsonGenerator.writeStartObject();
                     jsonGenerator.writeStringField("exception", new StackTrace(e).toString());
                     jsonGenerator.writeEndObject();
@@ -223,13 +215,69 @@ public abstract class AbstractJsonView
     protected void buildResponseHeaders(HttpContext httpContext)
         throws ProcessingException
     {
+        HttpServletRequest request = httpContext.getRequest();
+        HttpServletResponse response = httpContext.getResponse();
+        String origin = request.getHeader(ORIGIN_HEADER);
+        if(origin != null)
+        {
+            String reqMethod = request.getHeader(ACCESS_CONTROL_REQUEST_METHOD_HEADER);
+            if(request.getMethod().equals(OPTIONS_METHOD) && reqMethod != null)
+            {
+                // a pre-flight request
+                if(reqMethod != null)
+                {
+                    if(isCORSMethodAllowed(reqMethod))
+                    {
+                        response.addHeader(ACCESS_CONTROL_ALLOW_METHODS_HEADER, reqMethod);
+                    }
+                    else
+                    {
+                        log.error("rejected CORS request because of invalid method " + reqMethod);
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        return;
+                    }
+                }
+
+                final String reqHeadersList = request
+                    .getHeader(ACCESS_CONTROL_REQUEST_HEADERS_HEADER);
+                if(reqHeadersList != null)
+                {
+                    boolean reqHeadersValid = true;
+                    String[] reqHeaders = reqHeadersList.trim().split(",");
+                    for(String reqHeder : reqHeaders)
+                    {
+                        if(!isCORSHeaderAllowed(reqHeder.trim()))
+                        {
+                            log.error("rejected CORS request because of invalid header "
+                                + reqHeder.trim());
+                            reqHeadersValid = false;
+                            break;
+                        }
+                    }
+                    if(reqHeadersValid)
+                    {
+                        response.addHeader(ACCESS_CONTROL_ALLOW_HEADERS_HEADER, reqHeadersList);
+                    }
+                    else
+                    {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        return;
+                    }
+                }
+            }
+            String host = request.getProtocol() + "://" + request.getServerName();
+            if(isCORSOriginAllowed(host, origin))
+            {
+                response.addHeader("Access-Control-Allow-Origin", origin);
+            }
+        }
     }
 
     /**
      * Build JSON tree to be sent to the client.
      * <p>
      * {@link #build(Template, String)} calls this method, and if it returns a non-null value,
-     * writers it out to the client. Otherwise {@link #buildJsonStream()} is called.}
+     * writers it out to the client. Otherwise {@link #buildJsonStream(JsonGenerator)} is called.}
      * </p>
      * <p>
      * The default implementation returns {@code null}.
@@ -241,8 +289,8 @@ public abstract class AbstractJsonView
      * the server side.
      * </p>
      * 
-     * @return JSON tree to be sent to the client, or null if {@link #buildJsonStream()} should be
-     *         called instead.
+     * @return JSON tree to be sent to the client, or null if
+     *         {@link #buildJsonStream(JsonGenerator)} should be called instead.
      * @throws ProcessingException when there is an application level problem generating the
      *         response.
      */
@@ -269,17 +317,33 @@ public abstract class AbstractJsonView
      * exception will be logged only on the server side.
      * </p>
      * 
+     * @param jsonGenerator JsonGenereator used for writing
      * @throws ProcessingException when there is an application level problem generating the
      *         response.
      * @throws JsonGenerationException when there is a structural problem with JSON repose
      *         (non-matching end-object for example).
      * @throws IOException when there is a problem writing the response to the client.
      */
-    protected void buildJsonStream()
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
         throws ProcessingException, JsonGenerationException, IOException
     {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeEndObject();
+    }
+
+    /**
+     * Write the response data as JSON-mapped Java object.
+     * 
+     * @param jsonGenerator JsonGenereator used for writing
+     * @param value response data.
+     * @throws JsonGenerationException when there is a problem generating JSON response.
+     * @throws JsonMappingException when there is a problem mapping Java object to JSON.
+     * @throws IOException when there ie a problem writing response data to client.
+     */
+    protected void writeResponseValue(JsonGenerator jsonGenerator, Object value)
+        throws JsonGenerationException, JsonMappingException, IOException, ProcessingException
+    {
+        objectMapper.writeValue(jsonGenerator, value);
     }
 
     // XDM support
@@ -306,6 +370,39 @@ public abstract class AbstractJsonView
         return null;
     }
 
+    /**
+     * Invoked on CORS pre-flight requests to determine if the view allows a specific HTTP method.
+     * 
+     * @param method HTTP method name.
+     */
+    protected boolean isCORSMethodAllowed(String method)
+    {
+        return true;
+    }
+
+    /**
+     * Invoked on CORS pre-flight request to determine if the view allows specific HTTP headers.
+     * 
+     * @param header HTTP header name.
+     */
+    protected boolean isCORSHeaderAllowed(String header)
+    {
+        return true;
+    }
+
+    /**
+     * Invoked on CORS requests to determine if the view allows specific request origin. Default
+     * implementation allows only host == origin, effectively disabling CORS.
+     * 
+     * @param host protocol and host part of current request's URI
+     * @param origin protocol and host part of request origin URI
+     * @see org.objectledge.web.cors.CrossOriginRequestValidator
+     */
+    protected boolean isCORSOriginAllowed(String host, String origin)
+    {
+        return host.equals(origin);
+    }
+
     // convenience methods
 
     /**
@@ -329,12 +426,32 @@ public abstract class AbstractJsonView
     }
 
     /**
+     * Creates a JsonParser object. When request content type is not {@code application/json},
+     * jsonParser fields is {@code null}. The object may only be used by
+     * {@link #buildJsonStream(JsonGenerator)} and {@link #buildJsonTree()} method implementations.
+     */
+    protected JsonParser getJsonParser()
+        throws IOException
+    {
+        String requestContentType = getHttpContext().getRequest().getHeader("Content-Type");
+        if(requestContentType != null && requestContentType.equals("application/json"))
+        {
+            return factory.createJsonParser(getHttpContext().getRequest().getInputStream());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
      * Read the request data as JSON-mapped Java object.
      * <p>
      * If the request content type is not {@code application/json} this method will return
      * {@code null}.
      * </p>
      * 
+     * @param jsonParser JsonParser
      * @param clazz requested object class.
      * @return request data converted to Java object.
      * @throws JsonParseException if the request data is not well formed.
@@ -342,7 +459,7 @@ public abstract class AbstractJsonView
      *         class.
      * @throws IOException if there was a problem reading the request data from client.
      */
-    protected <T> T readRequestValue(Class<T> clazz)
+    protected <T> T readRequestValue(JsonParser jsonParser, Class<T> clazz)
         throws JsonParseException, JsonMappingException, IOException
     {
         if(jsonParser != null)
@@ -366,7 +483,7 @@ public abstract class AbstractJsonView
      *         type.
      * @throws IOException if there was a problem reading the request data from client.
      */
-    protected <T> T readRequestValue(TypeReference<T> typeRef)
+    protected <T> T readRequestValue(JsonParser jsonParser, TypeReference<T> typeRef)
         throws JsonParseException, JsonMappingException, IOException
     {
         if(jsonParser != null)
@@ -375,20 +492,5 @@ public abstract class AbstractJsonView
             return value;
         }
         return null;
-    }
-    
-    /**
-     * Write the response data as JSON-mapped Java object.
-     * 
-     * @param value response data.
-     * 
-     * @throws JsonGenerationException when there is a problem generating JSON response.
-     * @throws JsonMappingException when there is a problem mapping Java object to JSON.
-     * @throws IOException when there ie a problem writing response data to client.
-     */
-    protected void writeResponseValue(Object value)
-        throws JsonGenerationException, JsonMappingException, IOException
-    {
-        objectMapper.writeValue(jsonGenerator, value);
     }
 }

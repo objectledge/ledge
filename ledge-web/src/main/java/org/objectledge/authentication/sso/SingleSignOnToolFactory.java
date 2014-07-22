@@ -1,10 +1,9 @@
 package org.objectledge.authentication.sso;
 
-import org.objectledge.authentication.AuthenticationContext;
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.tools.ContextToolFactory;
-import org.objectledge.web.HttpContext;
 
 public class SingleSignOnToolFactory
     implements ContextToolFactory
@@ -15,17 +14,21 @@ public class SingleSignOnToolFactory
     
     private final SingleSignOnService singleSignOnService;
 
-    public SingleSignOnToolFactory(Context context, SingleSignOnService singleSignOnService)
+    private final Logger log;
+
+    public SingleSignOnToolFactory(Context context, SingleSignOnService singleSignOnService,
+        Logger log)
     {
         this.context = context;
-        this.singleSignOnService = singleSignOnService;        
+        this.singleSignOnService = singleSignOnService;
+        this.log = log;
     }
     
     @Override
     public Object getTool()
         throws ProcessingException
     {
-        return new SingleSignOnTool(context, singleSignOnService);
+        return new SingleSignOnTool(context, singleSignOnService, log);
     }
 
     @Override

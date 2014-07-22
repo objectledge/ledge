@@ -75,11 +75,14 @@ public class ActiveOperationsTest
         checking(new Expectations()
             {
                 {
-                    oneOf(servletRequest).getHeader("Content-Type");
-                    will(returnValue(null));
+                    oneOf(servletRequest).getMethod();
+                    will(returnValue("GET"));
 
                     oneOf(servletRequest).getCharacterEncoding();
                     will(returnValue("UTF-8"));
+
+                    oneOf(servletRequest).getHeader("Origin");
+                    will(returnValue(null));
 
                     oneOf(servletResponse).setContentType("application/json");
 

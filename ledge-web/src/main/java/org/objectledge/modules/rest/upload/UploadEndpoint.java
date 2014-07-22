@@ -2,6 +2,7 @@ package org.objectledge.modules.rest.upload;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,7 +108,7 @@ public class UploadEndpoint
     private Response buildResponse(Status status, String accept, UriInfo uriInfo,
         UploadBucket bucket, List<UploadBucket.Item> items, Optional<UploadContainer> created)
     {
-        UploadMessage msg = new UploadMessage(items, uriInfo.getRequestUri());
+        UploadMessage msg = new UploadMessage(items, getBucketUri(uriInfo));
         final ResponseBuilder respBuilder = Response.status(status);
         if(created.isPresent())
         {
@@ -115,6 +116,21 @@ public class UploadEndpoint
             respBuilder.header(HttpHeaders.LOCATION, uriInfo.getAbsolutePath().resolve(path));
         }
         return encodeResponse(msg, accept, respBuilder);
+    }
+
+    private static final Pattern BUCKET_URI_RE = Pattern.compile("/(upload/[0-9a-z]+)(/\\d+)?");
+
+    private URI getBucketUri(UriInfo uriInfo)
+    {
+        Matcher m = BUCKET_URI_RE.matcher(uriInfo.getPath());
+        if(m.matches())
+        {
+            return uriInfo.getBaseUri().resolve(m.group(1) + "/");
+        }
+        else
+        {
+            throw new RuntimeException("unexpected path " + uriInfo.getPath());
+        }
     }
 
     private Response encodeResponse(Object entity, String accept, final ResponseBuilder respBuilder)
@@ -286,7 +302,7 @@ public class UploadEndpoint
         UploadBucket bucket = fileUpload.getBucket(bucketId);
         if(bucket != null)
         {
-            final UploadMessage msg = new UploadMessage(bucket.getItems(), uriInfo.getRequestUri());
+            final UploadMessage msg = new UploadMessage(bucket.getItems(), getBucketUri(uriInfo));
             return encodeResponse(msg, accept, Response.ok());
         }
         return Response.status(Status.NOT_FOUND).build();

@@ -261,6 +261,13 @@ public class LocalSingleSignOnService
     }
 
     @Override
+    public String realmMaster(String memberDomain)
+    {
+        final Realm realm = findRealmByMember(memberDomain);
+        return realm == null ? null : realm.master;
+    }
+
+    @Override
     public void logIn(Principal principal, String domain)
     {
         Realm realm = findRealmByMember(domain);

@@ -17,6 +17,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * Retrieve one-time authentication ticket from SingleSignOn service.
@@ -73,7 +74,7 @@ public class Ticket
     }
 
     @Override
-    public void buildJsonStream()
+    public void buildJsonStream(JsonGenerator jsonGenerator)
         throws JsonGenerationException, IOException
     {
         HttpContext httpContext = getHttpContext();

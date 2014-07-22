@@ -32,7 +32,7 @@ public class UploadBucket
 
     private final Map<String, Item> items = new ConcurrentHashMap<>();
 
-    private final AtomicInteger seq = new AtomicInteger();
+    private final AtomicInteger seq;
 
     private final FileSystem fileSystem;
 
@@ -43,15 +43,21 @@ public class UploadBucket
     /**
      * Creates a new upload bucket instance.
      * 
+     * @param fileSystem Ledge file system
+     * @param workArea work area path in Ledge file system.
      * @param id bucket identifier.
+     * @param config bucket configuration
+     * @param minSeq initial item sequence number (typically 1)
      */
-    public UploadBucket(FileSystem fileSystem, String workArea, String id, UploadBucketConfig config)
+    public UploadBucket(FileSystem fileSystem, String workArea, String id,
+        UploadBucketConfig config, int minSeq)
     {
         this.fileSystem = fileSystem;
         this.workArea = workArea + "/" + id;
         this.id = id;
         this.config = config;
         this.lastAccessTime = System.currentTimeMillis();
+        this.seq = new AtomicInteger(minSeq);
     }
 
     /**
@@ -108,7 +114,7 @@ public class UploadBucket
     private Optional<UploadError> checkItem(String fileName, int size)
     {
         if(config.getMaxCount() > 0
-            && filter(items.values(), Item.IS_CONTAINER).size() > config.getMaxCount())
+            && filter(items.values(), Item.IS_CONTAINER).size() >= config.getMaxCount())
         {
             return Optional.of(UploadError.ITEM_COUNT_EXCEEDED);
         }
