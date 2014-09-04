@@ -1,0 +1,20 @@
+IP = 192.168.0.1
+IP = 192.168.0.0/16 => deny
+IP ~ 192.168.0.0 => deny
+IP = 192.168.0.999 => deny
+IP ~ 192.168.0.0/33 => deny
+IP ~ 192.168.0.1/16 => deny
+Host = somehost.tld => deny
+Host ~ /neoplus.adsl.tpnet.pl => deny
+Host ~ \neoplus.adsl.tpnet.pl$\ => deny
+Host ~ /(neoplus.adsl.tpnet.pl$/ => deny
+User-Agent ~ /Internet Explorer => deny
+User-Agent = "Internet Explorer => deny
+Hits < 1000 => deny
+Hits >= 1000 => deny
+Hits => 1000 => deny
+IP ~ 192.168.0.0/16 && => deny
+IP ~ 192.168.0.0/16 && => deny
+IP ~ 192.168.0.0/16 || || User-Agent ~ /Internet Explorer/=> deny
+(IP = 192.168.0.1 => deny
+IP = 192.168.0.1) => deny

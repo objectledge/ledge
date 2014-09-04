@@ -1,0 +1,12 @@
+IP = 192.168.0.1 => deny
+IP ~ 192.168.0.0/16 => deny
+Host = "somehost.tld" => deny
+Host ~ /neoplus.adsl.tpnet.pl$/ => deny
+Referrer = "somehost.tld" => deny
+User-Agent ~ /Internet Explorer/ => deny
+Hits > 1000 => deny
+IP ~ 192.168.0.0/16 && Hits > 1000 => deny
+Host ~ /neoplus.adsl.tpnet.pl$/ || User-Agent ~ /Internet Explorer/ => deny
+(Host ~ /neoplus.adsl.tpnet.pl$/ || User-Agent ~ /Internet Explorer/) && Hits > 1000 => deny
+Host ~ /neoplus.adsl.tpnet.pl$/ && !User-Agent ~ /Internet Explorer/ => deny
+(IP = 192.168.0.1) => deny
