@@ -13,6 +13,18 @@ public class HitTable
         return hit == null ? 0 : hit.getHits();
     }
 
+    public int getMatches(RequestInfo requestInfo)
+    {
+        Hit hit = table.get(requestInfo.getAddress().toString());
+        return hit == null ? 0 : hit.getMatches();
+    }
+
+    public long getLastMatchingRuleId(RequestInfo requestInfo)
+    {
+        Hit hit = table.get(requestInfo.getAddress().toString());
+        return hit == null ? -1 : hit.getLastMatchingRuleId();
+    }
+
     public void hit(RequestInfo requestInfo)
     {
         String key = requestInfo.getAddress().toString();
@@ -25,5 +37,17 @@ public class HitTable
         {
             hit.incHits();
         }
+    }
+
+    public void match(Rule rule, RequestInfo requestInfo)
+    {
+        String key = requestInfo.getAddress().toString();
+        Hit hit = table.get(key);
+        if(hit == null)
+        {
+            hit = new Hit(requestInfo.getAddress());
+            table.put(key, hit);
+        }
+        hit.incMatches(rule.getRuleId());
     }
 }

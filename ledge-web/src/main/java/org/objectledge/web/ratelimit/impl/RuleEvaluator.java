@@ -38,6 +38,7 @@ public class RuleEvaluator
         {
             if(VISITOR.visit(rule.getRule(), new RuleEvaluationContext(rule, request)))
             {
+                hitTable.match(rule, request);
                 return rule.getAction();
             }
         }
