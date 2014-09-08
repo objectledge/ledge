@@ -33,12 +33,12 @@ public class RuleEvaluator
 
     public String action(RequestInfo request, List<Rule> rules)
     {
-        hitTable.hit(request);
+        hitTable.hit(request.getAddress());
         for(Rule rule : rules)
         {
             if(VISITOR.visit(rule.getRule(), new RuleEvaluationContext(rule, request)))
             {
-                hitTable.match(rule, request);
+                hitTable.match(rule, request.getAddress());
                 return rule.getAction();
             }
         }
@@ -61,7 +61,7 @@ public class RuleEvaluator
         public RuleEvaluationContext(Rule rule, RequestInfo request)
         {
             this.request = request;
-            hits = hitTable.getHits(request);
+            hits = hitTable.getHits(request.getAddress());
         }
 
         @Override

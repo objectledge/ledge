@@ -39,12 +39,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.0.51", "otherhost");
 
         assertEquals("reject", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r));
-        assertEquals(1, hitsTable.getHits(q2));
-        assertEquals(0, hitsTable.getMatches(q2));
+        assertEquals(1, hitsTable.getHits(q2.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testMatchIP()
@@ -55,12 +55,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.1.1", "otherhost");
 
         assertEquals("reject", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r));
-        assertEquals(1, hitsTable.getHits(q2));
-        assertEquals(0, hitsTable.getMatches(q2));
+        assertEquals(1, hitsTable.getHits(q2.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testEqHost()
@@ -71,12 +71,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.1.1", "otherhost");
 
         assertEquals("reject", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r));
-        assertEquals(1, hitsTable.getHits(q2));
-        assertEquals(0, hitsTable.getMatches(q2));
+        assertEquals(1, hitsTable.getHits(q2.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testMatchHost()
@@ -87,12 +87,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.1.1", "otherhost");
 
         assertEquals("reject", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r));
-        assertEquals(1, hitsTable.getHits(q2));
-        assertEquals(0, hitsTable.getMatches(q2));
+        assertEquals(1, hitsTable.getHits(q2.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testEqHeader()
@@ -103,12 +103,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.0.1", "somehost", "Referrer", "otherdomain");
 
         assertEquals("reject", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r));
-        assertEquals(2, hitsTable.getHits(q2)); // matched for the same host
-        assertEquals(1, hitsTable.getMatches(q2));
+        assertEquals(2, hitsTable.getHits(q2.getAddress())); // matched for the same host
+        assertEquals(1, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testMatchHeader()
@@ -119,12 +119,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.0.1", "somehost", "User-Agent", "Google Chrome 32");
 
         assertEquals("reject", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r));
-        assertEquals(2, hitsTable.getHits(q2)); // matched for the same host
-        assertEquals(1, hitsTable.getMatches(q2));
+        assertEquals(2, hitsTable.getHits(q2.getAddress())); // matched for the same host
+        assertEquals(1, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testEqIPAndHits()
@@ -135,12 +135,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.0.1", "somehost");
 
         assertEquals("accept", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(0, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("reject", eval.action(q2, r));
-        assertEquals(2, hitsTable.getHits(q2));
-        assertEquals(1, hitsTable.getMatches(q2));
+        assertEquals(2, hitsTable.getHits(q2.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testHostMatchOrHeaderMatchAndHits()
@@ -155,20 +155,20 @@ public class RuleEvaluatorTest
             "Google Chrome 32");
 
         assertEquals("accept", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(0, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r));
-        assertEquals(2, hitsTable.getHits(q2));
-        assertEquals(0, hitsTable.getMatches(q2));
+        assertEquals(2, hitsTable.getHits(q2.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q2.getAddress()));
 
         assertEquals("reject", eval.action(q1, r));
-        assertEquals(3, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
+        assertEquals(3, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("reject", eval.action(q2, r));
-        assertEquals(4, hitsTable.getHits(q2));
-        assertEquals(2, hitsTable.getMatches(q2));
+        assertEquals(4, hitsTable.getHits(q2.getAddress()));
+        assertEquals(2, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testHostMatchAndNotHeaderMatch()
@@ -182,12 +182,12 @@ public class RuleEvaluatorTest
             "Google Chrome 32");
 
         assertEquals("accept", eval.action(q1, r));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(0, hitsTable.getMatches(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q1.getAddress()));
 
         assertEquals("reject", eval.action(q2, r));
-        assertEquals(2, hitsTable.getHits(q2));
-        assertEquals(1, hitsTable.getMatches(q2));
+        assertEquals(2, hitsTable.getHits(q2.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q2.getAddress()));
     }
 
     public void testMultiRule()
@@ -200,12 +200,12 @@ public class RuleEvaluatorTest
         RequestInfo q2 = request("192.168.1.1", "zyzyzz.netia.pl", "User-Agent", "Google Chrome 32");
 
         assertEquals("reject", eval.action(q1, r1, r2));
-        assertEquals(1, hitsTable.getHits(q1));
-        assertEquals(1, hitsTable.getMatches(q1));
-        assertEquals(2l, hitsTable.getLastMatchingRuleId(q1));
+        assertEquals(1, hitsTable.getHits(q1.getAddress()));
+        assertEquals(1, hitsTable.getMatches(q1.getAddress()));
+        assertEquals(2l, hitsTable.getLastMatchingRuleId(q1.getAddress()));
 
         assertEquals("accept", eval.action(q2, r1, r2));
-        assertEquals(1, hitsTable.getHits(q2));
-        assertEquals(0, hitsTable.getMatches(q2));
+        assertEquals(1, hitsTable.getHits(q2.getAddress()));
+        assertEquals(0, hitsTable.getMatches(q2.getAddress()));
     }
 }
