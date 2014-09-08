@@ -36,7 +36,7 @@ public class ASTpredicateHits
     }
 
     /** Accept the visitor. **/
-    public Object jjtAccept(RateLimitRulesVisitor visitor, Object data)
+    public boolean jjtAccept(RateLimitRulesVisitor visitor, EvaluationContext data)
     {
         return visitor.visit(this, data);
     }

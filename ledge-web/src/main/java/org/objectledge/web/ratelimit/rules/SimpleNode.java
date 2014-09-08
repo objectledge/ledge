@@ -88,22 +88,28 @@ public class SimpleNode
     }
 
     /** Accept the visitor. **/
-    public Object jjtAccept(RateLimitRulesVisitor visitor, Object data)
+    public boolean jjtAccept(RateLimitRulesVisitor visitor, EvaluationContext data)
     {
         return visitor.visit(this, data);
     }
 
     /** Accept the visitor. **/
-    public Object childrenAccept(RateLimitRulesVisitor visitor, Object data)
+    public boolean[] childrenAccept(RateLimitRulesVisitor visitor, EvaluationContext data)
     {
         if(children != null)
         {
+            boolean[] results = new boolean[children.length];
             for(int i = 0; i < children.length; ++i)
             {
-                children[i].jjtAccept(visitor, data);
+                results[i] = children[i].jjtAccept(visitor, data);
             }
+            return results;
         }
-        return data;
+        else
+        {
+            throw new IllegalStateException("childrenAccept should not be called on"
+                + getClass().getName());
+        }
     }
 
     /*

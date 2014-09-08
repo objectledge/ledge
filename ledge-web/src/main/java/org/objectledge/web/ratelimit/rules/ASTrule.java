@@ -12,6 +12,11 @@ public class ASTrule
         super(id);
     }
 
+    public ASTrule(RateLimitRules p, int id)
+    {
+        super(p, id);
+    }
+
     public void setAction(Token token)
     {
         this.action = token.image;
@@ -23,7 +28,7 @@ public class ASTrule
     }
 
     /** Accept the visitor. **/
-    public Object jjtAccept(RateLimitRulesVisitor visitor, Object data)
+    public boolean jjtAccept(RateLimitRulesVisitor visitor, EvaluationContext data)
     {
         return visitor.visit(this, data);
     }
