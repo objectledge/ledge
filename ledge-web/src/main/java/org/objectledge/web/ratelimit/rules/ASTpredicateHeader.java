@@ -32,7 +32,7 @@ public class ASTpredicateHeader
 
     public void setValue(Token t)
     {
-        value = t.image;
+        value = t.image.substring(1, t.image.length() - 1); // strip quotes
     }
     
     public String getValue()

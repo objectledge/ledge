@@ -2,7 +2,6 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 package org.objectledge.web.ratelimit.rules;
 
-
 public class ASTpredicateHost
     extends SimpleNode
 {
@@ -21,7 +20,7 @@ public class ASTpredicateHost
 
     public void setName(Token t)
     {
-        name = t.image;
+        name = t.image.substring(1, t.image.length() - 1); // strip quotes
     }
 
     public String getName()
