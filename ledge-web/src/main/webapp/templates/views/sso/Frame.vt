@@ -18,10 +18,20 @@ $viewEnclosureTool.top()##
                             xhrFields : {
                                 withCredentials: true
                             },
+                            beforeSend : function(xhr) {
+                                var identity = window.sessionStorage.getItem("identity");
+                                if(identity) {
+                                    xhr.setRequestHeader("X-Identity", identity);
+                                }
+                            }
                             data : jQuery.extend({
                                 origin : origin.replace(/https?:\/\//,"")
                             }, params)
-                        }).done(function(response, textStatus) {
+                        }).done(function(response, textStatus, xhr) {
+                            var identity = xhr.getResponseHeader("X-Identity");
+                            if(identity) {
+                                window.sessionStorage.setItem("identity", identity);
+                            }
                             source.postMessage(JSON.stringify({
                                 action : action,
                                 status : textStatus,

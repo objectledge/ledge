@@ -13,6 +13,7 @@ import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.BlockedReason;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.UserUnknownException;
+import org.objectledge.authentication.identity.IdentityStore;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
@@ -42,13 +43,16 @@ public class Login
 
     private final CrossOriginRequestValidator cors;
 
+    private final IdentityStore identityStore;
+
     public Login(UserManager userManager, SingleSignOnService singleSignOnService,
-        CrossOriginRequestValidator cors, Context context, Logger log)
+        CrossOriginRequestValidator cors, IdentityStore identityStore, Context context, Logger log)
     {
         super(context, log);
         this.userManager = userManager;
         this.singleSignOnService = singleSignOnService;
         this.cors = cors;
+        this.identityStore = identityStore;
         this.log = log;
     }
 
@@ -67,6 +71,7 @@ public class Login
 
         String status = "success";
         String ticket = null;
+        String identity = null;
         HttpSession session = httpRequest.getSession(false);
         String sessionId = session != null ? session.getId() : "N/A";
         log.debug("request from " + client + " sessionId " + sessionId);
@@ -109,6 +114,7 @@ public class Login
                                 // succeed
                                 httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY,
                                     principal);
+                                identity = identityStore.save(principal, -1);
                             }
                             else
                             {
@@ -116,7 +122,7 @@ public class Login
                                 // SingleSignOnService
                                 status = "invalid_request";
                             }
-                        }                     
+                        }
                     }
                     else
                     {
@@ -150,6 +156,9 @@ public class Login
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("status", status);
         jsonGenerator.writeStringField("ticket", ticket);
+        if(identity != null) {
+            httpContext.getResponse().addHeader("X-Identity", identity);
+        }
         jsonGenerator.writeEndObject();
     }
 
