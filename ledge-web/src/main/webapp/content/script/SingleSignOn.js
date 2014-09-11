@@ -22,11 +22,7 @@ function SSO(baseUrl) {
 SSO.prototype.migrateSession = function(callback) {
 	$.ajax({
 		url : this.ticketUrl,
-		beforeSend: function(xhr){
-		    xhr.withCredentials = true;
-		},
-		type : "POST",
-		dataType : "json",
+		dataType : "jsonp",
 		success : function(data) {
 			if (data && data.status && data.status == "success") {
 				document.cookie = "org.objectledge.web.sso.ticket=" + data.ticket + '; path=/';
