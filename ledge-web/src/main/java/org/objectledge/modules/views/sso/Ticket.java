@@ -105,9 +105,9 @@ public class Ticket
         Principal principal = principal(authContext, httpRequest);
         try
         {
-            uid = userManager.getLogin(principal);
             if(principal != null)
             {
+                uid = userManager.getLogin(principal);
                 if(targetDomain != null)
                 {
                     if(singleSignOnService.checkStatus(principal, targetDomain) == SingleSignOnService.LoginStatus.LOGGED_IN)
