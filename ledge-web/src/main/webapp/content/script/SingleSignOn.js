@@ -23,7 +23,7 @@ function SSO(baseUrl) {
     this.invoke = function(message, callback) {
         deferred.done(function(contentWindow) {
             var handler = function(event) {
-                var data = JSON.parse(event.originalEvent.data);
+                var data = JSON.parse(event.data);
                 if(data.status === "success") {
                     callback(data.response);
                 } else {
@@ -31,9 +31,9 @@ function SSO(baseUrl) {
                         status : "internal_error"
                     });
                 }
-                $(window).unbind("message", handler);
+                window.removeEventListener("message", handler);
             };
-            $(window).bind("message", handler);
+            window.addEventListener("message", handler);
             contentWindow.postMessage(JSON.stringify(message), baseUrl); 
         });
     };
