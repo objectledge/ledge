@@ -42,7 +42,7 @@ public class TransientIdentityStore
             {
                 token = newToken();
             }
-            while(!association.containsKey(token));
+            while(association.containsKey(token));
         }
         int validity = validityTime;
         if(validity == 0)
