@@ -23,7 +23,7 @@ $viewEnclosureTool.top()##
                                 if(identity) {
                                     xhr.setRequestHeader("X-Identity", identity);
                                 }
-                            }
+                            },
                             data : jQuery.extend({
                                 origin : origin.replace(/https?:\/\//,"")
                             }, params)
