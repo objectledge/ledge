@@ -5,38 +5,8 @@
  *            base URL of the SSO realm controller.
  */
 function SSO(baseUrl) {
-    var iframe = document.createElement("iframe");
-    iframe.src = baseUrl + "/view/sso.Frame";
-    var deferred = $.Deferred();
-    
-    if (iframe.attachEvent){
-        iframe.attachEvent("onload", function() {
-            deferred.resolve(iframe.contentWindow);
-        });
-    } else {
-        iframe.onload = function() {
-            deferred.resolve(iframe.contentWindow);
-        };
-    }
-    document.body.appendChild(iframe);
-    
-    this.invoke = function(message, callback) {
-        deferred.done(function(contentWindow) {
-            var handler = function(event) {
-                var data = JSON.parse(event.data);
-                if(data.status === "success") {
-                    callback(data.response);
-                } else {
-                    callback({
-                        status : "internal_error"
-                    });
-                }
-                window.removeEventListener("message", handler);
-            };
-            window.addEventListener("message", handler);
-            contentWindow.postMessage(JSON.stringify(message), baseUrl); 
-        });
-    };
+	this.ticketUrl = baseUrl + "/view/sso.Ticket";
+	this.loginUrl = baseUrl + "/view/sso.Login";
 }
 
 /**
@@ -50,17 +20,31 @@ function SSO(baseUrl) {
  *            'success', 'not_logged_id', 'invalid_request', 'internal_error'
  */
 SSO.prototype.migrateSession = function(callback) {
-    this.invoke({
-        action : "Ticket"
-    }, function(response) {
-        if(response.status === "success") {
-            document.cookie = "org.objectledge.web.sso.ticket=" + response.ticket + '; path=/';
-            callback(response.status, response.uid);
-        } else {
-            callback(response.status);
-        }
-    });
-}
+	$.ajax({
+		url : this.ticketUrl,
+		beforeSend: function(xhr){
+		    xhr.withCredentials = true;
+		},
+		type : "POST",
+		dataType : "json",
+		success : function(data) {
+			if (data && data.status && data.status == "success") {
+				document.cookie = "org.objectledge.web.sso.ticket=" + data.ticket + '; path=/';
+				callback(data.status, data.uid);
+				return;
+			} else {
+				if (data && data.status) {
+					callback(data.status);
+					return;
+				}
+			}
+			callback("internal_error");
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			callback("internal_error");
+		}
+	});
+};
 
 /**
  * Attempt a login into SSO realm.
@@ -73,17 +57,33 @@ SSO.prototype.migrateSession = function(callback) {
  *            'success', 'invalid_credentials', 'invalid_request',
  *            'internal_error'
  */
-SSO.prototype.login = function(login, password, callback) {
-    this.invoke({
-        action : "Login",
-        login : login,
-        password : password
-    }, function(response) {
-        if(response.status === "success") {
-            document.cookie = "org.objectledge.web.sso.ticket=" + response.ticket + '; path=/';
-            callback(response.status, login);
-        } else {
-            callback(response.status);
-        }
-    });    
-}
+SSO.prototype.login = function(vlogin, vpassword, callback) {
+	$.ajax({
+		url : this.loginUrl,
+		beforeSend: function(xhr){
+            xhr.withCredentials = true;
+        },
+		type : "POST",
+        dataType : "json",
+		data : {
+			login : vlogin,
+			password : vpassword
+		},
+		success : function(data) {
+			if (data && data.status && data.status == "success") {
+				document.cookie = "org.objectledge.web.sso.ticket=" + data.ticket + '; path=/';
+				callback(data.status, vlogin);
+				return;
+			} else {
+				if (data && data.status) {
+					callback(data.status);
+					return;
+				}
+			}
+			callback("internal_error");
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			callback("internal_error");
+		}
+	});
+};
