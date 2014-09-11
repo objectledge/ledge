@@ -60,11 +60,7 @@ SSO.prototype.migrateSession = function(callback) {
 SSO.prototype.login = function(vlogin, vpassword, callback) {
 	$.ajax({
 		url : this.loginUrl,
-		beforeSend: function(xhr){
-            xhr.withCredentials = true;
-        },
-		type : "POST",
-        dataType : "json",
+		dataType : "jsonp",
 		data : {
 			login : vlogin,
 			password : vpassword
