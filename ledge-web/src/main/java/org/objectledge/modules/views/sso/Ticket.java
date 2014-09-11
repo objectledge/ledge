@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.UserManager;
-import org.objectledge.authentication.identity.IdentityStore;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
@@ -69,17 +68,13 @@ public class Ticket
 
     private final CrossOriginRequestValidator cors;
 
-    private final IdentityStore identityStore;
-
     public Ticket(Context context, SingleSignOnService singleSignOnService,
-        UserManager userManager, CrossOriginRequestValidator cors, IdentityStore identityStore,
-        Logger log)
+        UserManager userManager, CrossOriginRequestValidator cors, Logger log)
     {
         super(context, log);
         this.singleSignOnService = singleSignOnService;
         this.userManager = userManager;
         this.cors = cors;
-        this.identityStore = identityStore;
         this.log = log;
     }
 
@@ -102,11 +97,11 @@ public class Ticket
         HttpSession session = httpRequest.getSession(false);
         String sessionId = session != null ? session.getId() : "N/A";
         log.debug("request from " + client + " sessionId " + sessionId);
-        Principal principal = principal(authContext, httpRequest);
+        Principal principal = authContext.getUserPrincipal();
         try
         {
             uid = userManager.getLogin(principal);
-            if(principal != null)
+            if(authContext.isUserAuthenticated())
             {
                 if(targetDomain != null)
                 {
@@ -165,10 +160,10 @@ public class Ticket
         }
         jsonGenerator.writeEndObject();
     }
-
+    
     @Override
     protected String getCallbackParameterName()
-    {
+    {        
         return "callback";
     }
 
@@ -184,20 +179,6 @@ public class Ticket
     {
         super.buildResponseHeaders(httpContext);
         httpContext.getResponse().addHeader("Access-Control-Allow-Credentials", "true");
-    }
-
-    private Principal principal(AuthenticationContext authContext, HttpServletRequest request)
-    {
-        if(authContext.isUserAuthenticated())
-        {
-            return authContext.getUserPrincipal();
-        }
-        String identity = request.getHeader("X-Identity");
-        if(identity != null)
-        {
-            return identityStore.load(identity);
-        }
-        return null;
     }
 
     private String refererDomain(HttpServletRequest request)

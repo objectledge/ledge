@@ -33,7 +33,6 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
-import org.objectledge.authentication.identity.IdentityStore;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
@@ -49,8 +48,6 @@ import org.objectledge.web.HttpContext;
 public class Logout
     extends BaseAuthenticationAction
 {
-    private IdentityStore identityStore;
-
     /**
      * Action constructor.
      * 
@@ -58,11 +55,9 @@ public class Logout
      * @param userManager the user manager.
      * @param singleSignOnService the SSO service.
      */
-    public Logout(Logger logger, UserManager userManager, SingleSignOnService singleSignOnService,
-        IdentityStore identityStore)
+    public Logout(Logger logger, UserManager userManager, SingleSignOnService singleSignOnService)
     {
         super(userManager, singleSignOnService, logger);
-        this.identityStore = identityStore;
     }
 
     /**
@@ -85,7 +80,6 @@ public class Logout
             {
                 Principal principal = authenticationContext.getUserPrincipal();
                 singleSignOnService.logOut(principal, httpContext.getRequest().getServerName());
-                identityStore.remove(principal);
             }
             authenticationContext.setUserPrincipal(anonymous, false);
         }
