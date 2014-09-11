@@ -8,8 +8,6 @@ $viewEnclosureTool.top()##
                 $(window).bind("message", function(event) {
                     event = event.originalEvent;
                     var data = JSON.parse(event.data);
-                    var source = event.source;
-                    var origin = event.origin;
             
                     function invoke(action, params) {
                         jQuery.ajax({
@@ -19,20 +17,20 @@ $viewEnclosureTool.top()##
                                 withCredentials: true
                             },
                             data : jQuery.extend({
-                                origin : origin.replace(/https?:\/\//,"")
+                                origin : event.origin.replace(/https?:\/\//,"")
                             }, params)
                         }).done(function(response, textStatus) {
-                            source.postMessage(JSON.stringify({
+                            event.source.postMessage(JSON.stringify({
                                 action : action,
                                 status : textStatus,
                                 response : response
-                            }), origin);
+                            }), event.origin);
                         }).fail(function(jqXHR, textStatus, errorThrown) {
-                            source.postMessage(JSON.stringify({
+                            event.source.postMessage(JSON.stringify({
                                 action : action,
                                 status : textStatus,
                                 error : errorThrown
-                            }), origin);
+                            }), event.origin);
                         });
                     }
                     
