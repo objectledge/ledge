@@ -80,4 +80,27 @@ public class RuleFactory
             throw new IllegalStateException("parser pool operation was interrupted", e);
         }
     }
+    
+    public void validateRule(String text)
+        throws ParseException
+    {
+        try
+        {
+            RateLimitRules parser = null;
+            try
+            {
+                parser = borrowParser();
+                parser.ReInit(new StringReader(text));
+                parser.rule();
+            }
+            finally
+            {
+                returnParser(parser);
+            }
+        }
+        catch(InterruptedException e)
+        {
+            throw new IllegalStateException("parser pool operation was interrupted", e);
+        }
+    }
 }
