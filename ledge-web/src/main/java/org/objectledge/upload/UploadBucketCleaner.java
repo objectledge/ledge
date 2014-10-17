@@ -54,7 +54,11 @@ public class UploadBucketCleaner
     {
         try
         {
-            fileSystem.deleteRecursive(workAreaPath + "/" + bucket.getId());
+            String path = workAreaPath + "/" + bucket.getId();
+            if(fileSystem.exists(path))
+            {
+                fileSystem.deleteRecursive(path);
+            }
         }
         catch(IOException e)
         {
