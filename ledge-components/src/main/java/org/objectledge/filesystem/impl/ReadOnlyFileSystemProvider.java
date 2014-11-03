@@ -54,10 +54,14 @@ public abstract class ReadOnlyFileSystemProvider
         }
         else if(item.isDirectory())
         {
-            addDirectoryEntry(relativePath);
-            for(File child : item.listFiles())
-            {
-                analyzeDirectory(base, child);
+            File[] files = item.listFiles();
+            if(files != null)
+            {                
+                addDirectoryEntry(relativePath);
+                for(File child : files)
+                {
+                    analyzeDirectory(base, child);
+                }
             }
         }
     }

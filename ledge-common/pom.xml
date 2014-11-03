@@ -6,7 +6,7 @@
   <groupId>org.objectledge</groupId>
   <artifactId>ledge-common</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.20.1</version>
+  <version>1.0.20.2</version>
   <name>ObjectLedge application development toolkit</name>
   <inceptionYear>2003</inceptionYear>
   <description>
@@ -535,7 +535,7 @@
       <plugin>
         <groupId>org.codehaus.sonar</groupId>
         <artifactId>sonar-maven3-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.7.4</version>
       </plugin>
     </plugins>
   </build>

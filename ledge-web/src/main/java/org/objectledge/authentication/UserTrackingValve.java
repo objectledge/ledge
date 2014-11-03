@@ -37,13 +37,14 @@ import java.util.Set;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
 
 /**
- * A valve that 
+ * A valve that
  * 
  * @version $Id: UserTrackingValve.java,v 1.1 2005-07-26 09:25:47 rafal Exp $
  * @author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
@@ -51,8 +52,15 @@ import org.objectledge.web.HttpContext;
 public class UserTrackingValve
     implements Valve
 {
-    private final Map<Principal,PunchCard> cardRack = new HashMap<Principal,PunchCard>();
-    
+    private final Map<Principal, PunchCard> cardRack = new HashMap<Principal, PunchCard>();
+
+    private Logger log;
+
+    public UserTrackingValve(Logger log)
+    {
+        this.log = log;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -68,10 +76,11 @@ public class UserTrackingValve
                 PunchCard card = cardRack.get(principal);
                 if(card == null)
                 {
-                    card =  new PunchCard(principal);
+                    card = new PunchCard(principal);
                     cardRack.put(principal, card);
                     HttpContext httpContext = HttpContext.getHttpContext(context);
                     httpContext.setSessionAttribute(PunchCard.class.getName(), card);
+                    log.info("checked in user " + principalInfo(principal));
                 }
                 else
                 {
@@ -79,6 +88,12 @@ public class UserTrackingValve
                 }
             }
         }
+    }
+
+    private String principalInfo(Principal principal)
+    {
+        return principal.getName() + " (" + principal.getClass().getName() + "@"
+            + Integer.toHexString(principal.hashCode()) + ")";
     }
 
     /**
@@ -93,7 +108,7 @@ public class UserTrackingValve
             return new HashSet<Principal>(cardRack.keySet());
         }
     }
-    
+
     /**
      * Returns the timestamp of user's most recent click.
      * 
@@ -115,41 +130,52 @@ public class UserTrackingValve
             }
         }
     }
-    
+
     void checkOut(PunchCard card)
     {
         synchronized(cardRack)
         {
-            cardRack.remove(card.getPrincipal());
-        }        
+            if(cardRack.remove(card.getPrincipal()) != null)
+            {
+                log.info("checked out " + principalInfo(card.getPrincipal()));
+            }
+            else
+            {
+                log.error("failed to check out " + principalInfo(card.getPrincipal()));
+            }
+        }
     }
-    
+
     /**
      * A user's puch card.
      */
-    private class PunchCard 
+    private class PunchCard
         implements HttpSessionBindingListener
     {
         private final Principal principal;
-        
+
         private Date lastClickTime;
 
-        public PunchCard(Principal principal) {
+        public PunchCard(Principal principal)
+        {
             this.principal = principal;
             this.lastClickTime = new Date();
         }
-        
-        public Principal getPrincipal() {
+
+        public Principal getPrincipal()
+        {
             return principal;
         }
-        
-        public void touch() {
+
+        public void touch()
+        {
             lastClickTime = new Date();
         }
-        
-        public Date getLastClickTime() {
+
+        public Date getLastClickTime()
+        {
             return lastClickTime;
-        }                
+        }
 
         /**
          * {@inheritDoc}
@@ -167,6 +193,10 @@ public class UserTrackingValve
             if(event.getValue() instanceof PunchCard)
             {
                 checkOut((PunchCard)event.getValue());
+            }
+            else
+            {
+                log.error("unexpected HttpSessionBindingEvent for " + event.getValue());
             }
         }
     }

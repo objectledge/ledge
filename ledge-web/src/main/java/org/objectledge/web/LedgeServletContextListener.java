@@ -31,6 +31,8 @@ public class LedgeServletContextListener
     public static final String ROOT_PARAM = "root";
 
     public static final String SERVLET_TEMPDIR_ATTR = "javax.servlet.context.tempdir";
+    
+    public static final String LEDGE_FS_ROOT_PROPERTY = "ledge.fs.root";
 
     public static final String PLATFORM_TEMPDIR_PROPERTY = "java.io.tempdir";
 
@@ -136,7 +138,11 @@ public class LedgeServletContextListener
      */
     private static FileSystem createFileSystem(ServletContext context, ClassLoader classLoader)
     {
-        String fsRoot = context.getInitParameter(ROOT_PARAM);
+        String fsRoot = System.getProperty(LEDGE_FS_ROOT_PROPERTY);
+        if(fsRoot == null)
+        {
+            fsRoot = context.getInitParameter(ROOT_PARAM);
+        }
         if(fsRoot == null)
         {
             fsRoot = ((File)context.getAttribute(SERVLET_TEMPDIR_ATTR)).getAbsolutePath();
