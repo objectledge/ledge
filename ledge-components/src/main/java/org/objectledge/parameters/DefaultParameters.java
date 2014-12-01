@@ -38,12 +38,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectledge.database.DatabaseUtils;
 
@@ -102,7 +102,7 @@ public class DefaultParameters implements Parameters
      */
     protected void setupMap()
     {
-        map = new HashMap<String, String[]>();
+        map = new ConcurrentHashMap<String, String[]>();
     }
     
     /**
