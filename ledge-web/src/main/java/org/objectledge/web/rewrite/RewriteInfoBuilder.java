@@ -396,6 +396,7 @@ public class RewriteInfoBuilder
         }
 
         @Override
+        @SuppressWarnings("rawtypes")
         public Map getParameterMap()
         {
             return parameterMap;
