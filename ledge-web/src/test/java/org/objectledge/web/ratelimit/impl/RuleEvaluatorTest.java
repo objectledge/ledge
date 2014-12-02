@@ -28,7 +28,7 @@ public class RuleEvaluatorTest
         {
             headers.put(headersTab[2 * i], headersTab[2 * i + 1]);
         }
-        return new RequestInfo(address, host, headers);
+        return new RequestInfo(address, host, headers, null);
     }
 
     public void testEqIP()
