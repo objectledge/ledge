@@ -7,9 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class HitTable
+public abstract class HitTable
 {
-    private Map<String, Hit> table = new ConcurrentHashMap<>();
+    protected Map<String, Hit> table = new ConcurrentHashMap<>();
 
     public int getHits(InetAddress adddress)
     {
@@ -67,7 +67,7 @@ public class HitTable
         hit.incMatches(rule.getRuleId());
     }
 
-    private static class Hit
+    public static class Hit
     {
         private final AtomicInteger hits;
 

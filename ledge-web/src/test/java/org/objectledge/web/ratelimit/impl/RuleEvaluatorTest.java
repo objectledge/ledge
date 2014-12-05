@@ -13,7 +13,9 @@ import org.objectledge.web.ratelimit.rules.ParseException;
 public class RuleEvaluatorTest
     extends TestCase
 {
-    private HitTable hitsTable = new HitTable();
+    private HitTable hitsTable = new HitTable()
+        {
+        };
 
     private RuleEvaluator eval = new RuleEvaluator(hitsTable, "accept");
 
