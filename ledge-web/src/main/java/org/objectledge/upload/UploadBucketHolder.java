@@ -52,7 +52,7 @@ class UploadBucketHolder
     {
         for(UploadBucket bucket : buckets)
         {
-            fileUpload.releaseBucket(bucket);
+            fileUpload.releaseBucket(bucket, "at session expiration");
         }
     }
 }

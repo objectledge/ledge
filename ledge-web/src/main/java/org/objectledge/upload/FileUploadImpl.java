@@ -180,17 +180,20 @@ public class FileUploadImpl
             while(allBuckets.containsKey(id));
         }
         UploadBucket bucket = new UploadBucket(fileSystem, workingDirectory, id, config, minSeq);
+        logger.debug("created bucket " + id);
         allBuckets.put(id, bucket);
         getHolder().addBucket(bucket);
         return bucket;
     }
 
     @Override
-    public void releaseBucket(UploadBucket bucket)
+    public void releaseBucket(UploadBucket bucket, String logMessage)
     {
         bucketCleaner.schedule(bucket);
         allBuckets.remove(bucket.getId());
         getHolder().removeBucket(bucket);
+        logMessage = logMessage != null ? (" " + logMessage) : "";
+        logger.debug("released bucket " + bucket.getId() + logMessage);
     }
 
     /**
