@@ -322,10 +322,10 @@ public class RequestTrackingValve
         return buff.toString();
     }
     
-    void sessionExpired(SessionMarker marker)
+    void sessionExpired(SessionMarker marker, String sessionId)
     {
         concurrentSessions--;
-        log.info("session S"+marker.getId()+" expired");
+        log.info("session S" + marker.getId() + " " + sessionId + " expired");
     }
     
     /**
@@ -374,7 +374,7 @@ public class RequestTrackingValve
                 RequestTrackingValve valve = valveRef.get();
                 if(valve != null)
                 {
-                    valve.sessionExpired(this);
+                    valve.sessionExpired(this, event.getSession().getId());
                 }
             }
         }
