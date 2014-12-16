@@ -101,6 +101,8 @@ public class ActiveOperationsTest
                                 return null;
                             }
                         }));
+                    oneOf(servletRequest).getServletPath();
+                    will(returnValue("/"));
                     oneOf(servletRequest).getPathInfo();
                     will(returnValue(null));
 
