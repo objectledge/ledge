@@ -98,7 +98,7 @@ import org.picocontainer.PicoContainer;
  * &lt;Context path="/app"
  *       docBase="/home/app/production/app.war"
  *       reloadable="false"&gt;
- *   &lt;Parameter name="ledge.root" 
+ *   &lt;Parameter name="root" 
  *       value="/home/app/production/work" 
  *       override="false"/&gt;
  * &lt;/Context&gt;
