@@ -28,7 +28,12 @@
 
   <servlet-mapping>
     <servlet-name>ledge</servlet-name>
-    <url-pattern>/ledge/*</url-pattern>
+    <url-pattern>/view/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ledge</servlet-name>
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

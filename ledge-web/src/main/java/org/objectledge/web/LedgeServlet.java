@@ -80,7 +80,11 @@ import org.picocontainer.PicoContainer;
  *   &lt;/servlet&gt;
  *   &lt;servlet-mapping&gt;
  *     &lt;servlet-name&gt;ledge&lt;/servlet-name&gt;
- *     &lt;url-pattern&gt;/ledge/*&lt;/url-pattern&gt;
+ *     &lt;url-pattern&gt;/view/*&lt;/url-pattern&gt;
+ *   &lt;/servlet-mapping&gt;
+ *   &lt;servlet-mapping&gt;
+ *     &lt;servlet-name&gt;ledge&lt;/servlet-name&gt;
+ *     &lt;url-pattern&gt;/&lt;/url-pattern&gt;
  *   &lt;/servlet-mapping&gt;
  * &lt;/web-app&gt;
  * </pre>

@@ -63,7 +63,7 @@ public class LedgeServletTest extends TestCase
     {
         ServletRunner runner = getRunner("servlet");
         ServletUnitClient client = runner.newClient();
-        WebRequest request = new GetMethodWebRequest("http://localhost/ledge");
+        WebRequest request = new GetMethodWebRequest("http://localhost/");
         WebResponse response = client.getResponse(request);
         assertNotNull(response);
         assertEquals(200, response.getResponseCode());
