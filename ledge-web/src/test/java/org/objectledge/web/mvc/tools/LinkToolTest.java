@@ -85,9 +85,9 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getParameterNames").
             will(returnValue((new Vector<String>()).elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
-        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("/view/Default"));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("/Default"));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
-        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/ledge"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/view"));
         mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getServerPort").will(returnValue(80));
         mockHttpServletRequest.stubs().method("isSecure").will(returnValue(false));
@@ -111,23 +111,23 @@ public class LinkToolTest extends LedgeTestCase
         assertNotNull(linkTool);
         linkToolFactory.recycleTool(linkTool);
         assertEquals(linkToolFactory.getKey(), "link");
-        assertEquals(linkTool.toString(), "/test/ledge/view/Default");
+        assertEquals(linkTool.toString(), "/test/view/Default");
         linkTool = linkTool.unsetView();
-        assertEquals(linkTool.action("Action").toString(), "/test/ledge?action=Action");
+        assertEquals(linkTool.action("Action").toString(), "/test?action=Action");
         assertEquals(linkTool.action("Action").unsetAction().toString(), 
-                    "/test/ledge");
-        assertEquals(linkTool.set("foo", "bar").toString(), "/test/ledge?foo=bar");
-        assertEquals(linkTool.set("foo", 1).toString(), "/test/ledge?foo=1");
-        assertEquals(linkTool.set("foo", 1L).toString(), "/test/ledge?foo=1");
-        assertEquals(linkTool.set("foo", 1.6F).toString(), "/test/ledge?foo=1.6");
+                    "/test");
+        assertEquals(linkTool.set("foo", "bar").toString(), "/test?foo=bar");
+        assertEquals(linkTool.set("foo", 1).toString(), "/test?foo=1");
+        assertEquals(linkTool.set("foo", 1L).toString(), "/test?foo=1");
+        assertEquals(linkTool.set("foo", 1.6F).toString(), "/test?foo=1.6");
         Parameters params = new DefaultParameters();
         params.add("foo", "bar");
         params.add("bar", "foo");
-        assertEquals(linkTool.set(params).toString(), "/test/ledge/bar/foo?foo=bar");
+        assertEquals(linkTool.set(params).toString(), "/test/bar/foo?foo=bar");
         assertEquals(linkTool.action("Action").set(params).toString(),
-             "/test/ledge/bar/foo?action=Action&foo=bar");
+             "/test/bar/foo?action=Action&foo=bar");
         assertEquals(linkTool.view("Default").set(params).toString(),
-            "/test/ledge/view/Default/bar/foo?foo=bar");
+            "/test/view/Default/bar/foo?foo=bar");
         params.add("action", "foo");
         try
         {
@@ -151,43 +151,43 @@ public class LinkToolTest extends LedgeTestCase
         }
         params.remove("view");
         
-        assertEquals(linkTool.set(params).toString(), "/test/ledge/bar/foo?foo=bar");
-        assertEquals(linkTool.set("foo", true).toString(), "/test/ledge?foo=true");
-        assertEquals(linkTool.set("bar", "foo").toString(), "/test/ledge/bar/foo");
-        assertEquals(linkTool.absolute().toString(), "http://www.objectledge.org/test/ledge");
-        assertEquals(linkTool.http().toString(), "http://www.objectledge.org/test/ledge");
-        assertEquals(linkTool.http(8080).toString(), "http://www.objectledge.org:8080/test/ledge");
-        assertEquals(linkTool.https().toString(), "https://www.objectledge.org/test/ledge");
+        assertEquals(linkTool.set(params).toString(), "/test/bar/foo?foo=bar");
+        assertEquals(linkTool.set("foo", true).toString(), "/test?foo=true");
+        assertEquals(linkTool.set("bar", "foo").toString(), "/test/bar/foo");
+        assertEquals(linkTool.absolute().toString(), "http://www.objectledge.org/test");
+        assertEquals(linkTool.http().toString(), "http://www.objectledge.org/test");
+        assertEquals(linkTool.http(8080).toString(), "http://www.objectledge.org:8080/test");
+        assertEquals(linkTool.https().toString(), "https://www.objectledge.org/test");
         assertEquals(linkTool.https().absolute().toString(), 
-                     "https://www.objectledge.org/test/ledge");
+                     "https://www.objectledge.org/test");
         assertEquals(linkTool.https(8090).toString(),
-                     "https://www.objectledge.org:8090/test/ledge");
-        assertEquals(linkTool.sessionless().toString(), "/test/ledge");
+                     "https://www.objectledge.org:8090/test");
+        assertEquals(linkTool.sessionless().toString(), "/test");
         assertEquals(linkTool.content("foo").toString(), "/test/content/foo");
         assertEquals(linkTool.content("").toString(), "/test/content");
         assertEquals(linkTool.content("/foo").toString(), "/test/content/foo");
-        assertEquals(linkTool.fragment("foo").toString(), "/test/ledge#foo");
+        assertEquals(linkTool.fragment("foo").toString(), "/test#foo");
         assertEquals(linkTool.fragment("foo").fragment(),"foo");
-        assertEquals(linkTool.self().toString(),"/test/ledge");
+        assertEquals(linkTool.self().toString(),"/test");
         assertEquals(linkTool.set("foo","bar").set("bar","foo").self().toString(),
-                     "/test/ledge/bar/foo");
+                     "/test/bar/foo");
 
         // test add methods
 
-        assertEquals(linkTool.add("foo", "bar").toString(), "/test/ledge?foo=bar");
+        assertEquals(linkTool.add("foo", "bar").toString(), "/test?foo=bar");
         assertEquals(linkTool.add("foo","bar").add("foo","foo").toString(),
-			"/test/ledge?foo=bar&foo=foo");
-        assertEquals(linkTool.add("foo", 1).toString(), "/test/ledge?foo=1");
-        assertEquals(linkTool.add("foo", 1L).toString(), "/test/ledge?foo=1");
-        assertEquals(linkTool.add("foo", 1.6F).toString(), "/test/ledge?foo=1.6");
+			"/test?foo=bar&foo=foo");
+        assertEquals(linkTool.add("foo", 1).toString(), "/test?foo=1");
+        assertEquals(linkTool.add("foo", 1L).toString(), "/test?foo=1");
+        assertEquals(linkTool.add("foo", 1.6F).toString(), "/test?foo=1.6");
         params = new DefaultParameters();
         params.add("foo", "bar");
         params.add("bar", "foo");
-        assertEquals(linkTool.add(params).toString(), "/test/ledge/bar/foo?foo=bar");
+        assertEquals(linkTool.add(params).toString(), "/test/bar/foo?foo=bar");
         assertEquals(linkTool.action("Action").add(params).toString(),
-                     "/test/ledge/bar/foo?action=Action&foo=bar");
+                     "/test/bar/foo?action=Action&foo=bar");
         assertEquals(linkTool.view("Default").add(params).toString(),
-                     "/test/ledge/view/Default/bar/foo?foo=bar");
+                     "/test/view/Default/bar/foo?foo=bar");
         params.add("action", "foo");
         try
         {
@@ -210,12 +210,12 @@ public class LinkToolTest extends LedgeTestCase
             //ok!
         }
         params.remove("view");
-        assertEquals(linkTool.add(params).toString(), "/test/ledge/bar/foo?foo=bar");
-        assertEquals(linkTool.add("foo", true).toString(), "/test/ledge?foo=true");
-        assertEquals(linkTool.add("bar", "foo").toString(), "/test/ledge/bar/foo");
+        assertEquals(linkTool.add(params).toString(), "/test/bar/foo?foo=bar");
+        assertEquals(linkTool.add("foo", true).toString(), "/test?foo=true");
+        assertEquals(linkTool.add("bar", "foo").toString(), "/test/bar/foo");
                      
         assertEquals(linkTool.add("bar","foo").unset("bar").toString(),
-                     "/test/ledge");
+                     "/test");
         try
         {
             linkTool.unset("action");
@@ -254,7 +254,7 @@ public class LinkToolTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getContextPath").will(returnValue("/test"));
-        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/ledge"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue(""));
         mockHttpServletRequest.stubs().method("getRequestURI").will(returnValue("/foo#bar"));
         mockHttpServletRequest.stubs().method("getServerName").
             will(returnValue("www.objectledge.org"));
@@ -276,11 +276,11 @@ public class LinkToolTest extends LedgeTestCase
 
         linkTool = (LinkTool)linkToolFactory.getTool();
         assertNotNull(linkTool);
-        assertEquals(linkTool.toString(), "/test/ledge");
-        assertEquals(linkTool.absolute().toString(), "https://www.objectledge.org/test/ledge");
-        assertEquals(linkTool.self().toString(),"/test/ledge#bar");
+        assertEquals(linkTool.toString(), "/test");
+        assertEquals(linkTool.absolute().toString(), "https://www.objectledge.org/test");
+        assertEquals(linkTool.self().toString(),"/test#bar");
         assertEquals(linkTool.set("foo","bar").set("bar","foo").toString(),
-                    "/test/ledge?bar=foo&foo=bar");
+                    "/test?bar=foo&foo=bar");
 
         //referer test
         Mock mockEnumeration = mock(Enumeration.class);
@@ -288,21 +288,21 @@ public class LinkToolTest extends LedgeTestCase
         mockEnumeration.stubs().method("hasMoreElements").will(returnValue(true));
         mockHttpServletRequest.stubs().method("getHeaders").will(returnValue(enumeration));
         mockEnumeration.stubs().method("nextElement").will(returnValue("https://www.objectledge.org/index.html"));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1"));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=&rowId=44914871&tableId=1"));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId=1");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList"));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login"));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId="));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId="));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?rowId=44914871&tableId=");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?personId=4&rowId=3&rowId=&tableId="));
-        assertEquals(linkTool.getReferer().toString(), "/test/ledge/view/dean.studies.SubjectList?personId=4&rowId=3&rowId=&tableId=");
-        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/ledge/view/dean.studies.SubjectList?action=dean.studies.subjects.SubjectEditAction&Subject.first=0&Subject.maxSize=20&embed=SubjectEdit&idprzedmiotu=1&idzakladu=&nazwaprzedmiotu=&nazwiskowprowadzajacego=&nazwiskowykladowcy=&nrkatalogowy=&semestrprowadzenia="));
+        assertEquals(linkTool.getReferer().toString(), "/test");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1"));
+        assertEquals(linkTool.getReferer().toString(), "/test/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=1");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList?action=&rowId=44914871&tableId=1"));
+        assertEquals(linkTool.getReferer().toString(), "/test/view/dean.studies.SubjectList?rowId=44914871&tableId=1");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList"));
+        assertEquals(linkTool.getReferer().toString(), "/test/view/dean.studies.SubjectList");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList?action=security.Login"));
+        assertEquals(linkTool.getReferer().toString(), "/test/view/dean.studies.SubjectList?action=security.Login");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId="));
+        assertEquals(linkTool.getReferer().toString(), "/test/view/dean.studies.SubjectList?action=security.Login&rowId=44914871&tableId=");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList?rowId=44914871&tableId="));
+        assertEquals(linkTool.getReferer().toString(), "/test/view/dean.studies.SubjectList?rowId=44914871&tableId=");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList?personId=4&rowId=3&rowId=&tableId="));
+        assertEquals(linkTool.getReferer().toString(), "/test/view/dean.studies.SubjectList?personId=4&rowId=3&rowId=&tableId=");
+        mockEnumeration.stubs().method("nextElement").will(returnValue("/test/view/dean.studies.SubjectList?action=dean.studies.subjects.SubjectEditAction&Subject.first=0&Subject.maxSize=20&embed=SubjectEdit&idprzedmiotu=1&idzakladu=&nazwaprzedmiotu=&nazwiskowprowadzajacego=&nazwiskowykladowcy=&nrkatalogowy=&semestrprowadzenia="));
     }
 }
