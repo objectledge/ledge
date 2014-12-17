@@ -36,6 +36,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -940,7 +941,7 @@ public class PageTool
          */
         public DateFormat getHttpDateFormat()
         {
-            DateFormat df = new SimpleDateFormat(RFC_1123_DATE_FORMAT);
+            DateFormat df = new SimpleDateFormat(RFC_1123_DATE_FORMAT, Locale.US);
             df.setTimeZone(TimeZone.getTimeZone("GMT"));
             return df;
         }  

@@ -943,7 +943,8 @@ public class LinkTool
         LinkTool target = getLinkTool(this);
         if (name.equals(config.viewToken))
         {
-			throw new IllegalArgumentException("to unset the value of the view parameter, " +				"call the unsetView() method");
+			throw new IllegalArgumentException("to unset the value of the view parameter, " +
+				"call the unsetView() method");
         }
         else if (name.equals(config.actionToken))
         {
@@ -1057,7 +1058,6 @@ public class LinkTool
             }
             else
             {
-                sb.append(getServletPath());
                 appendPathInfo(sb, keys, parametersTmp);
                 appendPathInfoSuffix(sb);
             }
@@ -1164,32 +1164,13 @@ public class LinkTool
      */
     protected String getContextPath()
     {
-        if(config.rewrite || !includeContext)
+        if(!includeContext)
         {
-            // rely on mod rewrite to put context path into URL
             return "";
         }
         else
         {
             return httpContext.getRequest().getContextPath();
-        }
-    }
-
-    /**
-     * Allows subclasses to override servlet path name rendered in {@link #toString()} method.
-     * 
-     * @return the overriden serlvet path
-     */
-    protected String getServletPath()
-    {
-        if(config.rewrite)
-        {
-            // rely on mod rewrite to put servlet path into URL
-            return "";
-        }
-        else
-        {
-            return httpContext.getRequest().getServletPath();
         }
     }
 
@@ -1456,9 +1437,6 @@ public class LinkTool
     
         /** external content switch */
         private boolean externalContent;
-        
-        /** rewrite (drop context and servlet path from URLs) switch. */
-        private boolean rewrite;
 
         /** the web configurator. */
         private WebConfigurator webConfigurator;
@@ -1523,7 +1501,6 @@ public class LinkTool
             queryStringSeparator = config.getChild("query_separator").
                 getValue(DEFAULT_QUERY_SEPARATOR);
             externalContent = config.getChild("external_content").getValueAsBoolean(false);
-            rewrite = config.getChild("rewrite").getValueAsBoolean(false);
             // TODO: remove WebConfigurator
             viewToken = webConfigurator.getViewToken();
             actionToken = webConfigurator.getActionToken();

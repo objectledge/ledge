@@ -36,8 +36,10 @@ public interface FileUpload
 
     /**
      * @param bucket
+     * @param logMessage TODO
+     * @param message optional message written to log with DEBUG verbosity.
      */
-    void releaseBucket(UploadBucket bucket);
+    void releaseBucket(UploadBucket bucket, String logMessage);
 
     /**
      * Returns active buckets owned by the current session.

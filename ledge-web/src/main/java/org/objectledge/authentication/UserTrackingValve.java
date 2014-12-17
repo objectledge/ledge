@@ -80,7 +80,8 @@ public class UserTrackingValve
                     cardRack.put(principal, card);
                     HttpContext httpContext = HttpContext.getHttpContext(context);
                     httpContext.setSessionAttribute(PunchCard.class.getName(), card);
-                    log.info("checked in user " + principalInfo(principal));
+                    log.info("checked in user " + principalInfo(principal) + " session "
+                        + httpContext.getRequest().getSession().getId());
                 }
                 else
                 {
@@ -131,17 +132,19 @@ public class UserTrackingValve
         }
     }
 
-    void checkOut(PunchCard card)
+    void checkOut(PunchCard card, String sessionId)
     {
         synchronized(cardRack)
         {
             if(cardRack.remove(card.getPrincipal()) != null)
             {
-                log.info("checked out " + principalInfo(card.getPrincipal()));
+                log.info("checked out " + principalInfo(card.getPrincipal()) + " session "
+                    + sessionId);
             }
             else
             {
-                log.error("failed to check out " + principalInfo(card.getPrincipal()));
+                log.error("failed to check out " + principalInfo(card.getPrincipal()) + " session "
+                    + sessionId);
             }
         }
     }
@@ -192,11 +195,12 @@ public class UserTrackingValve
         {
             if(event.getValue() instanceof PunchCard)
             {
-                checkOut((PunchCard)event.getValue());
+                checkOut((PunchCard)event.getValue(), event.getSession().getId());
             }
             else
             {
-                log.error("unexpected HttpSessionBindingEvent for " + event.getValue());
+                log.error("unexpected HttpSessionBindingEvent for " + event.getValue()
+                    + " session " + event.getSession().getId());
             }
         }
     }

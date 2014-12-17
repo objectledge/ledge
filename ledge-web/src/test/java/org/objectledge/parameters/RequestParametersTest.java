@@ -76,7 +76,8 @@ public class RequestParametersTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getParameterValues").with(eq("get")).
             will(returnValue(new String[] { "get" }));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue("get=get&mixed=mixed1"));
-        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("path/path"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/view"));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("/module.View/path/path"));
 
         HttpContext httpContext = new HttpContext(httpServletRequest, null);
         context.setAttribute(HttpContext.class, httpContext);
@@ -130,7 +131,8 @@ public class RequestParametersTest extends LedgeTestCase
         mockHttpServletRequest.stubs().method("getParameterNames").
         	will(returnValue(new Vector<String>().elements()));
         mockHttpServletRequest.stubs().method("getQueryString").will(returnValue(null));
-        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("path/path;jsessionid=8435A845CF71GB5E"));
+        mockHttpServletRequest.stubs().method("getServletPath").will(returnValue("/path"));
+        mockHttpServletRequest.stubs().method("getPathInfo").will(returnValue("/path;jsessionid=8435A845CF71GB5E"));
         HttpContext httpContext = new HttpContext(httpServletRequest, null);
         context.setAttribute(HttpContext.class, httpContext);
         RequestParametersLoaderValve paramsLoader = new RequestParametersLoaderValve();

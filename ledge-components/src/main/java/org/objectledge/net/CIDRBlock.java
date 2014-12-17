@@ -68,7 +68,8 @@ public class CIDRBlock
             {
                 throw new IllegalArgumentException("illegal network address "
                     + prefix.getHostAddress() + " for prefix length " + prefixLength + ": "
-                    + (networkAddr.length - prefixLength) + " low order bits of the must be zero");
+                    + (networkAddr.length * 8 - prefixLength)
+                    + " low order bits of the must be zero");
             }
         }
     }

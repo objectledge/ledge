@@ -261,8 +261,8 @@ public class DBParameters implements Parameters
 	 */
     public void remove()
     {
+        List<String> all = Arrays.asList(container.getParameterNames());
     	container.remove();
-		List<String> all = Arrays.asList(container.getParameterNames());
 		modified.addAll(all);
 		update();
     }

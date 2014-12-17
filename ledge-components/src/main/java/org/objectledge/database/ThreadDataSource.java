@@ -217,7 +217,7 @@ public class ThreadDataSource
                 log.error("introspection problem ", e);
             }
         }
-        else if(conn.getClass().getName().startsWith("$Proxy"))
+        else if(conn.getClass().getName().contains("$Proxy"))
         {
             buff.append(conn.toString());
             try

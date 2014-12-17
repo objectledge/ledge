@@ -13,7 +13,9 @@ import org.objectledge.web.ratelimit.rules.ParseException;
 public class RuleEvaluatorTest
     extends TestCase
 {
-    private HitTable hitsTable = new HitTable();
+    private HitTable hitsTable = new HitTable()
+        {
+        };
 
     private RuleEvaluator eval = new RuleEvaluator(hitsTable, "accept");
 
@@ -28,7 +30,7 @@ public class RuleEvaluatorTest
         {
             headers.put(headersTab[2 * i], headersTab[2 * i + 1]);
         }
-        return new RequestInfo(address, host, headers);
+        return new RequestInfo(address, host, headers, null);
     }
 
     public void testEqIP()
