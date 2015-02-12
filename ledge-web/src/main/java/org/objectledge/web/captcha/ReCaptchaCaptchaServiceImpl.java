@@ -35,6 +35,8 @@ public class ReCaptchaCaptchaServiceImpl
     private static final String PARAMETER_CHALLENGE = "recaptcha_challenge_field";
 
     private static final String PARAMETER_RESPONSE = "recaptcha_response_field";
+    
+    private static final String PARAMETER_VERSION = "recaptcha_api_version";
 
     private static final String I18n_PREFIX = "captcha";
         
@@ -135,7 +137,6 @@ public class ReCaptchaCaptchaServiceImpl
         {
             properties.setProperty(option, options.get(option));
         }
-
         properties.put("custom_translations", getTranslations(locale));
         return createRecaptchaHtml(properties.getProperty("errorMessage", ""), properties);
     }
@@ -170,7 +171,7 @@ public class ReCaptchaCaptchaServiceImpl
     {
         ReCaptchaResponse result;
         if(ApiVersion.API_V2.equals(version)){
-            result = gReCaptcha.checkAnswer(remoteAddr, challenge, response);
+            result = gReCaptcha.checkAnswer(remoteAddr, response);
         } else {
             result = reCaptcha.checkAnswer(remoteAddr, challenge, response);
         }
@@ -189,7 +190,7 @@ public class ReCaptchaCaptchaServiceImpl
         String challenge = parameters.get(PARAMETER_CHALLENGE, "");
         String response = parameters.get(PARAMETER_RESPONSE, "");
         ApiVersion apiVersion = ApiVersion.API_V2.toString().equals(
-            parameters.get("apiVersion", "")) ? ApiVersion.API_V2 : ApiVersion.API_V1;
+            parameters.get(PARAMETER_VERSION, "")) ? ApiVersion.API_V2 : ApiVersion.API_V1;
         
         CaptchaCacheKey captchaCacheKey = new CaptchaCacheKey(remoteAddr, challenge, response);
         CaptchaCacheValue captchaCacheValue = captchaCache.get(captchaCacheKey);
@@ -237,57 +238,6 @@ public class ReCaptchaCaptchaServiceImpl
             }
         }
         return false; 
-    }
-    
-    
-    /**
-     * Produces javascript array with the RecaptchaOptions encoded.
-     * 
-     * @param properties
-     * @return
-     */
-    private String fetchJSOptions(Properties properties) {
-
-        if (properties == null || properties.size() == 0) {
-            return "";
-        }
-
-        StringBuffer jsOptions = new StringBuffer();
-        jsOptions.append("<script type=\"text/javascript\">\r\n" + 
-            "var RecaptchaOptions = ");
-            
-        appendDictionary(jsOptions, properties);
-        
-        jsOptions.append(";\r\n</script>\r\n");
-
-        return jsOptions.toString();
-    } 
-    
-    /**
-     * Appends javascript dictionary representation of a Properties object to given StringBuffer 
-     * 
-     * @param jsOptions the target StringBuffer object.
-     * @param properties a Properties object.
-     */
-    private void appendDictionary(StringBuffer jsOptions, Properties properties)
-    {
-        jsOptions.append("\r\n{");
-        for (Enumeration e = properties.keys(); e.hasMoreElements(); ) {
-            Object property = e.nextElement();
-            jsOptions.append((String)property).append(": ");
-            
-            Object value = properties.get(property);
-            if(value instanceof Properties) {
-                appendDictionary(jsOptions, (Properties)value);
-            } else {
-                jsOptions.append("'").append(value).append("'");
-            }
-            
-            if (e.hasMoreElements()) {
-                jsOptions.append(",\r\n");
-            }
-        }
-        jsOptions.append("}");
     }
         
     private String createRecaptchaHtml(String errorMessage, Properties options)

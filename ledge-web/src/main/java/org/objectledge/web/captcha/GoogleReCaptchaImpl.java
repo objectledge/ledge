@@ -10,6 +10,8 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.objectledge.web.captcha.CaptchaService.ApiVersion;
+
 import net.tanesha.recaptcha.ReCaptcha;
 import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
@@ -33,8 +35,6 @@ public class GoogleReCaptchaImpl
 
     public static final String PROPERTY_RENDER = "render";
     
-    
-
     private String privateKey = "";
 
     private String publicKey = "";
@@ -82,14 +82,16 @@ public class GoogleReCaptchaImpl
                 script_opts += key.toString() + "=" + options.get(key).toString();
             }
         }
+        message += "<input type='hidden' id='recaptcha_api_version' name='recaptcha_api_version' value='"
+            + ApiVersion.API_V2.toString() + "' />\r\n";
+        message += "<input type='hidden' id='recaptcha_response_field' name='recaptcha_response_field' value />\r\n";
         message += "<div class='g-recaptcha' " + recaptcha_opts + "></div>\r\n";
         message += "<script src='" + recaptchaServer + CAPTHA_API_PATH + script_opts
             + "' async defer></script>";
         return message;
     }
 
-    @Override
-    public ReCaptchaResponse checkAnswer(String remoteAddr, String challenge, String response)
+    public ReCaptchaResponse checkAnswer(String remoteAddr, String response)
     {
         try
         {
