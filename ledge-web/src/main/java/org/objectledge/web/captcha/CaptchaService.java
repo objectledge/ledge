@@ -21,6 +21,23 @@ public interface CaptchaService
     
     public static final String CAPTCHA_DISABLED = "";
     
+    public static enum ApiVersion {
+        API_V1{
+            @Override
+            public String toString()
+            {
+                return "API_V1";
+            }
+        },
+        API_V2{
+            @Override
+            public String toString()
+            {
+                return "API_V2";
+            }
+        },
+    }
+    
     /**
      * Create CAPTCHA widget with specified options.
      * 
@@ -45,7 +62,7 @@ public interface CaptchaService
      * @param response response entered by the user.
      * @return true if the solution is correct.
      */
-    public boolean checkCaptcha(String remoteAddr, String challenge, String response);
+    public boolean checkCaptcha(String remoteAddr, String challenge, String response, ApiVersion version);
 
     /**
      * Verify CAPTCHA solved by the user.

@@ -21,21 +21,25 @@ public class GoogleReCaptchaImpl
     extends ReCaptchaImpl
     implements ReCaptcha
 {
-    public static final String HTTP_SERVER = "";
-
+    public static final String HTTPS_SERVER = "https://www.google.com/recaptcha/";
+    
+    public static final String CAPTHA_API_PATH = "api.js";
+    
+    public static final String CAPTHA_VERIFY_PATH = "api/siteverify";
+    
     public static final String PROPERTY_LOCALE = "hl";
 
     public static final String PROPERTY_ONLOAD = "onload";
 
     public static final String PROPERTY_RENDER = "render";
+    
+    
 
-    private String privateKey = "https://www.google.com/recaptcha/api/siteverify";
+    private String privateKey = "";
 
     private String publicKey = "";
 
     private String recaptchaServer = HTTP_SERVER;
-
-    private boolean includeNoscript = false;
 
     public String createRecaptchaHtml(Locale locale, String onLoad, String render)
     {
@@ -46,24 +50,41 @@ public class GoogleReCaptchaImpl
         }
         if(onLoad != null && !onLoad.isEmpty())
         {
-            options.setProperty(PROPERTY_ONLOAD, locale.getLanguage());
+            options.setProperty(PROPERTY_ONLOAD, onLoad);
         }
         if("explicit".equals(render) || "onload".equals(render))
         {
-            options.setProperty(PROPERTY_RENDER, locale.getLanguage());
+            options.setProperty(PROPERTY_RENDER, render);
         }
         return createRecaptchaHtml(null, options);
     }
 
-    @Override
     public String createRecaptchaHtml(String errorMessage, Properties options)
     {
         String message = "";
-        if(includeNoscript)
+        String recaptcha_opts = "";
+        String script_opts = "";
+        if(options == null)
         {
-            message += "<div class='g-recaptcha' data-sitekey='" + this.publicKey + "'></div>\r\n";
+            options = new Properties();
         }
-        message += "<script src='https://www.google.com/recaptcha/api.js' async defer></script>";
+        options.setProperty("data-sitekey", publicKey);
+        for(Object key : options.keySet())
+        {
+            if(key.toString().startsWith("data-"))
+            {
+                recaptcha_opts += key.toString() + "='" + options.get(key).toString() + "' ";
+            }
+            if(PROPERTY_RENDER.equals(key.toString()) || PROPERTY_LOCALE.equals(key.toString())
+                || PROPERTY_ONLOAD.equals(key.toString()))
+            {
+                script_opts += script_opts.isEmpty() ? "?" : "&";
+                script_opts += key.toString() + "=" + options.get(key).toString();
+            }
+        }
+        message += "<div class='g-recaptcha' " + recaptcha_opts + "></div>\r\n";
+        message += "<script src='" + recaptchaServer + CAPTHA_API_PATH + script_opts
+            + "' async defer></script>";
         return message;
     }
 
@@ -73,9 +94,9 @@ public class GoogleReCaptchaImpl
         try
         {
             Client client = ClientBuilder.newClient();
-            Form form = new Form().param("secret", this.privateKey).param("response", response)
+            Form form = new Form().param("secret", privateKey).param("response", response)
                 .param("remoteip", remoteAddr);
-            Response httpResponse = client.target(this.recaptchaServer)
+            Response httpResponse = client.target(recaptchaServer + CAPTHA_VERIFY_PATH)
                 .request(MediaType.APPLICATION_JSON_TYPE).post(Entity.form(form));
             String result = httpResponse.readEntity(String.class);
             if(httpResponse.getStatus() == 200)
@@ -99,6 +120,24 @@ public class GoogleReCaptchaImpl
         }
     }
 
+    @Override
+    public void setPrivateKey(String privateKey)
+    {
+        this.privateKey = privateKey;
+    }
+
+    @Override
+    public void setPublicKey(String publicKey)
+    {
+        this.publicKey = publicKey;
+    }
+
+    @Override
+    public void setRecaptchaServer(String recaptchaServer)
+    {
+        this.recaptchaServer = recaptchaServer;
+    }
+   
     private class GoogleReCaptchaResponse
         extends ReCaptchaResponse
     {

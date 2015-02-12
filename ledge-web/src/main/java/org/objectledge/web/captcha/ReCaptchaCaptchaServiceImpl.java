@@ -1,6 +1,5 @@
 package org.objectledge.web.captcha;
 
-import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -36,28 +35,18 @@ public class ReCaptchaCaptchaServiceImpl
     private static final String PARAMETER_CHALLENGE = "recaptcha_challenge_field";
 
     private static final String PARAMETER_RESPONSE = "recaptcha_response_field";
-    
-    private static final String CAPTCHA_CACHE = "captcha_cache";
 
     private static final String I18n_PREFIX = "captcha";
-    
+        
     private final Logger log;
 
     private final ReCaptchaImpl reCaptcha;
+    
+    private final GoogleReCaptchaImpl gReCaptcha;
 
-    private final Map<String, String> defaultOptions = new HashMap<String, String>();
-
-    private final String errorMessage;
+    private final Map<ApiVersion, Map<String, String>> defaultOptions = new HashMap<ApiVersion, Map<String,String>>();
     
     private final String emailTitle;
-    
-    private final String recaptchaServer;
-    
-    private final boolean includeNoscript;
-    
-    private final String publicKeyWidget;
-    
-    private final String publicKeyEmail;
     
     private final long cacheTimeLimit;
     
@@ -76,47 +65,70 @@ public class ReCaptchaCaptchaServiceImpl
     {
         this.i18n = i18n;
         this.log = log;
+        Configuration v1Config = config.getChild("apiVersionV1");
+        Configuration v2Config = config.getChild("apiVersionV2", true);
+        Configuration options;
         this.reCaptcha = new ReCaptchaImpl();
-        publicKeyWidget = config.getChild("widget").getChild("publicKey").getValue();
-        publicKeyEmail = config.getChild("email").getChild("publicKey").getValue();
-        reCaptcha.setPublicKey(publicKeyWidget);
-        reCaptcha.setPrivateKey(config.getChild("widget").getChild("privateKey").getValue());
-        recaptchaServer = config.getChild("recaptchaServer", true).getValue(
-            "//www.google.com/recaptcha");
-
-        if(recaptchaServer != null)
-        {
-            reCaptcha.setRecaptchaServer(recaptchaServer);
-        }
-        includeNoscript = config.getChild("widget").getChild("includeNoScript", true).getValueAsBoolean(false);
-        reCaptcha.setIncludeNoscript(includeNoscript);
-        this.errorMessage = config.getChild("widget").getChild("errorMessage", true).getValue(null);
-        Configuration options = config.getChild("widget").getChild("options", true);
+        
+        reCaptcha.setPublicKey(v1Config.getChild("widget").getChild("publicKey").getValue());
+        reCaptcha.setPrivateKey(v1Config.getChild("widget").getChild("privateKey").getValue());
+        reCaptcha.setRecaptchaServer(v1Config.getChild("recaptchaServer", true).getValue(
+            "//www.google.com/recaptcha/api"));
+        reCaptcha.setIncludeNoscript(v1Config.getChild("widget").getChild("includeNoScript", true)
+            .getValueAsBoolean(false));
+        
+        options = v1Config.getChild("widget").getChild("options", true);        
+        HashMap<String, String> v1options = new HashMap<String, String>();
+        v1options.put("errorMessage", v1Config.getChild("widget").getChild("errorMessage", true).getValue(""));
         for(Configuration option : options.getChildren())
         {
-            defaultOptions.put(option.getAttribute("name"), option.getValue().trim());
+            v1options.put(option.getAttribute("name"), option.getValue().trim());
         }
-        cacheTimeLimit = config.getChild("widget").getChild("cacheValidity").getChild("timeLimit")
-            .getValueAsLong(60000);
-        cacheHitLimit = config.getChild("widget").getChild("cacheValidity").getChild("hitLimit").getValueAsLong(2);
+        defaultOptions.put(ApiVersion.API_V1, v1options);        
+        reCaptchaEmailHides = new ReCaptchaEmailHides(v1Config.getChild("email")
+            .getChild("privateKey").getValue(), v1Config.getChild("email").getChild("publicKey")
+            .getValue(), v1Config.getChild("recaptchaServer", true).getValue(
+            "//www.google.com/recaptcha/api"));
+        
+        emailTitle = v1Config.getChild("email").getChild("title", true).getValue();
+        
+        cacheTimeLimit = config.getChild("cacheValidity").getChild("timeLimit").getValueAsLong(60000);
+        cacheHitLimit = config.getChild("cacheValidity").getChild("hitLimit").getValueAsLong(2);        
         this.userManager = userManager;
         Cache<CaptchaCacheKey, CaptchaCacheValue> cache = CacheBuilder.newBuilder()
             .expireAfterWrite(cacheTimeLimit, TimeUnit.MILLISECONDS).build();
         captchaCache = cache.asMap();
-        reCaptchaEmailHides = new ReCaptchaEmailHides(config.getChild("email")
-            .getChild("privateKey").getValue(), publicKeyEmail, recaptchaServer);
-        emailTitle = config.getChild("email").getChild("title", true).getValue();
+
+        gReCaptcha = new GoogleReCaptchaImpl();
+        if(v2Config != null) {
+            gReCaptcha.setPublicKey(v2Config.getChild("widget").getChild("publicKey").getValue());
+            gReCaptcha.setPrivateKey(v2Config.getChild("widget").getChild("privateKey").getValue());
+            if(v2Config.getChild("recaptchaServer", true).getValue(gReCaptcha.HTTPS_SERVER) != null){
+                gReCaptcha.setRecaptchaServer(v2Config.getChild("recaptchaServer", true).getValue(gReCaptcha.HTTPS_SERVER));
+            }
+            options = v2Config.getChild("widget").getChild("options", true);
+            HashMap<String,String> v2options = new HashMap<String,String>();
+            v2options.put("errorMessage", v2Config.getChild("widget").getChild("errorMessage", true).getValue(""));
+            for(Configuration option : options.getChildren())
+            {
+                v2options.put(option.getAttribute("name"), option.getValue().trim());
+            }
+            defaultOptions.put(ApiVersion.API_V2, v2options);
+        }
     }
 
     @Override
     public String createCaptchaWidget(Locale locale, Map<String, String> options)
     {
         Properties properties = new Properties();
-        for(String option : defaultOptions.keySet())
+        Map<String, String> defaults = options.containsKey("apiVersion")
+            && ApiVersion.API_V2.toString().equals(options.get("apiVersion")) ? defaultOptions
+            .get(ApiVersion.API_V2) : defaultOptions.get(ApiVersion.API_V1);
+        for(String option : defaults.keySet())
         {
             if(!options.containsKey(option))
             {
-                properties.setProperty(option, defaultOptions.get(option));
+                properties.setProperty(option, defaults.get(option));
             }
         }
         for(String option : options.keySet())
@@ -125,8 +137,7 @@ public class ReCaptchaCaptchaServiceImpl
         }
 
         properties.put("custom_translations", getTranslations(locale));
-        
-        return createRecaptchaHtml(errorMessage, properties);
+        return createRecaptchaHtml(properties.getProperty("errorMessage", ""), properties);
     }
 
     @Override
@@ -155,11 +166,16 @@ public class ReCaptchaCaptchaServiceImpl
     }
 
     @Override
-    public boolean checkCaptcha(String remoteAddr, String challenge, String response)
+    public boolean checkCaptcha(String remoteAddr, String challenge, String response, ApiVersion version)
     {
-        ReCaptchaResponse result = reCaptcha.checkAnswer(remoteAddr, challenge, response);
+        ReCaptchaResponse result;
+        if(ApiVersion.API_V2.equals(version)){
+            result = gReCaptcha.checkAnswer(remoteAddr, challenge, response);
+        } else {
+            result = reCaptcha.checkAnswer(remoteAddr, challenge, response);
+        }
        
-        if(!result.isValid() && result.getErrorMessage().equals("incorrect-captcha-sol"))
+        if(!result.isValid())
         {
             log.error("recaptcha verification failed: " + result.getErrorMessage());
         }
@@ -172,6 +188,8 @@ public class ReCaptchaCaptchaServiceImpl
         String remoteAddr = httpContext.getRequest().getRemoteAddr();
         String challenge = parameters.get(PARAMETER_CHALLENGE, "");
         String response = parameters.get(PARAMETER_RESPONSE, "");
+        ApiVersion apiVersion = ApiVersion.API_V2.toString().equals(
+            parameters.get("apiVersion", "")) ? ApiVersion.API_V2 : ApiVersion.API_V1;
         
         CaptchaCacheKey captchaCacheKey = new CaptchaCacheKey(remoteAddr, challenge, response);
         CaptchaCacheValue captchaCacheValue = captchaCache.get(captchaCacheKey);
@@ -186,7 +204,7 @@ public class ReCaptchaCaptchaServiceImpl
         }
         else
         {
-            captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge, response));
+            captchaCacheValue = new CaptchaCacheValue(checkCaptcha(remoteAddr, challenge, response, apiVersion));
             captchaCache.put(captchaCacheKey, captchaCacheValue);
         }
 
@@ -220,6 +238,7 @@ public class ReCaptchaCaptchaServiceImpl
         }
         return false; 
     }
+    
     
     /**
      * Produces javascript array with the RecaptchaOptions encoded.
@@ -270,25 +289,17 @@ public class ReCaptchaCaptchaServiceImpl
         }
         jsOptions.append("}");
     }
-    
-    private String createRecaptchaHtml(String errorMessage, Properties options) {
-
-        String errorPart = (errorMessage == null ? "" : "&amp;error=" + URLEncoder.encode(errorMessage));
-
-        String message = fetchJSOptions(options);
-
-        message += "<script type=\"text/javascript\" src=\"" + recaptchaServer + "/api/challenge?k=" + publicKeyWidget + errorPart + "\"></script>\r\n";
-
-        if (includeNoscript) {
-            String noscript = "<noscript>\r\n" + 
-                    "   <iframe src=\""+recaptchaServer+"/api/noscript?k="+publicKeyWidget + errorPart + "\" height=\"300\" width=\"500\" frameborder=\"0\"></iframe><br>\r\n" + 
-                    "   <textarea name=\"recaptcha_challenge_field\" rows=\"3\" cols=\"40\"></textarea>\r\n" + 
-                    "   <input type=\"hidden\" name=\"recaptcha_response_field\" value=\"manual_challenge\">\r\n" + 
-                    "</noscript>";
-            message += noscript;
-        }
         
-        return message;
+    private String createRecaptchaHtml(String errorMessage, Properties options)
+    {
+        if(ApiVersion.API_V2.toString().equals(options.getProperty("apiVersion", "")))
+        {
+            return gReCaptcha.createRecaptchaHtml(errorMessage, options);
+        }
+        else
+        {
+            return reCaptcha.createRecaptchaHtml(errorMessage, options);
+        }
     }
     
     private Properties getTranslations(Locale locale)
