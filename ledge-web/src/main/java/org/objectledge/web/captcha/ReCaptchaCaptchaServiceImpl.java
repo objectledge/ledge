@@ -1,7 +1,6 @@
 package org.objectledge.web.captcha;
 
 import java.security.Principal;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -37,6 +36,8 @@ public class ReCaptchaCaptchaServiceImpl
     private static final String PARAMETER_RESPONSE = "recaptcha_response_field";
     
     private static final String PARAMETER_VERSION = "recaptcha_api_version";
+    
+    private static final String API_VERSION = "apiVersion";
 
     private static final String I18n_PREFIX = "captcha";
         
@@ -46,7 +47,7 @@ public class ReCaptchaCaptchaServiceImpl
     
     private final GoogleReCaptchaImpl gReCaptcha;
 
-    private final Map<ApiVersion, Map<String, String>> defaultOptions = new HashMap<ApiVersion, Map<String,String>>();
+    private final Map<CaptchaApiVersion, Map<String, String>> defaultOptions = new HashMap<CaptchaApiVersion, Map<String,String>>();
     
     private final String emailTitle;
     
@@ -86,7 +87,7 @@ public class ReCaptchaCaptchaServiceImpl
         {
             v1options.put(option.getAttribute("name"), option.getValue().trim());
         }
-        defaultOptions.put(ApiVersion.API_V1, v1options);        
+        defaultOptions.put(CaptchaApiVersion.API_V1, v1options);        
         reCaptchaEmailHides = new ReCaptchaEmailHides(v1Config.getChild("email")
             .getChild("privateKey").getValue(), v1Config.getChild("email").getChild("publicKey")
             .getValue(), v1Config.getChild("recaptchaServer", true).getValue(
@@ -115,7 +116,7 @@ public class ReCaptchaCaptchaServiceImpl
             {
                 v2options.put(option.getAttribute("name"), option.getValue().trim());
             }
-            defaultOptions.put(ApiVersion.API_V2, v2options);
+            defaultOptions.put(CaptchaApiVersion.API_V2, v2options);
         }
     }
 
@@ -123,9 +124,7 @@ public class ReCaptchaCaptchaServiceImpl
     public String createCaptchaWidget(Locale locale, Map<String, String> options)
     {
         Properties properties = new Properties();
-        Map<String, String> defaults = options.containsKey("apiVersion")
-            && ApiVersion.API_V2.toString().equals(options.get("apiVersion")) ? defaultOptions
-            .get(ApiVersion.API_V2) : defaultOptions.get(ApiVersion.API_V1);
+        Map<String, String> defaults = defaultOptions.get(CaptchaApiVersion.getVersion(options.get(API_VERSION)));
         for(String option : defaults.keySet())
         {
             if(!options.containsKey(option))
@@ -167,10 +166,10 @@ public class ReCaptchaCaptchaServiceImpl
     }
 
     @Override
-    public boolean checkCaptcha(String remoteAddr, String challenge, String response, ApiVersion version)
+    public boolean checkCaptcha(String remoteAddr, String challenge, String response, CaptchaApiVersion version)
     {
         ReCaptchaResponse result;
-        if(ApiVersion.API_V2.equals(version)){
+        if(CaptchaApiVersion.API_V2.equals(version)){
             result = gReCaptcha.checkAnswer(remoteAddr, response);
         } else {
             result = reCaptcha.checkAnswer(remoteAddr, challenge, response);
@@ -189,8 +188,7 @@ public class ReCaptchaCaptchaServiceImpl
         String remoteAddr = httpContext.getRequest().getRemoteAddr();
         String challenge = parameters.get(PARAMETER_CHALLENGE, "");
         String response = parameters.get(PARAMETER_RESPONSE, "");
-        ApiVersion apiVersion = ApiVersion.API_V2.toString().equals(
-            parameters.get(PARAMETER_VERSION, "")) ? ApiVersion.API_V2 : ApiVersion.API_V1;
+        CaptchaApiVersion apiVersion = CaptchaApiVersion.getVersion(parameters.get(PARAMETER_VERSION, ""));
         
         CaptchaCacheKey captchaCacheKey = new CaptchaCacheKey(remoteAddr, challenge, response);
         CaptchaCacheValue captchaCacheValue = captchaCache.get(captchaCacheKey);
@@ -242,7 +240,7 @@ public class ReCaptchaCaptchaServiceImpl
         
     private String createRecaptchaHtml(String errorMessage, Properties options)
     {
-        if(ApiVersion.API_V2.toString().equals(options.getProperty("apiVersion", "")))
+        if(CaptchaApiVersion.API_V2.toString().equals(options.getProperty(API_VERSION, "")))
         {
             return gReCaptcha.createRecaptchaHtml(errorMessage, options);
         }

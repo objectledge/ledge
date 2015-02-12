@@ -10,7 +10,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.objectledge.web.captcha.CaptchaService.ApiVersion;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 
 import net.tanesha.recaptcha.ReCaptcha;
 import net.tanesha.recaptcha.ReCaptchaImpl;
@@ -83,7 +83,7 @@ public class GoogleReCaptchaImpl
             }
         }
         message += "<input type='hidden' id='recaptcha_api_version' name='recaptcha_api_version' value='"
-            + ApiVersion.API_V2.toString() + "' />\r\n";
+            + CaptchaApiVersion.API_V2.toString() + "' />\r\n";
         message += "<input type='hidden' id='recaptcha_response_field' name='recaptcha_response_field' value />\r\n";
         message += "<div class='g-recaptcha' " + recaptcha_opts + "></div>\r\n";
         message += "<script src='" + recaptchaServer + CAPTHA_API_PATH + script_opts

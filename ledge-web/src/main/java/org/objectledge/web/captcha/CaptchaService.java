@@ -21,7 +21,7 @@ public interface CaptchaService
     
     public static final String CAPTCHA_DISABLED = "";
     
-    public static enum ApiVersion {
+    public static enum CaptchaApiVersion {
         API_V1{
             @Override
             public String toString()
@@ -35,7 +35,20 @@ public interface CaptchaService
             {
                 return "API_V2";
             }
-        },
+        };
+        
+        public static CaptchaApiVersion getVersion(String version)
+        {
+            if(CaptchaApiVersion.API_V2.toString().equals(version))
+            {
+                return CaptchaApiVersion.API_V2;
+            }
+            else
+            {
+                // as default
+                return CaptchaApiVersion.API_V1;
+            }
+        }
     }
     
     /**
@@ -62,7 +75,7 @@ public interface CaptchaService
      * @param response response entered by the user.
      * @return true if the solution is correct.
      */
-    public boolean checkCaptcha(String remoteAddr, String challenge, String response, ApiVersion version);
+    public boolean checkCaptcha(String remoteAddr, String challenge, String response, CaptchaApiVersion version);
 
     /**
      * Verify CAPTCHA solved by the user.
