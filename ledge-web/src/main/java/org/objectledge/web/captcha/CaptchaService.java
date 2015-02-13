@@ -94,4 +94,12 @@ public interface CaptchaService
      * @return true if CAPTCHA required otherwise false.
      */
     public boolean isCaptchaRequired(Parameters config, Principal principal) throws Exception;
+    
+    /**
+     * Return Captcha API version from config
+     * 
+     * @param parameters component or application configuration.
+     * @return CaptchaApiVersion.
+     */
+    public CaptchaApiVersion getApiVersion(Parameters config);
 }

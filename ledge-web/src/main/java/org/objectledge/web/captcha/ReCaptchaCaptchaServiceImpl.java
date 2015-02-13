@@ -124,7 +124,8 @@ public class ReCaptchaCaptchaServiceImpl
     public String createCaptchaWidget(Locale locale, Map<String, String> options)
     {
         Properties properties = new Properties();
-        Map<String, String> defaults = defaultOptions.get(CaptchaApiVersion.getVersion(options.get(API_VERSION)));
+        Map<String, String> defaults = defaultOptions.get(CaptchaApiVersion.getVersion(options
+            .get(API_VERSION)));
         for(String option : defaults.keySet())
         {
             if(!options.containsKey(option))
@@ -236,6 +237,21 @@ public class ReCaptchaCaptchaServiceImpl
             }
         }
         return false; 
+    }
+    
+    /**
+     * Return Captcha API version from config
+     * 
+     * @param parameters component or application configuration.
+     * @return CaptchaApiVersion.
+     */
+    public CaptchaApiVersion getApiVersion(Parameters config)
+    {
+        if(config != null)
+        {
+            return CaptchaApiVersion.getVersion(config.get("recaptcha_api_version", ""));
+        }
+        return CaptchaApiVersion.getVersion("");
     }
         
     private String createRecaptchaHtml(String errorMessage, Properties options)
