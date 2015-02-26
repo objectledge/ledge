@@ -63,6 +63,7 @@ public class Verify
         boolean result = captchaService.checkCaptcha(getHttpContext(), getRequestParameters());
         jsonGenerator.writeStartObject();
         jsonGenerator.writeBooleanField("result", result);
+        jsonGenerator.writeBooleanField("valid", result);
         jsonGenerator.writeEndObject();
     }
 }

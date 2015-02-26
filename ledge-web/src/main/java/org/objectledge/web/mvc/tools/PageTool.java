@@ -746,6 +746,7 @@ public class PageTool
         Meta(String name, String property, String httpEquiv, String content)
         {
             this.name = name;
+            this.property = property;
             this.httpEquiv = httpEquiv;
             this.content = content;
         }

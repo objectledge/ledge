@@ -21,6 +21,36 @@ public interface CaptchaService
     
     public static final String CAPTCHA_DISABLED = "";
     
+    public static enum CaptchaApiVersion {
+        API_V1{
+            @Override
+            public String toString()
+            {
+                return "API_V1";
+            }
+        },
+        API_V2{
+            @Override
+            public String toString()
+            {
+                return "API_V2";
+            }
+        };
+        
+        public static CaptchaApiVersion getVersion(String version)
+        {
+            if(CaptchaApiVersion.API_V2.toString().equals(version))
+            {
+                return CaptchaApiVersion.API_V2;
+            }
+            else
+            {
+                // as default
+                return CaptchaApiVersion.API_V1;
+            }
+        }
+    }
+    
     /**
      * Create CAPTCHA widget with specified options.
      * 
@@ -45,7 +75,7 @@ public interface CaptchaService
      * @param response response entered by the user.
      * @return true if the solution is correct.
      */
-    public boolean checkCaptcha(String remoteAddr, String challenge, String response);
+    public boolean checkCaptcha(String remoteAddr, String challenge, String response, CaptchaApiVersion version);
 
     /**
      * Verify CAPTCHA solved by the user.
@@ -64,4 +94,12 @@ public interface CaptchaService
      * @return true if CAPTCHA required otherwise false.
      */
     public boolean isCaptchaRequired(Parameters config, Principal principal) throws Exception;
+    
+    /**
+     * Return Captcha API version from config
+     * 
+     * @param parameters component or application configuration.
+     * @return CaptchaApiVersion.
+     */
+    public CaptchaApiVersion getApiVersion(Parameters config);
 }
