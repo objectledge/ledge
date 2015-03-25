@@ -79,7 +79,7 @@ public class RuleEvaluator
         @Override
         public String getHeader(String headerName)
         {
-            return request.getHeaders().get(headerName);
+            return request.getHeader(headerName);
         }
 
         @Override

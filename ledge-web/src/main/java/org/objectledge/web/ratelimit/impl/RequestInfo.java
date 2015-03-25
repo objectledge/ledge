@@ -25,7 +25,11 @@ public class RequestInfo
     {
         this.address = address;
         this.host = host;
-        this.headers = Collections.unmodifiableMap(new HashMap<>(headers));
+        this.headers = new HashMap<>();
+        for(Map.Entry<String, String> e : headers.entrySet())
+        {
+            this.headers.put(e.getKey().toLowerCase(), e.getValue());
+        }
         this.path = path;
     }
 
@@ -39,11 +43,11 @@ public class RequestInfo
         return host;
     }
 
-    public Map<String, String> getHeaders()
+    public String getHeader(String name)
     {
-        return headers;
+        return headers.get(name.toLowerCase());
     }
-    
+
     public String getPath()
     {
         return path;
