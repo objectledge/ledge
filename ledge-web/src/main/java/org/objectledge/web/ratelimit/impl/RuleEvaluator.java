@@ -79,7 +79,7 @@ public class RuleEvaluator
         @Override
         public String getHeader(String headerName)
         {
-            return request.getHeaders().get(headerName);
+            return request.getHeader(headerName);
         }
 
         @Override
@@ -130,13 +130,15 @@ public class RuleEvaluator
             @Override
             public boolean visit(ASTpredicateHeader node, EvaluationContext data)
             {
-                return node.getValue().equals(data.getHeader(node.getHeader()));
+                final String header = data.getHeader(node.getHeader());
+                return header != null && node.getValue().equals(header);
             }
 
             @Override
             public boolean visit(ASTpredicateHeaderMatch node, EvaluationContext data)
             {
-                return node.getPattern().matcher(data.getHeader(node.getHeader())).matches();
+                final String header = data.getHeader(node.getHeader());
+                return header != null && node.getPattern().matcher(header).matches();
             }
 
             @Override

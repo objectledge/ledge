@@ -6,7 +6,7 @@
   <groupId>org.objectledge</groupId>
   <artifactId>ledge-common</artifactId>
   <packaging>pom</packaging>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <name>ObjectLedge application development toolkit</name>
   <inceptionYear>2003</inceptionYear>
   <description>
