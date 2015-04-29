@@ -75,7 +75,7 @@ public class ReCaptchaCaptchaServiceImpl
         
         reCaptcha.setPublicKey(v1Config.getChild("widget").getChild("publicKey").getValue());
         reCaptcha.setPrivateKey(v1Config.getChild("widget").getChild("privateKey").getValue());
-        reCaptcha.setRecaptchaServer(v1Config.getChild("recaptchaServer", true).getValue(
+        reCaptcha.setRecaptchaServer(v1Config.getChild("widget").getChild("recaptchaServer", true).getValue(
             "//www.google.com/recaptcha/api"));
         reCaptcha.setIncludeNoscript(v1Config.getChild("widget").getChild("includeNoScript", true)
             .getValueAsBoolean(false));
@@ -90,8 +90,8 @@ public class ReCaptchaCaptchaServiceImpl
         defaultOptions.put(CaptchaApiVersion.API_V1, v1options);        
         reCaptchaEmailHides = new ReCaptchaEmailHides(v1Config.getChild("email")
             .getChild("privateKey").getValue(), v1Config.getChild("email").getChild("publicKey")
-            .getValue(), v1Config.getChild("recaptchaServer", true).getValue(
-            "//www.google.com/recaptcha/api"));
+            .getValue(), v1Config.getChild("email").getChild("recaptchaServer", true).getValue(
+            "//www.google.com/recaptcha"));
         
         emailTitle = v1Config.getChild("email").getChild("title", true).getValue();
         

@@ -3,12 +3,12 @@
 	<start>
 		<element name="config">
 			<element name="apiVersionV1">
-				<optional>
-					<element name="recaptchaServer">
-						<text />
-					</element>
-				</optional>
 				<element name="widget">
+				    <optional>
+					  <element name="recaptchaServer">
+						<text />
+					  </element>
+				    </optional>				
 					<element name="publicKey">
 						<text />
 					</element>
@@ -32,6 +32,11 @@
 					</optional>
 				</element>
 				<element name="email">
+                    <optional>
+					  <element name="recaptchaServer">
+						<text />
+					  </element>
+				    </optional>				
 					<element name="publicKey">
 						<text />
 					</element>
