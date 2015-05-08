@@ -14,6 +14,7 @@ import org.objectledge.web.ratelimit.rules.ASTpredicateHost;
 import org.objectledge.web.ratelimit.rules.ASTpredicateHostMatch;
 import org.objectledge.web.ratelimit.rules.ASTpredicateIp;
 import org.objectledge.web.ratelimit.rules.ASTpredicateIpMatch;
+import org.objectledge.web.ratelimit.rules.ASTprediceteIpInList;
 import org.objectledge.web.ratelimit.rules.ASTrule;
 import org.objectledge.web.ratelimit.rules.EvaluationContext;
 import org.objectledge.web.ratelimit.rules.RateLimitRulesVisitor;
@@ -31,12 +32,12 @@ public class RuleEvaluator
         this.defaultAction = defaultAction;
     }
 
-    public String action(RequestInfo request, List<Rule> rules)
+    public String action(RequestInfo request, AccessListRegistry accesLists, List<Rule> rules)
     {
         hitTable.hit(request.getAddress());
         for(Rule rule : rules)
         {
-            if(VISITOR.visit(rule.getRule(), new RuleEvaluationContext(rule, request)))
+            if(VISITOR.visit(rule.getRule(), new RuleEvaluationContext(rule, accesLists, request)))
             {
                 hitTable.match(rule, request.getAddress());
                 return rule.getAction();
@@ -45,9 +46,9 @@ public class RuleEvaluator
         return defaultAction;
     }
 
-    public String action(RequestInfo request, Rule... rules)
+    public String action(RequestInfo request, AccessListRegistry accesLists, Rule... rules)
     {
-        return action(request, Arrays.asList(rules));
+        return action(request, accesLists, Arrays.asList(rules));
     }
 
     private class RuleEvaluationContext
@@ -58,9 +59,13 @@ public class RuleEvaluator
 
         private final int hits;
 
-        public RuleEvaluationContext(Rule rule, RequestInfo request)
+        private AccessListRegistry accessLists;
+
+        public RuleEvaluationContext(Rule rule, AccessListRegistry accesLists,
+            RequestInfo request)
         {
             this.request = request;
+            this.accessLists = accesLists;
             hits = hitTable.getHits(request.getAddress());
         }
 
@@ -87,6 +92,12 @@ public class RuleEvaluator
         {
             return hits;
         }
+
+        @Override
+        public boolean inList(String listName)
+        {
+            return accessLists.contains(listName, request.getAddress());
+        }
     }
 
     private static final RateLimitRulesVisitor VISITOR = new RateLimitRulesVisitor()
@@ -107,6 +118,12 @@ public class RuleEvaluator
             public boolean visit(ASTpredicateIpMatch node, EvaluationContext data)
             {
                 return node.getAddressBlock().contains(data.getAddress());
+            }
+
+            @Override
+            public boolean visit(ASTprediceteIpInList node, EvaluationContext data)
+            {
+                return data.inList(node.getListName());
             }
 
             @Override
