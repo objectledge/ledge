@@ -10,5 +10,7 @@ public interface EvaluationContext
     
     String getHeader(String headerName);
     
-    public int getHits();
+    int getHits();
+    
+    boolean inList(String listName);
 }
