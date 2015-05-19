@@ -3,6 +3,7 @@ package org.objectledge.net;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.util.Arrays;
 
 /**
  * Represents a Classless Inter-Domain Routing address block.
@@ -190,5 +191,59 @@ public class CIDRBlock
     public String toString()
     {
         return prefix.getHostAddress() + "/" + prefixLength;
+    }
+
+    public int compareTo(CIDRBlock that)
+    {
+        byte[] addr1Bytes;
+        byte[] addr2Bytes;
+        if(this.prefix.getAddress().length != that.prefix.getAddress().length)
+        {
+            addr1Bytes = upgrade(this.prefix.getAddress());
+            addr2Bytes = upgrade(that.prefix.getAddress());
+        }
+        else
+        {
+            addr1Bytes = this.prefix.getAddress();
+            addr2Bytes = that.prefix.getAddress();
+        }
+        int cmp = compare(addr1Bytes, addr2Bytes);
+        if(cmp != 0)
+        {
+            return cmp;
+        }
+        else
+        {
+            return this.getPrefixLength() - that.getPrefixLength();
+        }
+    }
+
+    private byte[] upgrade(byte[] in)
+    {
+        if(in.length == 16)
+        {
+            return in;
+        }
+        byte out[] = new byte[16];
+        Arrays.fill(out, 0, 10, (byte)0x00);
+        Arrays.fill(out, 10, 12, (byte)0xFF);
+        System.arraycopy(in, 0, out, 12, 4);
+        return out;
+    }
+
+    private int compare(byte[] a, byte[] b)
+    {
+        for(int i = 0; i < a.length; i++)
+        {
+            if(a[i] < b[i])
+            {
+                return -1;
+            }
+            else if(a[i] > b[i])
+            {
+                return 1;
+            }
+        }
+        return 0;
     }
 }

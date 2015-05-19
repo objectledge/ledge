@@ -122,6 +122,42 @@ public class CIDRBlockTest
         }
     }
     
+    public void testCompareIPv4() throws UnknownHostException, IllegalArgumentException 
+    {
+        CIDRBlock block1 = new CIDRBlock(IPAddressUtil.byAddress("192.168.10.0"), 26);
+        CIDRBlock block2 = new CIDRBlock(IPAddressUtil.byAddress("192.168.11.0"), 26);
+        assertEquals(0, block1.compareTo(block1));
+        assertTrue(block1.compareTo(block2) < 0);
+        assertTrue(block2.compareTo(block1) > 0);
+    }
+
+    public void testCompareIPv6() throws UnknownHostException, IllegalArgumentException 
+    {
+        CIDRBlock block1 = new CIDRBlock(IPAddressUtil.byAddress("100:200:FF::"), 64);
+        CIDRBlock block2 = new CIDRBlock(IPAddressUtil.byAddress("100:201:FF::"), 64);
+        assertEquals(0, block1.compareTo(block1));
+        assertTrue(block1.compareTo(block2) < 0);
+        assertTrue(block2.compareTo(block1) > 0);
+    }
+    
+    public void testCompareMixed() throws UnknownHostException, IllegalArgumentException 
+    {
+        CIDRBlock block1 = new CIDRBlock(IPAddressUtil.byAddress("::FFFF:192.168.10.62"), 32);
+        CIDRBlock block2 = new CIDRBlock(IPAddressUtil.byAddress("192.168.10.63"), 32);
+        assertEquals(0, block1.compareTo(block1));
+        assertTrue(block1.compareTo(block2) < 0);
+        assertTrue(block2.compareTo(block1) > 0);
+    }
+    
+    public void testComparePrefixSizes() throws UnknownHostException, IllegalArgumentException 
+    {
+        CIDRBlock block1 = new CIDRBlock(IPAddressUtil.byAddress("192.168.10.0"), 24);
+        CIDRBlock block2 = new CIDRBlock(IPAddressUtil.byAddress("192.168.10.0"), 26);
+        assertEquals(0, block1.compareTo(block1));
+        assertTrue(block1.compareTo(block2) < 0);
+        assertTrue(block2.compareTo(block1) > 0);
+    }
+    
     private static void assertEquals(byte[] expected, byte[] actual)
     {
         assertEquals("length", expected.length, actual.length);
