@@ -144,17 +144,26 @@ public class ImmutableHashSet<E>
     {
         return delegate.toArray(a);
     }
-    
+
     @Override
     public Set<E> unmodifiableSet()
     {
         return Collections.unmodifiableSet(delegate);
-    }    
+    }
 
     @Override
     public boolean equals(Object o)
     {
-        return delegate.equals(o);
+        if(o instanceof ImmutableHashSet)
+        {
+            @SuppressWarnings("unchecked")
+            final ImmutableHashSet<E> that = (ImmutableHashSet<E>)o;
+            return delegate.equals(that.delegate);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     @Override
