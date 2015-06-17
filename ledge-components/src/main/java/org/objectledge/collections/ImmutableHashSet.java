@@ -177,4 +177,9 @@ public class ImmutableHashSet<E>
     {
         return delegate.toString();
     }
+
+    public static <E> ImmutableSet<E> singletonSet(E singletonElement)
+    {
+        return new ImmutableHashSet<>(Collections.singleton(singletonElement));
+    }
 }
