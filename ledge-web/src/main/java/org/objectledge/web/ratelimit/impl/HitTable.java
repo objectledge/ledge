@@ -41,21 +41,23 @@ public abstract class HitTable
         return hit == null ? -1 : hit.getLastMatchingRuleId();
     }
 
-    public void hit(InetAddress address)
+    public Hit hit(InetAddress address)
     {
         String key = address.toString();
         Hit hit = table.get(key);
         if(hit == null)
         {
-            table.put(key, new Hit());
+            hit = new Hit();
+            table.put(key, hit);
         }
         else
         {
             hit.incHits();
         }
+        return hit;
     }
 
-    public void match(Rule rule, InetAddress address)
+    public Hit match(Rule rule, InetAddress address)
     {
         String key = address.toString();
         Hit hit = table.get(key);
@@ -65,6 +67,7 @@ public abstract class HitTable
             table.put(key, hit);
         }
         hit.incMatches(rule.getRuleId());
+        return hit;
     }
 
     public static class Hit
