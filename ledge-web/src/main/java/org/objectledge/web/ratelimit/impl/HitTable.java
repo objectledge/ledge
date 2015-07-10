@@ -11,39 +11,39 @@ public abstract class HitTable
 {
     protected Map<String, Hit> table = new ConcurrentHashMap<>();
 
-    public int getHits(InetAddress adddress)
+    public int getHits(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address.toString());
         return hit == null ? 0 : hit.getHits();
     }
 
-    public Date getLastHit(InetAddress adddress)
+    public Date getLastHit(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address.toString());
         return hit == null ? null : hit.getLastHit();
     }
 
-    public int getMatches(InetAddress adddress)
+    public int getMatches(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address.toString());
         return hit == null ? 0 : hit.getMatches();
     }
 
-    public Date getLastMatch(InetAddress adddress)
+    public Date getLastMatch(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address.toString());
         return hit == null ? null : hit.getLastMatch();
     }
 
-    public long getLastMatchingRuleId(InetAddress adddress)
+    public long getLastMatchingRuleId(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address.toString());
         return hit == null ? -1 : hit.getLastMatchingRuleId();
     }
 
-    public void hit(InetAddress adddress)
+    public void hit(InetAddress address)
     {
-        String key = adddress.toString();
+        String key = address.toString();
         Hit hit = table.get(key);
         if(hit == null)
         {
@@ -55,9 +55,9 @@ public abstract class HitTable
         }
     }
 
-    public void match(Rule rule, InetAddress adddress)
+    public void match(Rule rule, InetAddress address)
     {
-        String key = adddress.toString();
+        String key = address.toString();
         Hit hit = table.get(key);
         if(hit == null)
         {
