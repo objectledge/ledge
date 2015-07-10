@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -39,6 +40,12 @@ public abstract class HitTable
     {
         Hit hit = table.get(address.toString());
         return hit == null ? -1 : hit.getLastMatchingRuleId();
+    }
+
+    public boolean isThresholdExceeded(InetAddress address)
+    {
+        Hit hit = table.get(address.toString());
+        return hit == null ? false : hit.isThresholdExceeded();
     }
 
     public Hit hit(InetAddress address)
@@ -82,6 +89,8 @@ public abstract class HitTable
 
         private final AtomicLong lastMatch;
 
+        private final AtomicBoolean thresholdExceeded;
+
         public Hit(int hits, long lastHit, int matches, long lastMatchingRuleId, long lastMatch)
         {
             this.hits = new AtomicInteger(hits);
@@ -89,6 +98,7 @@ public abstract class HitTable
             this.matches = new AtomicInteger(matches);
             this.lastMatchingRuleId = new AtomicLong(lastMatchingRuleId);
             this.lastMatch = new AtomicLong(lastMatch);
+            this.thresholdExceeded = new AtomicBoolean(false);
         }
 
         public Hit()
@@ -119,6 +129,16 @@ public abstract class HitTable
         public Date getLastMatch()
         {
             return new Date(lastMatch.get());
+        }
+
+        public boolean isThresholdExceeded()
+        {
+            return thresholdExceeded.get();
+        }
+
+        public void setThresholdExeeded()
+        {
+            thresholdExceeded.set(true);
         }
 
         public void incHits()
