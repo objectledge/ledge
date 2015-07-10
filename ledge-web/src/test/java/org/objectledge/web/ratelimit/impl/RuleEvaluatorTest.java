@@ -27,6 +27,12 @@ public class RuleEvaluatorTest
                 return "whitelist".equals(listName) && somehost.equals(address);
             }
 
+            @Override
+            public boolean anyContains(InetAddress address)
+            {
+                return contains("whitelist", address);
+            }
+
             private InetAddress somehost()
             {
                 try
