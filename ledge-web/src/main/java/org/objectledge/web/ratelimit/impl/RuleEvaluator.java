@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.List;
 
+import org.objectledge.web.ratelimit.impl.HitTable.Hit;
 import org.objectledge.web.ratelimit.rules.ASTconjunction;
 import org.objectledge.web.ratelimit.rules.ASTdisjunction;
 import org.objectledge.web.ratelimit.rules.ASTnegation;
@@ -32,9 +33,15 @@ public class RuleEvaluator
         this.defaultAction = defaultAction;
     }
 
-    public String action(RequestInfo request, AccessListRegistry accesLists, List<Rule> rules)
+    public String action(RequestInfo request, AccessListRegistry accesLists,
+        ThresholdChecker thresholdChecker, List<Rule> rules)
     {
-        hitTable.hit(request.getAddress());
+        Hit hit = hitTable.hit(request.getAddress());
+        if(!hit.isThresholdExceeded()
+            && thresholdChecker.isThresholdExceeded(request.getAddress(), hit))
+        {
+            hit.setThresholdExeeded();
+        }
         for(Rule rule : rules)
         {
             if(VISITOR.visit(rule.getRule(), new RuleEvaluationContext(rule, accesLists, request)))
@@ -46,9 +53,10 @@ public class RuleEvaluator
         return defaultAction;
     }
 
-    public String action(RequestInfo request, AccessListRegistry accesLists, Rule... rules)
+    public String action(RequestInfo request, AccessListRegistry accesLists,
+        ThresholdChecker thresholdChecker, Rule... rules)
     {
-        return action(request, accesLists, Arrays.asList(rules));
+        return action(request, accesLists, thresholdChecker, Arrays.asList(rules));
     }
 
     private class RuleEvaluationContext
@@ -61,8 +69,7 @@ public class RuleEvaluator
 
         private AccessListRegistry accessLists;
 
-        public RuleEvaluationContext(Rule rule, AccessListRegistry accesLists,
-            RequestInfo request)
+        public RuleEvaluationContext(Rule rule, AccessListRegistry accesLists, RequestInfo request)
         {
             this.request = request;
             this.accessLists = accesLists;
