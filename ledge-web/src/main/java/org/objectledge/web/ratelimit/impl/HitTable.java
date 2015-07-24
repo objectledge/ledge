@@ -111,6 +111,16 @@ public abstract class HitTable
             return hits.get();
         }
 
+        public int getAndClearHits()
+        {
+            return hits.getAndSet(0);
+        }
+
+        public void addHits(int numHits)
+        {
+            hits.addAndGet(numHits);
+        }
+
         public Date getLastHit()
         {
             return new Date(lastHit.get());
