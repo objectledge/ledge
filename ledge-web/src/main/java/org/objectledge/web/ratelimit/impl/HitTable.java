@@ -10,52 +10,51 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class HitTable
 {
-    protected Map<String, Hit> table = new ConcurrentHashMap<>();
+    protected Map<InetAddress, Hit> table = new ConcurrentHashMap<>();
 
     public int getHits(InetAddress address)
     {
-        Hit hit = table.get(address.toString());
+        Hit hit = table.get(address);
         return hit == null ? 0 : hit.getHits();
     }
 
     public Date getLastHit(InetAddress address)
     {
-        Hit hit = table.get(address.toString());
+        Hit hit = table.get(address);
         return hit == null ? null : hit.getLastHit();
     }
 
     public int getMatches(InetAddress address)
     {
-        Hit hit = table.get(address.toString());
+        Hit hit = table.get(address);
         return hit == null ? 0 : hit.getMatches();
     }
 
     public Date getLastMatch(InetAddress address)
     {
-        Hit hit = table.get(address.toString());
+        Hit hit = table.get(address);
         return hit == null ? null : hit.getLastMatch();
     }
 
     public long getLastMatchingRuleId(InetAddress address)
     {
-        Hit hit = table.get(address.toString());
+        Hit hit = table.get(address);
         return hit == null ? -1 : hit.getLastMatchingRuleId();
     }
 
     public boolean isThresholdExceeded(InetAddress address)
     {
-        Hit hit = table.get(address.toString());
+        Hit hit = table.get(address);
         return hit == null ? false : hit.isThresholdExceeded();
     }
 
     public Hit hit(InetAddress address)
     {
-        String key = address.toString();
-        Hit hit = table.get(key);
+        Hit hit = table.get(address);
         if(hit == null)
         {
             hit = new Hit();
-            table.put(key, hit);
+            table.put(address, hit);
         }
         else
         {
@@ -66,12 +65,11 @@ public abstract class HitTable
 
     public Hit match(Rule rule, InetAddress address)
     {
-        String key = address.toString();
-        Hit hit = table.get(key);
+        Hit hit = table.get(address);
         if(hit == null)
         {
             hit = new Hit();
-            table.put(key, hit);
+            table.put(address, hit);
         }
         hit.incMatches(rule.getRuleId());
         return hit;
