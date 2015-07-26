@@ -4,67 +4,75 @@ import java.net.InetAddress;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class HitTable
 {
-    protected Map<String, Hit> table = new ConcurrentHashMap<>();
+    protected Map<InetAddress, Hit> table = new ConcurrentHashMap<>();
 
-    public int getHits(InetAddress adddress)
+    public int getHits(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address);
         return hit == null ? 0 : hit.getHits();
     }
 
-    public Date getLastHit(InetAddress adddress)
+    public Date getLastHit(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address);
         return hit == null ? null : hit.getLastHit();
     }
 
-    public int getMatches(InetAddress adddress)
+    public int getMatches(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address);
         return hit == null ? 0 : hit.getMatches();
     }
 
-    public Date getLastMatch(InetAddress adddress)
+    public Date getLastMatch(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address);
         return hit == null ? null : hit.getLastMatch();
     }
 
-    public long getLastMatchingRuleId(InetAddress adddress)
+    public long getLastMatchingRuleId(InetAddress address)
     {
-        Hit hit = table.get(adddress.toString());
+        Hit hit = table.get(address);
         return hit == null ? -1 : hit.getLastMatchingRuleId();
     }
 
-    public void hit(InetAddress adddress)
+    public boolean isThresholdExceeded(InetAddress address)
     {
-        String key = adddress.toString();
-        Hit hit = table.get(key);
+        Hit hit = table.get(address);
+        return hit == null ? false : hit.isThresholdExceeded();
+    }
+
+    public Hit hit(InetAddress address)
+    {
+        Hit hit = table.get(address);
         if(hit == null)
         {
-            table.put(key, new Hit());
+            hit = new Hit();
+            table.put(address, hit);
         }
         else
         {
             hit.incHits();
         }
+        return hit;
     }
 
-    public void match(Rule rule, InetAddress adddress)
+    public Hit match(Rule rule, InetAddress address)
     {
-        String key = adddress.toString();
-        Hit hit = table.get(key);
+        Hit hit = table.get(address);
         if(hit == null)
         {
             hit = new Hit();
-            table.put(key, hit);
+            table.put(address, hit);
         }
         hit.incMatches(rule.getRuleId());
+        return hit;
     }
 
     public static class Hit
@@ -79,6 +87,8 @@ public abstract class HitTable
 
         private final AtomicLong lastMatch;
 
+        private final AtomicBoolean thresholdExceeded;
+
         public Hit(int hits, long lastHit, int matches, long lastMatchingRuleId, long lastMatch)
         {
             this.hits = new AtomicInteger(hits);
@@ -86,6 +96,7 @@ public abstract class HitTable
             this.matches = new AtomicInteger(matches);
             this.lastMatchingRuleId = new AtomicLong(lastMatchingRuleId);
             this.lastMatch = new AtomicLong(lastMatch);
+            this.thresholdExceeded = new AtomicBoolean(false);
         }
 
         public Hit()
@@ -96,6 +107,16 @@ public abstract class HitTable
         public int getHits()
         {
             return hits.get();
+        }
+
+        public int getAndClearHits()
+        {
+            return hits.getAndSet(0);
+        }
+
+        public void addHits(int numHits)
+        {
+            hits.addAndGet(numHits);
         }
 
         public Date getLastHit()
@@ -116,6 +137,16 @@ public abstract class HitTable
         public Date getLastMatch()
         {
             return new Date(lastMatch.get());
+        }
+
+        public boolean isThresholdExceeded()
+        {
+            return thresholdExceeded.get();
+        }
+
+        public void setThresholdExeeded()
+        {
+            thresholdExceeded.set(true);
         }
 
         public void incHits()
