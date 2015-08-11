@@ -28,7 +28,7 @@ public class PasswordDigesterTest
         try
         {
             @SuppressWarnings("unused")
-            PasswordDigester pd = new PasswordDigester("SHA224");
+            PasswordDigester pd = new PasswordDigester("SHA220");
             fail("should throw exception");
         }
         catch(ComponentInitializationError e)
