@@ -34,6 +34,7 @@ import javax.naming.InvalidNameException;
 import javax.naming.Name;
 import javax.naming.NameParser;
 import javax.naming.NamingException;
+import javax.naming.ServiceUnavailableException;
 import javax.naming.directory.DirContext;
 
 import org.jcontainer.dna.Logger;
@@ -147,7 +148,7 @@ public class ContextHelper
         {
             return context.lookup(relativeName);
         }
-        catch(CommunicationException e)
+        catch(CommunicationException | ServiceUnavailableException e)
         {
             logger.error("CommunicationException occured, will attempt to reconnect", e);
             reconnect();
