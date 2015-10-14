@@ -32,6 +32,7 @@ import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.utils.StringUtils;
 
 /**
  * This valve decodes characters represented as HTML entities sent in by the browser in parameter
@@ -61,7 +62,7 @@ public class RequestParametersHTMLEntityDecoderValve
             String[] values = parameters.getStrings(name);
             for (int j = 0; j < values.length; j++)
             {
-                values[j] = decoder.decode(values[j]);
+                values[j] = StringUtils.clearControlChars(decoder.decode(values[j]));
             }
             parameters.set(name, values);
         }

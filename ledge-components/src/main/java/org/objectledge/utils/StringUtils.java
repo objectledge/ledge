@@ -1247,4 +1247,15 @@ public class StringUtils
             throw new RuntimeException(e);
         }
     }
+    
+    /**
+     * Remove ASCII control characters except tab, newline and carriage return from the input string.
+     * 
+     * @param text input string.
+     * @return cleared string.
+     */
+    public static String clearControlChars(String text)
+    {
+        return text.replaceAll("[\u0000-\u0008\u000B-\u000C\u000E-\u001F]", "");
+    }
 }
